@@ -27,7 +27,7 @@ export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh"
 
 
 export const API_GET_CURRENT_CART = BASE_URL + "/api/cart"
-export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/edit"
+export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/"
 
 export const API_CREATE_ORDER = BASE_URL + "/api/order/new"
 export const API_GET_ORDER_SUMMARY = BASE_URL + "/api/order/"

@@ -51,6 +51,7 @@ class Mainpage extends Component {
     this.routing = this.props.store.routing
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
+    this.userStore = this.props.store.user
 
 
     this.state = {
@@ -72,9 +73,9 @@ class Mainpage extends Component {
   }
 
   componentDidMount() {
-    this.loadData()
     this.userStore.getStatus()
       .then((status) => {
+        this.loadData()
       })
   }
 
@@ -87,7 +88,9 @@ class Mainpage extends Component {
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
-    this.checkoutStore.getCurrentCart()
+    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth()).catch((e) => {
+      console.error('Failed to load current cart', e)
+    })
   }
 
 
@@ -152,10 +155,6 @@ class Mainpage extends Component {
   }
 
   render() {
-    if (this.productStore.fetch) {
-      return null
-    }
-
     const id = this.props.match.params.id
 
     let cartDropdownClass = 'dropdown-menu dropdown-menu-right'

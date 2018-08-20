@@ -14,15 +14,13 @@ class CheckoutStore {
   deleteModal = null
   deleteId = null
 
-  getCurrentCart() {
-    axios.get(API_GET_CURRENT_CART)
-      .then(resp => {
-        this.cart = resp.data
-      })
+  async getCurrentCart(auth) {
+    const res = await axios.get(API_GET_CURRENT_CART, auth)
+    this.cart = res.data
   }
   
   async editCurrentCart(data, auth) {
-    const res = axios.patch(API_EDIT_CURRENT_CART, data, )
+    const res = axios.patch(API_EDIT_CURRENT_CART+this.cart._id+'?time=2018-08-20 08:00:00', data, auth)
   }
 
   async getOrderSummary(id) {
