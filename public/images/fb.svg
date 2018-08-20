@@ -1,0 +1,16 @@
+<svg width="8px" height="18px" viewBox="0 0 8 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<polygon id="path-1" points="4 18 0 18 0 0 4 0 8 0 8 18"></polygon>
+</defs>
+<g id="Symbols" stroke="none" stroke-width="1" fill="#fff" fill-rule="evenodd">
+<g id="facebook">
+<g id="facebook-letter-logo">
+<mask id="mask-2" fill="white">
+<use xlink:href="#path-1"></use>
+</mask>
+<g id="Clip-2"></g>
+<path d="M1.72894471,3.48625 L1.72894471,5.96375 L0,5.96375 L0,8.994 L1.72894471,8.994 L1.72894471,18 L5.28063806,18 L5.28063806,8.995 L7.66406762,8.995 C7.66406762,8.995 7.88738766,7.542 7.9961907,5.953 L5.29444676,5.953 L5.29444676,3.88075 C5.29444676,3.57125 5.68132849,3.15525 6.06463901,3.15525 L8,3.15525 L8,0 L5.36801381,0 C1.64156895,0 1.72894471,3.03325 1.72894471,3.48625 Z" id="Fill-1" fill="#FFFFFF"></path>
+</g>
+</g>
+</g>
+</svg>

@@ -1,0 +1,62 @@
+import {observable, decorate, action} from 'mobx'
+import { 
+  API_GET_CURRENT_CART, API_EDIT_CURRENT_CART,
+  API_GET_ORDER_SUMMARY, 
+  API_CHECK_PROMO } from '../config'
+import axios from 'axios'
+
+let index = 0
+
+class CheckoutStore {
+  cart  = null
+  order = null
+
+  deleteModal = null
+  deleteId = null
+
+  getCurrentCart() {
+    axios.get(API_GET_CURRENT_CART)
+      .then(resp => {
+        this.cart = resp.data
+      })
+  }
+  
+  async editCurrentCart(data, auth) {
+    const res = axios.patch(API_EDIT_CURRENT_CART, data, )
+  }
+
+  async getOrderSummary(id) {
+    const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
+    this.order = resp.data
+  }
+
+  async applyPromo() {
+    try {
+      const resp = await axios.get(API_CHECK_PROMO)
+      return true
+    } catch(e) {
+      return false
+    }
+  }
+
+  toggleDeleteModal(id) {
+    this.deleteModal = !this.deleteModal
+    this.deleteId = id
+  }
+
+}
+
+decorate(CheckoutStore, {
+  cart: observable,
+  order: observable,
+  deleteModal: observable,
+  deleteId: observable,
+  getCurrentCart: action,
+  editCurrentCart: action,
+  getOrderSummary: action,
+  applyPromo: action,
+  toggleDeleteModal: action
+})
+
+
+export default new CheckoutStore()
