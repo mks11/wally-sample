@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
 import { connect } from '../../utils'
+import { STRIPE_API_KEY } from '../../config'
+
+import Card from '../../common/Card';
+import {StripeProvider, Elements} from 'react-stripe-elements'
 
 class PaymentModal extends Component {
   constructor(props) {
@@ -102,9 +106,15 @@ class PaymentModal extends Component {
         </div>
         {this.state.mode === 'add' ? 
         <form onSubmit={e=>e.preventDefault()}>
-          <ModalBody>
-            <FormGroup className="input-merged">
 
+          <ModalBody>
+            <StripeProvider apiKey={STRIPE_API_KEY}>
+            <Elements>
+              <Card />
+            </Elements>
+          </StripeProvider>
+
+            <FormGroup className="input-merged">
             <Input
               style={{width: '40%'}}
               className="aw-input--control aw-input--control-large aw-input--left "

@@ -715,6 +715,14 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 .aw-input--control[readonly] {
   background: none;
 }
+
+.w-40 {
+  width: 40%;
+}
+
+.w-30 {
+  width: 30%;
+}
 textarea.aw-input--control, textarea.aw-input--control:focus{
   width: 100%;
   border:none;
@@ -725,6 +733,10 @@ textarea.aw-input--control, textarea.aw-input--control:focus{
   height: 80px;
   font-size: 20px;
 }
+.ElementsApp input {
+  background: red !important;
+}
+
 
 .aw-input--bordered, textarea.aw-input--bordered ,
 .aw-input--bordered:focus, textarea.aw-input--bordered:focus

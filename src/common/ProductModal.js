@@ -21,7 +21,6 @@ class ProductModal extends Component {
 
   componentDidUpdate() {
     if (!this.state.slick) {
-      console.log('qty', this.productStore.customer_quantity)
       this.setState({slick: true, qty: this.productStore.customer_quantity})
       const $thumb = window.$(this.thumb)
       const $prod = window.$(this.prod)
@@ -88,9 +87,14 @@ class ProductModal extends Component {
 
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     const price = inventory.price
-    const price_unit = product.unit_size
+    let price_unit = product.unit_size
 
-    const unit = parseFloat(price_unit.split(' ')[0])
+    let unit = 1
+    if (price_unit) {
+      unit = parseFloat(price_unit.split(' ')[0])
+    } else {
+      price_unit = unit + ' ' + product.unit_type
+    }
 
     const totalPrice = price / unit * this.state.qty
 
