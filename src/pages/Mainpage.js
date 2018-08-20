@@ -106,8 +106,9 @@ class Mainpage extends Component {
     this.routing.push('/checkout')
   }
 
-  handleEdit(id) {
-    this.productStore.showModal(id)
+  handleEdit(data) {
+    console.log('dat', data)
+    this.productStore.showModal(data.product_id, data.customer_quantity)
   }
 
   handleDelete(id) {
@@ -149,9 +150,7 @@ class Mainpage extends Component {
   }
 
   handleCartDropdown() {
-    if (this.checkoutStore.cart && this.checkoutStore.cart.cart_items.length > 0) {
       this.uiStore.toggleCartDropdown()
-    }
   }
 
   render() {
@@ -233,6 +232,8 @@ class Mainpage extends Component {
                       </div>
 
                       <div className={cartDropdownClass} aria-labelledby="dropdownMenuButton">
+                        { (cartItems && cartItems.length > 0) ?
+                            <div>
                         <h3>Orders:</h3>
                         <div className="order-summary">
                           <div className="order-scroll">
@@ -242,12 +243,12 @@ class Mainpage extends Component {
                                 <h4 className="item-name">{c.product_name}</h4>
                                 <span className="item-detail mb-1">2 oz, container large</span>
                                 <div className="item-link">
-                                  <a className="text-blue mr-2" onClick={e => this.handleEdit(c.product_id)}>EDIT</a>
-                                  <a className="text-dark-grey" onClick={e => this.handleDelete(c.product_id)}>DELETE</a>
+                                  <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
+                                  <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
                                 </div>
                               </div>
                               <div className="item-right">
-                                <h4>x1</h4>
+                                <h4>x{c.customer_quantity}</h4>
                                 <span className="item-price">{formatMoney(c.product_price)}</span>
                               </div>
                             </div>
@@ -260,6 +261,11 @@ class Mainpage extends Component {
                           </div>
                         </div>
                         <button onClick={e => this.handleCheckout()} className="btn btn-main active">CHECKOUT</button>
+                      </div>
+                            : 
+                            <span>No items in cart</span>
+                        }
+
                       </div>
                     </div>
                   </div>

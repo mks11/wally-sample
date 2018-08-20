@@ -21,7 +21,8 @@ class ProductModal extends Component {
 
   componentDidUpdate() {
     if (!this.state.slick) {
-      this.setState({slick: true, qty: this.productStore.activeProduct.min_size})
+      console.log('qty', this.productStore.customer_quantity)
+      this.setState({slick: true, qty: this.productStore.customer_quantity})
       const $thumb = window.$(this.thumb)
       const $prod = window.$(this.prod)
       $prod.slick({
@@ -52,8 +53,9 @@ class ProductModal extends Component {
   handleAddToCart() {
     const product = this.productStore.activeProduct
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
+
     this.checkoutStore.editCurrentCart({
-      qty: this.state.qty, 
+      quantity: this.state.qty, 
       product_id: inventory.product_id,
       inventory_id: inventory._id,
     }, this.userStore.getHeaderAuth()).then((data) => {
@@ -61,8 +63,9 @@ class ProductModal extends Component {
     }).catch((e) => {
       const msg = e.response.data.error.message
       this.setState({invalidText: msg})
-      console.error('Failed to save address', e)
+      console.error('Failed to add to cart', e)
     })
+
     this.productStore.hideModal()
   }
 
@@ -95,6 +98,7 @@ class ProductModal extends Component {
     const packaging = product.packaging[0] ? product.packaging[0] : null
     const packaging_type = packaging.type
     const packaging_description = packaging.description
+
 
 
     return (
@@ -144,7 +148,7 @@ class ProductModal extends Component {
 
               <div><strong>Chose your quantity</strong></div>
               <div className="form-group" style={{maxWidth: '140px'}}>
-                <select className="form-control" onChange={e => this.setState({qty: e.target.value})}>
+                <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => (
                     <option key={i} value={v}>{v}</option>
                   ))}

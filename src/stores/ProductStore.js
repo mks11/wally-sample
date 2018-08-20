@@ -19,18 +19,20 @@ class ProductStore {
   categories = []
   fetch = false
 
+  customer_quantity = null
+
 
   ads1 = null
   ads2 = null
 
-  showModal(id) {
-    this.open = true
-    this.modal = true
+  showModal(product_id, customer_quantity) {
+    this.activeProductId = product_id
 
-    this.activeProductId = id
-
-    axios.get(API_GET_PRODUCT_DETAIL + id).then(resp => {
+    axios.get(API_GET_PRODUCT_DETAIL + product_id).then(resp => {
       this.activeProduct = resp.data
+      this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
+      this.open = true
+      this.modal = true
     })
 
   }
@@ -87,6 +89,7 @@ decorate(ProductStore, {
   main_display: observable,
   path: observable,
   sidebar: observable,
+  customer_quantity: observable,
   fetch: observable,
   categories: observable,
   activeProduct: observable,

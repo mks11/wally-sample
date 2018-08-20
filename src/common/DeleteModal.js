@@ -2,14 +2,26 @@ import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { connect } from '../utils'
 
-class InvalidZipModal extends Component {
+class DeleteModal extends Component {
   constructor(props) {
     super(props)
     this.checkoutStore = this.props.store.checkout
+    this.userStore = this.props.store.user
   }
 
   handleDelete() {
-    this.checkoutStore.editCurrentCart()
+    this.checkoutStore.editCurrentCart({
+      quantity: 0, 
+      product_id: this.checkoutStore.deleteId.product_id,
+      inventory_id: this.checkoutStore.deleteId.inventory_id,
+    }, this.userStore.getHeaderAuth()).then((data) => {
+
+    }).catch((e) => {
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+      console.error('Failed to add to cart', e)
+    })
+
     this.checkoutStore.toggleDeleteModal()
   }
 
@@ -33,4 +45,4 @@ class InvalidZipModal extends Component {
   }
 }
 
-export default connect("store")(InvalidZipModal);
+export default connect("store")(DeleteModal);
