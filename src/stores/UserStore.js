@@ -114,26 +114,18 @@ class UserStore {
 
 
   async makeDefaultPayment(id) {
-    try {
-      const resp = await axios.post(API_PAYMENT_EDIT, {id})
-      return true
-    } catch(e) {
-      return false
-    }
+    const res = await axios.post(API_PAYMENT_EDIT, {id}, this.getHeaderAuth())
+    return res.data
   }
 
   async deletePayment(id) {
-    try {
-      const resp = await axios.post(API_PAYMENT_REMOVE, {id})
-      return true
-    } catch(e) {
-      return false
-    }
+    const res = await axios.post(API_PAYMENT_REMOVE, {id}, this.getHeaderAuth)
+    return res.data
   }
 
   async savePayment(data) {
     const res = await axios.post(API_PAYMENT_NEW, data, this.getHeaderAuth())
-    return res
+    return res.data
   }
 
   readStorage() {

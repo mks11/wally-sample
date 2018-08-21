@@ -59,7 +59,10 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
     cardnumber: false,
     mmyy: false,
     cvc: false,
-    zip: false
+    zip: false,
+
+    billing_zip: null,
+    preferred_payment: false
   }
 
   handleChange = (change) => {
@@ -77,7 +80,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
         changed = {cvc: change.complete}
         break
       case 'postalCode': 
-        changed = {zip: change.complete}
+        changed = {zip: change.complete, billing_zip: change.value}
         break
     }
     this.setState(changed)
@@ -92,13 +95,27 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
         .createToken()
         .then((payload) => {
           if (payload.error) {
-            this.setState({invalidText: payload.error.message})
+            throw payload
           }
 
-          this.props.addPayment()
+          // return this.props.addPayment({
+          //   preferred_payment: this.state.preferred_payment,
+          //   billing_zip: this.state.billing_zip,
+          //   // stripe_token: payload.token
+          // })
           // console.log('[token]', payload))
         }).catch((e) => {
-          console.log('e', e)
+          if (e.response) {
+            const msg = e.response.data.error.message
+            this.setState({invalidText: msg})
+            console.error('Failed to save payment', e)
+            return
+          }
+
+          if (e.error) {
+            this.setState({invalidText: e.error.message})
+          }
+          
         })
     } else {
       console.log("Stripe.js hasn't loaded yet.");
@@ -157,7 +174,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
         <FormGroup check className="my-4">
           <Label check>
-            <Input type="checkbox" />{' '}
+            <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
             Make default payment card
           </Label>
         </FormGroup>

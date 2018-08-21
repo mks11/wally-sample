@@ -45,8 +45,8 @@ class PaymentModal extends Component {
     }
   }
 
-  handleAddPayment(e) {
-    console.log('handle payment method: add')
+  handleAddPayment(data) {
+    return this.userStore.savePayment(data)
     // this.setState({invalidText: null})
     // if (!this.state.cardnumber) {
     //   this.setState({invalidText: 'Cardnumber cannot be empty'})
