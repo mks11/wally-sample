@@ -45,35 +45,36 @@ class PaymentModal extends Component {
     }
   }
 
-  handleSubmit(e) {
-    this.setState({invalidText: null})
-    if (!this.state.cardnumber) {
-      this.setState({invalidText: 'Cardnumber cannot be empty'})
-      return
-    }
-
-    if (!this.state.cvv) {
-      this.setState({invalidText: 'CVV cannot be empty'})
-      return
-    }
-
-    if (!this.state.mmyy) {
-      this.setState({invalidText: 'Expiration date cannot be empty'})
-      return
-    }
-
-    if (!this.state.zip) {
-      this.setState({invalidText: 'Zip cannot be empty'})
-      return
-    }
-    this.userStore.savePayment(this.state).then((data) => {
-      this.userStore.hidePaymentModal()
-    }).catch((e) => {
-      console.log('Failed to save payment', e)
-      const msg = e.response.data.error.message
-      this.setState({invalidText: msg})
-    })
-    e.preventDefault()
+  handleAddPayment(e) {
+    console.log('handle payment method: add')
+    // this.setState({invalidText: null})
+    // if (!this.state.cardnumber) {
+    //   this.setState({invalidText: 'Cardnumber cannot be empty'})
+    //   return
+    // }
+    //
+    // if (!this.state.cvv) {
+    //   this.setState({invalidText: 'CVV cannot be empty'})
+    //   return
+    // }
+    //
+    // if (!this.state.mmyy) {
+    //   this.setState({invalidText: 'Expiration date cannot be empty'})
+    //   return
+    // }
+    //
+    // if (!this.state.zip) {
+    //   this.setState({invalidText: 'Zip cannot be empty'})
+    //   return
+    // }
+    // this.userStore.savePayment(this.state).then((data) => {
+    //   this.userStore.hidePaymentModal()
+    // }).catch((e) => {
+    //   console.log('Failed to save payment', e)
+    //   const msg = e.response.data.error.message
+    //   this.setState({invalidText: msg})
+    // })
+    // e.preventDefault()
   }
 
   handleMakeDefault() {
@@ -104,60 +105,13 @@ class PaymentModal extends Component {
           <h2>{this.state.title}</h2>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.hidePaymentModal(e)}></button>
         </div>
-        {this.state.mode === 'add' ? 
-        <form onSubmit={e=>e.preventDefault()}>
-
-          <ModalBody>
+        {this.state.mode === 'add' &&
             <StripeProvider apiKey={STRIPE_API_KEY}>
-            <Elements>
-              <Card />
-            </Elements>
-          </StripeProvider>
-
-            <FormGroup className="input-merged">
-            <Input
-              style={{width: '40%'}}
-              className="aw-input--control aw-input--control-large aw-input--left "
-              type="text"
-              placeholder="Card number"
-              onChange={(e) => this.setState({cardnumber: e.target.value})}/>
-            <Input
-              style={{width: '30%'}}
-              className="aw-input--control aw-input--control-large aw-input--left "
-              type="text"
-              placeholder="MM/YY"
-              onChange={(e) => this.setState({mmyy: e.target.value})}/>
-            <Input
-              style={{width: '30%'}}
-              className="aw-input--control aw-input--control-large aw-input--left "
-              type="number"
-              placeholder="CVV"
-              onChange={(e) => this.setState({cvv: e.target.value})}/>
-
-            </FormGroup>
-
-            <Input
-              className="aw-input--control aw-input--control-large aw-input--left "
-              type="number"
-              placeholder="Billing zipcode"
-              onChange={(e) => this.setState({zip: e.target.value})}/>
-
-            <FormGroup check className="my-2">
-              <Label check>
-                <Input type="checkbox" />{' '}
-                Make defult payment card
-              </Label>
-            </FormGroup>
-
-        </ModalBody>
-
-        <ModalBody className="modal-body-bordertop">
-          <button type="button" onClick={e=> this.handleSubmit(e)} className={buttonClass}>SAVE</button>
-          { this.state.invalidText ? <span className="text-error text-center text-block">{this.state.invalidText}</span>: null}
-        </ModalBody>
-
-      </form>
-            :null}
+              <Elements>
+                <Card  addPayment={this.handleAddPayment} />
+              </Elements>
+            </StripeProvider>
+        }
 
       { this.state.mode === 'edit' ?
           <ModalBody className="modal-body-bordertop">

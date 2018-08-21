@@ -22,6 +22,7 @@ class AddressModal extends Component {
       name: '',
       telephone: '',
       default: false,
+      preferred_address: false,
       zip: 0,
       address_id: 0,
 
@@ -42,12 +43,13 @@ class AddressModal extends Component {
   componentDidMount() {
 
     if (this.userStore.activeAddress) {
-      const { address_id, name, state, delivery_notes, zip, unit, city, telephone} = this.userStore.activeAddress
+      const { address_id, name, state, delivery_notes, zip, unit, telephone, city, country, street_address} = this.userStore.activeAddress
       this.setState({
-        address_id, name, state, delivery_notes, zip, unit, city, telephone,
+        address_id, name, state, delivery_notes, zip, unit, city, telephone,street_address,
         default: this.userStore.user.preferred_address === address_id,
         title: 'Edit address',
         mode: 'edit',
+        address: street_address + ', ' + city + ', ' + country
       })
       return
     }
@@ -107,8 +109,12 @@ class AddressModal extends Component {
     //   this.setState({invalidText: 'Delivery notes cannot be empty'})
     //   return
     // }
+    //
+    const { name, state, delivery_notes, zip, unit, city, country, telephone, street_address, preferred_address} = this.state
 
-    this.userStore.saveAddress(this.state).then((data) => {
+    this.userStore.saveAddress({
+      name, state, delivery_notes, zip, unit, city, country, telephone,street_address, preferred_address
+    }).then((data) => {
       this.userStore.setUserData(data)
       this.userStore.hideAddressModal()
     }).catch((e) => {
@@ -288,7 +294,7 @@ class AddressModal extends Component {
               {this.state.mode === 'add' &&
                   <FormGroup check className="my-2">
                     <Label check>
-                      <Input type="checkbox" />{' '}
+                      <Input type="checkbox" onChange={e=>this.setState({preferred_address: !this.state.preferred_address})} />{' '}
                       Make default address
                     </Label>
                   </FormGroup>}

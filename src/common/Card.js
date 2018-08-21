@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
-import { FormGroup } from 'reactstrap';
 
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
 import type {InjectedProps} from 'react-stripe-elements';
 
 import {
@@ -21,9 +21,6 @@ import {
 const handleBlur = () => {
   console.log('[blur]');
 };
-const handleChange = (change) => {
-  console.log('[change]', change);
-};
 const handleClick = () => {
   console.log('[click]');
 };
@@ -39,8 +36,9 @@ const createOptions = (fontSize: string, padding: ?string) => {
     style: {
       base: {
         border: '1px solid #000',
-        fontSize,
-        color: '#424770',
+        fontSize:'18px',
+        color: '#000',
+        fontFamily: 'Circe',
         letterSpacing: '0.025em',
         '::placeholder': {
           color: '#aab7c4',
@@ -55,58 +53,122 @@ const createOptions = (fontSize: string, padding: ?string) => {
 };
 
 class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
+
+  state = {
+    invalidText: '',
+    cardnumber: false,
+    mmyy: false,
+    cvc: false,
+    zip: false
+  }
+
+  handleChange = (change) => {
+    if (!change) return
+
+    let changed = {}
+    switch(change.elementType) {
+      case 'cardNumber': 
+        changed = {cardnumber: change.complete}
+        break
+      case 'cardExpiry': 
+        changed = {mmyy: change.complete}
+        break
+      case 'cardCvc': 
+        changed = {cvc: change.complete}
+        break
+      case 'postalCode': 
+        changed = {zip: change.complete}
+        break
+    }
+    this.setState(changed)
+  };
+
+
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
+      // this.props.stripe.createSource()
       this.props.stripe
         .createToken()
-        .then((payload) => console.log('[token]', payload));
+        .then((payload) => {
+          if (payload.error) {
+            this.setState({invalidText: payload.error.message})
+          }
+
+          this.props.addPayment()
+          // console.log('[token]', payload))
+        }).catch((e) => {
+          console.log('e', e)
+        })
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
+
+
+
   render() {
+
+    let buttonClass = 'btn btn-main my-3'
+    if (this.state.cardnumber && this.state.cvc && this.state.mmyy && this.state.zip) {
+      buttonClass += ' active'
+    }
     return (
-      <form onSubmit={this.handleSubmit}>
-        <FormGroup className="input-merged">
-          <CardNumberElement
-            className="aw-input--control aw-input--control-large aw-input--left w-40"
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <ModalBody>
+            <FormGroup className="input-merged">
+              <CardNumberElement
+                className="card-element-input w-60"
+                onBlur={handleBlur}
+                onChange={this.handleChange}
+                onFocus={handleFocus}
+                onReady={handleReady}
+                placeholder="Card Number"
+                {...createOptions(this.props.fontSize)}
+              />
+              <CardExpiryElement
+                className="card-element-input w-20"
+                onBlur={handleBlur}
+                onChange={this.handleChange}
+                onFocus={handleFocus}
+                onReady={handleReady}
+                {...createOptions(this.props.fontSize)}
+              />
+              <CardCVCElement
+                className="card-element-input w-20"
+                onBlur={handleBlur}
+                onChange={this.handleChange}
+                onFocus={handleFocus}
+                onReady={handleReady}
+                {...createOptions(this.props.fontSize)}
+              />
+
+          </FormGroup>
+          <PostalCodeElement
+            className="card-element-input"
+            placeholder="Billing zipcode"
             onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
-          <CardExpiryElement
-            className="aw-input--control aw-input--control-large aw-input--left w-40"
-            onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
-          <CardCVCElement
-            className="aw-input--control aw-input--control-large aw-input--left w-30"
-            onBlur={handleBlur}
-            onChange={handleChange}
+            onChange={this.handleChange}
             onFocus={handleFocus}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
 
-            </FormGroup>
-        <label>
-          Postal code
-          <PostalCodeElement
-            onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        <button>Pay</button>
-      </form>
+        <FormGroup check className="my-4">
+          <Label check>
+            <Input type="checkbox" />{' '}
+            Make default payment card
+          </Label>
+        </FormGroup>
+      </ModalBody>
+
+      <ModalBody className="modal-body-bordertop">
+        <button type="submit" className={buttonClass}>SAVE</button>
+        { this.state.invalidText ? <span className="text-error text-center text-block">{this.state.invalidText}</span>: null}
+      </ModalBody>
+    </form>
+  </div>
     );
   }
 }
