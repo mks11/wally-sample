@@ -13,10 +13,12 @@ import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
+import InviteFriends from './pages/InviteFriends';
 
 export default (
     <Fragment>
         <Route exact path="/user" component={Account}/>
+        <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>
         <Route exact path="/reset_password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>

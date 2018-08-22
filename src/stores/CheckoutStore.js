@@ -24,7 +24,20 @@ class CheckoutStore {
     this.cart = res.data
   }
 
-  async getOrderSummary(id) {
+  async getOrderSummary(auth) {
+    const res = await axios.get(API_GET_ORDER_SUMMARY, auth)
+    console.log(res.data)
+    this.order = res.data
+    console.log(this.order)
+    return res.data
+  }
+
+  async createOrder(id) {
+    const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
+    this.order = resp.data
+  }
+
+  async check(id) {
     const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
     this.order = resp.data
   }

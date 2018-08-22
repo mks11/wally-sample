@@ -35,7 +35,7 @@ class Checkout extends Component {
       addressError: false,
 
 
-      invalidText: ''
+      invalidText: '',
 
     }
 
@@ -45,14 +45,22 @@ class Checkout extends Component {
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
 
+  }
+
+  componentDidMount() {
     this.userStore.getStatus()
       .then((status) => {
-        if (!status) {
-          this.modalStore.setLoginNextRoute('/checkout')
-          this.modalStore.toggleLogin()
-          this.props.store.routing.push('/main')
-        }
+        this.loadData()
       })
+  }
+
+  loadData() {
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
+      console.log(data)
+      console.log(this.checkoutStore.order)
+    }).catch((e) => {
+      console.error(e)
+    })
   }
 
   applyStoreCredit() {
@@ -67,10 +75,6 @@ class Checkout extends Component {
       appliedPromo: true,
     })
     this.checkoutStore.applyPromo()
-  }
-
-  componentDidMount() {
-    this.checkoutStore.getOrderSummary(1)
   }
 
   toggleTimeDropdown(e) {
@@ -146,22 +150,22 @@ class Checkout extends Component {
   }
   
   render() {
-    const store = this.props.store
-
-    let order
-
-    if (this.checkoutStore.order && this.userStore.user) {
-      order = this.checkoutStore.order
-    } else {
+    if (!this.checkoutStore.order || !this.userStore.user) {
       return null
     }
+
+    console.log(this.checkoutStore.order)
+
+    const store = this.props.store
+
+    const order = this.checkoutStore.order
 
     let timeDropdownClass = "dropdown-menu"
     if (this.state.timeDropdown && this.state.lockAddress) {
       timeDropdownClass += " show"
     }
      
-    const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : order.applicable_store_credit
+    const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : 0
 
     const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
     const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
@@ -186,6 +190,8 @@ class Checkout extends Component {
     if (this.state.addressError) {
       addressCardClass += ' error'
     }
+
+    const cart_items = order && order.cart_items ? order.cart_items : []
 
 
     return (
@@ -360,7 +366,7 @@ class Checkout extends Component {
 
                 <div className="card1">
                   <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
-                    { this.userStore.user.payments.map((data, index) => {
+                    { this.userStore.user.payment.map((data, index) => {
 
                       if (this.state.lockPayment && selectedPayment!=data.payment_id) {
                         return null
@@ -439,7 +445,7 @@ class Checkout extends Component {
                   <div className="card-body">
                     <h3 className="m-0 mb-2">Order Summary</h3>
                     <hr/>
-                    { order.cart_items.map((c, i) => (
+                    { cart_items.map((c, i) => (
 
                     <div className="item mt-3 pb-2" key={i}>
                       <div className="item-left">
@@ -452,7 +458,7 @@ class Checkout extends Component {
                       </div>
                       <div className="item-right">
                         <h4>x{c.customer_quantity}</h4>
-                        <span className="item-price">{formatMoney(c.total)}</span>
+                        <span className="item-price">{formatMoney(c.total/100)}</span>
                       </div>
                     </div>
                     ))}
@@ -461,11 +467,11 @@ class Checkout extends Component {
                     <div className="item-summaries">
                       <div className="summary">
                         <span>Subtotal</span>
-                        <span>{formatMoney(order.subtotal)}</span>
+                        <span>{formatMoney(order.sub_total/100)}</span>
                       </div>
                       <div className="summary">
                         <span>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
-                        <span>{formatMoney(order.tax_amount + order.service_amount)}</span>
+                        <span>{formatMoney((order.tax_amount + order.service_amount)/100)}</span>
                       </div>
                       <div className="summary">
                         <span>Delivery fee</span>
@@ -473,7 +479,7 @@ class Checkout extends Component {
                       </div>
                       <div className="summary">
                         <span>Packaging deposit  <FontAwesome name='info-circle' /></span>
-                        <span>{formatMoney(order.packaging_deposit)}</span>
+                        <span>{formatMoney(order.packaging_deposit/100)}</span>
                       </div>
                       {this.state.appliedStoreCredit ?
                       <div className="summary">
@@ -523,7 +529,7 @@ class Checkout extends Component {
                     <hr className="mt-4" />
                     <div className="item-total">
                       <span>Total</span>
-                      <span>{formatMoney(order.total)}</span>
+                      <span>{formatMoney(order.total/100)}</span>
                     </div>
                     <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
                     {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}

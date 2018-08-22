@@ -111,8 +111,12 @@ class Mainpage extends Component {
   }
 
   handleCheckout() {
-    this.uiStore.toggleCartDropdown()
-    this.routing.push('/checkout')
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
+      this.uiStore.toggleCartDropdown()
+      this.routing.push('/checkout')
+    }).catch((e) => {
+      console.error(e)
+    })
   }
 
   handleEdit(data) {

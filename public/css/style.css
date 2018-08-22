@@ -1106,6 +1106,9 @@ span.tnc {
     background-position: 5%;
 }
 
+.text-black {
+  color:black;
+}
 .text-blue {
   color: #6060a8 !important;
   font-size: 20px;
@@ -1123,10 +1126,11 @@ span.tnc {
   display:inline-block;
 }
 
-section.bg-fruitfull {
+section.page-section.bg-fruitfull {
   background: url('../images/fruitfull.png') repeat;
   min-height: 800px;
   margin: 0 auto;
+  padding-top:10px;
 }
 
 .card {
