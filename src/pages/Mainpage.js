@@ -59,10 +59,15 @@ class Mainpage extends Component {
       searchAhead: [],
       searchAheadLoading: false,
       searchPage: false,
-      searchResult:null,
+      searchResult:[],
+      searchDisplayed:[],
       searchTerms: '',
 
       sidebar:[],
+      searchSidebar:[],
+
+      currentSearchCat: null,
+      currentSearchCatId: null,
 
       cartDropdown: false,
       categoriesDropdown: false,
@@ -136,7 +141,14 @@ class Mainpage extends Component {
       let filters = []
       filters = data && data.filters ?
         data.filters : []
-      this.setState({sidebar: filters, searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword})
+
+      const currentSearchCatId = filters[0].cat_id
+      const currentSearchCat = filters[0].cat_name
+      const searchDisplayed = data.products.filter((d) => {
+        return d.cat_id == currentSearchCatId
+      })
+
+      this.setState({searchSidebar: filters, searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat, searchDisplayed })
     })
   }
 
@@ -160,6 +172,21 @@ class Mainpage extends Component {
 
   handleCategoriesDropdown = () => {
     this.uiStore.toggleCategoriesDropdown()
+  }
+
+  handleChangeSearchCategory(cat_id) {
+    const data = this.state.searchResult
+    const searchDisplayed = data.products.filter((d) => {
+      return d.cat_id == cat_id
+    })
+
+    const current = data.filters.find((d) => {
+      return d.cat_id == cat_id
+    })
+
+    this.setState({searchDisplayed, currentSearchCat: current.cat_name, currentSearchCatId: current.cat_id})
+
+
   }
 
   render() {
@@ -308,7 +335,7 @@ class Mainpage extends Component {
                       */
                   }
 
-                  {this.state.sidebar.map((s,i) => {
+                  {!this.state.searchPage && this.state.sidebar.map((s,i) => {
 
                     let parentSidebarClass = ''
                     let link = '/main'
@@ -333,6 +360,18 @@ class Mainpage extends Component {
                               >{sc.cat_name}</Link></li>
                           ) )}
                         </ul>
+                      </div>
+                    )
+                  })}
+
+                  {this.state.searchPage && <h4>Sub Categories</h4>}
+                  {this.state.searchPage && this.state.searchSidebar.map((s,i) => {
+                    return (
+                      <div key={i}>
+                        <label className="form-check-label check-sidebar">
+                          <input checked={s.cat_id==this.state.currentSearchCatId} type="radio" name="search_category" class="form-check-input" onChange={e=>this.handleChangeSearchCategory(s.cat_id)}/>
+                          <span>{s.cat_name}</span>
+                        </label>
                       </div>
                     )
                   })}
@@ -371,11 +410,12 @@ class Mainpage extends Component {
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
                   <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                  <span className="search-count">{this.state.searchResult.products.length} search result for "{this.state.searchTerms}" in Fresh Produce</span>
+                  <span className="search-count">{this.state.searchDisplayed.length} search result for "{this.state.searchTerms}" in {this.state.currentSearchCat}</span>
                   <hr/>
                 </div>
 
-                { this.state.searchResult.products.map((p, i) => (
+                <div className="row">
+                { this.state.searchDisplayed.map((p, i) => (
                   <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.productStore.showModal(p.product_id)}>
                     <img src={APP_URL + "/images/product_thumbnail.png"} />
                     <div className="row product-detail">
@@ -389,7 +429,7 @@ class Mainpage extends Component {
                     <span className="product-desc">{p.name}</span>
                   </div>
                 ))}
-
+              </div>
                 
               </div> }
             </div>

@@ -60,9 +60,12 @@ class ProductModal extends Component {
     }, this.userStore.getHeaderAuth()).then((data) => {
 
     }).catch((e) => {
-      const msg = e.response.data.error.message
-      this.setState({invalidText: msg})
-      console.error('Failed to add to cart', e)
+      console.log(e)
+      if (e.response) {
+        const msg = e.response.data.error.message
+        this.setState({invalidText: msg})
+        console.error('Failed to add to cart', e)
+      }
     })
 
     this.productStore.hideModal()
