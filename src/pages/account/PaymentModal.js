@@ -26,6 +26,7 @@ class PaymentModal extends Component {
 
 
     this.userStore = this.props.store.user
+    this.handleAddPayment = this.handleAddPayment.bind(this)
   }
 
   componentDidMount() {
@@ -35,7 +36,7 @@ class PaymentModal extends Component {
         cardnumber: payment.cardnumber,
         title: 'Edit Payment Card',
         mode: 'edit',
-        default: this.userStore.user.preferred_payment === payment.payment_id
+        default: this.userStore.user.preferred_payment === payment._id
       })
     } else {
       // this.setState({
@@ -46,7 +47,11 @@ class PaymentModal extends Component {
   }
 
   handleAddPayment(data) {
-    return this.userStore.savePayment(data)
+    return this.userStore.savePayment(data).then((data) => {
+      this.userStore.setUserData(data)
+      this.userStore.hidePaymentModal()
+      return data
+    })
     // this.setState({invalidText: null})
     // if (!this.state.cardnumber) {
     //   this.setState({invalidText: 'Cardnumber cannot be empty'})
@@ -81,8 +86,15 @@ class PaymentModal extends Component {
     if (this.state.default) {
       return
     }
-    this.userStore.makeDefaultPayment(this.state.address_id)
-    this.userStore.hidePaymentModal()
+    this.userStore.makeDefaultPayment(this.state.payment_id).then((data) => {
+      this.userStore.setUserData(data)
+      this.userStore.hidePaymentModal()
+    }).catch((e) => {
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+      console.error('Failed to edit payment', e)
+    })
+
   }
   handleDeleteConfirm() {
     this.setState({
@@ -90,8 +102,15 @@ class PaymentModal extends Component {
     })
   }
   handleDelete() {
-    this.userStore.deletePayment(this.state.payment_id)
-    this.userStore.hidePaymentModal()
+    this.setState({deleteConfirmation: false})
+    this.userStore.deletePayment(this.state.payment_id).then((data) => {
+      this.userStore.setUserData(data)
+      this.userStore.hidePaymentModal()
+    }).catch((e) => {
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+      console.error('Failed to delete address', e)
+    })
   }
   render() {
      let buttonClass = 'btn btn-main my-3'
@@ -118,7 +137,7 @@ class PaymentModal extends Component {
 
             <ul className="list-payments list-payments--noborder">
               <li>
-                <span className="payments--card">{this.state.cardnumber}</span>
+                <span className="payments--card">*****{this.state.last4}</span>
                 <span className="addresses--default button">
                   { this.state.default ? (
                     <span>DEFAULT</span>

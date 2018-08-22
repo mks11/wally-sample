@@ -158,7 +158,7 @@ class Account extends Component {
             <ul className="list-payments">
               {payments.map((data, index) => (
                 <li key={index}>
-                  <span className="payments--card">{data.cardnumber}</span>
+                  <span className="payments--card">*****{data.last4}</span>
                       <span className="addresses--default button">
                         {data.payment_id === this.userStore.user.preferred_payment ? (
                           <span onClick={e => this.userStore.showPaymentModal(data)}>DEFAULT</span>

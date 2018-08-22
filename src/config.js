@@ -50,5 +50,5 @@ export const FACEBOOK = "http://facebook.com"
 export const GOOGLE_API_KEY="AIzaSyB2IlvjI5MCPefFjne3cgbklq_1899QiXU"
 
 export const APP_URL = "http://rizkifuad.com:3000"
-export const STRIPE_API_KEY = "pk_test_zTbn5csOSFvi6A0WAtxp5aZt"
+export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4"
 

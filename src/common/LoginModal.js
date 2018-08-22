@@ -15,7 +15,10 @@ class LoginModal extends Component {
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
     this.routing = this.props.store.routing
+
+    this.handleEmailChange = this.handleEmailChange.bind(this)
   }
+
   handleSubmit(e) {
     this.setState({ invalidText: ''})
     if (!this.state.password) {
@@ -34,9 +37,9 @@ class LoginModal extends Component {
         const msg = e.response.data.error.message
         this.setState({invalidText: msg})
       })
-
     e.preventDefault()
   }
+
 
   handleNext(e) {
     this.setState({invalidText: ''})
@@ -49,6 +52,7 @@ class LoginModal extends Component {
       this.setState({invalidText: 'Email not valid'})
       return
     }
+
 
     this.modalStore.setLoginStep(2)
 
@@ -66,9 +70,26 @@ class LoginModal extends Component {
     this.modalStore.toggleLogin()
   }
 
-  handleToggle() {
+  handleToggle = () => {
     this.setState({invalidText: '', email: '', password: ''})
     this.modalStore.toggleLogin()
+  }
+
+  handleEmailChange(e) {
+    this.setState({email: e.target.value})
+    e.preventDefault()
+  }
+
+  handleEmailEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.handleNext(e)
+    }
+  }
+
+  handlePasswordEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmit(e)
+    }
   }
 
   render() {
@@ -91,12 +112,12 @@ class LoginModal extends Component {
     }
 
     return (
-      <Modal isOpen={store.modal.login}>
+      <Modal isOpen={store.modal.login} toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           { this.modalStore.loginStep >=2  ? <button className="btn-icon btn-icon--back" onClick={e => this.handlePrev(e)}></button>
               : <div></div>
           }
-          <button className="btn-icon btn-icon--close" onClick={e => this.handleToggle(e)}></button>
+          <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
         <ModalBody>
           <div className="login-wrap pb-2">
@@ -110,10 +131,12 @@ class LoginModal extends Component {
               { this.modalStore.loginStep === 1 && (
                 <div>
                   <Input
+                    autoFocus
                     className="aw-input--control aw-input--center mb-5"
                     type="text"
                     placeholder="Enter your email"
-                    onChange={(e) => this.setState({email: e.target.value})}/>
+                    onKeyDown={this.handleEmailEnter}
+                    onChange={this.handleEmailChange}/>
                   <ErrorInfo/>
                   <button type="button" className={buttonNextClass} onClick={e => this.handleNext(e)}>
                     SUBMIT
@@ -133,9 +156,11 @@ class LoginModal extends Component {
               { this.modalStore.loginStep === 2 &&
                   <div>
                   <Input
+                    autoFocus
                     className="aw-input--control aw-input--center"
                     type="password"
                     placeholder="Enter your password"
+                    onKeyDown={this.handlePasswordEnter}
                     onChange={(e) => this.setState({password: e.target.value})}/>
                   <a className="forgot-text mt-2 mb-4" onClick={e => this.modalStore.setLoginStep(3)}>Forgot Password?</a>
                   <ErrorInfo/>

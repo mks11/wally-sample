@@ -15,37 +15,48 @@ class UiStore {
     this.backdropTop = 0
     this.backdrop = !this.backdrop
     this.accountDropdown = !this.accountDropdown
-
-    if (this.accountDropdown) {
-      this.backdrop = true
-      this.cartDropdown = false
-      this.categoriesDropdown = false
-    }
   }
 
+  hideAccountDropdown() {
+    if (!this.accountDropdown) {
+      return
+    }
+    this.backdropZindex = 100
+    this.backdropTop = 0
+    this.backdrop = false
+    this.accountDropdown = false
+  }
+
+  hideCategoriesDropdown() {
+    if (!this.categoriesDropdown) {
+      return
+    }
+    this.backdropZindex = 100
+    this.backdropTop = 0
+    this.backdrop = false
+    this.categoriesDropdown = false
+  }
+
+
+  hideCartDropdown() {
+    if (!this.cartDropdown) {
+      return
+    }
+    this.backdropZindex = 70
+    this.backdropTop = 0
+    this.backdrop = false
+    this.cartDropdown = false
+  }
   toggleCartDropdown() {
     this.backdropTop = 70
     this.backdrop = !this.backdrop
     this.cartDropdown = !this.cartDropdown
-
-    if (this.cartDropdown) {
-      this.backdrop = true
-      this.accountDropdown = false
-      this.categoriesDropdown = false
-    }
   }
 
   toggleCategoriesDropdown() {
-    this.backdropTop = 70
+     this.backdropTop = 70
     this.backdrop = !this.backdrop
     this.categoriesDropdown = !this.categoriesDropdown
-
-    if (this.categoriesDropdown) {
-      this.backdrop = true
-      this.accountDropdown = false
-      this.cartDropdown = false
-    }
-    
   }
 
   showBackdrop(top) {
@@ -74,11 +85,15 @@ decorate(UiStore, {
   accountDropdown: observable,
   cartDropdown: observable,
   categoriesDropdown: observable,
+  
   backdropTop: observable,
   backdrop: observable,
   toggleAccountDropdown: action,
   toggleCartDropdown: action,
   toggleCategoriesDropdown: action,
+  hideAccountDropdown: action,
+  hideCategoriesDropdown: action,
+  hideCartDropdown: action,
   hideAllDropdown: action,
 })
 

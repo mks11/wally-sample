@@ -30,6 +30,12 @@ class UserStore {
     localStorage.setItem('user', JSON.stringify(this.user))
   }
 
+  setToken(token) {
+    this.token = token
+    this.status = true
+    localStorage.setItem('token', JSON.stringify(this.token))
+  }
+
 
   async login(email, password) {
     const resp =  await axios.post(API_LOGIN, {
@@ -37,15 +43,13 @@ class UserStore {
     })
 
     this.setUserData(resp.data.user)
+    this.setToken(resp.data.token)
 
-    this.token = resp.data.token
-    this.status = true
-    localStorage.setItem('token', JSON.stringify(this.token))
   }
 
   async signup(data) {
-    const resp = await axios.post(API_SIGNUP, data)
-    return resp
+    const res = await axios.post(API_SIGNUP, data)
+    return res.data
   }
 
   async edit(data) {
@@ -118,8 +122,8 @@ class UserStore {
     return res.data
   }
 
-  async deletePayment(id) {
-    const res = await axios.post(API_PAYMENT_REMOVE, {id}, this.getHeaderAuth)
+  async deletePayment(payment_id) {
+    const res = await axios.delete(API_PAYMENT_REMOVE + payment_id, this.getHeaderAuth())
     return res.data
   }
 
@@ -183,6 +187,7 @@ decorate(UserStore, {
 
   login: action,
   setUserData: action,
+  setToken: action,
   edit: action,
   signup: action,
   logout: action,

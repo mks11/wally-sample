@@ -86,7 +86,7 @@ class ProductModal extends Component {
 
 
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
-    const price = inventory.price
+    const price = inventory.price / 100
     let price_unit = product.unit_size
 
     let unit = 1
@@ -106,7 +106,7 @@ class ProductModal extends Component {
 
 
     return (
-      <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} >
+      <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
         <div className="modal-header">
           <button className="btn-icon btn-icon--back"></button>
           <button className="btn-icon btn-icon--close" onClick={e => this.productStore.hideModal(e)} ></button>

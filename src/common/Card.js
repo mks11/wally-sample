@@ -97,14 +97,18 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
           if (payload.error) {
             throw payload
           }
+          console.log('payload',payload)
 
-          // return this.props.addPayment({
-          //   preferred_payment: this.state.preferred_payment,
-          //   billing_zip: this.state.billing_zip,
-          //   // stripe_token: payload.token
-          // })
+          return this.props.addPayment({
+            preferred_payment: this.state.preferred_payment,
+            billing_zip: this.state.billing_zip,
+            stripeToken: payload.token.id
+          })
           // console.log('[token]', payload))
+        }).then((data) => {
+
         }).catch((e) => {
+          console.log(e)
           if (e.response) {
             const msg = e.response.data.error.message
             this.setState({invalidText: msg})

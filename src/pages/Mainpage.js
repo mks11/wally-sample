@@ -4,6 +4,7 @@ import { formatMoney, connect } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL } from '../config'
 import {MenuItem, MenuItemContainer, AsyncTypeahead} from 'react-bootstrap-typeahead'
+import ClickOutside from 'react-click-outside'
  
 
 import ProductModal from '../common/ProductModal';
@@ -13,7 +14,7 @@ let Product = ((props) => (
     <img src={APP_URL + "/images/product_thumbnail.png"} />
     <div className="row product-detail">
       <div className="col-6 product-price">
-        {formatMoney(props.product.product_price)}
+        {formatMoney(props.product.product_price/100)}
       </div>
       <div className="col-6 product-weight">
         {(props.product.product_size)}
@@ -62,6 +63,9 @@ class Mainpage extends Component {
       searchTerms: '',
 
       sidebar:[],
+
+      cartDropdown: false,
+      categoriesDropdown: false,
     }
 
     this.id = null
@@ -149,8 +153,13 @@ class Mainpage extends Component {
     this.search(e[0].name)
   }
 
-  handleCartDropdown() {
-      this.uiStore.toggleCartDropdown()
+  
+  handleCartDropdown = () => {
+    this.uiStore.toggleCartDropdown()
+  }
+
+  handleCategoriesDropdown = () => {
+    this.uiStore.toggleCategoriesDropdown()
   }
 
   render() {
@@ -174,7 +183,7 @@ class Mainpage extends Component {
       const cart_items = this.checkoutStore.cart.cart_items
       cartCount = cart_items.length
       cartItems = cart_items
-      cartSubtotal = this.checkoutStore.cart.subtotal
+      cartSubtotal = this.checkoutStore.cart.subtotal / 100
     }
 
 
@@ -185,17 +194,20 @@ class Mainpage extends Component {
         <div className="product-top">
           <div className="container">
             <div className="row">
-              <div className="col-md-3 col-sm-4 left-column">
+              <div className="col-md-2 col-sm-4 left-column">
                 <div className="dropdown dropdown-fwidth">
-                  <h3 onClick={e => this.uiStore.toggleCategoriesDropdown()}>All Categories <i className="fa fa-chevron-down"></i></h3>
+
+                  <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()}>
+                  <h3 onClick={this.handleCategoriesDropdown}>All Categories <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
-                    <Link to="/main" className="dropdown-item">All Categories</Link>
+                    <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
 
                     {this.productStore.categories.map((s,i) => (
-                      <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i}>{s.cat_name}</Link>
+                      <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>
                     ))}
                   </div>
+                </ClickOutside>
                 </div>
               </div>
               <div className="col-md-9 col-sm-8 right-column">
@@ -226,8 +238,9 @@ class Mainpage extends Component {
                   </div>
                   <div className="media-right">
 
+                  <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
                     <div className="btn-group dropdown-cart">
-                      <div onClick={e => this.handleCartDropdown()} className={buttonCart}>
+                      <div onClick={this.handleCartDropdown} className={buttonCart}>
                         <i className="fa fa-shopping-bag"></i><span>{cartCount} Item</span>
                       </div>
 
@@ -249,7 +262,7 @@ class Mainpage extends Component {
                               </div>
                               <div className="item-right">
                                 <h4>x{c.customer_quantity}</h4>
-                                <span className="item-price">{formatMoney(c.product_price)}</span>
+                                <span className="item-price">{formatMoney(c.total/100)}</span>
                               </div>
                             </div>
 
@@ -268,6 +281,7 @@ class Mainpage extends Component {
 
                       </div>
                     </div>
+                  </ClickOutside>
                   </div>
                 </div>
               </div>
@@ -278,7 +292,7 @@ class Mainpage extends Component {
         <div className="product-content">
           <div className="container">
             <div className="row ">
-              <div className="col-md-3 col-sm-4">
+              <div className="col-md-2 col-sm-4">
                 <div className="product-content-left">
                   <div className="mb-4">
                     <h4>The Wally Shop</h4>
@@ -335,10 +349,10 @@ class Mainpage extends Component {
                 <img src={APP_URL + this.productStore.ads2} className="img-fluid" />
 
                 <div className="product-breadcrumb">
-                  <span>All Categories > </span>
+                  <span>All Categories</span>
                   {this.productStore.path.map((p, i) => (
                     <span key={i}>
-                    { i != 0 && <a className="text-violet text-bold" href="">{p}</a>}
+                      { i != 0 && <span><span> &gt; </span> <Link to={""} className="text-violet text-bold">{p}</Link></span>}
                     </span>
                   ))}
                 </div>

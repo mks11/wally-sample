@@ -104,6 +104,12 @@ transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);}
   justify-content: space-between;
 }
 
+.aw-nav {
+  font-size: 16px;
+  font-weight: normal;
+  text-transform:uppercase;
+}
+
 /* nav.aw-nav--toggle svg path, */
 body.nav-open .aw-header nav.aw-nav--toggle svg path, 
 body.nav-open .aw-header.navbar-white nav.aw-nav--toggle svg path{stroke: #fff;}
@@ -117,7 +123,7 @@ nav.aw-nav a::after{position: absolute;content:'';left:0;right:0;bottom:-5px;bor
 nav.aw-nav a:focus::after, nav.aw-nav a:active::after, nav.aw-nav a:hover::after{border-bottom-color:#fff;}
 body.page-inner nav.aw-nav a:focus::after, body.page-inner nav.aw-nav a:active::after, body.page-inner nav.aw-nav a:hover::after, 
 .navbar-white nav.aw-nav a:focus::after, .navbar-white nav.aw-nav a:active::after,.navbar-white nav.aw-nav a:hover::after{
-border-bottom-color:#000;}
+border-bottom-color:#000;border-bottom: .6px solid #000;}
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
 .logo-text-desktop{height:40px;}
@@ -179,7 +185,7 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#ea5e74;box-shadow:none!important;-webkit-box-shadow:none!important;}
+background-color:#e0a5a7;box-shadow:none!important;-webkit-box-shadow:none!important;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:78px;}
 .footer-fb a{
@@ -657,7 +663,9 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   margin:0;
 }
 .btn-transparent.dropdown-toggle {
-  font-size: 22px;
+  font-size: 17px;
+  font-weight:normal;
+  text-transform:uppercase;
 }
 .btn-transparent.dropdown-toggle:after{
   background: url('')
@@ -1238,7 +1246,7 @@ a.dropdown-item.lg {
 .right-column{padding-left:50px;}
 
 .product-content-left{padding-top: 80px;font-size: 15px;}
-.product-content-left h4 {font-weight: bold;font-size:18px;}
+.product-content-left h4 {font-weight: bold;font-size:15px;}
 .text-violet{color:#6060a8 !important;}
 .product-content-left div > ul{
   list-style: none

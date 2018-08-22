@@ -57,7 +57,6 @@ ReactDOM.render(
         <InvalidZipSuccessModal/>
         <InviteModal/>
         <DeleteModal/>
-        <Outside/>
       </div> 
     </Router>
   </Provider>

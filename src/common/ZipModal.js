@@ -34,9 +34,16 @@ class ZipModal extends Component {
 
   }
 
-  handleToggle() {
+  handleToggle = () => {
+    console.log('asdfsafa')
     this.setState({zip: ''})
     this.modalStore.toggleZip()
+  }
+
+  handleZipEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmit(e)
+    }
   }
 
   render() {
@@ -47,10 +54,10 @@ class ZipModal extends Component {
       buttonClass += ' active'
     }
     return (
-      <Modal isOpen={store.modal.zip}>
+      <Modal isOpen={store.modal.zip} toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.handleToggle(e)}></button>
+          <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
         <ModalBody>
           <div className="login-wrap pb-5">
@@ -58,9 +65,11 @@ class ZipModal extends Component {
             <span className="mb-5">The Wally Shop is only available in select zipcodes.</span>
             <form onSubmit={e => e.preventDefault()}>
               <Input
+                autoFocus
                 className="aw-input--control aw-input--center mb-5"
                 type="number"
                 placeholder="Enter your zipcode"
+                onKeyDown={this.handleZipEnter}
                 onChange={(e) => this.setState({zip: e.target.value})}/>
               <button type="button" className={buttonClass} onClick={(e) => this.handleSubmit(e)}>SUBMIT</button>
             </form>

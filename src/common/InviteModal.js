@@ -11,20 +11,16 @@ class InviteModal extends Component {
     }
 
     this.userStore = this.props.store.user
+    this.modalStore = this.props.store.modal
   }
 
-  componentDidMount() {
-    // if (!this.userStore.user) return
-    //
-    // this.userStore.referFriend().then((res) => {
-    //   this.setState({link: res.data.ref_url})
-    // }).catch((e) => {
-    //   console.error('Failed to load refer friend', e)
-    // })
+  handleToggle = () => {
+    this.modalStore.toggleInvite()
   }
 
-  handleCopy() {
+  handleCopy = () => {
     const $el = this.el
+    console.log($el)
     $el.select()
     try {
       var successful = document.execCommand('copy')
@@ -38,10 +34,10 @@ class InviteModal extends Component {
   render() {
     const store = this.props.store
     return (
-      <Modal isOpen={store.modal.invite} contentClassName="modal-bg-pinneapple">
+      <Modal isOpen={store.modal.invite} contentClassName="modal-bg-pinneapple" toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={e => store.modal.toggleInvite(e)}></button>
+          <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
         <ModalBody >
           <div className="login-wrap pb-5">
@@ -51,9 +47,9 @@ class InviteModal extends Component {
               friends free delivery their first month.    
             </span>
             <div className="referral-wrap p-2">
-              <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.state.link} ref={el => this.el = el}/>
+              <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el}/>
               <span className="referral-link">{this.userStore.refUrl}</span>
-              <button type="button" className="btn btn-transparent btn-transparent-light" onClick={e => this.handleCopy()}>COPY</button>
+              <button type="button" className="btn btn-transparent btn-transparent-light" onClick={this.handleCopy}>COPY</button>
             </div>
           </div>
 

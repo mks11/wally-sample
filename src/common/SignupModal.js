@@ -41,6 +41,8 @@ class SignupModal extends Component {
       password: this.state.password,
       signup_zip: this.zipStore.selectedZip
     }).then((data) => {
+      this.userStore.setUserData(data.user)
+      this.userStore.setToken(data.token)
       this.modalStore.toggleSignup()
       this.modalStore.toggleWelcome()
     }).catch((e) => {
@@ -53,10 +55,20 @@ class SignupModal extends Component {
     e.preventDefault()
   }
 
+  handleKeySubmit = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmit(e)
+    }
+  }
+
   handleLogin() {
     this.routing.push('/main')
     this.modalStore.toggleSignup()
     this.modalStore.toggleLogin()
+  }
+
+  handleToggle = () => {
+    this.modalStore.toggleSignup()
   }
 
   render() {
@@ -65,10 +77,10 @@ class SignupModal extends Component {
       buttonClass += ' active'
     }
     return (
-      <Modal isOpen={this.modalStore.signup}>
+      <Modal isOpen={this.modalStore.signup} toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.modalStore.toggleSignup(e)}></button>
+          <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
         <ModalBody>
           <div className="signup-wrap">
@@ -76,19 +88,23 @@ class SignupModal extends Component {
             <span className="mb-5">Shop package-free groceries</span>
             <form onSubmit={e => e.preventDefault()}>
               <Input
+                autoFocus
                 className="aw-input--control"
                 type="text"
                 placeholder="Enter your name"
+                onKeyDown={this.handleKeySubmit}
                 onChange={(e) => this.setState({name: e.target.value})}/>
               <Input
                 className="aw-input--control"
                 type="text"
                 placeholder="Enter your email"
+                onKeyDown={this.handleKeySubmit}
                 onChange={(e) => this.setState({email: e.target.value})}/>
               <Input
                 className="aw-input--control"
                 type="password"
                 placeholder="Enter your password"
+                onKeyDown={this.handleKeySubmit}
                 onChange={(e) => this.setState({password: e.target.value})}/>
 
               <span className="tnc mt-3 mb-2">

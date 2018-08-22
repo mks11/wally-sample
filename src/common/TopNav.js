@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { formatMoney, connect } from '../utils'
+import ClickOutside from 'react-click-outside'
 
 class TopNav extends Component {
   constructor(props) {
@@ -25,14 +26,20 @@ class TopNav extends Component {
   }
 
   handleInvite() {
+    this.uiStore.hideAccountDropdown()
     this.modalStore.toggleInvite()
     this.userStore.referFriend()
   }
 
   handleLogout(e) {
+    this.uiStore.hideAccountDropdown()
     this.props.store.routing.push('/')
     this.userStore.logout()
     e.preventDefault()
+  }
+
+  handleToggle = () => {
+    this.uiStore.toggleAccountDropdown()
   }
 
   render() {
@@ -84,18 +91,20 @@ class TopNav extends Component {
               </div>
               { this.userStore.status ? 
                   <div className="col-auto ml-auto d-none d-md-block account-dropdown">
-                    <div className="btn-group">
-                      <button onClick={e => this.uiStore.toggleAccountDropdown(e)} className="btn btn-transparent dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                        Hello {name}
-                      </button>
-                      <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                        <a className="dropdown-item lg" href="#"><strong>All About You..</strong></a>
-                        <Link to="/orders" className="dropdown-item" href="#">Order History</Link>
-                        <Link to="/user" className="dropdown-item" href="#">Account Settings</Link>
-                        <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
-                        <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                    <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
+                      <div className="btn-group">
+                        <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                          Hello {name}
+                        </button>
+                        <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
+                          <a className="dropdown-item lg" href="#"><strong>All About You..</strong></a>
+                          <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
+                          <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
+                          <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
+                          <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                        </div>
                       </div>
-                    </div>
+                      </ClickOutside>
                 </div>
                   :null}
               <div className="col-auto ml-auto d-none d-md-block">
