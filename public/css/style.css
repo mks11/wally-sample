@@ -1200,11 +1200,12 @@ section.page-section.bg-fruitfull {
 .product-top{
   border-bottom: 1px solid #bbb;
   padding: 15px 0;
-  position: fixed;
+  /* position: fixed; */
   width: 100%;
   background: #fff;
   z-index: 100;
 }
+.product-top.fixed{position:fixed;top:69px;}
 .product-top h3{font-weight: 400;font-size: 20px;margin-bottom: 0;margin-top: 9px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 4px;}
 .left-column::after{position: absolute;content:'';border-right:1px solid #ddd;top:0;bottom:0;right:0;}
@@ -1464,4 +1465,38 @@ input[aria-expanded="true"] + .autocomplete-dropdown-container {
 }
 .form-check-label.check-sidebar span {
   margin-left: 20px;
+}
+
+.carousel {
+    background: #ddeff7;
+    position: relative;
+}
+
+.carousel .carousel-item {width:1200px;margin:auto;}
+
+.carousel-indicators li {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background:#fff;
+    margin-left:10px;
+    margin-right:10px;
+}
+.carousel-indicators li::after {
+  position: absolute;
+  /* bottom: -10px; */
+  left: 5px;
+  top: 5px;
+  display: inline-block;
+  width: 100%;
+  height: 10px;
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #ddeff7;
+  border-radius: 10px;
+}
+
+.carousel-indicators li.active::after {
+  background: #fff;
 }

@@ -154,10 +154,7 @@ class Checkout extends Component {
       return null
     }
 
-    console.log(this.checkoutStore.order)
-
     const store = this.props.store
-
     const order = this.checkoutStore.order
 
     let timeDropdownClass = "dropdown-menu"

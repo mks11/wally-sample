@@ -5,9 +5,40 @@ import { Link } from 'react-router-dom'
 import { APP_URL } from '../config'
 import {MenuItem, MenuItemContainer, AsyncTypeahead} from 'react-bootstrap-typeahead'
 import ClickOutside from 'react-click-outside'
- 
+import {
+  Carousel,
+  CarouselItem,
+  CarouselControl,
+  CarouselIndicators,
+  CarouselCaption
+} from 'reactstrap';
 
 import ProductModal from '../common/ProductModal';
+
+const heroItems = [
+  {
+    src: 'http://localhost:3000/images/hero1.png',
+    altText: 'Slide 1',
+    caption: 'Slide 1'
+  },
+  {
+    src: 'http://localhost:3000/images/hero1.png',
+    altText: 'Slide 2',
+    caption: 'Slide 2'
+  },
+  {
+    src: 'http://localhost:3000/images/hero1.png',
+    altText: 'Slide 3',
+    caption: 'Slide 3'
+  },
+  {
+    src: 'http://localhost:3000/images/hero1.png',
+    altText: 'Slide 4',
+    caption: 'Slide 4'
+  }
+];
+ 
+
 
 let Product = ((props) => ( 
   <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
@@ -63,6 +94,8 @@ class Mainpage extends Component {
       searchDisplayed:[],
       searchTerms: '',
 
+      activeHeroIndex: 0,
+
       sidebar:[],
       searchSidebar:[],
 
@@ -86,6 +119,15 @@ class Mainpage extends Component {
       .then((status) => {
         this.loadData()
       })
+    const $ = window.$
+    $(window).bind('scroll', function () {
+      console.log($(window).scrollTop())
+      if ($(window).scrollTop() > 614) {
+        $('.product-top').addClass('fixed');
+      } else {
+        $('.product-top').removeClass('fixed');
+      }
+    });
   }
 
   loadData() {
@@ -111,16 +153,11 @@ class Mainpage extends Component {
   }
 
   handleCheckout() {
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
       this.uiStore.toggleCartDropdown()
       this.routing.push('/checkout')
-    }).catch((e) => {
-      console.error(e)
-    })
   }
 
   handleEdit(data) {
-    console.log('dat', data)
     this.productStore.showModal(data.product_id, data.customer_quantity)
   }
 
@@ -192,6 +229,30 @@ class Mainpage extends Component {
 
 
   }
+  onHeroExiting = () => {
+    this.animating = true;
+  }
+
+  onHeroExited = () => {
+    this.animating = false;
+  }
+
+  nextHero = () => {
+    if (this.animating) return;
+    const nextIndex = this.state.activeHeroIndex === heroItems.length - 1 ? 0 : this.state.activeHeroIndex + 1;
+    this.setState({ activeHeroIndex: nextIndex });
+  }
+
+  previousHero = () => {
+    if (this.animating) return;
+    const nextIndex = this.state.activeHeroIndex === 0 ? heroItems.length - 1 : this.state.activeHeroIndex - 1;
+    this.setState({ activeHeroIndex: nextIndex });
+  }
+
+  goToHeroIndex = (newIndex) => {
+    if (this.animating) return;
+    this.setState({ activeHeroIndex: newIndex });
+  }
 
   render() {
     const id = this.props.match.params.id
@@ -217,10 +278,34 @@ class Mainpage extends Component {
       cartSubtotal = this.checkoutStore.cart.subtotal / 100
     }
 
+    const ads1 = this.productStore.ads1 ? this.productStore.ads1 : '/images/shop_banner_1.png'
+    const ads2 = this.productStore.ads2 ? this.productStore.ads2 : '/images/shop_banner_2.png'
+
+    const { activeHeroIndex } = this.state;
+
+    const slides = heroItems.map((item) => {
+      return (
+        <CarouselItem
+          onExiting={this.onHeroExiting}
+          onExited={this.onHeroExited}
+          key={item.caption}
+        >
+          <img src={item.src} alt={item.altText} />
+        </CarouselItem>
+      );
+    });
 
     return (
       <div className="App">
 
+      <Carousel
+        activeIndex={activeHeroIndex}
+        next={this.nextHero}
+        previous={this.previousHero}
+      >
+        <CarouselIndicators items={heroItems} activeIndex={activeHeroIndex} onClickHandler={this.goToHeroIndex} />
+        {slides}
+      </Carousel>
         {/* Product Top */}
         <div className="product-top">
           <div className="container">
@@ -319,6 +404,7 @@ class Mainpage extends Component {
             </div>
           </div>
         </div>
+
         
         <div className="product-content">
           <div className="container">
@@ -380,16 +466,18 @@ class Mainpage extends Component {
                     )
                   })}
 
+                  <br/>
                   <div>
-                    <img src={APP_URL + this.productStore.ads1} />
+                    <img src={APP_URL + ads1} />
                   </div>
+                  <br/>
                 </div>
 
               </div>
 
               { !this.state.searchPage &&
               <div className="col-md-9 col-sm-8 product-content-right">
-                <img src={APP_URL + this.productStore.ads2} className="img-fluid" />
+                <img src={APP_URL + ads2} className="img-fluid" />
 
                 <div className="product-breadcrumb">
                   <span>All Categories</span>
@@ -409,7 +497,7 @@ class Mainpage extends Component {
 
               { this.state.searchPage &&
               <div className="col-md-9 col-sm-8 product-content-right">
-                <img src={APP_URL + this.productStore.ads2} className="img-fluid" />
+                <img src={APP_URL + ads2} className="img-fluid" />
 
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
