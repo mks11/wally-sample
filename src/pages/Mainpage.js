@@ -17,22 +17,22 @@ import ProductModal from '../common/ProductModal';
 
 const heroItems = [
   {
-    src: 'http://localhost:3000/images/hero1.png',
+    src: APP_URL + '/images/hero1.png',
     altText: 'Slide 1',
     caption: 'Slide 1'
   },
   {
-    src: 'http://localhost:3000/images/hero1.png',
+    src: APP_URL + '/images/hero1.png',
     altText: 'Slide 2',
     caption: 'Slide 2'
   },
   {
-    src: 'http://localhost:3000/images/hero1.png',
+    src: APP_URL + '/images/hero1.png',
     altText: 'Slide 3',
     caption: 'Slide 3'
   },
   {
-    src: 'http://localhost:3000/images/hero1.png',
+    src: APP_URL + '/images/hero1.png',
     altText: 'Slide 4',
     caption: 'Slide 4'
   }
