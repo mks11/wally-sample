@@ -82,12 +82,13 @@ class Homepage extends Component {
 
     this.zipStore.subscribe(this.state.email)
       .then(() => {
-        this.setState({
-          heroStatus: 'invalid_zip_success',
-          heroText: 'Great! You\'ll be the first to know when we are in your zipcodes!',
-          heroDescription: '',
-        })
       })
+
+    this.setState({
+      heroStatus: 'invalid_zip_success',
+      heroText: 'Great! You\'ll be the first to know when we are in your zipcodes!',
+      heroDescription: '',
+    })
   }
 
   handleStart(e) {
@@ -105,6 +106,19 @@ class Homepage extends Component {
     this.setState({email: e.target.value})
     e.preventDefault()
   }
+
+  handleZipEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.handleValidateZip()
+    }
+  }
+
+  handleEmailEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubscribe()
+    }
+  }
+
 
 
   render() {
@@ -144,6 +158,7 @@ class Homepage extends Component {
                         type="number"
                         value={this.state.zip}
                         placeholder="Enter zipcode..."
+                        onKeyDown={this.handleZipEnter}
                         onChange={this.handleZip}/>
                       {this.state.invalidZip && <div className="text-error">Invalid zip codes</div>}
                       <ButtonStart/>
@@ -157,6 +172,7 @@ class Homepage extends Component {
                         type="text"
                         value={this.state.email}
                         placeholder="Enter your email..."
+                        onKeyDown={this.handleEmailEnter}
                         onChange={this.handleEmail}
                       />
                       {this.state.invalidEmail && <div className="text-error">Invalid email</div>}

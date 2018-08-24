@@ -1118,6 +1118,10 @@ span.tnc {
   font-weight: bold;
 }
 
+.text-caps {
+  text-transform:uppercase
+}
+
 .text-order {
   font-size: 18px !important;
 }
@@ -1472,31 +1476,44 @@ input[aria-expanded="true"] + .autocomplete-dropdown-container {
     position: relative;
 }
 
-.carousel .carousel-inner {width:1200px;margin:auto;}
+.carousel .carousel-inner {width:800px;margin:auto;}
+.carousel .carousel-inner img {max-width:800px;}
 
 .carousel-indicators li {
-    width: 20px;
-    height: 20px;
-    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
     background:#fff;
     margin-left:10px;
     margin-right:10px;
+    background-color:#fff;
 }
-.carousel-indicators li::after {
-  position: absolute;
-  /* bottom: -10px; */
-  left: 5px;
-  top: 5px;
-  display: inline-block;
-  width: 100%;
-  height: 10px;
-  content: "";
-  width: 10px;
-  height: 10px;
-  background: #ddeff7;
-  border-radius: 10px;
+/* .carousel-indicators li::after { */
+/*   position: absolute; */
+/*   [> bottom: -10px; <] */
+/*   left: 2.5px; */
+/*   top: 2.5px; */
+/*   display: inline-block; */
+/*   width: 100%; */
+/*   height: 10px; */
+/*   content: ""; */
+/*   width: 10px; */
+/*   height: 10px; */
+/*   background: #ddeff7; */
+/*   border-radius: 10px; */
+/* } */
+.carousel-indicators .active {
+  background-color: rgba(255,255,255,0);
+  border: 2.5px solid #fff;
 }
 
 .carousel-indicators li.active::after {
-  background: #fff;
+  /* background: #fff; */
 }
+a.nav-link.no-underline:hover{text-decoration:none;}
+li.no-underline a:hover::after{text-decoration:none; border:none!important;}
+
+ .modal-open{
+   padding-right:0 !important;
+   overflow-y: auto;
+ } 

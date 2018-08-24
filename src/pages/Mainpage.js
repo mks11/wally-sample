@@ -121,7 +121,7 @@ class Mainpage extends Component {
       })
     const $ = window.$
     $(window).bind('scroll', function () {
-      if ($(window).scrollTop() > 620) {
+      if ($(window).scrollTop() > 423) {
         $('.product-top').addClass('fixed');
       } else {
         $('.product-top').removeClass('fixed');
@@ -325,7 +325,7 @@ class Mainpage extends Component {
                 </ClickOutside>
                 </div>
               </div>
-              <div className="col-md-9 col-sm-8 right-column">
+              <div className="col-md-10 col-sm-8 right-column">
                 <div className="media">
                   <div className="media-body">
                     <div className="input-group search-product">
@@ -475,11 +475,15 @@ class Mainpage extends Component {
               </div>
 
               { !this.state.searchPage &&
-              <div className="col-md-9 col-sm-8 product-content-right">
+              <div className="col-md-10 col-sm-8 product-content-right">
                 <img src={APP_URL + ads2} className="img-fluid" />
 
                 <div className="product-breadcrumb">
-                  <span>All Categories</span>
+                  <span>
+                    <Link to ={""} className="text-violet text-bold">
+                      All Categories
+                    </Link>
+                  </span>
                   {this.productStore.path.map((p, i) => (
                     <span key={i}>
                       { i != 0 && <span><span> &gt; </span> <Link to={""} className="text-violet text-bold">{p}</Link></span>}
@@ -495,7 +499,7 @@ class Mainpage extends Component {
               </div> }
 
               { this.state.searchPage &&
-              <div className="col-md-9 col-sm-8 product-content-right">
+              <div className="col-md-10 col-sm-8 product-content-right">
                 <img src={APP_URL + ads2} className="img-fluid" />
 
                 <div className="product-breadcrumb">

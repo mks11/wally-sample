@@ -20,8 +20,7 @@ class ZipStore {
   }
 
   async subscribe(email) {
-    return fetch(API_SUBSCRIBE_EMAIL)
-      .then(res => res.json())
+    return axios.get(API_SUBSCRIBE_EMAIL)
   }
 }
 

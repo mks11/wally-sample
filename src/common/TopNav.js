@@ -18,6 +18,7 @@ class TopNav extends Component {
   }
 
   handleSignup() {
+    this.routing.push('/main')
     this.modalStore.toggleZip()
   }
 
@@ -93,8 +94,8 @@ class TopNav extends Component {
                   <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                     <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                       <div className="btn-group">
-                        <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                          Hello {name}
+                        <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                          <strong>Hello {name}</strong>
                         </button>
                         <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                           <a className="dropdown-item lg" href="#"><strong>All About You..</strong></a>
@@ -111,7 +112,7 @@ class TopNav extends Component {
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
                     { this.userStore.status ? 
-                        <li><a className="nav-link aw-nav--link p-0">Store Credit ({formatMoney(storeCredit)})</a></li>
+                        <li className="no-underline"><a className="nav-link aw-nav--link p-0">Store Credit ({formatMoney(storeCredit/100)})</a></li>
                         :null
                     }
                     <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
@@ -121,8 +122,8 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ? 
               <div className="col-auto d-none d-lg-block btn-top-account">
-                <button onClick={e => this.handleLogin(e)} className="btn btn-outline-black btn-login"><b>Login</b></button>
-                <button onClick={e => this.handleSignup(e)} className="btn btn-inline-black btn-sign-up"><b>Sign up</b></button>
+                <button onClick={e => this.handleLogin(e)} className="btn btn-outline-black btn-login text-caps"><b>Login</b></button>
+                <button onClick={e => this.handleSignup(e)} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
               </div>
                   : null}
               <button className="navbar-toggler aw-nav--toggle d-md-none" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">

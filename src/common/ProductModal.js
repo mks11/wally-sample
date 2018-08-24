@@ -89,7 +89,7 @@ class ProductModal extends Component {
 
 
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
-    const price = inventory.price / 100
+    let price = inventory.price / 100
     let price_unit = product.unit_size
 
     let unit = 1
@@ -99,12 +99,16 @@ class ProductModal extends Component {
       price_unit = unit + ' ' + product.unit_type
     }
 
+    price = price/unit
+
     const totalPrice = price / unit * this.state.qty
 
 
     const packaging = product.packaging[0] ? product.packaging[0] : null
     const packaging_type = packaging.type
     const packaging_description = packaging.description
+
+    const producer = inventory.producer
 
 
 
@@ -140,7 +144,7 @@ class ProductModal extends Component {
 
             <div className="col-md-6">
               <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
-              <div>Ship and sold by {product.producer}</div>
+              <div>Ship and sold by {producer}</div>
               <hr />
 
               <div className={infoPackageClass}>
@@ -163,7 +167,7 @@ class ProductModal extends Component {
               </div>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
               <button onClick={e => this.handleAddToCart()} className="btn btn-danger">Add to cart</button><br />
-              <div className="text-muted">Final price based on approximate eight</div>
+              <div className="text-muted">Final price based on approximate weight</div>
             </div>
           </div>
           <div className="row">
