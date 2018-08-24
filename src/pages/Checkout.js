@@ -87,10 +87,10 @@ class Checkout extends Component {
     this.setState({timeDropdown: !this.state.timeDropdown})
   }
 
-  handleSelectAddress(e) {
-    
-    this.setState({selectedAddress: e.target.value})
-    if (e.target.value === "0") {
+  handleSelectAddress(id) {
+    const selectedAddress = this.userStore.user.addresses[id] 
+    this.setState({selectedAddress})
+    if (id === "0") {
       this.setState({newAddress: true})
     } else {
       this.setState({newAddress: false})
@@ -107,6 +107,10 @@ class Checkout extends Component {
   }
 
   handleSubmitAddress() {
+    this.checkoutStore.getDeliveryTimes({
+      street_address: '',
+      zip: 0,
+    }, this.userStore.getHeaderAuth())
     this.setState({lockAddress: true, addressError: false})
   }
 
@@ -219,7 +223,7 @@ class Checkout extends Component {
                           checked={data.address_id === selectedAddress}
                           className="custom-control-input" 
                         value={data.address_id} 
-                        onChange={e=>this.handleSelectAddress(e)} />
+                        onChange={e=>this.handleSelectAddress(index)} />
                       <label className="custom-control-label" htmlFor={"address" + index}>
                         {data.street_address} {data.unit}, {data.state} {data.zip}
                         <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>

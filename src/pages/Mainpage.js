@@ -121,7 +121,6 @@ class Mainpage extends Component {
       })
     const $ = window.$
     $(window).bind('scroll', function () {
-      console.log($(window).scrollTop())
       if ($(window).scrollTop() > 620) {
         $('.product-top').addClass('fixed');
       } else {

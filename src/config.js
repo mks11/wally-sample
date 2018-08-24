@@ -33,6 +33,7 @@ export const API_CREATE_ORDER = BASE_URL + "/api/order"
 export const API_GET_ORDER_SUMMARY = BASE_URL + "/api/order/summary"
 export const API_UPDATE_ORDER = BASE_URL + "/api/order/update"
 export const API_CHECK_PROMO = BASE_URL + "/api/check_promo"
+export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes"

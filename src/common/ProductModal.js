@@ -151,7 +151,7 @@ class ProductModal extends Component {
                   <p><a href="#">Click here</a> to learn more or see full breakdown.</p>
                 </div>
               </div>
-              <div className="mb-3">Plastic container std</div>
+              <div className="mb-3">{packaging_type}</div>
 
               <div><strong>Chose your quantity</strong></div>
               <div className="form-group" style={{maxWidth: '140px'}}>
