@@ -99,7 +99,7 @@ class ProductModal extends Component {
       price_unit = unit + ' ' + product.unit_type
     }
 
-    price = price/unit
+    price = price*unit
 
     const totalPrice = price / unit * this.state.qty
 
@@ -115,7 +115,7 @@ class ProductModal extends Component {
     return (
       <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
         <div className="modal-header">
-          <button className="btn-icon btn-icon--back"></button>
+          <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.productStore.hideModal(e)} ></button>
         </div>
         <ModalBody>
@@ -144,7 +144,7 @@ class ProductModal extends Component {
 
             <div className="col-md-6">
               <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
-              <div>Ship and sold by {producer}</div>
+              <div>Ship and sold by The Wally Shop</div>
               <hr />
 
               <div className={infoPackageClass}>
@@ -157,7 +157,7 @@ class ProductModal extends Component {
               </div>
               <div className="mb-3">{packaging_type}</div>
 
-              <div><strong>Chose your quantity</strong></div>
+              <div><strong>Choose your quantity</strong></div>
               <div className="form-group" style={{maxWidth: '140px'}}>
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => (
@@ -166,7 +166,7 @@ class ProductModal extends Component {
                 </select>
               </div>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
-              <button onClick={e => this.handleAddToCart()} className="btn btn-danger">Add to cart</button><br />
+              <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart">Add to cart</button><br />
               <div className="text-muted">Final price based on approximate weight</div>
             </div>
           </div>
@@ -178,20 +178,16 @@ class ProductModal extends Component {
               <h3>Farms</h3>
 
               <div className="media media-xs">
-                <div className="media-img mr-4"><img src="images/img-02.jpg" className="img-fluid" /></div>
                 <div className="media-body">
                   <div className="row">
                     <div className="col-sm-6">
-                      <div><span className="font-weight-bold">Name</span>: {product.producer}</div>
-                      <div><span className="font-weight-bold">Location</span>: Albany Ly</div>
+                      <div><span className="font-weight-bold">Local</span>: {producer}</div>
                     </div>
                     <div className="col-sm-6">
                       <div><span className="font-weight-bold">Organic</span>: yes</div>
-                      <div><span className="font-weight-bold">Pestiside-Free</span>: yes</div>
                     </div>
                   </div>
-                  <div><span className="font-weight-bold">Certification</span>: Ny Organic Sertificated, National Green Farms Certification</div>
-                  <div><span className="font-weight-bold">Description</span>: e the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shet</div>
+                  <div><span className="font-weight-bold">Farms</span>: e the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shet</div>
                 </div>
               </div>
             </div>

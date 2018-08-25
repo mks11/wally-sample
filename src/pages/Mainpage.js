@@ -40,12 +40,24 @@ const heroItems = [
  
 
 
-let Product = ((props) => ( 
-  <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
+let Product = ((props) => {
+  let price = props.product.product_price/100
+  let price_unit = props.product.product_size
+
+  let unit = 1
+  if (price_unit) {
+    unit = parseFloat(price_unit.split(' ')[0])
+  } else {
+    price_unit = unit + ' ' + props.product.unit_type
+  }
+
+  price *= unit
+
+  return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
     <img src={APP_URL + "/images/product_thumbnail.png"} />
     <div className="row product-detail">
       <div className="col-6 product-price">
-        {formatMoney(props.product.product_price/100)}
+        {formatMoney(price)}
       </div>
       <div className="col-6 product-weight">
         {(props.product.product_size)}
@@ -53,7 +65,8 @@ let Product = ((props) => (
     </div>
     <span className="product-desc">{props.product.product_name}</span>
   </div>
-))
+  )
+})
 
 Product = connect("store")(Product)
 
@@ -121,7 +134,7 @@ class Mainpage extends Component {
       })
     const $ = window.$
     $(window).bind('scroll', function () {
-      if ($(window).scrollTop() > 423) {
+      if ($(window).scrollTop() > 525) {
         $('.product-top').addClass('fixed');
       } else {
         $('.product-top').removeClass('fixed');
@@ -319,7 +332,10 @@ class Mainpage extends Component {
                     <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
 
                     {this.productStore.categories.map((s,i) => (
-                      <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>
+                      <React.Fragment>
+                        {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
+                      </React.Fragment>
+
                     ))}
                   </div>
                 </ClickOutside>
@@ -486,7 +502,7 @@ class Mainpage extends Component {
                   </span>
                   {this.productStore.path.map((p, i) => (
                     <span key={i}>
-                      { i != 0 && <span><span> &gt; </span> <Link to={""} className="text-violet text-bold">{p}</Link></span>}
+                      { i != 0 && <span><span> &gt; </span> <Link to={p[1]} className="text-violet text-bold">{p[0]}</Link></span>}
                     </span>
                   ))}
                 </div>

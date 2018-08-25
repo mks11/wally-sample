@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import { Input, Button } from 'reactstrap'
 import Title from '../common/page/Title'
 import AddressModal from './account/AddressModal'
@@ -539,7 +540,11 @@ class Checkout extends Component {
               </section>
             </div>
           </div>
-
+          <div className="my-5 text-left d-inline-block">
+            By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
+            <Link to={""}>Learn more.</Link>
+            <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+          </div>
         </div>
         { this.productStore.open ? <ProductModal/> : null}
       </div>
