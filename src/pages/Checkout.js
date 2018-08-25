@@ -119,11 +119,15 @@ class Checkout extends Component {
     this.setState({lockPayment: true})
   }
 
-  handleEdit(id) {
-    this.productStore.showModal(id)
+  handleEdit(id, quantity) {
+    this.productStore.showModal(id, quantity)
   }
 
-  handleDelete(id) {
+  handleDelete(data) {
+    const id = {
+      product_id : data.product_id,
+      inventory_id : data.inventory[0]._id
+    }
     this.checkoutStore.toggleDeleteModal(id)
   }
 
@@ -454,8 +458,8 @@ class Checkout extends Component {
                         <h4 className="item-name">{c.product_name}</h4>
                         <span className="item-detail mt-2 mb-1">2 oz, container large</span>
                         <div className="item-link">
-                          <a onClick={e=>this.handleEdit(c.product_id)} className="text-blue mr-2">EDIT</a>
-                          <a onClick={e=>this.handleDelete(c.product_id)} className="text-dark-grey">DELETE</a>
+                          <a onClick={e=>this.handleEdit(c.product_id, c.customer_quantity)} className="text-blue mr-2">EDIT</a>
+                          <a onClick={e=>this.handleDelete(c)} className="text-dark-grey">DELETE</a>
                         </div>
                       </div>
                       <div className="item-right">

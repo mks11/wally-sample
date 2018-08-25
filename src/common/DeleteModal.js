@@ -7,14 +7,16 @@ class DeleteModal extends Component {
     super(props)
     this.checkoutStore = this.props.store.checkout
     this.userStore = this.props.store.user
+    this.routing = this.props.store.routing
   }
 
   handleDelete() {
+    const order_summary = this.routing.location.pathname.indexOf('checkout') !== -1
     this.checkoutStore.editCurrentCart({
       quantity: 0, 
       product_id: this.checkoutStore.deleteId.product_id,
       inventory_id: this.checkoutStore.deleteId.inventory_id,
-    }, this.userStore.getHeaderAuth()).then((data) => {
+    }, this.userStore.getHeaderAuth(), order_summary).then((data) => {
 
     }).catch((e) => {
       const msg = e.response.data.error.message

@@ -17,6 +17,7 @@ class ProductModal extends Component {
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.userStore = this.props.store.user
+    this.routing = this.props.store.routing
   }
 
   componentDidUpdate() {
@@ -52,12 +53,13 @@ class ProductModal extends Component {
   handleAddToCart() {
     const product = this.productStore.activeProduct
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
+    const order_summary = this.routing.location.pathname.indexOf('checkout') !== -1
 
     this.checkoutStore.editCurrentCart({
       quantity: this.state.qty, 
       product_id: inventory.product_id,
       inventory_id: inventory._id,
-    }, this.userStore.getHeaderAuth()).then((data) => {
+    }, this.userStore.getHeaderAuth(), order_summary).then((data) => {
 
     }).catch((e) => {
       console.log(e)

@@ -25,16 +25,14 @@ class ProductStore {
   ads1 = null
   ads2 = null
 
-  showModal(product_id, customer_quantity) {
+  async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id
 
-    axios.get(API_GET_PRODUCT_DETAIL + product_id).then(resp => {
-      this.activeProduct = resp.data
-      this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
-      this.open = true
-      this.modal = true
-    })
-
+    const res = await axios.get(API_GET_PRODUCT_DETAIL + product_id)
+    this.activeProduct = res.data
+    this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
+    this.open = true
+    this.modal = true
   }
 
   getAdvertisements() {

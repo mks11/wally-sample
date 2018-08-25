@@ -19,9 +19,19 @@ class CheckoutStore {
     this.cart = res.data
   }
   
-  async editCurrentCart(data, auth) {
-    const res = await axios.patch(API_EDIT_CURRENT_CART+this.cart._id+'?time=2018-08-20 08:00:00', data, auth)
+  async editCurrentCart(data, auth, order_summary) {
+    let cart_id
+    if (this.cart) {
+      cart_id = this.cart._id
+    }
+    if (order_summary) {
+      cart_id = this.order.cart_id
+    }
+    const res = await axios.patch(API_EDIT_CURRENT_CART+cart_id+'?time=2018-08-20 08:00:00', data, auth)
     this.cart = res.data
+    if (order_summary) {
+      this.getOrderSummary(auth)
+    }
   }
 
   async getOrderSummary(auth) {

@@ -134,7 +134,7 @@ class Mainpage extends Component {
       })
     const $ = window.$
     $(window).bind('scroll', function () {
-      if ($(window).scrollTop() > 525) {
+      if ($(window).scrollTop() > 515) {
         $('.product-top').addClass('fixed');
       } else {
         $('.product-top').removeClass('fixed');
@@ -332,7 +332,7 @@ class Mainpage extends Component {
                     <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
 
                     {this.productStore.categories.map((s,i) => (
-                      <React.Fragment>
+                      <React.Fragment key={i}>
                         {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
                       </React.Fragment>
 
