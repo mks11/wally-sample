@@ -92,18 +92,26 @@ class ProductModal extends Component {
 
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     let price = inventory.price / 100
-    let price_unit = product.unit_size
+    let price_unit = inventory.price_unit
+    let unit_type = product.unit_type
+    let unit_size = product.unit_size
 
     let unit = 1
-    if (price_unit) {
-      unit = parseFloat(price_unit.split(' ')[0])
-    } else {
-      price_unit = unit + ' ' + product.unit_type
+
+    if (price_unit != unit_type &&  unit_size) {
+      unit = parseFloat(unit_size.split(' ')[0])
     }
 
-    price = price*unit
+    // let unit = 1
+    // if (price_unit) {
+    //   unit = parseFloat(price_unit.split(' ')[0])
+    // } else {
+    //   // price_unit = unit + ' ' + product.unit_type
+    // }
+    //
+    // price = price*unit
 
-    const totalPrice = price / unit * this.state.qty
+    const totalPrice = price  * unit * this.state.qty
 
 
     const packaging = product.packaging[0] ? product.packaging[0] : null

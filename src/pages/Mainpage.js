@@ -51,7 +51,7 @@ let Product = ((props) => {
     price_unit = unit + ' ' + props.product.unit_type
   }
 
-  price *= unit
+  // price *= unit
 
   return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
     <img src={APP_URL + "/images/product_thumbnail.png"} />
@@ -60,7 +60,7 @@ let Product = ((props) => {
         {formatMoney(price)}
       </div>
       <div className="col-6 product-weight">
-        {(props.product.product_size)}
+        {price_unit}
       </div>
     </div>
     <span className="product-desc">{props.product.product_name}</span>
