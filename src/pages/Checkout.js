@@ -48,12 +48,17 @@ class Checkout extends Component {
 
       invalidText: '',
 
+      invalidAddressText: '',
       newStreetAddress: '',
       newAptNo: '',
       newZip: '',
       newContactName: '',
       newPhoneNumber: '',
-      newDeliveryNotes:''
+      newDeliveryNotes:'',
+      newState:'',
+      newCity: '',
+      newCountry: '',
+      newPreferedAddress: false
 
     }
 
@@ -205,18 +210,112 @@ class Checkout extends Component {
     })
   }
 
-  handleNewAddressChange = (new_address) => {
-    this.setState({ new_address });
+  handleNewAddressChange = (newStreetAddress) => {
+    this.setState({ newStreetAddress });
   }
 
-  handleNewAddressChange = (new_address) => {
-    this.setState({ new_address })
-    geocodeByAddress(new_address)
+  handleNewAddressSelect = (newStreetAddress) => {
+    this.setState({ newStreetAddress })
+    geocodeByAddress(newStreetAddress)
       .then(results => {
-        console.log(results[0])
-        // this.fillInAddress(results[0])
+        // console.log(results[0])
+        this.fillInAddress(results[0])
       })
       .catch(error => console.error('Error', error));
+  }
+
+  fillInAddress(place) {
+    var componentForm = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      administrative_area_level_1: 'short_name',
+      country: 'long_name',
+      postal_code: 'short_name'
+    };
+
+    let address = {}
+
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+        address[addressType] = val;
+      }
+    }
+    console.log('adddres', address)
+
+    let city = address.locality
+    if (!city && address.administrative_area_level_1) {
+      city = address.administrative_area_level_1
+    }
+    const state = address.administrative_area_level_1
+    const country = address.country
+    const zip = address.postal_code
+
+    this.setState({newCity: city, newState: state, newCountry: country, newZip: zip})
+  }
+
+  handleConfirmAddress(e) {
+    console.log('cook')
+    this.setState({invalidAddressText: null})
+    if (!this.state.newStreetAddress) {
+      this.setState({invalidAddressText: 'Street address cannot be empty'})
+      return
+    }
+
+    if (!this.state.newAptNo) {
+      this.setState({invalidAddressText: 'Unit cannot be empty'})
+      return
+    }
+
+    if (!this.state.newContactName) {
+      this.setState({invalidAddressText: 'Name cannot be empty'})
+      return
+    }
+
+    if (!this.state.newPhoneNumber) {
+      this.setState({invalidAddressText: 'Telephone cannot be empty'})
+      return
+    }
+
+    // if (!this.state.delivery_notes) {
+    //   this.setState({invalidText: 'Delivery notes cannot be empty'})
+    //   return
+    // }
+    //
+    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = this.state
+
+    this.userStore.saveAddress({
+      name: newContactName, 
+      state: newState,
+      delivery_notes: newDeliveryNotes,
+      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
+      preferred_address: newPreferedAddress
+    }).then((data) => {
+      this.userStore.setUserData(data)
+      this.setState({
+        selectedAddress: this.userStore.user.preferred_address,
+        newAddress: false,
+        invalidAddressText: '',
+        newStreetAddress: '',
+        newAptNo: '',
+        newZip: '',
+        newContactName: '',
+        newPhoneNumber: '',
+        newDeliveryNotes:'',
+        newState:'',
+        newCity: '',
+        newCountry: '',
+        newPreferedAddress: false
+      })
+    }).catch((e) => {
+      const msg = e.response.data.error.message
+      this.setState({invalidAddressText: msg})
+      console.error('Failed to save address', e)
+    })
+
+    e.preventDefault()
   }
   
   render() {
@@ -313,7 +412,7 @@ class Checkout extends Component {
                     </div>
                     <div className={addressFormClass}>
       <PlacesAutocomplete
-        value={this.state.new_address}
+        value={this.state.newStreetAddress}
         onChange={this.handleNewAddressChange}
         onSelect={this.handleNewAddressSelect}
       >
@@ -399,12 +498,12 @@ class Checkout extends Component {
                           className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
                       </div>
                       <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Make default payment method</label>
+                        <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
+                        <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
                       </div>
                       <hr />
-                      <button className="btn btn-main active inline-round">CONFIRM</button>
-                      <div className="error-msg d-none">Zipcode not serviced</div>
+                      <button className="btn btn-main active inline-round" onClick={e=>this.handleConfirmAddress(e)}>CONFIRM</button>
+                      {this.state.invalidAddressText && <div className="error-msg">{this.state.invalidAddressText}</div>}
                     </div>
                   </div>
                     ):null}
@@ -669,15 +768,11 @@ class Checkout extends Component {
                     {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}
                   </div>
                 </div>
-              </section>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6">&nbsp;</div>
-            <div className="col-md-6 my-3 text-left d-inline-block">
+
               By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
               <Link to={""}>Learn more.</Link>
               <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+              </section>
             </div>
           </div>
         </div>
