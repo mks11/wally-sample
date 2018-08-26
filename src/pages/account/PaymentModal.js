@@ -33,6 +33,7 @@ class PaymentModal extends Component {
     if (this.userStore.activePayment) {
       const payment = this.userStore.activePayment
       this.setState({
+        payment_id: payment._id,
         cardnumber: payment.cardnumber,
         title: 'Edit Payment Card',
         mode: 'edit',
@@ -103,9 +104,9 @@ class PaymentModal extends Component {
   }
   handleDelete() {
     this.setState({deleteConfirmation: false})
+    this.userStore.hidePaymentModal()
     this.userStore.deletePayment(this.state.payment_id).then((data) => {
       this.userStore.setUserData(data)
-      this.userStore.hidePaymentModal()
     }).catch((e) => {
       const msg = e.response.data.error.message
       this.setState({invalidText: msg})

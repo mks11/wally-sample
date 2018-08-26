@@ -36,7 +36,7 @@ const createOptions = (fontSize: string, padding: ?string) => {
     style: {
       base: {
         border: '1px solid #000',
-        fontSize:'18px',
+        fontSize:'14px',
         color: '#000',
         fontFamily: 'Circe',
         letterSpacing: '0.025em',
@@ -97,7 +97,6 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
           if (payload.error) {
             throw payload
           }
-          console.log('payload',payload)
 
           return this.props.addPayment({
             preferred_payment: this.state.preferred_payment,
@@ -136,21 +135,20 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
   render() {
 
-    let buttonClass = 'btn btn-main my-3'
+    let buttonClass = 'btn btn-main inline-round my-3'
     if (this.state.cardnumber && this.state.cvc && this.state.mmyy && this.state.zip) {
       buttonClass += ' active'
     }
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <ModalBody>
             <FormGroup className="input-merged">
               <CardNumberElement
-                className="card-element-input w-60"
+                className="card-element-input w-40"
                 onBlur={handleBlur}
                 onChange={this.handleChange}
                 onFocus={handleFocus}
-                onReady={handleReady}
+                onReady={(c) => this._cardnumber = c}
                 placeholder="Card Number"
                 {...createOptions(this.props.fontSize)}
               />
@@ -159,7 +157,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onBlur={handleBlur}
                 onChange={this.handleChange}
                 onFocus={handleFocus}
-                onReady={handleReady}
+                onReady={(c) => this._cardexpiry = c}
                 {...createOptions(this.props.fontSize)}
               />
               <CardCVCElement
@@ -167,20 +165,21 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onBlur={handleBlur}
                 onChange={this.handleChange}
                 onFocus={handleFocus}
-                onReady={handleReady}
+                onReady={(c) => this._cvc = c}
                 {...createOptions(this.props.fontSize)}
               />
 
+            <PostalCodeElement
+              className="card-element-input w-20"
+              placeholder="Zipcode"
+              onBlur={handleBlur}
+              onChange={this.handleChange}
+              onFocus={handleFocus}
+              onReady={(c) => this._zip = c}
+              {...createOptions(this.props.fontSize)}
+            />
+
           </FormGroup>
-          <PostalCodeElement
-            className="card-element-input"
-            placeholder="Billing zipcode"
-            onBlur={handleBlur}
-            onChange={this.handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
 
         <FormGroup check className="my-4">
           <Label check>
@@ -188,12 +187,9 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
             Make default payment card
           </Label>
         </FormGroup>
-      </ModalBody>
 
-      <ModalBody className="modal-body-bordertop">
-        <button type="submit" className={buttonClass}>SAVE</button>
-        { this.state.invalidText ? <span className="text-error text-center text-block">{this.state.invalidText}</span>: null}
-      </ModalBody>
+        <button type="submit" className={buttonClass}>CONFIRM</button>
+        { this.state.invalidText ? <span className="text-error text-block">{this.state.invalidText}</span>: null}
     </form>
   </div>
     );

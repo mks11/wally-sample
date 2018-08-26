@@ -85,8 +85,8 @@ class ProductModal extends Component {
     }
 
     let qtyOptions = []
-    for (var i = product.min_size, len = 10; i < len; i++) {
-      qtyOptions.push(i)
+    for (var i = 1, len = 10; i <= len; i++) {
+      qtyOptions.push(i*product.min_size)
     }
 
 
@@ -168,7 +168,7 @@ class ProductModal extends Component {
                 </select>
               </div>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
-              <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart">Add to cart</button><br />
+              <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
               <div className="text-muted">Final price based on approximate weight</div>
             </div>
           </div>

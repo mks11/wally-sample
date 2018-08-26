@@ -4,6 +4,7 @@ import {
   API_GET_ORDER_SUMMARY, API_DELIVERY_TIMES,
   API_CHECK_PROMO } from '../config'
 import axios from 'axios'
+import moment from 'moment'
 
 let index = 0
 
@@ -27,7 +28,7 @@ class CheckoutStore {
     if (order_summary) {
       cart_id = this.order.cart_id
     }
-    const res = await axios.patch(API_EDIT_CURRENT_CART+cart_id+'?time=2018-08-20 08:00:00', data, auth)
+    const res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
     this.cart = res.data
     if (order_summary) {
       this.getOrderSummary(auth)
@@ -51,7 +52,7 @@ class CheckoutStore {
   }
 
   async getDeliveryTimes(data, auth) {
-    const resp = await axios.get(API_DELIVERY_TIMES, data, auth)
+    const resp = await axios.post(`${API_DELIVERY_TIMES}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
     this.order = resp.data
   }
 

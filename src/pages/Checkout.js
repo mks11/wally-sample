@@ -6,8 +6,18 @@ import AddressModal from './account/AddressModal'
 import PaymentModal from './account/PaymentModal'
 import FontAwesome from 'react-fontawesome';
 import ProductModal from '../common/ProductModal';
+import CardSmall from '../common/CardSmall';
+import ClickOutside from 'react-click-outside'
+import {StripeProvider, Elements} from 'react-stripe-elements'
 
 import { connect, formatMoney } from '../utils'
+import { STRIPE_API_KEY } from '../config'
+
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
+
 
 class Checkout extends Component {
   constructor(props) {
@@ -52,6 +62,16 @@ class Checkout extends Component {
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()
+        if (this.userStore.user.addresses.length > 0) {
+          const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
+          console.log(selectedAddress)
+          this.setState({selectedAddress: selectedAddress._id})
+        }
+
+        if (this.userStore.user.payment.length > 0) {
+          const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
+          this.setState({selectedPayment: selectedPayment._id})
+        }
       })
   }
 
@@ -88,10 +108,17 @@ class Checkout extends Component {
     this.setState({timeDropdown: !this.state.timeDropdown})
   }
 
-  handleSelectAddress(id) {
-    const selectedAddress = this.userStore.user.addresses[id] 
-    this.setState({selectedAddress})
-    if (id === "0") {
+  hideTimeDropdown(e) {
+    if (!this.state.timeDropdown) {
+      return
+    }
+
+    this.setState({timeDropdown: false})
+  }
+
+  handleSelectAddress(e) {
+    this.setState({selectedAddress: e.target.value})
+    if (e.target.value === '0') {
       this.setState({newAddress: true})
     } else {
       this.setState({newAddress: false})
@@ -99,6 +126,7 @@ class Checkout extends Component {
   }
 
   handleSelectPayment(e) {
+    console.log(e.target.value)
     this.setState({selectedPayment: e.target.value})
     if (e.target.value === "0") {
       this.setState({newPayment: true})
@@ -108,14 +136,18 @@ class Checkout extends Component {
   }
 
   handleSubmitAddress() {
+    if (!this.state.selectedAddress) return
+    const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
     this.checkoutStore.getDeliveryTimes({
-      street_address: '',
-      zip: 0,
+      street_address: address.street_address,
+      zip: address.zip,
     }, this.userStore.getHeaderAuth())
     this.setState({lockAddress: true, addressError: false})
   }
 
   handleSubmitPayment() {
+    if (!this.state.selectedPayment) return
+      
     this.setState({lockPayment: true})
   }
 
@@ -157,6 +189,15 @@ class Checkout extends Component {
   handleChangeTime(e) {
     this.setState({selectedTime: 'Today, 12:30PM - 1.30PM', lockTime: true, timeDropdown: false})
   }
+
+  handleAddPayment = (data) => {
+    return this.userStore.savePayment(data).then((data) => {
+      this.userStore.setUserData(data)
+      this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
+      
+      return data
+    })
+  }
   
   render() {
     if (!this.checkoutStore.order || !this.userStore.user) {
@@ -182,7 +223,7 @@ class Checkout extends Component {
       addressFormClass += ' d-none'
     }
 
-    let paymentFormClass = 'addPaymentForm mb-4'
+    let paymentFormClass = 'addPaymentForm'
     if (!this.state.newPayment) {
       paymentFormClass += ' d-none'
     }
@@ -228,14 +269,14 @@ class Checkout extends Component {
                           checked={data.address_id === selectedAddress}
                           className="custom-control-input" 
                         value={data.address_id} 
-                        onChange={e=>this.handleSelectAddress(index)} />
+                        onChange={e=>this.handleSelectAddress(e)} />
                       <label className="custom-control-label" htmlFor={"address" + index}>
                         {data.street_address} {data.unit}, {data.state} {data.zip}
                         <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>
                       </label>
-                      {this.userStore.user.preferred_address === data.address_id ? 
+                      {this.userStore.user.preferred_address === data.address_id &&
                           <a className="address-rbtn link-blue">DEFAULT</a>
-                          :null}
+                      }
                     </div>)
                     })}
 
@@ -251,9 +292,50 @@ class Checkout extends Component {
                       <label className="custom-control-label" htmlFor="addressAdd">Add new address</label>
                     </div>
                     <div className={addressFormClass}>
-                      <div className="form-group">
-                        <input type="text" className="form-control input1" placeholder="Address" />
-                      </div>
+      <PlacesAutocomplete
+        value={this.state.address}
+        onChange={this.handleChange}
+        onSelect={this.handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div style={{position:'relative'}}>
+            <input
+              {...getInputProps({
+                autoComplete: 'off',
+                placeholder: 'Delivery to...',
+                className: 'aw-input--control aw-input--control-large aw-input--left location-search-input  aw-input--location aw-input--bordered mt-3 form-control',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <strong>
+                            {suggestion.formattedSuggestion.mainText}
+                          </strong>{' '}
+                          <small>
+                            {suggestion.formattedSuggestion.secondaryText}
+                          </small>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+      </PlacesAutocomplete>
                       <div className="row no-gutters">
                         <div className="col-md-7">
                           <div className="form-group">
@@ -291,7 +373,7 @@ class Checkout extends Component {
                     </div>
                   </div>
                     ):null}
-                    {!this.state.lockAddress ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+                    {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
                   </div>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Time 
@@ -299,6 +381,7 @@ class Checkout extends Component {
                   {this.state.addressError ?  <span className="address-rbtn text-error sm">Address required</span> : null}
                 </h3>
                 <div className="dropdown show">
+                  <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
                   <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
                     {selectedTime}
                                       </button>
@@ -361,6 +444,7 @@ class Checkout extends Component {
                       </div>
                     </div>
                   </div>
+                </ClickOutside>
                 </div>
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
@@ -374,26 +458,26 @@ class Checkout extends Component {
                   <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
                     { this.userStore.user.payment.map((data, index) => {
 
-                      if (this.state.lockPayment && selectedPayment!=data.payment_id) {
+                      if (this.state.lockPayment && selectedPayment!=data._id) {
                         return null
                       }
                       return (
                         <div 
-                          className={"custom-control custom-radio bb1" + (data.payment_id === selectedPayment ? " active" : "")}
+                          className={"custom-control custom-radio bb1" + (data._id === selectedPayment ? " active" : "")}
                           key={index}>
                           <input type="radio" id={"payment"+index}
-                            value={data.payment_id} 
-                            checked={data.payment_id === selectedPayment}
+                            value={data._id} 
+                            checked={data._id === selectedPayment}
                             name="customRadio" className="custom-control-input"
                             onChange={e => this.handleSelectPayment(e)}
                           />
                           <label className="custom-control-label" htmlFor={"payment"+index}>
-                            <img src="images/card.png" /> {data.cardnumber}
+                            <img src="images/card.png" /> *****{data.last4}
                           </label>
-                          {this.userStore.user.preferred_payment === data.payment_id ? 
-                              <a href="#" className="address-rbtn link-blue">DEFAULT</a>
-                              :null}
-                            </div>
+                          {this.userStore.user.preferred_payment === data._id &&
+                              <a href="#" className="address-rbtn link-blue" style={{top:'10px'}}>DEFAULT</a>
+                          }
+                        </div>
                       )
                     })}
 
@@ -409,6 +493,7 @@ class Checkout extends Component {
                       <label className="custom-control-label" htmlFor="paymentAdd">Add new card</label>
                     </div>
                     <div className={paymentFormClass}>
+                      {/* 
                       <div className="row no-gutters">
                         <div className="col-md-4">
                           <div className="form-group">
@@ -438,9 +523,16 @@ class Checkout extends Component {
                       <hr />
                       <button className="btn btn-main active inline-round">CONFIRM</button>
                       <div className="error-msg d-none">Invalid card information</div>
+                      */}
+
+                      <StripeProvider apiKey={STRIPE_API_KEY}>
+                        <Elements>
+                          <CardSmall  addPayment={this.handleAddPayment} />
+                        </Elements>
+                      </StripeProvider>
                     </div>
                   </div>):null}
-                    { !this.state.lockPayment ? <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>:null}
+                    { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
                   </div>
                 </div>
               </div>
@@ -510,9 +602,10 @@ class Checkout extends Component {
                           className="aw-input--control aw-input--left aw-input--bordered"
                           type="text"
                           placeholder="Enter your store credit"
+                          readOnly={true}
                           value={appliedStoreCreditAmount}
                           onChange={(e) => this.setState({appliedStoreCreditAmount: e.target.value})}/>
-                        <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>
+                        {appliedStoreCreditAmount>0 && <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>}
                       </div>
                       </div>
                       :null}
@@ -544,7 +637,7 @@ class Checkout extends Component {
               </section>
             </div>
           </div>
-          <div className="my-5 text-left d-inline-block">
+          <div className="col-md-11 my-5 text-left d-inline-block">
             By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
             <Link to={""}>Learn more.</Link>
             <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.

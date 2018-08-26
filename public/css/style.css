@@ -1321,7 +1321,7 @@ a.dropdown-item.lg {
 .card1.error{border: 2px solid red;}
 .card1.card-shadow{box-shadow: 2px 20px 17px rgba(0,0,0,.3);}
 .address-phone{color:#bbb;font-size: 13px;}
-.address-rbtn{position: absolute;right:0;bottom:16px;}
+.address-rbtn{position: absolute;right:0;top:20px;}
 .address-rbtn.sm{font-weight: normal; font-size:18px}
 .link-blue, .link-blue:hover{color:#6060a8;font-size: 13px;font-weight: 700;text-decoration: none;}
 .addAdressForm, .addPaymentForm{padding-left: 30px;}
@@ -1339,7 +1339,10 @@ a.dropdown-item.lg {
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after,
 .custom-control.active .custom-control-label::after
 {background-image:none;background-color: #000;
-  border-radius:50%;width:12px;height:12px;top:5px;left:3px;}
+  border-radius:50%;width: 10px;
+    height: 10px;
+    top: 6px;
+    left: 4px;}
 .custom-checkbox .custom-control-label::before{border-radius:0;}
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {left:1px;top:3px;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23000' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");}
@@ -1348,7 +1351,7 @@ a.dropdown-item.lg {
 .input2{border:1px solid #cecece;border-radius:0;}
 .input2:focus{box-shadow:none;border-color:#e0a5a7;}
 textarea.input1, textarea.input2{height:auto;}
-.btn-main.active.inline-round{width:auto;display:inline-block;border-radius:60px;padding-left: 30px;padding-right: 30px;}
+.btn-main.inline-round{width:auto;display:inline-block;border-radius:60px;padding-left: 30px;padding-right: 30px;}
 .error-msg{color:#FF0000;font-size: 16px;font-weight: 700;margin-top: 20px;margin-bottom: 20px;}
 
 .btn-dropdown-outline{border-radius:0;background-color:transparent;border: 1px solid #ececec;width:100%;display:block;text-align: left;
@@ -1523,6 +1526,9 @@ li.no-underline a:hover::after{text-decoration:none; border:none!important;}
  } 
 button.btn.btn-danger.btn-add-cart {
     height: 50px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight:normal;
     line-height: .5;
 }
 .product-top.fixed + .product-content .product-content-left,
