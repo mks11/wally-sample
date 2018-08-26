@@ -1544,3 +1544,7 @@ button.btn.btn-danger.btn-add-cart {
 ::-webkit-scrollbar-thumb {
     background: #FF0000;
 }
+.aw-input--location.aw-input--small {
+  background-position:2%;
+}
+

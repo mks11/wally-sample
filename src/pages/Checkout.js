@@ -48,6 +48,13 @@ class Checkout extends Component {
 
       invalidText: '',
 
+      newStreetAddress: '',
+      newAptNo: '',
+      newZip: '',
+      newContactName: '',
+      newPhoneNumber: '',
+      newDeliveryNotes:''
+
     }
 
     this.userStore = this.props.store.user
@@ -119,14 +126,13 @@ class Checkout extends Component {
   handleSelectAddress(e) {
     this.setState({selectedAddress: e.target.value})
     if (e.target.value === '0') {
-      this.setState({newAddress: true})
+      this.setState({newAddress: true, newContactName: this.userStore.user.name, newPhoneNumber: this.userStore.user.primary_telephone})
     } else {
       this.setState({newAddress: false})
     }
   }
 
   handleSelectPayment(e) {
-    console.log(e.target.value)
     this.setState({selectedPayment: e.target.value})
     if (e.target.value === "0") {
       this.setState({newPayment: true})
@@ -197,6 +203,20 @@ class Checkout extends Component {
       
       return data
     })
+  }
+
+  handleNewAddressChange = (new_address) => {
+    this.setState({ new_address });
+  }
+
+  handleNewAddressChange = (new_address) => {
+    this.setState({ new_address })
+    geocodeByAddress(new_address)
+      .then(results => {
+        console.log(results[0])
+        // this.fillInAddress(results[0])
+      })
+      .catch(error => console.error('Error', error));
   }
   
   render() {
@@ -293,9 +313,9 @@ class Checkout extends Component {
                     </div>
                     <div className={addressFormClass}>
       <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        value={this.state.new_address}
+        onChange={this.handleNewAddressChange}
+        onSelect={this.handleNewAddressSelect}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div style={{position:'relative'}}>
@@ -303,7 +323,7 @@ class Checkout extends Component {
               {...getInputProps({
                 autoComplete: 'off',
                 placeholder: 'Delivery to...',
-                className: 'aw-input--control aw-input--control-large aw-input--left location-search-input  aw-input--location aw-input--bordered mt-3 form-control',
+                className: 'aw-input--control aw-input--small  aw-input--left location-search-input  aw-input--location mt-3 form-control',
               })}
             />
             <div className="autocomplete-dropdown-container">
@@ -339,29 +359,44 @@ class Checkout extends Component {
                       <div className="row no-gutters">
                         <div className="col-md-7">
                           <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Apt number" />
+                            <input 
+                              value={this.state.newAptNo}
+                              onChange={e=>this.setState({newAptNo: e.target.value})}
+                              type="text" className="form-control input1" placeholder="Apt number" />
                           </div>
                         </div>
                         <div className="col-md-5">
                           <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Zip code" />
+                            <input 
+                              value={this.state.newZip}
+                              onChange={e=>this.setState({newZip: e.target.value})}
+                              type="text" className="form-control input1" placeholder="Zip code" />
                           </div>
                         </div>
                       </div>
                       <div className="row no-gutters">
                         <div className="col-md-7">
                           <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Contact Name" />
+                            <input
+                              value={this.state.newContactName}
+                              onChange={e=>this.setState({newContactName: e.target.value})}
+                              type="text" className="form-control input1" placeholder="Contact Name" />
                           </div>
                         </div>
                         <div className="col-md-5">
                           <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Phone Number" />
+                            <input
+                              value={this.state.newPhoneNumber}
+                              onChange={e=>this.setState({newPhoneNumber: e.target.value})}
+                              type="text" className="form-control input1" placeholder="Phone Number" />
                           </div>
                         </div>
                       </div>
                       <div className="form-group">
-                        <textarea className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
+                        <textarea
+                          value={this.state.newDeliveryNotes}
+                          onChange={e=>this.setState({newDeliveryNotes: e.target.value})}
+                          className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
                       </div>
                       <div className="custom-control custom-checkbox">
                         <input type="checkbox" className="custom-control-input" id="customCheck1" />
@@ -637,10 +672,13 @@ class Checkout extends Component {
               </section>
             </div>
           </div>
-          <div className="col-md-11 my-5 text-left d-inline-block">
-            By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
-            <Link to={""}>Learn more.</Link>
-            <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+          <div className="row">
+            <div className="col-md-6">&nbsp;</div>
+            <div className="col-md-6 my-3 text-left d-inline-block">
+              By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
+              <Link to={""}>Learn more.</Link>
+              <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+            </div>
           </div>
         </div>
         { this.productStore.open ? <ProductModal/> : null}
