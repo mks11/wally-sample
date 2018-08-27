@@ -75,7 +75,7 @@ const ProductList = ({display}) => (
     <h2>{display.cat_name}</h2>
     <div className="product-sub">
       <h5>{display.cat_name}</h5>
-      <Link to={"/main/" + display.cat_id }>View All 27 ></Link>
+      <Link to={"/main/" + display.cat_id }>View All {display.number_products} ></Link>
     </div>
 
     <div className="row">
@@ -443,23 +443,23 @@ class Mainpage extends Component {
                   {!this.state.searchPage && this.state.sidebar.map((s,i) => {
 
                     let parentSidebarClass = ''
-                    let link = '/main'
+                    let link = '/main/'
 
                     if (id === s.cat_id) {
                       parentSidebarClass = 'text-violet'
+                    }
                       link += s.cat_id
-                    }
 
-                    if (typeof id === 'undefined' && !s.cat_id) {
-                      parentSidebarClass = 'text-violet'
-                      link = '/main'
-                    }
+                    // if (typeof id === 'undefined' && !s.cat_id) {
+                    //   parentSidebarClass = 'text-violet'
+                    //   link = '/main'
+                    // }
 
                     return (
-                      <div className="mb-4" key={i}>
+                      <div className="mb-0" key={i}>
                         <h4><Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link></h4>
                         <ul>  
-                          {s.sub_cats.map((sc, idx) => (
+                          {s.sub_cat && s.sub_cats.map((sc, idx) => (
                             <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
                                 className={id === sc.cat_id ? "text-violet": ""}
                               >{sc.cat_name}</Link></li>
@@ -496,7 +496,7 @@ class Mainpage extends Component {
 
                 <div className="product-breadcrumb">
                   <span>
-                    <Link to ={""} className="text-violet text-bold">
+                    <Link to ={"/main"} className="text-violet text-bold">
                       All Categories
                     </Link>
                   </span>

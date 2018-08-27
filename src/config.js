@@ -38,10 +38,11 @@ export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes"
 
-export const API_HELP_GET_QUESTION = BASE_URL + "/api/help/questions"
-export const API_HELP_GET_QUESTION_SINGLE = BASE_URL + "/api/help/question"
-export const API_HELP_GET_HELP_TOPICS = BASE_URL + "/api/help/gethelptopics"
+export const API_HELP_GET_QUESTION = BASE_URL + "/api/help/questions/all"
+export const API_HELP_GET_QUESTION_SINGLE = BASE_URL + "/api/help/questions/"
+export const API_HELP_GET_HELP_TOPICS = BASE_URL + "/api/help/topics"
 export const API_HELP_GET_CONTACT = BASE_URL + "/api/help/getcontact"
+export const API_HELP_SEARCH = BASE_URL + "/api/help/search?search_term="
 
 export const API_SUBSCRIBE_EMAIL = BASE_URL + "/api/email/signup"
 

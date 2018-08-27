@@ -52,7 +52,7 @@ class ProductStore {
     const data = res.data
     this.main_display = data.main_products
     this.path = data.path
-    this.sidebar = [data.sidebar]
+    this.sidebar = data.sidebar
     this.fetch = false
 
     return res

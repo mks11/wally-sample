@@ -3,6 +3,7 @@ import {
   API_HELP_GET_QUESTION, 
   API_HELP_GET_HELP_TOPICS, 
   API_HELP_GET_CONTACT,
+  API_HELP_SEARCH,
   API_HELP_GET_QUESTION_SINGLE
 } from '../config'
 import axios from 'axios'
@@ -32,6 +33,11 @@ class HelpStore{
   async getQuestion(id){
     const resp = await axios(`${API_HELP_GET_QUESTION_SINGLE}/${id}`)
     this.question = resp.data
+  }
+
+  async search(terms) {
+    const res = await axios(API_HELP_SEARCH + terms)
+    return res.data
   }
 }
 

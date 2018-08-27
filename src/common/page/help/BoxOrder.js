@@ -53,7 +53,7 @@ class BoxOrder extends Component{
         <li key={key} className="list-bordered list-group-item d-flex justify-content-between align-items-center">
           <div className="row">
             {icon}
-            <Link className="list-link" to={item.link}><h4> {item.text} </h4></Link>
+            <Link className="list-link" to={""}><h4> {item.name} </h4></Link>
           </div>
           <span className="badge badge-pill">
             <i className="fa fa-chevron-right fa-2x"></i>

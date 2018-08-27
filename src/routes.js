@@ -23,7 +23,7 @@ export default (
         <Route exact path="/reset_password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
         <Route exact path="/help" component={Help}/>
-        <Route exact path="/help/:name" component={HelpSingle}/>
+        <Route exact path="/help/all" component={HelpSingle}/>
         <Route exact path="/help/question/:question" component={HelpAnswer}/>
         <Route exact path="/about" component={About}/>
         <Route exact path="/checkout" component={Checkout}/>

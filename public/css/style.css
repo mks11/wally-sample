@@ -1040,9 +1040,15 @@ span.tnc {
 }
 
 .list-link{
-  color: #6060a8;
+  color: #6060a8 !important;
+  font-size: 17px;,
   /* font-size: 9px !important; */
 }
+
+.list-link h4 {
+  font-size: 17px;
+}
+
 .btn-left {
   float:left;
   float:left;
@@ -1546,5 +1552,26 @@ button.btn.btn-danger.btn-add-cart {
 }
 .aw-input--location.aw-input--small {
   background-position:2%;
+}
+
+.list-group-item .answer{
+  max-height: 0;
+    transition: max-height 0.15s ease-out;
+    overflow: hidden;}
+
+.list-group-item.active .answer{
+ max-height: 500px;
+    transition: max-height 0.25s ease-in;}
+
+.list-group-item.active {
+  background:none;border:none;
+  color:#000;
+}
+.list-group-item .badge{
+  transition: transform .5s;
+}
+.list-group-item.active .badge{
+  transition: transform .5s;
+  transform: rotate(90deg)
 }
 
