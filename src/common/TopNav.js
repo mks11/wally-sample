@@ -8,6 +8,7 @@ class TopNav extends Component {
     super(props);
     this.modalStore= this.props.store.modal
     this.userStore= this.props.store.user
+    this.checkoutStore= this.props.store.checkout
     this.uiStore= this.props.store.ui
     this.routing = this.props.store.routing
   }
@@ -33,6 +34,8 @@ class TopNav extends Component {
   }
 
   handleLogout(e) {
+    this.checkoutStore.cart = null
+    this.checkoutStore.order = null
     this.uiStore.hideAccountDropdown()
     this.props.store.routing.push('/')
     this.userStore.logout()

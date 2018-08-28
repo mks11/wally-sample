@@ -2,6 +2,7 @@ import {observable, decorate, action} from 'mobx'
 import { 
   API_GET_CURRENT_CART, API_EDIT_CURRENT_CART,
   API_GET_ORDER_SUMMARY, API_DELIVERY_TIMES,
+API_CREATE_ORDER,
   API_CHECK_PROMO } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -65,10 +66,9 @@ class CheckoutStore {
     return res.data
   }
 
-  async createOrder(id) {
-    const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
-    this.order = resp.data
-  }
+  async createOrder(data, auth) {
+    const res = await axios.post(`${API_CREATE_ORDER}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+    return res.data  }
 
   async check(id) {
     const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
@@ -76,8 +76,8 @@ class CheckoutStore {
   }
 
   async getDeliveryTimes(data, auth) {
-    const resp = await axios.post(`${API_DELIVERY_TIMES}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
-    this.order = resp.data
+    const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}&zip=${data.zip}`, auth)
+    return res.data
   }
 
   async applyPromo() {
@@ -92,6 +92,10 @@ class CheckoutStore {
   toggleDeleteModal(id) {
     this.deleteModal = !this.deleteModal
     this.deleteId = id
+  }
+
+  async submitOrder(data, auth) {
+
   }
 
 }

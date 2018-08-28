@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input, Button } from 'reactstrap'
 import Title from '../common/page/Title'
@@ -33,6 +34,8 @@ class Checkout extends Component {
 
       selectedAddress: null,
       selectedPayment: null,
+      selectedDay: null,
+      selectedDate: null,
       selectedTime: null,
 
       lockAddress: false,
@@ -58,7 +61,9 @@ class Checkout extends Component {
       newState:'',
       newCity: '',
       newCountry: '',
-      newPreferedAddress: false
+      newPreferedAddress: false,
+
+      deliveryTimes: []
 
     }
 
@@ -67,6 +72,7 @@ class Checkout extends Component {
     this.modalStore = this.props.store.modal
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
+    this.routing = this.props.store.routing
 
   }
 
@@ -149,16 +155,50 @@ class Checkout extends Component {
   handleSubmitAddress() {
     if (!this.state.selectedAddress) return
     const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
+    let deliveryTimes = []
     this.checkoutStore.getDeliveryTimes({
       street_address: address.street_address,
       zip: address.zip,
-    }, this.userStore.getHeaderAuth())
-    this.setState({lockAddress: true, addressError: false})
+    }, this.userStore.getHeaderAuth()).then((data) => {
+      const times = data.delivery_windows
+      for (var i = 0, len = times.length; i < len; i++) {
+        addTimes(times[i])
+      }
+      console.log(deliveryTimes)
+
+      this.setState({deliveryTimes, lockAddress: true, addressError: false})
+    }).catch((e) => {
+      console.error(e)
+    })
+
+    function addTimes(data) {
+      const day = moment.utc().calendar(data[1],{
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        nextWeek: 'dddd',
+        lastDay: '[Yesterday]',
+        lastWeek: '[Last] dddd',
+        sameElse: 'DD/MM/YYYY'
+      })
+
+      const findTime = deliveryTimes.findIndex((data) => data.day === day)
+
+      const obj = {
+        time: data[0],
+        date: data[1],
+        availability: data[2]
+      }
+
+      if (findTime === -1) {
+        deliveryTimes.push({day: day, data: [obj]})
+      } else {
+        deliveryTimes[findTime].data.push(obj)
+      }
+    }
   }
 
   handleSubmitPayment() {
     if (!this.state.selectedPayment) return
-      
     this.setState({lockPayment: true})
   }
 
@@ -195,10 +235,24 @@ class Checkout extends Component {
       this.setState({invalidText: 'Please confirm that you are home'})
       return
     }
+
+    this.checkoutStore.createOrder({
+      user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+      address_id: this.state.selectedAddress,
+      payment_id: this.state.selectedPayment,
+      delivery_time: this.state.selectedDate + ' ' + this.state.selectedTime,
+    }, this.userStore.getHeaderAuth()).then((data) => {
+      this.routing.push('/order')
+    }).catch((e) => {
+      console.error('Failed to submit order', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+    })
   }
 
-  handleChangeTime(e) {
-    this.setState({selectedTime: 'Today, 12:30PM - 1.30PM', lockTime: true, timeDropdown: false})
+  handleChangeTime(day, time, date) {
+    console.log(day, time)
+    this.setState({selectedDay: day, selectedDate: date, selectedTime: time, lockTime: true, timeDropdown: false})
   }
 
   handleAddPayment = (data) => {
@@ -335,7 +389,6 @@ class Checkout extends Component {
 
     const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
     const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
-    const selectedTime = this.state.selectedTime ? this.state.selectedTime : 'Choose delivery date & time'
 
     let addressFormClass = 'addAdressForm mb-4'
     if (!this.state.newAddress) {
@@ -516,67 +569,25 @@ class Checkout extends Component {
                 </h3>
                 <div className="dropdown show">
                   <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
-                  <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                    {selectedTime}
-                                      </button>
+                    <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                      {this.state.selectedTime ? <React.Fragment>{this.state.selectedDay}, {this.state.selectedTime}</React.Fragment> : 'Choose delivery date and time'}
+                    </button>
                   <div className={timeDropdownClass}>
-                    <h6 className="dropdown-header">Today</h6>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio disabled">
-                        <input type="radio" id="time1" name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(e)} />
-                        <label className="custom-control-label" htmlFor="time1">12:30PM - 1:30PM <span className="text-muted">Not Available</span></label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time2" name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(e)} defaultChecked />
-                        <label className="custom-control-label" htmlFor="time2">3:30PM - 4:30PM</label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time3" name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(e)} />
-                        <label className="custom-control-label" htmlFor="time3">6:00PM - 7:00PM</label>
-                      </div>
-                    </div>
-                    <h6 className="dropdown-header">Tomorrow, Jul 22, 2018</h6>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time4" name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(e)} />
-                        <label className="custom-control-label" htmlFor="time4">12:30PM - 1:30PM</label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time5" name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(e)} />
-                        <label className="custom-control-label" htmlFor="time5">3:30PM - 4:30PM</label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time6" name="timeRadio" className="custom-control-input"  />
-                        <label className="custom-control-label" htmlFor="time6">6:00PM - 7:00PM</label>
-                      </div>
-                    </div>
-                    <h6 className="dropdown-header">Wed, Jul 23, 2018</h6>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time7" name="timeRadio" className="custom-control-input" />
-                        <label className="custom-control-label" htmlFor="time7">12:30PM - 1:30PM</label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time8" name="timeRadio" className="custom-control-input" defaultChecked />
-                        <label className="custom-control-label" htmlFor="time8">3:30PM - 4:30PM</label>
-                      </div>
-                    </div>
-                    <div className="dropdown-item">
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="time9" name="timeRadio" className="custom-control-input" />
-                        <label className="custom-control-label" htmlFor="time9">6:00PM - 7:00PM</label>
-                      </div>
-                    </div>
+                    {this.state.deliveryTimes.map((items, key) => (
+                        <React.Fragment key={key}>
+                          <h6 className="dropdown-header">{items.day}</h6>
+                          {items.data.map((item, key2) => ( 
+                            <div className="dropdown-item" key={key2} onClick={e => this.handleChangeTime(items.day, item.time, item.date)}  >
+                              <div className="custom-control custom-radio">
+                                <input 
+                                  checked={this.state.selectedDate === items.day && this.state.selectedTime === item.time}
+                                  type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date)} />
+                                <label className="custom-control-label" >{item.time} {!item.availability && <span className="text-muted">Not Available</span>}</label>
+                              </div>
+                            </div>
+                          ))}
+                        </React.Fragment>
+                    ))}
                   </div>
                 </ClickOutside>
                 </div>

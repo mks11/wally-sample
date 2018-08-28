@@ -53,6 +53,6 @@ export const GOOGLE_API_KEY="AIzaSyB2IlvjI5MCPefFjne3cgbklq_1899QiXU"
 
 export const APP_URL = "http://rizkifuad.com:3000"
 export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4"
-export const FB_KEY = "47bd39ab35242423e838b86b477ba5ce"
+export const FB_KEY = "1634254033370820"
 
 
