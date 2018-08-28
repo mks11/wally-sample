@@ -6,6 +6,7 @@ import routes from './routes';
 import TopNav from './common/TopNav.js'
 import Footer from './common/Footer.js'
 
+import ScrollToTop from './common/ScrollToTop.js'
 import LoginModal from './common/LoginModal.js'
 import SignupModal from './common/SignupModal.js'
 import WelcomeModal from './common/WelcomeModal.js'
@@ -42,22 +43,24 @@ const history = syncHistoryWithStore(browserHistory, routingStore)
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <div className="app">
-        <Backdrop/>
-        <TopNav/>
-        <main className="aw-main aw-home">
-          {routes}
-        </main>
-        <Footer/>
-        <LoginModal/>
-        <SignupModal/>
-        <WelcomeModal/>
-        <ZipModal/>
-        <InvalidZipModal/>
-        <InvalidZipSuccessModal/>
-        <InviteModal/>
-        <DeleteModal/>
-      </div> 
+      <ScrollToTop>
+        <div className="app">
+          <Backdrop/>
+          <TopNav/>
+          <main className="aw-main aw-home">
+            {routes}
+          </main>
+          <Footer/>
+          <LoginModal/>
+          <SignupModal/>
+          <WelcomeModal/>
+          <ZipModal/>
+          <InvalidZipModal/>
+          <InvalidZipSuccessModal/>
+          <InviteModal/>
+          <DeleteModal/>
+        </div> 
+      </ScrollToTop>
     </Router>
   </Provider>
   , document.getElementById('root'));
