@@ -98,6 +98,7 @@ class Mainpage extends Component {
     this.userStore = this.props.store.user
     this.uiStore = this.props.store.ui
     this.routing = this.props.store.routing
+    this.modalStore = this.props.store.modal
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.userStore = this.props.store.user
@@ -170,7 +171,11 @@ class Mainpage extends Component {
 
   handleCheckout() {
       this.uiStore.toggleCartDropdown()
+    if (this.userStore.status) {
       this.routing.push('/checkout')
+    } else {
+      this.modalStore.toggleLogin()
+    }
   }
 
   handleEdit(data) {

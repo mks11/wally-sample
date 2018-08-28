@@ -20,17 +20,18 @@ class CheckoutStore {
     let res
 
     const local = localStorage.getItem('cart')
+    let url = API_GET_CURRENT_CART
     if (local) {
       this.cart = JSON.parse(local)
-      return
+      url += '/' + this.cart._id
     }
 
 
     if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.get(API_GET_CURRENT_CART)
+      res = await axios.get(url)
       localStorage.setItem('cart', JSON.stringify(res.data))
     } else {
-      res = await axios.get(API_GET_CURRENT_CART, auth)
+      res = await axios.get(url, auth)
       localStorage.removeItem('cart')
     }
     this.cart = res.data

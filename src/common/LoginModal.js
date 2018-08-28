@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
+  import FacebookLogin from 'react-facebook-login';
+
+import { FB_KEY } from '../config'
 
 class LoginModal extends Component {
   constructor(props) {
@@ -92,6 +95,10 @@ class LoginModal extends Component {
     }
   }
 
+      responseFacebook(response) {
+      console.log(response);
+    }
+
   render() {
     const store = this.props.store
 
@@ -142,13 +149,21 @@ class LoginModal extends Component {
                     SUBMIT
                   </button>
                   
-              <div className="fancy-spacing my-4">
-                <hr/>
-                <span>or</span>
-                <hr/>
-              </div>
-              <button type="button" className="btn btn-blue-fb">FACEBOOK</button>
-              <hr className="mt-5"/>
+                  <div className="fancy-spacing my-4">
+                    <hr/>
+                    <span>or</span>
+                    <hr/>
+                  </div>
+                  <FacebookLogin
+                    appId={FB_KEY}
+                    cssClass="btn btn-blue-fb"
+                    autoLoad={true}
+                    textButton="FACEBOOK"
+                    fields="name,email,picture"
+                    scope="public_profile,user_friends,user_actions.books"
+                    callback={this.responseFacebook}
+                  />
+                  <hr className="mt-5"/>
                 </div>
               )
              }
