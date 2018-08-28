@@ -23,7 +23,7 @@ class TopNav extends Component {
   }
 
   handleLogo() {
-    this.props.store.routing.push('/')
+    this.props.store.routing.push('/main')
   }
 
   handleInvite() {

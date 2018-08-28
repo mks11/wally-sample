@@ -51,6 +51,10 @@ let Product = ((props) => {
     price_unit = unit + ' ' + props.product.unit_type
   }
 
+  if (props.product.unit_type === 'unit') {
+    price_unit = ''
+  }
+
   // price *= unit
 
   return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>

@@ -15,8 +15,24 @@ class CheckoutStore {
   deleteModal = null
   deleteId = null
 
+
   async getCurrentCart(auth) {
-    const res = await axios.get(API_GET_CURRENT_CART, auth)
+    let res
+
+    const local = localStorage.getItem('cart')
+    if (local) {
+      this.cart = JSON.parse(local)
+      return
+    }
+
+
+    if (auth.headers.Authorization === 'Bearer undefined') {
+      res = await axios.get(API_GET_CURRENT_CART)
+      localStorage.setItem('cart', JSON.stringify(res.data))
+    } else {
+      res = await axios.get(API_GET_CURRENT_CART, auth)
+      localStorage.removeItem('cart')
+    }
     this.cart = res.data
   }
   
@@ -28,7 +44,14 @@ class CheckoutStore {
     if (order_summary) {
       cart_id = this.order.cart_id
     }
-    const res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+
+    let res
+    if (auth.headers.Authorization === 'Bearer undefined') {
+      res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data)
+    } else {
+      res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+    }
+
     this.cart = res.data
     if (order_summary) {
       this.getOrderSummary(auth)
