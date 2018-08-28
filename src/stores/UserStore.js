@@ -1,6 +1,6 @@
 import {observable, decorate, action} from 'mobx'
 import { 
-  API_LOGIN, API_GET_LOGIN_STATUS, API_GET_USER, API_SIGNUP, API_EDIT_USER,
+  API_LOGIN, API_LOGIN_FACEBOOK, API_GET_LOGIN_STATUS, API_GET_USER, API_SIGNUP, API_EDIT_USER,
   API_ADDRESS_NEW, API_ADDRESS_EDIT, API_ADDRESS_REMOVE,
   API_PAYMENT_NEW, API_PAYMENT_EDIT, API_PAYMENT_REMOVE,
   API_REFER_FRIEND
@@ -169,7 +169,16 @@ class UserStore {
     this.status = false
     this.user = null
   }
+
+  async loginFacebook(data) {
+    console.log(data)
+    const res = await axios.post(API_LOGIN_FACEBOOK, {access_token: data.accessToken})
+    this.setUserData(res.data.user)
+    this.setToken(res.data.token)
+    return res.data
+  }
 }
+
 
 decorate(UserStore, {
   user: observable,
@@ -186,6 +195,7 @@ decorate(UserStore, {
   refUrl: observable,
 
   login: action,
+  loginFacebook: action,
   setUserData: action,
   setToken: action,
   edit: action,

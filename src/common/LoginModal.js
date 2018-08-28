@@ -12,7 +12,9 @@ class LoginModal extends Component {
       email: '',
       password: '',
 
-      invalidText: ''
+      invalidText: '',
+
+      facebookRequest: false
     }
 
     this.userStore = this.props.store.user
@@ -95,9 +97,20 @@ class LoginModal extends Component {
     }
   }
 
-      responseFacebook(response) {
-      console.log(response);
+  responseFacebook = (data) => {
+    if (this.state.facebookRequest) {
+      return
     }
+    this.setState({facebookRequest: true})
+    this.userStore.loginFacebook(data).then((response) => {
+      this.modalStore.toggleLogin()
+      this.setState({facebookRequest: false})
+    }).catch((e) => {
+      console.error('Failed to login', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+    })
+  }
 
   render() {
     const store = this.props.store
@@ -160,7 +173,7 @@ class LoginModal extends Component {
                     autoLoad={true}
                     textButton="FACEBOOK"
                     fields="name,email,picture"
-                    scope="public_profile,user_friends,user_actions.books"
+                    scope="public_profile,user_friends"
                     callback={this.responseFacebook}
                   />
                   <hr className="mt-5"/>

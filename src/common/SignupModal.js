@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
+  import FacebookLogin from 'react-facebook-login';
+
+import { FB_KEY } from '../config'
 
 class SignupModal extends Component {
   constructor(props) {
@@ -10,7 +13,9 @@ class SignupModal extends Component {
       email: '',
       password: '',
 
-      invalidText: ''
+      invalidText: '',
+
+      facebookRequest: false
     }
 
     this.modalStore = this.props.store.modal
@@ -71,6 +76,21 @@ class SignupModal extends Component {
     this.modalStore.toggleSignup()
   }
 
+  responseFacebook = (data) => {
+    if (this.state.facebookRequest) {
+      return
+    }
+    this.setState({facebookRequest: true})
+    this.userStore.loginFacebook(data).then((response) => {
+      this.modalStore.toggleSignup()
+      this.setState({facebookRequest: false})
+    }).catch((e) => {
+      console.error('Failed to signup', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+    })
+  }
+
   render() {
     let buttonClass = 'btn btn-main'
     if (this.state.name && this.state.email && this.state.password) {
@@ -118,7 +138,16 @@ class SignupModal extends Component {
                 <span>or</span>
                 <hr/>
               </div>
-              <button className="btn btn-blue-fb">FACEBOOK</button>
+
+              <FacebookLogin
+                appId={FB_KEY}
+                cssClass="btn btn-blue-fb"
+                autoLoad={true}
+                textButton="FACEBOOK"
+                fields="name,email,picture"
+                scope="public_profile,user_friends"
+                callback={this.responseFacebook}
+                  />
 
             </form>
           </div>

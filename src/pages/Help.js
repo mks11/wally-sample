@@ -37,7 +37,9 @@ class Help extends Component {
     this.helpStore.getHelpTopics();
     // await this.helpStore.getContact();
 
-    this.orderStore.getOrders(this.userStore.getHeaderAuth())
+    if (this.userStore.status) {
+      this.orderStore.getOrders(this.userStore.getHeaderAuth())
+    }
 
       
   }
@@ -65,7 +67,12 @@ class Help extends Component {
   }
   handleViewAllQuestions = (e) => {
     this.helpStore.activeTopics = 'All'
-    this.routing.push('/help/all')
+    this.routing.push('/help/topics')
+    e.preventDefault()
+  }
+
+  handleViewAllOrders = (e) => {
+    this.routing.push('/orders')
     e.preventDefault()
   }
   countItems(data) {
@@ -145,9 +152,7 @@ class Help extends Component {
                                 <h2>Recent Order</h2>
                               </div>
                               <div className="col-2">
-                                <span className="view-all">
-                                  View All
-                                </span>
+                            <a className="view-all" href="#"  onClick={this.handleViewAllOrders}>View All</a>
                               </div>
                             </div>
                           </div>
