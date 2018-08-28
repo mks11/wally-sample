@@ -53,7 +53,6 @@ class Orders extends Component {
   }
 
   render() {
-    console.log(this.orderStore.orders)
     if (this.orderStore.orders) {
       
     }

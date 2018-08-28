@@ -1020,8 +1020,8 @@ span.tnc {
   background-color:#fff;
 }
 
-.view-all{
-  color: #bbbbbb
+a.view-all{
+  color: #bbbbbb!important;
 }
 
 .list-group-item{
@@ -1574,4 +1574,6 @@ button.btn.btn-danger.btn-add-cart {
   transition: transform .5s;
   transform: rotate(90deg)
 }
-
+a {
+  cursor: pointer !important;
+}

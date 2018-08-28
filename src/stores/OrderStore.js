@@ -10,6 +10,7 @@ class OrderStore {
   orders  = []
 
   async getOrders(auth) {
+    console.log('adfasfdas')
     const res = await axios.get(API_GET_ORDERS, auth)
     this.orders = res.data
   }

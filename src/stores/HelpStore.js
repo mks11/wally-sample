@@ -14,11 +14,8 @@ class HelpStore{
   question = {}
   topics = []
   contact = []
+  activeTopics = 'All'
 
-  async getQuestions(){
-    const resp = await axios(API_HELP_GET_QUESTION)
-    this.questions = resp.data
-  }
 
   async getHelpTopics(){
     const resp = await axios(API_HELP_GET_HELP_TOPICS)
@@ -30,10 +27,12 @@ class HelpStore{
     this.contact = resp.data
   }
 
-  async getQuestion(id){
-    const resp = await axios(`${API_HELP_GET_QUESTION_SINGLE}/${id}`)
-    this.question = resp.data
+  async getQuestions(id){
+    const resp = await axios(`${API_HELP_GET_QUESTION_SINGLE}${id}`)
+    this.questions = resp.data
+    return this.questions
   }
+
 
   async search(terms) {
     const res = await axios(API_HELP_SEARCH + terms)
@@ -44,6 +43,7 @@ class HelpStore{
 decorate(HelpStore, {
   questions: observable,
   getQuestions: action,
+  activeTopics: observable,
 
   quesion: observable,
   getQuestion: action,

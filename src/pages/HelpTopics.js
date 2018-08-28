@@ -6,9 +6,7 @@ import { connect } from '../utils'
 
 class HelpSingle extends Component {
   state = {
-    activeQuestion: null,
-    fetch: false,
-    questions: []
+    activeQuestion: null
   }
   constructor(props){
     super(props)
@@ -25,11 +23,8 @@ class HelpSingle extends Component {
   }
 
   loadData() {
-    this.setState({fetch: true})
-    const id = this.props.match.params.id ? this.props.match.params.id : 'all'
-    this.helpStore.getQuestions(id).then((data) => {
-      this.setState({fetch: false, questions: data})
-    })
+    const id = this.props.match.params.id
+    this.helpStore.getTopics(id);
   }
 
   renderTitle(){
@@ -71,7 +66,7 @@ class HelpSingle extends Component {
                   <div className="list-header">
                     <div className="row">
                       <div className="col-10">
-                        <h2>{this.helpStore.activeTopics}</h2>
+                        <h2>All</h2>
                       </div>
                       <div className="col-2">
                       </div>
@@ -80,7 +75,7 @@ class HelpSingle extends Component {
                 </div>
 
                 <ul className="list-group list-group-flush">
-                  {this.state.questions.map((item, key) => (
+                  {this.helpStore.questions.map((item, key) => (
                     <li key={key} className={qClass + (key===this.state.activeQuestion ? ' active' : '')}  onClick={e=>this.handleToggleQuestion(key)}>
                       <div className="row w-100">
                         <div className="col-md-11">
