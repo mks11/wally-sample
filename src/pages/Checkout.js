@@ -242,7 +242,7 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.state.selectedDate + ' ' + this.state.selectedTime,
     }, this.userStore.getHeaderAuth()).then((data) => {
-      this.routing.push('/order')
+      this.routing.push('/orders')
     }).catch((e) => {
       console.error('Failed to submit order', e)
       const msg = e.response.data.error.message

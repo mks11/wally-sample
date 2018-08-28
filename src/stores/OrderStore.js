@@ -1,26 +1,25 @@
 import {observable, decorate, action} from 'mobx'
 import { 
+  API_GET_ORDERS
    } from '../config'
 import axios from 'axios'
 
 let index = 0
 
-class CheckoutStore {
+class OrderStore {
   orders  = []
 
-  getOrders() {
-    axios.get(API_GET_CURRENT_CART)
-      .then(resp => {
-        this.cart = resp.data
-      })
+  async getOrders(auth) {
+    const res = await axios.get(API_GET_ORDERS, auth)
+    this.orders = res.data
   }
 
 }
 
-decorate(CheckoutStore, {
-  cart: observable,
-  getCurrentCart: action
+decorate(OrderStore, {
+  orders: observable,
+  getOrders: action
 })
 
 
-export default new CheckoutStore()
+export default new OrderStore()
