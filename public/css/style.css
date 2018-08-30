@@ -1551,7 +1551,9 @@ button.btn.btn-danger.btn-add-cart {
     background: #FF0000;
 }
 .aw-input--location.aw-input--small {
-  background-position:2%;
+    background-size: 15px;
+    background-position: 0% 53%;
+    padding-left: 7%;
 }
 
 .list-group-item .answer{

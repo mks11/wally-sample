@@ -1,42 +1,68 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { connect } from '../../utils'
+import moment from 'moment'
 
 class ReportModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      text: ''
+      text: '',
+      invalidText: '',
+      cart: null
     }
 
-    this.modalStore = this.props.store.modal
+    this.orderStore = this.props.store.order
+    this.userStore = this.props.store.user
   }
 
   handleSubmit(e) {
-    this.modalStore.toggleReport()
+    if (!this.state.text) {
+      this.setState({invalidText: 'Issue cannot be empty'})
+      return
+    }
+    this.orderStore.submitIssue({
+      body: this.state.text,
+      id: this.orderStore.activeOrder.cart_id
+    }, this.userStore.getHeaderAuth()).then((data) => {
+
+    }).catch((e) => {
+      console.error('Failed to submit issue', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+      this.orderStore.toggleReport()
+    })
     e.preventDefault()
   }
+
   render() {
     const store = this.props.store
     let buttonClass='btn btn-main mt-3'
     if (this.state.text) {
       buttonClass += ' active'
     }
+
+    const item = this.orderStore.activeOrder
+    if (!item) {
+      return null
+    }
+
+
     return (
-      <Modal isOpen={store.modal.report}>
+      <Modal isOpen={this.orderStore.reportModal}>
         <div className="modal-header">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={e => store.modal.toggleReport(e)}></button>
+          <button className="btn-icon btn-icon--close" onClick={e => this.orderStore.toggleReport(e)}></button>
         </div>
         <ModalBody>
           <div className="order-wrap pb-5">
             <h3 className="m-0 mb-2">Order Issue</h3>
             <span className="text-order mb-3">
-              Order: #245993<br/>
-              May 07,2018<br/>
-              Delivered
+              Order: #{item.cart_id}<br/>
+              {moment(item.createAt).format('MMM DD, YYYY')}<br/>
+              {item.status}
             </span><br/><br/>
-            <span className="text-order text-bold mt-2">Describe your issue bellow:</span>
+            <span className="text-order text-bold mt-2">Describe your issue below:</span>
             <form onSubmit={e => e.preventDefault()}>
               <textarea
                 rows="10"
@@ -44,6 +70,8 @@ class ReportModal extends Component {
                 onChange={(e) => this.setState({text: e.target.value})}>
             </textarea>
             <button onClick={e => this.handleSubmit(e)} className={buttonClass} style={{width: '80%'}}>SUBMIT</button>
+
+            {this.state.invalidText && <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>}
             </form>
           </div>
         </ModalBody>

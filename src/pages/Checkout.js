@@ -225,7 +225,7 @@ class Checkout extends Component {
       this.setState({invalidText: 'Please select payment'})
       return
     }
-    
+
     if (!this.state.lockTime) {
       this.setState({invalidText: 'Please select delivery time'})
       return
@@ -259,7 +259,7 @@ class Checkout extends Component {
     return this.userStore.savePayment(data).then((data) => {
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
-      
+
       return data
     })
   }
@@ -371,7 +371,7 @@ class Checkout extends Component {
 
     e.preventDefault()
   }
-  
+
   render() {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null
@@ -384,7 +384,7 @@ class Checkout extends Component {
     if (this.state.timeDropdown && this.state.lockAddress) {
       timeDropdownClass += " show"
     }
-     
+
     const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : 0
 
     const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
@@ -402,7 +402,7 @@ class Checkout extends Component {
 
     let buttonPlaceOrderClass = 'btn btn-main'
     if (this.state.lockAddress && this.state.lockPayment && this.state.lockTime && this.state.confirmHome) {
-     buttonPlaceOrderClass += ' active' 
+      buttonPlaceOrderClass += ' active' 
     }
 
     let addressCardClass = 'card1'
@@ -432,133 +432,133 @@ class Checkout extends Component {
                         return null
                       }
                       return (
-                      <div 
-                        className={"custom-control custom-radio bb1" + (data.address_id === selectedAddress ? " active" : "")}
-                        key={index}>
-                        <input 
-                          type="radio" id={"address" + index} 
-                          name="customRadio" 
-                          checked={data.address_id === selectedAddress}
-                          className="custom-control-input" 
-                        value={data.address_id} 
-                        onChange={e=>this.handleSelectAddress(e)} />
-                      <label className="custom-control-label" htmlFor={"address" + index}>
-                        {data.street_address} {data.unit}, {data.state} {data.zip}
-                        <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>
-                      </label>
-                      {this.userStore.user.preferred_address === data.address_id &&
-                          <a className="address-rbtn link-blue">DEFAULT</a>
-                      }
-                    </div>)
+                        <div 
+                          className={"custom-control custom-radio bb1" + (data.address_id === selectedAddress ? " active" : "")}
+                          key={index}>
+                          <input 
+                            type="radio" id={"address" + index} 
+                            name="customRadio" 
+                            checked={data.address_id === selectedAddress}
+                            className="custom-control-input" 
+                            value={data.address_id} 
+                            onChange={e=>this.handleSelectAddress(e)} />
+                          <label className="custom-control-label" htmlFor={"address" + index}>
+                            {data.street_address} {data.unit}, {data.state} {data.zip}
+                            <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>
+                          </label>
+                          {this.userStore.user.preferred_address === data.address_id &&
+                              <a className="address-rbtn link-blue">DEFAULT</a>
+                          }
+                        </div>)
                     })}
 
                     { !this.state.lockAddress ?  (
                       <div>
-                    <div 
-                      className={"custom-control custom-radio bb1" + ("0" === selectedAddress ? " active" : "")}
-                      >
-                      <input type="radio" id="addressAdd" name="customRadio" className="custom-control-input" 
-                        value="0" 
-                        checked={selectedAddress === "0"}
-                        onChange={e=>this.handleSelectAddress(e)}/>
-                      <label className="custom-control-label" htmlFor="addressAdd">Add new address</label>
-                    </div>
-                    <div className={addressFormClass}>
-      <PlacesAutocomplete
-        value={this.state.newStreetAddress}
-        onChange={this.handleNewAddressChange}
-        onSelect={this.handleNewAddressSelect}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div style={{position:'relative'}}>
-            <input
-              {...getInputProps({
-                autoComplete: 'off',
-                placeholder: 'Delivery to...',
-                className: 'aw-input--control aw-input--small  aw-input--left location-search-input  aw-input--location mt-3 form-control',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <strong>
-                            {suggestion.formattedSuggestion.mainText}
-                          </strong>{' '}
-                          <small>
-                            {suggestion.formattedSuggestion.secondaryText}
-                          </small>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                        <div 
+                          className={"custom-control custom-radio bb1" + ("0" === selectedAddress ? " active" : "")}
+                        >
+                          <input type="radio" id="addressAdd" name="customRadio" className="custom-control-input" 
+                            value="0" 
+                            checked={selectedAddress === "0"}
+                            onChange={e=>this.handleSelectAddress(e)}/>
+                          <label className="custom-control-label" htmlFor="addressAdd">Add new address</label>
+                        </div>
+                        <div className={addressFormClass}>
+                          <PlacesAutocomplete
+                            value={this.state.newStreetAddress}
+                            onChange={this.handleNewAddressChange}
+                            onSelect={this.handleNewAddressSelect}
+                          >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                              <div style={{position:'relative'}}>
+                                <input
+                                  {...getInputProps({
+                                    autoComplete: 'off',
+                                    placeholder: 'Delivery to...',
+                                    className: 'aw-input--control aw-input--small  aw-input--left location-search-input  aw-input--location mt-3 form-control',
+                                  })}
+                                />
+                                <div className={"autocomplete-dropdown-container" + (suggestions.length > 0 ? '' : ' d-none') }>
+                                  {suggestions.map(suggestion => {
+                                    const className = suggestion.active
+                                      ? 'suggestion-item--active'
+                                      : 'suggestion-item';
+                                    // inline style for demonstration purpose
+                                    const style = suggestion.active
+                                      ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                      : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                    return (
+                                      <div
+                                        {...getSuggestionItemProps(suggestion, {
+                                          className,
+                                          style,
+                                        })}
+                                      >
+                                        <strong>
+                                          {suggestion.formattedSuggestion.mainText}
+                                        </strong>{' '}
+                                        <small>
+                                          {suggestion.formattedSuggestion.secondaryText}
+                                        </small>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
 
-      </PlacesAutocomplete>
-                      <div className="row no-gutters">
-                        <div className="col-md-7">
-                          <div className="form-group">
-                            <input 
-                              value={this.state.newAptNo}
-                              onChange={e=>this.setState({newAptNo: e.target.value})}
-                              type="text" className="form-control input1" placeholder="Apt number" />
+                          </PlacesAutocomplete>
+                          <div className="row mt-3">
+                            <div className="col-md-7">
+                              <div className="form-group">
+                                <input 
+                                  value={this.state.newAptNo}
+                                  onChange={e=>this.setState({newAptNo: e.target.value})}
+                                  type="text" className="form-control input1" placeholder="Apt number" />
+                              </div>
+                            </div>
+                            <div className="col-md-5">
+                              <div className="form-group">
+                                <input 
+                                  value={this.state.newZip}
+                                  onChange={e=>this.setState({newZip: e.target.value})}
+                                  type="text" className="form-control input1" placeholder="Zip code" />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-md-5">
-                          <div className="form-group">
-                            <input 
-                              value={this.state.newZip}
-                              onChange={e=>this.setState({newZip: e.target.value})}
-                              type="text" className="form-control input1" placeholder="Zip code" />
+                          <div className="row">
+                            <div className="col-md-7">
+                              <div className="form-group">
+                                <input
+                                  value={this.state.newContactName}
+                                  onChange={e=>this.setState({newContactName: e.target.value})}
+                                  type="text" className="form-control input1" placeholder="Contact Name" />
+                              </div>
+                            </div>
+                            <div className="col-md-5">
+                              <div className="form-group">
+                                <input
+                                  value={this.state.newPhoneNumber}
+                                  onChange={e=>this.setState({newPhoneNumber: e.target.value})}
+                                  type="text" className="form-control input1" placeholder="Phone Number" />
+                              </div>
+                            </div>
                           </div>
+                          <div className="form-group">
+                            <textarea
+                              value={this.state.newDeliveryNotes}
+                              onChange={e=>this.setState({newDeliveryNotes: e.target.value})}
+                              className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
+                          </div>
+                          <div className="custom-control custom-checkbox">
+                            <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
+                            <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
+                          </div>
+                          <hr />
+                          <button className="btn btn-main active inline-round" onClick={e=>this.handleConfirmAddress(e)}>CONFIRM</button>
+                          {this.state.invalidAddressText && <div className="error-msg">{this.state.invalidAddressText}</div>}
                         </div>
                       </div>
-                      <div className="row no-gutters">
-                        <div className="col-md-7">
-                          <div className="form-group">
-                            <input
-                              value={this.state.newContactName}
-                              onChange={e=>this.setState({newContactName: e.target.value})}
-                              type="text" className="form-control input1" placeholder="Contact Name" />
-                          </div>
-                        </div>
-                        <div className="col-md-5">
-                          <div className="form-group">
-                            <input
-                              value={this.state.newPhoneNumber}
-                              onChange={e=>this.setState({newPhoneNumber: e.target.value})}
-                              type="text" className="form-control input1" placeholder="Phone Number" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <textarea
-                          value={this.state.newDeliveryNotes}
-                          onChange={e=>this.setState({newDeliveryNotes: e.target.value})}
-                          className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
-                      </div>
-                      <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
-                        <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
-                      </div>
-                      <hr />
-                      <button className="btn btn-main active inline-round" onClick={e=>this.handleConfirmAddress(e)}>CONFIRM</button>
-                      {this.state.invalidAddressText && <div className="error-msg">{this.state.invalidAddressText}</div>}
-                    </div>
-                  </div>
                     ):null}
                     {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
                   </div>
@@ -572,8 +572,8 @@ class Checkout extends Component {
                     <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
                       {this.state.selectedTime ? <React.Fragment>{this.state.selectedDay}, {this.state.selectedTime}</React.Fragment> : 'Choose delivery date and time'}
                     </button>
-                  <div className={timeDropdownClass}>
-                    {this.state.deliveryTimes.map((items, key) => (
+                    <div className={timeDropdownClass}>
+                      {this.state.deliveryTimes.map((items, key) => (
                         <React.Fragment key={key}>
                           <h6 className="dropdown-header">{items.day}</h6>
                           {items.data.map((item, key2) => ( 
@@ -587,9 +587,9 @@ class Checkout extends Component {
                             </div>
                           ))}
                         </React.Fragment>
-                    ))}
-                  </div>
-                </ClickOutside>
+                      ))}
+                    </div>
+                  </ClickOutside>
                 </div>
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
@@ -628,17 +628,17 @@ class Checkout extends Component {
 
                     { !this.state.lockPayment ?  (
                       <div>
-                    <div 
-                      className={"custom-control custom-radio bb1" + ("0" === selectedPayment ? " active" : "")}
-                      >
-                      <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
-                        value="0"
-                        checked={selectedPayment === "0"}
-                        onChange={e=>this.handleSelectPayment(e)}/>
-                      <label className="custom-control-label" htmlFor="paymentAdd">Add new card</label>
-                    </div>
-                    <div className={paymentFormClass}>
-                      {/* 
+                        <div 
+                          className={"custom-control custom-radio bb1" + ("0" === selectedPayment ? " active" : "")}
+                        >
+                          <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
+                            value="0"
+                            checked={selectedPayment === "0"}
+                            onChange={e=>this.handleSelectPayment(e)}/>
+                          <label className="custom-control-label" htmlFor="paymentAdd">Add new card</label>
+                        </div>
+                        <div className={paymentFormClass}>
+                          {/* 
                       <div className="row no-gutters">
                         <div className="col-md-4">
                           <div className="form-group">
@@ -677,23 +677,23 @@ class Checkout extends Component {
                       </StripeProvider>
                     </div>
                   </div>):null}
-                    { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
-                  </div>
+                  { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
                 </div>
               </div>
             </div>
-            <div className="col-md-6">
-              <section className="order-summary mb-5" style={{maxWidth: '440px'}}>
-                <div className="card1 card-shadow">
-                  <div className="card-body">
-                    <h3 className="m-0 mb-2">Order Summary</h3>
-                    <hr/>
-                    { cart_items.map((c, i) => (
+          </div>
+          <div className="col-md-6">
+            <section className="order-summary mb-5" style={{maxWidth: '440px'}}>
+              <div className="card1 card-shadow">
+                <div className="card-body">
+                  <h3 className="m-0 mb-2">Order Summary</h3>
+                  <hr/>
+                  { cart_items.map((c, i) => (
 
                     <div className="item mt-3 pb-2" key={i}>
                       <div className="item-left">
                         <h4 className="item-name">{c.product_name}</h4>
-                        <span className="item-detail mt-2 mb-1">2 oz, container large</span>
+                        <span className="item-detail mt-2 mb-1">{c.packaging_name}</span>
                         <div className="item-link">
                           <a onClick={e=>this.handleEdit(c.product_id, c.customer_quantity)} className="text-blue mr-2">EDIT</a>
                           <a onClick={e=>this.handleDelete(c)} className="text-dark-grey">DELETE</a>
@@ -704,91 +704,91 @@ class Checkout extends Component {
                         <span className="item-price">{formatMoney(c.total/100)}</span>
                       </div>
                     </div>
-                    ))}
+                  ))}
 
 
-                    <div className="item-summaries">
-                      <div className="summary">
-                        <span>Subtotal</span>
-                        <span>{formatMoney(order.sub_total/100)}</span>
-                      </div>
-                      <div className="summary">
-                        <span>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
-                        <span>{formatMoney((order.tax_amount + order.service_amount)/100)}</span>
-                      </div>
-                      <div className="summary">
-                        <span>Delivery fee</span>
-                        <span>$0</span>
-                      </div>
-                      <div className="summary">
-                        <span>Packaging deposit  <FontAwesome name='info-circle' /></span>
-                        <span>{formatMoney(order.packaging_deposit/100)}</span>
-                      </div>
-                      {this.state.appliedStoreCredit ?
-                      <div className="summary">
-                        <span>Store credit applied</span>
-                        <span>{formatMoney(this.state.appliedStoreCreditAmount)}</span>
-                      </div>
-                          :null}
-                      {this.state.appliedPromo ?
-                      <div className="summary">
-                        <span>Promo code applied</span>
-                        <span>{this.state.appliedPromoCode}</span>
-                      </div>
-                          :null}
+                  <div className="item-summaries">
+                    <div className="summary">
+                      <span>Subtotal</span>
+                      <span>{formatMoney(order.sub_total/100)}</span>
                     </div>
+                    <div className="summary">
+                      <span>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
+                      <span>{formatMoney((order.tax_amount + order.service_amount)/100)}</span>
+                    </div>
+                    <div className="summary">
+                      <span>Delivery fee</span>
+                      <span>$0</span>
+                    </div>
+                    <div className="summary">
+                      <span>Packaging deposit  <FontAwesome name='info-circle' /></span>
+                      <span>{formatMoney(order.packaging_deposit/100)}</span>
+                    </div>
+                    {this.state.appliedStoreCredit ?
+                        <div className="summary">
+                          <span>Store credit applied</span>
+                          <span>{formatMoney(this.state.appliedStoreCreditAmount)}</span>
+                        </div>
+                        :null}
+                        {this.state.appliedPromo ?
+                            <div className="summary">
+                              <span>Promo code applied</span>
+                              <span>{this.state.appliedPromoCode}</span>
+                            </div>
+                            :null}
+                          </div>
 
-                    <div className="item-extras">
-                      {!this.state.appliedStoreCredit ? 
-                      <div className="form-group">
-                        <span className="text-blue">Apply your store credit?</span>
-                        <div className="aw-input--group aw-input--group-sm">
-                        <Input
-                          className="aw-input--control aw-input--left aw-input--bordered"
-                          type="text"
-                          placeholder="Enter your store credit"
-                          readOnly={true}
-                          value={appliedStoreCreditAmount}
-                          onChange={(e) => this.setState({appliedStoreCreditAmount: e.target.value})}/>
-                        {appliedStoreCreditAmount>0 && <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>}
-                      </div>
-                      </div>
-                      :null}
+                          <div className="item-extras">
+                            {!this.state.appliedStoreCredit ? 
+                                <div className="form-group">
+                                  <span className="text-blue">Apply your store credit?</span>
+                                  <div className="aw-input--group aw-input--group-sm">
+                                    <Input
+                                      className="aw-input--control aw-input--left aw-input--bordered"
+                                      type="text"
+                                      placeholder="Enter your store credit"
+                                      readOnly={true}
+                                      value={appliedStoreCreditAmount}
+                                      onChange={(e) => this.setState({appliedStoreCreditAmount: e.target.value})}/>
+                                    {appliedStoreCreditAmount>0 && <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>}
+                                  </div>
+                                </div>
+                                :null}
 
-                      {!this.state.appliedPromo ? 
-                      <div className="form-group">
-                        <span className="text-blue">Have a promo code</span>
-                        <div className="aw-input--group aw-input--group-sm">
-                        <Input
-                          className="aw-input--control aw-input--left aw-input--bordered"
-                          type="text"
-                          placeholder="Enter promocode here"
-                          onChange={(e) => this.setState({appliedPromoCode: e.target.value})}/>
+                                {!this.state.appliedPromo ? 
+                                    <div className="form-group">
+                                      <span className="text-blue">Have a promo code</span>
+                                      <div className="aw-input--group aw-input--group-sm">
+                                        <Input
+                                          className="aw-input--control aw-input--left aw-input--bordered"
+                                          type="text"
+                                          placeholder="Enter promocode here"
+                                          onChange={(e) => this.setState({appliedPromoCode: e.target.value})}/>
 
-                        <button onClick={e => this.applyPromo()} type="button" className="btn btn-transparent">APPLY</button>
+                                        <button onClick={e => this.applyPromo()} type="button" className="btn btn-transparent">APPLY</button>
+                                      </div>
+                                    </div>
+                                    :null}
+                                  </div>
+                                  <hr className="mt-4" />
+                                  <div className="item-total">
+                                    <span>Total</span>
+                                    <span>{formatMoney(order.total/100)}</span>
+                                  </div>
+                                  <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
+                                  {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}
+                                </div>
+                              </div>
+
+                              By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
+                              <Link to={""}>Learn more.</Link>
+                              <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+                            </section>
+                          </div>
                         </div>
                       </div>
-                          :null}
+                      { this.productStore.open && <ProductModal/> }
                     </div>
-                    <hr className="mt-4" />
-                    <div className="item-total">
-                      <span>Total</span>
-                      <span>{formatMoney(order.total/100)}</span>
-                    </div>
-                    <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
-                    {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}
-                  </div>
-                </div>
-
-              By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
-              <Link to={""}>Learn more.</Link>
-              <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
-              </section>
-            </div>
-          </div>
-        </div>
-        { this.productStore.open ? <ProductModal/> : null}
-      </div>
     );
   }
 }

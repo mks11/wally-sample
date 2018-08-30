@@ -85,7 +85,7 @@ class TopNav extends Component {
           </div>
         </div>
         <header className="aw-header navbar-white">
-          <div className="container-fluid full-width">
+          <div className="container">
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
                 <a className="aw-logo d-block" onClick={e => this.handleLogo(e)}>
@@ -102,6 +102,7 @@ class TopNav extends Component {
                         </button>
                         <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                           <a className="dropdown-item lg" href="#"><strong>All About You..</strong></a>
+                          <a className="dropdown-item">Store Credit ({formatMoney(storeCredit/100)})</a>
                           <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
                           <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
                           <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
@@ -114,10 +115,6 @@ class TopNav extends Component {
               <div className="col-auto ml-auto d-none d-md-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
-                    { this.userStore.status ? 
-                        <li className="no-underline"><a className="nav-link aw-nav--link p-0">Store Credit ({formatMoney(storeCredit/100)})</a></li>
-                        :null
-                    }
                     <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                     <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
                   </ul>

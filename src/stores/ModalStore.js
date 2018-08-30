@@ -15,8 +15,6 @@ class ModalStore {
 
   invite = false
 
-  report = false
-
   product = false
   productId = null
 
@@ -51,10 +49,6 @@ class ModalStore {
     this.invite = !this.invite
   }
 
-  toggleReport() {
-    this.report = !this.report
-  }
-
   toggleWelcome() {
     this.welcome = !this.welcome
   }
@@ -84,7 +78,6 @@ decorate(ModalStore, {
   invalidZip: observable,
   invalidZipSuccess: observable,
   invite: observable,
-  report: observable,
   product: observable,
   productId: observable,
   toggleLogin: action,
@@ -94,7 +87,6 @@ decorate(ModalStore, {
   toggleInvalidZip: action,
   toggleInvalidSuccess: action,
   toggleInvite: action,
-  toggleReport: action,
   toggleWelcome: action,
   setLoginNextRoute: action,
 

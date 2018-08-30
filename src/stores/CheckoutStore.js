@@ -26,6 +26,9 @@ class CheckoutStore {
       this.cart = JSON.parse(local)
       url += '/' + this.cart._id
     }
+    
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    url += '?time=' + time
 
 
     if (auth.headers.Authorization === 'Bearer undefined') {

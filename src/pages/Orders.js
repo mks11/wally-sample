@@ -53,9 +53,6 @@ class Orders extends Component {
   }
 
   render() {
-    if (this.orderStore.orders) {
-      
-    }
     const store = this.props.store
     return (
       <div className="App">
@@ -81,9 +78,9 @@ class Orders extends Component {
                 </tbody>
               </table>
               <hr className="my-1"/>
-              <span className="text-bold">Order #: 123456</span><br/>
+              <span className="text-bold">Order #: {item.cart_id}</span><br/>
               <span>{this.printItems(item.cart_items)}</span>
-              <a onClick={e => store.modal.toggleReport(e)} className="text-report text-blue">Report a Problem</a>
+              <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
             </div>
             ))}
 

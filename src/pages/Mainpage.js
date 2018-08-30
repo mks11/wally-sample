@@ -394,7 +394,7 @@ class Mainpage extends Component {
                             <div className="item mt-3 pb-2" key={i}>
                               <div className="item-left">
                                 <h4 className="item-name">{c.product_name}</h4>
-                                <span className="item-detail mb-1">2 oz, container large</span>
+                                <span className="item-detail mb-1">{c.packaging_name}</span>
                                 <div className="item-link">
                                   <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
                                   <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
@@ -505,7 +505,7 @@ class Mainpage extends Component {
 
                 <div className="product-breadcrumb">
                   <span>
-                    <Link to ={"/main"} className="text-violet text-bold">
+                    <Link to ={"/main"} className="text-black">
                       All Categories
                     </Link>
                   </span>

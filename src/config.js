@@ -37,6 +37,7 @@ export const API_CHECK_PROMO = BASE_URL + "/api/check_promo"
 export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 
 export const API_GET_ORDERS = BASE_URL + "/api/orders"
+export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 
 
 

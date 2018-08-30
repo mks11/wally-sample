@@ -3,6 +3,7 @@ import {
   API_GET_PRODUCT_DETAIL, API_GET_ADVERTISEMENTS, 
   API_GET_PRODUCT_DISPLAYED, API_GET_CATEGORIES, API_SEARCH_KEYWORD } from '../config'
 import axios from 'axios'
+import moment from 'moment'
 
 let index = 0
 
@@ -28,7 +29,8 @@ class ProductStore {
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id
 
-    const res = await axios.get(API_GET_PRODUCT_DETAIL + product_id)
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    const res = await axios.get(API_GET_PRODUCT_DETAIL + product_id + '?time=' + time)
     this.activeProduct = res.data
     this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
     this.open = true
@@ -47,8 +49,9 @@ class ProductStore {
 
   async getProductDisplayed(id) {
     this.fetch = true
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED
-    const res = await axios.get(url)
+    const res = await axios.get(url + '?time='+time)
     const data = res.data
     this.main_display = data.main_products
     this.path = data.path
@@ -67,7 +70,8 @@ class ProductStore {
   }
 
   async searchKeyword(keyword) {
-    const res = await axios.get(API_SEARCH_KEYWORD + keyword)
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    const res = await axios.get(API_SEARCH_KEYWORD + keyword + '?time=' + time)
     return res.data
   }
 
