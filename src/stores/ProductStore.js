@@ -71,7 +71,7 @@ class ProductStore {
 
   async searchKeyword(keyword) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(API_SEARCH_KEYWORD + keyword + '?time=' + time)
+    const res = await axios.get(API_SEARCH_KEYWORD + '?keyword='+ keyword + '&time=' + time)
     return res.data
   }
 

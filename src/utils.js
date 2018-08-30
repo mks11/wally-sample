@@ -26,7 +26,10 @@ const formatMoney = (n, c, d, t) => {
 
   return money
 }
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 export {
-  connect, validateEmail, formatMoney
+  connect, validateEmail, formatMoney, capitalizeFirstLetter
 }

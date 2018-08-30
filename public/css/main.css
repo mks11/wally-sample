@@ -500,13 +500,17 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
   .aw-header .btn-login {
     font-size: 17px;
-    width: 130px;
-    padding: 11px;
+    width: 119px;
+    padding: 7px;
+  }
+
+  .aw-header .btn-login b, .aw-header .btn-sign-up b {
+    vertical-align: middle;
   }
   .aw-header .btn-sign-up {
     font-size: 17px;
-    width: 130px;
-    padding: 11px;
+    width: 119px;
+    padding: 7px;
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Title from '../common/page/Title'
-import { connect, formatMoney } from '../utils'
+import { connect, formatMoney,capitalizeFirstLetter } from '../utils'
 import moment from 'moment'
 
 import  ReportModal from './orders/ReportModal'
@@ -45,11 +45,11 @@ class Orders extends Component {
 
   printItems(data) {
     console.log(data)
-    let items = ''
+    let items = []
     for (const d of data) {
-      items += d.product_name
+      items.push(d.product_name)
     }
-    return items
+    return items.join(', ')
   }
 
   render() {

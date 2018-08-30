@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { connect } from '../../utils'
+import { connect, capitalizeFirstLetter } from '../../utils'
 import moment from 'moment'
 
 class ReportModal extends Component {
@@ -60,7 +60,7 @@ class ReportModal extends Component {
             <span className="text-order mb-3">
               Order: #{item.cart_id}<br/>
               {moment(item.createAt).format('MMM DD, YYYY')}<br/>
-              {item.status}
+              {capitalizeFirstLetter(item.status)}
             </span><br/><br/>
             <span className="text-order text-bold mt-2">Describe your issue below:</span>
             <form onSubmit={e => e.preventDefault()}>

@@ -207,7 +207,7 @@ class Mainpage extends Component {
       const currentSearchCatId = filters[0].cat_id
       const currentSearchCat = filters[0].cat_name
       const searchDisplayed = data.products.filter((d) => {
-        return d.cat_id == currentSearchCatId
+        return d.subcat_id == currentSearchCatId
       })
 
       this.setState({searchSidebar: filters, searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat, searchDisplayed })
@@ -299,8 +299,11 @@ class Mainpage extends Component {
       cartSubtotal = this.checkoutStore.cart.subtotal / 100
     }
 
-    const ads1 = this.productStore.ads1 ? this.productStore.ads1 : '/images/shop_banner_1.png'
-    const ads2 = this.productStore.ads2 ? this.productStore.ads2 : '/images/shop_banner_2.png'
+    // const ads1 = this.productStore.ads1 ? this.productStore.ads1 : '/images/shop_banner_1.png'
+    // const ads2 = this.productStore.ads2 ? this.productStore.ads2 : '/images/shop_banner_2.png'
+
+    const ads1 = this.productStore.ads1 ? this.productStore.ads1 :null
+    const ads2 = this.productStore.ads2 ? this.productStore.ads2 :null
 
     const { activeHeroIndex } = this.state;
 
@@ -335,7 +338,7 @@ class Mainpage extends Component {
                 <div className="dropdown dropdown-fwidth">
 
                   <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()}>
-                  <h3 onClick={this.handleCategoriesDropdown}>All Categories <i className="fa fa-chevron-down"></i></h3>
+                    <h3 onClick={this.handleCategoriesDropdown}><strong>All Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
                     <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
@@ -381,7 +384,7 @@ class Mainpage extends Component {
                   <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
                     <div className="btn-group dropdown-cart">
                       <div onClick={this.handleCartDropdown} className={buttonCart}>
-                        <i className="fa fa-shopping-bag"></i><span>{cartCount} Item</span>
+                        <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                       </div>
 
                       <div className={cartDropdownClass} aria-labelledby="dropdownMenuButton">
@@ -468,7 +471,7 @@ class Mainpage extends Component {
                       <div className="mb-0" key={i}>
                         <h4><Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link></h4>
                         <ul>  
-                          {s.sub_cat && s.sub_cats.map((sc, idx) => (
+                          {s.sub_cats && s.sub_cats.map((sc, idx) => (
                             <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
                                 className={id === sc.cat_id ? "text-violet": ""}
                               >{sc.cat_name}</Link></li>
@@ -492,7 +495,7 @@ class Mainpage extends Component {
 
                   <br/>
                   <div>
-                    <img src={APP_URL + ads1} />
+                    {ads1 && <img src={APP_URL + ads1} />}
                   </div>
                   <br/>
                 </div>
@@ -501,7 +504,7 @@ class Mainpage extends Component {
 
               { !this.state.searchPage &&
               <div className="col-md-10 col-sm-8 product-content-right">
-                <img src={APP_URL + ads2} className="img-fluid" />
+                {ads2 && <img src={APP_URL + ads2} className="img-fluid" />}
 
                 <div className="product-breadcrumb">
                   <span>
@@ -511,7 +514,7 @@ class Mainpage extends Component {
                   </span>
                   {this.productStore.path.map((p, i) => (
                     <span key={i}>
-                      { i != 0 && <span><span> &gt; </span> <Link to={p[1]} className="text-violet text-bold">{p[0]}</Link></span>}
+                      { i != 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
                     </span>
                   ))}
                 </div>
@@ -525,7 +528,7 @@ class Mainpage extends Component {
 
               { this.state.searchPage &&
               <div className="col-md-10 col-sm-8 product-content-right">
-                <img src={APP_URL + ads2} className="img-fluid" />
+                {ads2 && <img src={APP_URL + ads2} className="img-fluid" />}
 
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>

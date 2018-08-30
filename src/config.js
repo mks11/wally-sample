@@ -23,7 +23,7 @@ export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/"
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"
 
 export const API_GET_CATEGORIES = BASE_URL + "/api/categories"
-export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search/"
+export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search"
 export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh"
 
 
@@ -52,8 +52,8 @@ export const API_HELP_SEARCH = BASE_URL + "/api/help/search?search_term="
 
 export const API_SUBSCRIBE_EMAIL = BASE_URL + "/api/email/signup"
 
-export const INSTAGRAM = "http://instagram.com"
-export const FACEBOOK = "http://facebook.com"
+export const INSTAGRAM = "https://www.instagram.com/thewallyshop/"
+export const FACEBOOK = "https://facebook.com/thewallyshop"
 
 export const GOOGLE_API_KEY="AIzaSyB2IlvjI5MCPefFjne3cgbklq_1899QiXU"
 
