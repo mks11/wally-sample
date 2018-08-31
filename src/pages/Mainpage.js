@@ -239,7 +239,7 @@ class Mainpage extends Component {
   handleChangeSearchCategory(cat_id) {
     const data = this.state.searchResult
     const searchDisplayed = data.products.filter((d) => {
-      return d.cat_id == cat_id
+      return d.subcat_id == cat_id
     })
 
     const current = data.filters.find((d) => {
