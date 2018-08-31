@@ -84,22 +84,14 @@ class CheckoutStore {
     return res.data
   }
 
-  async applyPromo() {
-    try {
-      const resp = await axios.get(API_CHECK_PROMO)
-      return true
-    } catch(e) {
-      return false
-    }
-  }
-
   toggleDeleteModal(id) {
     this.deleteModal = !this.deleteModal
     this.deleteId = id
   }
 
-  async submitOrder(data, auth) {
-
+  async checkPromo(data, auth) {
+    const res = await axios.get(`${API_CHECK_PROMO}/?sub_total=${data.subTotal}&promo_code=${data.promoCode}`, auth)
+    return res.data
   }
 
 }
@@ -112,7 +104,7 @@ decorate(CheckoutStore, {
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
-  applyPromo: action,
+  checkPromo: action,
   toggleDeleteModal: action
 })
 

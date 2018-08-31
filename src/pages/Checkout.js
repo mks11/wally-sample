@@ -28,6 +28,7 @@ class Checkout extends Component {
 
       appliedStoreCredit: false,
       appliedStoreCreditAmount: 0,
+      applicableStoreCreditAmount: 0,
 
       appliedPromo: false,
       appliedPromoCode: '',
@@ -95,18 +96,19 @@ class Checkout extends Component {
 
   loadData() {
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
-      console.log(data)
-      console.log(this.checkoutStore.order)
+      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit})
     }).catch((e) => {
       console.error(e)
     })
   }
 
   applyStoreCredit() {
-    this.setState({
-      appliedStoreCredit: true,
-      appliedStoreCreditAmount: this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : this.checkoutStore.order.applicable_store_credit
-    })
+    if (this.state.applicableStoreCreditAmount) {
+      this.setState({
+        appliedStoreCredit: true,
+        appliedStoreCreditAmount: this.checkoutStore.order.applied_store_credit
+      })
+    }
   }
 
   applyPromo() {
@@ -172,7 +174,8 @@ class Checkout extends Component {
     })
 
     function addTimes(data) {
-      const day = moment.utc().calendar(data[1],{
+      const timeFirst = data[0].split('-')[0]
+      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
         sameDay: '[Today]',
         nextDay: '[Tomorrow]',
         nextWeek: 'dddd',
@@ -237,6 +240,7 @@ class Checkout extends Component {
     }
 
     this.checkoutStore.createOrder({
+      store_credit: this.state.appliedStoreCreditAmount > 0,
       user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
       address_id: this.state.selectedAddress,
       payment_id: this.state.selectedPayment,
@@ -250,8 +254,36 @@ class Checkout extends Component {
     })
   }
 
-  handleChangeTime(day, time, date) {
-    console.log(day, time)
+  handleCheckPromo() {
+    const subTotal = this.checkoutStore.order.sub_total
+    const promoCode = this.state.appliedPromoCode
+
+    if (!promoCode) {
+      this.setState({invalidText: 'Promo code empty'})
+      return
+    }
+
+    this.checkoutStore.checkPromo({
+      subTotal,
+      promoCode
+    }, this.userStore.getHeaderAuth()).then((data) => {
+
+    }).catch((e) => {
+      if (!e.response.data.error) {
+        this.setState({invalidText: 'Check promo failed'})
+        return
+      }
+      console.error('Failed to check promo', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+    })
+
+  }
+
+  handleChangeTime(day, time, date, availability) {
+    if (availability) {
+      return
+    }
     this.setState({selectedDay: day, selectedDate: date, selectedTime: time, lockTime: true, timeDropdown: false})
   }
 
@@ -386,6 +418,7 @@ class Checkout extends Component {
     }
 
     const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : 0
+    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount : 0
 
     const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
     const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
@@ -577,12 +610,12 @@ class Checkout extends Component {
                         <React.Fragment key={key}>
                           <h6 className="dropdown-header">{items.day}</h6>
                           {items.data.map((item, key2) => ( 
-                            <div className="dropdown-item" key={key2} onClick={e => this.handleChangeTime(items.day, item.time, item.date)}  >
+                            <div className="dropdown-item" key={key2} onClick={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)}  >
                               <div className="custom-control custom-radio">
                                 <input 
-                                  checked={this.state.selectedDate === items.day && this.state.selectedTime === item.time}
-                                  type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date)} />
-                                <label className="custom-control-label" >{item.time} {!item.availability && <span className="text-muted">Not Available</span>}</label>
+                                  checked={this.state.selectedDate === item.date && this.state.selectedTime === item.time}
+                                  type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)} />
+                                <label className="custom-control-label" >{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
                               </div>
                             </div>
                           ))}
@@ -748,9 +781,8 @@ class Checkout extends Component {
                                       type="text"
                                       placeholder="Enter your store credit"
                                       readOnly={true}
-                                      value={appliedStoreCreditAmount}
-                                      onChange={(e) => this.setState({appliedStoreCreditAmount: e.target.value})}/>
-                                    {appliedStoreCreditAmount>0 && <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>}
+                                      value={applicableStoreCreditAmount}/>
+                                    <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>
                                   </div>
                                 </div>
                                 :null}
@@ -765,7 +797,7 @@ class Checkout extends Component {
                                           placeholder="Enter promocode here"
                                           onChange={(e) => this.setState({appliedPromoCode: e.target.value})}/>
 
-                                        <button onClick={e => this.applyPromo()} type="button" className="btn btn-transparent">APPLY</button>
+                                        <button onClick={e => this.handleCheckPromo()} type="button" className="btn btn-transparent">APPLY</button>
                                       </div>
                                     </div>
                                     :null}
@@ -783,6 +815,7 @@ class Checkout extends Component {
                               By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
                               <Link to={""}>Learn more.</Link>
                               <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
+                              <Link to={""}>Learn more.</Link>
                             </section>
                           </div>
                         </div>
