@@ -26,7 +26,10 @@ class InvalidZipModal extends Component {
       .then(() => {
         this.modalStore.toggleInvalidZip()
         this.modalStore.toggleInvalidZipSuccess()
+      }).catch((e) => {
+        this.setState({invalidText: 'Failed to subsribe'})
       })
+
 
     e.preventDefault()
   }

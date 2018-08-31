@@ -64,7 +64,10 @@ class Checkout extends Component {
       newCountry: '',
       newPreferedAddress: false,
 
-      deliveryTimes: []
+      deliveryTimes: [],
+
+      taxpopup: false,
+      packagingdeposit: false,
 
     }
 
@@ -74,8 +77,8 @@ class Checkout extends Component {
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.routing = this.props.store.routing
-
   }
+
 
   componentDidMount() {
     this.userStore.getStatus()
@@ -106,7 +109,7 @@ class Checkout extends Component {
     if (this.state.applicableStoreCreditAmount) {
       this.setState({
         appliedStoreCredit: true,
-        appliedStoreCreditAmount: this.checkoutStore.order.applied_store_credit
+        appliedStoreCreditAmount: this.checkoutStore.order.applicable_store_credit
       })
     }
   }
@@ -404,6 +407,22 @@ class Checkout extends Component {
     e.preventDefault()
   }
 
+  showTaxPopup() {
+    this.setState({taxpopup: true})
+  }
+
+  hideTaxPopup() {
+    this.setState({taxpopup: false})
+  }
+
+  showPackagingPopup() {
+    this.setState({packagingdeposit: true})
+  }
+
+  hidePackagingPopup() {
+    this.setState({packagingdeposit: false})
+  }
+
   render() {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null
@@ -444,6 +463,17 @@ class Checkout extends Component {
     }
 
     const cart_items = order && order.cart_items ? order.cart_items : []
+
+    let taxpopupClass = 'summary'
+    if (this.state.taxpopup) {
+      taxpopupClass += ' open'
+    }
+
+
+    let packagingdepositClass = 'summary'
+    if (this.state.packagingdeposit) {
+      packagingdepositClass += ' open'
+    }
 
 
     return (
@@ -745,16 +775,26 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.sub_total/100)}</span>
                     </div>
-                    <div className="summary">
-                      <span>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
+                    <div className={taxpopupClass}>
+                      <ClickOutside onClickOutside={e=>this.hideTaxPopup()}>
+                        <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
+                            <Link className="text-violet" to={""}>Learn more</Link>
+                        </div></div>
+                      </ClickOutside>
+                      <span onClick={e=>this.showTaxPopup()}>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
                       <span>{formatMoney((order.tax_amount + order.service_amount)/100)}</span>
                     </div>
                     <div className="summary">
                       <span>Delivery fee</span>
                       <span>$0</span>
                     </div>
-                    <div className="summary">
-                      <span>Packaging deposit  <FontAwesome name='info-circle' /></span>
+                    <div className={packagingdepositClass}>
+                      <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>
+                        <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right" style={{left: '142px'}}><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
+                            <Link className="text-violet" to={""}>Learn more</Link>
+                        </div></div>
+                      </ClickOutside>
+                      <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
                       <span>{formatMoney(order.packaging_deposit/100)}</span>
                     </div>
                     {this.state.appliedStoreCredit ?

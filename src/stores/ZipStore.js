@@ -19,8 +19,9 @@ class ZipStore {
     return false
   }
 
-  async subscribe(email) {
-    return axios.get(API_SUBSCRIBE_EMAIL)
+  async subscribe(data) {
+    const res = await axios.post(API_SUBSCRIBE_EMAIL, data)
+    return res.data
   }
 }
 

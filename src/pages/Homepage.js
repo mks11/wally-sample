@@ -74,21 +74,23 @@ class Homepage extends Component {
 
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({invalidEmail: true})
+      this.setState({invalidEmail: 'Invalid Email'})
       return
     }
 
-    this.setState({invalidEmail: false})
+    this.setState({invalidEmail: ''})
 
-    this.zipStore.subscribe(this.state.email)
+    this.zipStore.subscribe({email: this.state.email, zip: this.state.zip})
       .then(() => {
+        this.setState({
+          heroStatus: 'invalid_zip_success',
+          heroText: 'Great! You\'ll be the first to know when we are in your zipcodes!',
+          heroDescription: '',
+        })
+      }).catch((e) => {
+        this.setState({invalidEmail: 'Failed to subsribe'})
       })
 
-    this.setState({
-      heroStatus: 'invalid_zip_success',
-      heroText: 'Great! You\'ll be the first to know when we are in your zipcodes!',
-      heroDescription: '',
-    })
   }
 
   handleStart(e) {
@@ -176,7 +178,7 @@ class Homepage extends Component {
                         onKeyDown={this.handleEmailEnter}
                         onChange={this.handleEmail}
                       />
-                      {this.state.invalidEmail && <div className="text-error">Invalid email</div>}
+                      {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
                       <ButtonNotify/>
                     </div>
                 }
