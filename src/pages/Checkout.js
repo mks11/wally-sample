@@ -51,6 +51,7 @@ class Checkout extends Component {
 
 
       invalidText: '',
+      invalidSelectAddress: '',
 
       invalidAddressText: '',
       newStreetAddress: '',
@@ -139,18 +140,18 @@ class Checkout extends Component {
     this.setState({timeDropdown: false})
   }
 
-  handleSelectAddress(e) {
-    this.setState({selectedAddress: e.target.value})
-    if (e.target.value === '0') {
+  handleSelectAddress(address_id) {
+    this.setState({selectedAddress: address_id})
+    if (address_id === '0') {
       this.setState({newAddress: true, newContactName: this.userStore.user.name, newPhoneNumber: this.userStore.user.primary_telephone})
     } else {
       this.setState({newAddress: false})
     }
   }
 
-  handleSelectPayment(e) {
-    this.setState({selectedPayment: e.target.value})
-    if (e.target.value === "0") {
+  handleSelectPayment(payment_id) {
+    this.setState({selectedPayment: payment_id})
+    if (payment_id === "0") {
       this.setState({newPayment: true})
     } else {
       this.setState({newPayment: false})
@@ -159,6 +160,7 @@ class Checkout extends Component {
 
   handleSubmitAddress() {
     if (!this.state.selectedAddress) return
+    this.setState({invalidSelectAddress: null})
     const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
     let deliveryTimes = []
     this.checkoutStore.getDeliveryTimes({
@@ -169,10 +171,13 @@ class Checkout extends Component {
       for (var i = 0, len = times.length; i < len; i++) {
         addTimes(times[i])
       }
-      console.log(deliveryTimes)
 
       this.setState({deliveryTimes, lockAddress: true, addressError: false})
     }).catch((e) => {
+      console.log(e.response)
+      if (e.response.data.error) {
+        this.setState({invalidSelectAddress: e.response.data.error.message})
+      }
       console.error(e)
     })
 
@@ -436,8 +441,8 @@ class Checkout extends Component {
       timeDropdownClass += " show"
     }
 
-    const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount : 0
-    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount : 0
+    const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount/100 : 0
+    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount/100 : 0
 
     const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
     const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
@@ -499,13 +504,13 @@ class Checkout extends Component {
                           className={"custom-control custom-radio bb1" + (data.address_id === selectedAddress ? " active" : "")}
                           key={index}>
                           <input 
-                            type="radio" id={"address" + index} 
+                            type="radio" id={"address-" + index} 
                             name="customRadio" 
                             checked={data.address_id === selectedAddress}
                             className="custom-control-input" 
                             value={data.address_id} 
-                            onChange={e=>this.handleSelectAddress(e)} />
-                          <label className="custom-control-label" htmlFor={"address" + index}>
+                            onChange={e=>this.handleSelectAddress(data.address_id)} />
+                          <label className="custom-control-label" htmlFor={"address-" + index} onClick={e=>this.handleSelectAddress(data.address_id)}>
                             {data.street_address} {data.unit}, {data.state} {data.zip}
                             <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>
                           </label>
@@ -523,8 +528,8 @@ class Checkout extends Component {
                           <input type="radio" id="addressAdd" name="customRadio" className="custom-control-input" 
                             value="0" 
                             checked={selectedAddress === "0"}
-                            onChange={e=>this.handleSelectAddress(e)}/>
-                          <label className="custom-control-label" htmlFor="addressAdd">Add new address</label>
+                            onChange={e=>this.handleSelectAddress('0')}/>
+                          <label className="custom-control-label" htmlFor="addressAdd" onClick={e=>this.handleSelectAddress('0')}>Add new address</label>
                         </div>
                         <div className={addressFormClass}>
                           <PlacesAutocomplete
@@ -624,6 +629,8 @@ class Checkout extends Component {
                       </div>
                     ):null}
                     {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+
+                    {this.state.invalidSelectAddress && <span className="text-error text-center">{this.state.invalidSelectAddress}</span>}
                   </div>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Time 
@@ -656,7 +663,7 @@ class Checkout extends Component {
                 </div>
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-                  <label className="custom-control-label" htmlFor="homeCheck">I confirm that I will be at home or have a doorman</label>
+                  <label className="custom-control-label" htmlFor="homeCheck" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
@@ -677,9 +684,9 @@ class Checkout extends Component {
                             value={data._id} 
                             checked={data._id === selectedPayment}
                             name="customRadio" className="custom-control-input"
-                            onChange={e => this.handleSelectPayment(e)}
+                            onChange={e => this.handleSelectPayment(data._id)}
                           />
-                          <label className="custom-control-label" htmlFor={"payment"+index}>
+                          <label className="custom-control-label" htmlFor={"payment"+index} onClick={e=>this.handleSelectPayment(data._id)}>
                             <img src="images/card.png" /> *****{data.last4}
                           </label>
                           {this.userStore.user.preferred_payment === data._id &&
@@ -697,8 +704,8 @@ class Checkout extends Component {
                           <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
                             value="0"
                             checked={selectedPayment === "0"}
-                            onChange={e=>this.handleSelectPayment(e)}/>
-                          <label className="custom-control-label" htmlFor="paymentAdd">Add new card</label>
+                            onChange={e=>this.handleSelectPayment(selectedPayment)}/>
+                          <label className="custom-control-label" htmlFor="paymentAdd" onClick={e=>this.handleSelectPayment('0')} >Add new card</label>
                         </div>
                         <div className={paymentFormClass}>
                           {/* 
@@ -800,7 +807,7 @@ class Checkout extends Component {
                     {this.state.appliedStoreCredit ?
                         <div className="summary">
                           <span>Store credit applied</span>
-                          <span>{formatMoney(this.state.appliedStoreCreditAmount)}</span>
+                          <span>{formatMoney(this.state.appliedStoreCreditAmount/100)}</span>
                         </div>
                         :null}
                         {this.state.appliedPromo ?

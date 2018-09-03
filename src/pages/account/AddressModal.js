@@ -258,23 +258,34 @@ class AddressModal extends Component {
           </div>
         )}
       </PlacesAutocomplete>
+            <FormGroup className="input-merged justify-content-between">
             <Input
               className="aw-input--control aw-input--control-large aw-input--left "
               type="text"
               value={this.state.unit}
+              style={{width: '46%'}}
               placeholder="Apt number or company"
               onChange={(e) => this.setState({unit: e.target.value})}/>
-            <FormGroup className="input-merged">
+
+            <Input
+              className="aw-input--control aw-input--control-large aw-input--left "
+              type="text"
+              value={this.state.zip}
+              style={{width: '46%'}}
+              placeholder="Zip"
+              onChange={(e) => this.setState({zip: e.target.value})}/>
+          </FormGroup>
+            <FormGroup className="input-merged justify-content-between">
 
               <Input
-                style={{width: '50%'}}
+                style={{width: '46%'}}
                 className="aw-input--control aw-input--control-large aw-input--left "
                 type="text"
                 value={this.state.name}
                 placeholder="Enter your name"
                 onChange={(e) => this.setState({name: e.target.value})}/>
               <Input
-                style={{width: '50%'}}
+                style={{width: '46%'}}
                 className="aw-input--control aw-input--control-large aw-input--left "
                 type="text"
                 value={this.state.telephone}
