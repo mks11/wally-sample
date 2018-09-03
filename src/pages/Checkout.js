@@ -112,6 +112,7 @@ class Checkout extends Component {
         appliedStoreCredit: true,
         appliedStoreCreditAmount: this.checkoutStore.order.applicable_store_credit
       })
+      this.checkoutStore.order.total = this.checkoutStore.order.total - this.checkoutStore.order.applicable_store_credit
     }
   }
 
@@ -512,7 +513,7 @@ class Checkout extends Component {
                             onChange={e=>this.handleSelectAddress(data.address_id)} />
                           <label className="custom-control-label" htmlFor={"address-" + index} onClick={e=>this.handleSelectAddress(data.address_id)}>
                             {data.street_address} {data.unit}, {data.state} {data.zip}
-                            <div className="address-phone">{this.userStore.user.name}, {this.userStore.user.telephone}</div>
+                            <div className="address-phone">{this.userStore.user.name}, {data.telephone}</div>
                           </label>
                           {this.userStore.user.preferred_address === data.address_id &&
                               <a className="address-rbtn link-blue">DEFAULT</a>
@@ -859,10 +860,11 @@ class Checkout extends Component {
                                 </div>
                               </div>
 
-                              By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. 
-                              <Link to={""}>Learn more.</Link>
-                              <br/>A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery.
-                              <Link to={""}>Learn more.</Link>
+                              <p className="mt-3">By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. <Link to={""}>Learn more.</Link>
+                            </p>
+                            <p>
+                              A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery. <Link to={""}>Learn more.</Link>
+                            </p>
                             </section>
                           </div>
                         </div>

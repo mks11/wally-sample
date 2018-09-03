@@ -41,7 +41,7 @@ class Help extends Component {
       this.orderStore.getOrders(this.userStore.getHeaderAuth())
     }
 
-      
+
   }
 
   handleToggleQuestion = (id) => {
@@ -91,6 +91,11 @@ class Help extends Component {
     return items
   }
 
+  goToTopics(id, name) {
+    this.helpStore.activeTopics = name
+    this.routing.push('/help/topics/'+id)
+  }
+
   render() {
     let qClass = 'list-bordered list-group-item d-flex justify-content-between align-items-center'
     return (
@@ -111,8 +116,8 @@ class Help extends Component {
           <div className="help-content">
             <div className="container">
 
-                { this.state.onSearch  ?
-              <div className="row">
+              { this.state.onSearch  ?
+                  <div className="row">
                     <div className="col-md-12 col-xs-12 help-box">
                       <div className="list-header">
                         <div className="row">
@@ -140,10 +145,10 @@ class Help extends Component {
 
                       </ul>
                     </div>
-                    </div>
-                    : 
-                    <Fragment>
-                      <div className="row">
+                  </div>
+                  : 
+                  <Fragment>
+                    <div className="row">
                       <div className="col-md-6 col-xs-12 help-box">
                         <div className="list">
                           <div className="list-header">
@@ -152,44 +157,44 @@ class Help extends Component {
                                 <h2>Recent Order</h2>
                               </div>
                               <div className="col-2">
-                            <a className="view-all" href="#"  onClick={this.handleViewAllOrders}>View All</a>
+                                <a className="view-all" href="#"  onClick={this.handleViewAllOrders}>View All</a>
                               </div>
                             </div>
                           </div>
 
-      <ul className="list-group list-group-flush">
+                          <ul className="list-group list-group-flush">
 
-            {this.orderStore.orders.map((item, key) => (
-    <li  className="list-group-item">
-            <div className="row">
-            <div className="col-9">
-            <table className="table table-sm borderless" > 
-              <thead>
-                <tr>
-                  <th scope="col">Order Placed</th>
-                  <th scope="col">Items</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
-                  <td>{this.printItems(item.cart_items)}</td>
-                  <td>{this.countItems(item.cart_items)}</td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
+                            {this.orderStore.orders.map((item, key) => (
+                              <li  className="list-group-item">
+                                <div className="row">
+                                  <div className="col-9">
+                                    <table className="table table-sm borderless" > 
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">Order Placed</th>
+                                          <th scope="col">Items</th>
+                                          <th scope="col">Total</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
+                                          <td>{this.printItems(item.cart_items)}</td>
+                                          <td>{this.countItems(item.cart_items)}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
 
-            <div className="col-3">
-              <button className="help-btn">
-                Help
-              </button>
-            </div>
-            </div>
-          </li>
-            ))}
-      </ul>
+                                  <div className="col-3">
+                                    <button className="help-btn">
+                                      Help
+                                    </button>
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
 
@@ -237,9 +242,9 @@ class Help extends Component {
                         </div>
                         <ul className="list-group list-group-flush">
                           {this.helpStore.topics.map((item, key) => (
-                            <li key={key} className="list-bordered list-group-item d-flex justify-content-between align-items-center">
+                            <li key={key} className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer" onClick={e=>this.goToTopics(item._id, item.name)} >
                               <div className="row">
-                                <Link onClick={e=>this.helpStore.activeTopics = item.name} className="list-link" to={"/help/topics/" + item._id}><h4> {item.name} </h4></Link>
+                                <a className="list-link" ><h4> {item.name} </h4></a>
                               </div>
                               <span className="badge badge-pill">
                                 <i className="fa fa-chevron-right fa-2x"></i>
@@ -252,22 +257,21 @@ class Help extends Component {
 
                       <div className="col-md-6 col-xs-12 help-box">
                         <BoxOrder
-                          title="Contact us"
+                          title="Contact Us"
                           data={this.helpStore.contact}
-                          viewAll="help/contact-us"
                           methodName="contact"
                         />
                       </div>
                     </div>
 
                   </Fragment>
-                }
-              </div>
+              }
             </div>
-          </section>
-        </div>
-        );
-        }
-        }
+          </div>
+        </section>
+      </div>
+    );
+  }
+}
 
-        export default connect("store")(Help);
+export default connect("store")(Help);
