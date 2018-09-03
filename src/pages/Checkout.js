@@ -630,7 +630,7 @@ class Checkout extends Component {
                     ):null}
                     {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
 
-                    {this.state.invalidSelectAddress && <span className="text-error text-center">{this.state.invalidSelectAddress}</span>}
+                    {this.state.invalidSelectAddress && <span className="text-error text-center d-block mt-3">{this.state.invalidSelectAddress}</span>}
                   </div>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Time 
