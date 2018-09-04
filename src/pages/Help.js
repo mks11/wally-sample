@@ -97,7 +97,7 @@ class Help extends Component {
   }
 
   render() {
-    let qClass = 'list-bordered list-group-item d-flex justify-content-between align-items-center'
+    let qClass = 'list-bordered list-group-item '
     return (
       <div className="App">
         <Title content="Help" />
@@ -113,7 +113,7 @@ class Help extends Component {
             </form>
           </div>
 
-          <div className="help-content">
+          <div className="help-content mt-5">
             <div className="container">
 
               { this.state.onSearch  ?
@@ -129,17 +129,17 @@ class Help extends Component {
                       <ul className="list-group list-group-flush">
                         {this.state.searchResults.map((item, key) => (
                           <li key={key} className={qClass + (key===this.state.activeQuestion ? ' active' : '')}  onClick={e=>this.handleToggleQuestion(key)}>
-                            <div className="row w-100">
-                              <div className="col-md-11">
+                            <div className="d-flex justify-content-between">
+                              <div className="">
                                 <a className="list-link"><h4> {item.question_text} </h4></a>
                               </div>
-                              <span className="badge badge-pill col-md-1">
+                              <span className="badge badge-pill">
                                 <i className="fa fa-chevron-right fa-2x"></i>
                               </span>
-                              <div className="answer ml-3">
+                            </div>
+                              <div className="answer">
                                 {item.answer_text}
                               </div>
-                            </div>
                           </li>
                         ))}
 
@@ -210,17 +210,17 @@ class Help extends Component {
                         <ul className="list-group list-group-flush">
                           {this.helpStore.questions.map((item, key) => (
                             <li key={key} className={qClass + (key===this.state.activeQuestion ? ' active' : '')}  onClick={e=>this.handleToggleQuestion(key)}>
-                              <div className="row w-100">
-                                <div className="col-md-11">
+                              <div className="d-flex justify-content-between">
+                                <div className="">
                                   <a className="list-link"><h4> {item.question_text} </h4></a>
                                 </div>
-                                <span className="badge badge-pill col-md-1">
+                                <span className="badge badge-pill">
                                   <i className="fa fa-chevron-right fa-2x"></i>
                                 </span>
-                                <div className="answer ml-3">
+                              </div>
+                                <div className="answer">
                                   {item.answer_text}
                                 </div>
-                              </div>
                             </li>
                           ))}
 
@@ -261,10 +261,23 @@ class Help extends Component {
                           data={this.helpStore.contact}
                           methodName="contact"
                         />
-                      </div>
-                    </div>
 
-                  </Fragment>
+
+                      <li className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer">
+                        <div className="row">
+                          <i class="fa fa-envelope ml-2"></i>
+
+                          <a href="mailto:support@thewallyshop.co ml-3" className="list-link">
+                            <h4> 
+                             support@thewallyshop.co
+                            </h4>
+                          </a>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
+
+                </Fragment>
               }
             </div>
           </div>

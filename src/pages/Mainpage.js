@@ -204,11 +204,17 @@ class Mainpage extends Component {
       filters = data && data.filters ?
         data.filters : []
 
-      const currentSearchCatId = filters[0].cat_id
-      const currentSearchCat = filters[0].cat_name
-      const searchDisplayed = data.products.filter((d) => {
-        return d.subcat_id == currentSearchCatId
-      })
+      let currentSearchCatId = null
+      let currentSearchCat = ''
+      let searchDisplayed = []
+      if (data.filters.length > 0) {
+        currentSearchCatId = filters[0].cat_id
+        currentSearchCat = filters[0].cat_name
+        searchDisplayed = data.products.filter((d) => {
+          return d.subcat_id == currentSearchCatId
+        })
+      }
+
 
       this.setState({searchSidebar: filters, searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat, searchDisplayed })
     })
@@ -314,7 +320,7 @@ class Mainpage extends Component {
           onExited={this.onHeroExited}
           key={item.caption}
         >
-          <img src={item.src} alt={item.altText} />
+          <img className="img-fluid" src={item.src} alt={item.altText} />
         </CarouselItem>
       );
     });
@@ -486,7 +492,7 @@ class Mainpage extends Component {
                     return (
                       <div key={i}>
                         <label className="form-check-label check-sidebar">
-                          <input checked={s.cat_id==this.state.currentSearchCatId} type="radio" name="search_category" class="form-check-input" onChange={e=>this.handleChangeSearchCategory(s.cat_id)}/>
+                          <input checked={s.cat_id==this.state.currentSearchCatId} type="radio" name="search_category" className="form-check-input" onChange={e=>this.handleChangeSearchCategory(s.cat_id)}/>
                           <span>{s.cat_name}</span>
                         </label>
                       </div>
