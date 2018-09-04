@@ -170,7 +170,7 @@ class LoginModal extends Component {
                   <FacebookLogin
                     appId={FB_KEY}
                     cssClass="btn btn-blue-fb"
-                    autoLoad={true}
+                    autoLoad={false}
                     textButton="FACEBOOK"
                     fields="name,email,picture"
                     scope="public_profile,user_friends"

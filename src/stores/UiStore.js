@@ -9,6 +9,18 @@ class UiStore {
   backdrop = false
   backdropTop = 0
   backdropZindex = 100
+  navMobile = false;
+
+  hideNavMobile() {
+    this.navMobile = false
+  }
+  showNavMobile() {
+    this.navMobile = true
+  }
+  
+  toggleNavMobile() {
+    this.navMobile = !this.navMobile
+  }
 
   toggleAccountDropdown() {
     this.backdropZindex = 101
@@ -85,6 +97,11 @@ decorate(UiStore, {
   accountDropdown: observable,
   cartDropdown: observable,
   categoriesDropdown: observable,
+
+  navMobile: observable,
+  toggleNavMobile: action,
+  showNavMobile: action,
+  hideNavMobile: action,
   
   backdropTop: observable,
   backdrop: observable,

@@ -33,17 +33,42 @@ class TopNav extends Component {
     this.userStore.referFriend()
   }
 
-  handleLogout(e) {
+  handleLogout() {
     this.checkoutStore.cart = null
     this.checkoutStore.order = null
     this.uiStore.hideAccountDropdown()
     this.props.store.routing.push('/')
     this.userStore.logout()
-    e.preventDefault()
+    // e.preventDefault()
   }
 
   handleToggle = () => {
     this.uiStore.toggleAccountDropdown()
+  }
+
+  handleNavMobile = (link) => {
+    this.routing.push(link)
+    this.uiStore.hideNavMobile()
+  }
+
+  handleMobileNavLogin = () => {
+    this.uiStore.hideNavMobile()
+    this.handleLogin()
+  }
+
+  handleMobileNavSignUp = () => {
+    this.uiStore.hideNavMobile()
+    this.handleSignup()
+  }
+
+  handleMobileNavInvite = () => {
+    this.uiStore.hideNavMobile()
+    this.handleInvite()
+  }
+
+  handleMobileNavLogout = () => {
+    this.uiStore.hideNavMobile()
+    this.handleLogout()
   }
 
   render() {
@@ -61,8 +86,13 @@ class TopNav extends Component {
     if (this.uiStore.accountDropdown) {
       dropdownClass += ' show'
     }
+
+    let headerWrapClass = 'header-wrap'
+    if (this.uiStore.navMobile) {
+      headerWrapClass += ' nav-open'
+    }
     return (
-      <div className="header-wrap">
+      <div className={headerWrapClass}>
         <div className="aw-nav--mobile d-md-none">
           <div className="center-middle">
             <div className="container-fluid">
@@ -70,7 +100,24 @@ class TopNav extends Component {
                 <div className="col-12">
                   <nav className="navbar d-block">
                     <ul className="aw-nav--menu m-0 p-0 text-center">
-                      <li><Link to="/about">About</Link></li>
+
+                      { this.userStore.status ?
+                          <React.Fragment>
+                            <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                            <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/order')}>Order History</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Invite Friends</a></li>
+                            <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                          </React.Fragment>
+                          :
+                          <React.Fragment>
+                            <li><a onClick={this.handleMobileNavLogin}>Login</a></li>
+                            <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
+                          </React.Fragment>
+                      }
+
+                      <li className="mt-5"><Link to="/about">About</Link></li>
                       <li><Link to="/help">Help</Link></li>
                     </ul>
                   </nav>
@@ -78,7 +125,9 @@ class TopNav extends Component {
               </div>
               <div className="row aw-nav--action">
                 <div className="col-12 text-center">
+                  {/* 
                   <a href="#nav-hero" className="btn btn-block mx-auto btn-outline-white btn-get--started d-inline-block d-md-block">Get notified</a>
+                      */}
                 </div>
               </div>
             </div>
@@ -122,11 +171,11 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ? 
               <div className="col-auto d-none d-lg-block btn-top-account">
-                <button onClick={e => this.handleLogin(e)} className="btn btn-outline-black btn-login text-caps"><b>Login</b></button>
-                <button onClick={e => this.handleSignup(e)} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
+                <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Login</b></button>
+                <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
               </div>
                   : null}
-              <button className="navbar-toggler aw-nav--toggle d-md-none" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                  <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
             </div>
