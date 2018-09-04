@@ -1629,4 +1629,13 @@ a {
   .login-wrap, .signup-wrap {
     width: 90%;
   }
+.modal-header--sm {
+    margin: 12px;
+  }
+  .addresses--default {
+    position: absolute;
+    top: unset;
+    bottom: 28%;
+  }
+
 }

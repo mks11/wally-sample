@@ -160,7 +160,7 @@ class Account extends Component {
                 <li key={index}>
                   <span className="payments--card">*****{data.last4}</span>
                       <span className="addresses--default button">
-                        {data.payment_id === this.userStore.user.preferred_payment ? (
+                        {data._id === this.userStore.user.preferred_payment ? (
                           <span onClick={e => this.userStore.showPaymentModal(data)}>DEFAULT</span>
                         ): null}
                         <i className="ico ico-arrow-right ml-3 button" onClick={e => this.userStore.showPaymentModal(data)}></i>
