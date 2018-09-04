@@ -105,7 +105,7 @@ class TopNav extends Component {
                           <React.Fragment>
                             <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/order')}>Order History</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
                             <li><a onClick={this.handleMobileNavInvite}>Invite Friends</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
