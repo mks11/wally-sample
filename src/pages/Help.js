@@ -170,7 +170,7 @@ class Help extends Component {
                           <ul className="list-group list-group-flush">
 
                             {this.orderStore.orders.map((item, key) => (
-                              <li  className="list-group-item">
+                              <li className="list-group-item" key={key}>
                                 <div className="row">
                                   <div className="col-9">
                                     <table className="table table-sm borderless" > 
@@ -224,7 +224,15 @@ class Help extends Component {
                                 </span>
                               </div>
                                 <div className="answer">
-                                  {item.answer_text}
+                                  {item.read_more ?
+                                      <React.Fragment>
+                                        {item.answer_text.substring(0, 50)}...<Link className="text-violet text-bold" to={"/help/detail/" + item._id}>Read more</Link>
+                                      </React.Fragment>
+                                      :
+                                      <React.Fragment>
+                                      {item.answer_text}
+                                      </React.Fragment>
+                                  }
                                 </div>
                             </li>
                           ))}
@@ -270,9 +278,9 @@ class Help extends Component {
 
                       <li className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer">
                         <div className="row">
-                          <i class="fa fa-envelope ml-2"></i>
+                          <i className="fa fa-envelope ml-2"></i>
 
-                          <a href="mailto:support@thewallyshop.co ml-3" className="list-link">
+                          <a href="mailto:support@thewallyshop.co" className="list-link ml-3">
                             <h4> 
                              support@thewallyshop.co
                             </h4>

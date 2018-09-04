@@ -16,7 +16,6 @@ class HelpStore{
   contact = []
   activeTopics = 'All'
 
-
   async getHelpTopics(){
     const resp = await axios(API_HELP_GET_HELP_TOPICS)
     this.topics = resp.data
@@ -38,6 +37,12 @@ class HelpStore{
     const res = await axios(API_HELP_SEARCH + terms)
     return res.data
   }
+
+  getDetail(id) {
+    return this.questions.find((d, v) => {
+      return d._id === id
+    })
+  }
 }
 
 decorate(HelpStore, {
@@ -53,6 +58,7 @@ decorate(HelpStore, {
 
   contact: observable,
   getContact: action,
+  getDetail: action,
 
 })
 

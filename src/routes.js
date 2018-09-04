@@ -8,6 +8,7 @@ import About from './pages/About';
 import Account from './pages/Account';
 import Help from './pages/Help';
 import HelpSingle from './pages/HelpSingle';
+import HelpSingleAnswer from './pages/HelpSingleAnswer';
 import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from './pages/HelpAnswer';
 import ResetPassword from './pages/ResetPassword';
@@ -26,6 +27,7 @@ export default (
         <Route exact path="/help" component={Help}/>
         <Route exact path="/help/topics" component={HelpSingle}/>
         <Route exact path="/help/topics/:id" component={HelpSingle}/>
+        <Route exact path="/help/detail/:id" component={HelpSingleAnswer}/>
         <Route exact path="/help/question/:question" component={HelpAnswer}/>
         <Route exact path="/about" component={About}/>
         <Route exact path="/checkout" component={Checkout}/>
