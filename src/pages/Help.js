@@ -6,6 +6,7 @@ import BoxOrder from '../common/page/help/BoxOrder'
 import SearchForm from '../common/page/help/SearchForm'
 import { connect } from '../utils'
 import { Link } from 'react-router-dom'
+import  ReportModal from './orders/ReportModal'
 
 class Help extends Component {
   state = {
@@ -94,6 +95,10 @@ class Help extends Component {
   goToTopics(id, name) {
     this.helpStore.activeTopics = name
     this.routing.push('/help/topics/'+id)
+  }
+
+  handleReportOrder = (item) => {
+    this.orderStore.toggleReport(item)
   }
 
   render() {
@@ -187,7 +192,7 @@ class Help extends Component {
                                   </div>
 
                                   <div className="col-3">
-                                    <button className="help-btn">
+                                    <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
                                       Help
                                     </button>
                                   </div>
@@ -282,6 +287,7 @@ class Help extends Component {
             </div>
           </div>
         </section>
+      <ReportModal/>
       </div>
     );
   }
