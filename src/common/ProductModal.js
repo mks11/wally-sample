@@ -134,7 +134,7 @@ class ProductModal extends Component {
               <div className="row mb-3">
                 <div className="col-sm-6">
                   <h3 className="mb-0">{product.name}</h3>
-                  <div>Hillside Farms, NY</div>
+                  {/* <div>Hillside Farms, NY</div>*/}
                 </div>
                 <div className="col-sm-6">
                   <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>

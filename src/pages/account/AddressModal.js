@@ -183,7 +183,11 @@ class AddressModal extends Component {
     }
     const state = address.administrative_area_level_1
     const country = address.country
-    const zip = address.postal_code
+    let zip = address.postal_code
+
+    if (!zip) {
+      zip = ''
+    }
 
     this.setState({city, state, country, zip})
 
@@ -204,7 +208,7 @@ class AddressModal extends Component {
 
   render() {
     let buttonClass = 'btn btn-main my-3'
-    if (this.state.street_address && this.state.unit && this.state.name && this.state.telephone) {
+    if (this.state.street_address && this.state.unit && this.state.name && this.state.telephone && this.state.zip) {
       buttonClass += ' active'
     }
     return (

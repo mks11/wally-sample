@@ -85,11 +85,11 @@ class Help extends Component {
   }
 
   printItems(data) {
-    let items = ''
+    let items = []
     for (const d of data) {
-      items += d.product_name
+      items.push(d.product_name)
     }
-    return items
+    return items.join(', ')
   }
 
   goToTopics(id, name) {

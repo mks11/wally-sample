@@ -117,8 +117,8 @@ class TopNav extends Component {
                           </React.Fragment>
                       }
 
-                      <li className="mt-5"><Link to="/about">About</Link></li>
-                      <li><Link to="/help">Help</Link></li>
+                      <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
                     </ul>
                   </nav>
                 </div>

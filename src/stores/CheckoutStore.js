@@ -16,6 +16,10 @@ class CheckoutStore {
   deleteModal = null
   deleteId = null
 
+  async clearCart(auth) {
+    localStorage.removeItem('cart')
+    return this.getCurrentCart(auth)
+  }
 
   async getCurrentCart(auth) {
     let res
@@ -71,8 +75,9 @@ class CheckoutStore {
   }
 
   async createOrder(data, auth) {
-    const res = await axios.post(`${API_CREATE_ORDER}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
-    return res.data  }
+    const res = await axios.post(`${API_CREATE_ORDER}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+    return res.data  
+  }
 
   async check(id) {
     const resp = await axios.get(API_GET_ORDER_SUMMARY + id)

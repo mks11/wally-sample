@@ -255,6 +255,7 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.state.selectedDate + ' ' + this.state.selectedTime,
     }, this.userStore.getHeaderAuth()).then((data) => {
+      this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
       this.routing.push('/orders')
     }).catch((e) => {
       console.error('Failed to submit order', e)
@@ -513,7 +514,7 @@ class Checkout extends Component {
                             onChange={e=>this.handleSelectAddress(data.address_id)} />
                           <label className="custom-control-label" htmlFor={"address-" + index} onClick={e=>this.handleSelectAddress(data.address_id)}>
                             {data.street_address} {data.unit}, {data.state} {data.zip}
-                            <div className="address-phone">{this.userStore.user.name}, {data.telephone}</div>
+                            <div className="address-phone">{data.name}, {data.telephone}</div>
                           </label>
                           {this.userStore.user.preferred_address === data.address_id &&
                               <a className="address-rbtn link-blue">DEFAULT</a>
@@ -664,7 +665,7 @@ class Checkout extends Component {
                 </div>
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-                  <label className="custom-control-label" htmlFor="homeCheck" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
+                  <label className="custom-control-label" htmlFor="homeCheck" >I confirm that I will be at home or have a doorman</label>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
@@ -860,10 +861,9 @@ class Checkout extends Component {
                                 </div>
                               </div>
 
-                              <p className="mt-3">By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for $40. Your statement will reflect the final order total after order completion. <Link to={""}>Learn more.</Link>
-                            </p>
-                            <p>
-                              A bag fee may be added to your final total if required by law or the retailer. The fee will be visible on your receipt after delivery. <Link to={""}>Learn more.</Link>
+                              <p className="mt-3">
+                                By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. Learn more.
+                                <Link to={""}>Learn more.</Link>
                             </p>
                             </section>
                           </div>
