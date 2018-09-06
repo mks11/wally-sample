@@ -61,4 +61,6 @@ export const APP_URL = "http://rizkifuad.com:3000"
 export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4"
 export const FB_KEY = "1634254033370820"
 
+export const PRODUCT_BASE_URL = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images/'
+
 

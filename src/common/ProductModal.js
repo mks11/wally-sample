@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { formatMoney, connect } from '../utils'
-import { APP_URL } from '../config'
+import { APP_URL, PRODUCT_BASE_URL } from '../config'
 
 class ProductModal extends Component {
   constructor(props) {
@@ -138,17 +138,17 @@ class ProductModal extends Component {
                 </div>
                 <div className="col-sm-6">
                   <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
-                    <div className="slick-item"><img src={APP_URL + "/images/product_thumbnail.png"} /></div>
-                    <div className="slick-item"><img src={APP_URL + "/images/product_thumbnail.png"} /></div>
-                    <div className="slick-item"><img src={APP_URL + "/images/product_thumbnail.png"} /></div>
+                    {product.image_refs.map((item, key) => (
+                      <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} /></div>
+                    ))}
                   </div>
                 </div>
               </div>
 
               <div id="product-carousel" ref={el => this.prod = el}>
-                <div className="slick-item"><img src={APP_URL + "/images/img-01.jpg"} /></div>
-                <div className="slick-item"><img src={APP_URL + "/images/img-01.jpg"} /></div>
-                <div className="slick-item"><img src={APP_URL + "/images/img-01.jpg"} /></div>
+                {product.image_refs.map((item, key) => (
+                  <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} /></div>
+                ))}
               </div>
             </div>
 
