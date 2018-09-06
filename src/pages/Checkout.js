@@ -274,7 +274,6 @@ class Checkout extends Component {
     const subTotal = this.checkoutStore.order.subtotal
     const promoCode = this.state.appliedPromoCode
 
-        this.userStore.getUser()
     if (!promoCode) {
       this.setState({invalidText: 'Promo code empty'})
       return
