@@ -56,8 +56,8 @@ class Footer extends Component {
                   </h4>
                   <ul>
                     <li><a href="mailto:support@thewallyshop.co">Contact Us</a></li>
-                    <li><a href="terms-and-conditions.html">Terms &amp; Conditions</a></li> 
-                    <li><a href="privacy-policy.html">Privacy Policy</a></li> 
+                    <li><a href="https://thewallyshop.co/terms-and-conditions.html">Terms &amp; Conditions</a></li> 
+                    <li><a href="https://thewallyshop.co/privacy-policy.html">Privacy Policy</a></li> 
                   </ul>
 
                 </div>

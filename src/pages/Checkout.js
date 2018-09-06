@@ -808,12 +808,7 @@ class Checkout extends Component {
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
                     <div className={taxpopupClass}>
-                      <ClickOutside onClickOutside={e=>this.hideTaxPopup()}>
-                        <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
-                            <Link className="text-violet" to={""}>Learn more</Link>
-                        </div></div>
-                      </ClickOutside>
-                      <span onClick={e=>this.showTaxPopup()}>Tax service fee <FontAwesome name='info-circle' /></span>
+                      <span onClick={e=>this.showTaxPopup()}>Tax</span>
                       <span>{formatMoney((order.tax_amount)/100)}</span>
                     </div>
                     <div className={servicepopupClass}>
