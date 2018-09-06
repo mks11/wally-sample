@@ -68,6 +68,7 @@ class Checkout extends Component {
       deliveryTimes: [],
 
       taxpopup: false,
+      servicepopup: false,
       packagingdeposit: false,
 
     }
@@ -423,9 +424,17 @@ class Checkout extends Component {
     e.preventDefault()
   }
 
+  showServicePopup() {
+    this.setState({servicepopup: true})
+  }
+
+  hideServicePopup() {
+    this.setState({servicepopup: false})
+  }
   showTaxPopup() {
     this.setState({taxpopup: true})
   }
+
 
   hideTaxPopup() {
     this.setState({taxpopup: false})
@@ -483,6 +492,11 @@ class Checkout extends Component {
     let taxpopupClass = 'summary'
     if (this.state.taxpopup) {
       taxpopupClass += ' open'
+    }
+
+    let servicepopupClass = 'summary'
+    if (this.state.servicepopup) {
+      servicepopupClass += ' open'
     }
 
 
@@ -799,8 +813,17 @@ class Checkout extends Component {
                             <Link className="text-violet" to={""}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
-                      <span onClick={e=>this.showTaxPopup()}>Tax &amp; service fee <FontAwesome name='info-circle' /></span>
-                      <span>{formatMoney((order.tax_amount + order.service_amount)/100)}</span>
+                      <span onClick={e=>this.showTaxPopup()}>Tax service fee <FontAwesome name='info-circle' /></span>
+                      <span>{formatMoney((order.tax_amount)/100)}</span>
+                    </div>
+                    <div className={servicepopupClass}>
+                      <ClickOutside onClickOutside={e=>this.hideServicePopup()}>
+                        <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
+                            <Link className="text-violet" to={""}>Learn more</Link>
+                        </div></div>
+                      </ClickOutside>
+                      <span onClick={e=>this.showServicePopup()}>Service fee <FontAwesome name='info-circle' /></span>
+                      <span>{formatMoney((order.service_amount)/100)}</span>
                     </div>
                     <div className="summary">
                       <span>Delivery fee</span>
