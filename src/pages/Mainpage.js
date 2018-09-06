@@ -342,6 +342,11 @@ let currentSearchCat= curCat.join(', ')
     this.setState({searchAll: !this.state.searchAll})
   }
 
+  handleAllCategoriesDropdown() {
+    this.uiStore.hideCategoriesDropdown()
+    this.setState({searchPage: false})
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -408,7 +413,7 @@ let currentSearchCat= curCat.join(', ')
                     <h3 onClick={this.handleCategoriesDropdown}><strong>All Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
-                    <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
+                    <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
 
                     {this.productStore.categories.map((s,i) => (
                       <React.Fragment key={i}>
@@ -616,7 +621,7 @@ let currentSearchCat= curCat.join(', ')
                 <div className="row">
                 { this.state.searchDisplayed.map((p, i) => (
                   <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.productStore.showModal(p.product_id)}>
-                    <img src={APP_URL + "/images/product_thumbnail.png"} />
+                    <img src={PRODUCT_BASE_URL + p.product_id + "/" + p.image_refs[0]} />
                     <div className="row product-detail">
                       <div className="col-6 product-price">
                         $2.99
