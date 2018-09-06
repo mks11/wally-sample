@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Title from '../common/page/Title'
 import { formatMoney, connect } from '../utils'
 import { Link } from 'react-router-dom'
-import { APP_URL } from '../config'
+import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import {MenuItem, MenuItemContainer, AsyncTypeahead} from 'react-bootstrap-typeahead'
 import ClickOutside from 'react-click-outside'
 import {
@@ -56,7 +56,7 @@ let Product = ((props) => {
   // price *= unit
 
   return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
-    <img src={APP_URL + "/images/product_thumbnail.png"} />
+    <img src={PRODUCT_BASE_URL + props.product.product_id + "/" + props.product.image_refs[0]} />
     <div className="row product-detail">
       <div className="col-6 product-price">
         {formatMoney(price)}
@@ -136,13 +136,18 @@ class Mainpage extends Component {
         this.loadData()
       })
     const $ = window.$
+
+    const self = this
+
     $(window).bind('scroll', function () {
       if ($(window).scrollTop() > 515) {
         $('.product-top').addClass('fixed');
+        self.uiStore.topBar = false
       } else {
         $('.product-top').removeClass('fixed');
+        self.uiStore.topBar = true
       }
-    });
+    })
   }
 
   loadData() {

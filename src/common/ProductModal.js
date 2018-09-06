@@ -31,7 +31,8 @@ class ProductModal extends Component {
         asNavFor: '#thumbnailproduct-carousel',
         dots: false,
         infinite: false,
-        arrows: false
+        arrows: false,
+
       });
       $thumb.slick({
         slidesToShow: 3,
@@ -39,6 +40,8 @@ class ProductModal extends Component {
         asNavFor: '#product-carousel',
         dots: false,
         infinite: false,
+
+  variableWidth: true
       });
       $thumb.find('.slick-item').click(function() {
         $prod.slick('slickGoTo', window.$(this).index())
@@ -191,13 +194,13 @@ class ProductModal extends Component {
                 <div className="media-body">
                   <div className="row">
                     <div className="col-sm-6">
-                      <div><span className="font-weight-bold">Local</span>: {producer}</div>
+                      <div><span className="font-weight-bold">Local</span>: {product.local ? 'Yes' : 'No'}</div>
                     </div>
                     <div className="col-sm-6">
-                      <div><span className="font-weight-bold">Organic</span>: yes</div>
+                      <div><span className="font-weight-bold">Organic</span>: {product.organic ? 'Yes' : 'No'}</div>
                     </div>
                   </div>
-                  <div><span className="font-weight-bold">Farms</span>: e the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shet</div>
+                  <div><span className="font-weight-bold">Farms</span>: {product.farms && product.farms.join(',')}</div>
                 </div>
               </div>
             </div>

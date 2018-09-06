@@ -13,7 +13,6 @@ class UiStore {
   topBar = true;
 
   closeTopBar() {
-    console.log('menggila')
     this.topBar = false;
   }
 

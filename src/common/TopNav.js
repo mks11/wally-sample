@@ -146,10 +146,10 @@ class TopNav extends Component {
             <div className="container">
               Free delivery on orders over $35 
               <button className="close-top-bar" onClick={e=>this.uiStore.closeTopBar()}>
-              <i className="fa fa-times-circle" aria-hidden="true" ></i>
-            </button>
-      </div>
-      </div>
+                <i className="fa fa-times-circle" aria-hidden="true" ></i>
+              </button>
+            </div>
+          </div>
           <div className="container">
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
