@@ -192,12 +192,8 @@ class Homepage extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h2>It's what's on the inside, that counts.</h2>
-              <p>When did grocery shopping become more about the packaging than the food? At the Wally Shop we believe in
-food that is yummy, fresh and responsibly sourced. Everything is either local or organic. Your groceries will be 
-delivered to you in reusable paackaging that can be returned conveniently upon any future deliveries. Enjoy the 
-freshest groceries, at bulk prices, completely package-free. 
-</p>
+              <h2>The Wally Shop is making package-free grocery shopping easy.</h2>
+              <p>We’re changing up the grocery game with zero waste deliveries that come straight to your door. With all of our ingredients coming from local farmers markets and bulk shops, you get high-quality foods, same-day delivery and no plastic packaging. Ever. We want to make it easy for you to be a responsible shopper, so you can save time and keep your peace of mind. You take care of the earth - we’ll take care of the groceries.</p>
             </div>
 
             <div className="row">
