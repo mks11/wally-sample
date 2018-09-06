@@ -3,7 +3,8 @@ import {
   API_LOGIN, API_LOGIN_FACEBOOK, API_GET_LOGIN_STATUS, API_GET_USER, API_SIGNUP, API_EDIT_USER,
   API_ADDRESS_NEW, API_ADDRESS_EDIT, API_ADDRESS_REMOVE,
   API_PAYMENT_NEW, API_PAYMENT_EDIT, API_PAYMENT_REMOVE,
-  API_REFER_FRIEND
+  API_REFER_FRIEND,
+  API_FORGOT_PASSWORD, API_RESET_PASSWORD
 } from '../config'
 import axios from 'axios'
 
@@ -171,10 +172,19 @@ class UserStore {
   }
 
   async loginFacebook(data) {
-    console.log(data)
     const res = await axios.post(API_LOGIN_FACEBOOK, {access_token: data.accessToken})
     this.setUserData(res.data.user)
     this.setToken(res.data.token)
+    return res.data
+  }
+
+  async forgotPassword(email) {
+    const res = await axios.post(API_FORGOT_PASSWORD, {email})
+    return res.data
+  }
+
+  async resetPassword(email) {
+    const res = await axios.post(API_FORGOT_PASSWORD, {email})
     return res.data
   }
 }
@@ -220,7 +230,9 @@ decorate(UserStore, {
   savePayment: action,
   makeDefaultPayment: action,
 
-  getHeaderAuth: action
+  getHeaderAuth: action,
+  forgotPassword: action,
+  resetPassword: action,
 
 })
 

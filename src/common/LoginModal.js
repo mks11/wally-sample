@@ -112,6 +112,16 @@ class LoginModal extends Component {
     })
   }
 
+  handleForgotPassword = () => {
+    this.userStore.forgotPassword(this.state.email).then((data) => {
+      this.modalStore.setLoginStep(3)
+    }).catch((e) => {
+      console.error('Failed to login', e)
+      const msg = e.response.data.error.message
+      this.setState({invalidText: msg})
+    })
+  }
+
   render() {
     const store = this.props.store
 
@@ -190,7 +200,7 @@ class LoginModal extends Component {
                     placeholder="Enter your password"
                     onKeyDown={this.handlePasswordEnter}
                     onChange={(e) => this.setState({password: e.target.value})}/>
-                  <a className="forgot-text mt-2 mb-4" onClick={e => this.modalStore.setLoginStep(3)}>Forgot Password?</a>
+                  <a className="forgot-text mt-2 mb-4" onClick={this.handleForgotPassword}>Forgot Password?</a>
                   <ErrorInfo/>
                   <button type="button" className={buttonSubmitClass} onClick={e => this.handleSubmit(e)}>
                     SUBMIT

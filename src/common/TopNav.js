@@ -91,6 +91,14 @@ class TopNav extends Component {
     if (this.uiStore.navMobile) {
       headerWrapClass += ' nav-open'
     }
+
+
+    let topBarClass = 'top-bar d-none'
+    if (this.uiStore.topBar) {
+      topBarClass = 'top-bar'
+      headerWrapClass += ' top-bar-open'
+    }
+
     return (
       <div className={headerWrapClass}>
         <div className="aw-nav--mobile d-md-none">
@@ -134,6 +142,14 @@ class TopNav extends Component {
           </div>
         </div>
         <header className="aw-header navbar-white">
+          <div className={topBarClass}>
+            <div className="container">
+              Free delivery on orders over $35 
+              <button className="close-top-bar" onClick={e=>this.uiStore.closeTopBar()}>
+              <i className="fa fa-times-circle" aria-hidden="true" ></i>
+            </button>
+      </div>
+      </div>
           <div className="container">
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
