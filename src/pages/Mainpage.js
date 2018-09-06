@@ -109,6 +109,7 @@ class Mainpage extends Component {
       searchResult:[],
       searchDisplayed:[],
       searchTerms: '',
+      searchFilter: [],
 
       activeHeroIndex: 0,
 
@@ -492,16 +493,21 @@ class Mainpage extends Component {
                   })}
 
                   {this.state.searchPage && <h4>Sub Categories</h4>}
-                  {this.state.searchPage && this.state.searchSidebar.map((s,i) => {
-                    return (
-                      <div key={i}>
-                        <label className="form-check-label check-sidebar">
-                          <input checked={s.cat_id==this.state.currentSearchCatId} type="radio" name="search_category" className="form-check-input" onChange={e=>this.handleChangeSearchCategory(s.cat_id)}/>
-                          <span>{s.cat_name}</span>
-                        </label>
-                      </div>
-                    )
-                  })}
+                  {this.state.searchPage && 
+                      <React.Fragment>
+                            <div  className="custom-control custom-checkbox mt-2 mb-3">
+                              <input type="checkbox" className="custom-control-input" id="homeCheck" checked={true} />
+                              <label className="custom-control-label" >All Categories</label>
+                            </div>
+                        {this.state.searchSidebar.map((s,key) => (
+                            <div key={key} className="custom-control custom-checkbox mt-2 mb-3">
+                              <input type="checkbox" className="custom-control-input" id="homeCheck"  checked={s.cat_id==this.state.currentSearchCatId} />
+                              <label className="custom-control-label" >{s.cat_name}</label>
+                            </div>
+                          ))}
+
+                        </React.Fragment>
+                    }
 
                   <br/>
                   <div>
