@@ -22,17 +22,20 @@ const heroItems = [
   {
     src: banner1,
     altText: 'Slide 1',
-    caption: 'Slide 1'
+    caption: 'Slide 1',
+    link: '/help/detail/5b9159765e3b27043b178f93'
   },
   {
     src: banner2,
     altText: 'Slide 2',
-    caption: 'Slide 2'
+    caption: 'Slide 2',
+    link: '/help/detail/5b9159765e3b27043b178f92'
   },
   {
     src: banner3,
     altText: 'Slide 3',
-    caption: 'Slide 3'
+    caption: 'Slide 3',
+    link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
  
@@ -347,6 +350,10 @@ let currentSearchCat= curCat.join(', ')
     this.setState({searchPage: false})
   }
 
+  handleCarouselClick(link) {
+    this.routing.push(link)
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -386,7 +393,7 @@ let currentSearchCat= curCat.join(', ')
           onExited={this.onHeroExited}
           key={item.caption}
         >
-          <img className="img-fluid" src={item.src} alt={item.altText} />
+          <img className="img-fluid" src={item.src} alt={item.altText} onClick={e=>this.handleCarouselClick(item.link)} />
         </CarouselItem>
       );
     });

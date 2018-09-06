@@ -26,15 +26,18 @@ class HelpSingle extends Component {
 
   loadData() {
     const id = this.props.match.params.id
-    if (this.helpStore.questions.length === 0) {
-      this.routing.push('/help')
-      return
-    }
-    const detail = this.helpStore.getDetail(id)
-    this.setState({
-      question: detail.question_text,
-      answer: detail.answer_text
+    // if (this.helpStore.questions.length === 0) {
+    //   this.routing.push('/help')
+    //   return
+    // }
+    this.helpStore.getQuestions('all').then((data) => {
+      const detail = this.helpStore.getDetail(id)
+      this.setState({
+        question: detail.question_text,
+        answer: detail.answer_text
+      })
     })
+
   }
 
 
