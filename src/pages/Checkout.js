@@ -100,7 +100,11 @@ class Checkout extends Component {
 
   loadData() {
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
-      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit})
+      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
+        appliedPromo: this.checkoutStore.order.promo_amount,
+        appliedPromoCode: this.checkoutStore.order.promo,
+
+      })
     }).catch((e) => {
       console.error(e)
     })
@@ -265,7 +269,7 @@ class Checkout extends Component {
   }
 
   handleCheckPromo() {
-    const subTotal = this.checkoutStore.order.sub_total
+    const subTotal = this.checkoutStore.order.subtotal
     const promoCode = this.state.appliedPromoCode
 
     if (!promoCode) {
@@ -277,7 +281,12 @@ class Checkout extends Component {
       subTotal,
       promoCode
     }, this.userStore.getHeaderAuth()).then((data) => {
-
+      if (data.valid) {
+        this.setState({appliedPromo: true, appliedPromoCode: promoCode})
+        alert('Promo applied')
+      } else {
+        this.setState({invalidText: 'Invalid promo code'})
+      }
     }).catch((e) => {
       if (!e.response.data.error) {
         this.setState({invalidText: 'Check promo failed'})
@@ -795,7 +804,7 @@ class Checkout extends Component {
                     </div>
                     <div className="summary">
                       <span>Delivery fee</span>
-                      <span>$0</span>
+                      <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
                     <div className={packagingdepositClass}>
                       <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>

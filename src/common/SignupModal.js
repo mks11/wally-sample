@@ -145,7 +145,7 @@ class SignupModal extends Component {
                 autoLoad={true}
                 textButton="FACEBOOK"
                 fields="name,email,picture"
-                scope="public_profile,user_friends"
+                scope="public_profile"
                 callback={this.responseFacebook}
                   />
 
