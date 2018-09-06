@@ -286,7 +286,7 @@ class Checkout extends Component {
       if (data.valid) {
         this.setState({appliedPromo: true, appliedPromoCode: promoCode, successText: 'Promo applied successfully'})
         this.userStore.getUser().then(() => {
-          this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth())
+          this.loadData()
         })
       } else {
         this.setState({invalidText: 'Invalid promo code'})
@@ -842,12 +842,14 @@ class Checkout extends Component {
                           <span>{formatMoney(this.state.appliedStoreCreditAmount/100)}</span>
                         </div>
                         :null}
+                        {/*
                         {this.state.appliedPromo ?
                             <div className="summary">
                               <span>Promo code applied</span>
                               <span>{this.state.appliedPromoCode}</span>
                             </div>
                             :null}
+                            */}
                           </div>
 
                           <div className="item-extras">
