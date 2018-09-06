@@ -143,6 +143,13 @@ class UserStore {
     }
   }
 
+  async getUser() {
+    const res = await axios.get(API_GET_USER, this.getHeaderAuth())
+    this.setUserData(res.data)
+    //this.setUserToken(res.data.token)
+    return res.data
+  }
+
 
   async getStatus() {
     this.readStorage()
@@ -205,6 +212,7 @@ decorate(UserStore, {
   refUrl: observable,
 
   login: action,
+  getUser: action,
   loginFacebook: action,
   setUserData: action,
   setToken: action,

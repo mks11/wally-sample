@@ -51,6 +51,7 @@ class Checkout extends Component {
 
 
       invalidText: '',
+      successText: '',
       invalidSelectAddress: '',
 
       invalidAddressText: '',
@@ -273,6 +274,7 @@ class Checkout extends Component {
     const subTotal = this.checkoutStore.order.subtotal
     const promoCode = this.state.appliedPromoCode
 
+        this.userStore.getUser()
     if (!promoCode) {
       this.setState({invalidText: 'Promo code empty'})
       return
@@ -283,8 +285,10 @@ class Checkout extends Component {
       promoCode
     }, this.userStore.getHeaderAuth()).then((data) => {
       if (data.valid) {
-        this.setState({appliedPromo: true, appliedPromoCode: promoCode})
-        alert('Promo applied')
+        this.setState({appliedPromo: true, appliedPromoCode: promoCode, successText: 'Promo applied successfully'})
+        this.userStore.getUser().then(() => {
+          this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth())
+        })
       } else {
         this.setState({invalidText: 'Invalid promo code'})
       }
@@ -885,6 +889,7 @@ class Checkout extends Component {
                                   </div>
                                   <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
                                   {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}
+                                  {this.state.successText ? <span className="text-success text-center d-block mt-2">{this.state.successText}</span>:null}
                                 </div>
                               </div>
 
