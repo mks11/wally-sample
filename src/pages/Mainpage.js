@@ -29,7 +29,7 @@ const heroItems = [
     src: banner2,
     altText: 'Slide 2',
     caption: 'Slide 2',
-    link: '/help/detail/5b9159765e3b27043b178f92'
+    link: '/help/detail/5b91595b5e3b27043b178f92'
   },
   {
     src: banner3,
