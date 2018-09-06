@@ -10,6 +10,12 @@ class UiStore {
   backdropTop = 0
   backdropZindex = 100
   navMobile = false;
+  topBar = true;
+
+  closeTopBar() {
+    console.log('menggila')
+    this.topBar = false;
+  }
 
   hideNavMobile() {
     this.navMobile = false
@@ -97,9 +103,11 @@ decorate(UiStore, {
   accountDropdown: observable,
   cartDropdown: observable,
   categoriesDropdown: observable,
+  topBar: observable,
 
   navMobile: observable,
   toggleNavMobile: action,
+  closeTopBar: action,
   showNavMobile: action,
   hideNavMobile: action,
   

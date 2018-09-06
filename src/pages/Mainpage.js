@@ -15,27 +15,25 @@ import {
 
 import ProductModal from '../common/ProductModal';
 
+const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
+const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.png'
+const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.png'
 const heroItems = [
   {
-    src: APP_URL + '/images/hero1.png',
+    src: banner1,
     altText: 'Slide 1',
     caption: 'Slide 1'
   },
   {
-    src: APP_URL + '/images/hero1.png',
+    src: banner2,
     altText: 'Slide 2',
     caption: 'Slide 2'
   },
   {
-    src: APP_URL + '/images/hero1.png',
+    src: banner3,
     altText: 'Slide 3',
     caption: 'Slide 3'
   },
-  {
-    src: APP_URL + '/images/hero1.png',
-    altText: 'Slide 4',
-    caption: 'Slide 4'
-  }
 ];
  
 
@@ -245,7 +243,7 @@ class Mainpage extends Component {
   handleChangeSearchCategory(cat_id) {
     const data = this.state.searchResult
     const searchDisplayed = data.products.filter((d) => {
-      return d.subcat_id == cat_id
+      return d.cat_id == cat_id
     })
 
     const current = data.filters.find((d) => {

@@ -552,6 +552,10 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: transparent;
 }
 
+.top-bar-open .aw-nav--toggle {
+  top: 61%;
+}
+
 .aw-nav--toggle svg {
   max-width: 18px;
 }
@@ -577,7 +581,9 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   opacity: 0;
   transition: 0.27s all;
 }
-
+.top-bar-open .aw-nav--mobile {
+  top: 80px
+}
 .aw-nav--mobile ul {
   list-style-type: none;
 }
@@ -1075,4 +1081,8 @@ body {
 
 #server-error {
   color: #FF0000;
+}
+
+.header-wrap.top-bar-open + .aw-main .product-top.fixed {
+  top:102px;
 }
