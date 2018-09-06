@@ -22,17 +22,20 @@ const heroItems = [
   {
     src: banner1,
     altText: 'Slide 1',
-    caption: 'Slide 1'
+    caption: 'Slide 1',
+    link: '/help/detail/5b9159765e3b27043b178f93'
   },
   {
     src: banner2,
     altText: 'Slide 2',
-    caption: 'Slide 2'
+    caption: 'Slide 2',
+    link: '/help/detail/5b91595b5e3b27043b178f92'
   },
   {
     src: banner3,
     altText: 'Slide 3',
-    caption: 'Slide 3'
+    caption: 'Slide 3',
+    link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
  
@@ -110,6 +113,7 @@ class Mainpage extends Component {
       searchDisplayed:[],
       searchTerms: '',
       searchFilter: [],
+      searchAll: true,
 
       activeHeroIndex: 0,
 
@@ -219,8 +223,16 @@ class Mainpage extends Component {
         })
       }
 
+      const cur = []
+      data.filters.map((d) => {
+        cur.push(d.cat_id)
+      })
 
-      this.setState({searchSidebar: filters, searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat, searchDisplayed })
+
+
+      this.setState({searchSidebar: filters, 
+        searchFilter: cur,
+        searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat: 'All Categories', searchDisplayed: data.products })
     })
   }
 
@@ -256,7 +268,7 @@ class Mainpage extends Component {
       return d.cat_id == cat_id
     })
 
-    this.setState({searchDisplayed, currentSearchCat: current.cat_name, currentSearchCatId: current.cat_id})
+    this.setState({searchDisplayed: data.products, currentSearchCat: current.cat_name, currentSearchCatId: current.cat_id})
 
 
   }
@@ -283,6 +295,63 @@ class Mainpage extends Component {
   goToHeroIndex = (newIndex) => {
     if (this.animating) return;
     this.setState({ activeHeroIndex: newIndex });
+  }
+
+  toggleSearchCheck(id) {
+    const cur = this.state.searchFilter
+    const index = cur.indexOf(id)
+    if (index === -1) {
+      cur.push(id)
+    } else {
+      cur.splice(index, 1)
+    }
+
+    const products = this.state.searchResult.products
+    const filtered = products.filter((d) => {
+      return cur.indexOf(d.cat_id) !== -1
+    })
+
+    let curCat = []
+
+    this.state.searchResult.filters.map((d) => {
+      if (cur.indexOf(d.cat_id) !== -1) 
+        curCat.push(d.cat_name)
+    })
+let currentSearchCat= curCat.join(', ')
+
+    let all = false
+
+    if (cur.length === this.state.searchResult.filters.length) {
+      all = true
+      currentSearchCat = 'All Categories'
+    }
+
+    this.setState({searchAll: all, searchFilter: cur, searchDisplayed: filtered, currentSearchCat})
+
+  }
+
+  searchCheck(id) {
+    return this.state.searchFilter.indexOf(id) !== -1
+  }
+
+  toggleSearchAll() {
+    if (!this.state.searchAll) {
+      const curFilter = []
+      const current = this.state.searchResult.filters.map((d) => {
+        curFilter.push(d.cat_id)
+      })
+      this.setState({searchFilter: curFilter, searchDisplayed: this.state.searchResult.products, currentSearchCat: 'All Categories'})
+    }
+    this.setState({searchAll: !this.state.searchAll})
+  }
+
+  handleAllCategoriesDropdown() {
+    this.uiStore.hideCategoriesDropdown()
+    this.setState({searchPage: false})
+  }
+
+  handleCarouselClick(link) {
+    this.routing.push(link)
   }
 
   render() {
@@ -324,7 +393,7 @@ class Mainpage extends Component {
           onExited={this.onHeroExited}
           key={item.caption}
         >
-          <img className="img-fluid" src={item.src} alt={item.altText} />
+          <img className="img-fluid" src={item.src} alt={item.altText} onClick={e=>this.handleCarouselClick(item.link)} />
         </CarouselItem>
       );
     });
@@ -351,7 +420,7 @@ class Mainpage extends Component {
                     <h3 onClick={this.handleCategoriesDropdown}><strong>All Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
-                    <Link to="/main" className="dropdown-item" onClick={e=>this.uiStore.hideCategoriesDropdown()}>All Categories</Link>
+                    <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
 
                     {this.productStore.categories.map((s,i) => (
                       <React.Fragment key={i}>
@@ -495,16 +564,17 @@ class Mainpage extends Component {
                   {this.state.searchPage && <h4>Sub Categories</h4>}
                   {this.state.searchPage && 
                       <React.Fragment>
-                            <div  className="custom-control custom-checkbox mt-2 mb-3">
-                              <input type="checkbox" className="custom-control-input" id="homeCheck" checked={true} />
-                              <label className="custom-control-label" >All Categories</label>
-                            </div>
+                        <div  className="custom-control custom-checkbox mt-2 mb-3">
+                          <input type="checkbox" className="custom-control-input" checked={this.state.searchAll} onChange={e=>this.toggleSearchAll()} />
+                          <label className="custom-control-label" onClick={e=>this.toggleSearchAll()}>All Categories</label>
+                        </div>
+
                         {this.state.searchSidebar.map((s,key) => (
-                            <div key={key} className="custom-control custom-checkbox mt-2 mb-3">
-                              <input type="checkbox" className="custom-control-input" id="homeCheck"  checked={s.cat_id==this.state.currentSearchCatId} />
-                              <label className="custom-control-label" >{s.cat_name}</label>
-                            </div>
-                          ))}
+                          <div key={key} className="custom-control custom-checkbox mt-2 mb-3">
+                            <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.searchCheck(s.cat_id)} onChange={e=>this.toggleSearchCheck(s.cat_id)} />
+                            <label className="custom-control-label" onClick={e=>this.toggleSearchCheck(s.cat_id)}>{s.cat_name}</label>
+                          </div>
+                        ))}
 
                         </React.Fragment>
                     }
@@ -549,14 +619,16 @@ class Mainpage extends Component {
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
                   <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                  <span className="search-count">{this.state.searchDisplayed.length} search result for "{this.state.searchTerms}" in {this.state.currentSearchCat}</span>
+                  <span className="search-count">{this.state.searchDisplayed.length} search result for "{this.state.searchTerms}" 
+                    {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
+                  </span>
                   <hr/>
                 </div>
 
                 <div className="row">
                 { this.state.searchDisplayed.map((p, i) => (
                   <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.productStore.showModal(p.product_id)}>
-                    <img src={APP_URL + "/images/product_thumbnail.png"} />
+                    <img src={PRODUCT_BASE_URL + p.product_id + "/" + p.image_refs[0]} />
                     <div className="row product-detail">
                       <div className="col-6 product-price">
                         $2.99
