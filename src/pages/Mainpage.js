@@ -443,7 +443,8 @@ class Mainpage extends Component {
           <div className="container">
             <div className="row ">
               <div className="col-md-2 col-sm-4">
-                <div className="product-content-left">
+                {/* <div className="product-content-left d-none d-md-block d-lg-block"> */}
+                 <div className="product-content-left">
                   <div className="mb-4">
                     <h4>The Wally Shop</h4>
                     <ul>

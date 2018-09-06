@@ -665,7 +665,7 @@ class Checkout extends Component {
                 </div>
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-                  <label className="custom-control-label" htmlFor="homeCheck" >I confirm that I will be at home or have a doorman</label>
+                  <label className="custom-control-label" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
@@ -782,7 +782,7 @@ class Checkout extends Component {
                   <div className="item-summaries">
                     <div className="summary">
                       <span>Subtotal</span>
-                      <span>{formatMoney(order.sub_total/100)}</span>
+                      <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
                     <div className={taxpopupClass}>
                       <ClickOutside onClickOutside={e=>this.hideTaxPopup()}>
