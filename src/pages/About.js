@@ -45,7 +45,7 @@ class About extends Component {
                   </p>
 
                   <p>
-                  When you buy groceries through The Wally Shop, we can guarantee that all of our ingredients are ethically purchased. We prioritize shopping at local farmers markets, supporting small businesses and choosing organic ingredients above all else. Want to find out more? Click here. 
+                  When you buy groceries through The Wally Shop, we can guarantee that all of our ingredients are ethically purchased. We prioritize shopping at local farmers markets, supporting small businesses and choosing organic ingredients above all else. Want to find out more? Click <a href="/help/topics/5b9157bc5e3b27043b178f8e">here</a>. 
                   </p>
                 </div>  
               </div>
@@ -64,7 +64,7 @@ class About extends Component {
               </div> 
             </div>
             <div className="tagline">
-              <h1>Start ordering package-free groceries here.</h1>
+              <h2>Start ordering package-free groceries <a href="/main">here</a>.</h2>
             </div>
           </div>
         </section>

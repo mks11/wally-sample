@@ -817,7 +817,7 @@ class Checkout extends Component {
                     <div className={servicepopupClass}>
                       <ClickOutside onClickOutside={e=>this.hideServicePopup()}>
                         <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
-                            <Link className="text-violet" to={""}>Learn more</Link>
+                            <Link className="text-violet" to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
                       <span onClick={e=>this.showServicePopup()}>Service fee <FontAwesome name='info-circle' /></span>
@@ -830,7 +830,7 @@ class Checkout extends Component {
                     <div className={packagingdepositClass}>
                       <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>
                         <div class="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right" style={{left: '142px'}}><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body">
-                            <Link className="text-violet" to={""}>Learn more</Link>
+                            <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
                       <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
@@ -895,8 +895,7 @@ class Checkout extends Component {
                               </div>
 
                               <p className="mt-3">
-                                By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. Learn more.
-                                <Link to={""}>Learn more.</Link>
+                                By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
                             </p>
                             </section>
                           </div>
