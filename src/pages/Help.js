@@ -34,9 +34,10 @@ class Help extends Component {
   }
 
   loadData() {
-    this.helpStore.getQuestions('all');
     this.helpStore.getHelpTopics();
     // await this.helpStore.getContact();
+
+    this.helpStore.getQuestions('all');
 
     if (this.userStore.status) {
       this.orderStore.getOrders(this.userStore.getHeaderAuth())
@@ -248,7 +249,7 @@ class Help extends Component {
                         <div className="list-header">
                           <div className="row">
                             <div className="col-10">
-                              <h2>Top Questions</h2>
+                              <h2>Topics</h2>
                             </div>
                             <div className="col-2"><a className="view-all" href="#"  onClick={this.handleViewAllQuestions}>View All</a></div>
                           </div>
