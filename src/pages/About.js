@@ -22,9 +22,9 @@ class About extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h1>Turn out grocery shopping is so much better without packaging</h1>
+              <h1>We are the sustainable grocery solution.</h1>
               <p className="text-center">
-                The Wally Shop was founded with the singular mission to take make sustainable shopping the new standard. We believe in delightning people and our planet by offering great value, selection and convenience, all built upon a foundation that is inherently sustainable.
+                The Wally Shop is changing up the grocery game with package-free deliveries that come straight to your door. With the world’s massive waste problem, due in large part to our single-use habits, we want to make sustainability a priority. But switching to a package free life doesn’t have to be impossible: same-day grocery delivery from The Wally Shop makes sustainable shopping simple and convenient. So you can spend more time doing what you love, and we’ll ensure you have local, organic, zero waste groceries whenever you need them.
               </p>
             </div>  
 
@@ -35,72 +35,36 @@ class About extends Component {
             <div className="row justify-content-between">
               <div className="col-md-5 col-xs-12">
                 <div className="tagline">
-                  <h1>What Doesn't kill us makes us stronger</h1>
+                  <h1>It’s farmers market fresh - without the farmers market trip.</h1>
                   <p className="">
-                  We knew that if we wanted to make sustainability the new
-                  standard, that meant we had to make sure we could offer 
-                  the same if not better value, selection and convenience
-                  that we are all accustomed to. 
+                  “After managing the packaging and shipping category at Amazon, I became aware of just how much packaging we use on a daily basis.” Tamara Lim, Founder 
                   </p>
 
                   <p>
-                  What we found - building a business sustainability first 
-                  can actually create an experience with even better value, 
-                  selection and convenience.
+                  Following her decision to live a more sustainable lifestyle, founder Tamara Lim realized how difficult zero waste grocery shopping was with a busy schedule. With single use plastic packaging at an all-time high, grocery stores were a barrier to her sustainable endeavors. That’s why she created The Wally Shop, which combines the convenience of delivery with the responsibility of package-free groceries. 
                   </p>
 
                   <p>
-                  By using only reusable packaging, it’s enabled us to source
-                  higher quality packaging that actually keeps your produce
-                  fresher from our warehouse to your doorstep. Sourcing local
-                  organic produce, tastes that much better. 
+                  When you buy groceries through The Wally Shop, we can guarantee that all of our ingredients are ethically purchased. We prioritize shopping at local farmers markets, supporting small businesses and choosing organic ingredients above all else. Want to find out more? Click here. 
                   </p>
-
-
-                  <p>
-                  Because we buy everything in bulk and package them in
-                  house. We are able to pass on bulk prices to you at
-                  personalized quantities. By sourcing local and organic
-                  produce, reduces transportation costs.
-                  </p>
-
-                  <p>
-                  And without all that single use plastic, we’ve found that our
-                  unpacking experience is that much more rewarding and hassel
-                  free. Plus our packaging is not just reusable, we think they 
-                  look pretty good sitting on our shelves what do you think?
-                  </p>
-
                 </div>  
               </div>
 
               <div className="col-md-5 col-xs-12">
                 <div className="tagline">
-                  <h1>Better together</h1>
+                  <h1>Our Name</h1>
                   <p className="">
-                  We understand that our mission to bring
-                  forth a better way of doing things is no
-                  easy feat. Lucky for us, we’re not alone,
-                  thanks to you awesome people. 
+                  The name “The Wally Shop” was inspired by an incredible cooperative of individuals from India known as the dabbawala. Dubbed the world’s “best food delivery system”, they work in the Mumbai area to pick up worker’s freshly made lunch tiffins - usually prepared by a wife - and deliver them to their respective husbands working in the city. After lunch, the tiffins are collected and returned home.
                   </p>
 
                   <p>
-                  If we are going to change the world, what
-                  better chance do we have than to do it together.
-                  </p>
-
-                  <p>
-                  We will be hosting town halls, selection 
-                  tasting all that would directly affect our
-                  choices as we grow. </p>
-
-                  <p>
-                  So if you are passionate about our shared 
-                  mission and would love to partificpate, reach 
-                  out to Molly at molly@thewallyshop.co.
+                  At The Wally Shop, our goal is similar. We are a completely closed loop business - with the help of our exclusively reusable packaging - that you can rely on with for same-day delivery. Shopping at farmers markets and local stores for healthy, organic ingredients is how we give you a fresh take on package free groceries.
                   </p>
                 </div>  
               </div> 
+            </div>
+            <div className="tagline">
+              <h1>Start ordering package-free groceries here.</h1>
             </div>
           </div>
         </section>
