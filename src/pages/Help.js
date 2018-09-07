@@ -34,10 +34,9 @@ class Help extends Component {
   }
 
   loadData() {
+    this.helpStore.getQuestions('all');
     this.helpStore.getHelpTopics();
     // await this.helpStore.getContact();
-
-    this.helpStore.getQuestions('all');
 
     if (this.userStore.status) {
       this.orderStore.getOrders(this.userStore.getHeaderAuth())
