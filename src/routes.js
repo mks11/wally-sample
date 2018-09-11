@@ -24,6 +24,7 @@ export default (
         <Route exact path="/thankyou" component={OrderConfirmation}/>
         <Route exact path="/reset_password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
+        <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>
         <Route exact path="/help/topics" component={HelpSingle}/>
         <Route exact path="/help/topics/:id" component={HelpSingle}/>

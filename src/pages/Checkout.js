@@ -261,8 +261,8 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.state.selectedDate + ' ' + this.state.selectedTime,
     }, this.userStore.getHeaderAuth()).then((data) => {
+      this.routing.push('/orders/' + this.checkoutStore.cart._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
-      this.routing.push('/orders')
     }).catch((e) => {
       console.error('Failed to submit order', e)
       const msg = e.response.data.error.message
@@ -862,7 +862,7 @@ class Checkout extends Component {
                                       type="text"
                                       placeholder="Enter your store credit"
                                       readOnly={true}
-                                      value={applicableStoreCreditAmount}/>
+                                      value={formatNumber(applicableStoreCreditAmount)}/>
                                     <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>
                                   </div>
                                 </div>

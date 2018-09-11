@@ -6,18 +6,24 @@ import { connect } from '../utils'
 class OrderConfirmation extends Component {
   constructor(props, context) {
     super(props, context);
+    this.routing = this.store.routing
+
   }
 
   handleShopMore() {
-
+    this.routing.push('/main')
   }
 
   render() {
+    const id = this.props.match.params.id
+    if (!id) {
+      return null
+    }
      return (
       <section className="page-section">
           <div className="container-fluid">
         <h1 className="my-1">Your order has been placed!</h1>
-        <h1 className="my-1">Order ID: #123456</h1>
+        <h1 className="my-1">Order ID: #{id}</h1>
         <p style={{fontSize:'25px'}}>Thank you your order has been placed, you should be recieving a confirmation email shortly.
 Don’t forget, when you are done with a container just simply return it upon the next or any 
 future deliveries from the wally shop.</p>
