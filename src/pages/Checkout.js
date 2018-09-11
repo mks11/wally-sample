@@ -11,7 +11,7 @@ import CardSmall from '../common/CardSmall';
 import ClickOutside from 'react-click-outside'
 import {StripeProvider, Elements} from 'react-stripe-elements'
 
-import { connect, formatMoney } from '../utils'
+import { connect, formatMoney, formatNumber } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
 import PlacesAutocomplete, {

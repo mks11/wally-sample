@@ -6,6 +6,27 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
+const formatNumber = (n, c, d, t) => {
+  var c = n % 1 != 0 ? 2 : 2,
+  c = isNaN(c = Math.abs(c)) ? 0 : c, 
+  d = d == undefined ? "." : d, 
+  t = t == undefined ? "," : t, 
+  s = n < 0 ? "-" : "", 
+  i = String(parseInt(n = Math.abs(Number(n) || 0))), 
+  j = (j = i.length) > 3 ? j % 3 : 0;
+  var money =  s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+
+  // var sep = money.split(d)
+  // if (sep.length == 2) {
+  //   var dec = parseFloat(money.replace('$', ''))
+  //   dec = Math.abs(dec)
+  //
+  //   return '$'+dec
+  // }
+
+  return money
+}
+
 const formatMoney = (n, c, d, t) => {
   var c = n % 1 != 0 ? 2 : 2,
   c = isNaN(c = Math.abs(c)) ? 0 : c, 
@@ -31,5 +52,5 @@ const capitalizeFirstLetter = (string) => {
 }
 
 export {
-  connect, validateEmail, formatMoney, capitalizeFirstLetter
+  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter
 }
