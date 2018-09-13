@@ -128,7 +128,7 @@ class SignupModal extends Component {
                 onChange={(e) => this.setState({password: e.target.value})}/>
 
               <span className="tnc mt-3 mb-2">
-                By signing up, you agree to our <a href="https://thewallyshop.co/terms-and-conditions.html"><strong>Terms of Service</strong></a> and <a href="https://thewallyshop.co/privacy-policy.html"><strong>Privacy Policy.</strong></a>
+                By signing up, you agree to our <a target="_blank" href="https://thewallyshop.co/terms-and-conditions.html"><strong>Terms of Service</strong></a> and <a target="_blank" href="https://thewallyshop.co/privacy-policy.html"><strong>Privacy Policy.</strong></a>
               </span>
               { this.state.invalidText ? <span className="text-error text-center my-3">{this.state.invalidText}</span> : null}
 

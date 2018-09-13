@@ -159,7 +159,7 @@ class Help extends Component {
                           <div className="list-header">
                             <div className="row">
                               <div className="col-10">
-                                <h2>Recent Order</h2>
+                                <h2>Recent Orders</h2>
                               </div>
                               <div className="col-2">
                                 <a className="view-all" href="#"  onClick={this.handleViewAllOrders}>View All</a>

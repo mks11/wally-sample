@@ -373,10 +373,10 @@ class Checkout extends Component {
       return
     }
 
-    if (!this.state.newAptNo) {
-      this.setState({invalidAddressText: 'Unit cannot be empty'})
-      return
-    }
+    // if (!this.state.newAptNo) {
+    //   this.setState({invalidAddressText: 'Unit cannot be empty'})
+    //   return
+    // }
 
     if (!this.state.newContactName) {
       this.setState({invalidAddressText: 'Name cannot be empty'})

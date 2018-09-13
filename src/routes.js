@@ -22,7 +22,7 @@ export default (
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>
-        <Route exact path="/reset_password" component={ResetPassword}/>
+        <Route exact path="/api/user/reset-password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
         <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>

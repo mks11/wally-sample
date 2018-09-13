@@ -426,7 +426,7 @@ let currentSearchCat= curCat.join(', ')
                 <div className="dropdown dropdown-fwidth">
 
                   <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()}>
-                    <h3 onClick={this.handleCategoriesDropdown}><strong>All Categories</strong> <i className="fa fa-chevron-down"></i></h3>
+                    <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
                     <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
@@ -636,18 +636,7 @@ let currentSearchCat= curCat.join(', ')
 
                 <div className="row">
                 { this.state.searchDisplayed.map((p, i) => (
-                  <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.productStore.showModal(p.product_id)}>
-                    <img src={PRODUCT_BASE_URL + p.product_id + "/" + p.image_refs[0]} />
-                    <div className="row product-detail">
-                      <div className="col-6 product-price">
-                        $2.99
-                      </div>
-                      <div className="col-6 product-weight">
-                        12 oz
-                      </div>
-                    </div>
-                    <span className="product-desc">{p.name}</span>
-                  </div>
+                  <Product key={i} product={p} />
                 ))}
               </div>
                 

@@ -90,10 +90,10 @@ class AddressModal extends Component {
       return
     }
 
-    if (!this.state.unit) {
-      this.setState({invalidText: 'Unit cannot be empty'})
-      return
-    }
+    // if (!this.state.unit) {
+    //   this.setState({invalidText: 'Unit cannot be empty'})
+    //   return
+    // }
 
     if (!this.state.name) {
       this.setState({invalidText: 'Name cannot be empty'})
@@ -208,7 +208,7 @@ class AddressModal extends Component {
 
   render() {
     let buttonClass = 'btn btn-main my-3'
-    if (this.state.street_address && this.state.unit && this.state.name && this.state.telephone && this.state.zip) {
+    if (this.state.street_address && this.state.name && this.state.telephone && this.state.zip) {
       buttonClass += ' active'
     }
     return (
@@ -228,6 +228,7 @@ class AddressModal extends Component {
           <div style={{position:'relative'}}>
             <input
               {...getInputProps({
+                readOnly: this.state.mode === 'edit',
                 autoComplete: 'off',
                 placeholder: 'Delivery to...',
                 className: 'aw-input--control aw-input--control-large aw-input--left location-search-input  aw-input--location aw-input--bordered mt-3 form-control',
@@ -267,6 +268,7 @@ class AddressModal extends Component {
               className="aw-input--control aw-input--control-large aw-input--left "
               type="text"
               value={this.state.unit}
+              readOnly={this.state.mode === 'edit'}
               style={{width: '46%'}}
               placeholder="Apt number or company"
               onChange={(e) => this.setState({unit: e.target.value})}/>
@@ -274,6 +276,7 @@ class AddressModal extends Component {
             <Input
               className="aw-input--control aw-input--control-large aw-input--left "
               type="text"
+              readOnly={this.state.mode === 'edit'}
               value={this.state.zip}
               style={{width: '46%'}}
               placeholder="Zip"
@@ -285,6 +288,7 @@ class AddressModal extends Component {
                 style={{width: '46%'}}
                 className="aw-input--control aw-input--control-large aw-input--left "
                 type="text"
+              readOnly={this.state.mode === 'edit'}
                 value={this.state.name}
                 placeholder="Enter your name"
                 onChange={(e) => this.setState({name: e.target.value})}/>
@@ -292,14 +296,16 @@ class AddressModal extends Component {
                 style={{width: '46%'}}
                 className="aw-input--control aw-input--control-large aw-input--left "
                 type="text"
+              readOnly={this.state.mode === 'edit'}
                 value={this.state.telephone}
                 placeholder="Enter your telephone"
                 onChange={(e) => this.setState({telephone: e.target.value})}/>
 
             </FormGroup>
             <textarea
+              readOnly={this.state.mode === 'edit'}
               className="aw-input--control aw-input--control-large aw-input--left mt-3"
-              placeholder="Add delivery instructions (e.g. “use callbox when you arrive”)"
+              placeholder={this.state.mode != 'edit' ? "Add delivery instructions (e.g. “use callbox when you arrive”)" : ""}
               onChange={(e) => this.setState({delivery_notes: e.target.value})} value={this.state.delivery_notes}></textarea>
           </ModalBody>
 
