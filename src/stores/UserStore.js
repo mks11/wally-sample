@@ -190,8 +190,8 @@ class UserStore {
     return res.data
   }
 
-  async resetPassword(email) {
-    const res = await axios.post(API_FORGOT_PASSWORD, {email})
+  async resetPassword(data) {
+    const res = await axios.post(API_FORGOT_PASSWORD, data)
     return res.data
   }
 }
