@@ -78,7 +78,7 @@ class Orders extends Component {
                 </tbody>
               </table>
               <hr className="my-1"/>
-              <span className="text-bold">Order #: {item.cart_id}</span><br/>
+              <span className="text-bold">Order #: {item.order_id}</span><br/>
               <span>{this.printItems(item.cart_items)}</span>
               <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
             </div>
