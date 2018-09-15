@@ -181,7 +181,7 @@ class UserStore {
   }
 
   async loginFacebook(data) {
-    const res = await axios.post(API_LOGIN_FACEBOOK, {access_token: data.accessToken})
+    const res = await axios.post(API_LOGIN_FACEBOOK, {access_token: data.accessToken, signup_zip: data.signup_zip})
     this.setUserData(res.data.user)
     this.setToken(res.data.token)
     return res.data

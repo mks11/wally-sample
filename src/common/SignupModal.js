@@ -82,6 +82,8 @@ class SignupModal extends Component {
       return
     }
     this.setState({facebookRequest: true, signup_zip: this.zipStore.selectedZip})
+    data.signup_zip = this.zipStore.selectedZip
+    console.log('data', data)
     this.userStore.loginFacebook(data).then((response) => {
       this.modalStore.toggleSignup()
       this.setState({facebookRequest: false})
