@@ -58,7 +58,7 @@ let Product = ((props) => {
 
   // price *= unit
 
-  return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
+  return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
     <img src={PRODUCT_BASE_URL + props.product.product_id + "/" + props.product.image_refs[0]} />
     <div className="row product-detail">
       <div className="col-6 product-price">
