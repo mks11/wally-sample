@@ -68,7 +68,8 @@ let Product = ((props) => {
         {price_unit}
       </div>
     </div>
-    <span className="product-desc">{props.product.product_name}</span>
+    { props.product.product_name && <span className="product-desc">{props.product.product_name}</span>}
+    { props.product.name && <span className="product-desc">{props.product.name}</span>}
   </div>
   )
 })
@@ -628,7 +629,7 @@ let currentSearchCat= curCat.join(', ')
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
                   <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                  <span className="search-count">{this.state.searchDisplayed.length} search result for "{this.state.searchTerms}" 
+                  <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
                     {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
                   </span>
                   <hr/>

@@ -114,6 +114,7 @@ class UserStore {
 
   async saveAddress(data) {
     const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth())
+    this.setUserData(res.data)
     return res.data
   }
 
@@ -130,6 +131,7 @@ class UserStore {
 
   async savePayment(data) {
     const res = await axios.post(API_PAYMENT_NEW, data, this.getHeaderAuth())
+    this.setUserData(res.data)
     return res.data
   }
 
@@ -191,7 +193,7 @@ class UserStore {
   }
 
   async resetPassword(data) {
-    const res = await axios.post(API_FORGOT_PASSWORD, data)
+    const res = await axios.patch(API_FORGOT_PASSWORD, data)
     return res.data
   }
 }

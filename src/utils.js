@@ -14,7 +14,7 @@ const formatNumber = (n, c, d, t) => {
   s = n < 0 ? "-" : "", 
   i = String(parseInt(n = Math.abs(Number(n) || 0))), 
   j = (j = i.length) > 3 ? j % 3 : 0;
-  var money =  s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+  var money =  ''+ s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 
   // var sep = money.split(d)
   // if (sep.length == 2) {

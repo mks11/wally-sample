@@ -71,14 +71,14 @@ class Orders extends Component {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
-                    <td>{this.countItems(item.cart_items)}</td>
+                    <td>{moment(item.delivery_time).format('MMM DD, YYYY')}</td>
+                    <td>{item.cart_items.length}</td>
                     <td>{formatMoney(item.total/100)}</td>
                   </tr>
                 </tbody>
               </table>
               <hr className="my-1"/>
-              <span className="text-bold">Order #: {item.order_id}</span><br/>
+              <span className="text-bold">Order #: {item._id}</span><br/>
               <span>{this.printItems(item.cart_items)}</span>
               <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
             </div>

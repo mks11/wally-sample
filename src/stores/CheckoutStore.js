@@ -76,6 +76,7 @@ class CheckoutStore {
 
   async createOrder(data, auth) {
     const res = await axios.post(`${API_CREATE_ORDER}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+    console.log('order', res.data)
     return res.data  
   }
 

@@ -58,7 +58,7 @@ class ReportModal extends Component {
           <div className="order-wrap pb-5">
             <h3 className="m-0 mb-2">Order Issue</h3>
             <span className="text-order mb-3">
-              Order: #{item.cart_id}<br/>
+              Order: #{item._id}<br/>
               {moment(item.createAt).format('MMM DD, YYYY')}<br/>
               {capitalizeFirstLetter(item.status)}
             </span><br/><br/>

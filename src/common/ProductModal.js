@@ -124,6 +124,9 @@ class ProductModal extends Component {
     const producer = inventory.producer
 
 
+    console.log('unittype', unit_type)
+    const qty_unit_type = unit_type == 'unit' ? '': ' ' + unit_type
+
 
     return (
       <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
@@ -174,7 +177,7 @@ class ProductModal extends Component {
               <div className="form-group" style={{maxWidth: '140px'}}>
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => (
-                    <option key={i} value={v}>{v}</option>
+                    <option key={i} value={v}>{v + qty_unit_type}</option>
                   ))}
                 </select>
               </div>
