@@ -169,36 +169,31 @@ class Help extends Component {
 
                           <ul className="list-group list-group-flush">
 
-                            {this.orderStore.orders.map((item, key) => (
-                              <li className="list-group-item" key={key}>
-                                <div className="row">
-                                  <div className="col-9">
-                                    <table className="table table-sm borderless" > 
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">Order Placed</th>
-                                          <th scope="col">Items</th>
-                                          <th scope="col">Total</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
-                                          <td>{this.printItems(item.cart_items)}</td>
-                                          <td>{this.countItems(item.cart_items)}</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-
-                                  <div className="col-3">
-                                    <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
-                                      Help
-                                    </button>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
+                            <table className="table table-sm borderless" > 
+                              {this.orderStore.orders.map((item, key) => (
+                                <React.Fragment key={key}>
+                                  <thead>
+                                    <tr>
+                                      <th scope="col" style={{width: '110px'}}>Order Placed</th>
+                                      <th scope="col">Items</th>
+                                      <th scope="col" style={{width: '80px'}}>Total</th>
+                                      <th>
+                                        <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
+                                          Help
+                                        </button>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
+                                      <td>{this.printItems(item.cart_items)}</td>
+                                      <td>{this.countItems(item.cart_items)}</td>
+                                    </tr>
+                                  </tbody>
+                                </React.Fragment>
+                              ))}
+                            </table>
                           </ul>
                         </div>
                       </div>

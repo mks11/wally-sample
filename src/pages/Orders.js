@@ -60,7 +60,7 @@ class Orders extends Component {
         <section className="page-section aw--orders">
           <div className="container">
             {this.orderStore.orders.map((item, key) => (
-            <div className="order-item mt-2" key={key}>
+            <div className="order-item mt-2 mb-5" key={key}>
               <table>
                 <thead>
                   <tr>
