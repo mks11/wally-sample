@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
   import FacebookLogin from 'react-facebook-login';
@@ -81,6 +82,8 @@ class SignupModal extends Component {
       return
     }
     this.setState({facebookRequest: true, signup_zip: this.zipStore.selectedZip})
+    data.signup_zip = this.zipStore.selectedZip
+    console.log('data', data)
     this.userStore.loginFacebook(data).then((response) => {
       this.modalStore.toggleSignup()
       this.setState({facebookRequest: false})
@@ -128,7 +131,8 @@ class SignupModal extends Component {
                 onChange={(e) => this.setState({password: e.target.value})}/>
 
               <span className="tnc mt-3 mb-2">
-                By signing up, you agree to our <a target="_blank" href="https://thewallyshop.co/terms-and-conditions.html"><strong>Terms of Service</strong></a> and <a target="_blank" href="https://thewallyshop.co/privacy-policy.html"><strong>Privacy Policy.</strong></a>
+                By signing up, you agree to our <Link target="_blank" to={"/tnc"}><strong>Terms of Service</strong></Link> &nbsp;and 
+                &nbsp;<Link target="_blank" to={"/privacy"}><strong>Privacy Policy.</strong></Link>
               </span>
               { this.state.invalidText ? <span className="text-error text-center my-3">{this.state.invalidText}</span> : null}
 
@@ -142,7 +146,7 @@ class SignupModal extends Component {
               <FacebookLogin
                 appId={FB_KEY}
                 cssClass="btn btn-blue-fb"
-                autoLoad={true}
+                autoLoad={false}
                 textButton="FACEBOOK"
                 fields="name,email,picture"
                 scope="public_profile"

@@ -27,7 +27,9 @@ class InvalidZipModal extends Component {
         this.modalStore.toggleInvalidZip()
         this.modalStore.toggleInvalidZipSuccess()
       }).catch((e) => {
-        this.setState({invalidText: 'Failed to subsribe'})
+        console.error('Failed to subscribe', e)
+        const msg = e.response.data.error.message
+        this.setState({invalidEmail: msg})
       })
 
 

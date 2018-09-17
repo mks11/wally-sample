@@ -6,7 +6,7 @@ import { connect } from '../utils'
 class OrderConfirmation extends Component {
   constructor(props, context) {
     super(props, context);
-    this.routing = this.store.routing
+    this.routing = this.props.store.routing
 
   }
 

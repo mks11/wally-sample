@@ -88,7 +88,9 @@ class Homepage extends Component {
           heroDescription: '',
         })
       }).catch((e) => {
-        this.setState({invalidEmail: 'Failed to subsribe'})
+        console.error('Failed to subscribe', e)
+        const msg = e.response.data.error.message
+        this.setState({invalidEmail: msg})
       })
 
   }

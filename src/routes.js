@@ -16,6 +16,8 @@ import Orders from './pages/Orders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
 import InviteFriends from './pages/InviteFriends';
+import Tnc from './pages/Tnc';
+import Privacy from './pages/Privacy';
 
 export default (
     <Fragment>
@@ -24,6 +26,8 @@ export default (
         <Route exact path="/thankyou" component={OrderConfirmation}/>
         <Route exact path="/api/user/reset-password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
+        <Route exact path="/tnc" component={Tnc}/>
+        <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>
         <Route exact path="/help/topics" component={HelpSingle}/>

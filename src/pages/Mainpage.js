@@ -58,7 +58,7 @@ let Product = ((props) => {
 
   // price *= unit
 
-  return ( <div className="col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
+  return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
     <img src={PRODUCT_BASE_URL + props.product.product_id + "/" + props.product.image_refs[0]} />
     <div className="row product-detail">
       <div className="col-6 product-price">
@@ -68,7 +68,8 @@ let Product = ((props) => {
         {price_unit}
       </div>
     </div>
-    <span className="product-desc">{props.product.product_name}</span>
+    { props.product.product_name && <span className="product-desc">{props.product.product_name}</span>}
+    { props.product.name && <span className="product-desc">{props.product.name}</span>}
   </div>
   )
 })
@@ -628,7 +629,7 @@ let currentSearchCat= curCat.join(', ')
                 <div className="product-breadcrumb">
                   <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
                   <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                  <span className="search-count">{this.state.searchDisplayed.length} search result for "{this.state.searchTerms}" 
+                  <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
                     {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
                   </span>
                   <hr/>
