@@ -166,11 +166,13 @@ class UserStore {
       this.status = true
       // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
       this.user = JSON.parse(localStorage.getItem('user'))
+      this.getUser()
     } else {
       status = false
       this.status = false
       this.user = null
     }
+
     return status
   }
 

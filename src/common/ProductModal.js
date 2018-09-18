@@ -181,9 +181,10 @@ class ProductModal extends Component {
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => {
                     let unit = qty_unit_type
-                    if (v>1) {
+                    if (unit != '' && v>1) {
                       unit = qty_unit_type+'s'
                     }
+
                     return(
                       <option key={i} value={v}>{v} {unit}</option>
                     )
