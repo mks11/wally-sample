@@ -97,6 +97,7 @@ class CheckoutStore {
 
   async checkPromo(data, auth) {
     const res = await axios.get(`${API_CHECK_PROMO}/?subtotal=${data.subTotal}&promo_code=${data.promoCode}`, auth)
+    this.order = res.data
     return res.data
   }
 

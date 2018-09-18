@@ -862,7 +862,7 @@ class Checkout extends Component {
                                       type="text"
                                       placeholder="Enter your store credit"
                                       readOnly={true}
-                                      value={formatNumber(applicableStoreCreditAmount)}/>
+                                      value={formatMoney(applicableStoreCreditAmount)}/>
                                     <button onClick={e => this.applyStoreCredit()} type="button" className="btn btn-transparent">APPLY</button>
                                   </div>
                                 </div>

@@ -22,14 +22,14 @@ class InvalidZipModal extends Component {
       return
     }
 
-    this.zipStore.subscribe(this.state.email)
+    this.zipStore.subscribe({email: this.state.email})
       .then(() => {
         this.modalStore.toggleInvalidZip()
         this.modalStore.toggleInvalidZipSuccess()
       }).catch((e) => {
         console.error('Failed to subscribe', e)
         const msg = e.response.data.error.message
-        this.setState({invalidEmail: msg})
+        this.setState({invalidText: msg})
       })
 
 
