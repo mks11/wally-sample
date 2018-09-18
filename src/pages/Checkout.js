@@ -84,7 +84,7 @@ class Checkout extends Component {
 
 
   componentDidMount() {
-    this.userStore.getStatus()
+    this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
         if (this.userStore.user.addresses.length > 0) {

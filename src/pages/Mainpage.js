@@ -137,7 +137,7 @@ class Mainpage extends Component {
   }
 
   componentDidMount() {
-    this.userStore.getStatus()
+    this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
       })
