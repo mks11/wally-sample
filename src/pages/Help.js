@@ -177,11 +177,6 @@ class Help extends Component {
                                       <th scope="col" style={{width: '110px'}}>Order Placed</th>
                                       <th scope="col">Items</th>
                                       <th scope="col" style={{width: '80px'}}>Total</th>
-                                      <th>
-                                        <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
-                                          Help
-                                        </button>
-                                      </th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -189,6 +184,11 @@ class Help extends Component {
                                       <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
                                       <td>{this.printItems(item.cart_items)}</td>
                                       <td>{this.countItems(item.cart_items)}</td>
+                                      <td>
+                                        <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
+                                          Help
+                                        </button>
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </React.Fragment>

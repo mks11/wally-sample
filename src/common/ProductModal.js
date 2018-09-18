@@ -125,7 +125,10 @@ class ProductModal extends Component {
 
 
     console.log('unittype', unit_type)
-    const qty_unit_type = unit_type == 'unit' ? '': ' ' + unit_type
+    let  qty_unit_type = unit_type 
+    if (qty_unit_type === 'unit' || qty_unit_type === 'ea') {
+      qty_unit_type = ''
+    }
 
 
     return (
@@ -176,9 +179,15 @@ class ProductModal extends Component {
               <div><strong>Choose your quantity</strong></div>
               <div className="form-group" style={{maxWidth: '140px'}}>
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
-                  { qtyOptions.map((v, i) => (
-                    <option key={i} value={v}>{v + qty_unit_type}</option>
-                  ))}
+                  { qtyOptions.map((v, i) => {
+                    let unit = qty_unit_type
+                    if (v>1) {
+                      unit = qty_unit_type+'s'
+                    }
+                    return(
+                      <option key={i} value={v}>{v} {unit}</option>
+                    )
+                  })}
                 </select>
               </div>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>

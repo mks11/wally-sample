@@ -192,8 +192,8 @@ class UserStore {
     return res.data
   }
 
-  async resetPassword(data) {
-    const res = await axios.patch(API_FORGOT_PASSWORD, data)
+  async resetPassword(token, data) {
+    const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data)
     return res.data
   }
 }

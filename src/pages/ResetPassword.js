@@ -40,11 +40,11 @@ class OrderConfirmation extends Component {
     }
 
 
-    this.userStore.resetPassword({
-      token_id: this.state.token_id,
-      new_password: this.state.password,
-      confirm_password: this.state.confirmPassword
-    }).then(() => {
+    this.userStore.resetPassword(this.state.token_id,
+      {
+        new_password: this.state.password,
+        confirm_password: this.state.confirmPassword
+      }).then(() => {
       this.routing.push('/main')
       this.modalStore.toggleLogin()
     }).catch((e) => {
