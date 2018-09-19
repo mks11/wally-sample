@@ -10,6 +10,7 @@ let index = 0
 class OrderStore {
   orders  = []
   reportModal = false
+  reportSuccessModal = false
   activeOrder = null
 
   async getOrders(auth) {
@@ -25,6 +26,10 @@ class OrderStore {
     }
   }
 
+  toggleReportSuccess() {
+    this.reportSuccessModal = !this.reportSuccessModal
+  }
+
   async submitIssue(data, auth) {
     const res = await axios.post(API_SUBMIT_ISSUE, data, auth)
     return res
@@ -37,8 +42,10 @@ decorate(OrderStore, {
   orders: observable,
   activeOrder: observable,
   reportModal: observable,
+  reportSuccessModal: observable,
   getOrders: action,
-  toggleReport: action
+  toggleReport: action,
+  toggleReportSuccess: action
 })
 
 

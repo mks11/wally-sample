@@ -25,12 +25,13 @@ class ReportModal extends Component {
       body: this.state.text,
       id: this.orderStore.activeOrder.cart_id
     }, this.userStore.getHeaderAuth()).then((data) => {
-
+      this.orderStore.toggleReport()
+      this.orderStore.toggleReportSuccess()
     }).catch((e) => {
       console.error('Failed to submit issue', e)
       const msg = e.response.data.error.message
       this.setState({invalidText: msg})
-      this.orderStore.toggleReport()
+      //this.orderStore.toggleReport()
     })
     e.preventDefault()
   }

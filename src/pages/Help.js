@@ -7,6 +7,7 @@ import SearchForm from '../common/page/help/SearchForm'
 import { connect } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'
+import  ReportSuccessModal from './orders/ReportSuccessModal'
 
 class Help extends Component {
   state = {
@@ -291,6 +292,7 @@ class Help extends Component {
           </div>
         </section>
       <ReportModal/>
+      <ReportSuccessModal/>
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { connect, formatMoney,capitalizeFirstLetter } from '../utils'
 import moment from 'moment'
 
 import  ReportModal from './orders/ReportModal'
+import  ReportSuccessModal from './orders/ReportSuccessModal'
 
 class Orders extends Component {
   constructor(props) {
@@ -159,6 +160,7 @@ class Orders extends Component {
           </div>
       </section>
       <ReportModal/>
+      <ReportSuccessModal/>
     </div>
     );
   }
