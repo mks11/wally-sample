@@ -61,7 +61,7 @@ class ReportModal extends Component {
             <span className="text-order mb-3">
               Order: #{item._id}<br/>
               {moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}<br/>
-              {capitalizeFirstLetter(item.status)}
+              {capitalizeFirstLetter(item.status.replace("_", " "))}
             </span><br/><br/>
             <span className="text-order text-bold mt-2">Describe your issue below:</span>
             <form onSubmit={e => e.preventDefault()}>
