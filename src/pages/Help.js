@@ -7,6 +7,7 @@ import SearchForm from '../common/page/help/SearchForm'
 import { connect } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'
+import  ReportSuccessModal from './orders/ReportSuccessModal'
 
 class Help extends Component {
   state = {
@@ -181,7 +182,7 @@ class Help extends Component {
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td>{moment(item.createAt).format('MMM DD, YYYY')}</td>
+                                      <td>{moment(item.delivery_time).format('MMM DD, YYYY')}</td>
                                       <td>{this.printItems(item.cart_items)}</td>
                                       <td>{this.countItems(item.cart_items)}</td>
                                       <td>
@@ -291,6 +292,7 @@ class Help extends Component {
           </div>
         </section>
       <ReportModal/>
+      <ReportSuccessModal/>
       </div>
     );
   }

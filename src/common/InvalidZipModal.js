@@ -22,7 +22,7 @@ class InvalidZipModal extends Component {
       return
     }
 
-    this.zipStore.subscribe({email: this.state.email})
+    this.zipStore.subscribe({email: this.state.email, zip: this.zipStore.selectedZip})
       .then(() => {
         this.modalStore.toggleInvalidZip()
         this.modalStore.toggleInvalidZipSuccess()

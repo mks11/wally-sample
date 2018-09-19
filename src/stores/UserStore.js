@@ -153,7 +153,7 @@ class UserStore {
   }
 
 
-  async getStatus() {
+  async getStatus(update) {
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
       this.status = false
@@ -166,11 +166,15 @@ class UserStore {
       this.status = true
       // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
       this.user = JSON.parse(localStorage.getItem('user'))
+      if (update) {
+        this.getUser()
+      }
     } else {
       status = false
       this.status = false
       this.user = null
     }
+
     return status
   }
 

@@ -84,7 +84,7 @@ class Checkout extends Component {
 
 
   componentDidMount() {
-    this.userStore.getStatus()
+    this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
         if (this.userStore.user.addresses.length > 0) {
@@ -514,8 +514,8 @@ class Checkout extends Component {
         <Title content="Checkout" />
         <div className="container">
 
-          <div className="row">
-            <div className="col-md-6">
+          <div className="justify-content-around d-flex">
+            <div className="">
               <div style={{maxWidth: '440px'}}>
                 <h3 className="m-0 mb-3 p-r">
                   Delivery address
@@ -780,7 +780,7 @@ class Checkout extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="">
             <section className="order-summary mb-5" style={{maxWidth: '440px'}}>
               <div className="card1 card-shadow">
                 <div className="card-body">

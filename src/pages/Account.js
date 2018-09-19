@@ -25,7 +25,7 @@ class Account extends Component {
   }
 
   componentDidMount() {
-    this.userStore.getStatus()
+    this.userStore.getStatus(true)
       .then((status) => {
         if (!status) {
           // this.modalStore.toggleLogin()
