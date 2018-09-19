@@ -22,8 +22,8 @@ class ReportModal extends Component {
       return
     }
     this.orderStore.submitIssue({
-      body: this.state.text,
-      id: this.orderStore.activeOrder.cart_id
+      message: this.state.text,
+      issue_id: this.orderStore.activeOrder._id
     }, this.userStore.getHeaderAuth()).then((data) => {
       this.orderStore.toggleReport()
       this.orderStore.toggleReportSuccess()
@@ -60,7 +60,7 @@ class ReportModal extends Component {
             <h3 className="m-0 mb-2">Order Issue</h3>
             <span className="text-order mb-3">
               Order: #{item._id}<br/>
-              {moment(item.createAt).format('MMM DD, YYYY')}<br/>
+              {moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}<br/>
               {capitalizeFirstLetter(item.status)}
             </span><br/><br/>
             <span className="text-order text-bold mt-2">Describe your issue below:</span>

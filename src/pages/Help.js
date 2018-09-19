@@ -182,7 +182,7 @@ class Help extends Component {
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td>{moment(item.delivery_time).format('MMM DD, YYYY')}</td>
+                                      <td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>
                                       <td>{this.printItems(item.cart_items)}</td>
                                       <td>{this.countItems(item.cart_items)}</td>
                                       <td>
