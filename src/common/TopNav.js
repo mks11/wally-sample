@@ -193,7 +193,7 @@ class TopNav extends Component {
                   : null}
 
                   { this.userStore.status ? 
-                      <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                      <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" >
                         <span className="navbar-toggler-icon"></span>
                       </button>
                     :

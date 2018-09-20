@@ -379,6 +379,11 @@ let currentSearchCat= curCat.join(', ')
       categoriesDropdownClass += ' show'
     }
 
+    let cartMobileClass = 'cart-mobile d-md-none'
+    if (this.uiStore.cartMobile) {
+      cartMobileClass += ' open'
+    }
+
     let cartCount = 0, cartItems = [], cartSubtotal = 0
 
     if (this.checkoutStore.cart) {
@@ -646,6 +651,28 @@ let currentSearchCat= curCat.join(', ')
           </div>
         </div>
         { this.productStore.open && <ProductModal/> }
+        <button class="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
+        <div class={cartMobileClass}>
+          <button class="btn-close-cart" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
+                            { cartItems.map((c, i) => (
+                            <div className="item mt-3 pb-2" key={i}>
+                              <div className="item-left">
+                                <h4 className="item-name">{c.product_name}</h4>
+                                <span className="item-detail mb-1">{c.packaging_name}</span>
+                                <div className="item-link">
+                                  <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
+                                  <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
+                                </div>
+                              </div>
+                              <div className="item-right">
+                                <h4>x{c.customer_quantity}</h4>
+                                <span className="item-price">{formatMoney(c.total/100)}</span>
+                              </div>
+                            </div>
+
+                            ))}
+                            <button class="btn btm-main active">Checkout</button>
+        </div>
     
       </div>
     );

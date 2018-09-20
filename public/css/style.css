@@ -78,8 +78,8 @@ border-radius:0;}
 .icon-outline-down:before {content: "\e900";}
 .icon-search:before {content: "\e90a";}
 .icon-map-pin:before {content: "\e907";}
-.center-middle{position: absolute;top: 50%;left: 50%;width: 100%;text-align: center;
-transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);}
+.center-middle{width: 100%;text-align: center;
+}
 
 /* Header */
 .aw-header{padding-top: 0px;padding-bottom: 10px;}
@@ -1689,3 +1689,51 @@ a {
     max-height:600px;
     overflow: scroll;
   }
+
+  .btn-cart-mobile{
+      position: fixed;
+    bottom: 20px;
+    width: 96%;
+    left: 2%;
+    padding: 20px;
+    margin: 0 auto;
+    color: #fff;
+    background-color: #e0a5a7;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-cart-mobile span {
+      position: absolute;
+    left: 6%;
+  }
+
+  .cart-mobile {
+    font-weight: 700;
+    z-index: 2000;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #fff;
+    color: #fff;
+    line-height: 1;
+    /* visibility: hidden; */
+    /* opacity: 0; */
+    transition: 0.27s all;
+  }
+
+  .cart-mobile.open {
+    visibility: visible;
+    opacity: 1;
+  }
+
+.close-icon {
+  background-image: url("../images/close-black.svg");
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+}
+
+
