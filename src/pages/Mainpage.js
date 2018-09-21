@@ -441,10 +441,10 @@ let currentSearchCat= curCat.join(', ')
         <div className="product-top">
           <div className="container">
             <div className="row">
-              <div className="col-md-2 col-sm-4 left-column">
+              <div className="col-md-2 col-sm-4 left-column d-none d-md-block">
                 <div className="dropdown dropdown-fwidth">
 
-                  <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()}>
+                  <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} >
                     <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
@@ -460,7 +460,19 @@ let currentSearchCat= curCat.join(', ')
                 </ClickOutside>
                 </div>
               </div>
-              <div className="col-md-10 col-sm-8 right-column">
+
+                <div className="d-md-none col-sm-12">
+                  <div className="row">
+                    <div className="col-10">
+                      <h3>Categories</h3>
+                    </div>
+
+                    <div className="col-2">
+                      <button class="btn btn-transparent"><span class="catsearch-icon"></span></button>
+                    </div>
+                  </div>
+                </div>
+              <div className="col-md-10 col-sm-8 right-column d-none d-md-block">
                 <div className="media">
                   <div className="media-body">
                     <div className="input-group search-product">
@@ -675,7 +687,7 @@ let currentSearchCat= curCat.join(', ')
             { cartItems.map((c, i) => (
               <tr key={i}>
                 <td style={{width:42}}>{c.customer_quantity}</td>
-                <td>{c.product_name}<br/>{c.packaging_name}</td>
+                <td>{c.product_name}<br/><span>{c.packaging_name}</span></td>
                 <td style={{width:46, color: '#e07f82'}}>{formatMoney(c.total/100)}</td>
                 <td style={{width: 10}} onClick={e => this.handleDeleteMobile({product_id: c.product_id, inventory_id: c._id})}>
                   <button class="btn-close-cart btn-transparent" type="button"><span class="navbar-toggler-icon close-icon-grey"></span></button> 
