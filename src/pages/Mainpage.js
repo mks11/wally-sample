@@ -757,7 +757,7 @@ let currentSearchCat= curCat.join(', ')
                     return (
                       <li key={i}>
                         <div>
-                          <Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link>
+                          <Link to={link} className={parentSidebarClass} onClick={e=>this.uiStore.toggleCategoryMobile()} replace>{s.cat_name}</Link>
                         </div>
                         <ul>  
                           {s.sub_cats && s.sub_cats.map((sc, idx) => (
