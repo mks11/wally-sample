@@ -739,7 +739,7 @@ let currentSearchCat= curCat.join(', ')
           <div class="row">
             <div class="col-12">
             <ul class="category-mobile-wrap">
-                  {!this.state.searchPage && this.state.sidebar.map((s,i) => {
+                  {this.state.sidebar.map((s,i) => {
 
                     let parentSidebarClass = ''
                     let link = '/main/'
