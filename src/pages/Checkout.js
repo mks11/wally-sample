@@ -514,7 +514,7 @@ class Checkout extends Component {
         <Title content="Checkout" />
         <div className="container">
 
-          <div className="justify-content-around d-flex">
+          <div className="checkout-wrap">
             <div className="">
               <div style={{maxWidth: '440px'}}>
                 <h3 className="m-0 mb-3 p-r">

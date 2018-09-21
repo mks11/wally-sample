@@ -196,11 +196,24 @@ class Mainpage extends Component {
     }
   }
 
+  handleCheckoutMobile() {
+    if (this.userStore.status) {
+      this.routing.push('/checkout')
+    } else {
+      this.modalStore.toggleLogin()
+    }
+  }
+
   handleEdit(data) {
     this.productStore.showModal(data.product_id, data.customer_quantity)
   }
 
   handleDelete(id) {
+    this.checkoutStore.toggleDeleteModal(id)
+  }
+
+  handleDeleteMobile(id) {
+    this.uiStore.toggleCartMobile()
     this.checkoutStore.toggleDeleteModal(id)
   }
 
@@ -476,7 +489,7 @@ let currentSearchCat= curCat.join(', ')
                   <div className="media-right">
 
                   <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
-                    <div className="btn-group dropdown-cart">
+                    <div className="btn-group dropdown-cart d-none d-md-block">
                       <div onClick={this.handleCartDropdown} className={buttonCart}>
                         <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                       </div>
@@ -653,25 +666,31 @@ let currentSearchCat= curCat.join(', ')
         { this.productStore.open && <ProductModal/> }
         <button class="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
         <div class={cartMobileClass}>
-          <button class="btn-close-cart" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
-                            { cartItems.map((c, i) => (
-                            <div className="item mt-3 pb-2" key={i}>
-                              <div className="item-left">
-                                <h4 className="item-name">{c.product_name}</h4>
-                                <span className="item-detail mb-1">{c.packaging_name}</span>
-                                <div className="item-link">
-                                  <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
-                                  <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
-                                </div>
-                              </div>
-                              <div className="item-right">
-                                <h4>x{c.customer_quantity}</h4>
-                                <span className="item-price">{formatMoney(c.total/100)}</span>
-                              </div>
-                            </div>
+          <button class="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
+          {cartItems.length>0 ?
+              <React.Fragment>
+          <h2 class="ml-4">Order</h2>
+          <div class="tbl-cart-mobile">
+          <table>
+            { cartItems.map((c, i) => (
+              <tr key={i}>
+                <td style={{width:42}}>{c.customer_quantity}</td>
+                <td>{c.product_name}<br/>{c.packaging_name}</td>
+                <td style={{width:46, color: '#e07f82'}}>{formatMoney(c.total/100)}</td>
+                <td style={{width: 10}} onClick={e => this.handleDeleteMobile({product_id: c.product_id, inventory_id: c._id})}>
+                  <button class="btn-close-cart btn-transparent" type="button"><span class="navbar-toggler-icon close-icon-grey"></span></button> 
+                </td>
+              </tr>
 
-                            ))}
-                            <button class="btn btm-main active">Checkout</button>
+            ))}
+          </table>
+        </div>
+          <button class="btn btn-main active btn-checkout-mobile" onClick={e=>this.handleCheckoutMobile(e)}>Checkout</button>
+
+        </React.Fragment>
+      :
+              <h5 className="text-center">No items in cart</h5>
+  }
         </div>
     
       </div>
