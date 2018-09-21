@@ -15,7 +15,6 @@ class Footer extends Component {
   }
   
   handleSubscribe() {
-    console.log('menggila')
     if (!validateEmail(this.state.email)) {
       this.setState({invalidEmail: true})
       return

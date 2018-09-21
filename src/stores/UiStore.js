@@ -30,7 +30,6 @@ class UiStore {
   }
 
   toggleCategoryMobile() {
-    console.log('menggila')
     this.categoryMobile = !this.categoryMobile
   }
 
