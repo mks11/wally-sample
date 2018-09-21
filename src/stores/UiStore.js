@@ -12,6 +12,7 @@ class UiStore {
   navMobile = false;
   topBar = true;
   cartMobile = false;
+  categoryMobile = false;
 
   closeTopBar() {
     this.topBar = false;
@@ -26,6 +27,11 @@ class UiStore {
   
   toggleNavMobile() {
     this.navMobile = !this.navMobile
+  }
+
+  toggleCategoryMobile() {
+    console.log('menggila')
+    this.categoryMobile = !this.categoryMobile
   }
 
   toggleCartMobile() {
@@ -109,7 +115,9 @@ decorate(UiStore, {
   categoriesDropdown: observable,
   topBar: observable,
   cartMobile: observable,
+  categoryMobile: observable,
   toggleCartMobile: action,
+  toggleCategoryMobile: action,
 
   navMobile: observable,
   toggleNavMobile: action,

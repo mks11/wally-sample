@@ -377,6 +377,13 @@ let currentSearchCat= curCat.join(', ')
     this.routing.push(link)
   }
 
+  handleSearchMobile(e) {
+    if (e.keyCode === 13) {
+      this.uiStore.toggleCategoryMobile()
+      this.search(e.target.value)
+    }
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -395,6 +402,11 @@ let currentSearchCat= curCat.join(', ')
     let cartMobileClass = 'cart-mobile d-md-none'
     if (this.uiStore.cartMobile) {
       cartMobileClass += ' open'
+    }
+
+    let categoryMobileClass = 'category-mobile d-md-none'
+    if (this.uiStore.categoryMobile) {
+      categoryMobileClass += ' open'
     }
 
     let cartCount = 0, cartItems = [], cartSubtotal = 0
@@ -468,7 +480,7 @@ let currentSearchCat= curCat.join(', ')
                     </div>
 
                     <div className="col-2">
-                      <button class="btn btn-transparent"><span class="catsearch-icon"></span></button>
+                      <button class="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span class="catsearch-icon"></span></button>
                     </div>
                   </div>
                 </div>
@@ -681,30 +693,88 @@ let currentSearchCat= curCat.join(', ')
           <button class="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
           {cartItems.length>0 ?
               <React.Fragment>
-          <h2 class="ml-4">Order</h2>
-          <div class="tbl-cart-mobile">
-          <table>
-            { cartItems.map((c, i) => (
-              <tr key={i}>
-                <td style={{width:42}}>{c.customer_quantity}</td>
-                <td>{c.product_name}<br/><span>{c.packaging_name}</span></td>
-                <td style={{width:46, color: '#e07f82'}}>{formatMoney(c.total/100)}</td>
-                <td style={{width: 10}} onClick={e => this.handleDeleteMobile({product_id: c.product_id, inventory_id: c._id})}>
-                  <button class="btn-close-cart btn-transparent" type="button"><span class="navbar-toggler-icon close-icon-grey"></span></button> 
-                </td>
-              </tr>
+                <h2 class="ml-4">Order</h2>
+                <div class="tbl-cart-mobile">
+                  <table>
+                    <tbody>
+                    { cartItems.map((c, i) => (
+                      <tr key={i}>
+                        <td style={{width:42}}>{c.customer_quantity}</td>
+                        <td>{c.product_name}<br/><span>{c.packaging_name}</span></td>
+                        <td style={{width:46, color: '#e07f82'}}>{formatMoney(c.total/100)}</td>
+                        <td style={{width: 10}} onClick={e => this.handleDeleteMobile({product_id: c.product_id, inventory_id: c._id})}>
+                          <button class="btn-close-cart btn-transparent" type="button"><span class="navbar-toggler-icon close-icon-grey"></span></button> 
+                        </td>
+                      </tr>
 
-            ))}
-          </table>
-        </div>
-          <button class="btn btn-main active btn-checkout-mobile" onClick={e=>this.handleCheckoutMobile(e)}>Checkout</button>
+                    ))}
+                  </tbody>
+                  </table>
+                </div>
+                <button class="btn btn-main active btn-checkout-mobile" onClick={e=>this.handleCheckoutMobile(e)}>Checkout</button>
 
-        </React.Fragment>
-      :
+              </React.Fragment>
+              :
               <h5 className="text-center">No items in cart</h5>
-  }
+          }
         </div>
-    
+
+
+        <div class={categoryMobileClass}>
+          <div class="row">
+            <div class="col-2">
+              <button class="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCategoryMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
+            </div>
+            <div class="col-10">
+              <div class="input-group search-product" style={{width: '90%', marginTop: 15}}>
+                <div class="input-group-prepend">
+                  <div class="input-group-text" style={{backgroundColor: '#ececec'}}>
+                    <i class="fa fa-search"></i>
+                  </div>
+                </div>
+                <input class="rbt-input-main form-control rbt-input" style={{backgroundColor: '#ececec'}} onKeyDown={e => this.handleSearchMobile(e)} />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+            <ul class="category-mobile-wrap">
+                  {!this.state.searchPage && this.state.sidebar.map((s,i) => {
+
+                    let parentSidebarClass = ''
+                    let link = '/main/'
+
+                    if (id === s.cat_id) {
+                      parentSidebarClass = 'text-violet'
+                    }
+                      link += s.cat_id
+
+                    // if (typeof id === 'undefined' && !s.cat_id) {
+                    //   parentSidebarClass = 'text-violet'
+                    //   link = '/main'
+                    // }
+
+                    return (
+                      <li key={i}>
+                        <div>
+                          <Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link>
+                        </div>
+                        <ul>  
+                          {s.sub_cats && s.sub_cats.map((sc, idx) => (
+                            <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
+                                className={id === sc.cat_id ? "text-violet": ""}
+                              >{sc.cat_name}</Link></li>
+                          ) )}
+                        </ul>
+                      </li>
+                    )
+                  })}
+                </ul>
+
+          </div>
+          </div>
+        </div>
+
       </div>
     );
   }
