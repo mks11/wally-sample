@@ -35,7 +35,7 @@ class Help extends Component {
   }
 
   loadData() {
-    this.helpStore.getQuestions('all');
+    this.helpStore.getQuestions('top');
     this.helpStore.getHelpTopics();
     // await this.helpStore.getContact();
 

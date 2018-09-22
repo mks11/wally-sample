@@ -1,6 +1,6 @@
 @media (min-width: 1200px) {
 .container {
-    max-width: 1400px;
+    max-width: 1200px;
 }
 }
 /* Global */
@@ -694,7 +694,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   border-radius: 0;
   left:50%;
   margin-left: -115px;
-  margin-top: 24px;
+  margin-top: 18px;
   border:0;
   box-shadow:2px 4px 6px rgba(0,0,0,.2);
 }
@@ -728,7 +728,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   border-bottom: 1px solid #cecece;
   padding:0 10px;
 }
-.aw-input--control[readonly] {
+.aw-input--control[readonly]:not(.aw-input--location) {
   background: none;
 }
 
@@ -1113,6 +1113,7 @@ a.view-all{
 
 .aw-input--location {
   background: url("../images/location_icon.png") no-repeat;
+  background-color: #fff !important;
   padding-left: 12%;
     background-position: 5%;
 }
@@ -1746,6 +1747,14 @@ a {
     width: 30px;
     height: 30px;
     margin: 20px;
+}
+
+.aw-header.navbar-white .navbar-toggler-icon.account-icon {
+    background-image: url(../images/profile-icon-grey.png);
+    background-size: 40px 40px;
+    max-width: 40px;
+    width: 40px;
+    height: 40px;
 }
 
 .catsearch-icon {

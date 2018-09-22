@@ -158,30 +158,38 @@ class TopNav extends Component {
                   <img className="logo-text-mobile" src='/images/logo.png'/>
                 </a>
               </div>
-              { this.userStore.status ? 
-                  <div className="col-auto ml-auto d-none d-md-block account-dropdown">
-                    <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
-                      <div className="btn-group">
-                        <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
-                          <strong>Hello {name}</strong>
-                        </button>
-                        <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                          <a className="dropdown-item lg" href="#"><strong>All About You..</strong></a>
-                          <a className="dropdown-item">Store Credit ({formatMoney(storeCredit/100)})</a>
-                          <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
-                          <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
-                          <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
-                          <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
-                        </div>
-                      </div>
-                      </ClickOutside>
-                </div>
-                  :null}
               <div className="col-auto ml-auto d-none d-md-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
-                    <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
-                    <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                    { this.userStore.status ?
+                        <li>
+
+                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                            <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
+                              <div className="btn-group">
+                                <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                                  <span class="navbar-toggler-icon account-icon"></span>
+                                </button>
+                                <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
+                                  <a className="dropdown-item lg" href="#"><strong>Hi {name}</strong></a>
+                                  <a className="dropdown-item">Store Credit ({formatMoney(storeCredit/100)})</a>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
+                                  <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item" href="#">About</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item" href="#">Help</Link>
+                                  <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                                </div>
+                              </div>
+                            </ClickOutside>
+                          </div>
+                        </li>
+                        :
+                        <React.Fragment>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                        </React.Fragment>
+                    }
                   </ul>
                 </nav>
               </div>
