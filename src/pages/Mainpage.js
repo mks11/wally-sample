@@ -387,12 +387,6 @@ let currentSearchCat= curCat.join(', ')
   render() {
     const id = this.props.match.params.id
 
-    let cartDropdownClass = 'dropdown-menu dropdown-menu-right'
-    let buttonCart = 'product-cart-counter'
-    if (this.uiStore.cartDropdown) {
-      cartDropdownClass += ' show'
-      buttonCart += ' active'
-    }
 
     let categoriesDropdownClass = 'dropdown-menu dropdown-menu-right'
     if (this.uiStore.categoriesDropdown) {
@@ -416,6 +410,16 @@ let currentSearchCat= curCat.join(', ')
       cartCount = cart_items.length
       cartItems = cart_items
       cartSubtotal = this.checkoutStore.cart.subtotal / 100
+    }
+
+    let cartDropdownClass = 'dropdown-menu dropdown-menu-right'
+    if (this.uiStore.cartDropdown) {
+      cartDropdownClass += ' show'
+    }
+
+    let buttonCart = 'product-cart-counter'
+    if (cartItems.length>0) {
+      buttonCart += ' active'
     }
 
     // const ads1 = this.productStore.ads1 ? this.productStore.ads1 : '/images/shop_banner_1.png'
@@ -480,7 +484,7 @@ let currentSearchCat= curCat.join(', ')
                     </div>
 
                     <div className="col-2">
-                      <button class="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span class="catsearch-icon"></span></button>
+                      <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                     </div>
                   </div>
                 </div>
@@ -514,7 +518,7 @@ let currentSearchCat= curCat.join(', ')
 
                   <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
                     <div className="btn-group dropdown-cart d-none d-md-block">
-                      <div onClick={this.handleCartDropdown} className={buttonCart}>
+                      <div onMouseEnter={this.handleCartDropdown}  className={buttonCart}>
                         <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                       </div>
 
@@ -688,13 +692,13 @@ let currentSearchCat= curCat.join(', ')
           </div>
         </div>
         { this.productStore.open && <ProductModal/> }
-        <button class="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
-        <div class={cartMobileClass}>
-          <button class="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
+        <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
+        <div className={cartMobileClass}>
+          <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span className="navbar-toggler-icon close-icon"></span></button> 
           {cartItems.length>0 ?
               <React.Fragment>
-                <h2 class="ml-4">Order</h2>
-                <div class="tbl-cart-mobile">
+                <h2 className="ml-4">Order</h2>
+                <div className="tbl-cart-mobile">
                   <table>
                     <tbody>
                     { cartItems.map((c, i) => (
@@ -703,7 +707,7 @@ let currentSearchCat= curCat.join(', ')
                         <td>{c.product_name}<br/><span>{c.packaging_name}</span></td>
                         <td style={{width:46, color: '#e07f82'}}>{formatMoney(c.total/100)}</td>
                         <td style={{width: 10}} onClick={e => this.handleDeleteMobile({product_id: c.product_id, inventory_id: c._id})}>
-                          <button class="btn-close-cart btn-transparent" type="button"><span class="navbar-toggler-icon close-icon-grey"></span></button> 
+                          <button className="btn-close-cart btn-transparent" type="button"><span className="navbar-toggler-icon close-icon-grey"></span></button> 
                         </td>
                       </tr>
 
@@ -711,7 +715,7 @@ let currentSearchCat= curCat.join(', ')
                   </tbody>
                   </table>
                 </div>
-                <button class="btn btn-main active btn-checkout-mobile" onClick={e=>this.handleCheckoutMobile(e)}>Checkout</button>
+                <button className="btn btn-main active btn-checkout-mobile" onClick={e=>this.handleCheckoutMobile(e)}>Checkout</button>
 
               </React.Fragment>
               :
@@ -720,25 +724,25 @@ let currentSearchCat= curCat.join(', ')
         </div>
 
 
-        <div class={categoryMobileClass}>
-          <div class="row">
-            <div class="col-2">
-              <button class="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCategoryMobile()}><span class="navbar-toggler-icon close-icon"></span></button> 
+        <div className={categoryMobileClass}>
+          <div className="row">
+            <div className="col-2">
+              <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="navbar-toggler-icon close-icon"></span></button> 
             </div>
-            <div class="col-10">
-              <div class="input-group search-product" style={{width: '90%', marginTop: 15}}>
-                <div class="input-group-prepend">
-                  <div class="input-group-text" style={{backgroundColor: '#ececec'}}>
-                    <i class="fa fa-search"></i>
+            <div className="col-10">
+              <div className="input-group search-product" style={{width: '90%', marginTop: 15}}>
+                <div className="input-group-prepend">
+                  <div className="input-group-text" style={{backgroundColor: '#ececec'}}>
+                    <i className="fa fa-search"></i>
                   </div>
                 </div>
-                <input class="rbt-input-main form-control rbt-input" style={{backgroundColor: '#ececec'}} onKeyDown={e => this.handleSearchMobile(e)} />
+                <input className="rbt-input-main form-control rbt-input" style={{backgroundColor: '#ececec'}} onKeyDown={e => this.handleSearchMobile(e)} />
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-12">
-            <ul class="category-mobile-wrap">
+          <div className="row">
+            <div className="col-12">
+            <ul className="category-mobile-wrap">
                   {this.state.sidebar.map((s,i) => {
 
                     let parentSidebarClass = ''
