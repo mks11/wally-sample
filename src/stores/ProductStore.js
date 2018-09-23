@@ -47,13 +47,38 @@ class ProductStore {
       })
   }
 
+  limitDisplay(data)  {
+    const display = []
+    for (let i = 0; i < 4; i++) {
+      display.push(data[i])
+    }
+    
+    return display
+  }
+
   async getProductDisplayed(id) {
     this.fetch = true
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED
     const res = await axios.get(url + '?time='+time)
     const data = res.data
+
+    let mode = 'all'
+    if (!id || id.length <= 3) {
+      mode = 'limit'
+    }
+
     this.main_display = data.main_products
+    console.log('mode', mode)
+    if (mode === 'limit') {
+      for (const i in this.main_display) {
+
+      console.log('masuk dek', this.main_display[i].products)
+        this.main_display[i].products = this.limitDisplay(this.main_display[i].products) 
+      console.log('masuk dek changed', this.main_display[i].products)
+      }
+    }
+
     this.path = data.path
     this.sidebar = data.sidebar
     this.fetch = false

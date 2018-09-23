@@ -129,6 +129,11 @@ class Mainpage extends Component {
     }
 
     this.id = null
+    this.categoryType = 'all'
+
+    if (!this.id || this.id.length <= 3) {
+      this.categoryType = 'limit'
+    }
 
     this.handleSearch = this.handleSearch.bind(this)
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
@@ -384,6 +389,17 @@ let currentSearchCat= curCat.join(', ')
     }
   }
 
+  limitDisplay = (data) => {
+    const display = []
+    for (let i = 0; i < 4; i++) {
+      display.push(data[i])
+    }
+    
+      console.log('asdf', data.get())
+
+    return display
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -421,6 +437,9 @@ let currentSearchCat= curCat.join(', ')
     if (cartItems.length>0) {
       buttonCart += ' active'
     }
+
+    const mainDisplay = this.productStore.main_display
+
 
     // const ads1 = this.productStore.ads1 ? this.productStore.ads1 : '/images/shop_banner_1.png'
     // const ads2 = this.productStore.ads2 ? this.productStore.ads2 : '/images/shop_banner_2.png'
@@ -661,9 +680,10 @@ let currentSearchCat= curCat.join(', ')
                   ))}
                 </div>
 
-                { this.productStore.main_display.map((p, i) => (
-                  <ProductList key={i} display={p} />
-                ))}
+                { mainDisplay.map((p, i) => (
+                    <ProductList key={i} display={p} />
+                )
+                )}
 
                 
               </div> }
