@@ -3,6 +3,8 @@ import { Input  } from 'reactstrap'
 import Title from '../common/page/Title'
 import AddressModal from './account/AddressModal'
 import PaymentModal from './account/PaymentModal'
+import PromoModal from './account/PromoModal'
+import PromoSuccessModal from './account/PromoSuccessModal'
 
 import { connect } from '../utils'
 
@@ -169,11 +171,13 @@ class Account extends Component {
               ))}
             </ul>
             <button onClick={e=>this.userStore.showPaymentModal()} className="btn btn-icon-transparent btn-block mt-4"><i className="ico ico-add-square mr-3"></i>Add new card</button>
-            <button className="btn btn-icon-transparent btn-block mt-4"><i className="ico ico-add-square mr-3"></i>Add promo or gift card</button>
+            <button onClick={e=>this.userStore.togglePromoModal()} className="btn btn-icon-transparent btn-block mt-4"><i className="ico ico-add-square mr-3"></i>Add promo or gift card</button>
           </div>
         </section>
         { this.userStore.addressModalOpen ? <AddressModal/> : null }
         { this.userStore.paymentModalOpen ? <PaymentModal/> : null }
+        <PromoModal/>
+        <PromoSuccessModal/>
       </div>
     );
   }

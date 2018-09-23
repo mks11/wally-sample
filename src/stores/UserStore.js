@@ -4,6 +4,7 @@ import {
   API_ADDRESS_NEW, API_ADDRESS_EDIT, API_ADDRESS_REMOVE,
   API_PAYMENT_NEW, API_PAYMENT_EDIT, API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
+  API_USER_ADD_PROMO,
   API_FORGOT_PASSWORD, API_RESET_PASSWORD
 } from '../config'
 import axios from 'axios'
@@ -208,6 +209,11 @@ class UserStore {
     return res.data
   }
 
+  async addPromo(promoCode) {
+    const res = await axios.post(`${API_USER_ADD_PROMO}`, {promo_code: promoCode}, this.getHeaderAuth())
+    return res.data
+  }
+
   async resetPassword(token, data) {
     const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data)
     return res.data
@@ -226,6 +232,14 @@ decorate(UserStore, {
   paymentModal: observable,
   paymentModalOpen: observable,
   activePayment: observable,
+
+
+  promoModal: observable,
+  promoSuccessModal: observable,
+
+  addPromo: action,
+  togglePromoModal: action,
+  togglePromoSuccessModal: action,
 
   refUrl: observable,
 
