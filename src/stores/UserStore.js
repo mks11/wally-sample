@@ -22,8 +22,20 @@ class UserStore {
 
   paymentModal = false
   paymentModalOpen = false
+
+  promoModal = false
+  promoSuccessModal = false
+
   activePayment = null
   refUrl = ''
+
+  togglePromoModal() {
+    this.promoModal = !this.promoModal
+  }
+
+  togglePromoSuccessModal() {
+    this.promoModal = !this.promoModal
+  }
 
   setUserData(user) {
     console.log(user)
