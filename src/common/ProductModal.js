@@ -41,7 +41,7 @@ class ProductModal extends Component {
         dots: false,
         infinite: false,
 
-  variableWidth: true
+        variableWidth: true
       });
       $thumb.find('.slick-item').click(function() {
         $prod.slick('slickGoTo', window.$(this).index())

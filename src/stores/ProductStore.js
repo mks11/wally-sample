@@ -32,6 +32,10 @@ class ProductStore {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const res = await axios.get(API_GET_PRODUCT_DETAIL + product_id + '?time=' + time)
     this.activeProduct = res.data
+    if (this.activeProduct.available_inventory.length === 0) {
+      alert('Item not available in inventory')
+      return
+    }
     this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
     this.open = true
     this.modal = true
@@ -69,15 +73,12 @@ class ProductStore {
     }
 
     this.main_display = data.main_products
-    console.log('mode', mode)
-    if (mode === 'limit') {
+    if (mode === 'limit' && this.main_display.length > 0) {
       for (const i in this.main_display) {
-
-      console.log('masuk dek', this.main_display[i].products)
         this.main_display[i].products = this.limitDisplay(this.main_display[i].products) 
-      console.log('masuk dek changed', this.main_display[i].products)
       }
     }
+    console.log(this.main_display)
 
     this.path = data.path
     this.sidebar = data.sidebar

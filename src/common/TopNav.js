@@ -168,7 +168,7 @@ class TopNav extends Component {
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="btn btn-transparent dropdown-toggle text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
-                                  <span class="navbar-toggler-icon account-icon"></span>
+                                  <span className="navbar-toggler-icon account-icon"></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <a className="dropdown-item lg" href="#"><strong>Hi {name}</strong></a>

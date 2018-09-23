@@ -42,6 +42,11 @@ const heroItems = [
 
 
 let Product = ((props) => {
+
+  if (!props.product) {
+    return
+  }
+  //console.log('props', props.product.product_price)
   let price = props.product.product_price/100
   let price_unit = props.product.product_size
 
