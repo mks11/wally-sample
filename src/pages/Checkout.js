@@ -853,7 +853,7 @@ class Checkout extends Component {
                           </div>
 
                           <div className="item-extras">
-                            {!this.state.appliedStoreCredit ? 
+                            {!this.state.appliedStoreCredit && 1==2 ? 
                                 <div className="form-group">
                                   <span className="text-blue">Apply your store credit?</span>
                                   <div className="aw-input--group aw-input--group-sm">

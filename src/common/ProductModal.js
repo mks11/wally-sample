@@ -12,12 +12,34 @@ class ProductModal extends Component {
 
       infoPackage: false,
       slick: false,
+      subtitutes: [],
+      selectedSubtitute: 0
     }
 
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.userStore = this.props.store.user
     this.routing = this.props.store.routing
+  }
+
+  componentDidMount() {
+    let subtitutes = [{
+      id: 0,
+      text: "Substitute with Wally Shop recommendation"
+    }, {
+      id: 1,
+      text: "Remove item"
+    }]
+
+    if (this.productStore.activeProduct.organic) {
+      subtitutes.unshift({
+        id: 2,
+        text: "Substitute for organic only"
+      })
+    }
+
+    this.setState({subtitutes})
+    
   }
 
   componentDidUpdate() {
@@ -62,6 +84,7 @@ class ProductModal extends Component {
       quantity: this.state.qty, 
       product_id: inventory.product_id,
       inventory_id: inventory._id,
+      sub_pref: this.state.selectedSubtitute
     }, this.userStore.getHeaderAuth(), order_summary).then((data) => {
 
     }).catch((e) => {
@@ -74,6 +97,10 @@ class ProductModal extends Component {
     })
 
     this.productStore.hideModal()
+  }
+
+  handleSelectSubtitute(id) {
+    this.setState({selectedSubtitute: id})
   }
 
 
@@ -191,6 +218,26 @@ class ProductModal extends Component {
                   })}
                 </select>
               </div>
+              <hr/>
+              <div><strong>If item is unavailable:</strong></div>
+              {this.state.subtitutes.map((sub, key) => (
+                <div 
+                  className={"custom-control red custom-radio " + (sub.id === this.state.selectedSubtitute ? " active" : "")}
+                  key={key}>
+                  <input 
+                    type="radio"
+                    name="customRadio" 
+                    checked={this.state.selectedSubtitute === sub.id}
+                    className="custom-control-input" 
+                    value={sub.id} 
+                    onChange={e=>this.handleSelectSubtitute(sub.id)} />
+
+                  <label className="custom-control-label small" onClick={e=>this.handleSelectSubtitute(sub.id)}>
+                    {sub.text}
+                  </label>
+                </div>
+              ))}
+              <br/>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
               <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
               <div className="text-muted">Final price based on approximate weight</div>

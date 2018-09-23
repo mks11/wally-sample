@@ -8,6 +8,7 @@ import {
   API_FORGOT_PASSWORD, API_RESET_PASSWORD
 } from '../config'
 import axios from 'axios'
+import moment from 'moment'
 
 let index = 0
 
@@ -210,7 +211,7 @@ class UserStore {
   }
 
   async addPromo(promoCode) {
-    const res = await axios.post(`${API_USER_ADD_PROMO}`, {promo_code: promoCode}, this.getHeaderAuth())
+    const res = await axios.post(`${API_USER_ADD_PROMO}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, {promo_code: promoCode}, this.getHeaderAuth())
     return res.data
   }
 
