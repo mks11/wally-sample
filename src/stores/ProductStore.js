@@ -53,7 +53,8 @@ class ProductStore {
 
   limitDisplay(data)  {
     const display = []
-    for (let i = 0; i < 4; i++) {
+    const limit = data.length >= 4 ? 4 : data.length
+    for (let i = 0; i < limit; i++) {
       display.push(data[i])
     }
     
@@ -78,7 +79,7 @@ class ProductStore {
         this.main_display[i].products = this.limitDisplay(this.main_display[i].products) 
       }
     }
-    console.log(this.main_display)
+    console.log('data', data)
 
     this.path = data.path
     this.sidebar = data.sidebar

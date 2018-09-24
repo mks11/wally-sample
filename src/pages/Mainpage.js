@@ -41,30 +41,25 @@ const heroItems = [
  
 
 
-let Product = ((props) => {
-
-  if (!props.product) {
-    return
-  }
-  //console.log('props', props.product.product_price)
-  let price = props.product.product_price/100
-  let price_unit = props.product.product_size
+let Product = (({product, store}) => {
+  let price = product.product_price/100
+  let price_unit = product.product_size
 
   let unit = 1
   if (price_unit) {
     unit = parseFloat(price_unit.split(' ')[0])
   } else {
-    price_unit = unit + ' ' + props.product.unit_type
+    price_unit = unit + ' ' + product.unit_type
   }
 
-  if (props.product.unit_type === 'unit') {
+  if (product.unit_type === 'unit') {
     price_unit = ''
   }
 
   // price *= unit
 
-  return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => props.store.product.showModal(props.product.product_id)}>
-    <img src={PRODUCT_BASE_URL + props.product.product_id + "/" + props.product.image_refs[0]} />
+  return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => store.product.showModal(product.product_id)}>
+    <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} />
     <div className="row product-detail">
       <div className="col-6 product-price">
         {formatMoney(price)}
@@ -73,8 +68,8 @@ let Product = ((props) => {
         {price_unit}
       </div>
     </div>
-    { props.product.product_name && <span className="product-desc">{props.product.product_name}</span>}
-    { props.product.name && <span className="product-desc">{props.product.name}</span>}
+    { product.product_name && <span className="product-desc">{product.product_name}</span>}
+    { product.name && <span className="product-desc">{product.name}</span>}
   </div>
   )
 })
@@ -90,9 +85,10 @@ const ProductList = ({display}) => (
     </div>
 
     <div className="row">
-      { display.products.map((p, i) => (
-        <Product key={i} product={p} />
-      ))}
+      { display.products.map((p, i) => {
+        return (<Product key={i} product={p} />)
+      }
+      )}
     </div>
   </div>
 )
@@ -400,7 +396,6 @@ let currentSearchCat= curCat.join(', ')
       display.push(data[i])
     }
     
-      console.log('asdf', data.get())
 
     return display
   }
