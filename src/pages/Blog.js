@@ -25,7 +25,7 @@ class About extends Component {
   render() {
     return (
       <div className="App">
-         <Title content="About" />
+         <Title content="Blog" />
 
         <section className="page-section aw-our--story">
           <div className="container">

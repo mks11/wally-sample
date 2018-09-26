@@ -76,7 +76,7 @@ let Product = (({product, store}) => {
 
 Product = connect("store")(Product)
 
-const ProductList = ({display}) => (
+const ProductList = ({display, mode}) => (
   <div className="product">
     <h2>{display.cat_name}</h2>
     <div className="product-sub">
@@ -89,6 +89,11 @@ const ProductList = ({display}) => (
         return (<Product key={i} product={p} />)
       }
       )}
+
+      {mode == 'limit' && 
+          <Link className="big-arrow" to={"/main/" + display.cat_id }>
+          </Link>
+      }
     </div>
   </div>
 )
@@ -127,14 +132,10 @@ class Mainpage extends Component {
 
       cartDropdown: false,
       categoriesDropdown: false,
+      categoryTypeMode: 'limit'
     }
 
-    this.id = null
-    this.categoryType = 'all'
-
-    if (!this.id || this.id.length <= 3) {
-      this.categoryType = 'limit'
-    }
+    this.id = this.props.match.params.id
 
     this.handleSearch = this.handleSearch.bind(this)
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
@@ -153,7 +154,7 @@ class Mainpage extends Component {
 
     $(window).bind('scroll', function () {
       // console.log($(window).scrollTop())
-      if ($(window).scrollTop() > 580) {
+      if ($(window).scrollTop() > 510) {
         $('.product-top').addClass('fixed');
         self.uiStore.topBar = false
       } else {
@@ -161,7 +162,7 @@ class Mainpage extends Component {
         self.uiStore.topBar = true
       }
 
-      if ($(window).scrollTop() > 650) {
+      if ($(window).scrollTop() > 580) {
         $('.product-content-left').addClass('fixed')
       } else {
         $('.product-content-left').removeClass('fixed')
@@ -174,6 +175,15 @@ class Mainpage extends Component {
   loadData() {
     const id = this.props.match.params.id
     this.id = id
+
+    let categoryTypeMode = 'all'
+
+    if (!this.id || this.id.length <= 3) {
+      categoryTypeMode = 'limit'
+    }
+
+    this.setState({categoryTypeMode})
+
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
     this.productStore.getProductDisplayed(id).then((data) => {
@@ -279,8 +289,12 @@ class Mainpage extends Component {
   }
 
   
-  handleCartDropdown = () => {
-    this.uiStore.toggleCartDropdown()
+  handleShowCartDropdown = () => {
+    this.uiStore.toggleCartDropdown(true)
+  }
+
+  handleHideCartDropdown = () => {
+    this.uiStore.toggleCartDropdown(false)
   }
 
   handleCategoriesDropdown = () => {
@@ -401,6 +415,7 @@ let currentSearchCat= curCat.join(', ')
   }
 
   render() {
+    console.log('mode', this.categoryTypeMode)
     const id = this.props.match.params.id
 
 
@@ -536,17 +551,18 @@ let currentSearchCat= curCat.join(', ')
                   <div className="media-right">
 
                   <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
-                    <div className="btn-group dropdown-cart d-none d-md-block">
-                      <div onMouseEnter={this.handleCartDropdown}  className={buttonCart}>
+                    <div className="btn-group dropdown-cart d-none d-md-block" onMouseEnter={this.handleShowCartDropdown} 
+                    >
+                      <div  className={buttonCart}>
                         <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                       </div>
 
                       <div className={cartDropdownClass} aria-labelledby="dropdownMenuButton">
                         { (cartItems && cartItems.length > 0) ?
                             <div>
-                        <h3>Orders:</h3>
+                        <h3 className="px-3">Orders:</h3>
                         <div className="order-summary">
-                          <div className="order-scroll">
+                          <div className="order-scroll px-3">
                             { cartItems.map((c, i) => (
                             <div className="item mt-3 pb-2" key={i}>
                               <div className="item-left">
@@ -565,15 +581,15 @@ let currentSearchCat= curCat.join(', ')
 
                             ))}
                           </div>
-                          <div className="item-total mt-4">
+                          <div className="item-total px-3">
                             <span>Total</span>
                             <span>{formatMoney(cartSubtotal)}</span>
                           </div>
                         </div>
-                        <button onClick={e => this.handleCheckout()} className="btn btn-main active">CHECKOUT</button>
+                        <button onClick={e => this.handleCheckout()} className="btn mx-3 w-90 btn-main active">CHECKOUT</button>
                       </div>
                             : 
-                            <span>No items in cart</span>
+                            <span className="px-3">No items in cart</span>
                         }
 
                       </div>
@@ -681,7 +697,7 @@ let currentSearchCat= curCat.join(', ')
                 </div>
 
                 { mainDisplay.map((p, i) => (
-                    <ProductList key={i} display={p} />
+                    <ProductList key={i} display={p} mode={this.state.categoryTypeMode} />
                 )
                 )}
 

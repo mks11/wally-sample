@@ -1231,14 +1231,17 @@ section.page-section.bg-fruitfull {
   z-index: 100;
 }
 .product-top.fixed{position:fixed;top:69px;}
-.product-top h3{font-weight: 400;font-size: 20px;margin-bottom: 0;margin-top: 9px;}
+.product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;margin-top: 9px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 4px;}
 .left-column::after{position: absolute;content:'';border-right:1px solid #ddd;top:0;bottom:0;right:0;}
 .product-content{padding-top:0px;min-height:600px;padding-bottom:50px;}
 
 .dropdown h3{cursor:pointer;}
-.dropdown-fwidth .dropdown-menu, .product-top .dropdown-menu{right:0;border-radius:0;border:0;border-top:1px solid #ececec;
+.dropdown-fwidth .dropdown-menu{right:0;border-radius:0;border:0;border-top:1px solid #ececec;
   padding-left: 15px;padding-right: 15px;box-shadow:2px 4px 6px rgba(0,0,0,.2);max-height:290px;overflow-y:auto;}
+
+.product-top .dropdown-menu{right:0;border-radius:0;border:0;border-top:1px solid #ececec;
+  box-shadow:2px 4px 6px rgba(0,0,0,.2);max-height:290px;overflow-y:auto;}
 .dropdown-fwidth .dropdown-item, .account-dropdown .dropdown-item{padding:10px 0;position: relative;}
 .dropdown-fwidth .dropdown-item:hover, .dropdown-fwidth .dropdown-item:focus, .dropdown-fwidth .dropdown-item.active, 
 .dropdown-fwidth .dropdown-item:active, .account-dropdown .dropdown-item:hover, .account-dropdown .dropdown-item:focus{
@@ -1256,11 +1259,11 @@ a.dropdown-item.lg {
     font-size: 20px;
 }
 
-.search-product .form-control{border: 1px solid #ececec;border-left:0;padding:6px 10px;border-radius: 10px;height:auto;line-height:26px;}
+.search-product .form-control{border: 1px solid #ececec;border-left:0;padding:6px 10px;border-radius: 10px;height:auto;line-height:26px;font-size:16px;}
 .search-product .form-control:focus{box-shadow:none;}
 .search-product .input-group-text{padding:3px 5px 3px 15px;background-color:#fff;border-color:#ececec;border-radius:10px 0 0 10px; border-right:none;}
 .product-top .media-right{margin-left: 50px;}
-.product-cart-counter{cursor: pointer;border:1px solid #ececec;border-radius: 10px;padding:7px 10px;line-height:24px;}
+.product-cart-counter{cursor: pointer;border:1px solid #ececec;border-radius: 10px;padding:7px 10px;line-height:24px;font-size:16px;}
 .product-cart-counter.active{background: #e0a5a7; color: #fff; border:none;}
 .product-cart-counter.active span{border-left: 1px solid #fff}
 .product-cart-counter i {margin-right: 10px;}
@@ -1271,7 +1274,7 @@ a.dropdown-item.lg {
   border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid #ececec;}
 .dropdown-cart .dropdown-menu::after{border-bottom:20px solid #fff;top:-18px;}
 .dropdown-cart h3{font-size: 24px;font-weight: 700;}
-.order-scroll{max-height:300px;overflow-y:auto;margin-right: -15px;padding-right: 10px;}
+.order-scroll{max-height:300px;overflow-y:auto;padding-right: 10px;}
 
 .right-column{padding-left:50px;}
 
@@ -1392,7 +1395,11 @@ h3.p-r .address-rbtn{top:9px;}
 .item-summaries{padding-top:20px;padding-bottom: 20px;}
 .summary{color:#bbb;line-height:30px;position:relative;}
 .summary span+span, .item-total span+span{float:right;}
-.item-total{font-size: 18px;font-weight: 700;margin-bottom: 20px;}
+.item-total{    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    box-shadow: 0px -2px 3px rgba(0,0,0,.1);}
 hr{border-top-color:#ececec;}
 
 .summary .popover {
@@ -1533,8 +1540,13 @@ input[aria-expanded="true"] + .autocomplete-dropdown-container {
     position: relative;
 }
 
-.carousel .carousel-inner {height:auto;margin:auto;max-width:1120px;}
+.carousel .carousel-inner {height: auto;
+    margin: auto;
+    /* max-width: 1120px; */
+    height: 500px;}
 .carousel .carousel-inner img {
+  height: 500px;
+  width: 100%;
 /* max-width:800px; */
 }
 
@@ -1874,3 +1886,18 @@ a {
     padding: 10px 0;
     border-bottom: 1px solid #ececec;
   }
+ .w-90{
+   width:90%!important;
+  }
+
+  .big-arrow {
+    background: url(../images/chevron-right.svg) no-repeat;
+    display: block;
+    position: absolute;
+    right: -52px;
+    top: 20%;
+    width: 50px;
+    background-size: 100% 100%;
+    height: 30px;
+  }
+  .product .row {position:relative;}

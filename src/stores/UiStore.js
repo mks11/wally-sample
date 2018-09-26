@@ -33,8 +33,8 @@ class UiStore {
     this.categoryMobile = !this.categoryMobile
   }
 
-  toggleCartMobile() {
-    this.cartMobile = !this.cartMobile
+  toggleCartMobile(state) {
+    this.cartMobile = state
   }
 
   toggleAccountDropdown() {
@@ -74,10 +74,10 @@ class UiStore {
     this.backdrop = false
     this.cartDropdown = false
   }
-  toggleCartDropdown() {
+  toggleCartDropdown(state) {
     this.backdropTop = 70
-    this.backdrop = !this.backdrop
-    this.cartDropdown = !this.cartDropdown
+    this.backdrop = state
+    this.cartDropdown = state
   }
 
   toggleCategoriesDropdown() {

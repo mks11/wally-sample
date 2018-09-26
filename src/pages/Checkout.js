@@ -836,6 +836,14 @@ class Checkout extends Component {
                       <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
                       <span>{formatMoney(order.packaging_deposit/100)}</span>
                     </div>
+
+                    {order.applied_store_credit>0 &&
+                    <div className="summary">
+                      <span>Store credit</span>
+                      <span>{formatMoney(order.applied_store_credit/100)}</span>
+                    </div>
+                    }
+
                     {this.state.appliedStoreCredit ?
                         <div className="summary">
                           <span>Store credit applied</span>
