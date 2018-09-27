@@ -13,6 +13,7 @@ import {
   CarouselCaption
 } from 'reactstrap';
 
+import DeliveryModal from '../common/DeliveryModal.js';
 import ProductModal from '../common/ProductModal';
 
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
@@ -41,38 +42,55 @@ const heroItems = [
  
 
 
-let Product = (({product, store}) => {
-  let price = product.product_price/100
-  let price_unit = product.product_size
-
-  let unit = 1
-  if (price_unit) {
-    unit = parseFloat(price_unit.split(' ')[0])
-  } else {
-    price_unit = unit + ' ' + product.unit_type
+class Product extends Component {
+  constructor(props) {
+    super(props)
+    this.userStore = this.props.store.user
+    this.productStore = this.props.store.product
   }
 
-  if (product.unit_type === 'unit') {
-    price_unit = ''
+  handleProductModal() {
+    if (!this.userStore.selectedDeliveryZip && !this.userStore.selectedDeliveryTime) {
+      this.userStore.toggleDeliveryModal(true)
+    } else {
+      this.productStore.showModal()
+    }
   }
 
-  // price *= unit
+  render() {
+    const product = this.props.product
+    let price = product.product_price/100
+    let price_unit = product.product_size
 
-  return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => store.product.showModal(product.product_id)}>
-    <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} />
-    <div className="row product-detail">
-      <div className="col-6 product-price">
-        {formatMoney(price)}
+    let unit = 1
+    if (price_unit) {
+      unit = parseFloat(price_unit.split(' ')[0])
+    } else {
+      price_unit = unit + ' ' + product.unit_type
+    }
+
+    if (product.unit_type === 'unit') {
+      price_unit = ''
+    }
+
+    // price *= unit
+
+    return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
+      <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} />
+      <div className="row product-detail">
+        <div className="col-6 product-price">
+          {formatMoney(price)}
+        </div>
+        <div className="col-6 product-weight">
+          {price_unit}
+        </div>
       </div>
-      <div className="col-6 product-weight">
-        {price_unit}
-      </div>
+      { product.product_name && <span className="product-desc">{product.product_name}</span>}
+      { product.name && <span className="product-desc">{product.name}</span>}
     </div>
-    { product.product_name && <span className="product-desc">{product.product_name}</span>}
-    { product.name && <span className="product-desc">{product.name}</span>}
-  </div>
-  )
-})
+    )
+  }
+}
 
 Product = connect("store")(Product)
 
@@ -132,7 +150,10 @@ class Mainpage extends Component {
 
       cartDropdown: false,
       categoriesDropdown: false,
-      categoryTypeMode: 'limit'
+      categoryTypeMode: 'limit',
+
+      deliveryTimeDetail: false
+
     }
 
     this.id = this.props.match.params.id
@@ -414,14 +435,26 @@ let currentSearchCat= curCat.join(', ')
     return display
   }
 
+  handleShowDeliveryDetail = () => {
+    this.setState({deliveryTimeDetail: true})
+  }
+
+  handleHideDeliveryDetail = () => {
+    this.setState({deliveryTimeDetail: false})
+  }
+
   render() {
-    console.log('mode', this.categoryTypeMode)
     const id = this.props.match.params.id
 
 
     let categoriesDropdownClass = 'dropdown-menu dropdown-menu-right'
     if (this.uiStore.categoriesDropdown) {
       categoriesDropdownClass += ' show'
+    }
+
+    let deliveryTimeClass = 'left-column px-3 d-none'
+    if (this.state.deliveryTimeDetail) {
+      deliveryTimeClass = 'left-column px-3 d-inline-block'
     }
 
     let cartMobileClass = 'cart-mobile d-md-none'
@@ -491,10 +524,41 @@ let currentSearchCat= curCat.join(', ')
         <div className="product-top">
           <div className="container">
             <div className="row">
-              <div className="col-md-2 col-sm-4 left-column d-none d-md-block">
-                <div className="dropdown dropdown-fwidth">
+                <div className="d-md-none col-sm-12">
+                  <div className="row">
+                    <div className="col-10">
+                      <h3>Categories</h3>
+                    </div>
 
-                  <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} >
+                    <div className="col-2">
+                      <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
+                    </div>
+                  </div>
+                </div>
+
+              <div className="col-md-12 col-sm-8 right-column d-none d-md-block">
+                <div className="row">
+
+                   <div className="col-auto" onMouseEnter={this.handleShowDeliveryDetail} onMouseLeave={this.handleHideDeliveryDetail}>
+                    {/*}<div className="col-auto" onClick={this.handleShowDeliveryDetail}*/}
+                    <div className="left-column pr-3 d-inline-block">
+                      <h3><strong>Delivery</strong></h3>
+                    </div>
+
+                    <div className={deliveryTimeClass}>
+                      <i class="fa fa-map-marker bar-icon"></i>
+                    </div>
+
+                    <div className={deliveryTimeClass}>
+                      <i class="fa fa-clock-o bar-icon"></i>
+                    </div>
+                  </div>
+
+
+                  <div className="col-2 left-column" style={{width:200}}>
+                    <div className="dropdown dropdown-fwidth">
+
+                      <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} >
                     <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                   <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
@@ -510,20 +574,7 @@ let currentSearchCat= curCat.join(', ')
                 </ClickOutside>
                 </div>
               </div>
-
-                <div className="d-md-none col-sm-12">
-                  <div className="row">
-                    <div className="col-10">
-                      <h3>Categories</h3>
-                    </div>
-
-                    <div className="col-2">
-                      <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
-                    </div>
-                  </div>
-                </div>
-              <div className="col-md-10 col-sm-8 right-column d-none d-md-block">
-                <div className="media">
+                <div className="media col">
                   <div className="media-body">
                     <div className="input-group search-product">
                       <div className="input-group-prepend">
@@ -598,6 +649,7 @@ let currentSearchCat= curCat.join(', ')
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
@@ -728,6 +780,7 @@ let currentSearchCat= curCat.join(', ')
           </div>
         </div>
         { this.productStore.open && <ProductModal/> }
+        { this.userStore.deliveryModal && <DeliveryModal/> }
         <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
         <div className={cartMobileClass}>
           <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span className="navbar-toggler-icon close-icon"></span></button> 

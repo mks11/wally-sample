@@ -25,11 +25,20 @@ class UserStore {
   paymentModal = false
   paymentModalOpen = false
 
+  deliveryModal = false
+  selectedDeliveryZip = null
+  selectedDeliveryTime = null
+
   promoModal = false
   promoSuccessModal = false
 
   activePayment = null
+
   refUrl = ''
+
+  toggleDeliveryModal(toggle) {
+    this.deliveryModal = toggle
+  }
 
   togglePromoModal() {
     this.promoModal = !this.promoModal
@@ -152,11 +161,25 @@ class UserStore {
   readStorage() {
     const token = localStorage.getItem('token')
     const user = localStorage.getItem('user')
+    const delivery = localStorage.getItem('delivery')
 
     if (token && user) {
       this.token = JSON.parse(token)
       this.user = JSON.parse(user)
     }
+
+    if (delivery) {
+      const deliveryData = JSON.parse(delivery)
+      this.selectedDeliveryZip = deliveryData.deliveryZip
+      this.selectedDeliveryTime = deliveryData.deliveryTime
+    }
+  }
+
+  setDeliveryData(data) {
+    this.selectedDeliveryZip = data.deliveryZip
+    this.selectedDeliveryTime = data.deliveryTime
+
+    localStorage.setItem('delivery', JSON.stringify(data))
   }
 
   async getUser() {
@@ -237,6 +260,13 @@ decorate(UserStore, {
 
   promoModal: observable,
   promoSuccessModal: observable,
+
+
+  deliveryModal: observable,
+  selectedDeliveryZip: observable,
+  selectedDeliveryTime: observable,
+
+  toggleDeliveryModal: action,
 
   addPromo: action,
   togglePromoModal: action,
