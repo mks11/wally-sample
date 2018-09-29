@@ -169,15 +169,19 @@ class UserStore {
     }
 
     if (delivery) {
+      console.log('gent in')
       const deliveryData = JSON.parse(delivery)
-      this.selectedDeliveryZip = deliveryData.deliveryZip
-      this.selectedDeliveryTime = deliveryData.deliveryTime
+      console.log('deliveryData')
+      this.selectedDeliveryZip = deliveryData.zip
+      this.selectedDeliveryTime = deliveryData.time
     }
   }
 
-  setDeliveryData(data) {
-    this.selectedDeliveryZip = data.deliveryZip
-    this.selectedDeliveryTime = data.deliveryTime
+  setDeliveryData() {
+    const data = {
+      zip: this.selectedDeliveryZip,
+      time: this.selectedDeliveryTime
+    }
 
     localStorage.setItem('delivery', JSON.stringify(data))
   }
@@ -217,8 +221,12 @@ class UserStore {
 
   logout() {
     localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('delivery')
     this.status = false
     this.user = null
+    this.selectedDeliveryZip = null
+    this.selectedDeliveryTime = null
   }
 
   async loginFacebook(data) {
@@ -241,6 +249,16 @@ class UserStore {
   async resetPassword(token, data) {
     const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data)
     return res.data
+  }
+
+  setDeliveryZip(zip) {
+    this.selectedDeliveryZip = zip
+    this.setDeliveryData()
+  }
+
+  setDeliveryTime(time) {
+    this.selectedDeliveryTime = time
+    this.setDeliveryData()
   }
 }
 
@@ -305,6 +323,8 @@ decorate(UserStore, {
   forgotPassword: action,
   resetPassword: action,
 
+  setDeliveryZip: action,
+  setDeliveryTime: action,
 })
 
 

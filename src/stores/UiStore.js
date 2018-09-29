@@ -11,11 +11,13 @@ class UiStore {
   backdropZindex = 100
   navMobile = false;
   topBar = true;
+  topBarClosed = false;
   cartMobile = false;
   categoryMobile = false;
 
   closeTopBar() {
     this.topBar = false;
+    this.topBarClosed = true;
   }
 
   hideNavMobile() {
@@ -113,6 +115,7 @@ decorate(UiStore, {
   cartDropdown: observable,
   categoriesDropdown: observable,
   topBar: observable,
+  topBarClosed: observable,
   cartMobile: observable,
   categoryMobile: observable,
   toggleCartMobile: action,
