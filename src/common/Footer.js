@@ -34,7 +34,7 @@ class Footer extends Component {
           <div className="row">
             <div className="col-auto col-sm-2">
               <a href="/">
-                <img className="footer-logo" src={APP_URL + "/images/logo.png"}/>
+                <img className="footer-logo" src={"/images/logo.png"}/>
               </a>
             </div>
             <div className="col col-sm-10">
