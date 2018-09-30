@@ -1233,7 +1233,11 @@ section.page-section.bg-fruitfull {
 .product-top.fixed{position:fixed;top:69px;}
 .product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 5px; height:35px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 4px;}
-.left-column{display:inline-block;position:relative;}
+.left-column{display:inline-block;position:relative;visibility: visible;opacity:1; cursor:pointer;}
+.left-column.hide{transform: translateX(-100%);visibility: hidden;opacity:0;display:none;}
+.left-column.hide.hide-block{transform: translateX(-100%);visibility: hidden;opacity:0;display:inline-block;}
+.left-column{transform: translateX(0%);transition:all .5s ease;}
+.left-column span{line-height:28px;}
 .left-column::after{position: absolute;content:'';border-right:1px solid #ddd;top:0;bottom:0;right:0;}
 .product-content{padding-top:0px;min-height:600px;padding-bottom:50px;}
 
@@ -1908,5 +1912,6 @@ a {
     vertical-align:middle;
     display: block;
     font-size: 22px;
+    margin-right:10px;
     text-align: center;
   }

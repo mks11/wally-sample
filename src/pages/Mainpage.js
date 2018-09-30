@@ -52,8 +52,9 @@ class Product extends Component {
   handleProductModal() {
     if (!this.userStore.selectedDeliveryZip && !this.userStore.selectedDeliveryTime) {
       this.userStore.toggleDeliveryModal(true)
+      this.productStore.activeProductId = this.props.product.product_id
     } else {
-      this.productStore.showModal()
+      this.productStore.showModal(this.props.product.product_id)
     }
   }
 
@@ -152,7 +153,7 @@ class Mainpage extends Component {
       categoriesDropdown: false,
       categoryTypeMode: 'limit',
 
-      deliveryTimeDetail: false
+      deliveryTimeDetail: 0
 
     }
 
@@ -180,7 +181,7 @@ class Mainpage extends Component {
         self.uiStore.topBar = false
       } else {
         $('.product-top').removeClass('fixed');
-        self.uiStore.topBar = true
+        self.uiStore.topBar = true && !self.uiStore.topBarClosed
       }
 
       if ($(window).scrollTop() > 580) {
@@ -436,14 +437,19 @@ let currentSearchCat= curCat.join(', ')
   }
 
   handleShowDeliveryDetail = () => {
-    this.setState({deliveryTimeDetail: true})
+    this.setState({deliveryTimeDetail: 1})
+    setTimeout(() => {
+      this.setState({deliveryTimeDetail: 2})
+    }, 50)
   }
 
   handleHideDeliveryDetail = () => {
-    this.setState({deliveryTimeDetail: false})
+    this.setState({deliveryTimeDetail: 0})
   }
 
   render() {
+    console.log(this.userStore.selectedDeliveryZip)
+    console.log(this.userStore.selectedDeliveryTime)
     const id = this.props.match.params.id
 
 
@@ -452,9 +458,12 @@ let currentSearchCat= curCat.join(', ')
       categoriesDropdownClass += ' show'
     }
 
-    let deliveryTimeClass = 'left-column px-3 d-none'
-    if (this.state.deliveryTimeDetail) {
-      deliveryTimeClass = 'left-column px-3 d-inline-block'
+    let deliveryTimeClass = 'left-column px-3'
+  
+    if (this.state.deliveryTimeDetail === 1) {
+      deliveryTimeClass = 'left-column px-3 hide hide-block'
+    } else if (this.state.deliveryTimeDetail === 0) {
+      deliveryTimeClass = 'left-column px-3 hide'
     }
 
     let cartMobileClass = 'cart-mobile d-md-none'
@@ -534,6 +543,28 @@ let currentSearchCat= curCat.join(', ')
                       <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-auto">
+                      <div className="d-flex justify-content-between">
+                        <i className="fa fa-map-marker bar-icon"></i>
+                        <span style={{lineHeight: 26}}>{this.userStore.selectedDeliveryZip && this.userStore.selectedDeliveryZip.zip}</span>
+                      </div>
+                    </div>
+
+                    <div className="col-auto">
+                      <div className="d-flex justify-content-between">
+                        <i className="fa fa-clock-o bar-icon"></i>
+                        <span style={{lineHeight: 26}}>{this.userStore.selectedDeliveryTime !== null ?
+                            <React.Fragment>
+                              {this.userStore.selectedDeliveryTime.selectedDay}, {this.userStore.selectedDeliveryTime.selectedTime}
+                            </React.Fragment>
+                            : null
+                        }
+
+                      </span>
+                    </div>
+                  </div>
+                  </div>
                 </div>
 
               <div className="col-md-12 col-sm-8 right-column d-none d-md-block">
@@ -546,13 +577,27 @@ let currentSearchCat= curCat.join(', ')
                     </div>
 
                     <div className={deliveryTimeClass}>
-                      <i class="fa fa-map-marker bar-icon"></i>
+                      <div className="d-flex justify-content-between">
+                        <i className="fa fa-map-marker bar-icon"></i>
+                        <span>{this.userStore.selectedDeliveryZip && this.userStore.selectedDeliveryZip.zip}</span>
+                      </div>
                     </div>
 
                     <div className={deliveryTimeClass}>
-                      <i class="fa fa-clock-o bar-icon"></i>
+                      <div className="d-flex justify-content-between">
+                        <i className="fa fa-clock-o bar-icon"></i>
+                        <span>{this.userStore.selectedDeliveryTime !== null ?
+                            <React.Fragment>
+                              {this.userStore.selectedDeliveryTime.selectedDay}, {this.userStore.selectedDeliveryTime.selectedTime}
+                            </React.Fragment>
+                            : null
+                        }
+
+                      </span>
                     </div>
                   </div>
+
+                </div>
 
 
                   <div className="col-2 left-column" style={{width:200}}>
@@ -604,7 +649,7 @@ let currentSearchCat= curCat.join(', ')
                   <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
                     <div className="btn-group dropdown-cart d-none d-md-block" onMouseEnter={this.handleShowCartDropdown} 
                     >
-                      <div  className={buttonCart}>
+                      <div className={buttonCart}>
                         <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                       </div>
 
@@ -780,7 +825,7 @@ let currentSearchCat= curCat.join(', ')
           </div>
         </div>
         { this.productStore.open && <ProductModal/> }
-        { this.userStore.deliveryModal && <DeliveryModal/> }
+        { this.userStore.user && <DeliveryModal/> }
         <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
         <div className={cartMobileClass}>
           <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span className="navbar-toggler-icon close-icon"></span></button> 
