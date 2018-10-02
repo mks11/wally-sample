@@ -448,10 +448,7 @@ let currentSearchCat= curCat.join(', ')
   }
 
   render() {
-    console.log(this.userStore.selectedDeliveryZip)
-    console.log(this.userStore.selectedDeliveryTime)
     const id = this.props.match.params.id
-
 
     let categoriesDropdownClass = 'dropdown-menu dropdown-menu-right'
     if (this.uiStore.categoriesDropdown) {
