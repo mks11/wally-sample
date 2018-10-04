@@ -26,7 +26,7 @@ class UserStore {
   paymentModalOpen = false
 
   deliveryModal = false
-  selectedDeliveryZip = null
+  selectedDeliveryAddress = null
   selectedDeliveryTime = null
 
   promoModal = false
@@ -172,14 +172,14 @@ class UserStore {
       console.log('gent in')
       const deliveryData = JSON.parse(delivery)
       console.log('deliveryData')
-      this.selectedDeliveryZip = deliveryData.zip
+      this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
     }
   }
 
   setDeliveryData() {
     const data = {
-      zip: this.selectedDeliveryZip,
+      address: this.selectedDeliveryAddress,
       time: this.selectedDeliveryTime
     }
 
@@ -225,7 +225,7 @@ class UserStore {
     localStorage.removeItem('delivery')
     this.status = false
     this.user = null
-    this.selectedDeliveryZip = null
+    this.selectedDeliveryAddress = null
     this.selectedDeliveryTime = null
   }
 
@@ -251,14 +251,31 @@ class UserStore {
     return res.data
   }
 
-  setDeliveryZip(zip) {
-    this.selectedDeliveryZip = zip
+  setDeliveryAddress(data) {
+    this.selectedDeliveryAddress = data
     this.setDeliveryData()
   }
 
   setDeliveryTime(time) {
     this.selectedDeliveryTime = time
     this.setDeliveryData()
+  }
+
+  getDeliveryParams() {
+    let data = {
+      zip: null,
+      date: null
+    }
+
+    if (this.selectedDeliveryAddress) {
+      data.zip = this.selectedDeliveryAddress.zip
+    }
+
+    if (this.selectedDeliveryTime) {
+      data.date = this.selectedDeliveryTime.date
+    }
+
+    return data;
   }
 }
 
@@ -270,6 +287,7 @@ decorate(UserStore, {
   addressModal: observable,
   addressModalOpen: observable,
   activeAddress: observable,
+  getDeliveryParams: action,
 
   paymentModal: observable,
   paymentModalOpen: observable,
@@ -281,7 +299,7 @@ decorate(UserStore, {
 
 
   deliveryModal: observable,
-  selectedDeliveryZip: observable,
+  selectedDeliveryAddress: observable,
   selectedDeliveryTime: observable,
 
   toggleDeliveryModal: action,
@@ -323,7 +341,7 @@ decorate(UserStore, {
   forgotPassword: action,
   resetPassword: action,
 
-  setDeliveryZip: action,
+  setDeliveryAddress: action,
   setDeliveryTime: action,
 })
 

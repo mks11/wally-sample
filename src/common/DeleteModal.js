@@ -16,7 +16,7 @@ class DeleteModal extends Component {
       quantity: 0, 
       product_id: this.checkoutStore.deleteId.product_id,
       inventory_id: this.checkoutStore.deleteId.inventory_id,
-    }, this.userStore.getHeaderAuth(), order_summary).then((data) => {
+    }, this.userStore.getHeaderAuth(), order_summary, this.userStore.getDeliveryParams()).then((data) => {
 
     }).catch((e) => {
       const msg = e.response.data.error.message

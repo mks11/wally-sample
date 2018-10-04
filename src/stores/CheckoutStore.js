@@ -21,7 +21,7 @@ class CheckoutStore {
     return this.getCurrentCart(auth)
   }
 
-  async getCurrentCart(auth) {
+  async getCurrentCart(auth, delivery) {
     let res
 
     const local = localStorage.getItem('cart')
@@ -33,6 +33,8 @@ class CheckoutStore {
     
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     url += '?time=' + time
+    url += '&delivery_zip=' + delivery.zip
+    url += '&delivery_date=' + delivery.date
 
 
     if (auth.headers.Authorization === 'Bearer undefined') {
@@ -45,7 +47,7 @@ class CheckoutStore {
     this.cart = res.data
   }
   
-  async editCurrentCart(data, auth, order_summary) {
+  async editCurrentCart(data, auth, order_summary,delivery) {
     let cart_id
     if (this.cart) {
       cart_id = this.cart._id
@@ -54,11 +56,12 @@ class CheckoutStore {
       cart_id = this.order.cart_id
     }
 
+    const url = `${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
     let res
     if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data)
+      res = await axios.patch(url, data)
     } else {
-      res = await axios.patch(`${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
+      res = await axios.patch(url, data, auth)
     }
 
     this.cart = res.data
@@ -67,9 +70,9 @@ class CheckoutStore {
     }
   }
 
-  async getOrderSummary(auth) {
+  async getOrderSummary(auth, delivery) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(API_GET_ORDER_SUMMARY + '?time=' + time, auth)
+    const res = await axios.get(`${API_GET_ORDER_SUMMARY}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, auth)
     this.order = res.data
     return res.data
   }
