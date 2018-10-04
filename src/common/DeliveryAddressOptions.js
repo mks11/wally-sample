@@ -1,13 +1,13 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import moment from 'moment'
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 class DeliveryAddressOptions extends Component {
   state = {
-    selectedAddress: null,
-    lockAddress: false,
-    addressError: false,
-    invalidAddressText: '',
-    invalidSelectAddress: '',
-    invalidAddressText: '',
+    error: false,
     newStreetAddress: '',
     newAptNo: '',
     newZip: '',
@@ -24,64 +24,80 @@ class DeliveryAddressOptions extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    let selected = this.state.selected ? this.state.selected : this.props.selected
+    if (!selected) {
+      selected = this.props.user.preferred_address
+    }
+
+    this.setState({selected})
+  }
+
   handleSelectAddress(address_id) {
-    this.setState({selectedAddress: address_id})
+    this.setState({selected: address_id})
     if (address_id === '0') {
-      this.setState({newAddress: true, newContactName: this.userStore.user.name, newPhoneNumber: this.userStore.user.primary_telephone})
+      this.setState({newAddress: true, newContactName: this.props.user.name, newPhoneNumber: this.props.user.primary_telephone})
     } else {
       this.setState({newAddress: false})
     }
   }
 
-  handleSubmitAddress() {
-    if (!this.state.selectedAddress) return
-    this.setState({invalidSelectAddress: null})
-    const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
-    let deliveryTimes = []
-    this.checkoutStore.getDeliveryTimes({
-      street_address: address.street_address,
-      zip: address.zip,
-    }, this.userStore.getHeaderAuth()).then((data) => {
-      const times = data.delivery_windows
-      for (var i = 0, len = times.length; i < len; i++) {
-        addTimes(times[i])
-      }
-
-      this.setState({deliveryTimes, lockAddress: true, addressError: false})
-    }).catch((e) => {
-      console.log(e.response)
-      if (e.response.data.error) {
+  handleSubmitAddress = () => {
+    if (!this.state.selected) return
+    this.setState({invalidSelectAddress: null, lock: true})
+    const address = this.props.user.addresses.find((d) => d._id === this.state.selected)
+    this.props.onSubmit(address).catch((e) => {
+      if (e.response && e.response.data.error) {
         this.setState({invalidSelectAddress: e.response.data.error.message})
       }
       console.error(e)
     })
+  }
 
-    function addTimes(data) {
-      const timeFirst = data[0].split('-')[0]
-      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday]',
-        lastWeek: '[Last] dddd',
-        sameElse: 'DD/MM/YYYY'
+  handleAddNewAddress = () => {
+    this.setState({invalidText: null})
+    if (!this.state.newStreetAddress) {
+      this.setState({invalidText: 'Street address cannot be empty'})
+      return
+    }
+
+    if (!this.state.newContactName) {
+      this.setState({invalidText: 'Name cannot be empty'})
+      return
+    }
+
+    if (!this.state.newPhoneNumber) {
+      this.setState({invalidText: 'Telephone cannot be empty'})
+      return
+    }
+
+    this.props.onAddNew(this.state).then((data) => {
+      const lastAddress = data.addresses[data.addresses.length - 1]
+      this.setState({
+        selected: lastAddress.address_id,
+        newAddress: false,
+        invalidText: '',
+        newStreetAddress: '',
+        newAptNo: '',
+        newZip: '',
+        newContactName: '',
+        newPhoneNumber: '',
+        newDeliveryNotes:'',
+        newState:'',
+        newCity: '',
+        newCountry: '',
       })
 
-      const findTime = deliveryTimes.findIndex((data) => data.day === day)
-
-      const obj = {
-        time: data[0],
-        date: data[1],
-        availability: data[2]
+    }).catch((e) => {
+      if (e.response && e.response.data.error) {
+        const msg = e.response.data.error.message
+        this.setState({invalidText: msg})
       }
+      console.error('Failed to save address', e)
+    })
 
-      if (findTime === -1) {
-        deliveryTimes.push({day: day, data: [obj]})
-      } else {
-        deliveryTimes[findTime].data.push(obj)
-      }
-    }
   }
+
 
   fillInAddress(place) {
     var componentForm = {
@@ -129,29 +145,54 @@ class DeliveryAddressOptions extends Component {
       .catch(error => console.error('Error', error));
   }
 
+  unlock = () => {
+    this.setState({lock: false})
+    this.props.onUnlock()
+  }
+
+
   render() {
     const props = this.props
+
+    let addressFormClass = 'addAdressForm mb-4'
+    if (!this.state.newAddress) {
+      addressFormClass += ' d-none'
+    }
+
+    let addressCardClass = 'card1 delivery'
+    if (this.state.error) {
+      addressCardClass += ' error'
+    }
+
+    let selected = this.state.selected ? this.state.selected : this.props.selected
+    if (!selected) {
+      selected = this.props.user.preferred_address
+    }
+    const data = this.props.user ? this.props.user.addresses : []
+    const lock = this.state.lock ? this.state.lock : this.props.lock
+    const preferred_address = this.props.user ? this.props.user.preferred_address : null
+    const editable = this.props.editable !== null ? this.props.editable : true
 
     return (
       <React.Fragment>
         <h3 className="m-0 mb-3 p-r">
           Delivery address
-          { this.state.lockAddress ? <a onClick={e => this.setState({lockAddress: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
+          { (lock && editable) ? <a onClick={this.unlock} className="address-rbtn link-blue pointer">CHANGE</a> : null}
         </h3>
         <div className={addressCardClass}>
-          <div className={"card-body" + (this.state.lockAddress ? " lock" : "")}>
-            { this.userStore.user.addresses.map((data, index) => {
-              if (this.state.lockAddress && selectedAddress!=data.address_id) {
+          <div className={"card-body" + (lock ? " lock" : "")}>
+            { data.map((data, index) => {
+              if (lock && selected!=data.address_id) {
                 return null
               }
               return (
                 <div 
-                  className={"custom-control custom-radio bb1" + (data.address_id === selectedAddress ? " active" : "")}
+                  className={"custom-control custom-radio bb1" + (data.address_id === selected ? " active" : "")}
                   key={index}>
                   <input 
                     type="radio" id={"address-" + index} 
                     name="customRadio" 
-                    checked={data.address_id === selectedAddress}
+                    checked={data.address_id === selected}
                     className="custom-control-input" 
                     value={data.address_id} 
                     onChange={e=>this.handleSelectAddress(data.address_id)} />
@@ -159,20 +200,20 @@ class DeliveryAddressOptions extends Component {
                     {data.street_address} {data.unit}, {data.state} {data.zip}
                     <div className="address-phone">{data.name}, {data.telephone}</div>
                   </label>
-                  {this.userStore.user.preferred_address === data.address_id &&
+                  {preferred_address === data.address_id &&
                       <a className="address-rbtn link-blue">DEFAULT</a>
                   }
                 </div>)
             })}
 
-            { !this.state.lockAddress ?  (
+            { !lock ?  (
               <div>
                 <div 
-                  className={"custom-control custom-radio bb1" + ("0" === selectedAddress ? " active" : "")}
+                  className={"custom-control custom-radio bb1" + ("0" === selected ? " active" : "")}
                 >
                   <input type="radio" id="addressAdd" name="customRadio" className="custom-control-input" 
                     value="0" 
-                    checked={selectedAddress === "0"}
+                    checked={selected === "0"}
                     onChange={e=>this.handleSelectAddress('0')}/>
                   <label className="custom-control-label" htmlFor="addressAdd" onClick={e=>this.handleSelectAddress('0')}>Add new address</label>
                 </div>
@@ -268,134 +309,17 @@ class DeliveryAddressOptions extends Component {
                     <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
                   </div>
                   <hr />
-                  <button className="btn btn-main active inline-round" onClick={e=>this.handleConfirmAddress(e)}>CONFIRM</button>
-                  {this.state.invalidAddressText && <div className="error-msg">{this.state.invalidAddressText}</div>}
+                  <button className="btn btn-main active inline-round" onClick={this.handleAddNewAddress}>CONFIRM</button>
+                  {this.state.invalidText && <div className="error-msg">{this.state.invalidText}</div>}
                 </div>
               </div>
             ):null}
-            {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+            {(!lock && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
 
             {this.state.invalidSelectAddress && <span className="text-error text-center d-block mt-3">{this.state.invalidSelectAddress}</span>}
           </div>
         </div>
-        <h3 className="m-0 mb-3 p-r mt-5">Time 
-          {this.state.lockTime ?  <a onClick={e => this.setState({lockTime: false, timeDropdown: true})} className="address-rbtn link-blue">CHANGE</a> : null}
-          {this.state.addressError ?  <span className="address-rbtn text-error sm">Address required</span> : null}
-        </h3>
-        <div className="dropdown show">
-          <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
-            <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-              {this.state.selectedTime ? <React.Fragment>{this.state.selectedDay}, {this.state.selectedTime}</React.Fragment> : 'Choose delivery date and time'}
-            </button>
-            <div className={timeDropdownClass}>
-              {this.state.deliveryTimes.map((items, key) => (
-                <React.Fragment key={key}>
-                  <h6 className="dropdown-header">{items.day}</h6>
-                  {items.data.map((item, key2) => ( 
-                    <div className="dropdown-item" key={key2} onClick={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)}  >
-                      <div className="custom-control custom-radio">
-                        <input 
-                          checked={this.state.selectedDate === item.date && this.state.selectedTime === item.time}
-                          type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)} />
-                        <label className="custom-control-label" >{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
-                      </div>
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
-            </div>
-          </ClickOutside>
-        </div>
-        <div className="custom-control custom-checkbox mt-2 mb-3">
-          <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-          <label className="custom-control-label" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
-        </div>
-        <h3 className="m-0 mb-3 p-r mt-5">Payment 
-          { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
-        </h3>
-
-        <div className="card1">
-          <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
-            { this.userStore.user.payment.map((data, index) => {
-
-              if (this.state.lockPayment && selectedPayment!=data._id) {
-                return null
-              }
-              return (
-                <div 
-                  className={"custom-control custom-radio bb1" + (data._id === selectedPayment ? " active" : "")}
-                  key={index}>
-                  <input type="radio" id={"payment"+index}
-                    value={data._id} 
-                    checked={data._id === selectedPayment}
-                    name="customRadio" className="custom-control-input"
-                    onChange={e => this.handleSelectPayment(data._id)}
-                  />
-                  <label className="custom-control-label" htmlFor={"payment"+index} onClick={e=>this.handleSelectPayment(data._id)}>
-                    <img src="images/card.png" /> *****{data.last4}
-                  </label>
-                  {this.userStore.user.preferred_payment === data._id &&
-                      <a href="#" className="address-rbtn link-blue" style={{top:'10px'}}>DEFAULT</a>
-                  }
-                </div>
-              )
-            })}
-
-            { !this.state.lockPayment ?  (
-              <div>
-                <div 
-                  className={"custom-control custom-radio bb1" + ("0" === selectedPayment ? " active" : "")}
-                >
-                  <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
-                    value="0"
-                    checked={selectedPayment === "0"}
-                    onChange={e=>this.handleSelectPayment(selectedPayment)}/>
-                  <label className="custom-control-label" htmlFor="paymentAdd" onClick={e=>this.handleSelectPayment('0')} >Add new card</label>
-                </div>
-                <div className={paymentFormClass}>
-                  {/* 
-                      <div className="row no-gutters">
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Card number" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="MM/YY" />
-                          </div>
-                        </div>
-                        <div className="col-md-2">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="CVV" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Zipcode" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Make default payment method</label>
-                      </div>
-                      <hr />
-                      <button className="btn btn-main active inline-round">CONFIRM</button>
-                      <div className="error-msg d-none">Invalid card information</div>
-                      */}
-
-                      <StripeProvider apiKey={STRIPE_API_KEY}>
-                        <Elements>
-                          <CardSmall  addPayment={this.handleAddPayment} />
-                        </Elements>
-                      </StripeProvider>
-                    </div>
-                  </div>):null}
-                  { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
-                </div>
-              </div>
-            </React.Fragment>
+      </React.Fragment>
     )
   }
 }

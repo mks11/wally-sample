@@ -85,7 +85,7 @@ class ProductModal extends Component {
       product_id: inventory.product_id,
       inventory_id: inventory._id,
       sub_pref: this.state.selectedSubtitute
-    }, this.userStore.getHeaderAuth(), order_summary).then((data) => {
+    }, this.userStore.getHeaderAuth(), order_summary, this.userStore.getDeliveryParams()).then((data) => {
 
     }).catch((e) => {
       console.log(e)

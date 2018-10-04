@@ -26,11 +26,11 @@ class ProductStore {
   ads1 = null
   ads2 = null
 
-  async showModal(product_id, customer_quantity) {
+  async showModal(product_id, customer_quantity, delivery) {
     this.activeProductId = product_id
 
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(API_GET_PRODUCT_DETAIL + product_id + '?time=' + time)
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     this.activeProduct = res.data
     if (this.activeProduct.available_inventory.length === 0) {
       alert('Item not available in inventory')
@@ -61,11 +61,11 @@ class ProductStore {
     return display
   }
 
-  async getProductDisplayed(id) {
+  async getProductDisplayed(id, delivery) {
     this.fetch = true
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED
-    const res = await axios.get(url + '?time='+time)
+    const res = await axios.get(`${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     const data = res.data
 
     let mode = 'all'
@@ -96,9 +96,9 @@ class ProductStore {
       }).catch((e) => console.error('Failed to load categories: ', e))
   }
 
-  async searchKeyword(keyword) {
+  async searchKeyword(keyword, delivery) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(API_SEARCH_KEYWORD + '?keyword='+ keyword + '&time=' + time)
+    const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     return res.data
   }
 

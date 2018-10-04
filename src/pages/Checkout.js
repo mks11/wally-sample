@@ -14,11 +14,8 @@ import {StripeProvider, Elements} from 'react-stripe-elements'
 import { connect, formatMoney, formatNumber } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
-
+import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
+import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 
 class Checkout extends Component {
   constructor(props) {
@@ -101,7 +98,7 @@ class Checkout extends Component {
   }
 
   loadData() {
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth()).then((data) => {
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
@@ -221,7 +218,7 @@ class Checkout extends Component {
   }
 
   handleEdit(id, quantity) {
-    this.productStore.showModal(id, quantity)
+    this.productStore.showModal(id, quantity, this.userStore.getDeliveryParams())
   }
 
   handleDelete(data) {
@@ -234,17 +231,12 @@ class Checkout extends Component {
 
   handlePlaceOrder() {
     this.setState({invalidText: ''})
-    if (!this.state.lockAddress) {
+    if (!this.userStore.selectedDeliveryAddress) {
       this.setState({invalidText: 'Please select address'})
       return
     }
 
-    if (!this.state.lockPayment) {
-      this.setState({invalidText: 'Please select payment'})
-      return
-    }
-
-    if (!this.state.lockTime) {
+    if (!this.userStore.selectedDeliveryTime) {
       this.setState({invalidText: 'Please select delivery time'})
       return
     }
@@ -253,13 +245,18 @@ class Checkout extends Component {
       this.setState({invalidText: 'Please confirm that you are home'})
       return
     }
+    if (!this.state.lockPayment) {
+      this.setState({invalidText: 'Please select payment'})
+      return
+    }
+
 
     this.checkoutStore.createOrder({
       store_credit: this.state.appliedStoreCreditAmount > 0,
       user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-      address_id: this.state.selectedAddress,
+      address_id: this.userStore.selectedDeliveryAddress.address_id,
       payment_id: this.state.selectedPayment,
-      delivery_time: this.state.selectedDate + ' ' + this.state.selectedTime,
+      delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
     }, this.userStore.getHeaderAuth()).then((data) => {
       this.routing.push('/orders/' + data._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
@@ -319,51 +316,6 @@ class Checkout extends Component {
     })
   }
 
-  handleNewAddressChange = (newStreetAddress) => {
-    this.setState({ newStreetAddress });
-  }
-
-  handleNewAddressSelect = (newStreetAddress) => {
-    this.setState({ newStreetAddress })
-    geocodeByAddress(newStreetAddress)
-      .then(results => {
-        // console.log(results[0])
-        this.fillInAddress(results[0])
-      })
-      .catch(error => console.error('Error', error));
-  }
-
-  fillInAddress(place) {
-    var componentForm = {
-      street_number: 'short_name',
-      route: 'long_name',
-      locality: 'long_name',
-      administrative_area_level_1: 'short_name',
-      country: 'long_name',
-      postal_code: 'short_name'
-    };
-
-    let address = {}
-
-    for (var i = 0; i < place.address_components.length; i++) {
-      var addressType = place.address_components[i].types[0];
-      if (componentForm[addressType]) {
-        var val = place.address_components[i][componentForm[addressType]];
-        address[addressType] = val;
-      }
-    }
-    console.log('adddres', address)
-
-    let city = address.locality
-    if (!city && address.administrative_area_level_1) {
-      city = address.administrative_area_level_1
-    }
-    const state = address.administrative_area_level_1
-    const country = address.country
-    const zip = address.postal_code
-
-    this.setState({newCity: city, newState: state, newCountry: country, newZip: zip})
-  }
 
   handleConfirmAddress(e) {
     console.log('cook')
@@ -481,7 +433,7 @@ class Checkout extends Component {
     }
 
     let buttonPlaceOrderClass = 'btn btn-main'
-    if (this.state.lockAddress && this.state.lockPayment && this.state.lockTime && this.state.confirmHome) {
+    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome) {
       buttonPlaceOrderClass += ' active' 
     }
 
@@ -509,6 +461,7 @@ class Checkout extends Component {
     }
 
 
+
     return (
       <div className="App">
         <Title content="Checkout" />
@@ -517,178 +470,23 @@ class Checkout extends Component {
           <div className="checkout-wrap">
             <div className="">
               <div style={{maxWidth: '440px'}}>
-                <h3 className="m-0 mb-3 p-r">
-                  Delivery address
-                  { this.state.lockAddress ? <a onClick={e => this.setState({lockAddress: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
-                </h3>
-                <div className={addressCardClass}>
-                  <div className={"card-body" + (this.state.lockAddress ? " lock" : "")}>
-                    { this.userStore.user.addresses.map((data, index) => {
-                      if (this.state.lockAddress && selectedAddress!=data.address_id) {
-                        return null
-                      }
-                      return (
-                        <div 
-                          className={"custom-control custom-radio bb1" + (data.address_id === selectedAddress ? " active" : "")}
-                          key={index}>
-                          <input 
-                            type="radio" id={"address-" + index} 
-                            name="customRadio" 
-                            checked={data.address_id === selectedAddress}
-                            className="custom-control-input" 
-                            value={data.address_id} 
-                            onChange={e=>this.handleSelectAddress(data.address_id)} />
-                          <label className="custom-control-label" htmlFor={"address-" + index} onClick={e=>this.handleSelectAddress(data.address_id)}>
-                            {data.street_address} {data.unit}, {data.state} {data.zip}
-                            <div className="address-phone">{data.name}, {data.telephone}</div>
-                          </label>
-                          {this.userStore.user.preferred_address === data.address_id &&
-                              <a className="address-rbtn link-blue">DEFAULT</a>
-                          }
-                        </div>)
-                    })}
-
-                    { !this.state.lockAddress ?  (
-                      <div>
-                        <div 
-                          className={"custom-control custom-radio bb1" + ("0" === selectedAddress ? " active" : "")}
-                        >
-                          <input type="radio" id="addressAdd" name="customRadio" className="custom-control-input" 
-                            value="0" 
-                            checked={selectedAddress === "0"}
-                            onChange={e=>this.handleSelectAddress('0')}/>
-                          <label className="custom-control-label" htmlFor="addressAdd" onClick={e=>this.handleSelectAddress('0')}>Add new address</label>
-                        </div>
-                        <div className={addressFormClass}>
-                          <PlacesAutocomplete
-                            value={this.state.newStreetAddress}
-                            onChange={this.handleNewAddressChange}
-                            onSelect={this.handleNewAddressSelect}
-                          >
-                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                              <div style={{position:'relative'}}>
-                                <input
-                                  {...getInputProps({
-                                    autoComplete: 'off',
-                                    placeholder: 'Delivery to...',
-                                    className: 'aw-input--control aw-input--small  aw-input--left location-search-input  aw-input--location mt-3 form-control',
-                                  })}
-                                />
-                                <div className={"autocomplete-dropdown-container" + (suggestions.length > 0 ? '' : ' d-none') }>
-                                  {suggestions.map(suggestion => {
-                                    const className = suggestion.active
-                                      ? 'suggestion-item--active'
-                                      : 'suggestion-item';
-                                    // inline style for demonstration purpose
-                                    const style = suggestion.active
-                                      ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                      : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                    return (
-                                      <div
-                                        {...getSuggestionItemProps(suggestion, {
-                                          className,
-                                          style,
-                                        })}
-                                      >
-                                        <strong>
-                                          {suggestion.formattedSuggestion.mainText}
-                                        </strong>{' '}
-                                        <small>
-                                          {suggestion.formattedSuggestion.secondaryText}
-                                        </small>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            )}
-
-                          </PlacesAutocomplete>
-                          <div className="row mt-3">
-                            <div className="col-md-7">
-                              <div className="form-group">
-                                <input 
-                                  value={this.state.newAptNo}
-                                  onChange={e=>this.setState({newAptNo: e.target.value})}
-                                  type="text" className="form-control input1" placeholder="Apt number" />
-                              </div>
-                            </div>
-                            <div className="col-md-5">
-                              <div className="form-group">
-                                <input 
-                                  value={this.state.newZip}
-                                  onChange={e=>this.setState({newZip: e.target.value})}
-                                  type="text" className="form-control input1" placeholder="Zip code" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-7">
-                              <div className="form-group">
-                                <input
-                                  value={this.state.newContactName}
-                                  onChange={e=>this.setState({newContactName: e.target.value})}
-                                  type="text" className="form-control input1" placeholder="Contact Name" />
-                              </div>
-                            </div>
-                            <div className="col-md-5">
-                              <div className="form-group">
-                                <input
-                                  value={this.state.newPhoneNumber}
-                                  onChange={e=>this.setState({newPhoneNumber: e.target.value})}
-                                  type="text" className="form-control input1" placeholder="Phone Number" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <textarea
-                              value={this.state.newDeliveryNotes}
-                              onChange={e=>this.setState({newDeliveryNotes: e.target.value})}
-                              className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
-                          </div>
-                          <div className="custom-control custom-checkbox">
-                            <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
-                            <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
-                          </div>
-                          <hr />
-                          <button className="btn btn-main active inline-round" onClick={e=>this.handleConfirmAddress(e)}>CONFIRM</button>
-                          {this.state.invalidAddressText && <div className="error-msg">{this.state.invalidAddressText}</div>}
-                        </div>
-                      </div>
-                    ):null}
-                    {(!this.state.lockAddress && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
-
-                    {this.state.invalidSelectAddress && <span className="text-error text-center d-block mt-3">{this.state.invalidSelectAddress}</span>}
-                  </div>
-                </div>
-                <h3 className="m-0 mb-3 p-r mt-5">Time 
-                  {this.state.lockTime ?  <a onClick={e => this.setState({lockTime: false, timeDropdown: true})} className="address-rbtn link-blue">CHANGE</a> : null}
-                  {this.state.addressError ?  <span className="address-rbtn text-error sm">Address required</span> : null}
-                </h3>
-                <div className="dropdown show">
-                  <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
-                    <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                      {this.state.selectedTime ? <React.Fragment>{this.state.selectedDay}, {this.state.selectedTime}</React.Fragment> : 'Choose delivery date and time'}
-                    </button>
-                    <div className={timeDropdownClass}>
-                      {this.state.deliveryTimes.map((items, key) => (
-                        <React.Fragment key={key}>
-                          <h6 className="dropdown-header">{items.day}</h6>
-                          {items.data.map((item, key2) => ( 
-                            <div className="dropdown-item" key={key2} onClick={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)}  >
-                              <div className="custom-control custom-radio">
-                                <input 
-                                  checked={this.state.selectedDate === item.date && this.state.selectedTime === item.time}
-                                  type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)} />
-                                <label className="custom-control-label" >{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
-                              </div>
-                            </div>
-                          ))}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </ClickOutside>
-                </div>
+                {this.userStore.user && 
+                  <DeliveryAddressOptions
+                    editable={false}
+                    lock={true}
+                    selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
+                    user={this.userStore.user}
+                  />
+                }
+                {this.userStore.user && 
+                    <DeliveryTimeOptions
+                      editable={false}
+                      lock={true}
+                      data={[]}
+                      selected={this.userStore.selectedDeliveryTime}
+                      isAddressSelected={true}
+                    />
+                }
                 <div className="custom-control custom-checkbox mt-2 mb-3">
                   <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
                   <label className="custom-control-label" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>

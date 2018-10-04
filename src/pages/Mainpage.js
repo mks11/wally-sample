@@ -14,6 +14,8 @@ import {
 } from 'reactstrap';
 
 import DeliveryModal from '../common/DeliveryModal.js';
+import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
+import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
 
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
@@ -50,11 +52,12 @@ class Product extends Component {
   }
 
   handleProductModal() {
-    if (!this.userStore.selectedDeliveryZip && !this.userStore.selectedDeliveryTime) {
+    if (!this.userStore.selectedDeliveryAddress && !this.userStore.selectedDeliveryTime) {
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = this.props.product.product_id
     } else {
-      this.productStore.showModal(this.props.product.product_id)
+      console.log(this.userStore.getDeliveryParams())
+      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams())
     }
   }
 
@@ -208,11 +211,11 @@ class Mainpage extends Component {
 
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
-    this.productStore.getProductDisplayed(id).then((data) => {
+    this.productStore.getProductDisplayed(id, this.userStore.getDeliveryParams()).then((data) => {
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
-    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth()).catch((e) => {
+    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).catch((e) => {
       console.error('Failed to load current cart', e)
     })
   }
@@ -243,7 +246,7 @@ class Mainpage extends Component {
   }
 
   handleEdit(data) {
-    this.productStore.showModal(data.product_id, data.customer_quantity)
+    this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams())
   }
 
   handleDelete(id) {
@@ -257,7 +260,7 @@ class Mainpage extends Component {
 
   handleSearch(keyword) {
     this.setState({searchAheadLoading: true})
-    this.productStore.searchKeyword(keyword).then((data) => {
+    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
       this.setState({searchAhead: data.products, searchAheadLoading: false, searchResult: data})
     })
   }
@@ -268,7 +271,7 @@ class Mainpage extends Component {
     const instance = this._typeahead.getInstance();
     instance.blur();
 
-    this.productStore.searchKeyword(keyword).then((data) => {
+    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
       let filters = []
       filters = data && data.filters ?
         data.filters : []
@@ -515,6 +518,7 @@ let currentSearchCat= curCat.join(', ')
       );
     });
 
+
     return (
       <div className="App">
 
@@ -544,16 +548,16 @@ let currentSearchCat= curCat.join(', ')
                     <div className="col-auto">
                       <div className="d-flex justify-content-between">
                         <i className="fa fa-map-marker bar-icon"></i>
-                        <span style={{lineHeight: 26}}>{this.userStore.selectedDeliveryZip && this.userStore.selectedDeliveryZip.zip}</span>
+                        <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
                       </div>
                     </div>
 
                     <div className="col-auto">
                       <div className="d-flex justify-content-between">
                         <i className="fa fa-clock-o bar-icon"></i>
-                        <span style={{lineHeight: 26}}>{this.userStore.selectedDeliveryTime !== null ?
+                        <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryTime !== null ?
                             <React.Fragment>
-                              {this.userStore.selectedDeliveryTime.selectedDay}, {this.userStore.selectedDeliveryTime.selectedTime}
+                              {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
                             </React.Fragment>
                             : null
                         }
@@ -568,7 +572,6 @@ let currentSearchCat= curCat.join(', ')
                 <div className="row">
 
                    <div className="col-auto" onMouseEnter={this.handleShowDeliveryDetail} onMouseLeave={this.handleHideDeliveryDetail}>
-                    {/*}<div className="col-auto" onClick={this.handleShowDeliveryDetail}*/}
                     <div className="left-column pr-3 d-inline-block">
                       <h3><strong>Delivery</strong></h3>
                     </div>
@@ -576,7 +579,9 @@ let currentSearchCat= curCat.join(', ')
                     <div className={deliveryTimeClass}>
                       <div className="d-flex justify-content-between">
                         <i className="fa fa-map-marker bar-icon"></i>
-                        <span>{this.userStore.selectedDeliveryZip && this.userStore.selectedDeliveryZip.zip}</span>
+                        <span>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
+                      </div>
+                      <div className="dropdown-item">
                       </div>
                     </div>
 
@@ -585,13 +590,16 @@ let currentSearchCat= curCat.join(', ')
                         <i className="fa fa-clock-o bar-icon"></i>
                         <span>{this.userStore.selectedDeliveryTime !== null ?
                             <React.Fragment>
-                              {this.userStore.selectedDeliveryTime.selectedDay}, {this.userStore.selectedDeliveryTime.selectedTime}
+                              {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
                             </React.Fragment>
                             : null
                         }
 
                       </span>
                     </div>
+
+                      <div className="dropdown-item">
+                      </div>
                   </div>
 
                 </div>
@@ -823,9 +831,9 @@ let currentSearchCat= curCat.join(', ')
         </div>
         { this.productStore.open && <ProductModal/> }
         { this.userStore.user && <DeliveryModal/> }
-        <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span>{cartItems.length}</span>View Order</button>
+        <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
         <div className={cartMobileClass}>
-          <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile()}><span className="navbar-toggler-icon close-icon"></span></button> 
+          <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
           {cartItems.length>0 ?
               <React.Fragment>
                 <h2 className="ml-4">Order</h2>
