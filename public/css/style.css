@@ -1926,3 +1926,7 @@ a {
 .checkout-wrap .card1.delivery {
   max-width: 400px;
 }
+.dropdown-menu.dropdown-large {
+  width: 500px;
+  height: 300px;
+}
