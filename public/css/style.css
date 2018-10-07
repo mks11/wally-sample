@@ -1930,3 +1930,11 @@ a {
   width: 500px;
   height: 300px;
 }
+
+.blog-item {
+  border-bottom: 3px solid #ebebeb;
+}
+
+.blog-date {
+color:#6e8692
+}
