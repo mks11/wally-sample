@@ -7,17 +7,18 @@ import axios from 'axios'
 let index = 0
 
 class ContentStore {
-  blogPost = ''
+  blog = []
 
 
   async getBlogPost(data) {
     const res = await axios.get(API_BLOG_POST)
+    this.blog = res.data
     return res.data
   }
 }
 
 decorate(ContentStore, {
-  blogPost: observable,
+  blog: observable,
 
   getBlogPost: action
 })

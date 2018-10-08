@@ -131,8 +131,7 @@ class DeliveryModal extends Component {
                     <DeliveryTimeOptions
                       lock={false}
                       data={this.state.deliveryTimes}
-                      selectedDate={this.userStore.selectedDeliveryTime ? this.userStore.selectedDeliveryTime.date : null}
-                      selectedTime={this.userStore.selectedDeliveryTime ? this.userStore.selectedDeliveryTime.time : null}
+                      selected={this.userStore.selectedDeliveryTime}
                       isAddressSelected={this.state.isAddressSelected}
                       onSelectTime={this.handleSelectTime}
                     />
