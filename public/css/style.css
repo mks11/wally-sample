@@ -1225,7 +1225,7 @@ section.page-section.bg-fruitfull {
 .product-top{
   border-bottom: 1px solid #ececec;
   padding: 15px 0;
-  /* position: fixed; */
+  position: relative;
   width: 100%;
   background: #fff;
   z-index: 100;
