@@ -273,7 +273,7 @@ font-size:20px;}
 .blog-title{font-size: 25px;font-weight: 700;font-family: 'Circe', sans-serif;line-height:1.4;margin-bottom: 15px;}
 .blog-date, .readmore{color:#6e8692;font-family: 'Aleo', sans-serif;font-size: 15px;margin-bottom: 20px;}
 .readmore{color:#303a88;margin-bottom: 0;font-size: 16px;position: relative;font-family: 'Circe', sans-serif;font-weight: 700;}
-.readmore i{font-size:20px;position: relative;top:5px;}
+.readmore i{font-size:15px;position: relative;top:0px;margin-left:5px;}
 .readmore:hover, .readmore:focus{text-decoration: none;color: #2c357e;}
 .readmore::after{position: absolute;content:'';border-top:2px solid #303a88;left:0;right:0;bottom:-5px;}
 .blog-collapse{display:none;}
@@ -1225,7 +1225,7 @@ section.page-section.bg-fruitfull {
 .product-top{
   border-bottom: 1px solid #ececec;
   padding: 15px 0;
-  /* position: fixed; */
+  position: relative;
   width: 100%;
   background: #fff;
   z-index: 100;
@@ -1938,3 +1938,19 @@ a {
 .blog-date {
 color:#6e8692
 }
+.readmore {
+    font-size: 16px;
+    text-decoration: none;
+    color: #2c357e;
+    position: relative;
+    font-weight: 700;
+  }
+
+  .readmore::after {
+    position: absolute;
+    content: '';
+    border-top: 2px solid #303a88;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+  }
