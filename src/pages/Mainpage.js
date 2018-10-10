@@ -441,15 +441,21 @@ class Mainpage extends Component {
     return display
   }
 
-  handleShowDeliveryDetail = () => {
-    this.setState({deliveryTimeDetail: 1})
-    setTimeout(() => {
-      this.setState({deliveryTimeDetail: 2})
-    }, 50)
+
+  handleShowDeliveryAddressDetail = () => {
+    this.setState({deliveryAddressDetail: true})
   }
 
-  handleHideDeliveryDetail = () => {
-    this.setState({deliveryTimeDetail: 0})
+  handleHideDeliveryAddressDetail = () => {
+    this.setState({deliveryAddressDetail: false})
+  }
+
+  handleShowDeliveryTimeDetail = () => {
+    this.setState({deliveryTimeDetail: true})
+  }
+
+  handleHideDeliveryTimeDetail = () => {
+    this.setState({deliveryTimeDetail: false})
   }
 
   toggleDeliveryTimeDropdown = () => {
@@ -476,15 +482,6 @@ class Mainpage extends Component {
       categoriesDropdownClass += ' show'
     }
 
-    let deliveryTimeClass = 'left-column px-3'
-
-    if (!this.state.deliveryTimeDropdown && !this.state.deliveryAddressDropdown) {
-      if (this.state.deliveryTimeDetail === 1) {
-        deliveryTimeClass = 'left-column px-3 hide hide-block'
-      } else if (this.state.deliveryTimeDetail === 0) {
-        deliveryTimeClass = 'left-column px-3 hide'
-      }
-    }
 
     let cartMobileClass = 'cart-mobile d-md-none'
     if (this.uiStore.cartMobile) {
@@ -505,10 +502,21 @@ class Mainpage extends Component {
       cartSubtotal = this.checkoutStore.cart.subtotal / 100
     }
 
+    let deliveryAddressDetailClass = 'd-none'
+    if (this.state.deliveryAddressDetail) {
+      deliveryAddressDetailClass = ' d-block'
+    }
+
+    let deliveryTimeDetailClass = 'd-none'
+    if (this.state.deliveryTimeDetail) {
+      deliveryTimeDetailClass = ' d-block'
+    }
+
     let cartDropdownClass = 'dropdown-menu dropdown-menu-right'
     if (this.uiStore.cartDropdown) {
       cartDropdownClass += ' show'
     }
+
 
     let buttonCart = 'product-cart-counter'
     if (cartItems.length>0) {
@@ -602,47 +610,16 @@ class Mainpage extends Component {
             <div className="col-md-12 col-sm-8 right-column d-none d-md-block">
               <div className="row">
 
-                <div className="col-auto" onMouseEnter={this.handleShowDeliveryDetail} onMouseLeave={this.handleHideDeliveryDetail}>
-                  <div className="left-column pr-3 d-inline-block">
-                    <h3><strong>Delivery</strong></h3>
-                  </div>
-
-
-                  <div className={deliveryTimeClass}>
-                    <ClickOutside onClickOutside={this.hideDeliveryTimeDropdown} >
-                      <div className="d-flex justify-content-between" onClick={this.toggleDeliveryTimeDropdown}>
-                        <i className="fa fa-map-marker bar-icon"></i>
-                        <span>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
-                      </div>
-                    </ClickOutside>
-
-                    <div className={deliveryTimeDropdownClass}>
-                      {this.userStore.user && 
-                        <DeliveryTimeOptions
-                          lock={false}
-                          data={this.state.deliveryTimes}
-                          selected={this.userStore.selectedDeliveryTime}
-                          isAddressSelected={true}
-                          onSelectTime={this.handleSelectTime}
-                        />
-                      }
-                    </div>
-                  </div>
-
-                  <div className={deliveryTimeClass}>
+                <div className="col-auto" >
+                  <div className="left-column pr-3">
                     <ClickOutside onClickOutside={this.hideDeliveryAddressDropdown} >
-                      <div className="d-flex justify-content-between" onClick={this.toggleDeliveryAddressDropdown}>
-                        <i className="fa fa-clock-o bar-icon"></i>
-                        <span>
-                          {this.userStore.selectedDeliveryTime !== null ?
-                              <React.Fragment>
-                                {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
-                              </React.Fragment>
-                              : null
-                          }
-                        </span>
+                      <div className="d-flex justify-content-between"
+                        onClick={this.toggleDeliveryAddressDropdown}
+                        onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
+                        <i className="fa fa-map-marker bar-icon"></i>
+                        <span className={deliveryAddressDetailClass}>
+                          {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
                       </div>
-
                     </ClickOutside>
 
                     <div className={deliveryAddressDropdownClass}>
@@ -657,6 +634,37 @@ class Mainpage extends Component {
                         />
                       }
                     </div>
+                  </div>
+
+                  <div className="left-column px-3">
+                    <ClickOutside onClickOutside={this.hideDeliveryTimeDropdown} >
+                      <div className="d-flex justify-content-between" onClick={this.toggleDeliveryTimeDropdown}
+                        onMouseEnter={this.handleShowDeliveryTimeDetail} onMouseLeave={this.handleHideDeliveryTimeDetail}>
+                        <i className="fa fa-clock-o bar-icon"></i>
+                        <span className={deliveryTimeDetailClass}>
+                          {this.userStore.selectedDeliveryTime !== null ?
+                              <React.Fragment>
+                                {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
+                              </React.Fragment>
+                              : null
+                          }
+                        </span>
+                      </div>
+
+                    </ClickOutside>
+
+                    <div className={deliveryTimeDropdownClass}>
+                      {this.userStore.user && 
+                        <DeliveryTimeOptions
+                          lock={false}
+                          data={this.state.deliveryTimes}
+                          selected={this.userStore.selectedDeliveryTime}
+                          isAddressSelected={true}
+                          onSelectTime={this.handleSelectTime}
+                        />
+                      }
+                    </div>
+
                   </div>
 
 
