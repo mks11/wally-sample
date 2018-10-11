@@ -64,7 +64,7 @@ class About extends Component {
               </div> 
             </div>
             <div className="tagline">
-              <h2>Start ordering package-free groceries <a href="/main">here</a>.</h2>
+              <h2>Start your sustainable shopping <a href="/main">here</a>.</h2>
             </div>
           </div>
         </section>

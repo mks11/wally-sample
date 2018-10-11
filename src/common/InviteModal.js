@@ -41,10 +41,9 @@ class InviteModal extends Component {
         </div>
         <ModalBody >
           <div className="login-wrap pb-5">
-            <h3 className="m-0 mb-2">Share the love!</h3>
+            <h3 className="m-0 mb-2">Who wants brownie points?</h3>
             <span className="mb-5">
-              Share the link below to give your
-              friends free delivery their first month.    
+              Share the link below to give your friends free delivery their first month. 
             </span>
             <div className="referral-wrap p-2">
               <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el}/>

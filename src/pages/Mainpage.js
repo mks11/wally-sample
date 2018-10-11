@@ -620,7 +620,6 @@ class Mainpage extends Component {
                         <span className={deliveryAddressDetailClass}>
                           {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
                       </div>
-                    </ClickOutside>
 
                     <div className={deliveryAddressDropdownClass}>
                       {this.userStore.user && 
@@ -634,6 +633,7 @@ class Mainpage extends Component {
                         />
                       }
                     </div>
+                    </ClickOutside>
                   </div>
 
                   <div className="left-column px-3">
@@ -651,7 +651,6 @@ class Mainpage extends Component {
                         </span>
                       </div>
 
-                    </ClickOutside>
 
                     <div className={deliveryTimeDropdownClass}>
                       {this.userStore.user && 
@@ -664,6 +663,8 @@ class Mainpage extends Component {
                         />
                       }
                     </div>
+
+                    </ClickOutside>
 
                   </div>
 

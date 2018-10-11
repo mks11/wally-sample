@@ -59,14 +59,14 @@ class Homepage extends Component {
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
-        heroText: 'Hurrah! Looks like we are in your zipcodes',
+        heroText: 'Huzzah! It looks like we\'re in your zip code. \n Click here to start shopping. ',
         heroDescription: 'We are also excited  to be servicing you and your grocery needs completely package free. We are currently in beta and look forward to hearing your thoughts on how we can  make the Wally Shop the best experience for you',
         heroDescriptionAlign: 'left'
       })
     } else {
       this.setState({
         heroStatus: 'invalid_zip',
-        heroText: 'Hope to be there soon!',
+        heroText: 'Hope to be there soon!\n We\'re not in your zip code yet, but sign up and we\'ll send you a notification when we are. ',
         heroDescription: 'We are not currently servicing your zipcode. Input your email below to get notified when we are!',
       })
     }
@@ -84,7 +84,7 @@ class Homepage extends Component {
       .then(() => {
         this.setState({
           heroStatus: 'invalid_zip_success',
-          heroText: 'Great! You\'ll be the first to know when we are in your zipcodes!',
+          heroText: 'Thanks!\n We\'ll notify you when we launch in your area.\n Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.',
           heroDescription: '',
         })
       }).catch((e) => {
@@ -194,8 +194,8 @@ class Homepage extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h2>The Wally Shop is making package-free grocery shopping easy.</h2>
-              <p>We’re changing up the grocery game with zero waste deliveries that come straight to your door. With all of our ingredients coming from local farmers markets and bulk shops, you get high-quality foods, same-day delivery and no plastic packaging. Ever. We want to make it easy for you to be a responsible shopper, so you can save time and keep your peace of mind. You take care of the earth - we’ll take care of the groceries.</p>
+              <h2>Get farm fresh, package-free groceries delivered straight to your door.</h2>
+              <p>The Wally Shop is making responsible shopping easy with ingredients from local farmers markets and bulk shops. So you'll get high-quality foods, same-day delivery and no plastic packaging. Ever. You take care of the earth - we'll take care of the groceries.</p>
             </div>
 
             <div className="row">
