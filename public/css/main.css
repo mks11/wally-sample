@@ -206,7 +206,7 @@ h4 {
 }
 
 .bg-darkblue {
-  background-color: #303A88;
+  background-color: #c0d6cd;
 }
 
 .full-height {
@@ -1019,7 +1019,7 @@ body {
 
 .aw-footer {
   padding: 30px 0;
-  color: #fff;
+  color: #000;
   line-height: 2;
   position: relative;
 }
@@ -1031,7 +1031,7 @@ body {
 }
 
 .aw-footer a {
-  color: #FFF;
+  color: #000;
 }
 
 .aw-footer ul {
@@ -1072,7 +1072,7 @@ body {
   right: 0;
   bottom: 0;
   height: 3px;
-  background-color: #ea5e74;
+  background-color: #000;
 }
 
 #invalid-text {
