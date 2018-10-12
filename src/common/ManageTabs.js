@@ -52,7 +52,7 @@ const ManageTabs = ({ page }) => {
           {
             manageTabsRouter.map(item => {
               return (
-                <Tab {...{ item, page }}/>
+                <Tab {...{ item, page }} key={item.id} />
               )
             })
           }
