@@ -131,8 +131,6 @@ class Mainpage extends Component {
     this.modalStore = this.props.store.modal
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
-    this.userStore = this.props.store.user
-
 
     this.state = {
       searchAhead: [],

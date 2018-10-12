@@ -9,7 +9,7 @@ import Account from './pages/Account';
 import Help from './pages/Help';
 import HelpSingle from './pages/HelpSingle';
 import HelpSingleAnswer from './pages/HelpSingleAnswer';
-import HelpTopics from './pages/HelpTopics';
+// import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from './pages/HelpAnswer';
 import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
@@ -19,9 +19,11 @@ import InviteFriends from './pages/InviteFriends';
 import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
+import ManageShopper from './pages/ManageShopper';
 
 export default (
     <Fragment>
+        <Route exact path="/manage/shopper" component={ManageShopper} />
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>
