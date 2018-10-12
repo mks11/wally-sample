@@ -1094,3 +1094,9 @@ body {
   font-weight: bold;
   background-color: #ccc;
 }
+
+.aw--custom-dropdown .dropdown-toggle {
+  width: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}

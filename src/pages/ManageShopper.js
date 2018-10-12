@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Table} from 'reactstrap'
+import {
+  Row,
+  Col,
+  Container,
+  Table,
+} from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from '../common/ManageTabs'
+import CustomDropdown from '../common/CustomDropdown'
 
 import { connect } from '../utils'
 
@@ -22,20 +28,24 @@ class ManageShopper extends Component {
         if (!status || user.type !== 'admin') {
           this.props.store.routing.push('/')
         } else {
-          this.loadData()
+          this.loadTimeFramesData()
         }
       })
   }
 
-  loadData() {
-    const date = + new Date()
-    this.adminStore.getTimeFrames(date)
-    this.adminStore.getShopLocations()
+  loadTimeFramesData() {
+    this.adminStore.getTimeFrames()
+  }
+
+  loadShopLocations = (timeframe) => {
+    this.adminStore.getShopLocations(timeframe)
   }
 
   render() {
     if (!this.userStore.user) return null
-      
+
+    const { timeframes, locations } = this.adminStore
+
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -43,16 +53,28 @@ class ManageShopper extends Component {
 
         <section className="page-section pt-1">
           <Container>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th scope="col">Time Frame:</th>
-                  <th scope="col">Location:</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </Table>
+            <Row>
+              <Col md="6" sm="12">
+                <div className="mb-3">
+                  <div className="mb-2 font-weight-bold">Time Frame:</div>
+                  <CustomDropdown
+                    frames={timeframes}
+                    onItemClick={this.loadShopLocations}
+                    title="Time Frame"
+                  />
+                </div>
+              </Col>
+              <Col md="6" sm="12">
+                <div className="mb-3">
+                  <div className="mb-2 font-weight-bold">Location:</div>
+                  {
+                    locations && locations.map(item => {
+                      return (<div key={item}>{item}</div>)
+                    })
+                  }
+                </div>
+              </Col>
+            </Row>
           </Container>
         </section>
 

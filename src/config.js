@@ -42,8 +42,8 @@ export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 
 
 
-export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes"
-export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/locations"
+export const API_ADMIN_GET_TIME_FRAMES = "http://localhost:4000/api/admin/timeframes"
+export const API_ADMIN_GET_SHOP_LOCATIONS = "http://localhost:4000/api/admin/shopping/locations"
 
 
 

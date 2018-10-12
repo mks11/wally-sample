@@ -429,6 +429,20 @@ const searchHelp = {}
 const helpTopics = {}
 const helpAnswers = {}
 
+const getTimeFrames = {
+  method: "GET",
+  response: {
+    timeframes: [ '2018-10-18, 4:00-5:00PM' ]
+  }
+}
+
+const getShopLocations = {
+  method: "GET",
+  response: {
+    locations: [ 'Union Square', 'Fort Greene' ]
+  }
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -466,5 +480,8 @@ module.exports = {
   "/api/help/questions": getQuestions,
   "/api/help/question/:id": getQuestion,
   "/api/help/gethelptopics": getHelpTopics,
-  "/api/help/getcontact": getContact
+  "/api/help/getcontact": getContact,
+
+  "/api/admin/timeframes": getTimeFrames,
+  "/api/admin/shopping/locations": getShopLocations,
 }

@@ -1,28 +1,30 @@
-import {observable, decorate, action } from 'mobx'
+import { observable, decorate, action } from 'mobx'
 import { 
   API_ADMIN_GET_TIME_FRAMES,
   API_ADMIN_GET_SHOP_LOCATIONS,
 } from '../config'
 import axios from 'axios'
+import moment from 'moment'
 
 class AdminStore {
 
-  timeFrames = {}
-  locations = {}
+  timeframes = []
+  locations = []
 
-  async getTimeFrames(time){
-    const resp = await axios(`${API_ADMIN_GET_TIME_FRAMES}/${time}`)
-    this.timeFrames = resp.data
+  async getTimeFrames(){
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    const resp = await axios(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
+    this.timeframes = resp.data.timeframes
   }
 
-  async getShopLocations(){
-    const resp = await axios(API_ADMIN_GET_SHOP_LOCATIONS)
-    this.locations = resp.data
+  async getShopLocations(timeframe){
+    const resp = await axios(`${API_ADMIN_GET_SHOP_LOCATIONS}?timeframe=${timeframe}`)
+    this.locations = resp.data.locations
   }
 }
 
 decorate(AdminStore, {
-  timeFrames: observable,
+  timeframes: observable,
   locations: observable,
   getTimeFrames: action,
   getShopLocations: action,
