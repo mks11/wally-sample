@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom'
+import { Container, Row, Col } from 'reactstrap'
 
 const manageTabsRouter = [
   {
@@ -30,7 +31,7 @@ const manageTabsRouter = [
 
 const Tab = ({ item, page }) => {
   return (
-    <div className="col">
+    <Col>
       <div className={`nav-link ${item.id === page ? 'active-tab' : ''}`}>
         {
           (item.id === page || !item.linkTo)
@@ -39,15 +40,15 @@ const Tab = ({ item, page }) => {
         }
         
       </div>
-    </div>
+    </Col>
   )
 }
 
 const ManageTabs = ({ page }) => {
   return (
     <div className="admin-tabs mt-3">
-      <div className="container">
-        <div className="row">
+      <Container>
+        <Row>
           {
             manageTabsRouter.map(item => {
               return (
@@ -55,8 +56,8 @@ const ManageTabs = ({ page }) => {
               )
             })
           }
-        </div>
-      </div>
+        </Row>
+      </Container>
     </div>
   )
 }

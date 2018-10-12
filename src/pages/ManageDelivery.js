@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input  } from 'reactstrap'
+import { Table, Container } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from '../common/ManageTabs'
 
@@ -42,37 +42,33 @@ class ManageDelivery extends Component {
         <Title content="Delivery Portal" />
 
         <section className="page-section pt-1">
-          <div className="container">
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Time Frame:</th>
-                    <th scope="col">Delivery Route:</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Container>
+            <Table responsive>
+            <thead>
+                <tr>
+                <th scope="col">Time Frame:</th>
+                <th scope="col">Delivery Route:</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </Table>
+          </Container>
         </section>
 
         <section className="page-section pt-1">
-          <div className="container">
+          <Container>
             <h2>Orders</h2>
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
+            <Table responsive>
+            <thead>
+                <tr>
+                
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </Table>
+          </Container>
         </section>
       </div>
     );

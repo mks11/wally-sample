@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input  } from 'reactstrap'
+import { Input, Container } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from '../common/ManageTabs'
 
@@ -42,9 +42,9 @@ class ManageFulfillment extends Component {
         <Title content="Fulfillment Portal" />
 
         <section className="page-section pt-1">
-          <div className="container">
+          <Container>
             
-          </div>
+          </Container>
         </section>
       </div>
     );

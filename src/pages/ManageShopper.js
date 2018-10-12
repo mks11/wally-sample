@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input  } from 'reactstrap'
+import { Container, Table} from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from '../common/ManageTabs'
 
@@ -42,44 +42,40 @@ class ManageShopper extends Component {
         <Title content="Shopper Portal" />
 
         <section className="page-section pt-1">
-          <div className="container">
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Time Frame:</th>
-                    <th scope="col">Location:</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Container>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th scope="col">Time Frame:</th>
+                  <th scope="col">Location:</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </Table>
+          </Container>
         </section>
 
         <section className="page-section pt-1">
-          <div className="container">
+          <Container>
             <h2>Shop Location View</h2>
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Organic</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Farm</th>
-                    <th scope="col">Qty</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Purchase</th>
-                    <th scope="col">Box #</th>
-                    <th scope="col">Edit Item</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th scope="col">Organic</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Farm</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Purchase</th>
+                  <th scope="col">Box #</th>
+                  <th scope="col">Edit Item</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </Table>
+          </Container>
         </section>
       </div>
     );
