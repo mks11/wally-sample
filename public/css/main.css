@@ -1089,3 +1089,8 @@ body {
 .header-wrap.top-bar-open + .aw-main  {
   padding-top:34px;
 }
+
+.admin-tabs .active-tab {
+  font-weight: bold;
+  background-color: #ccc;
+}

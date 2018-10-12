@@ -42,6 +42,11 @@ export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 
 
 
+export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes"
+export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/locations"
+
+
+
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes"
 
