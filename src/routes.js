@@ -20,10 +20,14 @@ import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
 import ManageShopper from './pages/ManageShopper';
+import ManageFulfillment from './pages/ManageFulfillment';
+import ManageDelivery from './pages/ManageDelivery';
 
 export default (
     <Fragment>
         <Route exact path="/manage/shopper" component={ManageShopper} />
+        <Route exact path="/manage/fulfillment" component={ManageFulfillment} />
+        <Route exact path="/manage/delivery" component={ManageDelivery} />
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>
