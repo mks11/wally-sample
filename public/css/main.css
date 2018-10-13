@@ -1109,6 +1109,10 @@ body {
   }
 }
 
+.modal-shopper .aw--custom-dropdown {
+  margin-bottom: 100px;
+}
+
 .shopper-location {
   padding: 5px 10px;
   cursor: pointer;
