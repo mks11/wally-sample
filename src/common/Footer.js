@@ -44,19 +44,19 @@ class Footer extends Component {
                     THE WALLY SHOP
                   </h4>
                   <ul>
-                      <li><Link to="about">About</Link></li>
-                      <li><Link to="help">Help</Link></li>
+                      <li><Link to="about">ABOUT</Link></li>
+                      <li><Link to="help">HELP</Link></li>
                   </ul>
 
                 </div>
                 <div className="col-sm-4">
                   <h4 className="aw-footer--title">
-                    WE’VE GOT YOU
+                    SUPPORT
                   </h4>
                   <ul>
-                    <li><a href="mailto:support@thewallyshop.co">Contact Us</a></li>
-                    <li><Link to={"/tnc"} >Terms &amp; Conditions</Link></li> 
-                    <li><Link to={"/privacy"} >Privacy Policy</Link></li> 
+                    <li><a href="mailto:support@thewallyshop.co">CONTACT US</a></li>
+                    <li><Link to={"/tnc"} >TERMS &amp; CONDITIONS</Link></li> 
+                    <li><Link to={"/privacy"} >PRIVACY POLICY</Link></li> 
                   </ul>
 
                 </div>
@@ -64,21 +64,6 @@ class Footer extends Component {
                   <h4 className="aw-footer--title">
                     FOLLOW US
                   </h4>
-                  <ul>
-                    <li>@thewallyshop</li>
-                    <li>
-                      <ul className="aw-social mt-2">
-                        <li className="d-inline-block align-middle mr-3 footer-fb">
-                          <a href={FACEBOOK} target="_blank">
-                          </a>
-                        </li>
-                        <li className="d-inline-block align-middle footer-ig">
-                          <a href={INSTAGRAM} target="_blank">
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
 
                 </div>
               </div>
@@ -90,6 +75,21 @@ class Footer extends Component {
             <div className="container">
               <form className="form-inline">
                 <label htmlFor="subscribe-email">Subscribe to our newsletter</label>
+
+                  <ul>
+                    <li>
+                      <ul className="aw-social mt-0 mx-2">
+                        <li className="d-inline-block align-middle mr-3 footer-fb">
+                          <a href={FACEBOOK} target="_blank">
+                          </a>
+                        </li>
+                        <li className="d-inline-block align-middle footer-ig">
+                          <a href={INSTAGRAM} target="_blank">
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
                 <div className="input-group">
                   <input type="email" id="subscribe-email" className="form-control" placeholder="Enter your email" onChange={e => this.setState({email: e.target.value})}/>
                     <div className="input-group-append">

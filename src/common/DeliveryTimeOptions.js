@@ -22,6 +22,9 @@ class DeliveryTimeOptions extends Component {
   }
 
   toggleTimeDropdown(e) {
+    if (this.props.lock) {
+      return
+    }
     if (!this.props.isAddressSelected) {
       this.setState({addressError: true})
       return

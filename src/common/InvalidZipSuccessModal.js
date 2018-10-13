@@ -13,7 +13,7 @@ class InvalidZipModal extends Component {
         </div>
         <ModalBody>
           <div className="login-wrap pb-5">
-            <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Great you'll be the first to know when we are in your zipcode!</h3>
+            <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Thanks!<br/> We'll notify you when we launch in your area.<br/> Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.</h3>
           </div>
         </ModalBody>
       </Modal>

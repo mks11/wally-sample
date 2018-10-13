@@ -21,7 +21,9 @@ class DeliveryModal extends Component {
     this.state = {
       deliveryTimes: [],
       confirmHome: false,
-      isAddressSelected: false
+      isAddressSelected: false,
+      selectedAddress: null,
+      selectedTime: null,
     }
 
     this.userStore = this.props.store.user
@@ -60,7 +62,6 @@ class DeliveryModal extends Component {
     }
 
     this.setState({deliveryTimes})
-    console.log(deliveryTimes)
 
     function addTimes(data) {
       const timeFirst = data[0].split('-')[0]
@@ -96,17 +97,29 @@ class DeliveryModal extends Component {
       zip: address.zip,
     }, this.userStore.getHeaderAuth())
       
-    this.setState({isAddressSelected: true})
-    this.userStore.setDeliveryAddress(address)
+    this.setState({isAddressSelected: true, selectedAddress: address})
     this.getDeliveryTimes(data)
     return data 
   }
 
   handleSelectTime = (data) => {
-    this.userStore.setDeliveryTime(data)
+    this.setState({selectedTime: data})
   }
 
+  handleSubmit = (data) => {
+    this.userStore.setDeliveryAddress(this.state.selectedAddress)
+    this.userStore.setDeliveryTime(this.state.selectedTime)
+    this.userStore.toggleDeliveryModal(false)
+  }
+
+
+
   render() {
+    let btnSubmitClass  = 'btn btn-main mt-3'
+    if (this.state.selectedAddress && this.state.selectedTime) {
+      btnSubmitClass += ' active'
+    }
+
     return (
       <Modal isOpen={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm">
@@ -137,8 +150,10 @@ class DeliveryModal extends Component {
                     />
                 }
               </div>
+            <button onClick={this.handleSubmit} className={btnSubmitClass}>Submit</button>
             </div>
           </div>
+
         </ModalBody>
       </Modal>
     );
