@@ -93,7 +93,7 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover, 
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
-.aw-header, .aw-header.navbar-white{background-color: #ffe9dd;}
+.aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
 .navbar-toggler {
 }
 .aw-header.navbar-white .navbar-toggler-icon {
@@ -200,7 +200,7 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#ea5e74;box-shadow:none!important;-webkit-box-shadow:none!important;}
+background-color:#faf5ee;box-shadow:none!important;-webkit-box-shadow:none!important;color:#000;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:78px;}
 .footer-fb a{
