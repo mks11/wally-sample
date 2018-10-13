@@ -53,10 +53,8 @@ class ManageShopper extends Component {
   render() {
     if (!this.userStore.user) return null
 
-    const {
-      timeframes,
-      locations,
-    } = this.adminStore
+    const { timeframes, locations } = this.adminStore
+    const { timeframe } = this.state
 
     return (
       <div className="App">
@@ -102,7 +100,7 @@ class ManageShopper extends Component {
         <section className="page-section pt-1">
           <Container>
             <h2>Shop Location View</h2>
-            <ShopperTable />
+            <ShopperTable {...{ timeframe }} />
           </Container>
         </section>
       </div>

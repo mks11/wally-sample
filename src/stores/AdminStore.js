@@ -37,9 +37,26 @@ class AdminStore {
   }
 
   async updateShopItem(timeframe, shopitem_id) {
-    const data = {}
-    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
-    console.log(resp.data)
+    const item = this.shopitems.find(item => item.product_id === shopitem_id)
+    if (item) {
+      const data = {
+        // product_id: item.product_id,
+        // inventory_id: item.inventory_id,
+        // organic: item.organic,
+        // product_name: item.product_name,
+        // product_producer: item.product_producer,
+        // missing: item.missing,
+        // box_number: item.box_number,
+        // substitute_for_name: item.substitute_for_name,
+        // product_substitute_reason: item.product_substitute_reason,
+        // farm_substitue_reason: item.farm_substitue_reason,
+        // price_substitute_reason: item.price_substitute_reason,
+        // product_missing_reason: item.product_missing_reason,
+        ...item
+      }
+      const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
+      console.log(resp.data)
+    }
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id) {
