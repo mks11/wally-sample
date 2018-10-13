@@ -85,18 +85,8 @@ class ManageFulfillment extends Component {
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
               <TabPane tabId="1">
-                <Row>
-                  <Col>
-
-                  </Col>
-                </Row>
               </TabPane>
               <TabPane tabId="2">
-                <Row>
-                  <Col>
-                    
-                  </Col>
-                </Row>
               </TabPane>
             </TabContent>
           </Container>
