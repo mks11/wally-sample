@@ -38,7 +38,7 @@ const TableFoot = ({ shopitems }) => (
   <tfoot>
     <tr>
       <td colSpan="3"></td>
-      <td colSpan="2">Total Price: ${totalPrice({ shopitems }) / 100}</td>
+      <td colSpan="2"><b>Total Price:</b> ${totalPrice({ shopitems }) / 100}</td>
       <td colSpan="3"></td>
     </tr>
   </tfoot>
@@ -72,8 +72,8 @@ const ShopperTable = ({ shopitems, shopitemsFarms }) => (
               </td>
               <td>
                 <Row noGutters>
-                  <Col xs="6">Unit:</Col>
-                  <Col xs="6">Qty:</Col>
+                  <Col xs="6"><b>Unit:</b></Col>
+                  <Col xs="6"><b>Qty:</b></Col>
                   <Col xs="6">{item.price_unit}</Col>
                   <Col xs="6">{item.quantity}</Col>
                   <Col xs="12"><Input placeholder="Enter actual qty (if different)" /></Col>

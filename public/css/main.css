@@ -1097,8 +1097,14 @@ body {
 
 .aw--custom-dropdown .dropdown-toggle {
   width: auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 15px 10px;
+  border-radius: .25rem;
+}
+
+@media (min-width: 768px){
+  .aw--custom-dropdown .dropdown-toggle {
+    font-size: 16px;
+  }
 }
 
 .shopper-location {
