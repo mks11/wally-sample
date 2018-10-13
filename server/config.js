@@ -463,6 +463,25 @@ const getShopItems = {
         product_missing_reason: '',
         price_unit: '1 Ct',
         quantity: 16,
+        warehouse_placement: null
+      },
+      {
+        product_id: 'prod_456',
+        inventory_id: 'invetory_567',
+        organic: true,
+        product_name: 'Awesome product 2',
+        product_producer: 'Farm A',
+        product_price: 345,
+        missing: false,
+        box_number: 'XYZ213',
+        substitute_for_name: null,
+        product_substitute_reason: '',
+        farm_substitue_reason: '',
+        price_substitute_reason: '',
+        product_missing_reason: '',
+        price_unit: '1 Ct',
+        quantity: 9,
+        warehouse_placement: null
       }
     ]
   }
