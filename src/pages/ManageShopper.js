@@ -56,8 +56,6 @@ class ManageShopper extends Component {
     const {
       timeframes,
       locations,
-      shopitems,
-      shopitemsFarms
     } = this.adminStore
 
     return (
@@ -104,7 +102,7 @@ class ManageShopper extends Component {
         <section className="page-section pt-1">
           <Container>
             <h2>Shop Location View</h2>
-            <ShopperTable {...{ shopitems, shopitemsFarms }} />
+            <ShopperTable />
           </Container>
         </section>
       </div>

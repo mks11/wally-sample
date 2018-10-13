@@ -47,6 +47,15 @@ class AdminStore {
     const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
     console.log(resp.data)
   }
+
+  setEditing(id, edit) {
+    for (let item of this.shopitems) {
+      if (item.product_id === id) {
+        item.complete = !edit
+        break
+      }
+    }
+  }
 }
 
 decorate(AdminStore, {

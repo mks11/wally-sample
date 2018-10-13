@@ -1095,14 +1095,16 @@ body {
   background-color: #ececec;
 }
 
-.aw--custom-dropdown .dropdown-toggle {
+.aw--custom-dropdown .dropdown-toggle,
+.shopper-table .btn {
   width: auto;
   padding: 15px 10px;
   border-radius: .25rem;
 }
 
 @media (min-width: 768px){
-  .aw--custom-dropdown .dropdown-toggle {
+  .aw--custom-dropdown .dropdown-toggle,
+  .shopper-table .btn {
     font-size: 16px;
   }
 }

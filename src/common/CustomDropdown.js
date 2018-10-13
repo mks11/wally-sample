@@ -40,7 +40,7 @@ class CustomDropdown extends PureComponent {
 
     return values && values.length ? (
       <Dropdown isOpen={open} toggle={this.toggle} direction="down" className="aw--custom-dropdown">
-        <DropdownToggle caret>{title}</DropdownToggle>
+        <DropdownToggle color="info" caret>{title}</DropdownToggle>
         <DropdownMenu>
           {values.map(item => {
             return (
