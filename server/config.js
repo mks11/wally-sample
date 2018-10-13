@@ -510,6 +510,13 @@ const updateShopItemQuantity = {
   }
 }
 
+const updateShopItemsWarehouseLocations = {
+  method: "PATCH",
+  response: {
+    
+  }
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -555,4 +562,5 @@ module.exports = {
   "/api/admin/shopping/shopitems/farms": getShopItemsFarms,
   "/api/admin/shopping/shopitem/:id": updateShopItem,
   "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
+  "/api/admin/fulfillment/shopitem/warehouse-location": updateShopItemsWarehouseLocations,
 }

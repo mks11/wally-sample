@@ -1096,7 +1096,8 @@ body {
 }
 
 .aw--custom-dropdown .dropdown-toggle,
-.shopper-table .btn {
+.shopper-table .btn,
+.fulfillment-page .btn {
   width: auto;
   padding: 15px 10px;
   border-radius: .25rem;
@@ -1104,7 +1105,8 @@ body {
 
 @media (min-width: 768px){
   .aw--custom-dropdown .dropdown-toggle,
-  .shopper-table .btn {
+  .shopper-table .btn,
+  .fulfillment-page .btn {
     font-size: 16px;
   }
 }
@@ -1120,4 +1122,8 @@ body {
 
 .shopper-location:hover {
   background: #ececec;
+}
+
+.fulfillment-page .nav-tabs .nav-link {
+  font-weight: bold;
 }

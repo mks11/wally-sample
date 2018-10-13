@@ -7,10 +7,13 @@ import {
   NavLink,
   Container,
   Row,
-  Col
+  Col,
 } from 'reactstrap';
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
+import CustomDropdown from '../common/CustomDropdown'
+import FulfillmentPlaceView from './manage/FulfillmentPlaceView'
+import FulfillmentPackView from './manage/FulfillmentPackView'
 
 import { connect } from '../utils'
 
@@ -19,7 +22,8 @@ class ManageFulfillment extends Component {
     super(props)
 
     this.state = {
-      activeTab: '1'
+      activeTab: '1',
+      timeframe: null
     };
 
     this.userStore = this.props.store.user
@@ -41,12 +45,17 @@ class ManageFulfillment extends Component {
   loadData() {
     const date = + new Date()
     this.adminStore.getTimeFrames(date)
-    this.adminStore.getShopLocations()
+  }
+
+  onTimeFrameSelect = (timeframe) => {
+    this.setState({
+      timeframe
+    })
   }
 
   toggle = (e) => {
     const tab = e.target.getAttribute('tab-id')
-    if (this.state.activeTab !== tab) {
+    if (tab && this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       });
@@ -55,13 +64,33 @@ class ManageFulfillment extends Component {
 
   render() {
     if (!this.userStore.user) return null
+
+    const { timeframes } = this.adminStore
+    const { timeframe } = this.state
       
     return (
       <div className="App">
         <ManageTabs page="fulfillment" />
         <Title content="Fulfillment Portal" />
 
-        <section className="page-section pt-1">
+        <section className="page-section pt-1 fulfillment-page">
+          <Container>
+            <Row>
+              <Col md="6" sm="12">
+                <div className="mb-3">
+                  <div className="mb-2 font-weight-bold">Time Frame:</div>
+                  <CustomDropdown
+                    values={timeframes}
+                    onItemClick={this.onTimeFrameSelect}
+                    title="Time Frame"
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+
+        <section className="page-section pt-1 fulfillment-page">
           <Container>
             <Nav tabs>
               <NavItem>
@@ -70,7 +99,7 @@ class ManageFulfillment extends Component {
                   className={`${this.state.activeTab === '1' ? 'active' : '' }`}
                   onClick={this.toggle}
                 >
-                  <b>Place</b>
+                  Place
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -79,14 +108,16 @@ class ManageFulfillment extends Component {
                   className={`${this.state.activeTab === '2' ? 'active' : '' }`}
                   onClick={this.toggle}
                 >
-                  <b>Pack</b>
+                  Pack
                 </NavLink>
               </NavItem>
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
               <TabPane tabId="1">
+                <FulfillmentPlaceView {...{ timeframe }} />
               </TabPane>
               <TabPane tabId="2">
+                <FulfillmentPackView {...{ timeframe }} />
               </TabPane>
             </TabContent>
           </Container>

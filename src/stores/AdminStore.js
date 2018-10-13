@@ -5,6 +5,7 @@ import {
   API_ADMIN_GET_SHOP_ITEMS,
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_UPDATE_SHOP_ITEM,
+  API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -45,6 +46,13 @@ class AdminStore {
     const data = {}
     const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
     console.log(resp.data)
+    //this.updateStoreShopItem(shopitem_id, resp.data)
+  }
+
+  async updateShopItemsWarehouseLocations(data) {
+    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
+    console.log(resp.data)
+    // updateManyStoreShopItems(resp.data)
   }
 
   setEditing(id, edit) {
@@ -64,6 +72,13 @@ class AdminStore {
       return item
     })
   }
+
+  updateManyStoreShopItems(shopitems) {
+    for (let item of shopitems) {
+      const id = item.product_id
+      this.updateStoreShopItem(id, item)
+    }
+  }
 }
 
 decorate(AdminStore, {
@@ -76,6 +91,7 @@ decorate(AdminStore, {
   getShopLocations: action,
   getShopItems: action,
   getShopItemsFarms: action,
+  updateShopItemsWarehouseLocations: action,
 })
 
 export default new AdminStore()
