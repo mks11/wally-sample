@@ -46,8 +46,10 @@ class TableEditRow extends Component {
 
   onProductNameChange = (e) => {
     const newvalue = e.target.value
-    this.onValueChange('product_name', newvalue)
-    this.modalStore.toggleChangeProduct()
+    if (newvalue.length) {
+      this.onValueChange('product_name', newvalue)
+      this.modalStore.toggleChangeProduct()
+    }
   }
 
   onOrgaincChange = (newvalue) => {
