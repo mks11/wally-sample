@@ -36,27 +36,9 @@ class AdminStore {
     this.shopitemsFarms = resp.data.farms
   }
 
-  async updateShopItem(timeframe, shopitem_id) {
-    const item = this.shopitems.find(item => item.product_id === shopitem_id)
-    if (item) {
-      const data = {
-        // product_id: item.product_id,
-        // inventory_id: item.inventory_id,
-        // organic: item.organic,
-        // product_name: item.product_name,
-        // product_producer: item.product_producer,
-        // missing: item.missing,
-        // box_number: item.box_number,
-        // substitute_for_name: item.substitute_for_name,
-        // product_substitute_reason: item.product_substitute_reason,
-        // farm_substitue_reason: item.farm_substitue_reason,
-        // price_substitute_reason: item.price_substitute_reason,
-        // product_missing_reason: item.product_missing_reason,
-        ...item
-      }
-      const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
-      console.log(resp.data)
-    }
+  async updateShopItem(timeframe, shopitem_id, data) {
+    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
+    this.updateStoreShopItem(shopitem_id, resp.data)
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id) {
@@ -72,6 +54,15 @@ class AdminStore {
         break
       }
     }
+  }
+
+  updateStoreShopItem(id, updateditem) {
+    this.shopitems = this.shopitems.map(item => {
+      if (item.product_id === id) {
+        item = updateditem
+      }
+      return item
+    })
   }
 }
 

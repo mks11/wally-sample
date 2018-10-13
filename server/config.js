@@ -452,7 +452,7 @@ const getShopItems = {
         inventory_id: 'invetory_123',
         organic: true,
         product_name: 'Awesome product',
-        product_producer: 'Farm Initial',
+        product_producer: 'Farm B',
         product_price: 450,
         missing: false,
         box_number: 'ABC213',
