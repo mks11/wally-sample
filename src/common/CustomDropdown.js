@@ -26,25 +26,25 @@ class CustomDropdown extends PureComponent {
 
   onDropdownItemClick = (e) => {
     const { onItemClick } = this.props
-    const value = e.target.id
+    const value = e.target.getAttribute('attr-id')
 
-    onItemClick(value)
+    onItemClick && onItemClick(value)
     
     this.setState({
       title: value
     })
   }
   render() {
-    const { frames } = this.props
+    const { values } = this.props
     const { open, title } = this.state
 
-    return frames && frames.length ? (
+    return values && values.length ? (
       <Dropdown isOpen={open} toggle={this.toggle} direction="down" className="aw--custom-dropdown">
         <DropdownToggle caret>{title}</DropdownToggle>
         <DropdownMenu>
-          {frames.map(item => {
+          {values.map(item => {
             return (
-              <DropdownItem key={item} onClick={this.onDropdownItemClick} id={item}>
+              <DropdownItem key={item} onClick={this.onDropdownItemClick} attr-id={item}>
                 {item}
               </DropdownItem>
             );

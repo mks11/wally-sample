@@ -44,6 +44,11 @@ export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 
 export const API_ADMIN_GET_TIME_FRAMES = "http://localhost:4000/api/admin/timeframes"
 export const API_ADMIN_GET_SHOP_LOCATIONS = "http://localhost:4000/api/admin/shopping/locations"
+export const API_ADMIN_GET_SHOP_ITEMS = "http://localhost:4000/api/admin/shopping/shopitems"
+export const API_ADMIN_GET_SHOP_ITEMS_FARMS = "http://localhost:4000/api/admin/shopping/shopitems/farms"
+export const API_ADMIN_UPDATE_SHOP_ITEM = "http://localhost:4000/api/admin/shopping/shopitem"
+// export const API_ADMIN_UPDATE_SHOP_ITEM_QUANTITY = "http://localhost:4000/api/admin/shopping/shopitem/"
+
 
 
 

@@ -443,6 +443,54 @@ const getShopLocations = {
   }
 }
 
+const getShopItems = {
+  method: "GET",
+  response: {
+    "shop_items": [
+      {
+        product_id: 'prod_123',
+        inventory_id: 'invetory_123',
+        organic: true,
+        product_name: 'Awesome product',
+        product_producer: 'Farm Initial',
+        product_price: 450,
+        missing: false,
+        box_number: 'ABC213',
+        substitute_for_name: null,
+        product_substitute_reason: '',
+        farm_substitue_reason: '',
+        price_substitute_reason: '',
+        product_missing_reason: '',
+        price_unit: '1 Ct',
+        quantity: 16,
+      }
+    ]
+  }
+}
+
+const getShopItemsFarms = {
+  method: "GET",
+  response: {
+    farms: {
+      prod_123: [ 'Farm A', 'Farm B' ]
+    }
+  }
+}
+
+const updateShopItem = {
+  method: "PATCH",
+  response: {
+
+  }
+}
+
+const updateShopItemQuantity = {
+  method: "PATCH",
+  response: {
+
+  }
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -484,4 +532,8 @@ module.exports = {
 
   "/api/admin/timeframes": getTimeFrames,
   "/api/admin/shopping/locations": getShopLocations,
+  "/api/admin/shopping/shopitems": getShopItems,
+  "/api/admin/shopping/shopitems/farms": getShopItemsFarms,
+  "/api/admin/shopping/shopitem/:id": updateShopItem,
+  "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
 }

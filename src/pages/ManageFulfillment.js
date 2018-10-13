@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Container } from 'reactstrap'
 import Title from '../common/page/Title'
-import ManageTabs from '../common/ManageTabs'
+import ManageTabs from './manage/ManageTabs'
 
 import { connect } from '../utils'
 

@@ -3,10 +3,10 @@ import {
   Row,
   Col,
   Container,
-  Table,
 } from 'reactstrap'
 import Title from '../common/page/Title'
-import ManageTabs from '../common/ManageTabs'
+import ManageTabs from './manage/ManageTabs'
+import ShopperTable from './manage/ShopperTable'
 import CustomDropdown from '../common/CustomDropdown'
 
 import { connect } from '../utils'
@@ -15,6 +15,7 @@ class ManageShopper extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      timeframe: null
     }
 
     this.userStore = this.props.store.user
@@ -39,12 +40,25 @@ class ManageShopper extends Component {
 
   loadShopLocations = (timeframe) => {
     this.adminStore.getShopLocations(timeframe)
+    this.setState({ timeframe })
+  }
+
+  loadShopItems = (e) => {
+    const location = e.target.getAttribute('attr-id')
+    const { timeframe } = this.state
+    this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getShopItemsFarms(timeframe, location)
   }
 
   render() {
     if (!this.userStore.user) return null
 
-    const { timeframes, locations } = this.adminStore
+    const {
+      timeframes,
+      locations,
+      shopitems,
+      shopitemsFarms
+    } = this.adminStore
 
     return (
       <div className="App">
@@ -58,7 +72,7 @@ class ManageShopper extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Time Frame:</div>
                   <CustomDropdown
-                    frames={timeframes}
+                    values={timeframes}
                     onItemClick={this.loadShopLocations}
                     title="Time Frame"
                   />
@@ -69,7 +83,16 @@ class ManageShopper extends Component {
                   <div className="mb-2 font-weight-bold">Location:</div>
                   {
                     locations && locations.map(item => {
-                      return (<div key={item}>{item}</div>)
+                      return (
+                        <div
+                          key={item}
+                          className="shopper-location"
+                          onClick={this.loadShopItems}
+                          attr-id={item}
+                        >
+                          {item}
+                        </div>
+                      )
                     })
                   }
                 </div>
@@ -81,22 +104,7 @@ class ManageShopper extends Component {
         <section className="page-section pt-1">
           <Container>
             <h2>Shop Location View</h2>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th scope="col">Organic</th>
-                  <th scope="col">Product</th>
-                  <th scope="col">Farm</th>
-                  <th scope="col">Qty</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Purchase</th>
-                  <th scope="col">Box #</th>
-                  <th scope="col">Edit Item</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </Table>
+            <ShopperTable {...{ shopitems, shopitemsFarms }} />
           </Container>
         </section>
       </div>

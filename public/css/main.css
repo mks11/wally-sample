@@ -1092,11 +1092,20 @@ body {
 
 .admin-tabs .active-tab {
   font-weight: bold;
-  background-color: #ccc;
+  background-color: #ececec;
 }
 
 .aw--custom-dropdown .dropdown-toggle {
   width: auto;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.shopper-location {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.shopper-location:hover {
+  background: #ececec;
 }
