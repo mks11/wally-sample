@@ -49,6 +49,8 @@ export const API_ADMIN_GET_SHOP_ITEMS_FARMS = "http://localhost:4000/api/admin/s
 export const API_ADMIN_UPDATE_SHOP_ITEM = "http://localhost:4000/api/admin/shopping/shopitem"
 export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = "http://localhost:4000/api/admin/fulfillment/shopitem/warehouse-location"
 // export const API_ADMIN_UPDATE_SHOP_ITEM_QUANTITY = "http://localhost:4000/api/admin/shopping/shopitem/"
+export const API_ADMIN_GET_ROUTES = "http://localhost:4000/api/admin/routes"
+export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = "http://localhost:4000/api/admin/route"
 
 
 

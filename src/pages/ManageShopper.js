@@ -32,6 +32,9 @@ class ManageShopper extends Component {
           this.loadTimeFramesData()
         }
       })
+      .catch((error) => {
+        this.props.store.routing.push('/')
+      })
   }
 
   loadTimeFramesData() {

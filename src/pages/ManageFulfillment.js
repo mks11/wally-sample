@@ -40,6 +40,9 @@ class ManageFulfillment extends Component {
           this.loadData()
         }
       })
+      .catch((error) => {
+        this.props.store.routing.push('/')
+      })
   }
 
   loadData() {
