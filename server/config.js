@@ -664,6 +664,35 @@ const getOrder = {
   }
 }
 
+const getPackagings = {
+  method: "GET",
+  response: [
+    {
+      id: 'package1',
+      type: 'Tote Bag',
+      description: 'Package description 1',
+      deposit_amount: 370,
+    },
+    {
+      id: 'package2',
+      type: 'Mesh bag',
+      description: 'Package description 2',
+      deposit_amount: 270,
+    },
+    {
+      id: 'package3',
+      type: 'Stasher bag',
+      description: 'Package description 3',
+      deposit_amount: 310,
+    }
+  ]
+}
+
+const packageOrder = {
+  method: "PATCH",
+  response: {}
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -714,4 +743,6 @@ module.exports = {
   "/api/admin/route/:id/orders": getRouteOrders,
   "/api/admin/route/:id/placement": updateRoutePlacement,
   "/api/admin/order/:id": getOrder,
+  "/api/admin/packagings": getPackagings,
+  "/api/order/:id/package": packageOrder,
 }

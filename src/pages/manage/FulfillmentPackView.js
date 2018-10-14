@@ -57,9 +57,16 @@ class FulfillmentPackView extends Component {
     })
   }
 
+  onOrderSubmit = () => {
+    this.setState({
+      selectedOrder: null,
+      selectedRoute: null,
+    })
+  }
+
   render() {
     const { routes } = this.adminStore
-    const { selectedRoute, selectedOrder } = this.state
+    const { selectedRoute, selectedOrder, timeframe } = this.state
 
     return (
       <Container>
@@ -87,7 +94,7 @@ class FulfillmentPackView extends Component {
           </tbody>
         </Table>
         { selectedRoute ? <PackRouteView route={selectedRoute} onOrderClick={this.openOrder} /> : null}
-        { selectedOrder ? <PackOrderView orderId={selectedOrder} /> : null}
+        { selectedOrder ? <PackOrderView orderId={selectedOrder} timeframe={timeframe} onSubmit={this.onOrderSubmit} /> : null}
       </Container>
     )
   }

@@ -9,6 +9,8 @@ import {
   API_ADMIN_GET_ROUTES,
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
   API_ADMIN_GET_ORDER,
+  API_ADMIN_GET_PACKAGINGS,
+  API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -23,6 +25,8 @@ class AdminStore {
   routes = []
   orders = []
   singleorder = {}
+
+  packagings = []
 
   async getTimeFrames() {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -83,6 +87,16 @@ class AdminStore {
     this.singleorder = res.data
   }
 
+  async getPackagings() {
+    const res = await axios.get(`${API_ADMIN_GET_PACKAGINGS}`)
+    this.packagings = res.data
+  }
+
+  async packageOrder(id, data) {
+    const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data) // API_CREATE_ORDER
+    console.log(res.data)
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -117,6 +131,7 @@ decorate(AdminStore, {
   routes: observable,
   orders: observable,
   singleorder: observable,
+  packagings: observable,
 
   getTimeFrames: action,
   getShopLocations: action,
@@ -127,6 +142,8 @@ decorate(AdminStore, {
   getRouteOrders: action,
   updateRoutePlacement: action,
   getOrder: action,
+  getPackagings: action,
+  packageOrder: action,
 })
 
 export default new AdminStore()

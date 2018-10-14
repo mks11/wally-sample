@@ -151,7 +151,7 @@ class TableEditRow extends Component {
               <Col xs="6"><b>Qty:</b></Col>
               <Col xs="6">{item.price_unit}</Col>
               <Col xs="6">{item.quantity}</Col>
-              <Col xs="12"><Input placeholder="Enter actual qty (if different)" onBlur={this.onQtyChange} /></Col>
+              <Col xs="12"><Input placeholder="Enter actual qty (if different)" onBlur={this.onQtyChange} type="number" /></Col>
             </Row>
           </td>
           <td>
