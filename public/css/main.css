@@ -1045,6 +1045,7 @@ body {
 }
 
 .aw-footer ul.aw-social {
+  line-height: 1;
 }
 
 @media (min-width: 768px) {

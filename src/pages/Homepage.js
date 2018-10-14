@@ -59,15 +59,14 @@ class Homepage extends Component {
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
-        heroText: 'Huzzah! It looks like we\'re in your zip code. \n Click here to start shopping. ',
-        heroDescription: 'We are also excited  to be servicing you and your grocery needs completely package free. We are currently in beta and look forward to hearing your thoughts on how we can  make the Wally Shop the best experience for you',
-        heroDescriptionAlign: 'left'
+        heroText: 'Huzzah! It looks like we\'re in your zip code.',
+        heroDescription: 'Click here to start shopping.',
       })
     } else {
       this.setState({
         heroStatus: 'invalid_zip',
-        heroText: 'Hope to be there soon!\n We\'re not in your zip code yet, but sign up and we\'ll send you a notification when we are. ',
-        heroDescription: 'We are not currently servicing your zipcode. Input your email below to get notified when we are!',
+        heroText: 'Hope to be there soon!',
+        heroDescription: 'We\'re not in your zip code yet, but sign up and we\'ll send you a notification when we are.',
       })
     }
   }
