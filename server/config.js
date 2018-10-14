@@ -626,6 +626,44 @@ const updateRoutePlacement = {
   response: {}
 }
 
+const getOrder = {
+  method: "GET",
+  response: {
+    "id": "789012",
+    "user_id": "ABC123",
+    "cart_id": "ABC123",
+    "subtotal": 1560,
+    "promo": "",
+    "promo_discount": 0,
+    "service_amount": 399,
+    "tax_amount": 0,
+    "packaging_deposit": 120,
+    "applied_store_credit": 200,
+    "total": 1879,
+    "user_name": "Test User",
+    "telephone": "3457658900",
+    "street_address": "1 Test St",
+    "unit": "",
+    "zip": "10016",
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "delivery_notes": "Leave with doorman",
+    "delivery_time": "2018-07-31 18:00-19:00",
+    "payment_method": "XYZABC",
+    "status": "packaged",
+    "cart_items": [
+      { "product_id": "ABC123",
+        "product_name": "Milk",
+        "product_price": 500,
+        "customer_quantity": 2,
+        "total": 1000
+      } ,
+    ],
+    "applicable_store_credit": 150 
+  }
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -675,4 +713,5 @@ module.exports = {
   "/api/admin/routes": getRoutes,
   "/api/admin/route/:id/orders": getRouteOrders,
   "/api/admin/route/:id/placement": updateRoutePlacement,
+  "/api/admin/order/:id": getOrder,
 }

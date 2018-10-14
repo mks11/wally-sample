@@ -8,6 +8,7 @@ import {
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
   API_ADMIN_GET_ROUTES,
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
+  API_ADMIN_GET_ORDER,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -21,6 +22,7 @@ class AdminStore {
   
   routes = []
   orders = []
+  singleorder = {}
 
   async getTimeFrames() {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -76,6 +78,11 @@ class AdminStore {
     console.log(res.data)
   }
 
+  async getOrder(id) {
+    const res = await axios.get(`${API_ADMIN_GET_ORDER}/${id}`)
+    this.singleorder = res.data
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -109,6 +116,7 @@ decorate(AdminStore, {
   shopitemsFarms: observable,
   routes: observable,
   orders: observable,
+  singleorder: observable,
 
   getTimeFrames: action,
   getShopLocations: action,
@@ -118,6 +126,7 @@ decorate(AdminStore, {
   getRoutes: action,
   getRouteOrders: action,
   updateRoutePlacement: action,
+  getOrder: action,
 })
 
 export default new AdminStore()

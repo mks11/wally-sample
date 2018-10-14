@@ -5,7 +5,8 @@ import {
   Button,
 } from 'reactstrap'
 import { connect } from '../../utils'
-import PackRouteView from './fulfillment/PackRouteView';
+import PackRouteView from './fulfillment/PackRouteView'
+import PackOrderView from './fulfillment/PackOrderView'
 
 class FulfillmentPackView extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class FulfillmentPackView extends Component {
     this.state = {
       timeframe: this.props.timeframe,
       selectedRoute: null,
+      selectedOrder: null, 
     }
 
     this.adminStore = this.props.store.admin
@@ -41,12 +43,23 @@ class FulfillmentPackView extends Component {
     const routeId = e.target.getAttribute('route-id')
     const { routes } = this.adminStore
     const selectedRoute = routes.find(item => item.id === routeId)
-    this.setState({ selectedRoute })
+    this.setState({
+      selectedRoute,
+      selectedOrder: null,
+    })
+  }
+
+  openOrder = (e) => {
+    const routeId = e.target.getAttribute('order-id')
+    this.setState({
+      selectedOrder: routeId,
+      selectedRoute: null,
+    })
   }
 
   render() {
     const { routes } = this.adminStore
-    const { selectedRoute } = this.state
+    const { selectedRoute, selectedOrder } = this.state
 
     return (
       <Container>
@@ -73,7 +86,8 @@ class FulfillmentPackView extends Component {
             }
           </tbody>
         </Table>
-        { selectedRoute ? <PackRouteView route={selectedRoute} /> : null}
+        { selectedRoute ? <PackRouteView route={selectedRoute} onOrderClick={this.openOrder} /> : null}
+        { selectedOrder ? <PackOrderView orderId={selectedOrder} /> : null}
       </Container>
     )
   }

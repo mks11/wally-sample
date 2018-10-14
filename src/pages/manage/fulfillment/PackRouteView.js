@@ -58,6 +58,7 @@ class PackRouteView extends Component {
   render() {
     const { orders } = this.adminStore
     const { route, route_placement } = this.state
+    const { onOrderClick } = this.props
 
     return (
       <section className="page-section pt-1">
@@ -88,6 +89,7 @@ class PackRouteView extends Component {
                             <Button
                               color="primary"
                               order-id={item.id}
+                              onClick={onOrderClick}
                             >
                               {item.status === 'submitted' ? 'Start Order' : 'View Order'}
                             </Button>
