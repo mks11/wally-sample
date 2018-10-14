@@ -35,7 +35,6 @@ class ZipModal extends Component {
   }
 
   handleToggle = () => {
-    console.log('asdfsafa')
     this.setState({zip: ''})
     this.modalStore.toggleZip()
   }
