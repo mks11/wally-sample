@@ -1127,3 +1127,13 @@ body {
 .fulfillment-page .nav-tabs .nav-link {
   font-weight: bold;
 }
+
+.pack-order-details {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.pack-order-details .col:not(:last-child) {
+  border-right: 1px solid #000;
+}

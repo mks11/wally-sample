@@ -113,14 +113,14 @@ class PackOrderView extends Component {
     return (
       <section className="page-section">
         <Container>
-          <Row>
+          <Row className="pack-order-details">
             <Col>Order # {singleorder.id}</Col>
             <Col>Name: {singleorder.user_name}</Col>
             <Col>Phone Number: {singleorder.telephone}</Col>
           </Row>
-          <Row className="mb-3">
+          <Row>
             <Col>
-              <Table responsive className="pack-order-table">
+              <Table responsive className="pack-order-table my-5">
                 <thead>
                   <tr>
                     <th scope="col" width="8%">Organic (Y/N)</th>
@@ -166,7 +166,7 @@ class PackOrderView extends Component {
               </Table>
             </Col>
           </Row>
-          <Row className="mb-3">
+          <Row>
             <Col>
               <Table responsive className="pack-order-table-bags">
                 <tbody>

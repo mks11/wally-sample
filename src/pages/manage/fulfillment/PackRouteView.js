@@ -67,12 +67,12 @@ class PackRouteView extends Component {
             <Col>
               <h2>{route.route_number} Orders:</h2>
               <Input placeholder="Write lane number, cart number" value={route_placement} onChange={this.onRouteUpdate} />
-              <Button color="primary" onClick={this.onRouteUpdateSubmit}>Submit</Button>
+              <Button color="primary" className="my-2" onClick={this.onRouteUpdateSubmit}>Submit</Button>
             </Col>
           </Row>
           <Row>
             <Col>
-              <Table responsive className="pack-route-table">
+              <Table responsive className="pack-route-table mt-5">
                 <thead>
                   <tr>
                     <th scope="col">Order #</th>
