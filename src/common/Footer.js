@@ -34,7 +34,7 @@ class Footer extends Component {
           <div className="row">
             <div className="col-auto col-sm-2">
               <a href="/">
-                <img className="footer-logo" src={APP_URL + "/images/logo.png"}/>
+                <img className="footer-logo" src={"/images/logo.png"}/>
               </a>
             </div>
             <div className="col col-sm-10">
@@ -64,21 +64,10 @@ class Footer extends Component {
                   <h4 className="aw-footer--title">
                     FOLLOW US
                   </h4>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="container">
-          <div className="footer-bottom">
-            <div className="container">
-              <form className="form-inline">
-                <label htmlFor="subscribe-email">Subscribe to our newsletter</label>
-
                   <ul>
+                    <li>@thewallyshop</li>
                     <li>
-                      <ul className="aw-social mt-0 mx-2">
+                      <ul className="aw-social mt-2">
                         <li className="d-inline-block align-middle mr-3 footer-fb">
                           <a href={FACEBOOK} target="_blank">
                           </a>
@@ -90,6 +79,18 @@ class Footer extends Component {
                       </ul>
                     </li>
                   </ul>
+
+                
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="container">
+          <div className="footer-bottom">
+            <div className="container">
+              <form className="form-inline">
+                <label htmlFor="subscribe-email">Subscribe to our newsletter</label>
                 <div className="input-group">
                   <input type="email" id="subscribe-email" className="form-control" placeholder="Enter your email" onChange={e => this.setState({email: e.target.value})}/>
                     <div className="input-group-append">
