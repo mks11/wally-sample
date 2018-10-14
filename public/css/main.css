@@ -1094,3 +1094,41 @@ body {
 .header-wrap.top-bar-open + .aw-main  {
   padding-top:34px;
 }
+
+.admin-tabs .active-tab {
+  font-weight: bold;
+  background-color: #ececec;
+}
+
+.aw--custom-dropdown .dropdown-toggle,
+.shopper-table .btn,
+.fulfillment-page .btn {
+  width: auto;
+  padding: 15px 10px;
+  border-radius: .25rem;
+}
+
+@media (min-width: 768px){
+  .aw--custom-dropdown .dropdown-toggle,
+  .shopper-table .btn,
+  .fulfillment-page .btn {
+    font-size: 16px;
+  }
+}
+
+.modal-shopper .aw--custom-dropdown {
+  margin-bottom: 100px;
+}
+
+.shopper-location {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.shopper-location:hover {
+  background: #ececec;
+}
+
+.fulfillment-page .nav-tabs .nav-link {
+  font-weight: bold;
+}

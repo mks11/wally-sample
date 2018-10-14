@@ -49,7 +49,6 @@ class UserStore {
   }
 
   setUserData(user) {
-    console.log(user)
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
   }
@@ -169,9 +168,9 @@ class UserStore {
     }
 
     if (delivery) {
-      console.log('gent in')
+      // console.log('gent in')
       const deliveryData = JSON.parse(delivery)
-      console.log('deliveryData')
+      // console.log('deliveryData')
       this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
     }

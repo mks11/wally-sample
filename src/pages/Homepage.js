@@ -40,7 +40,12 @@ class Homepage extends Component {
     this.userStore.getStatus()
       .then((status) => {
         if (status) {
-          this.routing.push('/main')
+          const user = this.userStore.user
+          if (user.type === 'admin') {
+            this.routing.push('/manage/shopper')
+          } else {
+            this.routing.push('/main')
+          }
         }
         this.setState({fetching: false})
       }).catch((e) => {
