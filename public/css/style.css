@@ -145,7 +145,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 .logo-text-mobile{display:none;}
 
 /* Homepage */
-.landing-section{background-color:#9ECACB;background-image:url("../images/header300.png");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+.landing-section{background-color:#9ECACB;background-image:url("../images/header300.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
 .landing-section h1{color:#fff;font-size:45px;}
 .landing-section h2{
   font-size: 20px;
