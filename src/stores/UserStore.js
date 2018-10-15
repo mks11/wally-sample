@@ -9,6 +9,7 @@ import {
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
+import uuid from 'uuid'
 
 let index = 0
 
@@ -277,6 +278,32 @@ class UserStore {
 
     return data;
   }
+
+  loadFakeUser() {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+    const user = {
+      addresses,
+      preferred_address: null
+    }
+
+    return user
+  }
+
+  addFakeAddress(data) {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+    data.address_id = uuid()
+    data._id = data.address_id
+
+    addresses.push(data)
+
+    localStorage.setItem('addresses', JSON.stringify(addresses))
+  }
 }
 
 
@@ -343,6 +370,8 @@ decorate(UserStore, {
 
   setDeliveryAddress: action,
   setDeliveryTime: action,
+  loadFakeUser: action,
+  addFakeAddress: action
 })
 
 

@@ -29,6 +29,7 @@ class DeliveryModal extends Component {
     this.userStore = this.props.store.user
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
+    this.zipStore = this.props.store.zip
   }
 
   componentDidMount() {
@@ -36,7 +37,9 @@ class DeliveryModal extends Component {
     if (this.userStore.user) {
       preferred_address = this.userStore.user.preferred_address
     }
-    this.setState({selectedAddress: preferred_address})
+    const fakeUser = this.userStore.loadFakeUser()
+
+    this.setState({selectedAddress: preferred_address, fakeUser})
   }
 
   handleUnlockAddress = async (data) => {
@@ -46,13 +49,27 @@ class DeliveryModal extends Component {
   handleAddNewAddress = async (data) => {
     const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
 
-    const response = await this.userStore.saveAddress({
+    const dataMap = {
       name: newContactName, 
       state: newState,
       delivery_notes: newDeliveryNotes,
       zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
       preferred_address: newPreferedAddress
-    })
+    }
+
+    if (!this.userStore.user) {
+      if (!this.zipStore.validateZipCode(newZip)) {
+        throw {response: {data: {error:{message: 'Invalid zip code'}}}}
+      }
+
+      this.userStore.addFakeAddress(dataMap)
+      const fakeUser =  this.userStore.loadFakeUser()
+      this.setState({fakeUser})
+
+      return fakeUser
+    }
+
+    const response = await this.userStore.saveAddress(dataMap)
     this.userStore.setUserData(response)
     return response
 
@@ -88,6 +105,9 @@ class DeliveryModal extends Component {
       btnSubmitClass += ' active'
     }
 
+    const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
+    console.log('user', user)
+
     return (
       <Modal isOpen={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm">
@@ -98,17 +118,15 @@ class DeliveryModal extends Component {
           <div className="checkout-wrap">
             <div className="">
               <div >
-                {this.userStore.user && 
                   <DeliveryAddressOptions
                     lock={false}
                     selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
-                    user={this.userStore.user}
+                    user={user}
+                    locking={true}
                     onUnlock={this.handleUnlockAddress}
                     onAddNew={this.handleAddNewAddress}
                     onSubmit={this.handleSubmitAddress}
                   />
-                }
-                {this.userStore.user && 
                     <DeliveryTimeOptions
                       lock={false}
                       data={this.state.deliveryTimes}
@@ -116,7 +134,6 @@ class DeliveryModal extends Component {
                       isAddressSelected={this.state.isAddressSelected}
                       onSelectTime={this.handleSelectTime}
                     />
-                }
               </div>
             <button onClick={this.handleSubmit} className={btnSubmitClass}>Submit</button>
             </div>
