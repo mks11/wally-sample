@@ -9,6 +9,11 @@ import {
 } from 'reactstrap'
 
 const DEFAULT_TITLE = 'Out of stock today'
+const dropdown = [
+  { id: DEFAULT_TITLE, title: DEFAULT_TITLE },
+  { id: 'Out of stock for the season', title: 'Out of stock for the season' },
+  { id: 'Price too high', title: 'Price too high' }
+]
 
 class ModalFarmChange extends Component {
   constructor(props) {
@@ -50,9 +55,8 @@ class ModalFarmChange extends Component {
           <div className="signup-wrap">
             <p>Are you sure? Please select reason for this?</p>
             <CustomDropdown
-              values={[ DEFAULT_TITLE, 'Out of stock for the season', 'Price too high' ]}
+              values={dropdown}
               onItemClick={this.onDropdownChange}
-              title={DEFAULT_TITLE}
             />
           </div>
         </ModalBody>

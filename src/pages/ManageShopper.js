@@ -46,8 +46,7 @@ class ManageShopper extends Component {
     this.setState({ timeframe })
   }
 
-  loadShopItems = (e) => {
-    const location = e.target.getAttribute('attr-id')
+  loadShopItems = (location) => {
     const { timeframe } = this.state
     this.adminStore.getShopItems(timeframe, location)
     this.adminStore.getShopItemsFarms(timeframe, location)
@@ -71,29 +70,18 @@ class ManageShopper extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Time Frame:</div>
                   <CustomDropdown
-                    values={timeframes}
+                    values={timeframes.map(item => { return { id: item, title: item }})}
                     onItemClick={this.loadShopLocations}
-                    title="Time Frame"
                   />
                 </div>
               </Col>
               <Col md="6" sm="12">
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Location:</div>
-                  {
-                    locations && locations.map(item => {
-                      return (
-                        <div
-                          key={item}
-                          className="shopper-location"
-                          onClick={this.loadShopItems}
-                          attr-id={item}
-                        >
-                          {item}
-                        </div>
-                      )
-                    })
-                  }
+                  <CustomDropdown
+                    values={locations.map(item => { return { id: item, title: item }})}
+                    onItemClick={this.loadShopItems}
+                  />
                 </div>
               </Col>
             </Row>
