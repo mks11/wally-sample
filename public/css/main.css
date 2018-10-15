@@ -1097,7 +1097,8 @@ body {
 
 .aw--custom-dropdown .dropdown-toggle,
 .shopper-table .btn,
-.fulfillment-page .btn {
+.fulfillment-page .btn,
+.delivery-page .btn {
   width: auto;
   padding: 15px 10px;
   border-radius: .25rem;
@@ -1106,7 +1107,8 @@ body {
 @media (min-width: 768px){
   .aw--custom-dropdown .dropdown-toggle,
   .shopper-table .btn,
-  .fulfillment-page .btn {
+  .fulfillment-page .btn,
+  .delivery-page .btn {
     font-size: 16px;
   }
 }
@@ -1134,6 +1136,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.pack-order-details .col:not(:last-child) {
+.pack-order-details > div:not(:last-child) {
   border-right: 1px solid #000;
 }

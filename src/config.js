@@ -54,7 +54,7 @@ export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = "http://localhost:4000/api/admin
 export const API_ADMIN_GET_ORDER = "http://localhost:4000/api/admin/order"
 export const API_ADMIN_GET_PACKAGINGS = "http://localhost:4000/api/admin/packagings"
 export const API_ADMIN_PACKAGE_ORDER = "http://localhost:4000/api/order"
-
+export const API_ADMIN_COMPLETE_ORDER =  "http://localhost:4000/api/order"
 
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"

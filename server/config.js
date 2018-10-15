@@ -693,6 +693,11 @@ const packageOrder = {
   response: {}
 }
 
+const completeOrder = {
+  method: "PATCH",
+  response: {}
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -745,4 +750,5 @@ module.exports = {
   "/api/admin/order/:id": getOrder,
   "/api/admin/packagings": getPackagings,
   "/api/order/:id/package": packageOrder,
+  "/api/order/:id/complete": completeOrder,
 }
