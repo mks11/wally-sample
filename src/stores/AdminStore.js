@@ -19,10 +19,10 @@ import moment from 'moment'
 class AdminStore {
   timeframes = []
   locations = []
-  
+
   shopitems = []
   shopitemsFarms = {}
-  
+
   routes = []
   orders = []
   singleorder = {}
@@ -55,17 +55,15 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async updateShopItemQuantity(timeframe, shopitem_id) {
-    const data = {}
+  async updateShopItemQuantity(timeframe, shopitem_id, data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
-    console.log(res.data)
-    //this.updateStoreShopItem(shopitem_id, res.data)
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async updateShopItemsWarehouseLocations(data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
     console.log(res.data)
-    // updateManyStoreShopItems(res.data)
+    this.updateManyStoreShopItems(res.data)
   }
 
   async getRoutes(timeframe) {
@@ -80,7 +78,7 @@ class AdminStore {
 
   async updateRoutePlacement(id, data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`, data)
-    console.log(res.data)
+    this.updateRouteItem(id, res.data)
   }
 
   async getOrder(id) {
@@ -95,7 +93,7 @@ class AdminStore {
 
   async packageOrder(id, data) {
     const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data) // API_CREATE_ORDER
-    console.log(res.data)
+    this.updateOrderItem(id, res.data)
   }
 
   async completeOrder(id, data) {
@@ -115,6 +113,24 @@ class AdminStore {
   updateStoreShopItem(id, updateditem) {
     this.shopitems = this.shopitems.map(item => {
       if (item.product_id === id) {
+        item = updateditem
+      }
+      return item
+    })
+  }
+
+  updateRouteItem(id, updateditem) {
+    this.routes = this.routes.map(item => {
+      if (item.id === id) {
+        item = updateditem
+      }
+      return item
+    })
+  }
+
+  updateOrderItem(id, updateditem) {
+    this.orders = this.orders.map(item => {
+      if (item.id === id) {
         item = updateditem
       }
       return item

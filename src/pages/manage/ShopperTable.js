@@ -33,6 +33,7 @@ class ShopperTable extends Component {
       shopitems,
       shopitemsFarms,
     } = this.adminStore
+    const { timeframe } = this.props
 
     return (
       <Table responsive className="shopper-table">
@@ -52,6 +53,7 @@ class ShopperTable extends Component {
                   item={item}
                   shopitemsFarms={shopitemsFarms}
                   onSubmitClick={this.onSubmitClick}
+                  timeframe={timeframe}
                 />
               )
             })}
