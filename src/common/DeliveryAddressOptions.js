@@ -44,7 +44,13 @@ class DeliveryAddressOptions extends Component {
 
   handleSubmitAddress = () => {
     if (!this.state.selected) return
-    this.setState({invalidSelectAddress: null, lock: true})
+    if (this.props.locking !== null) {
+      if (!this.props.locking) {
+        this.setState({invalidSelectAddress: null, lock: false})
+      }
+    } else {
+      this.setState({invalidSelectAddress: null, lock: true})
+    }
     const address = this.props.user.addresses.find((d) => d._id === this.state.selected)
     this.props.onSubmit(address).catch((e) => {
       if (e.response && e.response.data.error) {

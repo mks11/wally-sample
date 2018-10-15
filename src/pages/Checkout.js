@@ -680,7 +680,7 @@ class Checkout extends Component {
                                           className="aw-input--control aw-input--left aw-input--bordered"
                                           type="text"
                                           placeholder="Enter promocode here"
-                                          onChange={(e) => this.setState({appliedPromoCode: e.target.value})}/>
+                                          onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
 
                                         <button onClick={e => this.handleCheckPromo()} type="button" className="btn btn-transparent">APPLY</button>
                                       </div>
