@@ -175,6 +175,13 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
+        const selectedAddress = this.userStore.selectedDeliveryAddress 
+        if (selectedAddress) {
+          this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
+            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+            this.setState({deliveryTimes})
+          })
+        }
       })
     const $ = window.$
 
@@ -477,6 +484,11 @@ class Mainpage extends Component {
 
   handleSubmitAddress = async (data) => {
     this.modalStore.showDeliveryChange('address', data)
+    return
+  }
+
+  handleSelectTime = async (data) => {
+    this.modalStore.showDeliveryChange('time', data)
     return
   }
 

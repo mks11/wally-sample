@@ -58,42 +58,6 @@ class DeliveryModal extends Component {
 
   }
 
-  getDeliveryTimes(data) {
-    let deliveryTimes = []
-    const times = data.delivery_windows
-    for (var i = 0, len = times.length; i < len; i++) {
-      addTimes(times[i])
-    }
-
-    this.setState({deliveryTimes})
-
-    function addTimes(data) {
-      const timeFirst = data[0].split('-')[0]
-      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday]',
-        lastWeek: '[Last] dddd',
-        sameElse: 'DD/MM/YYYY'
-      })
-
-      const findTime = deliveryTimes.findIndex((data) => data.day === day)
-
-      const obj = {
-        time: data[0],
-        date: data[1],
-        availability: data[2]
-      }
-
-      if (findTime === -1) {
-        deliveryTimes.push({day: day, data: [obj]})
-      } else {
-        deliveryTimes[findTime].data.push(obj)
-      }
-    }
-  }
-
 
   handleSubmitAddress = async (address) => {
     const data = await this.checkoutStore.getDeliveryTimes({
@@ -101,8 +65,8 @@ class DeliveryModal extends Component {
       zip: address.zip,
     }, this.userStore.getHeaderAuth())
       
-    this.setState({isAddressSelected: true, selectedAddress: address})
-    this.getDeliveryTimes(data)
+    const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+    this.setState({isAddressSelected: true, selectedAddress: address, deliveryTimes})
     return data 
   }
 

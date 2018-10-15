@@ -3,7 +3,19 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'react
 import { connect } from '../utils'
 
 class DeliveryChangeModal extends Component {
-   render() {
+  handleChangeDelivery = () => {
+    const modalStore = this.props.store.modal
+    const userStore = this.props.store.user
+
+    if (modalStore.deliveryChangeType === 'address') {
+      userStore.setDeliveryAddress(modalStore.deliveryChangeData)
+    } else {
+      userStore.setDeliveryTime(modalStore.deliveryChangeData)
+    }
+    modalStore.hideDeliveryChange()
+  }
+
+  render() {
     const modalStore = this.props.store.modal
     return (
       <Modal isOpen={modalStore.deliveryChange} contentClassName="modal-bg-pinneapple-bottom">
@@ -17,7 +29,7 @@ class DeliveryChangeModal extends Component {
             <p>
               Product selection changes on a daily basis. Are you sure you want to change? This may change the products available and in your cart.
             </p>
-            <button onClick={e=>modalStore.hideDeliveryChange(e)} className="btn btn-main active">Submit</button>
+            <button onClick={this.handleChangeDelivery} className="btn btn-main active">Submit</button>
           </div>
         </ModalBody>
       </Modal>
