@@ -9,6 +9,10 @@ import {
 } from 'reactstrap'
 
 const DEFAULT_TITLE = 'Cheapest option'
+const dropdown = [
+  { id: DEFAULT_TITLE, title: DEFAULT_TITLE },
+  { id: 'No similar products', title: 'No similar products' }
+]
 
 class ModalPriceChange extends Component {
   constructor(props) {
@@ -50,9 +54,8 @@ class ModalPriceChange extends Component {
           <div className="signup-wrap">
             <p>Are you sure? Please select reason for this?</p>
             <CustomDropdown
-              values={[ DEFAULT_TITLE, 'No similar products' ]}
+              values={dropdown}
               onItemClick={this.onDropdownChange}
-              title={DEFAULT_TITLE}
             />
           </div>
         </ModalBody>

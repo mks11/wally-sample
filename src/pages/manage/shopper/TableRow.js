@@ -8,8 +8,8 @@ import {
 
 const TableRow = ({ item, onEditClick }) => (
   <tr>
-    <td>{item.organic ? "Y" : "N"}</td>
-    <td>{item.product_name}</td>
+    <td>{item.organic ? 'Y' : 'N'}</td>
+    <td>{item.substitue_for_name || item.product_name}</td>
     <td>{item.product_producer}</td>
     <td>
       <Row noGutters>
@@ -24,7 +24,7 @@ const TableRow = ({ item, onEditClick }) => (
         <Col xs="12">${item.product_price / 100}</Col>
       </Row>
     </td>
-    <td></td>
+    <td>{item.missing ? 'Missing' : 'Purchased'}</td>
     <td>{item.box_number}</td>
     <td><Button color="info" onClick={onEditClick} prod-id={item.product_id}>Edit Item</Button></td>
   </tr>

@@ -10,6 +10,12 @@ import {
 
 const DEFAULT_TITLE = 'Price increase was too high'
 
+const dropdown = [
+  { id: DEFAULT_TITLE, title: DEFAULT_TITLE },
+  { id: 'Was not available at any farm', title: 'Was not available at any farm' },
+  { id: 'Produce quality was bad', title: 'Produce quality was bad' },
+]
+
 class ModalProductChange extends Component {
   constructor(props) {
     super(props)
@@ -51,9 +57,8 @@ class ModalProductChange extends Component {
             <p>Have you checked all the farms?</p>
             <p>Please select reason for this?</p>
             <CustomDropdown
-              values={[ DEFAULT_TITLE, 'Was not available at any farm', 'Produce quality was bad' ]}
+              values={dropdown}
               onItemClick={this.onDropdownChange}
-              title={DEFAULT_TITLE}
             />
           </div>
         </ModalBody>
