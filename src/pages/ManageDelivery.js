@@ -48,8 +48,7 @@ class ManageDelivery extends Component {
     this.adminStore.getRoutes(timeframe)
   }
 
-  loadOrders = (e) => {
-    const routeId = e.target.getAttribute('attr-id')
+  loadOrders = (routeId) => {
     this.adminStore.getRouteOrders(routeId)
   }
 
@@ -79,29 +78,18 @@ class ManageDelivery extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Time Frame:</div>
                   <CustomDropdown
-                    values={timeframes}
+                    values={timeframes.map(item => { return { id: item, title: item }})}
                     onItemClick={this.loadRoutes}
-                    title="Time Frame"
                   />
                 </div>
               </Col>
               <Col md="6" sm="12">
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Delivery Route:</div>
-                  {
-                    routes && routes.map(item => {
-                      return (
-                        <div
-                          key={item.id}
-                          className="shopper-location"
-                          onClick={this.loadOrders}
-                          attr-id={item.id}
-                        >
-                          {item.route_number}
-                        </div>
-                      )
-                    })
-                  }
+                  <CustomDropdown
+                    values={routes.map(item => { return { id: item.id, title: item.route_number }})}
+                    onItemClick={this.loadOrders}
+                  />
                 </div>
               </Col>
             </Row>

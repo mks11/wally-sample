@@ -121,11 +121,14 @@ class OrderDetailView extends Component {
             <Col xs="12">Address: {singleorder.street_address}, {singleorder.city}, {singleorder.state} {singleorder.zip}</Col>
           </Row>
           <Row>
-            <Col>
+            <Col className="my-3">
               <CustomDropdown
-                values={[ 'Delivered', 'Didn’t Respond', 'Couldn’t Contact' ]}
+                values={[ 
+                  { id: 'Delivered', title: 'Delivered' },
+                  { id: 'Didn’t Respond', title: 'Didn’t Respond' },
+                  { id: 'Couldn’t Contact', title: 'Couldn’t Contact' }
+                ]}
                 onItemClick={this.updateStatus}
-                title="Delivered"
               />
             </Col>
           </Row>
