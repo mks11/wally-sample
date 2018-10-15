@@ -374,7 +374,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   transition: 0.15s background-color;
   width: 250px;
   text-align: center;
-  background-color:#D7A9A9;
+  background-color:#78C98D;
   border-radius: 12px;
 }
 
@@ -1023,7 +1023,7 @@ body {
 
 .aw-footer {
   padding: 30px 0;
-  color: #000;
+  color: #263a52;
   line-height: 2;
   position: relative;
 }
@@ -1035,7 +1035,7 @@ body {
 }
 
 .aw-footer a {
-  color: #000;
+  color: #263a52;
 }
 
 .aw-footer ul {
@@ -1076,7 +1076,7 @@ body {
   right: 0;
   bottom: 0;
   height: 3px;
-  background-color: #000;
+  background-color: #263a52;
 }
 
 #invalid-text {
