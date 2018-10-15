@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 
 import DeliveryModal from '../common/DeliveryModal.js';
+import DeliveryChangeModal from '../common/DeliveryChangeModal.js';
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
@@ -472,6 +473,11 @@ class Mainpage extends Component {
     this.setState({deliveryAddressDropdown: false})
   }
 
+  handleSubmitAddress = async (data) => {
+    this.modalStore.showDeliveryChange('address', data)
+    return
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -628,6 +634,7 @@ class Mainpage extends Component {
                           onUnlock={this.handleUnlockAddress}
                           onAddNew={this.handleAddNewAddress}
                           onSubmit={this.handleSubmitAddress}
+                          locking={false}
                         />
                       }
                     </div>
@@ -895,7 +902,8 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal/> }
-                { this.userStore.user && <DeliveryModal/> }
+                <DeliveryModal/>
+                <DeliveryChangeModal/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 

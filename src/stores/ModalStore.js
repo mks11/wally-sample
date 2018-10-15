@@ -22,6 +22,22 @@ class ModalStore {
   changeFarm = false
   changePrice = false
 
+  deliveryChange = false
+  deliveryChangeType = null
+  deliveryChangeData = null
+
+  showDeliveryChange(type, data) {
+    this.deliveryChange = true
+    this.deliveryChangeType = type
+    this.deliveryChangeData = data
+  }
+
+  hideDeliveryChange() {
+    this.deliveryChange = false
+    this.deliveryChangeType = null
+    this.deliveryChangeData = null
+  }
+
   toggleLogin() {
     this.login = !this.login
     this.loginStep = 1
@@ -109,9 +125,14 @@ decorate(ModalStore, {
   toggleInvite: action,
   toggleWelcome: action,
   setLoginNextRoute: action,
+
   toggleChangeProduct: action,
   toggleChangeFarm: action,
   toggleChangePrice: action,
+
+  deliveryChange: observable,
+  showDeliveryChange: action,
+  hideDeliveryChange: action
 })
 
 
