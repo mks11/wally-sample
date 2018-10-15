@@ -904,8 +904,8 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal/> }
-                { this.userStore.user && <DeliveryModal/> }
-<DeliveryChangeModal/>
+                <DeliveryModal/>
+                <DeliveryChangeModal/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 

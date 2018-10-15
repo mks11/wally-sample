@@ -32,7 +32,11 @@ class DeliveryModal extends Component {
   }
 
   componentDidMount() {
-    this.setState({selectedAddress: this.userStore.user.preferred_address})
+    let preferred_address = null
+    if (this.userStore.user) {
+      preferred_address = this.userStore.user.preferred_address
+    }
+    this.setState({selectedAddress: preferred_address})
   }
 
   handleUnlockAddress = async (data) => {
