@@ -19,9 +19,9 @@ import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
 
-const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
-const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.png'
-const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.png'
+const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.jpg'
+const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.jpg'
+const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.jpg'
 const heroItems = [
   {
     src: banner1,
