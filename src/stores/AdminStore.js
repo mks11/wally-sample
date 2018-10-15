@@ -98,7 +98,7 @@ class AdminStore {
 
   async completeOrder(id, data) {
     const res = await axios.patch(`${API_ADMIN_COMPLETE_ORDER}/${id}/complete`, data) // API_CREATE_ORDER
-    console.log(res.data)
+    this.updateOrderItem(id, res.data)
   }
 
   setEditing(id, edit) {
