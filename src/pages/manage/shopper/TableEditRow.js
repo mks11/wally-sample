@@ -31,6 +31,7 @@ class TableEditRow extends Component {
     }
 
     this.modalStore = this.props.store.modal
+    this.adminStore = this.props.store.admin
   }
 
   onValueChange(property, newvalue) {
@@ -52,6 +53,15 @@ class TableEditRow extends Component {
     if (newvalue.length) {
       this.onValueChange('substitue_for_name', newvalue)
       this.modalStore.toggleChangeProduct()
+
+      const { item } = this.state
+      const { timeframe } = this.props
+      const payload = {
+        product_id: item.product_id,
+        inventory_id: item.inventory_id,
+        organic: item.organic,
+      }
+      this.adminStore.updateShopItemQuantity(timeframe, item.product_id, payload)
     }
   }
 

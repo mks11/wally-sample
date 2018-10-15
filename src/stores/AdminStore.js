@@ -41,10 +41,9 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, resp.data)
   }
 
-  async updateShopItemQuantity(timeframe, shopitem_id) {
-    const data = {}
+  async updateShopItemQuantity(timeframe, shopitem_id, data) {
     const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
-    console.log(resp.data)
+    this.updateStoreShopItem(shopitem_id, resp.data)
   }
 
   setEditing(id, edit) {
