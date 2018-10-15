@@ -297,7 +297,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 #btn-subscribe:hover {
-  color: #c0d6cd;
+  color: #fff;
 }
 
 .btn-outline-black {
@@ -503,8 +503,8 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   }
 
   .aw-header .btn-login {
-    font-size: 17px;
-    width: 119px;
+    font-size: 15px;
+    width: 102px;
     padding: 7px;
   }
 
@@ -512,8 +512,8 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
     vertical-align: middle;
   }
   .aw-header .btn-sign-up {
-    font-size: 17px;
-    width: 119px;
+    font-size: 15px;
+    width: 102px;
     padding: 7px;
   }
 }

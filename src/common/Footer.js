@@ -68,7 +68,7 @@ class Footer extends Component {
                     <li>@thewallyshop</li>
                     <li>
                       <ul className="aw-social mt-2">
-                        <li className="d-inline-block align-middle mr-3 footer-fb">
+                        <li className="d-inline-block align-middle footer-fb">
                           <a href={FACEBOOK} target="_blank">
                           </a>
                         </li>

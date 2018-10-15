@@ -126,7 +126,7 @@ body.nav-open .aw-header nav.aw-nav--toggle svg path,
 body.nav-open .aw-header.navbar-white nav.aw-nav--toggle svg path{stroke: #fff;}
 body.nav-open:not(.page-inner) .aw-header:not(.navbar-white){background-color:#303A88;}
 
-nav.aw-nav, .aw-header .btn-get--started{font-size: 17px;}
+nav.aw-nav, .aw-header .btn-get--started{font-size: 15px;}
 .aw-header .btn-get--started{font-family: 'Circe', sans-serif;}
 nav.aw-nav a{position: relative;}
 nav.aw-nav a:focus, nav.aw-nav a:active, nav.aw-nav a:hover{color:#222;}
@@ -141,7 +141,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
-.logo-text-desktop{height:40px;}
+.logo-text-desktop{height:35px;padding-top:12px;}
 .logo-text-mobile{display:none;}
 
 /* Homepage */
@@ -200,20 +200,22 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#faf5ee;box-shadow:none!important;-webkit-box-shadow:none!important;color:#000;}
+background-color:#78C98D;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
 .footer-bottom label{font-size: 14px;}
-.footer-logo{width:78px;}
+.footer-logo{width:60px;}
 .footer-fb a{
-  width: 8px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   display: inline-block;
-  background: url("../images/fb.svg") no-repeat
+  background: url("../images/facebook_icon.png") no-repeat;
+  background-size: cover;
 }
 .footer-ig a{
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   display: inline-block;
-  background: url("../images/ig.svg") no-repeat
+  background: url("../images/instagram_icon.png") no-repeat;
+  background-size: cover;
 }
 
 /* Our Story */
@@ -1786,7 +1788,7 @@ a {
 
 .aw-header.navbar-white .navbar-toggler-icon.account-icon {
   background-image: url(../images/profile-icon-grey.png);
-  background-size: 40px 40px;
+  background-size: 34px 34px;
   max-width: 40px;
   width: 40px;
   height: 40px;
