@@ -162,10 +162,18 @@ class TableEditRow extends Component {
           </td>
           <td>
             <Row noGutters>
-              <Col xs="6"><b>Unit:</b></Col>
-              <Col xs="6"><b>Qty:</b></Col>
-              <Col xs="6">{item.price_unit}</Col>
-              <Col xs="6">{item.quantity}</Col>
+              <Col>
+                <Row>
+                  <Col><b>Unit:</b></Col>
+                  <Col>{item.price_unit}</Col>
+                </Row>
+              </Col>
+              <Col xs="6">
+                <Row>
+                  <Col><b>Qty:</b></Col>
+                  <Col>{item.quantity}</Col>
+                </Row>
+              </Col>
               <Col xs="12"><Input placeholder="Enter actual qty (if different)" onBlur={this.onQtyChange} /></Col>
             </Row>
           </td>
