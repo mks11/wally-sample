@@ -19,9 +19,9 @@ import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
 
-const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
-const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.png'
-const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.png'
+const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.jpg'
+const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.jpg'
+const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.jpg'
 const heroItems = [
   {
     src: banner1,
@@ -159,6 +159,8 @@ class Mainpage extends Component {
       deliveryTimeDropdown: false,
       deliveryAddressDropdown: false,
 
+      fakeUser: this.userStore.loadFakeUser()
+
     }
 
     this.id = this.props.match.params.id
@@ -173,7 +175,16 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
+        const selectedAddress = this.userStore.selectedDeliveryAddress 
+        if (selectedAddress) {
+          this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
+            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+            this.setState({deliveryTimes})
+          })
+        }
+
       })
+
     const $ = window.$
 
     const self = this
@@ -242,6 +253,7 @@ class Mainpage extends Component {
     if (this.userStore.status) {
       this.routing.push('/checkout')
     } else {
+      this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()
     }
   }
@@ -478,6 +490,40 @@ class Mainpage extends Component {
     return
   }
 
+  handleSelectTime = async (data) => {
+    this.modalStore.showDeliveryChange('time', data)
+    return
+  }
+
+  handleAddNewAddress = async (data) => {
+    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
+
+    const dataMap = {
+      name: newContactName, 
+      state: newState,
+      delivery_notes: newDeliveryNotes,
+      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
+      preferred_address: newPreferedAddress
+    }
+
+    if (!this.userStore.user) {
+      if (!this.zipStore.validateZipCode(newZip)) {
+        throw {response: {data: {error:{message: 'Invalid zip code'}}}}
+      }
+
+      this.userStore.addFakeAddress(dataMap)
+      const fakeUser =  this.userStore.loadFakeUser()
+      this.setState({fakeUser})
+
+      return fakeUser
+    }
+
+    const response = await this.userStore.saveAddress(dataMap)
+    this.userStore.setUserData(response)
+    return response
+
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -562,6 +608,8 @@ class Mainpage extends Component {
     });
 
 
+    const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
+
     return (
       <div className="App">
 
@@ -626,17 +674,15 @@ class Mainpage extends Component {
                       </div>
 
                     <div className={deliveryAddressDropdownClass}>
-                      {this.userStore.user && 
                         <DeliveryAddressOptions
                           lock={false}
                           selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
-                          user={this.userStore.user}
+                          user={user}
                           onUnlock={this.handleUnlockAddress}
                           onAddNew={this.handleAddNewAddress}
                           onSubmit={this.handleSubmitAddress}
                           locking={false}
                         />
-                      }
                     </div>
                     </ClickOutside>
                   </div>
@@ -658,7 +704,6 @@ class Mainpage extends Component {
 
 
                     <div className={deliveryTimeDropdownClass}>
-                      {this.userStore.user && 
                         <DeliveryTimeOptions
                           lock={false}
                           data={this.state.deliveryTimes}
@@ -666,7 +711,6 @@ class Mainpage extends Component {
                           isAddressSelected={true}
                           onSelectTime={this.handleSelectTime}
                         />
-                      }
                     </div>
 
                     </ClickOutside>
