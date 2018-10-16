@@ -18,6 +18,10 @@ class ModalStore {
   product = false
   productId = null
 
+  changeProduct = false
+  changeFarm = false
+  changePrice = false
+
   deliveryChange = false
   deliveryChangeType = null
   deliveryChangeData = null
@@ -33,10 +37,6 @@ class ModalStore {
     this.deliveryChangeType = null
     this.deliveryChangeData = null
   }
-  
-  changeProduct = false
-  changeFarm = false
-  changePrice = false
 
   toggleLogin() {
     this.login = !this.login
@@ -129,7 +129,7 @@ decorate(ModalStore, {
   hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
-  toggleChangePrice: action,
+  toggleChangePrice: action
 })
 
 
