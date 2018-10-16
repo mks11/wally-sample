@@ -40,6 +40,9 @@ class ManageFulfillment extends Component {
           this.loadData()
         }
       })
+      .catch((error) => {
+        this.props.store.routing.push('/')
+      })
   }
 
   loadData() {
@@ -80,9 +83,8 @@ class ManageFulfillment extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Time Frame:</div>
                   <CustomDropdown
-                    values={timeframes}
+                    values={timeframes.map(item => { return { id: item, title: item }})}
                     onItemClick={this.onTimeFrameSelect}
-                    title="Time Frame"
                   />
                 </div>
               </Col>

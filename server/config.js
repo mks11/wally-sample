@@ -517,6 +517,182 @@ const updateShopItemsWarehouseLocations = {
   }
 }
 
+const getRoutes = {
+  method: "GET",
+  response: [
+    {
+      id: 'route1',
+      route_number: 'Route 1',
+      status: 'packed',
+      route_placement: '',
+      delivery_date: '',
+      order_ids: [],
+    },
+    {
+      id: 'route2',
+      route_number: 'Route 2',
+      status: 'packed',
+      route_placement: '',
+      delivery_date: '',
+      order_ids: [],
+    },
+    {
+      id: 'route3',
+      route_number: 'Route 3',
+      status: 'incomplete',
+      route_placement: '',
+      delivery_date: '',
+      order_ids: [],
+    }
+  ]
+}
+
+const getRouteOrders = {
+  method: "GET",
+  response: [
+    {
+      "id": "123456",
+      "user_id": "ABC123",
+      "cart_id": "ABC123",
+      "subtotal": 1560,
+      "promo": "",
+      "promo_discount": 0,
+      "service_amount": 399,
+      "tax_amount": 0,
+      "packaging_deposit": 120,
+      "applied_store_credit": 200,
+      "total": 1879,
+      "user_name": "Test User",
+      "telephone": "3457658900",
+      "street_address": "1 Test St",
+      "unit": "",
+      "zip": "10016",
+      "city": "New York",
+      "state": "NY",
+      "country": "USA",
+      "delivery_notes": "Leave with doorman",
+      "delivery_time": "2018-07-31 18:00-19:00",
+      "payment_method": "XYZABC",
+      "status": "submitted",
+      "cart_items": [
+        { "product_id": "ABC123",
+          "product_name": "Milk",
+          "product_price": 500,
+          "customer_quantity": 2,
+          "total": 1000
+        } ,
+      ],
+      "applicable_store_credit": 150 
+    },
+    {
+      "id": "789012",
+      "user_id": "ABC123",
+      "cart_id": "ABC123",
+      "subtotal": 1560,
+      "promo": "",
+      "promo_discount": 0,
+      "service_amount": 399,
+      "tax_amount": 0,
+      "packaging_deposit": 120,
+      "applied_store_credit": 200,
+      "total": 1879,
+      "user_name": "Test User",
+      "telephone": "3457658900",
+      "street_address": "1 Test St",
+      "unit": "",
+      "zip": "10016",
+      "city": "New York",
+      "state": "NY",
+      "country": "USA",
+      "delivery_notes": "Leave with doorman",
+      "delivery_time": "2018-07-31 18:00-19:00",
+      "payment_method": "XYZABC",
+      "status": "packaged",
+      "cart_items": [
+        { "product_id": "ABC123",
+          "product_name": "Milk",
+          "product_price": 500,
+          "customer_quantity": 2,
+          "total": 1000
+        } ,
+      ],
+      "applicable_store_credit": 150 
+    }
+  ]
+}
+
+const updateRoutePlacement = {
+  method: "PATCH",
+  response: {}
+}
+
+const getOrder = {
+  method: "GET",
+  response: {
+    "id": "789012",
+    "user_id": "ABC123",
+    "cart_id": "ABC123",
+    "subtotal": 1560,
+    "promo": "",
+    "promo_discount": 0,
+    "service_amount": 399,
+    "tax_amount": 0,
+    "packaging_deposit": 120,
+    "applied_store_credit": 200,
+    "total": 1879,
+    "user_name": "Test User",
+    "telephone": "3457658900",
+    "street_address": "1 Test St",
+    "unit": "",
+    "zip": "10016",
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "delivery_notes": "Leave with doorman",
+    "delivery_time": "2018-07-31 18:00-19:00",
+    "payment_method": "XYZABC",
+    "status": "packaged",
+    "cart_items": [
+      { "product_id": "ABC123",
+        "product_name": "Milk",
+        "product_price": 500,
+        "customer_quantity": 2,
+        "total": 1000
+      } ,
+    ],
+    "applicable_store_credit": 150 
+  }
+}
+
+const getPackagings = {
+  method: "GET",
+  response: [
+    {
+      id: 'package1',
+      type: 'Tote Bag',
+      description: 'Package description 1',
+      deposit_amount: 370,
+    },
+    {
+      id: 'package2',
+      type: 'Mesh bag',
+      description: 'Package description 2',
+      deposit_amount: 270,
+    },
+    {
+      id: 'package3',
+      type: 'Stasher bag',
+      description: 'Package description 3',
+      deposit_amount: 310,
+    }
+  ]
+}
+
+const packageOrder = {
+  method: "PATCH",
+  response: {}
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -563,4 +739,10 @@ module.exports = {
   "/api/admin/shopping/shopitem/:id": updateShopItem,
   "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
   "/api/admin/fulfillment/shopitem/warehouse-location": updateShopItemsWarehouseLocations,
+  "/api/admin/routes": getRoutes,
+  "/api/admin/route/:id/orders": getRouteOrders,
+  "/api/admin/route/:id/placement": updateRoutePlacement,
+  "/api/admin/order/:id": getOrder,
+  "/api/admin/packagings": getPackagings,
+  "/api/order/:id/package": packageOrder,
 }

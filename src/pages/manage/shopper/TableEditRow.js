@@ -15,7 +15,9 @@ const prepareFarmValues = ({ shopitem, other }) => {
   const { product_id, product_producer } = shopitem
   const initial = product_producer
   const restFarms = (other && other[product_id]) || []
-  return [...new Set([ initial, ...restFarms ])]    
+  return [...new Set([ initial, ...restFarms ])].map(item => {
+    return { id: item, title: item }
+  })
 }
 
 class TableEditRow extends Component {
@@ -24,16 +26,18 @@ class TableEditRow extends Component {
 
     this.state = {
       initialItem: props.item,
-      item: props.item
+      item: props.item,
+      missingNote: ''
     }
 
     this.modalStore = this.props.store.modal
+    this.adminStore = this.props.store.admin
   }
 
   onValueChange(property, newvalue) {
     const { item } = this.state
 
-    if (newvalue.length || newvalue > 0) {
+    if (newvalue.length || newvalue > 0 || typeof(newvalue) == typeof(true)) {
       const { [property.toString()]: omit, ...rest } = item
       this.setState({
         item: {
@@ -47,22 +51,22 @@ class TableEditRow extends Component {
   onProductNameChange = (e) => {
     const newvalue = e.target.value
     if (newvalue.length) {
-      this.onValueChange('product_name', newvalue)
+      this.onValueChange('substitue_for_name', newvalue)
       this.modalStore.toggleChangeProduct()
+
+      const { item } = this.state
+      const { timeframe } = this.props
+      const payload = {
+        product_id: item.product_id,
+        inventory_id: item.inventory_id,
+        organic: item.organic,
+      }
+      this.adminStore.updateShopItemQuantity(timeframe, item.product_id, payload)
     }
   }
 
   onOrgaincChange = (newvalue) => {
-    const value = newvalue === 'Y'
-    const { item } = this.state
-    const { organic, ...rest } = item
-
-    this.setState({
-      item: {
-        organic: value,
-        ...rest,
-      }
-    })
+    this.onValueChange('organic', newvalue === 'true')
   }
 
   onFarmChange = (newvalue) => {
@@ -91,7 +95,12 @@ class TableEditRow extends Component {
 
   onQtyChange = (e) => {
     const newvalue = parseInt(e.target.value)
-    this.onValueChange('quantity', newvalue)
+    this.onValueChange('final_quantity', newvalue)
+  }
+
+  onBoxNumberChange = (e) => {
+    const newvalue = e.target.value
+    this.onValueChange('box_number', newvalue)
   }
 
   onPriceReasonChange = (reason) => {
@@ -104,6 +113,24 @@ class TableEditRow extends Component {
 
   onProductReasonChange = (reason) => {
     this.onValueChange('product_substitute_reason', reason)
+  }
+
+  onPurchaseChange = (state) => {
+    this.onValueChange('missing', state === 'Missing')
+  }
+
+  onPurchaseMissingChange = (reason) => {
+    const { missingNote } = this.state
+    this.onValueChange('product_missing_reason', `${reason} ${missingNote}`)
+  }
+
+  onMissingNoteChange = (e) => {
+    const note = e.target.value
+    const { item } = this.state 
+    this.onValueChange('product_missing_reason', `${item.product_missing_reason} ${note}`)
+    this.setState({
+      missingNote: note
+    })
   }
 
   onSubmit = (e) => {
@@ -122,9 +149,8 @@ class TableEditRow extends Component {
         <tr>
           <td>
             <CustomDropdown
-              values={["Y", "N"]}
+              values={[ { id: 'true', title: "Y" }, { id: 'false', title: "N" }]}
               onItemClick={this.onOrgaincChange}
-              title={item.organic ? "Y" : "N"}
             />
           </td>
           <td>
@@ -141,16 +167,23 @@ class TableEditRow extends Component {
                 other: shopitemsFarms
               })}
               onItemClick={this.onFarmChange}
-              title={item.product_producer}
             />
             <div>{this.state.item.farm_substitue_reason !== '' ? this.state.item.farm_substitue_reason : ''}</div>
           </td>
           <td>
             <Row noGutters>
-              <Col xs="6"><b>Unit:</b></Col>
-              <Col xs="6"><b>Qty:</b></Col>
-              <Col xs="6">{item.price_unit}</Col>
-              <Col xs="6">{item.quantity}</Col>
+              <Col>
+                <Row>
+                  <Col><b>Unit:</b></Col>
+                  <Col>{item.price_unit}</Col>
+                </Row>
+              </Col>
+              <Col xs="6">
+                <Row>
+                  <Col><b>Qty:</b></Col>
+                  <Col>{item.quantity}</Col>
+                </Row>
+              </Col>
               <Col xs="12"><Input placeholder="Enter actual qty (if different)" onBlur={this.onQtyChange} /></Col>
             </Row>
           </td>
@@ -161,8 +194,28 @@ class TableEditRow extends Component {
               <Col xs="12">{this.state.item.price_substitute_reason !== '' ? this.state.item.price_substitute_reason : ''}</Col>
             </Row>
           </td>
-          <td></td>
-          <td>{item.box_number}</td>
+          <td>
+            <CustomDropdown
+              values={[{ id: 'Purchased', title: 'Purchased' }, { id: 'Missing', title: 'Missing' }]}
+              onItemClick={this.onPurchaseChange}
+            />
+            {
+              this.state.item.missing && 
+                (<React.Fragment>
+                  <CustomDropdown
+                    values={[{ id: 'Temp OOS', title: 'Temp OOS' }, { id: 'Season OOS', title: 'Season OOS' }, { id: 'Perm OOS', title: 'Perm OOS' }]}
+                    onItemClick={this.onPurchaseMissingChange}
+                  />
+                  <Input placeholder="Enter any notes you might have" onBlur={this.onMissingNoteChange} />
+                </React.Fragment>)
+            }
+          </td>
+          <td>
+            <Row noGutters>
+              <Col xs="12">{item.box_number}</Col>
+              <Col xs="12"><Input placeholder="Type in substitute" onBlur={this.onBoxNumberChange} /></Col>
+            </Row>
+          </td>
           <td><Button color="primary" onClick={this.onSubmit} prod-id={item.product_id}>Submit Item</Button></td>
         </tr>
         <ModalProductChange onSubmit={this.onProductReasonChange} />

@@ -21,13 +21,13 @@ class FulfillmentPlaceView extends Component {
 
   componentDidUpdate(_, prevState) {
     if (prevState.timeframe !== this.state.timeframe) {
-      this.loadShopItems();
+      this.loadShopItems()
     }
   }
 
-  static getDerivedStateFromProps(nextProps, prevState){
+  static getDerivedStateFromProps(nextProps, prevState) {
     if(nextProps.timeframe !== prevState.timeframe){
-      return { timeframe: nextProps.timeframe };
+      return { timeframe: nextProps.timeframe }
     }
     else return null;
   }
@@ -59,7 +59,7 @@ class FulfillmentPlaceView extends Component {
     
     if (items.length) {
       const payload = items.map(item => { 
-        return { 
+        return {
           shopitem_id: item.product_id,
           location: item.warehouse_placement
         }

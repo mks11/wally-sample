@@ -6,6 +6,11 @@ import {
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
+  API_ADMIN_GET_ROUTES,
+  API_ADMIN_UPDATE_ROUTE_PLACEMENT,
+  API_ADMIN_GET_ORDER,
+  API_ADMIN_GET_PACKAGINGS,
+  API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -13,46 +18,81 @@ import moment from 'moment'
 class AdminStore {
   timeframes = []
   locations = []
+
   shopitems = []
   shopitemsFarms = {}
 
+  routes = []
+  orders = []
+  singleorder = {}
+
+  packagings = []
+
   async getTimeFrames() {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const resp = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
-    this.timeframes = resp.data.timeframes
+    const res = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
+    this.timeframes = res.data.timeframes
   }
 
   async getShopLocations(timeframe) {
-    const resp = await axios.get(`${API_ADMIN_GET_SHOP_LOCATIONS}?timeframe=${timeframe}`)
-    this.locations = resp.data.locations
+    const res = await axios.get(`${API_ADMIN_GET_SHOP_LOCATIONS}?timeframe=${timeframe}`)
+    this.locations = res.data.locations
   }
 
   async getShopItems(timeframe, shop_location) {
-    const resp = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
-    this.shopitems = resp.data.shop_items
+    const res = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
+    this.shopitems = res.data.shop_items
   }
 
   async getShopItemsFarms(timeframe, shop_location) {
-    const resp = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS_FARMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
-    this.shopitemsFarms = resp.data.farms
+    const res = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS_FARMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
+    this.shopitemsFarms = res.data.farms
   }
 
   async updateShopItem(timeframe, shopitem_id, data) {
-    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
-    this.updateStoreShopItem(shopitem_id, resp.data)
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async updateShopItemQuantity(timeframe, shopitem_id) {
-    const data = {}
-    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
-    console.log(resp.data)
-    //this.updateStoreShopItem(shopitem_id, resp.data)
+  async updateShopItemQuantity(timeframe, shopitem_id, data) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async updateShopItemsWarehouseLocations(data) {
-    const resp = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
-    console.log(resp.data)
-    // updateManyStoreShopItems(resp.data)
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
+    console.log(res.data)
+    this.updateManyStoreShopItems(res.data)
+  }
+
+  async getRoutes(timeframe) {
+    const res = await axios.get(`${API_ADMIN_GET_ROUTES}?timeframe=${timeframe}`)
+    this.routes = res.data
+  }
+
+  async getRouteOrders(id) {
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/orders`)
+    this.orders = res.data
+  }
+
+  async updateRoutePlacement(id, data) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`, data)
+    this.updateRouteItem(id, res.data)
+  }
+
+  async getOrder(id) {
+    const res = await axios.get(`${API_ADMIN_GET_ORDER}/${id}`)
+    this.singleorder = res.data
+  }
+
+  async getPackagings() {
+    const res = await axios.get(`${API_ADMIN_GET_PACKAGINGS}`)
+    this.packagings = res.data
+  }
+
+  async packageOrder(id, data) {
+    const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data) // API_CREATE_ORDER
+    this.updateOrderItem(id, res.data)
   }
 
   setEditing(id, edit) {
@@ -73,6 +113,24 @@ class AdminStore {
     })
   }
 
+  updateRouteItem(id, updateditem) {
+    this.routes = this.routes.map(item => {
+      if (item.id === id) {
+        item = updateditem
+      }
+      return item
+    })
+  }
+
+  updateOrderItem(id, updateditem) {
+    this.orders = this.orders.map(item => {
+      if (item.id === id) {
+        item = updateditem
+      }
+      return item
+    })
+  }
+
   updateManyStoreShopItems(shopitems) {
     for (let item of shopitems) {
       const id = item.product_id
@@ -86,12 +144,22 @@ decorate(AdminStore, {
   locations: observable,
   shopitems: observable,
   shopitemsFarms: observable,
+  routes: observable,
+  orders: observable,
+  singleorder: observable,
+  packagings: observable,
 
   getTimeFrames: action,
   getShopLocations: action,
   getShopItems: action,
   getShopItemsFarms: action,
   updateShopItemsWarehouseLocations: action,
+  getRoutes: action,
+  getRouteOrders: action,
+  updateRoutePlacement: action,
+  getOrder: action,
+  getPackagings: action,
+  packageOrder: action,
 })
 
 export default new AdminStore()

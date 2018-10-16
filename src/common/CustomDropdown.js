@@ -10,13 +10,23 @@ class CustomDropdown extends PureComponent {
   constructor(props) {
     super(props)
 
-    const { title } = this.props
-
     this.state = {
-      title: title,
+      values: [],
+      title: '',
       open: false,
     }
   }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if(nextProps.values.length !== prevState.values.length){
+      return {
+        values: nextProps.values,
+        title: nextProps.values[0].title
+      }
+    }
+    else return null;
+  }
+
 
   toggle = () => {
     this.setState(prevState => ({
@@ -26,12 +36,13 @@ class CustomDropdown extends PureComponent {
 
   onDropdownItemClick = (e) => {
     const { onItemClick } = this.props
-    const value = e.target.getAttribute('attr-id')
+    const { values } = this.state
+    const valueId = e.target.getAttribute('attr-id')
 
-    onItemClick && onItemClick(value)
+    onItemClick && onItemClick(valueId)
     
     this.setState({
-      title: value
+      title: values.find(item => item.id === valueId).title
     })
   }
   render() {
@@ -44,8 +55,8 @@ class CustomDropdown extends PureComponent {
         <DropdownMenu>
           {values.map(item => {
             return (
-              <DropdownItem key={item} onClick={this.onDropdownItemClick} attr-id={item}>
-                {item}
+              <DropdownItem key={item.id} onClick={this.onDropdownItemClick} attr-id={item.id}>
+                {item.title}
               </DropdownItem>
             );
           })}
