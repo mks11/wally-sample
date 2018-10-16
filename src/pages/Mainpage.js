@@ -255,6 +255,7 @@ class Mainpage extends Component {
     if (this.userStore.status) {
       this.routing.push('/checkout')
     } else {
+      this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()
     }
   }
