@@ -201,7 +201,14 @@ class UserStore {
     }
 
     for (const address of addresses) {
-      this.saveAddress(address, this.getHeaderAuth())
+      const user = await this.saveAddress(address, this.getHeaderAuth())
+      console.log('menggila', address.address_id, this.selectedDeliveryAddress.address_id)
+      if (address.address_id === this.selectedDeliveryAddress.address_id) {
+        const added = user.addresses[user.addresses.length - 1]
+        console.log('masuk dek')
+        console.log('added', added)
+        this.setDeliveryAddress(added)
+      }
     }
 
     localStorage.removeItem('addresses')
