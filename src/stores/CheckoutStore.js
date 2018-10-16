@@ -104,6 +104,42 @@ class CheckoutStore {
     return res.data
   }
 
+  transformDeliveryTimes(data) {
+    let deliveryTimes = []
+    const times = data.delivery_windows
+    for (var i = 0, len = times.length; i < len; i++) {
+      addTimes(times[i])
+    }
+
+    function addTimes(data) {
+      const timeFirst = data[0].split('-')[0]
+      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        nextWeek: 'dddd',
+        lastDay: '[Yesterday]',
+        lastWeek: '[Last] dddd',
+        sameElse: 'DD/MM/YYYY'
+      })
+
+      const findTime = deliveryTimes.findIndex((data) => data.day === day)
+
+      const obj = {
+        time: data[0],
+        date: data[1],
+        availability: data[2]
+      }
+
+      if (findTime === -1) {
+        deliveryTimes.push({day: day, data: [obj]})
+      } else {
+        deliveryTimes[findTime].data.push(obj)
+      }
+    }
+
+    return deliveryTimes
+  }
+
 }
 
 decorate(CheckoutStore, {
@@ -115,7 +151,8 @@ decorate(CheckoutStore, {
   editCurrentCart: action,
   getOrderSummary: action,
   checkPromo: action,
-  toggleDeleteModal: action
+  toggleDeleteModal: action,
+  transformDeliveryTimes: action
 })
 
 
