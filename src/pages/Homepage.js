@@ -207,19 +207,19 @@ class Homepage extends Component {
                 <div className="row">
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
-                      <img src="images/home1_1.png" alt=""/>
+                      <img src="images/home1_hd.jpg" alt=""/>
                       <h4>BUY THE PRODUCT, <br/>NOT THE PACKAGING</h4>
                     </div>
                   </div>
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
-                      <img src="images/home2_1.png" alt=""/>
+                      <img src="images/home2_hd.jpg" alt=""/>
                       <h4>BULK PRICES, <br/>INDIVIDUAL SIZES</h4>
                     </div>
                   </div>
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
-                      <img src="images/home3_1.png" alt=""/>
+                      <img src="images/home3_hd.jpg" alt=""/>
                       <h4>CURATED SELECTION <br/>OF QUALITY INGREDIENTS</h4>
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import {
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
+import uuid from 'uuid'
 
 let index = 0
 
@@ -192,6 +193,26 @@ class UserStore {
     return res.data
   }
 
+  async saveLocalAddresses() {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+
+    for (const address of addresses) {
+      const user = await this.saveAddress(address, this.getHeaderAuth())
+      console.log('menggila', address.address_id, this.selectedDeliveryAddress.address_id)
+      if (address.address_id === this.selectedDeliveryAddress.address_id) {
+        const added = user.addresses[user.addresses.length - 1]
+        console.log('masuk dek')
+        console.log('added', added)
+        this.setDeliveryAddress(added)
+      }
+    }
+
+    localStorage.removeItem('addresses')
+  }
+
 
   async getStatus(update) {
     this.readStorage()
@@ -199,6 +220,8 @@ class UserStore {
       this.status = false
       return status
     }
+
+    this.saveLocalAddresses()
 
     const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
     let status = resp.data.status && localStorage.getItem('user')
@@ -276,6 +299,32 @@ class UserStore {
 
     return data;
   }
+
+  loadFakeUser() {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+    const user = {
+      addresses,
+      preferred_address: null
+    }
+
+    return user
+  }
+
+  addFakeAddress(data) {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+    data.address_id = uuid()
+    data._id = data.address_id
+
+    addresses.push(data)
+
+    localStorage.setItem('addresses', JSON.stringify(addresses))
+  }
 }
 
 
@@ -342,6 +391,8 @@ decorate(UserStore, {
 
   setDeliveryAddress: action,
   setDeliveryTime: action,
+  loadFakeUser: action,
+  addFakeAddress: action
 })
 
 
