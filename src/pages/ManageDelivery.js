@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
-import { Table, Container } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Container,
+  Table,
+  Button,
+} from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
+import CustomDropdown from '../common/CustomDropdown'
+import OrderDetailView from './manage/delivery/OrderDetailView'
 
 import { connect } from '../utils'
 
@@ -9,6 +17,7 @@ class ManageDelivery extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedOrder: null
     }
 
     this.userStore = this.props.store.user
@@ -33,46 +42,106 @@ class ManageDelivery extends Component {
   loadData() {
     const date = + new Date()
     this.adminStore.getTimeFrames(date)
-    this.adminStore.getShopLocations()
+  }
+
+  loadRoutes = (timeframe) => {
+    this.adminStore.getRoutes(timeframe)
+  }
+
+  loadOrders = (routeId) => {
+    this.adminStore.getRouteOrders(routeId)
+  }
+
+  openOrder = (e) => {
+    const routeId = e.target.getAttribute('order-id')
+    this.setState({
+      selectedOrder: routeId,
+      selectedRoute: null,
+    })
   }
 
   render() {
     if (!this.userStore.user) return null
+
+    const { timeframes, routes, orders } = this.adminStore
+    const { selectedOrder } = this.state
       
     return (
       <div className="App">
         <ManageTabs page="delivery" />
         <Title content="Delivery Portal" />
 
-        <section className="page-section pt-1">
+        <section className="page-section pt-1 delivery-page">
           <Container>
+            <Row>
+              <Col md="6" sm="12">
+                <div className="mb-3">
+                  <div className="mb-2 font-weight-bold">Time Frame:</div>
+                  <CustomDropdown
+                    values={timeframes.map(item => { return { id: item, title: item }})}
+                    onItemClick={this.loadRoutes}
+                  />
+                </div>
+              </Col>
+              <Col md="6" sm="12">
+                <div className="mb-3">
+                  <div className="mb-2 font-weight-bold">Delivery Route:</div>
+                  <CustomDropdown
+                    values={routes.map(item => { return { id: item.id, title: item.route_number }})}
+                    onItemClick={this.loadOrders}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+
+        <section className="page-section pt-1 delivery-page">
+          <Container>
+            <h2>Orders</h2>
             <Table responsive>
-            <thead>
-                <tr>
-                <th scope="col">Time Frame:</th>
-                <th scope="col">Delivery Route:</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
+              <tbody>
+                {
+                  orders && orders.map(item => {
+                    let status = ''
+                    switch(item.status) {
+                      case 'paid':
+                        status = 'Incomplete'
+                        break
+                      case 'delivery_issue':
+                        status = 'Missing'
+                        break
+                      case 'delivered':
+                        status = 'Delivered'
+                        break
+                      default:
+                        break
+                    }
+
+                    return (
+                      <tr key={item.id}>
+                        <td>Order #{item.id}</td>
+                        <td>{item.street_address}</td>
+                        <td>{status}</td>
+                        <td>
+                          <Button
+                            color="primary"
+                            order-id={item.id}
+                            onClick={this.openOrder}
+                          >
+                            View Details
+                          </Button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
             </Table>
           </Container>
         </section>
 
-        <section className="page-section pt-1">
-          <Container>
-            <h2>Orders</h2>
-            <Table responsive>
-            <thead>
-                <tr>
-                
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-            </Table>
-          </Container>
-        </section>
+        { selectedOrder ? <OrderDetailView orderId={selectedOrder} onSubmit={this.onOrderSubmit} /> : null}
       </div>
     );
   }

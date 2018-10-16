@@ -11,6 +11,7 @@ import {
   API_ADMIN_GET_ORDER,
   API_ADMIN_GET_PACKAGINGS,
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
+  API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -95,6 +96,11 @@ class AdminStore {
     this.updateOrderItem(id, res.data)
   }
 
+  async completeOrder(id, data) {
+    const res = await axios.patch(`${API_ADMIN_COMPLETE_ORDER}/${id}/complete`, data) // API_CREATE_ORDER
+    this.updateOrderItem(id, res.data)
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -160,6 +166,7 @@ decorate(AdminStore, {
   getOrder: action,
   getPackagings: action,
   packageOrder: action,
+  completeOrder: action,
 })
 
 export default new AdminStore()
