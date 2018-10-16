@@ -194,6 +194,19 @@ class UserStore {
     return res.data
   }
 
+  async saveLocalAddresses() {
+    let addresses = []
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'))
+    }
+
+    for (const address of addresses) {
+      this.saveAddress(address, this.getHeaderAuth())
+    }
+
+    localStorage.removeItem('addresses')
+  }
+
 
   async getStatus(update) {
     this.readStorage()
@@ -201,6 +214,8 @@ class UserStore {
       this.status = false
       return status
     }
+
+    this.saveLocalAddresses()
 
     const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
     let status = resp.data.status && localStorage.getItem('user')
