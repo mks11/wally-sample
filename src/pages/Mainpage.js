@@ -22,6 +22,11 @@ import ProductModal from '../common/ProductModal';
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.png'
 const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.png'
 const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.png'
+
+const bannerMobile1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner1.jpg'
+const bannerMobile2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner2.jpg'
+const bannerMobile3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner3.jpg'
+
 const heroItems = [
   {
     src: banner1,
@@ -42,6 +47,12 @@ const heroItems = [
     link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
+
+if (window.innerWidth <= 500) {
+  heroItems[0].src = bannerMobile1
+  heroItems[1].src = bannerMobile2
+  heroItems[2].src = bannerMobile3
+}
 
 
 

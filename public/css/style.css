@@ -146,6 +146,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 
 /* Homepage */
 .landing-section{background-color:#9ECACB;background-image:url("../images/header300.png");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+.landing-section.mobile{background-image:url("../images/mobile_header300.jpg");}
 .landing-section h1{color:#fff;font-size:45px;}
 .landing-section h2{
   font-size: 20px;
@@ -500,7 +501,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   .page-recyclestep .media{margin-bottom: 30px;}
   .page-recyclestep h3{min-height: auto;}
   #help img{width:60px;}
-  h3{font-size: 18px;}
+  h3{font-size: 18px;margin:0;}
   .page-recyclestep h3{font-size: 16px;}
 
   .wxs{max-width:220px;margin:0 auto;text-align: left;position: relative;}
@@ -514,7 +515,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 
   .logo-middle{display:none;}
   .logo-text-desktop{display:none;}
-  .logo-text-mobile{display:inline-block;width:75px;}
+  .logo-text-mobile{display:inline-block;width:60px;}
   .slick-arrow{margin-top: -40px;}
 }
 @media (max-width:576px){
@@ -1237,7 +1238,7 @@ section.page-section.bg-fruitfull {
 .left-column.hide{transform: translateX(-100%);visibility: hidden;opacity:0;display:none;}
 .left-column.hide.hide-block{transform: translateX(-100%);visibility: hidden;opacity:0;display:inline-block;}
 .left-column{transform: translateX(0%);transition:all .5s ease;}
-.left-column span{line-height:28px;}
+.left-column span{line-height:40px;}
 .left-column::after{position: absolute;content:'';border-right:1px solid #ddd;top:0;bottom:0;right:0;}
 .product-content{padding-top:0px;min-height:600px;padding-bottom:50px;}
 
@@ -1651,6 +1652,11 @@ a {
   max-width:1000px;
 }
 
+.checkout-wrap .card1.delivery {
+  width: 400px;
+}
+
+/* media mobile */
 @media (max-width:576px){
   .product-top.fixed {
     position: fixed;
@@ -1683,6 +1689,10 @@ a {
   .modal-header--sm {
     margin: 12px;
   }
+
+  .modal-header--sm-nomargin {
+    margin: 0;
+  }
   .addresses--default {
     position: absolute;
     top: unset;
@@ -1706,6 +1716,9 @@ a {
   .product-content-left{display:none;}
 
   .big-arrow{display:none!important;}
+  .checkout-wrap .card1.delivery {
+    width: 100%;
+  }
 }
 
 .top-bar {
@@ -1921,11 +1934,9 @@ a {
   font-size: 22px;
   margin-right:10px;
   text-align: center;
+  padding-top:7px;
 }
 
-.checkout-wrap .card1.delivery {
-  width: 400px;
-}
 .dropdown-menu.dropdown-large {
   width: 500px;
   height: 300px;
