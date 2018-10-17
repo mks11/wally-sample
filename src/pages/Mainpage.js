@@ -498,8 +498,14 @@ class Mainpage extends Component {
     this.setState({deliveryAddressDropdown: false})
   }
 
-  handleSubmitAddress = async (data) => {
-    this.modalStore.showDeliveryChange('address', data)
+  handleSubmitAddress = async (address) => {
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.modalStore.showDeliveryChange('address', {
+        address,
+        times 
+      })
+    })
     return
   }
 
