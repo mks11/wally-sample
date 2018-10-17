@@ -142,7 +142,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
 .logo-text-desktop{height:35px;padding-top:12px;}
-.logo-text-mobile{display:none;}
+.logo-text-mobile{display:none;padding-top:12px;}
 
 /* Homepage */
 .landing-section{background-color:#9ECACB;background-image:url("../images/header300.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
@@ -517,7 +517,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 
   .logo-middle{display:none;}
   .logo-text-desktop{display:none;}
-  .logo-text-mobile{display:inline-block;width:60px;}
+  .logo-text-mobile{display:inline-block;width:90px;}
   .slick-arrow{margin-top: -40px;}
 }
 @media (max-width:576px){
