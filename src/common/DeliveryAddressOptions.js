@@ -59,6 +59,8 @@ class DeliveryAddressOptions extends Component {
   }
 
   handleAddNewAddress = () => {
+
+    console.log('newpreffered address', this.state.newPreferedAddress)
     this.setState({invalidText: null})
     if (!this.state.newStreetAddress) {
       this.setState({invalidText: 'Street address cannot be empty'})
@@ -75,6 +77,7 @@ class DeliveryAddressOptions extends Component {
       return
     }
 
+
     this.props.onAddNew(this.state).then((data) => {
       const lastAddress = data.addresses[data.addresses.length - 1]
       this.setState({
@@ -90,6 +93,7 @@ class DeliveryAddressOptions extends Component {
         newState:'',
         newCity: '',
         newCountry: '',
+        newPreferedAddress: false
       })
 
     }).catch((e) => {
@@ -309,8 +313,10 @@ class DeliveryAddressOptions extends Component {
                       className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
                   </div>
                   <div className="custom-control custom-checkbox">
-                    <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
-                    <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
+                    <input type="checkbox" className="custom-control-input" checked={this.state.newPreferedAddress} onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
+                    <label className="custom-control-label"
+                      onClick={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} 
+                    >Make default address</label>
                   </div>
                   <hr />
                   <button className="btn btn-main active inline-round" onClick={this.handleAddNewAddress}>CONFIRM</button>

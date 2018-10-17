@@ -126,7 +126,7 @@ decorate(ModalStore, {
   setLoginNextRoute: action,
   deliveryChange: observable,
   showDeliveryChange: action,
-  hideDeliveryChange: action
+  hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
   toggleChangePrice: action
