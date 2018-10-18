@@ -517,7 +517,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 
   .logo-middle{display:none;}
   .logo-text-desktop{display:none;}
-  .logo-text-mobile{display:inline-block;width:115px;}
+  .logo-text-mobile{display:inline-block;width:120px;}
   .slick-arrow{margin-top: -40px;}
 }
 @media (max-width:576px){
