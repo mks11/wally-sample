@@ -64,9 +64,15 @@ class DeliveryTimeOptions extends Component {
     }
 
     const lock = this.state.lock ? this.state.lock : this.props.lock
+    const dropdown = typeof this.props.dropdown !== "undefined" ? this.props.dropdown : true
     const data = this.props.data ? this.props.data : []
     const editable = this.props.editable !== null ? this.props.editable : true
     const selected  = this.props.selected ? this.props.selected : this.state.selected
+
+    let dropdownButtonClass = "btn btn-dropdown-outline dropdown-toggle" 
+    if (!dropdown) {
+      dropdownButtonClass += " disabled"
+    }
 
     return (
       <React.Fragment>
@@ -76,7 +82,7 @@ class DeliveryTimeOptions extends Component {
         </h3>
         <div className="dropdown show">
           <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
-            <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+            <button onClick={e=>this.toggleTimeDropdown()} className={dropdownButtonClass} type="button" data-toggle="dropdown" aria-expanded="true">
               {selected ? <React.Fragment>{selected.day}, {selected.time}</React.Fragment> : 'Choose delivery date and time'}
             </button>
             <div className={timeDropdownClass}>
