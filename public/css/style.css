@@ -1965,3 +1965,7 @@ color:#6e8692
     right: 0;
     bottom: -5px;
   }
+
+  .dropdown-toggle.disabled::after {
+    opacity: 0;
+  }

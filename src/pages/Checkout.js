@@ -484,6 +484,7 @@ class Checkout extends Component {
                       lock={true}
                       data={[]}
                       selected={this.userStore.selectedDeliveryTime}
+                      dropdown={false}
                       isAddressSelected={true}
                     />
                 }
