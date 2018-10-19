@@ -44,8 +44,8 @@ class Footer extends Component {
                     THE WALLY SHOP
                   </h4>
                   <ul>
-                      <li><Link to="about">ABOUT</Link></li>
-                      <li><Link to="help">HELP</Link></li>
+                      <li><Link to="about">About</Link></li>
+                      <li><Link to="help">Help</Link></li>
                   </ul>
 
                 </div>
@@ -54,9 +54,9 @@ class Footer extends Component {
                     SUPPORT
                   </h4>
                   <ul>
-                    <li><a href="mailto:support@thewallyshop.co">CONTACT US</a></li>
-                    <li><Link to={"/tnc"} >TERMS &amp; CONDITIONS</Link></li> 
-                    <li><Link to={"/privacy"} >PRIVACY POLICY</Link></li> 
+                    <li><a href="mailto:support@thewallyshop.co">Contact Us</a></li>
+                    <li><Link to={"/tnc"} >Terms &amp; Conditions</Link></li> 
+                    <li><Link to={"/privacy"} >Privacy Policy</Link></li> 
                   </ul>
 
                 </div>
@@ -68,7 +68,7 @@ class Footer extends Component {
                     <li>@thewallyshop</li>
                     <li>
                       <ul className="aw-social mt-2">
-                        <li className="d-inline-block align-middle mr-3 footer-fb">
+                        <li className="d-inline-block align-middle footer-fb">
                           <a href={FACEBOOK} target="_blank">
                           </a>
                         </li>

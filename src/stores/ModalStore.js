@@ -18,6 +18,10 @@ class ModalStore {
   product = false
   productId = null
 
+  changeProduct = false
+  changeFarm = false
+  changePrice = false
+
   deliveryChange = false
   deliveryChangeType = null
   deliveryChangeData = null
@@ -33,7 +37,6 @@ class ModalStore {
     this.deliveryChangeType = null
     this.deliveryChangeData = null
   }
-  
 
   toggleLogin() {
     this.login = !this.login
@@ -83,6 +86,18 @@ class ModalStore {
     this.loginNextRoute = '/checkout'
   }
 
+  toggleChangeProduct() {
+    this.changeProduct = !this.changeProduct
+  }
+
+  toggleChangeFarm() {
+    this.changeFarm = !this.changeFarm
+  }
+
+  toggleChangePrice() {
+    this.changePrice = !this.changePrice
+  }
+
 }
 
 decorate(ModalStore, {
@@ -97,6 +112,9 @@ decorate(ModalStore, {
   invite: observable,
   product: observable,
   productId: observable,
+  changeProduct: observable,
+  changeFarm: observable,
+  changePrice: observable,
   toggleLogin: action,
   toggleSignup: action,
   toggleZip: action,
@@ -108,8 +126,10 @@ decorate(ModalStore, {
   setLoginNextRoute: action,
   deliveryChange: observable,
   showDeliveryChange: action,
-  hideDeliveryChange: action
-
+  hideDeliveryChange: action,
+  toggleChangeProduct: action,
+  toggleChangeFarm: action,
+  toggleChangePrice: action
 })
 
 

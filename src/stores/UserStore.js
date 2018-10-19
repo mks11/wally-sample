@@ -50,7 +50,6 @@ class UserStore {
   }
 
   setUserData(user) {
-    console.log(user)
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
   }
@@ -170,9 +169,9 @@ class UserStore {
     }
 
     if (delivery) {
-      console.log('gent in')
+      // console.log('gent in')
       const deliveryData = JSON.parse(delivery)
-      console.log('deliveryData')
+      // console.log('deliveryData')
       this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
     }
@@ -265,7 +264,7 @@ class UserStore {
   }
 
   async addPromo(promoCode) {
-    const res = await axios.post(`${API_USER_ADD_PROMO}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, {promo_code: promoCode}, this.getHeaderAuth())
+    const res = await axios.post(`${API_USER_ADD_PROMO}?promo_code=${promoCode}`, this.getHeaderAuth())
     return res.data
   }
 

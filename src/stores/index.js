@@ -7,6 +7,7 @@ import OrderStore from './OrderStore'
 import ZipStore from './ZipStore'
 import ContentStore from './ContentStore'
 import HelpStore from './HelpStore'
+import AdminStore from './AdminStore'
 
 const store =  {
   ui: UiStore,
@@ -17,7 +18,8 @@ const store =  {
   zip: ZipStore,
   checkout: CheckoutStore,
   help: HelpStore,
-  order: OrderStore
+  order: OrderStore,
+  admin: AdminStore,
 }
 
 export default store

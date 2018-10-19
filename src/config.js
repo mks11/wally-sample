@@ -1,5 +1,6 @@
 //w,export const BASE_URL = "http://api.tws.rizkifuad.com"
 export const BASE_URL = "https://the-wally-shop.herokuapp.com"
+// export const BASE_URL = "localhost:4001"
 
 export const API_GET_USER = BASE_URL + "/api/user"
 export const API_EDIT_USER = BASE_URL + "/api/user"
@@ -40,6 +41,21 @@ export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 export const API_GET_ORDERS = BASE_URL + "/api/orders"
 export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 
+
+
+export const API_ADMIN_GET_TIME_FRAMES = "http://localhost:4000/api/admin/timeframes"
+export const API_ADMIN_GET_SHOP_LOCATIONS = "http://localhost:4000/api/admin/shopping/locations"
+export const API_ADMIN_GET_SHOP_ITEMS = "http://localhost:4000/api/admin/shopping/shopitems"
+export const API_ADMIN_GET_SHOP_ITEMS_FARMS = "http://localhost:4000/api/admin/shopping/shopitems/farms"
+export const API_ADMIN_UPDATE_SHOP_ITEM = "http://localhost:4000/api/admin/shopping/shopitem"
+export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = "http://localhost:4000/api/admin/fulfillment/shopitem/warehouse-location"
+// export const API_ADMIN_UPDATE_SHOP_ITEM_QUANTITY = "http://localhost:4000/api/admin/shopping/shopitem/"
+export const API_ADMIN_GET_ROUTES = "http://localhost:4000/api/admin/routes"
+export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = "http://localhost:4000/api/admin/route"
+export const API_ADMIN_GET_ORDER = "http://localhost:4000/api/admin/order"
+export const API_ADMIN_GET_PACKAGINGS = "http://localhost:4000/api/admin/packagings"
+export const API_ADMIN_PACKAGE_ORDER = "http://localhost:4000/api/order"
+export const API_ADMIN_COMPLETE_ORDER =  "http://localhost:4000/api/order"
 
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"
