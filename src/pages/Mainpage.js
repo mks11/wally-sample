@@ -201,8 +201,12 @@ class Mainpage extends Component {
     const self = this
 
     $(window).bind('scroll', function () {
+      let thTop = 561
+      if (window.innerWidth <= 500) {
+        thTop = 731
+      }
       // console.log($(window).scrollTop())
-      if ($(window).scrollTop() > 510) {
+      if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
         // self.uiStore.topBar = false
       } else {
@@ -656,7 +660,7 @@ class Mainpage extends Component {
                     <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                   </div>
                 </div>
-                <div className="row" onClick={e => this.userStore.toggleDeliveryModal(true)}>
+                <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>
@@ -697,7 +701,11 @@ class Mainpage extends Component {
                         onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
                         <i className="fa fa-map-marker bar-icon"></i>
                         <span className={deliveryAddressDetailClass}>
+                        {this.userStore.selectedDeliveryAddress && 
+                          <React.Fragment>
                             {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                          </React.Fragment>
+                        }
                           </span>
                       </div>
 
@@ -752,7 +760,7 @@ class Mainpage extends Component {
                 <div className="col-2 left-column" style={{width:200}}>
                   <div className="dropdown dropdown-fwidth">
 
-                    <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} >
+                    <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} className="pt-1">
                       <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                       <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
