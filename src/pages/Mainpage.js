@@ -541,6 +541,10 @@ class Mainpage extends Component {
 
   }
 
+  formatAddress(street_address) {
+    return street_address.substr(0, 25) + '...'
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -656,7 +660,13 @@ class Mainpage extends Component {
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.street_address }</span>
+                      <span style={{lineHeight: '26px'}}>
+                        {this.userStore.selectedDeliveryAddress && 
+                          <React.Fragment>
+                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                          </React.Fragment>
+                        }
+                      </span>
                     </div>
                   </div>
 
@@ -687,7 +697,8 @@ class Mainpage extends Component {
                         onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
                         <i className="fa fa-map-marker bar-icon"></i>
                         <span className={deliveryAddressDetailClass}>
-                          {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.street_address }</span>
+                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                          </span>
                       </div>
 
                     <div className={deliveryAddressDropdownClass}>
