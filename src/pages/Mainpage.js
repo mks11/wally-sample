@@ -656,7 +656,7 @@ class Mainpage extends Component {
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
+                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.street_address }</span>
                     </div>
                   </div>
 
@@ -687,7 +687,7 @@ class Mainpage extends Component {
                         onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
                         <i className="fa fa-map-marker bar-icon"></i>
                         <span className={deliveryAddressDetailClass}>
-                          {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
+                          {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.street_address }</span>
                       </div>
 
                     <div className={deliveryAddressDropdownClass}>

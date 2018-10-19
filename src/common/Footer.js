@@ -45,6 +45,7 @@ class Footer extends Component {
                   </h4>
                   <ul>
                       <li><Link to="about">About</Link></li>
+                      <li><Link to="blog">Blog</Link></li>
                       <li><Link to="help">Help</Link></li>
                   </ul>
 
