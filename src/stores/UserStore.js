@@ -217,6 +217,7 @@ class UserStore {
   async getStatus(update) {
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
+      this.logout()
       this.status = false
       return status
     }
@@ -236,6 +237,7 @@ class UserStore {
       status = false
       this.status = false
       this.user = null
+      this.logout()
     }
 
     return status
