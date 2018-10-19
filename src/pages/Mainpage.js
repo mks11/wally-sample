@@ -206,10 +206,10 @@ class Mainpage extends Component {
       // console.log($(window).scrollTop())
       if ($(window).scrollTop() > 510) {
         $('.product-top').addClass('fixed');
-        self.uiStore.topBar = false
+        // self.uiStore.topBar = false
       } else {
         $('.product-top').removeClass('fixed');
-        self.uiStore.topBar = true && !self.uiStore.topBarClosed
+        // self.uiStore.topBar = true && !self.uiStore.topBarClosed
       }
 
       if ($(window).scrollTop() > 580) {
