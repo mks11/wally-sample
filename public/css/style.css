@@ -1951,10 +1951,10 @@ a {
 .blog-date {
 color:#6e8692
 }
-.readmore {
+.blog-item a.readmore, .readmore {
     font-size: 16px;
     text-decoration: none;
-    color: #2c357e;
+    color: #6060a8;
     position: relative;
     font-weight: 700;
   }
