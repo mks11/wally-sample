@@ -486,18 +486,22 @@ class Mainpage extends Component {
 
   toggleDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
+      this.uiStore.backdrop = !this.state.deliveryTimeDropdown
   }
 
   toggleDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
+      this.uiStore.backdrop = !this.state.deliveryAddressDropdown
   }
 
   hideDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: false})
+      this.uiStore.backdrop = false
   }
 
   hideDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: false})
+      this.uiStore.backdrop = false
   }
 
   handleSubmitAddress = async (address) => {
@@ -547,6 +551,10 @@ class Mainpage extends Component {
 
   formatAddress(street_address) {
     return street_address.substr(0, 25) + '...'
+  }
+
+  handleChangeDelivery = () => {
+    this.loadData()
   }
 
   render() {
@@ -982,8 +990,8 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal/> }
-                <DeliveryModal/>
-                <DeliveryChangeModal/>
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
+                <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
