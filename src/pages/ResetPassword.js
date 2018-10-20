@@ -67,7 +67,8 @@ class OrderConfirmation extends Component {
           <div className="container-fluid">
             <div className="card">
               <h3 className="m-0 mb-2">Reset your password</h3>
-              <span className="mb-5">Please enter and verify your new password.</span>
+              <span className="mb-0">Please enter and verify your new password.</span>
+              <span className="mb-3">Your password needs to be longer than 6 characters.</span>
               <form>
                 <Input
                   className="aw-input--control aw-input--bordered"

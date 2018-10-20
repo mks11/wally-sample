@@ -97,8 +97,10 @@ border-radius:0;}
 .navbar-toggler {
 }
 .aw-header.navbar-white .navbar-toggler-icon {
-  background-image: url("../images/hamburger.svg");
-  max-width: 18px;
+  background-image: url("../images/hamburger.png");
+  max-width: 23px;
+  margin-top: 7px;
+  margin-right: 7px;
 }
 
 .nav-open .aw-header.navbar-white .navbar-toggler-icon {
@@ -1151,8 +1153,10 @@ a.view-all{
 }
 
 section.page-section.bg-fruitfull {
-  background: url('../images/fruitfull.png') repeat;
-  min-height: 800px;
+  background: url('../images/pear_blanket.jpg');
+  /*min-height: 800px;*/
+  background-size: cover;
+  background-position: center;
   margin: 0 auto;
   padding-top:10px;
 }
