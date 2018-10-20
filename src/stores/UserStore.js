@@ -255,6 +255,7 @@ class UserStore {
     localStorage.removeItem('token')
     localStorage.removeItem('delivery')
     localStorage.removeItem('cart')
+    this.token = ''
     this.status = false
     this.user = null
     this.selectedDeliveryAddress = null

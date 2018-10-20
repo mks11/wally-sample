@@ -37,6 +37,7 @@ class CheckoutStore {
     url += '&delivery_date=' + delivery.date
 
 
+    console.log({auth})
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.get(url)
       localStorage.setItem('cart', JSON.stringify(res.data))
