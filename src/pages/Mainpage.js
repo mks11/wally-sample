@@ -672,7 +672,7 @@ class Mainpage extends Component {
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>
+                      <span style={{lineHeight: '37px'}}>
                         {this.userStore.selectedDeliveryAddress && 
                           <React.Fragment>
                             {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
@@ -685,7 +685,7 @@ class Mainpage extends Component {
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-clock-o bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryTime !== null ?
+                      <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
                         <React.Fragment>
                           {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
                         </React.Fragment>
