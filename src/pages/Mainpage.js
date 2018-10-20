@@ -553,6 +553,10 @@ class Mainpage extends Component {
     return street_address.substr(0, 25) + '...'
   }
 
+  handleChangeDelivery = () => {
+    this.loadData()
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -986,8 +990,8 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal/> }
-                <DeliveryModal/>
-                <DeliveryChangeModal/>
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
+                <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 

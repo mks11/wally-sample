@@ -95,6 +95,7 @@ class DeliveryModal extends Component {
     this.userStore.setDeliveryAddress(this.state.selectedAddress)
     this.userStore.setDeliveryTime(this.state.selectedTime)
     this.userStore.toggleDeliveryModal(false)
+    this.props.onChangeSubmit()
   }
 
 
