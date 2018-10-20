@@ -215,38 +215,46 @@ class UserStore {
 
 
   async getStatus(update) {
+    console.log('menggila')
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
       this.logout()
       this.status = false
-      return status
+      return this.status
     }
 
     this.saveLocalAddresses()
 
-    const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
-    let status = resp.data.status && localStorage.getItem('user')
-    if (resp.data.status && localStorage.getItem('user')) {
-      this.status = true
-      // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-      this.user = JSON.parse(localStorage.getItem('user'))
-      if (update) {
-        this.getUser()
+    try {
+      const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
+      let status = resp.data.status && localStorage.getItem('user')
+      if (resp.data.status && localStorage.getItem('user')) {
+        this.status = true
+        // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
+        this.user = JSON.parse(localStorage.getItem('user'))
+        if (update) {
+          this.getUser()
+        }
+      } else {
+        status = false
+        this.status = false
+        this.user = null
+        this.logout()
       }
-    } else {
-      status = false
-      this.status = false
-      this.user = null
-      this.logout()
-    }
 
-    return status
+      return status
+    } catch(e) {
+      this.logout()
+      console.error("Error getstatus: ", e)
+      return false
+    }
   }
 
   logout() {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
     localStorage.removeItem('delivery')
+    localStorage.removeItem('cart')
     this.status = false
     this.user = null
     this.selectedDeliveryAddress = null

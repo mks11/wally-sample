@@ -1240,7 +1240,7 @@ section.page-section.bg-fruitfull {
 .left-column.hide{transform: translateX(-100%);visibility: hidden;opacity:0;display:none;}
 .left-column.hide.hide-block{transform: translateX(-100%);visibility: hidden;opacity:0;display:inline-block;}
 .left-column{transform: translateX(0%);transition:all .5s ease;}
-.left-column span{line-height:40px;}
+.left-column span{padding-top:7px;}
 .left-column::after{position: absolute;content:'';border-right:1px solid #ddd;top:0;bottom:0;right:0;}
 .product-content{padding-top:0px;min-height:600px;padding-bottom:50px;}
 
@@ -1259,7 +1259,7 @@ position: absolute;content:'';top:0;bottom:0;left:-15px;border-left:2px solid tr
 .dropdown-fwidth .dropdown-item:hover::before, .dropdown-fwidth .dropdown-item:focus::before,
 .account-dropdown .dropdown-item:hover::before, .account-dropdown .dropdown-item:focus:before{border-left-color:#ea5e74;}
 .dropdown-fwidth .dropdown-item+.dropdown-item{border-top:1px solid #ececec;}
-.product-top .dropdown-menu{margin-top: 22px;}
+.product-top .dropdown-menu{margin-top: 20px;}
 .rbt-menu.dropdown-menu {margin-top:0;border:0;    left: -38px!important;
 width: inherit !important;}
 

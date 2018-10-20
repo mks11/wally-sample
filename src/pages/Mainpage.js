@@ -486,18 +486,22 @@ class Mainpage extends Component {
 
   toggleDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
+      this.uiStore.backdrop = !this.state.deliveryTimeDropdown
   }
 
   toggleDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
+      this.uiStore.backdrop = !this.state.deliveryAddressDropdown
   }
 
   hideDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: false})
+      this.uiStore.backdrop = false
   }
 
   hideDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: false})
+      this.uiStore.backdrop = false
   }
 
   handleSubmitAddress = async (address) => {
