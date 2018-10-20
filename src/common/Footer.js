@@ -16,16 +16,15 @@ class Footer extends Component {
   
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({invalidEmail: true})
+      this.setState({invalidEmail: 'Invalid email'})
       return
     }
 
     this.setState({invalidEmail: false})
 
-    this.zipStore.subscribe(this.state.email)
-      .then(() => {
-        this.modalStore.toggleInvalidZipSuccess()
-      })
+    this.userStore.subscribeNewsletter().then(() => {
+
+    })
   }
   render() {
     return (

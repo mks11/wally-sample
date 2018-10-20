@@ -214,12 +214,12 @@ class Mainpage extends Component {
         // self.uiStore.topBar = true && !self.uiStore.topBarClosed
       }
 
-      if ($(window).scrollTop() > 580) {
-        $('.product-content-left').addClass('fixed')
-      } else {
-        $('.product-content-left').removeClass('fixed')
-      }
-
+      // if ($(window).scrollTop() > 580) {
+      //   $('.product-content-left').addClass('fixed')
+      // } else {
+      //   $('.product-content-left').removeClass('fixed')
+      // }
+      //
 
     })
   }
@@ -904,7 +904,7 @@ class Mainpage extends Component {
                       <div className="mb-0" key={i}>
                         <h4><Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link></h4>
                         <ul>  
-                          {s.sub_cats && s.sub_cats.map((sc, idx) => (
+                          {s.subcats && s.subcats.map((sc, idx) => (
                             <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
                                 className={id === sc.cat_id ? "text-violet": ""}
                               >{sc.cat_name}</Link></li>
