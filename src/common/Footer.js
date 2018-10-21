@@ -16,11 +16,11 @@ class Footer extends Component {
   
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({invalidEmail: 'Invalid email'})
+      this.setState({invalidText: 'Invalid email'})
       return
     }
 
-    this.setState({invalidEmail: false})
+    this.setState({invalidText: false})
 
     this.userStore.subscribeNewsletter().then(() => {
 
@@ -97,6 +97,7 @@ class Footer extends Component {
                       <button className="btn btn-primary" type="button" id="btn-subscribe" onClick={e => this.handleSubscribe(e)}>Subscribe</button>
                     </div>
                   </div>
+                  {this.state.invalidText && <span>{this.state.invalidText}</span>}
                 </form>
               </div>
             </div>
