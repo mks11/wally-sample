@@ -181,12 +181,16 @@ class DeliveryAddressOptions extends Component {
     const preferred_address = this.props.user ? this.props.user.preferred_address : null
     const editable = this.props.editable !== null ? this.props.editable : true
 
+    const showTitle = this.props.title !== null ? this.props.title : true
+    const showButton = this.props.button !== null ? this.props.button : true
+
     return (
       <React.Fragment>
-        <h3 className="m-0 mb-3 p-r">
+        {showTitle && <h3 className="m-0 mb-3 p-r">
           Delivery address
           { (lock && editable) ? <a onClick={this.unlock} className="address-rbtn link-blue pointer">CHANGE</a> : null}
         </h3>
+        }
         <div className={addressCardClass}>
           <div className={"card-body" + (lock ? " lock" : "")}>
             { data.map((data, index) => {
@@ -324,7 +328,12 @@ class DeliveryAddressOptions extends Component {
                 </div>
               </div>
             ):null}
-            {(!lock && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+
+            {showButton && 
+                <React.Fragment>
+                  {(!lock && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+                </React.Fragment>
+            }
 
             {this.state.invalidSelectAddress && <span className="text-error text-center d-block mt-3">{this.state.invalidSelectAddress}</span>}
           </div>

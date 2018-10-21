@@ -82,7 +82,7 @@ class TopNav extends Component {
       storeCredit = 0
     }
 
-    let dropdownClass = 'dropdown-menu dropdown-menu-right'
+    let dropdownClass = 'dropdown-menu dropdown-menu-right profile-dropdown'
     if (this.uiStore.accountDropdown) {
       dropdownClass += ' show'
     }
