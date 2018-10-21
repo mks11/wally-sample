@@ -39,6 +39,8 @@ class DeliveryAddressOptions extends Component {
       this.setState({newAddress: true, newContactName: this.props.user.name, newPhoneNumber: this.props.user.primary_telephone})
     } else {
       this.setState({newAddress: false})
+      const address = this.props.user.addresses.find((d) => d._id === address_id)
+      this.props.onSelect && this.props.onSelect(address)
     }
   }
 
@@ -50,7 +52,7 @@ class DeliveryAddressOptions extends Component {
       this.setState({invalidSelectAddress: null, lock: false})
     }
     const address = this.props.user.addresses.find((d) => d._id === this.state.selected)
-    this.props.onSubmit(address).catch((e) => {
+    this.props.onSubmit && this.props.onSubmit(address).catch((e) => {
       if (e.response && e.response.data.error) {
         this.setState({invalidSelectAddress: e.response.data.error.message})
       }
@@ -59,6 +61,8 @@ class DeliveryAddressOptions extends Component {
   }
 
   handleAddNewAddress = () => {
+
+    console.log('newpreffered address', this.state.newPreferedAddress)
     this.setState({invalidText: null})
     if (!this.state.newStreetAddress) {
       this.setState({invalidText: 'Street address cannot be empty'})
@@ -75,6 +79,7 @@ class DeliveryAddressOptions extends Component {
       return
     }
 
+
     this.props.onAddNew(this.state).then((data) => {
       const lastAddress = data.addresses[data.addresses.length - 1]
       this.setState({
@@ -90,6 +95,7 @@ class DeliveryAddressOptions extends Component {
         newState:'',
         newCity: '',
         newCountry: '',
+        newPreferedAddress: false
       })
 
     }).catch((e) => {
@@ -177,12 +183,17 @@ class DeliveryAddressOptions extends Component {
     const preferred_address = this.props.user ? this.props.user.preferred_address : null
     const editable = this.props.editable !== null ? this.props.editable : true
 
+    const showTitle = typeof this.props.title !== 'undefined' ? this.props.title : true
+    const showButton = typeof this.props.button !== 'undefined' ? this.props.button : true
+
+
     return (
       <React.Fragment>
-        <h3 className="m-0 mb-3 p-r">
+        {showTitle && <h3 className="m-0 mb-3 p-r">
           Delivery address
           { (lock && editable) ? <a onClick={this.unlock} className="address-rbtn link-blue pointer">CHANGE</a> : null}
         </h3>
+        }
         <div className={addressCardClass}>
           <div className={"card-body" + (lock ? " lock" : "")}>
             { data.map((data, index) => {
@@ -309,8 +320,10 @@ class DeliveryAddressOptions extends Component {
                       className="form-control input2" rows="3" placeholder="Add delivery instructions"></textarea>
                   </div>
                   <div className="custom-control custom-checkbox">
-                    <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
-                    <label className="custom-control-label" htmlFor="customCheck1">Make default address</label>
+                    <input type="checkbox" className="custom-control-input" checked={this.state.newPreferedAddress} onChange={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} />
+                    <label className="custom-control-label"
+                      onClick={e=>this.setState({newPreferedAddress: !this.state.newPreferedAddress})} 
+                    >Make default address</label>
                   </div>
                   <hr />
                   <button className="btn btn-main active inline-round" onClick={this.handleAddNewAddress}>CONFIRM</button>
@@ -318,7 +331,12 @@ class DeliveryAddressOptions extends Component {
                 </div>
               </div>
             ):null}
-            {(!lock && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+
+            {showButton && 
+                <React.Fragment>
+                  {(!lock && !this.state.newAddress) ? <button className="btn btn-main active" onClick={e => this.handleSubmitAddress(e)}>SUBMIT</button>:null}
+                </React.Fragment>
+            }
 
             {this.state.invalidSelectAddress && <span className="text-error text-center d-block mt-3">{this.state.invalidSelectAddress}</span>}
           </div>

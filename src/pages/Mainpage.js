@@ -22,6 +22,11 @@ import ProductModal from '../common/ProductModal';
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.jpg'
 const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.jpg'
 const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.jpg'
+
+const bannerMobile1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner1.jpg'
+const bannerMobile2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner2.jpg'
+const bannerMobile3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner3.jpg'
+
 const heroItems = [
   {
     src: banner1,
@@ -42,6 +47,12 @@ const heroItems = [
     link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
+
+if (window.innerWidth <= 500) {
+  heroItems[0].src = bannerMobile1
+  heroItems[1].src = bannerMobile2
+  heroItems[2].src = bannerMobile3
+}
 
 
 
@@ -159,7 +170,14 @@ class Mainpage extends Component {
       deliveryTimeDropdown: false,
       deliveryAddressDropdown: false,
 
-      fakeUser: this.userStore.loadFakeUser()
+      fakeUser: this.userStore.loadFakeUser(),
+
+      selectedAddress: this.userStore.selectedDeliveryAddress,
+      selectedTime: this.userStore.selectedDeliveryTime,
+
+      selectedAddressChanged: false,
+      selectedTimeChanged: false,
+
 
     }
 
@@ -190,21 +208,25 @@ class Mainpage extends Component {
     const self = this
 
     $(window).bind('scroll', function () {
-      // console.log($(window).scrollTop())
-      if ($(window).scrollTop() > 510) {
+      let thTop = 570
+      if (window.innerWidth <= 500) {
+        thTop = 731
+      }
+      console.log($(window).scrollTop())
+      if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
-        self.uiStore.topBar = false
+        // self.uiStore.topBar = false
       } else {
         $('.product-top').removeClass('fixed');
-        self.uiStore.topBar = true && !self.uiStore.topBarClosed
+        // self.uiStore.topBar = true && !self.uiStore.topBarClosed
       }
 
-      if ($(window).scrollTop() > 580) {
-        $('.product-content-left').addClass('fixed')
-      } else {
-        $('.product-content-left').removeClass('fixed')
-      }
-
+      // if ($(window).scrollTop() > 580) {
+      //   $('.product-content-left').addClass('fixed')
+      // } else {
+      //   $('.product-content-left').removeClass('fixed')
+      // }
+      //
 
     })
   }
@@ -471,28 +493,55 @@ class Mainpage extends Component {
 
   toggleDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
+      this.uiStore.backdrop = true
   }
 
   toggleDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
+    this.uiStore.backdrop = true
   }
 
   hideDeliveryTimeDropdown = () => {
-    this.setState({deliveryTimeDropdown: false})
+    if (this.state.deliveryTimeDropdown) {
+      this.setState({deliveryTimeDropdown: false})
+      this.uiStore.backdrop = false
+    }
   }
 
   hideDeliveryAddressDropdown = () => {
-    this.setState({deliveryAddressDropdown: false})
+    if (this.state.deliveryAddressDropdown) {
+      this.setState({deliveryAddressDropdown: false})
+      this.uiStore.backdrop = false
+    }
   }
 
-  handleSubmitAddress = async (data) => {
-    this.modalStore.showDeliveryChange('address', data)
+  handleSubmitAddress = async (address) => {
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.modalStore.showDeliveryChange('address', {
+        address,
+        times 
+      })
+    })
     return
   }
 
-  handleSelectTime = async (data) => {
-    this.modalStore.showDeliveryChange('time', data)
-    return
+  handleSelectTime = (data) => {
+    const selectedTime  = this.userStore.selectedDeliveryTime
+    if (!selectedTime || (selectedTime.date !== data.date && selectedTime.time !== data.time && selectedTime.day !== data.day)) {
+      this.setState({selectedTime: data, selectedTimeChanged: true})
+    } else {
+      this.setState({selectedTimeChanged: false})
+    }
+  }
+
+  handleSelectAddress = (data) => {
+    const selectedAddress  = this.userStore.selectedDeliveryAddress
+    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
+      this.setState({selectedAddress: data, selectedAddressChanged: true})
+    } else {
+      this.setState({selectedAddressChanged: false})
+    }
   }
 
   handleAddNewAddress = async (data) => {
@@ -522,6 +571,36 @@ class Mainpage extends Component {
     this.userStore.setUserData(response)
     return response
 
+  }
+
+  formatAddress(street_address) {
+    return street_address.substr(0, 25) + '...'
+  }
+
+  handleChangeDelivery = () => {
+    this.loadData()
+  }
+
+  handleSubmitDeliveryAddress= () => {
+    if (!this.state.selectedAddressChanged) {
+      return
+    }
+    const address = this.state.selectedAddress
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({deliveryTimes: times})
+      this.modalStore.showDeliveryChange('address', {
+        address,
+        times 
+      })
+    })
+  }
+
+  handleSubmitDeliveryTime= () => {
+    if (!this.state.selectedTimeChanged) {
+      return
+    }
+    this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
   render() {
@@ -610,6 +689,16 @@ class Mainpage extends Component {
 
     const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
 
+    let submitAddressClass = "btn btn-main"
+    if (this.state.selectedAddressChanged) {
+      submitAddressClass += " active"
+    }
+
+    let submitTimeClass = "btn btn-main"
+    if (this.state.selectedTimeChanged) {
+      submitTimeClass += " active"
+    }
+
     return (
       <div className="App">
 
@@ -635,18 +724,24 @@ class Mainpage extends Component {
                     <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                   </div>
                 </div>
-                <div className="row" onClick={e => this.userStore.toggleDeliveryModal(true)}>
+                <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
+                      <span style={{lineHeight: '37px'}}>
+                        {this.userStore.selectedDeliveryAddress && 
+                          <React.Fragment>
+                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                          </React.Fragment>
+                        }
+                      </span>
                     </div>
                   </div>
 
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-clock-o bar-icon"></i>
-                      <span style={{lineHeight: '26px'}}>{this.userStore.selectedDeliveryTime !== null ?
+                      <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
                         <React.Fragment>
                           {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
                         </React.Fragment>
@@ -670,19 +765,34 @@ class Mainpage extends Component {
                         onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
                         <i className="fa fa-map-marker bar-icon"></i>
                         <span className={deliveryAddressDetailClass}>
-                          {this.userStore.selectedDeliveryAddress && this.userStore.selectedDeliveryAddress.zip }</span>
+                        {this.userStore.selectedDeliveryAddress && 
+                          <React.Fragment>
+                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                          </React.Fragment>
+                        }
+                          </span>
                       </div>
 
                     <div className={deliveryAddressDropdownClass}>
+
+                      <h3 className="m-0 mb-3 p-r">
+                        Delivery address
+                      </h3>
+                      <div className="scroller">
                         <DeliveryAddressOptions
+                          title={false}
+                          button={false}
                           lock={false}
                           selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                           user={user}
                           onUnlock={this.handleUnlockAddress}
                           onAddNew={this.handleAddNewAddress}
                           onSubmit={this.handleSubmitAddress}
+                          onSelect={this.handleSelectAddress}
                           locking={false}
                         />
+                      </div>
+                      <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                     </div>
                     </ClickOutside>
                   </div>
@@ -694,24 +804,32 @@ class Mainpage extends Component {
                         <i className="fa fa-clock-o bar-icon"></i>
                         <span className={deliveryTimeDetailClass}>
                           {this.userStore.selectedDeliveryTime !== null ?
-                              <React.Fragment>
-                                {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
-                              </React.Fragment>
-                              : null
+                            <React.Fragment>
+                              {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
+                            </React.Fragment>
+                            : null
                           }
                         </span>
                       </div>
 
 
-                    <div className={deliveryTimeDropdownClass}>
+                      <div className={deliveryTimeDropdownClass}>
+                      <h3 className="m-0 mb-3 p-r">
+                        Time
+                      </h3>
+                      <div className="scroller">
                         <DeliveryTimeOptions
+                          title={false}
                           lock={false}
                           data={this.state.deliveryTimes}
                           selected={this.userStore.selectedDeliveryTime}
                           isAddressSelected={true}
                           onSelectTime={this.handleSelectTime}
                         />
-                    </div>
+                      </div>
+
+                      <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
+                      </div>
 
                     </ClickOutside>
 
@@ -724,7 +842,7 @@ class Mainpage extends Component {
                 <div className="col-2 left-column" style={{width:200}}>
                   <div className="dropdown dropdown-fwidth">
 
-                    <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} >
+                    <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} className="pt-1">
                       <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
 
                       <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
@@ -860,7 +978,7 @@ class Mainpage extends Component {
                       <div className="mb-0" key={i}>
                         <h4><Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link></h4>
                         <ul>  
-                          {s.sub_cats && s.sub_cats.map((sc, idx) => (
+                          {s.subcats && s.subcats.map((sc, idx) => (
                             <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
                                 className={id === sc.cat_id ? "text-violet": ""}
                               >{sc.cat_name}</Link></li>
@@ -946,8 +1064,8 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal/> }
-                <DeliveryModal/>
-                <DeliveryChangeModal/>
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
+                <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 

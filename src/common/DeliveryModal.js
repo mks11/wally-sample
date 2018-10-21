@@ -95,6 +95,7 @@ class DeliveryModal extends Component {
     this.userStore.setDeliveryAddress(this.state.selectedAddress)
     this.userStore.setDeliveryTime(this.state.selectedTime)
     this.userStore.toggleDeliveryModal(false)
+    this.props.onChangeSubmit()
   }
 
 
@@ -110,7 +111,7 @@ class DeliveryModal extends Component {
 
     return (
       <Modal isOpen={this.userStore.deliveryModal}>
-        <div className="modal-header modal-header--sm">
+        <div className="modal-header modal-header--sm modal-header--sm-nomargin">
           <div><h3>Select delivery time &amp; location</h3></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
         </div>

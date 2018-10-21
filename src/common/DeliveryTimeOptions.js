@@ -41,6 +41,7 @@ class DeliveryTimeOptions extends Component {
   }
 
   handleChangeTime(day, time, date, availability) {
+    console.log('change time')
     if (availability) {
       return
     }
@@ -64,19 +65,30 @@ class DeliveryTimeOptions extends Component {
     }
 
     const lock = this.state.lock ? this.state.lock : this.props.lock
+    const dropdown = typeof this.props.dropdown !== "undefined" ? this.props.dropdown : true
     const data = this.props.data ? this.props.data : []
     const editable = this.props.editable !== null ? this.props.editable : true
     const selected  = this.props.selected ? this.props.selected : this.state.selected
 
+
+    const showTitle = this.props.title !== null ? this.props.title : true
+
+    let dropdownButtonClass = "btn btn-dropdown-outline dropdown-toggle" 
+    if (!dropdown) {
+      dropdownButtonClass += " disabled"
+    }
+
     return (
       <React.Fragment>
-        <h3 className="m-0 mb-3 p-r mt-5">Time 
-          {(lock && editable) && <a onClick={this.unlock} className="address-rbtn link-blue">CHANGE</a> }
-          {this.state.addressError  ? <span className="address-rbtn text-error sm">Address required</span> : null}
-        </h3>
+        {showTitle && 
+            <h3 className="m-0 mb-3 p-r">Time 
+              {(lock && editable) && <a onClick={this.unlock} className="address-rbtn link-blue">CHANGE</a> }
+              {this.state.addressError  ? <span className="address-rbtn text-error sm">Address required</span> : null}
+            </h3>
+        }
         <div className="dropdown show">
           <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
-            <button onClick={e=>this.toggleTimeDropdown()} className="btn btn-dropdown-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+            <button onClick={e=>this.toggleTimeDropdown()} className={dropdownButtonClass} type="button" data-toggle="dropdown" aria-expanded="true">
               {selected ? <React.Fragment>{selected.day}, {selected.time}</React.Fragment> : 'Choose delivery date and time'}
             </button>
             <div className={timeDropdownClass}>
@@ -88,8 +100,8 @@ class DeliveryTimeOptions extends Component {
                       <div className="custom-control custom-radio">
                         <input 
                           checked={this.state.selected && this.state.selected.date === item.date && this.state.selected.time === item.time}
-                          type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)} />
-                        <label className="custom-control-label" >{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
+                          type="radio" name="timeRadio" className="custom-control-input"/>
+                        <label className="custom-control-label">{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
                       </div>
                     </div>
                   ))}

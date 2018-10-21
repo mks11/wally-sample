@@ -18,7 +18,7 @@ class CheckoutStore {
 
   async clearCart(auth) {
     localStorage.removeItem('cart')
-    return this.getCurrentCart(auth)
+    return this.getCurrentCart(auth, {})
   }
 
   async getCurrentCart(auth, delivery) {
@@ -37,6 +37,7 @@ class CheckoutStore {
     url += '&delivery_date=' + delivery.date
 
 
+    console.log({auth})
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.get(url)
       localStorage.setItem('cart', JSON.stringify(res.data))

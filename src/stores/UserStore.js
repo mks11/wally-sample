@@ -5,6 +5,7 @@ import {
   API_PAYMENT_NEW, API_PAYMENT_EDIT, API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_USER_ADD_PROMO,
+  API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD, API_RESET_PASSWORD
 } from '../config'
 import axios from 'axios'
@@ -215,36 +216,47 @@ class UserStore {
 
 
   async getStatus(update) {
+    console.log('menggila')
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
+      this.logout()
       this.status = false
-      return status
+      return this.status
     }
 
     this.saveLocalAddresses()
 
-    const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
-    let status = resp.data.status && localStorage.getItem('user')
-    if (resp.data.status && localStorage.getItem('user')) {
-      this.status = true
-      // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-      this.user = JSON.parse(localStorage.getItem('user'))
-      if (update) {
-        this.getUser()
+    try {
+      const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth())
+      let status = resp.data.status && localStorage.getItem('user')
+      if (resp.data.status && localStorage.getItem('user')) {
+        this.status = true
+        // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
+        this.user = JSON.parse(localStorage.getItem('user'))
+        if (update) {
+          this.getUser()
+        }
+      } else {
+        status = false
+        this.status = false
+        this.user = null
+        this.logout()
       }
-    } else {
-      status = false
-      this.status = false
-      this.user = null
-    }
 
-    return status
+      return status
+    } catch(e) {
+      this.logout()
+      console.error("Error getstatus: ", e)
+      return false
+    }
   }
 
   logout() {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
     localStorage.removeItem('delivery')
+    localStorage.removeItem('cart')
+    this.token = ''
     this.status = false
     this.user = null
     this.selectedDeliveryAddress = null
@@ -264,7 +276,7 @@ class UserStore {
   }
 
   async addPromo(promoCode) {
-    const res = await axios.post(`${API_USER_ADD_PROMO}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, {promo_code: promoCode}, this.getHeaderAuth())
+    const res = await axios.post(`${API_USER_ADD_PROMO}?promo_code=${promoCode}`, this.getHeaderAuth())
     return res.data
   }
 
@@ -324,6 +336,11 @@ class UserStore {
     addresses.push(data)
 
     localStorage.setItem('addresses', JSON.stringify(addresses))
+  }
+
+  async subscribeNewsletter(email) {
+    const res = await axios.post(API_SUBSCRIBE_EMAIL, {email})
+    return res.data
   }
 }
 
