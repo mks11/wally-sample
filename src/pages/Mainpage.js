@@ -208,11 +208,11 @@ class Mainpage extends Component {
     const self = this
 
     $(window).bind('scroll', function () {
-      let thTop = 561
+      let thTop = 570
       if (window.innerWidth <= 500) {
         thTop = 731
       }
-      // console.log($(window).scrollTop())
+      console.log($(window).scrollTop())
       if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
         // self.uiStore.topBar = false
