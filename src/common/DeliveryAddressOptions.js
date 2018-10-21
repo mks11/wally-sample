@@ -98,6 +98,8 @@ class DeliveryAddressOptions extends Component {
         newPreferedAddress: false
       })
 
+      this.props.onSelect && this.props.onSelect(lastAddress)
+
     }).catch((e) => {
       if (e.response && e.response.data.error) {
         const msg = e.response.data.error.message
