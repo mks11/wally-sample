@@ -1978,3 +1978,10 @@ color:#6e8692
 .dropdown-toggle.disabled::after {
   opacity: 0;
 }
+
+.footer-message {
+    position: absolute;
+    left: 80%;
+    top: 0;
+    width: 100%;
+}
