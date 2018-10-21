@@ -14,7 +14,8 @@ class DeliveryTimeOptions extends Component {
   }
 
   componentDidMount() {
-    this.setState({addressError: false})
+    const selected  = this.props.selected ? this.props.selected : this.state.selected
+    this.setState({addressError: false, selected})
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,10 +42,10 @@ class DeliveryTimeOptions extends Component {
   }
 
   handleChangeTime(day, time, date, availability) {
-    console.log('change time')
     if (availability) {
       return
     }
+    console.log('change time')
     this.setState({
       selected: {day, time, date},
       lock: true, timeDropdown: false})
@@ -68,7 +69,6 @@ class DeliveryTimeOptions extends Component {
     const dropdown = typeof this.props.dropdown !== "undefined" ? this.props.dropdown : true
     const data = this.props.data ? this.props.data : []
     const editable = this.props.editable !== null ? this.props.editable : true
-    const selected  = this.props.selected ? this.props.selected : this.state.selected
 
 
     const showTitle = this.props.title !== null ? this.props.title : true
@@ -89,7 +89,7 @@ class DeliveryTimeOptions extends Component {
         <div className="dropdown show">
           <ClickOutside onClickOutside={e=>this.hideTimeDropdown()}>
             <button onClick={e=>this.toggleTimeDropdown()} className={dropdownButtonClass} type="button" data-toggle="dropdown" aria-expanded="true">
-              {selected ? <React.Fragment>{selected.day}, {selected.time}</React.Fragment> : 'Choose delivery date and time'}
+              {this.state.selected ? <React.Fragment>{this.state.selected.day}, {this.state.selected.time}</React.Fragment> : 'Choose delivery date and time'}
             </button>
             <div className={timeDropdownClass}>
               {data.map((items, key) => (

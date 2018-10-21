@@ -212,7 +212,6 @@ class Mainpage extends Component {
       if (window.innerWidth <= 500) {
         thTop = 731
       }
-      console.log($(window).scrollTop())
       if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
         // self.uiStore.topBar = false
@@ -528,7 +527,7 @@ class Mainpage extends Component {
 
   handleSelectTime = (data) => {
     const selectedTime  = this.userStore.selectedDeliveryTime
-    if (!selectedTime || (selectedTime.date !== data.date && selectedTime.time !== data.time && selectedTime.day !== data.day)) {
+    if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
     } else {
       this.setState({selectedTimeChanged: false})
