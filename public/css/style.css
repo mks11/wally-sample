@@ -1993,3 +1993,11 @@ color:#6e8692
 .account-dropdown .dropdown-item a, .profile-dropdown a {
   color: #263a52 !important;
 }
+
+.scroller {
+    max-height: 139px;
+    margin-bottom:8px;
+    min-height: 139px;
+    overflow: scroll;
+}
+

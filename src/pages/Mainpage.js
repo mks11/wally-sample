@@ -170,7 +170,14 @@ class Mainpage extends Component {
       deliveryTimeDropdown: false,
       deliveryAddressDropdown: false,
 
-      fakeUser: this.userStore.loadFakeUser()
+      fakeUser: this.userStore.loadFakeUser(),
+
+      selectedAddress: this.userStore.selectedDeliveryAddress,
+      selectedTime: this.userStore.selectedDeliveryTime,
+
+      selectedAddressChanged: false,
+      selectedTimeChanged: false,
+
 
     }
 
@@ -519,9 +526,22 @@ class Mainpage extends Component {
     return
   }
 
-  handleSelectTime = async (data) => {
-    this.modalStore.showDeliveryChange('time', data)
-    return
+  handleSelectTime = (data) => {
+    const selectedTime  = this.userStore.selectedDeliveryTime
+    if (!selectedTime || (selectedTime.date !== data.date && selectedTime.time !== data.time && selectedTime.day !== data.day)) {
+      this.setState({selectedTime: data, selectedTimeChanged: true})
+    } else {
+      this.setState({selectedTimeChanged: false})
+    }
+  }
+
+  handleSelectAddress = (data) => {
+    const selectedAddress  = this.userStore.selectedDeliveryAddress
+    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
+      this.setState({selectedAddress: data, selectedAddressChanged: true})
+    } else {
+      this.setState({selectedAddressChanged: false})
+    }
   }
 
   handleAddNewAddress = async (data) => {
@@ -559,6 +579,28 @@ class Mainpage extends Component {
 
   handleChangeDelivery = () => {
     this.loadData()
+  }
+
+  handleSubmitDeliveryAddress= () => {
+    if (!this.state.selectedAddressChanged) {
+      return
+    }
+    const address = this.state.selectedAddress
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({deliveryTimes: times})
+      this.modalStore.showDeliveryChange('address', {
+        address,
+        times 
+      })
+    })
+  }
+
+  handleSubmitDeliveryTime= () => {
+    if (!this.state.selectedTimeChanged) {
+      return
+    }
+    this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
   render() {
@@ -647,6 +689,16 @@ class Mainpage extends Component {
 
     const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
 
+    let submitAddressClass = "btn btn-main"
+    if (this.state.selectedAddressChanged) {
+      submitAddressClass += " active"
+    }
+
+    let submitTimeClass = "btn btn-main"
+    if (this.state.selectedTimeChanged) {
+      submitTimeClass += " active"
+    }
+
     return (
       <div className="App">
 
@@ -726,6 +778,7 @@ class Mainpage extends Component {
                       <h3 className="m-0 mb-3 p-r">
                         Delivery address
                       </h3>
+                      <div className="scroller">
                         <DeliveryAddressOptions
                           title={false}
                           button={false}
@@ -735,8 +788,11 @@ class Mainpage extends Component {
                           onUnlock={this.handleUnlockAddress}
                           onAddNew={this.handleAddNewAddress}
                           onSubmit={this.handleSubmitAddress}
+                          onSelect={this.handleSelectAddress}
                           locking={false}
                         />
+                      </div>
+                      <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                     </div>
                     </ClickOutside>
                   </div>
@@ -761,6 +817,7 @@ class Mainpage extends Component {
                       <h3 className="m-0 mb-3 p-r">
                         Time
                       </h3>
+                      <div className="scroller">
                         <DeliveryTimeOptions
                           title={false}
                           lock={false}
@@ -769,6 +826,9 @@ class Mainpage extends Component {
                           isAddressSelected={true}
                           onSelectTime={this.handleSelectTime}
                         />
+                      </div>
+
+                      <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                       </div>
 
                     </ClickOutside>

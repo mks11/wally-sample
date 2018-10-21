@@ -39,6 +39,8 @@ class DeliveryAddressOptions extends Component {
       this.setState({newAddress: true, newContactName: this.props.user.name, newPhoneNumber: this.props.user.primary_telephone})
     } else {
       this.setState({newAddress: false})
+      const address = this.props.user.addresses.find((d) => d._id === address_id)
+      this.props.onSelect && this.props.onSelect(address)
     }
   }
 
@@ -50,7 +52,7 @@ class DeliveryAddressOptions extends Component {
       this.setState({invalidSelectAddress: null, lock: false})
     }
     const address = this.props.user.addresses.find((d) => d._id === this.state.selected)
-    this.props.onSubmit(address).catch((e) => {
+    this.props.onSubmit && this.props.onSubmit(address).catch((e) => {
       if (e.response && e.response.data.error) {
         this.setState({invalidSelectAddress: e.response.data.error.message})
       }
@@ -181,8 +183,9 @@ class DeliveryAddressOptions extends Component {
     const preferred_address = this.props.user ? this.props.user.preferred_address : null
     const editable = this.props.editable !== null ? this.props.editable : true
 
-    const showTitle = this.props.title !== null ? this.props.title : true
-    const showButton = this.props.button !== null ? this.props.button : true
+    const showTitle = typeof this.props.title !== 'undefined' ? this.props.title : true
+    const showButton = typeof this.props.button !== 'undefined' ? this.props.button : true
+
 
     return (
       <React.Fragment>

@@ -41,6 +41,7 @@ class DeliveryTimeOptions extends Component {
   }
 
   handleChangeTime(day, time, date, availability) {
+    console.log('change time')
     if (availability) {
       return
     }
@@ -99,8 +100,8 @@ class DeliveryTimeOptions extends Component {
                       <div className="custom-control custom-radio">
                         <input 
                           checked={this.state.selected && this.state.selected.date === item.date && this.state.selected.time === item.time}
-                          type="radio" id={"date-time-"+ key2} name="timeRadio" className="custom-control-input" onChange={e => this.handleChangeTime(items.day, item.time, item.date, item.availability)} />
-                        <label className="custom-control-label" >{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
+                          type="radio" name="timeRadio" className="custom-control-input"/>
+                        <label className="custom-control-label">{item.time} {item.availability && <span className="text-muted">Not Available</span>}</label>
                       </div>
                     </div>
                   ))}
