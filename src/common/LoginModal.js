@@ -183,7 +183,7 @@ class LoginModal extends Component {
                     autoLoad={false}
                     textButton="FACEBOOK"
                     fields="name,email,picture"
-                    scope="public_profile"
+                    scope="public_profile,email"
                     callback={this.responseFacebook}
                   />
                   <hr className="mt-5"/>

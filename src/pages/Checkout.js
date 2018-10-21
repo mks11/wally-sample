@@ -258,7 +258,7 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
     }, this.userStore.getHeaderAuth()).then((data) => {
-      this.routing.push('/orders/' + data._id)
+      this.routing.push('/orders/' + data.order._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
     }).catch((e) => {
       console.error('Failed to submit order', e)
@@ -484,6 +484,7 @@ class Checkout extends Component {
                       lock={true}
                       data={[]}
                       selected={this.userStore.selectedDeliveryTime}
+                      dropdown={false}
                       isAddressSelected={true}
                     />
                 }

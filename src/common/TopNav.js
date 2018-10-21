@@ -82,7 +82,7 @@ class TopNav extends Component {
       storeCredit = 0
     }
 
-    let dropdownClass = 'dropdown-menu dropdown-menu-right'
+    let dropdownClass = 'dropdown-menu dropdown-menu-right profile-dropdown'
     if (this.uiStore.accountDropdown) {
       dropdownClass += ' show'
     }
@@ -155,7 +155,7 @@ class TopNav extends Component {
               <div className="col-auto">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
                   <img className="logo-text-desktop" src='/images/text-logo.png'/>
-                  <img className="logo-text-mobile" src='/images/logo.png'/>
+                  <img className="logo-text-mobile" src='/images/text-logo.png'/>
                 </a>
               </div>
               <div className="col-auto ml-auto d-none d-md-block">
@@ -177,6 +177,7 @@ class TopNav extends Component {
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
                                   <a onClick={e => this.handleInvite(e)} className="dropdown-item">Invite Friends</a>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item" href="#">About</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item" href="#">Blog</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item" href="#">Help</Link>
                                   <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
@@ -187,6 +188,7 @@ class TopNav extends Component {
                         :
                         <React.Fragment>
                           <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
                         </React.Fragment>
                     }
@@ -194,7 +196,7 @@ class TopNav extends Component {
                 </nav>
               </div>
               { !this.userStore.status ? 
-              <div className="col-auto d-none d-lg-block btn-top-account">
+              <div className="col-auto d-none d-md-block btn-top-account">
                 <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Login</b></button>
                 <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
               </div>

@@ -19,7 +19,9 @@ class Homepage extends Component {
       invalidEmail: false,
       invalidZip: false,
 
-      fetching: true
+      fetching: true,
+      width: window.innerWidth
+
 
     };
 
@@ -151,9 +153,15 @@ class Homepage extends Component {
       </button>
     )
 
+    const isMobile = this.state.width <= 500;
+    let heroClass = "landing-section aw-hero"
+    if (isMobile) {
+      heroClass += ' mobile'
+    }
+
     return (
       <div className="homepage">
-        <section id="nav-hero" className="landing-section aw-hero">
+        <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
               <div className="col-12 col-sm-10 col-md-8 col-lg-6">

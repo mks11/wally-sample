@@ -11,21 +11,30 @@ class Footer extends Component {
     }
 
     this.zipStore = this.props.store.zip
-    this.modalStore = this.props.store.modal
+    this.userStore = this.props.store.user
   }
   
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({invalidEmail: true})
+      this.setState({invalidText: 'Invalid email'})
       return
     }
 
-    this.setState({invalidEmail: false})
+    this.setState({invalidText: false})
 
-    this.zipStore.subscribe(this.state.email)
-      .then(() => {
-        this.modalStore.toggleInvalidZipSuccess()
-      })
+    this.userStore.subscribeNewsletter(this.state.email).then(() => {
+      this.setState({invalidText: '', successText: 'Subscribed!'})
+      setTimeout(() => {
+        this.setState({successText: ''})
+      }, 1500)
+    }).catch((e) => {
+      this.setState({invalidText: 'Failed to subscribe'})
+    })
+  }
+
+  handleEmailChange = (e) => {
+    this.setState({email: e.target.value, invalidText: ''})
+
   }
   render() {
     return (
@@ -44,8 +53,9 @@ class Footer extends Component {
                     THE WALLY SHOP
                   </h4>
                   <ul>
-                      <li><Link to="about">ABOUT</Link></li>
-                      <li><Link to="help">HELP</Link></li>
+                      <li><Link to="about">About</Link></li>
+                      <li><Link to="blog">Blog</Link></li>
+                      <li><Link to="help">Help</Link></li>
                   </ul>
 
                 </div>
@@ -54,9 +64,9 @@ class Footer extends Component {
                     SUPPORT
                   </h4>
                   <ul>
-                    <li><a href="mailto:support@thewallyshop.co">CONTACT US</a></li>
-                    <li><Link to={"/tnc"} >TERMS &amp; CONDITIONS</Link></li> 
-                    <li><Link to={"/privacy"} >PRIVACY POLICY</Link></li> 
+                    <li><a href="mailto:support@thewallyshop.co">Contact Us</a></li>
+                    <li><Link to={"/tnc"} >Terms &amp; Conditions</Link></li> 
+                    <li><Link to={"/privacy"} >Privacy Policy</Link></li> 
                   </ul>
 
                 </div>
@@ -89,14 +99,16 @@ class Footer extends Component {
         <div className="container">
           <div className="footer-bottom">
             <div className="container">
-              <form className="form-inline">
+              <form className="form-inline" style={{position: 'relative'}}>
                 <label htmlFor="subscribe-email">Subscribe to our newsletter</label>
                 <div className="input-group">
-                  <input type="email" id="subscribe-email" className="form-control" placeholder="Enter your email" onChange={e => this.setState({email: e.target.value})}/>
+                  <input type="email" id="subscribe-email" className="form-control" placeholder="Enter your email" onChange={this.handleEmailChange}/>
                     <div className="input-group-append">
                       <button className="btn btn-primary" type="button" id="btn-subscribe" onClick={e => this.handleSubscribe(e)}>Subscribe</button>
                     </div>
                   </div>
+                  {this.state.invalidText ? <span className="text-error  d-block ml-2 mt-0 p-0 footer-message">{this.state.invalidText}</span>:null}
+                  {this.state.successText ? <span className="text-green  d-block ml-2 mt-0 p-0 footer-message">{this.state.successText}</span>:null}
                 </form>
               </div>
             </div>
