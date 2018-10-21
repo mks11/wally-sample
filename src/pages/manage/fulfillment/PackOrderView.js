@@ -138,7 +138,7 @@ class PackOrderView extends Component {
                         <tr key={item.product_id} >
                           <td>{item.organic ? "Y" : "N"}</td>
                           <td>{item.product_name}</td>
-                          <td>{item.substitute_for_name}</td>
+                          <td>{item.substitute_for_name || 'No substitute'}</td>
                           <td>{item.product_producer}</td>
                           <td>
                           <Row noGutters>
@@ -165,7 +165,7 @@ class PackOrderView extends Component {
                             </Col>
                           </Row>
                           </td>
-                          <td>{item.warehouse_placement}</td>
+                          <td>{item.warehouse_placement || (item.missing ? 'Missing' : '')}</td>
                         </tr>
                       )
                     })

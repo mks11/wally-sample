@@ -454,7 +454,7 @@ const getShopItems = {
         product_name: 'Awesome product',
         product_producer: 'Farm B',
         product_price: 450,
-        missing: false,
+        missing: true,
         box_number: 'ABC213',
         substitute_for_name: null,
         product_substitute_reason: '',
@@ -481,7 +481,7 @@ const getShopItems = {
         product_missing_reason: '',
         price_unit: '1 Ct',
         quantity: 9,
-        warehouse_placement: null
+        warehouse_placement: 'Somewhere else'
       }
     ]
   }

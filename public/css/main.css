@@ -1118,6 +1118,12 @@ body {
   }
 }
 
+@media (max-width: 768px){
+  .shopper-table .form-control {
+    padding: 0.1rem;
+  }
+}
+
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }
