@@ -1989,3 +1989,7 @@ color:#6e8692
     top: 0;
     width: 100%;
 }
+
+.account-dropdown .dropdown-item a, .profile-dropdown a {
+  color: #263a52 !important;
+}

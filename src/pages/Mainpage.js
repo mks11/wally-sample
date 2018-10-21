@@ -486,22 +486,26 @@ class Mainpage extends Component {
 
   toggleDeliveryTimeDropdown = () => {
     this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
-      this.uiStore.backdrop = !this.state.deliveryTimeDropdown
+      this.uiStore.backdrop = true
   }
 
   toggleDeliveryAddressDropdown = () => {
     this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
-      this.uiStore.backdrop = !this.state.deliveryAddressDropdown
+    this.uiStore.backdrop = true
   }
 
   hideDeliveryTimeDropdown = () => {
-    this.setState({deliveryTimeDropdown: false})
+    if (this.state.deliveryTimeDropdown) {
+      this.setState({deliveryTimeDropdown: false})
       this.uiStore.backdrop = false
+    }
   }
 
   hideDeliveryAddressDropdown = () => {
-    this.setState({deliveryAddressDropdown: false})
+    if (this.state.deliveryAddressDropdown) {
+      this.setState({deliveryAddressDropdown: false})
       this.uiStore.backdrop = false
+    }
   }
 
   handleSubmitAddress = async (address) => {
@@ -718,7 +722,13 @@ class Mainpage extends Component {
                       </div>
 
                     <div className={deliveryAddressDropdownClass}>
+
+                      <h3 className="m-0 mb-3 p-r">
+                        Delivery address
+                      </h3>
                         <DeliveryAddressOptions
+                          title={false}
+                          button={false}
                           lock={false}
                           selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                           user={user}
@@ -738,24 +748,28 @@ class Mainpage extends Component {
                         <i className="fa fa-clock-o bar-icon"></i>
                         <span className={deliveryTimeDetailClass}>
                           {this.userStore.selectedDeliveryTime !== null ?
-                              <React.Fragment>
-                                {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
-                              </React.Fragment>
-                              : null
+                            <React.Fragment>
+                              {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
+                            </React.Fragment>
+                            : null
                           }
                         </span>
                       </div>
 
 
-                    <div className={deliveryTimeDropdownClass}>
+                      <div className={deliveryTimeDropdownClass}>
+                      <h3 className="m-0 mb-3 p-r">
+                        Time
+                      </h3>
                         <DeliveryTimeOptions
+                          title={false}
                           lock={false}
                           data={this.state.deliveryTimes}
                           selected={this.userStore.selectedDeliveryTime}
                           isAddressSelected={true}
                           onSelectTime={this.handleSelectTime}
                         />
-                    </div>
+                      </div>
 
                     </ClickOutside>
 
