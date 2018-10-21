@@ -12,6 +12,7 @@ import {
   API_ADMIN_GET_PACKAGINGS,
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
+  API_ADMIN_POST_BLOG_POST,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -101,6 +102,11 @@ class AdminStore {
     this.updateOrderItem(id, res.data)
   }
 
+  async postBlogPost(data) {
+    const res = await axios.post(API_ADMIN_POST_BLOG_POST, data)
+    console.log(res.data)
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -154,6 +160,7 @@ decorate(AdminStore, {
   orders: observable,
   singleorder: observable,
   packagings: observable,
+  blogposts: observable,
 
   getTimeFrames: action,
   getShopLocations: action,
@@ -167,6 +174,7 @@ decorate(AdminStore, {
   getPackagings: action,
   packageOrder: action,
   completeOrder: action,
+  postBlogPost: action,
 })
 
 export default new AdminStore()

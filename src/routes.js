@@ -22,12 +22,14 @@ import Blog from './pages/Blog';
 import ManageShopper from './pages/ManageShopper';
 import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
+import ManageBlog from './pages/ManageBlog';
 
 export default (
     <Fragment>
         <Route exact path="/manage/shopper" component={ManageShopper} />
         <Route exact path="/manage/fulfillment" component={ManageFulfillment} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
+        <Route exact path="/manage/blog" component={ManageBlog} />
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>

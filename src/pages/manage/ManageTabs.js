@@ -19,6 +19,11 @@ const manageTabsRouter = [
     linkTo: '/manage/delivery'
   },
   {
+    id: 'blog',
+    title: 'Blog',
+    linkTo: '/manage/blog'
+  },
+  {
     id: 'admin',
     title: 'Admin',
   },
