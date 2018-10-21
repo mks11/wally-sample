@@ -18,7 +18,7 @@ class CheckoutStore {
 
   async clearCart(auth) {
     localStorage.removeItem('cart')
-    return this.getCurrentCart(auth)
+    return this.getCurrentCart(auth, {})
   }
 
   async getCurrentCart(auth, delivery) {
