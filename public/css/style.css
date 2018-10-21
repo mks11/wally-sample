@@ -1164,7 +1164,7 @@ section.page-section.bg-fruitfull {
 .card {
   box-shadow: 1px 5px 5px rgba(0,0,0,.3);
   padding:90px 110px;
-  width: 600px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -1721,6 +1721,11 @@ a {
   .checkout-wrap .card1.delivery {
     width: 100%;
   }
+
+  .card {
+    padding: 20px 30px;
+  }
+
 }
 
 .top-bar {
@@ -1976,4 +1981,11 @@ color:#6e8692
 
 .dropdown-toggle.disabled::after {
   opacity: 0;
+}
+
+.footer-message {
+    position: absolute;
+    left: 80%;
+    top: 0;
+    width: 100%;
 }
