@@ -58,12 +58,15 @@ class FulfillmentPlaceView extends Component {
     const { items } = this.state
     
     if (items.length) {
-      const payload = items.map(item => { 
+      const payload_items = items.map(item => {
         return {
-          shopitem_id: item.product_id,
+          shopitem_id: item._id,
           location: item.warehouse_placement
         }
       })
+      const payload = {
+        locations: payload_items
+      }
       this.adminStore.updateShopItemsWarehouseLocations(payload)
     }
   }

@@ -19,6 +19,7 @@ class PackRouteView extends Component {
     }
 
     this.adminStore = this.props.store.admin
+    this.userStore = this.props.store.user
   }
 
   componentDidMount() {
@@ -40,7 +41,8 @@ class PackRouteView extends Component {
 
   loadOrders = () => {
     const { route } = this.state
-    this.adminStore.getRouteOrders(route.id)
+    const options = this.userStore.getHeaderAuth()
+    this.adminStore.getRouteOrders(route._id, options)
   }
 
   onRouteUpdate = (e) => {
@@ -52,7 +54,8 @@ class PackRouteView extends Component {
   onRouteUpdateSubmit = () => {
     const { route, route_placement } = this.state
     const payload = { route_placement }
-    this.adminStore.updateRoutePlacement(route.id, payload)
+    const options = this.userStore.getHeaderAuth()
+    this.adminStore.updateRoutePlacement(route._id, payload, options)
   }
 
   render() {
@@ -83,12 +86,12 @@ class PackRouteView extends Component {
                   {
                     orders && orders.map(item => {
                       return (
-                        <tr key={item.id} >
-                          <td>Order #{item.id}</td>
+                        <tr key={item._id} >
+                          <td>Order #{item._id}</td>
                           <td>
                             <Button
                               color="primary"
-                              order-id={item.id}
+                              order-id={item._id}
                               onClick={onOrderClick}
                             >
                               {item.status === 'submitted' ? 'Start Order' : 'View Order'}

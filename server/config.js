@@ -454,7 +454,7 @@ const getShopItems = {
         product_name: 'Awesome product',
         product_producer: 'Farm B',
         product_price: 450,
-        missing: false,
+        missing: true,
         box_number: 'ABC213',
         substitute_for_name: null,
         product_substitute_reason: '',
@@ -481,7 +481,7 @@ const getShopItems = {
         product_missing_reason: '',
         price_unit: '1 Ct',
         quantity: 9,
-        warehouse_placement: null
+        warehouse_placement: 'Somewhere else'
       }
     ]
   }
@@ -698,6 +698,43 @@ const completeOrder = {
   response: {}
 }
 
+const getBlogPosts = {
+  method: "GET",
+  response: [
+    {
+      id: 'blog1',
+      author: 'Anonymous',
+      title: 'Hello World!',
+      body: '<h1>Hello</h1> Here goes example text',
+      image_ref: 'full/listnk/address',
+      live: true,
+      post_date: '2018-10-19',
+    },
+    {
+      id: 'blog2',
+      author: 'Anonymous Wolf',
+      title: 'Check this out!',
+      body: '<h1>HI</h1> This is another blog poset text with <strong>strong</strong> text included',
+      image_ref: 'full/listnk/address2',
+      live: true,
+      post_date: '2018-10-18',
+    }
+  ]
+}
+
+const postBlogPost = {
+  method: "POST",
+  response: {
+    id: 'blog2',
+    author: 'Anonymous Wolf',
+    title: 'Check this out!',
+    body: '<h1>HI</h1> This is another blog poset text with <strong>strong</strong> text included',
+    image_ref: 'full/listnk/address2',
+    live: true,
+    post_date: '2018-10-18',
+  }
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -751,4 +788,7 @@ module.exports = {
   "/api/admin/packagings": getPackagings,
   "/api/order/:id/package": packageOrder,
   "/api/order/:id/complete": completeOrder,
+
+  "/api/blog": getBlogPosts,
+  "/api/admin/blog": postBlogPost,
 }

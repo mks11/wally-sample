@@ -1118,6 +1118,12 @@ body {
   }
 }
 
+@media (max-width: 768px){
+  .shopper-table .form-control {
+    padding: 0.1rem;
+  }
+}
+
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }
@@ -1143,4 +1149,17 @@ body {
 
 .pack-order-details > div:not(:last-child) {
   border-right: 1px solid #000;
+}
+
+.custom-datepicker {
+  height: calc(2.25rem + 2px);
+}
+
+.edit-blog-post {
+  border-radius: 0;
+  width: auto;
+}
+
+.post-edtior-page textarea {
+  height: 300px;
 }

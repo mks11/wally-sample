@@ -19,6 +19,7 @@ class FulfillmentPackView extends Component {
     }
 
     this.adminStore = this.props.store.admin
+    this.userStore = this.props.store.user
   }
 
   componentDidUpdate(_, prevState) {
@@ -36,13 +37,14 @@ class FulfillmentPackView extends Component {
 
   loadRoutes = () => {
     const { timeframe } = this.state
-    this.adminStore.getRoutes(timeframe)
+    const options = this.userStore.getHeaderAuth()
+    this.adminStore.getRoutes(timeframe, options)
   }
 
   openRoute = (e) => {
     const routeId = e.target.getAttribute('route-id')
     const { routes } = this.adminStore
-    const selectedRoute = routes.find(item => item.id === routeId)
+    const selectedRoute = routes.find(item => item._id === routeId)
     this.setState({
       selectedRoute,
       selectedOrder: null,
@@ -76,12 +78,12 @@ class FulfillmentPackView extends Component {
             {
               routes && routes.map(item => {
                 return (
-                  <tr key={item.id} >
+                  <tr key={item._id} >
                     <td>{item.route_number}</td>
                     <td>
                       <Button
                         color="primary"
-                        route-id={item.id}
+                        route-id={item._id}
                         onClick={this.openRoute}
                       >
                         {item.status === 'packed' ? 'View Orders' : 'Pack Orders'}

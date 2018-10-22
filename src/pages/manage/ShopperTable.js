@@ -43,13 +43,13 @@ class ShopperTable extends Component {
             shopitems.map(item => {
               return (item.complete === undefined || item.complete) ? (
                 <TableRow
-                  key={item.product_id}
+                  key={item._id}
                   item={item}
                   onEditClick={this.onEditClick}
                 />
               ) : (
                 <TableEditRow
-                  key={item.product_id}
+                  key={item._id}
                   item={item}
                   shopitemsFarms={shopitemsFarms}
                   onSubmitClick={this.onSubmitClick}
