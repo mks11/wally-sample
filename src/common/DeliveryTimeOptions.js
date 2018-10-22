@@ -41,10 +41,10 @@ class DeliveryTimeOptions extends Component {
   }
 
   handleChangeTime(day, time, date, availability) {
-    console.log('change time')
     if (availability) {
       return
     }
+    console.log('change time')
     this.setState({
       selected: {day, time, date},
       lock: true, timeDropdown: false})

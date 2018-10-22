@@ -212,7 +212,6 @@ class Mainpage extends Component {
       if (window.innerWidth <= 500) {
         thTop = 731
       }
-      console.log($(window).scrollTop())
       if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
         // self.uiStore.topBar = false
@@ -518,6 +517,7 @@ class Mainpage extends Component {
   handleSubmitAddress = async (address) => {
     this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
       const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({selectedAddressChanged: false})
       this.modalStore.showDeliveryChange('address', {
         address,
         times 
@@ -528,7 +528,7 @@ class Mainpage extends Component {
 
   handleSelectTime = (data) => {
     const selectedTime  = this.userStore.selectedDeliveryTime
-    if (!selectedTime || (selectedTime.date !== data.date && selectedTime.time !== data.time && selectedTime.day !== data.day)) {
+    if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
     } else {
       this.setState({selectedTimeChanged: false})
@@ -578,7 +578,13 @@ class Mainpage extends Component {
   }
 
   handleChangeDelivery = () => {
+    // this.setState({selectedAddressChanged: false, selectedTimeChanged: false})
     this.loadData()
+    const address = this.userStore.selectedDeliveryAddress
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({deliveryTimes: times})
+    })
   }
 
   handleSubmitDeliveryAddress= () => {
@@ -600,6 +606,8 @@ class Mainpage extends Component {
     if (!this.state.selectedTimeChanged) {
       return
     }
+
+      this.setState({selectedTimeChanged: false})
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
