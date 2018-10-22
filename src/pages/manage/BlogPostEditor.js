@@ -69,7 +69,7 @@ class BlogPostEditor extends Component {
     data.append('body', post.body)
     data.append('live', post.live)
     data.append('post_date', post.post_date)
-    data.append('image', file)
+    data.append('image', file || post.image_ref)
 
     this.adminStore.postBlogPost(data)
 

@@ -31,7 +31,8 @@ class AdminStore {
   packagings = []
 
   async getTimeFrames() {
-    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    // const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    const time = '2018-10-21 15:30:00'
     const res = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
     this.timeframes = res.data.timeframes
   }
@@ -63,27 +64,26 @@ class AdminStore {
 
   async updateShopItemsWarehouseLocations(data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
-    console.log(res.data)
     this.updateManyStoreShopItems(res.data)
   }
 
-  async getRoutes(timeframe) {
-    const res = await axios.get(`${API_ADMIN_GET_ROUTES}?timeframe=${timeframe}`)
+  async getRoutes(timeframe, options) {
+    const res = await axios.get(`${API_ADMIN_GET_ROUTES}?timeframe=${timeframe}`, options)
     this.routes = res.data
   }
 
-  async getRouteOrders(id) {
-    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/orders`)
+  async getRouteOrders(id, options) {
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/orders`, options)
     this.orders = res.data
   }
 
-  async updateRoutePlacement(id, data) {
-    const res = await axios.patch(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`, data)
+  async updateRoutePlacement(id, data, options) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`, data, options)
     this.updateRouteItem(id, res.data)
   }
 
-  async getOrder(id) {
-    const res = await axios.get(`${API_ADMIN_GET_ORDER}/${id}`)
+  async getOrder(id, options) {
+    const res = await axios.get(`${API_ADMIN_GET_ORDER}/${id}`, options)
     this.singleorder = res.data
   }
 

@@ -45,11 +45,13 @@ class ManageDelivery extends Component {
   }
 
   loadRoutes = (timeframe) => {
-    this.adminStore.getRoutes(timeframe)
+    const options = this.userStore.getHeaderAuth()
+    this.adminStore.getRoutes(timeframe, options)
   }
 
   loadOrders = (routeId) => {
-    this.adminStore.getRouteOrders(routeId)
+    const options = this.userStore.getHeaderAuth()
+    this.adminStore.getRouteOrders(routeId, options)
   }
 
   openOrder = (e) => {
@@ -87,7 +89,7 @@ class ManageDelivery extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Delivery Route:</div>
                   <CustomDropdown
-                    values={routes.map(item => { return { id: item.id, title: item.route_number }})}
+                    values={routes.map(item => { return { id: item._id, title: item.route_number }})}
                     onItemClick={this.loadOrders}
                   />
                 </div>
@@ -119,14 +121,14 @@ class ManageDelivery extends Component {
                     }
 
                     return (
-                      <tr key={item.id}>
-                        <td>Order #{item.id}</td>
+                      <tr key={item._id}>
+                        <td>Order #{item._id}</td>
                         <td>{item.street_address}</td>
                         <td>{status}</td>
                         <td>
                           <Button
                             color="primary"
-                            order-id={item.id}
+                            order-id={item._id}
                             onClick={this.openOrder}
                           >
                             View Details

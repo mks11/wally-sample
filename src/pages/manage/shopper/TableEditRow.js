@@ -149,7 +149,11 @@ class TableEditRow extends Component {
         <tr>
           <td>
             <CustomDropdown
-              values={[ { id: 'true', title: "Y" }, { id: 'false', title: "N" }]}
+              values={
+                item.organic
+                ? [{ id: 'true', title: "Y" }, { id: 'false', title: "N" }]
+                : [{ id: 'false', title: "N" }, { id: 'true', title: "Y" }]
+              }
               onItemClick={this.onOrgaincChange}
             />
           </td>

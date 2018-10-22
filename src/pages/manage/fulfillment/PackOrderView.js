@@ -20,6 +20,7 @@ class PackOrderView extends Component {
     }
 
     this.adminStore = this.props.store.admin
+    this.userStore = this.props.store.user
   }
 
   componentDidMount() {
@@ -42,8 +43,9 @@ class PackOrderView extends Component {
   loadSingleOrder = () => {
     const { orderId } = this.state
     const { timeframe } = this.props
+    const options = this.userStore.getHeaderAuth()
 
-    this.adminStore.getOrder(orderId)
+    this.adminStore.getOrder(orderId, options)
     this.adminStore.getPackagings()
     this.adminStore.getShopItems(timeframe, 'all')
   }
@@ -181,13 +183,13 @@ class PackOrderView extends Component {
                   {
                     packagings && packagings.map(item => {
                       return (
-                        <tr key={item.id} >
+                        <tr key={item._id} >
                           <td>{item.type}</td>
                           <td>
                             <Input
                               placeholder="Enter # bags"
-                              package-id={item.id}
-                              value={editedPackagings[item.id] || ''}
+                              package-id={item._id}
+                              value={editedPackagings[item._id] || ''}
                               onChange={this.onPackageNumberChange}
                               type="number"
                             />
