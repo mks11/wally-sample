@@ -32,7 +32,7 @@ class AdminStore {
 
   async getTimeFrames() {
     // const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const time = '2018-10-21 15:30:00'
+    const time = '2018-10-22 15:30:00'
     const res = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
     this.timeframes = res.data.timeframes
   }
