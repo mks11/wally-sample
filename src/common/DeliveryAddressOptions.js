@@ -239,6 +239,7 @@ class DeliveryAddressOptions extends Component {
                     value={this.state.newStreetAddress}
                     onChange={this.handleNewAddressChange}
                     onSelect={this.handleNewAddressSelect}
+                    googleCallbackName="myCallbackFunc"
                   >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                       <div style={{position:'relative'}}>
