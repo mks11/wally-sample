@@ -81,7 +81,7 @@ class BlogPostEditor extends Component {
     const { post } = this.state
 
     return post ? (
-      <section className="page-section pt-1 post-edtior-page">
+      <section className="page-section pt-1 post-edtior-page temp-class">
         <Container>
           <Row>
             <Col>
