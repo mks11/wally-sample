@@ -61,7 +61,7 @@ class TableEditRow extends Component {
         inventory_id: item.inventory_id,
         organic: item.organic,
       }
-      this.adminStore.updateShopItemQuantity(timeframe, item.product_id, payload)
+      this.adminStore.updateShopItemQuantity(timeframe, item._id, payload)
     }
   }
 
@@ -220,7 +220,7 @@ class TableEditRow extends Component {
               <Col xs="12"><Input placeholder="Type in substitute" onBlur={this.onBoxNumberChange} /></Col>
             </Row>
           </td>
-          <td><Button color="primary" onClick={this.onSubmit} prod-id={item.product_id}>Submit Item</Button></td>
+          <td><Button color="primary" onClick={this.onSubmit} prod-id={item._id}>Submit Item</Button></td>
         </tr>
         <ModalProductChange onSubmit={this.onProductReasonChange} />
         <ModalFarmChange onSubmit={this.onFarmReasonChange} />
