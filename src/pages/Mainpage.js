@@ -517,6 +517,7 @@ class Mainpage extends Component {
   handleSubmitAddress = async (address) => {
     this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
       const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({selectedAddressChanged: false})
       this.modalStore.showDeliveryChange('address', {
         address,
         times 
@@ -577,7 +578,13 @@ class Mainpage extends Component {
   }
 
   handleChangeDelivery = () => {
+    // this.setState({selectedAddressChanged: false, selectedTimeChanged: false})
     this.loadData()
+    const address = this.userStore.selectedDeliveryAddress
+    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+      this.setState({deliveryTimes: times})
+    })
   }
 
   handleSubmitDeliveryAddress= () => {
@@ -599,6 +606,8 @@ class Mainpage extends Component {
     if (!this.state.selectedTimeChanged) {
       return
     }
+
+      this.setState({selectedTimeChanged: false})
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
