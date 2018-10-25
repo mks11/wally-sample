@@ -19,13 +19,17 @@ import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
 
-const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner1.jpg'
-const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner2.jpg'
-const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Banner3.jpg'
+const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-1.png'
+const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-2.png'
+const banner3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-3.png'
 
-const bannerMobile1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner1.jpg'
-const bannerMobile2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner2.jpg'
-const bannerMobile3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/Mobile_Banner3.jpg'
+const bannerMobile1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-banner-1.png'
+const bannerMobile2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-banner-2.png'
+const bannerMobile3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-banner-3.png'
+
+const bannerMobileHoriz1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-horiz-banner-1.png'
+const bannerMobileHoriz2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-horiz-banner-2.png'
+const bannerMobileHoriz3 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/mobile-horiz-banner-3.png'
 
 const heroItems = [
   {
@@ -47,6 +51,12 @@ const heroItems = [
     link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
+
+if (window.innerWidth <= 800 && window.innerWidth > 500) {
+  heroItems[0].src = bannerMobileHoriz1
+  heroItems[1].src = bannerMobileHoriz2
+  heroItems[2].src = bannerMobileHoriz3
+}
 
 if (window.innerWidth <= 500) {
   heroItems[0].src = bannerMobile1

@@ -60,7 +60,7 @@ class About extends Component {
                 </div>
                 <div className="col">
                   <h2 className="m-0 p-0">{item.title}</h2>
-                  <div className="my-3 blog-date">Posted {moment(item.createdAt).format('MMMM DD, YYYY')} by {item.author}</div>
+                  <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
                   <p dangerouslySetInnerHTML={{__html: item.body_displayed}}></p>
                   {item.need_readmore && 
                       <React.Fragment>

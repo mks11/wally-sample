@@ -154,9 +154,13 @@ class Homepage extends Component {
     )
 
     const isMobile = this.state.width <= 500;
+    const isMobileHoriz = (this.state.width > 500 && this.state.width <= 800);
     let heroClass = "landing-section aw-hero"
     if (isMobile) {
       heroClass += ' mobile'
+    }
+    if (isMobileHoriz) {
+      heroClass += ' mobile-horiz'
     }
 
     return (

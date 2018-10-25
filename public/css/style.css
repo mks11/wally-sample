@@ -147,8 +147,9 @@ nav.aw-nav a.dropdown-item:hover::after {
 .logo-text-mobile{display:none;padding-top:12px;}
 
 /* Homepage */
-.landing-section{background-color:#9ECACB;background-image:url("../images/header300.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
-.landing-section.mobile{background-image:url("../images/mobile_header300.jpg");}
+.landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+.landing-section.mobile{background-image:url("../images/wally-home-banner-wood-mobile.jpg");}
+.landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");}
 .landing-section h1{color:#fff;font-size:45px;}
 .landing-section h2{
   font-size: 20px;
