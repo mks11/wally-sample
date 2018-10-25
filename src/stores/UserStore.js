@@ -342,6 +342,35 @@ class UserStore {
     const res = await axios.post(API_SUBSCRIBE_EMAIL, {email})
     return res.data
   }
+
+  async adjustDeliveryTimes(delivery_date, deliveryTimes) {
+        console.log("adjusting", {delivery_date, deliveryTimes})
+    if (delivery_date && deliveryTimes) {
+      const currentDate = this.selectedDeliveryTime.date
+      const date = moment(delivery_date).format('YYYY-MM-DD')
+      if (date !== currentDate) {
+        const day = moment(date).calendar(null,{
+          sameDay: '[Today]',
+          nextDay: '[Tomorrow]',
+          nextWeek: 'dddd',
+          lastDay: '[Yesterday]',
+          lastWeek: '[Last] dddd',
+          sameElse: 'DD/MM/YYYY'
+        })
+
+        const deliveryDate = deliveryTimes.find((data) => data.day === day)
+        if (deliveryDate) {
+          let data = deliveryDate.data[0]
+
+          data.day = day
+
+          this.setDeliveryTime(data)
+
+        }
+
+      }
+    }
+  }
 }
 
 
@@ -409,7 +438,8 @@ decorate(UserStore, {
   setDeliveryAddress: action,
   setDeliveryTime: action,
   loadFakeUser: action,
-  addFakeAddress: action
+  addFakeAddress: action,
+  adjustDeliveryTimes: action
 })
 
 

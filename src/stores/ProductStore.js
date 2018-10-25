@@ -39,6 +39,8 @@ class ProductStore {
     this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
     this.open = true
     this.modal = true
+
+    return res.data
   }
 
   getAdvertisements() {
@@ -85,7 +87,7 @@ class ProductStore {
     this.sidebar = data.sidebar
     this.fetch = false
 
-    return res
+    return res.data
   }
 
   getCategories() {

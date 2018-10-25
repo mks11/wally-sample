@@ -79,7 +79,9 @@ class Product extends Component {
       this.productStore.activeProductId = this.props.product.product_id
     } else {
       console.log(this.userStore.getDeliveryParams())
-      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams())
+      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
+      })
     }
   }
 
@@ -120,7 +122,7 @@ class Product extends Component {
 
 Product = connect("store")(Product)
 
-const ProductList = ({display, mode}) => (
+const ProductList = ({display, mode, deliveryTimes}) => (
   <div className="product">
     <h2>{display.cat_name}</h2>
     <div className="product-sub">
@@ -130,7 +132,7 @@ const ProductList = ({display, mode}) => (
 
     <div className="row">
       { display.products.map((p, i) => {
-        return (<Product key={i} product={p} />)
+        return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
       }
       )}
 
@@ -202,12 +204,12 @@ class Mainpage extends Component {
   componentDidMount() {
     this.userStore.getStatus(true)
       .then((status) => {
-        this.loadData()
         const selectedAddress = this.userStore.selectedDeliveryAddress 
         if (selectedAddress) {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
             this.setState({deliveryTimes})
+            this.loadData()
           })
         }
 
@@ -255,10 +257,13 @@ class Mainpage extends Component {
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
     this.productStore.getProductDisplayed(id, this.userStore.getDeliveryParams()).then((data) => {
+      this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
-    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).catch((e) => {
+    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
+      this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+    }).catch((e) => {
       console.error('Failed to load current cart', e)
     })
   }
@@ -290,7 +295,9 @@ class Mainpage extends Component {
   }
 
   handleEdit(data) {
-    this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams())
+    this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams()).then((data) => {
+      this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+    })
   }
 
   handleDelete(id) {
@@ -305,6 +312,7 @@ class Mainpage extends Component {
   handleSearch(keyword) {
     this.setState({searchAheadLoading: true})
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
+      this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       this.setState({searchAhead: data.products, searchAheadLoading: false, searchResult: data})
     })
   }
@@ -525,14 +533,18 @@ class Mainpage extends Component {
   }
 
   handleSubmitAddress = async (address) => {
-    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
-      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
-      this.setState({selectedAddressChanged: false})
-      this.modalStore.showDeliveryChange('address', {
-        address,
-        times 
-      })
+    this.modalStore.showDeliveryChange('address', {
+      address,
+      // times
     })
+    // this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
+    //   const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
+    //   this.setState({selectedAddressChanged: false})
+    //   this.modalStore.showDeliveryChange('address', {
+    //     address,
+    //     times
+    //   })
+    // })
     return
   }
 
@@ -619,6 +631,10 @@ class Mainpage extends Component {
 
       this.setState({selectedTimeChanged: false})
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
+  }
+
+  handleAddToCart = (data) => {
+    this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
   }
 
   render() {
@@ -1051,7 +1067,7 @@ class Mainpage extends Component {
                     </div>
 
                     { mainDisplay.map((p, i) => (
-                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode} />
+                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode}  deliveryTimes={this.state.deliveryTimes}/>
                     )
                     )}
 
@@ -1073,7 +1089,7 @@ class Mainpage extends Component {
 
                         <div className="row">
                           { this.state.searchDisplayed.map((p, i) => (
-                            <Product key={i} product={p} />
+                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes} />
                           ))}
                         </div>
 
@@ -1081,7 +1097,7 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                { this.productStore.open && <ProductModal/> }
+                { this.productStore.open && <ProductModal onAddToCart={this.handleAddToCart}/> }
                 <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>

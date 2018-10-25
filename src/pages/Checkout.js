@@ -98,12 +98,20 @@ class Checkout extends Component {
   }
 
   loadData() {
+    let dataOrder
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
 
       })
+
+      dataOrder = data
+      return data
+    }).then(data => {
+      return this.checkoutStore.getDeliveryTimes(selectedAddress)
+    }).then(times => {
+      this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
     }).catch((e) => {
       console.error(e)
     })
