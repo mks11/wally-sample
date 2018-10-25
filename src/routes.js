@@ -23,6 +23,7 @@ import ManageShopper from './pages/ManageShopper';
 import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
+import Signup from './pages/Signup';
 
 export default (
     <Fragment>
@@ -48,6 +49,7 @@ export default (
         <Route exact path="/checkout" component={Checkout}/>
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>
+        <Route exact path="/signup" component={Signup}/>
         <Route exact path="/" component={Homepage}/>
     </Fragment>
 );

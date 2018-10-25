@@ -45,7 +45,8 @@ class SignupModal extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      signup_zip: this.zipStore.selectedZip
+      signup_zip: this.zipStore.selectedZip,
+      reference_promo: this.userStore.refPromo
     }).then((data) => {
       this.userStore.setUserData(data.user)
       this.userStore.setToken(data.token)
@@ -83,7 +84,8 @@ class SignupModal extends Component {
     }
     this.setState({facebookRequest: true, signup_zip: this.zipStore.selectedZip})
     data.signup_zip = this.zipStore.selectedZip
-    console.log('data', data)
+    data.reference_promo = this.userStore.refPromo
+    // console.log('data', data)
     this.userStore.loginFacebook(data).then((response) => {
       this.modalStore.toggleSignup()
       this.setState({facebookRequest: false})
