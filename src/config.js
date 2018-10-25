@@ -76,7 +76,7 @@ export const FACEBOOK = "https://facebook.com/thewallyshop"
 
 export const GOOGLE_API_KEY="AIzaSyB2IlvjI5MCPefFjne3cgbklq_1899QiXU"
 
-export const APP_URL = "http://thewallyshop.co"
+export const APP_URL = "https://thewallyshop.co"
 export const STRIPE_API_KEY = "pk_live_QV08YsHEj9zFZeHcx3O6X5Wn"
 export const FB_KEY = "1634254033370820"
 
