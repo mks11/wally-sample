@@ -16,7 +16,7 @@ class InvalidZipSuccessModal extends Component {
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-3 text-center" style={{lineHeight: '40px'}}>Thanks!<br/> We'll notify you when we launch in your area.<br/> Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.</h3>
             <p className="text-center">
-              <Link to="/main" className="btn btn-primary" onClick={e => modalStore.toggleInvalidZipSuccess(e)}>Explore</Link>
+              <Link to="/main" className="btn btn-primary btn-explore" onClick={e => modalStore.toggleInvalidZipSuccess(e)}>Explore</Link>
             </p>
           </div>
         </ModalBody>
