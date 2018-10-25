@@ -30,7 +30,7 @@ class OrderConfirmation extends Component {
                 KEEP SHOPPING
               </button>
               <span>
-                For every friend you refer, you’ll get 30% off once they purchase, and they’ll get 30% off their first delivery within 30 days. Details <Link to="/help">here.</Link>
+                For every friend you refer, you’ll get 30% off once they purchase, and they’ll get 30% off their first delivery within 30 days. Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27">here.</Link>
               </span>
             </div>
         </div>

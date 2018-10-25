@@ -45,7 +45,7 @@ class ReferralModal extends Component {
             <span className="mb-1">
             For every friend you refer, you’ll get 30% off once they purchase, and they’ll get 30% off their first delivery within 30 days.
             </span>
-            <p className="mb-5 text-center"><small>Details <Link to="/help" onClick={this.handleToggle}>here</Link></small></p>
+            <p className="mb-5 text-center"><small>Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleToggle}>here</Link></small></p>
             <div className="referral-wrap p-2">
               <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el} readOnly />
               <span className="referral-link">{this.userStore.refUrl}</span>
