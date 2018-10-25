@@ -11,7 +11,7 @@ class InviteFriends extends Component {
   }
 
   handleSignup() {
-    this.modalStore.toggleSignup()
+    this.modalStore.toggleZip()
     this.routing.push('/main')
   }
 
