@@ -120,7 +120,7 @@ class TopNav extends Component {
                           </React.Fragment>
                           :
                           <React.Fragment>
-                            <li><a onClick={this.handleMobileNavLogin}>Login</a></li>
+                            <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
                             <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
                           </React.Fragment>
                       }
@@ -144,7 +144,7 @@ class TopNav extends Component {
         <header className="aw-header navbar-white">
           <div className={topBarClass}>
             <div className="container">
-              Free delivery on orders over $35 
+              Refer a friend and get 30% off 
               <button className="close-top-bar" onClick={e=>this.uiStore.closeTopBar()}>
                 <i className="fa fa-times-circle" aria-hidden="true" ></i>
               </button>
@@ -197,7 +197,7 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ? 
               <div className="col-auto d-none d-md-block btn-top-account">
-                <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Login</b></button>
+                <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Log in</b></button>
                 <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
               </div>
                   : null}

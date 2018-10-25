@@ -13,7 +13,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Currently in beta in select zipcodes',
+      heroDescription: 'Delivered exclusively in reusable packaging, picked up again for reuse. Currently in beta in select zip codes.',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -210,8 +210,8 @@ class Homepage extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h2>Get farm fresh, package-free groceries delivered straight to your door.</h2>
-              <p>The Wally Shop is making responsible shopping easy with ingredients from local farmers markets and bulk shops. So you'll get high-quality foods, same-day delivery and no plastic packaging. Ever. You take care of the earth - we'll take care of the groceries.</p>
+              <h2>Conveniently sustainable, deliciously local, organic</h2>
+              <p>The Wally Shop is your sustainable grocery solution. Order your favorite local, organic produce and have it delivered same-day in all reusable packaging. This means no plastic packaging. Ever. You take care of the earth - we'll take care of the groceries.</p>
             </div>
 
             <div className="row">
@@ -220,19 +220,19 @@ class Homepage extends Component {
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
                       <img src="images/home1_hd.jpg" alt=""/>
-                      <h4>BUY THE PRODUCT, <br/>NOT THE PACKAGING</h4>
+                      <h4>Shop produce from local, organic farmers markets & shops</h4>
                     </div>
                   </div>
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
                       <img src="images/home2_hd.jpg" alt=""/>
-                      <h4>BULK PRICES, <br/>INDIVIDUAL SIZES</h4>
+                      <h4>Get it delivered in all reusable packaging</h4>
                     </div>
                   </div>
                   <div className="col-sm-12 col-lg-4">
                     <div className="howto-item">
                       <img src="images/home3_hd.jpg" alt=""/>
-                      <h4>CURATED SELECTION <br/>OF QUALITY INGREDIENTS</h4>
+                      <h4>Return packaging at a future delivery for reuse</h4>
                     </div>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ class Homepage extends Component {
 
           <br /><br />
           <div className="container">
-            <h3>All available zipcodes</h3>
+            <h3>All available zip codes</h3>
             <hr />
             <div className="mb-5">
               <div className="row ">

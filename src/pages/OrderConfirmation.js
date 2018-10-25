@@ -24,9 +24,7 @@ class OrderConfirmation extends Component {
           <div className="container-fluid">
         <h1 className="my-1">Your order has been placed!</h1>
         <h1 className="my-1 mt-4">Order ID: #{id}</h1>
-        <p style={{fontSize:'25px'}}>Thank you! Your order has been placed and you should be receiving a confirmation email shortly.
-Don’t forget, when you are finished with any Wally Shop containers or bags, simply return them to the courier upon your next, or any 
-future, Wally Shop delivery.</p>
+        <p style={{fontSize:'25px'}}>Thank you for your order! You should receive an order confirmation email shortly. When you’re finished with any Wally Shop containers or bags, simply return them to the courier upon your next, or any future, Wally Shop delivery.</p>
       <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started btn-left mb-3 mt-4" data-submit="Submit">
         KEEP SHOPPING
       </button>

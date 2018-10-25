@@ -34,7 +34,7 @@ class DeliveryChangeModal extends Component {
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Delivery change</h3>
             <p>
-              Product selection changes on a daily basis. Are you sure you want to change? This may change the products available and in your cart.
+              Are you sure you want to change? Product selection varies on a daily basis, so your cart might have to be adjusted.
             </p>
             <button onClick={this.handleChangeDelivery} className="btn btn-main active">Submit</button>
           </div>
