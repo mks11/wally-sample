@@ -2,8 +2,6 @@ import {observable, decorate, action} from 'mobx'
 import { GET_ZIP_CODES,API_SUBSCRIBE_EMAIL } from '../config'
 import axios from 'axios'
 
-let index = 0
-
 class ZipStore {
   zipcodes = []
   selectedZip = null

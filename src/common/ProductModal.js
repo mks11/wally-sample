@@ -151,7 +151,7 @@ class ProductModal extends Component {
     const producer = inventory.producer
 
 
-    console.log('unittype', unit_type)
+    // console.log('unittype', unit_type)
     let  qty_unit_type = unit_type 
     if (qty_unit_type === 'unit' || qty_unit_type === 'ea') {
       qty_unit_type = ''
@@ -164,7 +164,7 @@ class ProductModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.productStore.hideModal(e)} ></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="row">
             <div className="col-md-6 product-modal-left">
               <div className="row mb-3">

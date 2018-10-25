@@ -34,7 +34,7 @@ class DeleteModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.checkoutStore.toggleDeleteModal(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Are you sure you want to delete this item?
             </h3>

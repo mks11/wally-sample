@@ -28,7 +28,7 @@ class ZipModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.modalStore.toggleWelcome(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">Welcome to The Wally Shop</h3>
             <p className="mb-5">

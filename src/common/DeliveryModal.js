@@ -115,7 +115,7 @@ class DeliveryModal extends Component {
           <div><h3>Select delivery time &amp; location</h3></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="checkout-wrap">
             <div className="">
               <div >

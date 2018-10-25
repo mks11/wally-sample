@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Modal, ModalBody } from 'reactstrap';
 import { connect } from '../utils'
 
-class InviteModal extends Component {
+class ReferralModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,7 +15,7 @@ class InviteModal extends Component {
   }
 
   handleToggle = () => {
-    this.modalStore.toggleInvite()
+    this.modalStore.toggleReferral()
   }
 
   handleCopy = () => {
@@ -33,7 +34,7 @@ class InviteModal extends Component {
   render() {
     const store = this.props.store
     return (
-      <Modal isOpen={store.modal.invite} contentClassName="modal-bg-pinneapple" toggle={this.handleToggle}>
+      <Modal isOpen={store.modal.referral} contentClassName="modal-bg-pinneapple" toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
@@ -41,11 +42,12 @@ class InviteModal extends Component {
         <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">Who wants brownie points?</h3>
-            <span className="mb-5">
-              Share the link below to give your friends free delivery their first month. 
+            <span className="mb-1">
+            For every friend you refer, you’ll get 30% off once they purchase, and they’ll get 30% off their first delivery within 30 days.
             </span>
+            <p className="mb-5 text-center"><small>Details <Link to="/help" onClick={this.handleToggle}>here</Link></small></p>
             <div className="referral-wrap p-2">
-              <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el}/>
+              <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el} readOnly />
               <span className="referral-link">{this.userStore.refUrl}</span>
               <button type="button" className="btn btn-transparent btn-transparent-light" onClick={this.handleCopy}>COPY</button>
             </div>
@@ -57,4 +59,4 @@ class InviteModal extends Component {
   }
 }
 
-export default connect("store")(InviteModal);
+export default connect("store")(ReferralModal);

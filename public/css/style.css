@@ -1735,6 +1735,7 @@ a {
   text-align: center;
   background: white;
   font-family: 'Circe', sans-serif;
+  cursor: pointer;
 }
 
 .top-bar .container {
@@ -1748,6 +1749,7 @@ a {
   top: 0px;
   border: none;
   background: none;
+  z-index: 10;
 }
 
 .tnc a strong, .tnc a:hover {
@@ -1756,8 +1758,15 @@ a {
 }
 
 .modal-body {
-  max-height:600px;
-  overflow: scroll;
+  max-height: calc(100vh - 270px);
+  overflow-y: auto;
+  /* max-height:600px; */
+  /* overflow: scroll; */
+}
+
+.modal-body-no-footer {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
 .btn-cart-mobile{

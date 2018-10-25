@@ -14,6 +14,7 @@ class ModalStore {
   invalidZipSuccess = false
 
   invite = false
+  referral = false
 
   product = false
   productId = null
@@ -69,6 +70,10 @@ class ModalStore {
     this.invite = !this.invite
   }
 
+  toggleReferral() {
+    this.referral = !this.referral
+  }
+
   toggleWelcome() {
     this.welcome = !this.welcome
   }
@@ -110,6 +115,7 @@ decorate(ModalStore, {
   invalidZip: observable,
   invalidZipSuccess: observable,
   invite: observable,
+  referral: observable,
   product: observable,
   productId: observable,
   changeProduct: observable,
@@ -122,6 +128,7 @@ decorate(ModalStore, {
   toggleInvalidZip: action,
   toggleInvalidSuccess: action,
   toggleInvite: action,
+  toggleReferral: action,
   toggleWelcome: action,
   setLoginNextRoute: action,
   deliveryChange: observable,

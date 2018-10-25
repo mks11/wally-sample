@@ -58,7 +58,7 @@ class ZipModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">What's your zipcode?</h3>
             <span className="mb-5">The Wally Shop is only available in select zipcodes.</span>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, Input, ControlLabel, HelpBlock } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Row, Col, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 
 
@@ -62,6 +63,8 @@ class Homepage extends Component {
       return
     }
     this.setState({invalidZip: false})
+
+    this.zipStore.selectedZip = this.state.zip
 
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
@@ -236,6 +239,13 @@ class Homepage extends Component {
                     </div>
                   </div>
                 </div>
+                <Row>
+                  <Col>
+                    <div className="text-center">
+                      <Link to="/main" className="btn btn-primary">Explore</Link>
+                    </div>
+                  </Col>
+                </Row>
               </div>
             </div>
           </div>

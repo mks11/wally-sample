@@ -109,7 +109,7 @@ class Checkout extends Component {
       dataOrder = data
       return data
     }).then(data => {
-      return this.checkoutStore.getDeliveryTimes(selectedAddress)
+      return this.checkoutStore.getDeliveryTimes(this.state.selectedAddress)
     }).then(times => {
       this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
     }).catch((e) => {

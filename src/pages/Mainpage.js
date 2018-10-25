@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import Title from '../common/page/Title'
 import { formatMoney, connect } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
-import {MenuItem, MenuItemContainer, AsyncTypeahead} from 'react-bootstrap-typeahead'
+import { AsyncTypeahead} from 'react-bootstrap-typeahead'
 import ClickOutside from 'react-click-outside'
 import {
   Carousel,
   CarouselItem,
-  CarouselControl,
   CarouselIndicators,
-  CarouselCaption
 } from 'reactstrap';
 
 import DeliveryModal from '../common/DeliveryModal.js';
@@ -136,7 +133,7 @@ const ProductList = ({display, mode, deliveryTimes}) => (
       }
       )}
 
-      {mode == 'limit' && 
+      {mode === 'limit' && 
           <Link className="big-arrow" to={"/main/" + display.cat_id }>
           </Link>
       }
@@ -217,7 +214,7 @@ class Mainpage extends Component {
 
     const $ = window.$
 
-    const self = this
+    // const self = this
 
     $(window).bind('scroll', function () {
       let thTop = 570
@@ -262,7 +259,7 @@ class Mainpage extends Component {
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
-      this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+      data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
     }).catch((e) => {
       console.error('Failed to load current cart', e)
     })
@@ -335,7 +332,7 @@ class Mainpage extends Component {
         currentSearchCatId = filters[0].cat_id
         currentSearchCat = filters[0].cat_name
         searchDisplayed = data.products.filter((d) => {
-          return d.subcat_id == currentSearchCatId
+          return d.subcat_id === currentSearchCatId
         })
       }
 
@@ -381,11 +378,11 @@ class Mainpage extends Component {
   handleChangeSearchCategory(cat_id) {
     const data = this.state.searchResult
     const searchDisplayed = data.products.filter((d) => {
-      return d.cat_id == cat_id
+      return d.cat_id === cat_id
     })
 
     const current = data.filters.find((d) => {
-      return d.cat_id == cat_id
+      return d.cat_id === cat_id
     })
 
     this.setState({searchDisplayed: data.products, currentSearchCat: current.cat_name, currentSearchCatId: current.cat_id})
@@ -493,6 +490,7 @@ class Mainpage extends Component {
 
 
   handleShowDeliveryAddressDetail = () => {
+    console.log('show?')
     this.setState({deliveryAddressDetail: true})
   }
 
@@ -1061,7 +1059,7 @@ class Mainpage extends Component {
                       </span>
                       {this.productStore.path.map((p, i) => (
                         <span key={i}>
-                          { i != 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                          { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
                         </span>
                       ))}
                     </div>

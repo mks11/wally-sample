@@ -49,7 +49,7 @@ class InvalidZipModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => store.modal.toggleInvalidZip(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">Hope to be there soon!</h3>
             <span className="mb-5">Sign up to be notified once we are.</span>

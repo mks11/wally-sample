@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Modal, ModalBody}  from 'reactstrap';
 import { connect } from '../utils'
 
-class InvalidZipModal extends Component {
+class InvalidZipSuccessModal extends Component {
    render() {
     const modalStore = this.props.store.modal
     return (
@@ -11,9 +12,12 @@ class InvalidZipModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => modalStore.toggleInvalidZipSuccess(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
-            <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Thanks!<br/> We'll notify you when we launch in your area.<br/> Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.</h3>
+            <h3 className="m-0 mb-3 text-center" style={{lineHeight: '40px'}}>Thanks!<br/> We'll notify you when we launch in your area.<br/> Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.</h3>
+            <p className="text-center">
+              <Link to="/main" className="btn btn-primary" onClick={e => modalStore.toggleInvalidZipSuccess(e)}>Explore</Link>
+            </p>
           </div>
         </ModalBody>
       </Modal>
@@ -21,4 +25,4 @@ class InvalidZipModal extends Component {
   }
 }
 
-export default connect("store")(InvalidZipModal);
+export default connect("store")(InvalidZipSuccessModal);

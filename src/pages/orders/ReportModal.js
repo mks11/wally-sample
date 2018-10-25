@@ -55,7 +55,7 @@ class ReportModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.orderStore.toggleReport(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="order-wrap pb-5">
             <h3 className="m-0 mb-2">Order Issue</h3>
             <span className="text-order mb-3">

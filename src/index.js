@@ -14,9 +14,9 @@ import ZipModal from './common/ZipModal.js'
 import InvalidZipModal from './common/InvalidZipModal.js'
 import InvalidZipSuccessModal from './common/InvalidZipSuccessModal.js'
 import InviteModal from './common/InviteModal.js'
+import ReferralModal from './common/ReferralModal'
 import DeleteModal from './common/DeleteModal.js'
 import Backdrop from './common/Backdrop.js'
-import Outside from './common/Outside.js'
 
 //router
 import { Router } from 'react-router-dom'
@@ -59,6 +59,7 @@ ReactDOM.render(
           <InvalidZipSuccessModal/>
           <InviteModal/>
           <DeleteModal/>
+          <ReferralModal/>
         </div> 
       </ScrollToTop>
     </Router>

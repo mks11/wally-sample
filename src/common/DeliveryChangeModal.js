@@ -30,7 +30,7 @@ class DeliveryChangeModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => modalStore.hideDeliveryChange(e)}></button>
         </div>
-        <ModalBody>
+        <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2 text-center" style={{lineHeight: '40px'}}>Delivery change</h3>
             <p>

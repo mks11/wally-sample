@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
+import { Modal, ModalBody, Input, FormGroup, Label } from 'reactstrap';
 import { connect } from '../../utils'
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng,
+  // getLatLng,
 } from 'react-places-autocomplete';
 
 class AddressModal extends Component {
@@ -11,7 +11,6 @@ class AddressModal extends Component {
     super(props)
 
     this.state = {
-      address_id: null,
       street_address: '',
       city: '',
       state: '',
@@ -305,11 +304,11 @@ class AddressModal extends Component {
             <textarea
               readOnly={this.state.mode === 'edit'}
               className="aw-input--control aw-input--control-large aw-input--left mt-3"
-              placeholder={this.state.mode != 'edit' ? "Add delivery instructions (e.g. “use callbox when you arrive”)" : ""}
+              placeholder={this.state.mode !== 'edit' ? "Add delivery instructions (e.g. “use callbox when you arrive”)" : ""}
               onChange={(e) => this.setState({delivery_notes: e.target.value})} value={this.state.delivery_notes}></textarea>
           </ModalBody>
 
-          {this.state.default || this.state.mode === 'add' && (
+          {(this.state.default || this.state.mode === 'add') && (
             <ModalBody className="modal-body-bordertop">
               {this.state.default && <span className="text-blue">DEFAULT</span>}
               {this.state.mode === 'add' &&

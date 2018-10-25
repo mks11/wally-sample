@@ -59,7 +59,7 @@ export const API_ADMIN_COMPLETE_ORDER =  BASE_URL + "/api/order"
 export const API_ADMIN_POST_BLOG_POST =  BASE_URL + "/api/admin/blog"
 
 
-export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/get_advertisements"
+export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display"
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes"
 
 export const API_HELP_GET_QUESTION = BASE_URL + "/api/help/questions/"

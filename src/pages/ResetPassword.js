@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, Input, ControlLabel, HelpBlock } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { connect } from '../utils'
 
 
-class OrderConfirmation extends Component {
+class ResetPassword extends Component {
   state = {
     token_id: '',
     password: '',
@@ -91,4 +91,4 @@ class OrderConfirmation extends Component {
   }
 }
 
-export default connect("store")(OrderConfirmation);
+export default connect("store")(ResetPassword);

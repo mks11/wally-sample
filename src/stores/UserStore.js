@@ -345,7 +345,7 @@ class UserStore {
 
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
         console.log("adjusting", {delivery_date, deliveryTimes})
-    if (delivery_date && deliveryTimes) {
+    if (delivery_date && deliveryTimes && this.selectedDeliveryTime) {
       const currentDate = this.selectedDeliveryTime.date
       const date = moment(delivery_date).format('YYYY-MM-DD')
       if (date !== currentDate) {

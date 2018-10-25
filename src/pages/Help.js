@@ -79,6 +79,8 @@ class Help extends Component {
   }
   countItems(data) {
     let total = 0 
+    if (!data) return total
+
     for (const d of data) {
       total += parseFloat(d.customer_quantity)
     }
@@ -87,6 +89,8 @@ class Help extends Component {
 
   printItems(data) {
     let items = []
+    if (!data) return items
+
     for (const d of data) {
       items.push(d.product_name)
     }
@@ -182,7 +186,7 @@ class Help extends Component {
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>
+                                      <td>{item.delivery_time ? moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
                                       <td>{this.printItems(item.cart_items)}</td>
                                       <td>{this.countItems(item.cart_items)}</td>
                                       <td>
