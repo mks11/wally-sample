@@ -2011,3 +2011,8 @@ color:#6e8692
     overflow: scroll;
 }
 
+.btn-explore {
+  background-color: #78C98D;
+  border-radius: 12px;
+  border: 0;
+}

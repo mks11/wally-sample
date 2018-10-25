@@ -242,7 +242,7 @@ class Homepage extends Component {
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <Link to="/main" className="btn btn-primary">Explore</Link>
+                      <Link to="/main" className="btn btn-primary btn-explore">Explore</Link>
                     </div>
                   </Col>
                 </Row>

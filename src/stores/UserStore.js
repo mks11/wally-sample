@@ -36,6 +36,8 @@ class UserStore {
 
   activePayment = null
 
+  refPromo = null
+
   refUrl = ''
 
   toggleDeliveryModal(toggle) {
@@ -216,7 +218,6 @@ class UserStore {
 
 
   async getStatus(update) {
-    console.log('menggila')
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
       this.logout()
@@ -264,7 +265,11 @@ class UserStore {
   }
 
   async loginFacebook(data) {
-    const res = await axios.post(API_LOGIN_FACEBOOK, {access_token: data.accessToken, signup_zip: data.signup_zip})
+    const res = await axios.post(API_LOGIN_FACEBOOK, {
+      access_token: data.accessToken,
+      signup_zip: data.signup_zip,
+      reference_promo: data.reference_promo
+    })
     this.setUserData(res.data.user)
     this.setToken(res.data.token)
     return res.data
@@ -401,6 +406,8 @@ decorate(UserStore, {
   addPromo: action,
   togglePromoModal: action,
   togglePromoSuccessModal: action,
+
+  refPromo: observable,
 
   refUrl: observable,
 

@@ -214,6 +214,8 @@ class Mainpage extends Component {
 
     const $ = window.$
 
+    this.loadData()
+
     // const self = this
 
     $(window).bind('scroll', function () {

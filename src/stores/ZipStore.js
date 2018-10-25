@@ -12,7 +12,7 @@ class ZipStore {
   }
 
   validateZipCode(zip) {
-    const valid = this.zipcodes.find((z) => z == zip)
+    const valid = this.zipcodes.find((z) => z === zip)
     if (valid) return true
     return false
   }
