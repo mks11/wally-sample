@@ -127,7 +127,7 @@ class TopNav extends Component {
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Get 30% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           :
@@ -159,7 +159,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
-                  Refer a friend and get 30% off
+                  Refer a friend and get 15% off
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
@@ -193,7 +193,7 @@ class TopNav extends Component {
                                   <a className="dropdown-item">Store Credit ({formatMoney(storeCredit/100)})</a>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
-                                  <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 30% Off</a>
+                                  <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item" href="#">About</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item" href="#">Blog</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item" href="#">Help</Link>

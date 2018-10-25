@@ -25,8 +25,8 @@ class InviteFriends extends Component {
             </div>
             <div class="col-md-6">
               <div className="card">
-                <h3 className="m-0 mb-2">Molly hooked you up with free delivery.</h3>
-                <span className="mb-3">Sign up and get free delivery your first month.</span>
+                <h3 className="m-0 mb-2">You've been hooked up with 15% off orders your first month.</h3>
+                <span className="mb-3">Sign up and get your discount for your first month.</span>
                 <button className="btn btn-main mt-3 active" onClick={e=>this.handleSignup()}>SUBMIT</button>
               </div>
           </div>
