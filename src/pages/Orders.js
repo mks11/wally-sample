@@ -72,15 +72,15 @@ class Orders extends Component {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>
-                    <td>{item.cart_items.length}</td>
-                    <td>{formatMoney(item.total/100)}</td>
+                    {item.delivery_time && (<td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>)}
+                    {item.cart_items && (<td>{item.cart_items.length}</td>)}
+                    {item.total && (<td>{formatMoney(item.total/100)}</td>)}
                   </tr>
                 </tbody>
               </table>
               <hr className="my-1"/>
               <span className="text-bold">Order #: {item._id}</span><br/>
-              <span>{this.printItems(item.cart_items)}</span>
+              {item.cart_items && (<span>{this.printItems(item.cart_items)}</span>)}
               <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
             </div>
             ))}
