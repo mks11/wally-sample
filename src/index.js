@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactGA from 'react-ga';
 // import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
 import routes from './routes';
@@ -36,6 +37,9 @@ const routingStore = new RouterStore()
 const browserHistory = createBrowserHistory()
 
 store.routing = routingStore
+
+// ReactGA.initialize('UA-128193575-1', { debug: true });
+ReactGA.initialize('UA-128193575-1');
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
 

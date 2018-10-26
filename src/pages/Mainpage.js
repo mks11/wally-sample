@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import { formatMoney, connect } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
@@ -199,6 +200,7 @@ class Mainpage extends Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
         const selectedAddress = this.userStore.selectedDeliveryAddress 

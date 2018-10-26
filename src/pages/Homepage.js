@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
@@ -40,6 +41,7 @@ class Homepage extends Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview("/");
     this.userStore.getStatus()
       .then((status) => {
         if (status) {
@@ -132,8 +134,6 @@ class Homepage extends Component {
       this.handleSubscribe()
     }
   }
-
-
 
   render() {
     if (this.state.fetching) return null

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input, Button } from 'reactstrap'
@@ -81,6 +82,7 @@ class Checkout extends Component {
 
 
   componentDidMount() {
+    ReactGA.pageview("/checkout");
     this.userStore.getStatus(true)
       .then((status) => {
         this.loadData()
@@ -266,6 +268,10 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
     }, this.userStore.getHeaderAuth()).then((data) => {
+      ReactGA.event({
+        category: 'Order',
+        action: 'Submit Order'
+      });
       this.routing.push('/orders/' + data.order._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
     }).catch((e) => {
