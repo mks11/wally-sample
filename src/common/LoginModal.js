@@ -185,6 +185,7 @@ class LoginModal extends Component {
                     fields="name,email,picture"
                     scope="public_profile,email"
                     callback={this.responseFacebook}
+                    disableMobileRedirect={true}
                   />
                   <hr className="mt-5"/>
                 </div>
