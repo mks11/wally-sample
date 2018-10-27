@@ -1312,6 +1312,12 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 
 .product{
+  position: relative;
+}
+
+.product .container-fluid {
+  padding: 0;
+  overflow: hidden;
 }
 
 .product h2{
@@ -1721,7 +1727,12 @@ a {
   .product-content-left.fixed{position:relative; top: unset;}
   .product-content-left{display:none;}
 
-  .big-arrow{display:none!important;}
+  .big-arrow{
+    right: -30px !important;
+  }
+  .big-arrow.right-arrow{
+    left: -37px !important;
+  }
   .checkout-wrap .card1.delivery {
     width: 100%;
   }
@@ -1940,10 +1951,26 @@ a {
   display: block;
   position: absolute;
   right: -52px;
-  top: 20%;
+  top: 40%;
   width: 50px;
   background-size: 100% 100%;
   height: 30px;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+}
+.big-arrow.right-arrow{
+  transform: rotate(180deg);
+  left: -55px;
+}
+.big-arrow:hover,
+.big-arrow:active,
+.big-arrow:focus,
+.big-arrow:focus:active {
+  border: 0 !important;
+  background-color: transparent !important;
+  color: #000 !important; 
+  box-shadow: none !important;
 }
 .product .row {position:relative;}
 

@@ -8,6 +8,7 @@ import {
   Carousel,
   CarouselItem,
   CarouselIndicators,
+  Button,
 } from 'reactstrap';
 
 import DeliveryModal from '../common/DeliveryModal.js';
@@ -99,8 +100,7 @@ class Product extends Component {
     }
 
     // price *= unit
-
-    return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
+    return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
         <div className="col-6 product-price">
@@ -119,27 +119,52 @@ class Product extends Component {
 
 Product = connect("store")(Product)
 
-const ProductList = ({display, mode, deliveryTimes}) => (
-  <div className="product">
-    <h2>{display.cat_name}</h2>
-    <div className="product-sub">
-      <h5>{display.cat_name}</h5>
-      <Link to={"/main/" + display.cat_id }>View All {display.number_products} ></Link>
-    </div>
+class ProductList extends Component {
 
-    <div className="row">
-      { display.products.map((p, i) => {
-        return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
-      }
-      )}
+  componentDidMount() {
+    const $ = window.$
 
-      {mode === 'limit' && 
-          <Link className="big-arrow" to={"/main/" + display.cat_id }>
-          </Link>
-      }
-    </div>
-  </div>
-)
+    $('.big-arrow.left-arrow').click(function() {
+      $(this).siblings('.container-fluid').animate({
+        scrollLeft: '+=100'
+      }, 100, 'linear');
+    })
+    $('.big-arrow.right-arrow').click(function() {
+      $(this).siblings('.container-fluid').animate({
+        scrollLeft: '-=100'
+      }, 100, 'linear');
+    })
+  }
+
+  render() {
+    const { display, mode, deliveryTimes } = this.props
+
+    return (
+      <div className="product">
+        <h2>{display.cat_name}</h2>
+        <div className="product-sub">
+          <h5>{display.cat_name}</h5>
+          <Link to={"/main/" + display.cat_id }>View All {display.number_products} ></Link>
+        </div>
+
+        {mode === 'limit' && 
+          <Button className="big-arrow right-arrow" />
+        }
+        <div className="container-fluid">
+          <div className="row flex-row flex-nowrap">
+            { display.products.map((p, i) => {
+              return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
+            }
+            )}
+          </div>
+        </div>
+        {mode === 'limit' && 
+          <Button className="big-arrow left-arrow" />
+        }
+      </div>
+    )
+  }
+}
 
 class Mainpage extends Component {
 
