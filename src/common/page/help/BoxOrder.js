@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { FontAwesome } from 'react-fontawesome'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
@@ -70,7 +69,7 @@ class BoxOrder extends Component{
   }
 
   renderViewAll(){
-    const { title, viewAll, data, methodName } = this.props
+    const { title, viewAll, methodName } = this.props
     const route = {
       pathname: viewAll,
       state: {
@@ -87,7 +86,7 @@ class BoxOrder extends Component{
   }
 
   render(){
-    const { title, viewAll } = this.props
+    const { title } = this.props
   
     return (
       <div className="list">

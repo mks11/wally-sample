@@ -1,9 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import moment from 'moment'
 import Title from '../common/page/Title'
-import Box from '../common/page/help/Box'
 import BoxOrder from '../common/page/help/BoxOrder'
-import SearchForm from '../common/page/help/SearchForm'
 import { connect } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'

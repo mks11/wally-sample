@@ -4,8 +4,6 @@ import {
 } from '../config'
 import axios from 'axios'
 
-let index = 0
-
 class ContentStore {
   blog = []
 

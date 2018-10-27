@@ -9,10 +9,6 @@ class DeliveryTimeOptions extends Component {
     data: []
   }
 
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     this.setState({addressError: false})
   }
@@ -57,8 +53,6 @@ class DeliveryTimeOptions extends Component {
   }
 
   render() {
-    const props = this.props
-
     let timeDropdownClass = "dropdown-menu"
     if (this.state.timeDropdown && !this.props.addressUnlocked) {
       timeDropdownClass += " show"

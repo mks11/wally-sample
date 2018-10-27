@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import moment from 'moment'
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng,
 } from 'react-places-autocomplete';
 
 class DeliveryAddressOptions extends Component {
@@ -18,10 +16,6 @@ class DeliveryAddressOptions extends Component {
     newCity: '',
     newCountry: '',
     newPreferedAddress: false,
-  }
-
-  constructor(props) {
-    super(props)
   }
 
   componentDidMount() {
@@ -164,8 +158,6 @@ class DeliveryAddressOptions extends Component {
 
 
   render() {
-    const props = this.props
-
     let addressFormClass = 'addAdressForm mb-4'
     if (!this.state.newAddress) {
       addressFormClass += ' d-none'
@@ -199,7 +191,7 @@ class DeliveryAddressOptions extends Component {
         <div className={addressCardClass}>
           <div className={"card-body" + (lock ? " lock" : "")}>
             { data.map((data, index) => {
-              if (lock && selected!=data.address_id) {
+              if (lock && selected !== data.address_id) {
                 return null
               }
               return (

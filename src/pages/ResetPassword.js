@@ -34,7 +34,7 @@ class ResetPassword extends Component {
       return
     }
 
-    if (this.state.password != this.state.confirmPassword) {
+    if (this.state.password !== this.state.confirmPassword) {
       this.setState({invalidText: 'Password doesn\'t match'})
       return
     }

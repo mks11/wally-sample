@@ -5,8 +5,6 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 
-let index = 0
-
 class ProductStore {
   // modal state open
   open = false

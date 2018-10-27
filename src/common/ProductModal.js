@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { formatMoney, connect } from '../utils'
-import { APP_URL, PRODUCT_BASE_URL } from '../config'
+import { PRODUCT_BASE_URL } from '../config'
 
 class ProductModal extends Component {
   constructor(props) {
@@ -128,7 +128,7 @@ class ProductModal extends Component {
 
     let unit = 1
 
-    if (price_unit != unit_type &&  unit_size) {
+    if (price_unit !== unit_type &&  unit_size) {
       unit = parseFloat(unit_size.split(' ')[0])
     }
 
@@ -148,7 +148,7 @@ class ProductModal extends Component {
     const packaging_type = packaging.type
     const packaging_description = packaging.description
 
-    const producer = inventory.producer
+    // const producer = inventory.producer
 
 
     // console.log('unittype', unit_type)
@@ -175,7 +175,7 @@ class ProductModal extends Component {
                 <div className="col-sm-6">
                   <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
                     {product.image_refs.map((item, key) => (
-                      <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} /></div>
+                      <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} alt="" /></div>
                     ))}
                   </div>
                 </div>
@@ -183,7 +183,7 @@ class ProductModal extends Component {
 
               <div id="product-carousel" ref={el => this.prod = el}>
                 {product.image_refs.map((item, key) => (
-                  <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} /></div>
+                  <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + product.product_id + "/" + item} alt="" /></div>
                 ))}
               </div>
             </div>
@@ -208,7 +208,7 @@ class ProductModal extends Component {
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => {
                     let unit = qty_unit_type
-                    if (unit != '' && v>1) {
+                    if (unit !== '' && v>1) {
                       unit = qty_unit_type+'s'
                     }
 

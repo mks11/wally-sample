@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { Input, Button } from 'reactstrap'
+import { Input } from 'reactstrap'
 import Title from '../common/page/Title'
-import AddressModal from './account/AddressModal'
-import PaymentModal from './account/PaymentModal'
 import FontAwesome from 'react-fontawesome';
 import ProductModal from '../common/ProductModal';
 import CardSmall from '../common/CardSmall';
 import ClickOutside from 'react-click-outside'
 import {StripeProvider, Elements} from 'react-stripe-elements'
 
-import { connect, formatMoney, formatNumber } from '../utils'
+import { connect, formatMoney } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
@@ -416,24 +414,23 @@ class Checkout extends Component {
       return null
     }
 
-    const store = this.props.store
     const order = this.checkoutStore.order
 
-    let timeDropdownClass = "dropdown-menu"
-    if (this.state.timeDropdown && this.state.lockAddress) {
-      timeDropdownClass += " show"
-    }
+    // let timeDropdownClass = "dropdown-menu"
+    // if (this.state.timeDropdown && this.state.lockAddress) {
+    //   timeDropdownClass += " show"
+    // }
 
-    const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount/100 : 0
+    // const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount/100 : 0
     const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount/100 : 0
 
-    const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
+    // const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
     const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
 
-    let addressFormClass = 'addAdressForm mb-4'
-    if (!this.state.newAddress) {
-      addressFormClass += ' d-none'
-    }
+    // let addressFormClass = 'addAdressForm mb-4'
+    // if (!this.state.newAddress) {
+    //   addressFormClass += ' d-none'
+    // }
 
     let paymentFormClass = 'addPaymentForm'
     if (!this.state.newPayment) {
@@ -445,10 +442,10 @@ class Checkout extends Component {
       buttonPlaceOrderClass += ' active' 
     }
 
-    let addressCardClass = 'card1'
-    if (this.state.addressError) {
-      addressCardClass += ' error'
-    }
+    // let addressCardClass = 'card1'
+    // if (this.state.addressError) {
+    //   addressCardClass += ' error'
+    // }
 
     const cart_items = order && order.cart_items ? order.cart_items : []
 
@@ -508,7 +505,7 @@ class Checkout extends Component {
                   <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
                     { this.userStore.user.payment.map((data, index) => {
 
-                      if (this.state.lockPayment && selectedPayment!=data._id) {
+                      if (this.state.lockPayment && selectedPayment !== data._id) {
                         return null
                       }
                       return (
@@ -522,7 +519,7 @@ class Checkout extends Component {
                             onChange={e => this.handleSelectPayment(data._id)}
                           />
                           <label className="custom-control-label" htmlFor={"payment"+index} onClick={e=>this.handleSelectPayment(data._id)}>
-                            <img src="images/card.png" /> *****{data.last4}
+                            <img src="images/card.png" alt="" /> *****{data.last4}
                           </label>
                           {this.userStore.user.preferred_payment === data._id &&
                               <a href="#" className="address-rbtn link-blue" style={{top:'10px'}}>DEFAULT</a>

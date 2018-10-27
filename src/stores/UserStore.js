@@ -12,8 +12,6 @@ import axios from 'axios'
 import moment from 'moment'
 import uuid from 'uuid'
 
-let index = 0
-
 class UserStore {
   user = null
   status = false

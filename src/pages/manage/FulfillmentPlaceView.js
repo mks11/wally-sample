@@ -38,7 +38,7 @@ class FulfillmentPlaceView extends Component {
     const { shopitems } = this.adminStore
 
     const updateditems = shopitems.map(item => {
-      if (item.product_id == productId) {
+      if (item.product_id === productId) {
         item.warehouse_placement = value
       }
       return item

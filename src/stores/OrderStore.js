@@ -5,8 +5,6 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 
-let index = 0
-
 class OrderStore {
   orders  = []
   reportModal = false

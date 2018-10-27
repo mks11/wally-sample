@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { connect } from '../../utils'
 import { STRIPE_API_KEY } from '../../config'
 
@@ -114,10 +114,6 @@ class PaymentModal extends Component {
     })
   }
   render() {
-     let buttonClass = 'btn btn-main my-3'
-     if (this.state.cardnumber && this.state.cvv && this.state.mmyy && this.state.zip) {
-       buttonClass += ' active'
-     }
     return (
       <Modal isOpen={this.userStore.paymentModal} className="modal-outline" onClosed={e => this.userStore.closePaymentModal()}>
     

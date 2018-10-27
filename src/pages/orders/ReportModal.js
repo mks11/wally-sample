@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { connect, capitalizeFirstLetter } from '../../utils'
 import moment from 'moment'
 
@@ -37,7 +37,6 @@ class ReportModal extends Component {
   }
 
   render() {
-    const store = this.props.store
     let buttonClass='btn btn-main mt-3'
     if (this.state.text) {
       buttonClass += ' active'

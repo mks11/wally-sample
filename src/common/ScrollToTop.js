@@ -1,6 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
-import { formatMoney, connect } from '../utils'
+
 class ScrollToTop extends React.Component {
   constructor(props) {
     super(props)

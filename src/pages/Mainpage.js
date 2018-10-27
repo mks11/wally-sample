@@ -101,7 +101,7 @@ class Product extends Component {
     // price *= unit
 
     return ( <div className="col-6 col-lg-3 col-md-4 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
-      <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} />
+      <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
         <div className="col-6 product-price">
           {formatMoney(price)}
@@ -328,20 +328,20 @@ class Mainpage extends Component {
         data.filters : []
 
       let currentSearchCatId = null
-      let currentSearchCat = ''
-      let searchDisplayed = []
+      // let currentSearchCat = ''
+      // let searchDisplayed = []
       if (data.filters.length > 0) {
         currentSearchCatId = filters[0].cat_id
-        currentSearchCat = filters[0].cat_name
-        searchDisplayed = data.products.filter((d) => {
-          return d.subcat_id === currentSearchCatId
-        })
+        // currentSearchCat = filters[0].cat_name
+        // searchDisplayed = data.products.filter((d) => {
+        //   return d.subcat_id === currentSearchCatId
+        // })
       }
 
-      const cur = []
-      data.filters.map((d) => {
-        cur.push(d.cat_id)
-      })
+      const cur = data.filters.reduce((sum, d) => {
+        sum.push(d.cat_id)
+        return sum
+      }, [])
 
 
 
@@ -379,9 +379,9 @@ class Mainpage extends Component {
 
   handleChangeSearchCategory(cat_id) {
     const data = this.state.searchResult
-    const searchDisplayed = data.products.filter((d) => {
-      return d.cat_id === cat_id
-    })
+    // const searchDisplayed = data.products.filter((d) => {
+    //   return d.cat_id === cat_id
+    // })
 
     const current = data.filters.find((d) => {
       return d.cat_id === cat_id
@@ -430,12 +430,12 @@ class Mainpage extends Component {
       return cur.indexOf(d.cat_id) !== -1
     })
 
-    let curCat = []
-
-    this.state.searchResult.filters.map((d) => {
-      if (cur.indexOf(d.cat_id) !== -1) 
-        curCat.push(d.cat_name)
-    })
+    let curCat = this.state.searchResult.filters.reduce((sum, d) => {
+      if (cur.indexOf(d.cat_id) !== -1) {
+        sum.push(d.cat_name)
+      }
+      return sum
+    }, [])
     let currentSearchCat= curCat.join(', ')
 
     let all = false
@@ -455,10 +455,10 @@ class Mainpage extends Component {
 
   toggleSearchAll() {
     if (!this.state.searchAll) {
-      const curFilter = []
-      const current = this.state.searchResult.filters.map((d) => {
-        curFilter.push(d.cat_id)
-      })
+       const curFilter = this.state.searchResult.filters.map((sum, d) => {
+        sum.push(d.cat_id)
+        return sum
+      }, [])
       this.setState({searchFilter: curFilter, searchDisplayed: this.state.searchResult.products, currentSearchCat: 'All Categories'})
     }
     this.setState({searchAll: !this.state.searchAll})
@@ -1042,7 +1042,7 @@ class Mainpage extends Component {
 
                   <br/>
                   <div>
-                    {ads1 && <img src={APP_URL + ads1} />}
+                    {ads1 && <img src={APP_URL + ads1} alt="" />}
                   </div>
                   <br/>
                 </div>
@@ -1051,7 +1051,7 @@ class Mainpage extends Component {
 
               { !this.state.searchPage &&
                   <div className="col-md-10 col-sm-8 product-content-right">
-                    {ads2 && <img src={APP_URL + ads2} className="img-fluid" />}
+                    {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                     <div className="product-breadcrumb">
                       <span>
@@ -1076,7 +1076,7 @@ class Mainpage extends Component {
 
                   { this.state.searchPage &&
                       <div className="col-md-10 col-sm-8 product-content-right">
-                        {ads2 && <img src={APP_URL + ads2} className="img-fluid" />}
+                        {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                         <div className="product-breadcrumb">
                           <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
