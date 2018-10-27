@@ -74,6 +74,8 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
       case 'postalCode': 
         changed = {zip: change.complete, billing_zip: change.value}
         break
+      default:
+        break
     }
     this.setState(changed)
   };

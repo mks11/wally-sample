@@ -94,7 +94,7 @@ class TableEditRow extends Component {
   }
 
   onQtyChange = (e) => {
-    const newvalue = parseInt(e.target.value)
+    const newvalue = parseInt(e.target.value, 10)
     this.onValueChange('final_quantity', newvalue)
   }
 

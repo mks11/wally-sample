@@ -6,7 +6,7 @@ import {
   API_REFER_FRIEND,
   API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
-  API_FORGOT_PASSWORD, API_RESET_PASSWORD
+  API_FORGOT_PASSWORD,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
