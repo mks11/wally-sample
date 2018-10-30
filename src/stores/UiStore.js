@@ -2,7 +2,7 @@ import {observable, decorate, action} from 'mobx'
 
 class UiStore {
   accountDropdown = false
-  cartDropdown = false
+  // cartDropdown = false
   categoriesDropdown = false
   backdrop = false
   backdropTop = 0
@@ -66,18 +66,18 @@ class UiStore {
 
 
   hideCartDropdown() {
-    if (!this.cartDropdown) {
-      return
-    }
+    // if (!this.cartDropdown) {
+    //   return
+    // }
     this.backdropZindex = 70
     this.backdropTop = 0
     this.backdrop = false
-    this.cartDropdown = false
+    // this.cartDropdown = false
   }
   toggleCartDropdown(state) {
     this.backdropTop = 70
     this.backdrop = state
-    this.cartDropdown = state
+    // this.cartDropdown = state
   }
 
   toggleCategoriesDropdown() {
@@ -102,7 +102,7 @@ class UiStore {
     this.backdrop = false
     this.backdropTop = 0
     this.accountDropdown = false
-    this.cartDropdown = false
+    // this.cartDropdown = false
     this.categoriesDropdown = false
   }
 
@@ -110,7 +110,7 @@ class UiStore {
 
 decorate(UiStore, {
   accountDropdown: observable,
-  cartDropdown: observable,
+  // cartDropdown: observable,
   categoriesDropdown: observable,
   topBar: observable,
   topBarClosed: observable,

@@ -519,45 +519,48 @@ class Mainpage extends Component {
 
 
   handleShowDeliveryAddressDetail = () => {
-    console.log('show?')
     this.setState({deliveryAddressDetail: true})
+    this.uiStore.backdrop = true
   }
 
   handleHideDeliveryAddressDetail = () => {
     this.setState({deliveryAddressDetail: false})
+    this.uiStore.backdrop = false
   }
 
   handleShowDeliveryTimeDetail = () => {
     this.setState({deliveryTimeDetail: true})
+    this.uiStore.backdrop = true
   }
 
   handleHideDeliveryTimeDetail = () => {
     this.setState({deliveryTimeDetail: false})
+    this.uiStore.backdrop = false
   }
 
-  toggleDeliveryTimeDropdown = () => {
-    this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
-      this.uiStore.backdrop = true
-  }
+  // toggleDeliveryTimeDropdown = () => {
+  //   this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
+  //     this.uiStore.backdrop = true
+  // }
 
-  toggleDeliveryAddressDropdown = () => {
-    this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
-    this.uiStore.backdrop = true
-  }
+  // toggleDeliveryAddressDropdown = () => {
+  //   this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
+  //   this.uiStore.backdrop = true
+  // }
 
-  hideDeliveryTimeDropdown = () => {
-    if (this.state.deliveryTimeDropdown) {
-      this.setState({deliveryTimeDropdown: false})
-      this.uiStore.backdrop = false
-    }
-  }
+  // hideDeliveryTimeDropdown = () => {
+  //   if (this.state.deliveryTimeDropdown) {
+  //     this.setState({deliveryTimeDropdown: false})
+  //     this.uiStore.backdrop = false
+  //   }
+  // }
 
-  hideDeliveryAddressDropdown = () => {
-    if (this.state.deliveryAddressDropdown) {
-      this.setState({deliveryAddressDropdown: false})
-      this.uiStore.backdrop = false
-    }
-  }
+  // hideDeliveryAddressDropdown = () => {
+  //   if (this.state.deliveryAddressDropdown) {
+  //     this.setState({deliveryAddressDropdown: false})
+  //     this.uiStore.backdrop = false
+  //   }
+  // }
 
   handleSubmitAddress = async (address) => {
     this.modalStore.showDeliveryChange('address', {
@@ -820,10 +823,13 @@ class Mainpage extends Component {
 
                 <div className="col-auto" >
                   <div className="left-column pr-3">
-                    <ClickOutside onClickOutside={this.hideDeliveryAddressDropdown} >
-                      <div className="d-flex justify-content-between"
-                        onClick={this.toggleDeliveryAddressDropdown}
-                        onMouseEnter={this.handleShowDeliveryAddressDetail} onMouseLeave={this.handleHideDeliveryAddressDetail}>
+                    {/* <ClickOutside onClickOutside={this.hideDeliveryAddressDropdown} > */}
+                    <div>
+                      <div className="d-flex justify-content-between dropdown-address"
+                        // onClick={this.toggleDeliveryAddressDropdown}
+                        onMouseEnter={this.handleShowDeliveryAddressDetail}
+                        onMouseLeave={this.handleHideDeliveryAddressDetail}
+                      >
                         <i className="fa fa-map-marker bar-icon"></i>
                         <span className={deliveryAddressDetailClass}>
                         {this.userStore.selectedDeliveryAddress && 
@@ -834,34 +840,45 @@ class Mainpage extends Component {
                           </span>
                       </div>
 
-                    <div className={deliveryAddressDropdownClass}>
+                    <div 
+                      className="dropdown-wrapper"
+                      onMouseEnter={this.handleShowDeliveryAddressDetail}
+                      onMouseLeave={this.handleHideDeliveryAddressDetail}
+                    >
+                      <div className={deliveryAddressDropdownClass}>
 
-                      <h3 className="m-0 mb-3 p-r">
-                        Delivery address
-                      </h3>
-                      <div className="scroller">
-                        <DeliveryAddressOptions
-                          title={false}
-                          button={false}
-                          lock={false}
-                          selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
-                          user={user}
-                          onUnlock={this.handleUnlockAddress}
-                          onAddNew={this.handleAddNewAddress}
-                          onSubmit={this.handleSubmitAddress}
-                          onSelect={this.handleSelectAddress}
-                          locking={false}
-                        />
+                        <h3 className="m-0 mb-3 p-r">
+                          Delivery address
+                        </h3>
+                        <div className="scroller">
+                          <DeliveryAddressOptions
+                            title={false}
+                            button={false}
+                            lock={false}
+                            selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
+                            user={user}
+                            onUnlock={this.handleUnlockAddress}
+                            onAddNew={this.handleAddNewAddress}
+                            onSubmit={this.handleSubmitAddress}
+                            onSelect={this.handleSelectAddress}
+                            locking={false}
+                          />
+                        </div>
+                        <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                       </div>
-                      <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                     </div>
-                    </ClickOutside>
+                    {/* </ClickOutside> */}
+                    </div>
                   </div>
 
                   <div className="left-column px-3">
-                    <ClickOutside onClickOutside={this.hideDeliveryTimeDropdown} >
-                      <div className="d-flex justify-content-between" onClick={this.toggleDeliveryTimeDropdown}
-                        onMouseEnter={this.handleShowDeliveryTimeDetail} onMouseLeave={this.handleHideDeliveryTimeDetail}>
+                    {/* <ClickOutside onClickOutside={this.hideDeliveryTimeDropdown} > */}
+                    <div>
+                      <div 
+                        className="d-flex justify-content-between dropdown-time"
+                        // onClick={this.toggleDeliveryTimeDropdown}
+                        onMouseEnter={this.handleShowDeliveryTimeDetail}
+                        onMouseLeave={this.handleHideDeliveryTimeDetail}>
                         <i className="fa fa-clock-o bar-icon"></i>
                         <span className={deliveryTimeDetailClass}>
                           {this.userStore.selectedDeliveryTime !== null ?
@@ -873,26 +890,32 @@ class Mainpage extends Component {
                         </span>
                       </div>
 
+                      <div
+                        className="dropdown-wrapper"
+                        onMouseEnter={this.handleShowDeliveryTimeDetail}
+                        onMouseLeave={this.handleHideDeliveryTimeDetail}
+                      >
+                        <div className={deliveryTimeDropdownClass}>
+                          <h3 className="m-0 mb-3 p-r">
+                            Time
+                          </h3>
+                          <div className="scroller">
+                            <DeliveryTimeOptions
+                              title={false}
+                              lock={false}
+                              data={this.state.deliveryTimes}
+                              selected={this.userStore.selectedDeliveryTime}
+                              isAddressSelected={true}
+                              onSelectTime={this.handleSelectTime}
+                            />
+                          </div>
 
-                      <div className={deliveryTimeDropdownClass}>
-                      <h3 className="m-0 mb-3 p-r">
-                        Time
-                      </h3>
-                      <div className="scroller">
-                        <DeliveryTimeOptions
-                          title={false}
-                          lock={false}
-                          data={this.state.deliveryTimes}
-                          selected={this.userStore.selectedDeliveryTime}
-                          isAddressSelected={true}
-                          onSelectTime={this.handleSelectTime}
-                        />
+                          <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
+                        </div>
                       </div>
 
-                      <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
-                      </div>
-
-                    </ClickOutside>
+                    {/* </ClickOutside> */}
+                    </div>
 
                   </div>
 
@@ -946,51 +969,62 @@ class Mainpage extends Component {
                   </div>
                   <div className="media-right">
 
-                    <ClickOutside onClickOutside={e => this.uiStore.hideCartDropdown()}>
-                      <div className="btn-group dropdown-cart d-none d-md-block" onMouseEnter={this.handleShowCartDropdown} 
+                    <div>
+                      <div className="btn-group dropdown-cart d-none d-md-block" 
+                      onMouseEnter={this.handleShowCartDropdown} 
+                      onMouseLeave={this.handleHideCartDropdown}
                       >
                         <div className={buttonCart}>
                           <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                         </div>
 
-                        <div className={cartDropdownClass} aria-labelledby="dropdownMenuButton">
-                          { (cartItems && cartItems.length > 0) ?
-                              <div>
-                                <h3 className="px-3">Orders:</h3>
-                                <div className="order-summary">
-                                  <div className="order-scroll px-3">
-                                    { cartItems.map((c, i) => (
-                                      <div className="item mt-3 pb-2" key={i}>
-                                        <div className="item-left">
-                                          <h4 className="item-name">{c.product_name}</h4>
-                                          <span className="item-detail mb-1">{c.packaging_name}</span>
-                                          <div className="item-link">
-                                            <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
-                                            <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
+                        <div 
+                          className="dropdown-wrapper"
+                          onMouseEnter={this.handleShowCartDropdown}
+                          onMouseLeave={this.handleHideCartDropdown}
+                        >
+                          <div
+                            className={cartDropdownClass}
+                            aria-labelledby="dropdownMenuButton"
+                          >
+                            { (cartItems && cartItems.length > 0) ?
+                                <div>
+                                  <h3 className="px-3">Orders:</h3>
+                                  <div className="order-summary">
+                                    <div className="order-scroll px-3">
+                                      { cartItems.map((c, i) => (
+                                        <div className="item mt-3 pb-2" key={i}>
+                                          <div className="item-left">
+                                            <h4 className="item-name">{c.product_name}</h4>
+                                            <span className="item-detail mb-1">{c.packaging_name}</span>
+                                            <div className="item-link">
+                                              <a className="text-blue mr-2" onClick={e => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
+                                              <a className="text-dark-grey" onClick={e => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
+                                            </div>
+                                          </div>
+                                          <div className="item-right">
+                                            <h4>x{c.customer_quantity}</h4>
+                                            <span className="item-price">{formatMoney(c.total/100)}</span>
                                           </div>
                                         </div>
-                                        <div className="item-right">
-                                          <h4>x{c.customer_quantity}</h4>
-                                          <span className="item-price">{formatMoney(c.total/100)}</span>
-                                        </div>
-                                      </div>
 
-                                    ))}
+                                      ))}
+                                    </div>
+                                    <div className="item-total px-3">
+                                      <span>Total</span>
+                                      <span>{formatMoney(cartSubtotal)}</span>
+                                    </div>
                                   </div>
-                                  <div className="item-total px-3">
-                                    <span>Total</span>
-                                    <span>{formatMoney(cartSubtotal)}</span>
-                                  </div>
+                                  <button onClick={e => this.handleCheckout()} className="btn mx-3 w-90 btn-main active">CHECKOUT</button>
                                 </div>
-                                <button onClick={e => this.handleCheckout()} className="btn mx-3 w-90 btn-main active">CHECKOUT</button>
-                              </div>
-                              : 
-                              <span className="px-3">No items in cart</span>
-                          }
+                                : 
+                                <span className="px-3">No items in cart</span>
+                            }
 
+                          </div>
                         </div>
                       </div>
-                    </ClickOutside>
+                    </div>
                   </div>
                 </div>
               </div>

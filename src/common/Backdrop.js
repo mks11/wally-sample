@@ -10,10 +10,8 @@ class Backdrop extends Component {
     }
     return (
       <div className={className}>
-        <div className="backdrop white" onClick={e => uiStore.hideAllDropdown()}>
-        </div>
-        <div style={{top: uiStore.backdropTop+'px', zIndex: uiStore.backdropZindex}} className="backdrop" onClick={e => uiStore.hideAllDropdown()}>
-        </div>
+        <div className="backdrop white" onClick={e => uiStore.hideAllDropdown()}></div>
+        <div style={{top: uiStore.backdropTop+'px', zIndex: uiStore.backdropZindex}} className="backdrop" onClick={e => uiStore.hideAllDropdown()}></div>
       </div>
     );
   }
