@@ -151,7 +151,7 @@ class ProductList extends Component {
           <Button className="big-arrow right-arrow" />
         }
         <div className="container-fluid">
-          <div className="row flex-row flex-nowrap">
+          <div className={`row flex-row ${mode === 'limit' ? 'flex-nowrap' : ''}`} >
             { display.products.map((p, i) => {
               return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
             }
