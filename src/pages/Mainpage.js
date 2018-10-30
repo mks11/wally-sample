@@ -536,30 +536,6 @@ class Mainpage extends Component {
     this.uiStore.backdrop = false
   }
 
-  // toggleDeliveryTimeDropdown = () => {
-  //   this.setState({deliveryTimeDropdown: !this.state.deliveryTimeDropdown})
-  //     this.uiStore.backdrop = true
-  // }
-
-  // toggleDeliveryAddressDropdown = () => {
-  //   this.setState({deliveryAddressDropdown: !this.state.deliveryAddressDropdown})
-  //   this.uiStore.backdrop = true
-  // }
-
-  // hideDeliveryTimeDropdown = () => {
-  //   if (this.state.deliveryTimeDropdown) {
-  //     this.setState({deliveryTimeDropdown: false})
-  //     this.uiStore.backdrop = false
-  //   }
-  // }
-
-  // hideDeliveryAddressDropdown = () => {
-  //   if (this.state.deliveryAddressDropdown) {
-  //     this.setState({deliveryAddressDropdown: false})
-  //     this.uiStore.backdrop = false
-  //   }
-  // }
-
   handleSubmitAddress = async (address) => {
     this.modalStore.showDeliveryChange('address', {
       address,
@@ -821,10 +797,8 @@ class Mainpage extends Component {
 
                 <div className="col-auto" >
                   <div className="left-column pr-3">
-                    {/* <ClickOutside onClickOutside={this.hideDeliveryAddressDropdown} > */}
                     <div>
                       <div className="d-flex justify-content-between dropdown-address"
-                        // onClick={this.toggleDeliveryAddressDropdown}
                         onMouseEnter={this.handleShowDeliveryAddressDetail}
                         onMouseLeave={this.handleHideDeliveryAddressDetail}
                       >
@@ -838,43 +812,40 @@ class Mainpage extends Component {
                           </span>
                       </div>
 
-                    <div 
-                      className="dropdown-wrapper"
-                      onMouseEnter={this.handleShowDeliveryAddressDetail}
-                      onMouseLeave={this.handleHideDeliveryAddressDetail}
-                    >
-                      <div className={deliveryAddressDropdownClass}>
+                      <div 
+                        className="dropdown-wrapper"
+                        onMouseEnter={this.handleShowDeliveryAddressDetail}
+                        onMouseLeave={this.handleHideDeliveryAddressDetail}
+                      >
+                        <div className={deliveryAddressDropdownClass}>
 
-                        <h3 className="m-0 mb-3 p-r">
-                          Delivery address
-                        </h3>
-                        <div className="scroller">
-                          <DeliveryAddressOptions
-                            title={false}
-                            button={false}
-                            lock={false}
-                            selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
-                            user={user}
-                            onUnlock={this.handleUnlockAddress}
-                            onAddNew={this.handleAddNewAddress}
-                            onSubmit={this.handleSubmitAddress}
-                            onSelect={this.handleSelectAddress}
-                            locking={false}
-                          />
+                          <h3 className="m-0 mb-3 p-r">
+                            Delivery address
+                          </h3>
+                          <div className="scroller">
+                            <DeliveryAddressOptions
+                              title={false}
+                              button={false}
+                              lock={false}
+                              selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
+                              user={user}
+                              onUnlock={this.handleUnlockAddress}
+                              onAddNew={this.handleAddNewAddress}
+                              onSubmit={this.handleSubmitAddress}
+                              onSelect={this.handleSelectAddress}
+                              locking={false}
+                            />
+                          </div>
+                          <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                         </div>
-                        <button className={submitAddressClass} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
                       </div>
-                    </div>
-                    {/* </ClickOutside> */}
                     </div>
                   </div>
 
                   <div className="left-column px-3">
-                    {/* <ClickOutside onClickOutside={this.hideDeliveryTimeDropdown} > */}
                     <div>
                       <div 
                         className="d-flex justify-content-between dropdown-time"
-                        // onClick={this.toggleDeliveryTimeDropdown}
                         onMouseEnter={this.handleShowDeliveryTimeDetail}
                         onMouseLeave={this.handleHideDeliveryTimeDetail}>
                         <i className="fa fa-clock-o bar-icon"></i>
@@ -911,8 +882,6 @@ class Mainpage extends Component {
                           <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                         </div>
                       </div>
-
-                    {/* </ClickOutside> */}
                     </div>
 
                   </div>
@@ -968,11 +937,12 @@ class Mainpage extends Component {
                   <div className="media-right">
 
                     <div>
-                      <div className="btn-group dropdown-cart d-none d-md-block" 
-                      onMouseEnter={this.handleShowCartDropdown} 
-                      onMouseLeave={this.handleHideCartDropdown}
-                      >
-                        <div className={buttonCart}>
+                      <div className="btn-group dropdown-cart d-none d-md-block" >
+                        <div
+                          className={buttonCart}
+                          onMouseEnter={this.handleShowCartDropdown} 
+                          onMouseLeave={this.handleHideCartDropdown}
+                        >
                           <i className="fa fa-shopping-bag"></i><span><strong>{cartCount} {cartCount > 1 ? 'Items' : 'Item'}</strong></span>
                         </div>
 

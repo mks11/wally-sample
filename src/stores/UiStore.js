@@ -64,24 +64,14 @@ class UiStore {
     this.categoriesDropdown = false
   }
 
-
-  hideCartDropdown() {
-    // if (!this.cartDropdown) {
-    //   return
-    // }
-    this.backdropZindex = 70
-    this.backdropTop = 0
-    this.backdrop = false
-    // this.cartDropdown = false
-  }
   toggleCartDropdown(state) {
     this.backdropTop = 70
     this.backdrop = state
-    // this.cartDropdown = state
+    this.cartDropdown = state
   }
 
   toggleCategoriesDropdown() {
-     this.backdropTop = 70
+    this.backdropTop = 70
     this.backdrop = !this.backdrop
     this.categoriesDropdown = !this.categoriesDropdown
   }
@@ -132,7 +122,6 @@ decorate(UiStore, {
   toggleCategoriesDropdown: action,
   hideAccountDropdown: action,
   hideCategoriesDropdown: action,
-  hideCartDropdown: action,
   hideAllDropdown: action,
 })
 
