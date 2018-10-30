@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { validateEmail, connect } from '../utils'
-import { APP_URL, INSTAGRAM, FACEBOOK} from '../config'
+import { INSTAGRAM, FACEBOOK} from '../config'
 
 class Footer extends Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class Footer extends Component {
           <div className="row">
             <div className="col-auto col-sm-2">
               <a href="/">
-                <img className="footer-logo" src={"/images/logo.png"}/>
+                <img className="footer-logo" src={"/images/logo.png"} alt="" />
               </a>
             </div>
             <div className="col col-sm-10">

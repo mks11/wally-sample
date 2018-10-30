@@ -37,7 +37,7 @@ class TableEditRow extends Component {
   onValueChange(property, newvalue) {
     const { item } = this.state
 
-    if (newvalue.length || newvalue > 0 || typeof(newvalue) == typeof(true)) {
+    if (newvalue.length || newvalue > 0 || typeof(newvalue) === typeof(true)) {
       const { [property.toString()]: omit, ...rest } = item
       this.setState({
         item: {
@@ -94,7 +94,7 @@ class TableEditRow extends Component {
   }
 
   onQtyChange = (e) => {
-    const newvalue = parseInt(e.target.value)
+    const newvalue = parseInt(e.target.value, 10)
     this.onValueChange('final_quantity', newvalue)
   }
 

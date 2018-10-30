@@ -1,6 +1,5 @@
 import {observable, decorate, action } from 'mobx'
 import { 
-  API_HELP_GET_QUESTION, 
   API_HELP_GET_HELP_TOPICS, 
   API_HELP_GET_CONTACT,
   API_HELP_SEARCH,

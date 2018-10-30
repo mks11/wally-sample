@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
   import FacebookLogin from 'react-facebook-login';
 
@@ -81,7 +81,7 @@ class LoginModal extends Component {
   }
 
   handleEmailChange(e) {
-    this.setState({email: e.target.value})
+    this.setState({email: e.target.value.toLowerCase()})
     e.preventDefault()
   }
 

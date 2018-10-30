@@ -172,8 +172,8 @@ class TopNav extends Component {
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
-                  <img className="logo-text-desktop" src='/images/text-logo.png'/>
-                  <img className="logo-text-mobile" src='/images/text-logo.png'/>
+                  <img className="logo-text-desktop" src='/images/text-logo.png' alt="" />
+                  <img className="logo-text-mobile" src='/images/text-logo.png' alt="" />
                 </a>
               </div>
               <div className="col-auto ml-auto d-none d-md-block">
@@ -189,14 +189,14 @@ class TopNav extends Component {
                                   <span className="navbar-toggler-icon account-icon"></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                  <a className="dropdown-item lg" href="#"><strong>Hi {name}</strong></a>
+                                  <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
                                   <a className="dropdown-item">Store Credit ({formatMoney(storeCredit/100)})</a>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item" href="#">Order History</Link>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item" href="#">Account Settings</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
                                   <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item" href="#">About</Link>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item" href="#">Blog</Link>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item" href="#">Help</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
                                   <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>

@@ -76,7 +76,7 @@ class ManageBlog extends Component {
             { blog && blog.map(item => (
               <Row className="blog-item" key={item._id}>
                 <Col>
-                  <img className="img-fluid" src={item.image_ref} />
+                  <img className="img-fluid" src={item.image_ref} alt="" />
                 </Col>
                 <Col>
                   <h2 className="m-0 p-0">{item.title}</h2>

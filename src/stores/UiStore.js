@@ -1,7 +1,5 @@
 import {observable, decorate, action} from 'mobx'
 
-let index = 0
-
 class UiStore {
   accountDropdown = false
   cartDropdown = false

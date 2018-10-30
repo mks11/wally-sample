@@ -56,7 +56,7 @@ class About extends Component {
             { this.state.items.map((item, key) => (
               <div className="row blog-item" key={key}>
                 <div className="col">
-                  <img className="img-fluid" src={item.image_ref} />
+                  <img className="img-fluid" src={item.image_ref} alt="" />
                 </div>
                 <div className="col">
                   <h2 className="m-0 p-0">{item.title}</h2>

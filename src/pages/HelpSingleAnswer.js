@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import BoxOrder from '../common/page/help/BoxOrder';
 import Title from '../common/page/Title';
 import PropTypes from 'prop-types';
 import { connect } from '../utils'
@@ -42,7 +41,7 @@ class HelpSingle extends Component {
 
 
   render(){
-    let qClass = 'list-bordered list-group-item d-flex justify-content-between align-items-center'
+    // let qClass = 'list-bordered list-group-item d-flex justify-content-between align-items-center'
     return (
       <div className="app">
         <Title content="Help"/>

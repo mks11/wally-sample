@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import qs from 'qs'
 import { connect } from '../utils'
 

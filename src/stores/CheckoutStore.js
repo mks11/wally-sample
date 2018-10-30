@@ -7,8 +7,6 @@ API_CREATE_ORDER,
 import axios from 'axios'
 import moment from 'moment'
 
-let index = 0
-
 class CheckoutStore {
   cart  = null
   order = null

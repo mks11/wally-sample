@@ -1,35 +1,27 @@
 import React from 'react';
-import {render} from 'react-dom';
-
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from 'reactstrap';
+import { Input, FormGroup, Label } from 'reactstrap';
 import type {InjectedProps} from 'react-stripe-elements';
 
 import {
-  CardElement,
   CardNumberElement,
   CardExpiryElement,
   CardCVCElement,
   PostalCodeElement,
-  PaymentRequestButtonElement,
-  IbanElement,
-  IdealBankElement,
-  StripeProvider,
-  Elements,
   injectStripe,
 } from 'react-stripe-elements';
 
 const handleBlur = () => {
   console.log('[blur]');
 };
-const handleClick = () => {
-  console.log('[click]');
-};
+// const handleClick = () => {
+//   console.log('[click]');
+// };
 const handleFocus = () => {
   console.log('[focus]');
 };
-const handleReady = () => {
-  console.log('[ready]');
-};
+// const handleReady = () => {
+//   console.log('[ready]');
+// };
 
 const createOptions = (fontSize: string, padding: ?string) => {
   return {
@@ -81,6 +73,8 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
         break
       case 'postalCode': 
         changed = {zip: change.complete, billing_zip: change.value}
+        break
+      default:
         break
     }
     this.setState(changed)

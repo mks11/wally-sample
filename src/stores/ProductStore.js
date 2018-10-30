@@ -5,8 +5,6 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 
-let index = 0
-
 class ProductStore {
   // modal state open
   open = false
@@ -70,18 +68,18 @@ class ProductStore {
     const res = await axios.get(`${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     const data = res.data
 
-    let mode = 'all'
-    if (!id || id.length <= 3) {
-      mode = 'limit'
-    }
+    // let mode = 'all'
+    // if (!id || id.length <= 3) {
+    //   mode = 'limit'
+    // }
 
     this.main_display = data.main_products
-    if (mode === 'limit' && this.main_display.length > 0) {
-      for (const i in this.main_display) {
-        this.main_display[i].products = this.limitDisplay(this.main_display[i].products) 
-      }
-    }
-    console.log('data', data)
+    // if (mode === 'limit' && this.main_display.length > 0) {
+    //   for (const i in this.main_display) {
+    //     this.main_display[i].products = this.limitDisplay(this.main_display[i].products) 
+    //   }
+    // }
+    // console.log('data', data)
 
     this.path = data.path
     this.sidebar = data.sidebar

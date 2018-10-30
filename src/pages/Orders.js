@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Title from '../common/page/Title'
-import { connect, formatMoney,capitalizeFirstLetter } from '../utils'
+import { connect, formatMoney } from '../utils'
 import moment from 'moment'
 
 import  ReportModal from './orders/ReportModal'
@@ -54,7 +54,6 @@ class Orders extends Component {
   }
 
   render() {
-    const store = this.props.store
     return (
       <div className="App">
         <Title content="Orders" />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Modal, ModalBody, Input } from 'reactstrap';
 import { connect } from '../utils'
 
 class ZipModal extends Component {
