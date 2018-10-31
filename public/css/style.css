@@ -2010,7 +2010,7 @@ a {
 
 .dropdown-menu.dropdown-large {
   width: 500px;
-  height: 300px;
+  max-height: calc(100vh - 200px);
 }
 
 .blog-item {
@@ -2059,9 +2059,9 @@ color:#6e8692
 }
 
 .scroller {
-    max-height: 139px;
+    max-height: calc(50vh - 139px);
     margin-bottom:8px;
-    min-height: 139px;
+    min-height: calc(50vh - 139px);
     overflow: scroll;
 }
 
