@@ -156,6 +156,12 @@ class Homepage extends Component {
       </button>
     )
 
+    const ButtonExplore = () => (
+      <button onClick={this.handleStart} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
+        EXPLORE
+      </button>
+    )
+
     const isMobile = this.state.width <= 500;
     const isMobileHoriz = (this.state.width > 500 && this.state.width <= 800);
     let heroClass = "landing-section aw-hero"
@@ -205,6 +211,8 @@ class Homepage extends Component {
                 }
 
                 {this.state.heroStatus === 'success' && <ButtonStartShopping/>}
+
+                {this.state.heroStatus === 'invalid_zip_success' && <ButtonExplore/>}
               </div>
             </div>
           </div>
