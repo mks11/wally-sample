@@ -597,9 +597,9 @@ class Mainpage extends Component {
     }
 
     const response = await this.userStore.saveAddress(dataMap)
-    this.userStore.setUserData(response)
+    const address = this.userStore.selectedDeliveryAddress
+    this.handleSubmitAddress(address)
     return response
-
   }
 
   formatAddress(street_address) {

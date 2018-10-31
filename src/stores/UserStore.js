@@ -138,6 +138,7 @@ class UserStore {
 
   async saveAddress(data) {
     const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth())
+    this.updateSelectedDeliveryAddress(res.data)
     this.setUserData(res.data)
     return res.data
   }
@@ -157,6 +158,25 @@ class UserStore {
     const res = await axios.post(API_PAYMENT_NEW, data, this.getHeaderAuth())
     this.setUserData(res.data)
     return res.data
+  }
+
+  updateSelectedDeliveryAddress(newUser) {
+    const oldAddresses = this.user.addresses
+    const newAddresses = newUser.addresses
+
+    function comparer(otherArray){
+      return function(current){
+        return otherArray.filter(function(other){
+          return other.address_id == current.address_id
+        }).length == 0;
+      }
+    }
+    
+    let addressOldFilter = oldAddresses.filter(comparer(newAddresses))
+    let addressNewFilter = newAddresses.filter(comparer(oldAddresses))
+    
+    let diff = addressOldFilter.concat(addressNewFilter)
+    this.selectedDeliveryAddress = diff[0]
   }
 
   readStorage() {
@@ -202,11 +222,8 @@ class UserStore {
 
     for (const address of addresses) {
       const user = await this.saveAddress(address, this.getHeaderAuth())
-      console.log('menggila', address.address_id, this.selectedDeliveryAddress.address_id)
       if (address.address_id === this.selectedDeliveryAddress.address_id) {
         const added = user.addresses[user.addresses.length - 1]
-        console.log('masuk dek')
-        console.log('added', added)
         this.setDeliveryAddress(added)
       }
     }
