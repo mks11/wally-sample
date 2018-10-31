@@ -391,6 +391,7 @@ class Mainpage extends Component {
 
 
   handleShowCartDropdown = () => {
+    this.uiStore.hideAllDropdown()
     this.uiStore.toggleCartDropdown(true)
   }
 
@@ -517,6 +518,7 @@ class Mainpage extends Component {
 
 
   handleShowDeliveryAddressDetail = () => {
+    this.uiStore.hideAllDropdown()
     this.setState({deliveryAddressDetail: true})
     this.uiStore.backdrop = true
   }
@@ -527,6 +529,7 @@ class Mainpage extends Component {
   }
 
   handleShowDeliveryTimeDetail = () => {
+    this.uiStore.hideAllDropdown()
     this.setState({deliveryTimeDetail: true})
     this.uiStore.backdrop = true
   }

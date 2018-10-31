@@ -1308,7 +1308,7 @@ span.dropdown-item.lg {
 border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid #ececec;}
 .dropdown-cart .dropdown-menu::after{border-bottom:20px solid #fff;top:-18px;}
 .dropdown-cart h3{font-size: 24px;font-weight: 700;}
-.order-scroll{max-height:300px;overflow-y:auto;padding-right: 10px;}
+.order-scroll{max-height:calc(50vh - 100px);overflow-y:auto;padding-right: 10px;}
 
 /* .right-column{padding-left:50px;} */
 
