@@ -288,6 +288,10 @@ class UserStore {
     return res.data
   }
 
+  getAddressById(id) {
+    return this.user ? this.user.addresses.find(item => item.address_id === id) : null
+  }
+
   setDeliveryAddress(data) {
     this.selectedDeliveryAddress = data
     this.setDeliveryData()
@@ -444,7 +448,9 @@ decorate(UserStore, {
   setDeliveryTime: action,
   loadFakeUser: action,
   addFakeAddress: action,
-  adjustDeliveryTimes: action
+  adjustDeliveryTimes: action,
+
+  getAddressById: action
 })
 
 

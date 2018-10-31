@@ -226,7 +226,7 @@ class Mainpage extends Component {
   componentDidMount() {
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress 
+        const selectedAddress = this.userStore.selectedDeliveryAddress || this.userStore.getAddressById(this.userStore.user.preferred_address)
         if (selectedAddress) {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
@@ -830,7 +830,13 @@ class Mainpage extends Component {
                               title={false}
                               button={false}
                               lock={false}
-                              selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
+                              selected={
+                                this.userStore.selectedDeliveryAddress 
+                                  ? this.userStore.selectedDeliveryAddress.address_id
+                                  : this.userStore.user
+                                    ? this.userStore.user.preferred_address
+                                    : null
+                                  }
                               user={user}
                               onUnlock={this.handleUnlockAddress}
                               onAddNew={this.handleAddNewAddress}
@@ -881,7 +887,7 @@ class Mainpage extends Component {
                               onSelectTime={this.handleSelectTime}
                             />
                           </div>
-
+                          <div className="font-italic mb-1 text-center">Order by 2:00PM for same day delivery</div>
                           <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                         </div>
                       </div>
