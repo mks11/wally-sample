@@ -228,7 +228,7 @@ class Mainpage extends Component {
     ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress 
+        const selectedAddress = this.userStore.selectedDeliveryAddress || this.userStore.getAddressById(this.userStore.user.preferred_address)
         if (selectedAddress) {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
@@ -393,6 +393,7 @@ class Mainpage extends Component {
 
 
   handleShowCartDropdown = () => {
+    this.uiStore.hideAllDropdown()
     this.uiStore.toggleCartDropdown(true)
   }
 
@@ -519,6 +520,7 @@ class Mainpage extends Component {
 
 
   handleShowDeliveryAddressDetail = () => {
+    this.uiStore.hideAllDropdown()
     this.setState({deliveryAddressDetail: true})
     this.uiStore.backdrop = true
   }
@@ -529,6 +531,7 @@ class Mainpage extends Component {
   }
 
   handleShowDeliveryTimeDetail = () => {
+    this.uiStore.hideAllDropdown()
     this.setState({deliveryTimeDetail: true})
     this.uiStore.backdrop = true
   }
@@ -596,9 +599,9 @@ class Mainpage extends Component {
     }
 
     const response = await this.userStore.saveAddress(dataMap)
-    this.userStore.setUserData(response)
+    const address = this.userStore.selectedDeliveryAddress
+    this.handleSubmitAddress(address)
     return response
-
   }
 
   formatAddress(street_address) {
@@ -829,7 +832,13 @@ class Mainpage extends Component {
                               title={false}
                               button={false}
                               lock={false}
-                              selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
+                              selected={
+                                this.userStore.selectedDeliveryAddress 
+                                  ? this.userStore.selectedDeliveryAddress.address_id
+                                  : this.userStore.user
+                                    ? this.userStore.user.preferred_address
+                                    : null
+                                  }
                               user={user}
                               onUnlock={this.handleUnlockAddress}
                               onAddNew={this.handleAddNewAddress}
@@ -880,7 +889,7 @@ class Mainpage extends Component {
                               onSelectTime={this.handleSelectTime}
                             />
                           </div>
-
+                          <div className="font-italic mb-1 text-center">Order by 2:00PM for same day delivery</div>
                           <button className={submitTimeClass} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                         </div>
                       </div>
