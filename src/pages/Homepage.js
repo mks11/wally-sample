@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Delivered exclusively in reusable packaging, picked up again for reuse. Currently in beta in select zip codes.',
+      heroDescription: 'Currently in beta in select zip codes.',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -213,8 +213,11 @@ class Homepage extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h2>Conveniently sustainable, deliciously local, organic</h2>
-              <p>The Wally Shop is your sustainable grocery solution. Order your favorite local, organic produce and have it delivered same-day in all reusable packaging. This means no plastic packaging. Ever. You take care of the earth - we'll take care of the groceries.</p>
+              <h2>It's what's on the inside that counts.</h2>
+              <p></p>
+              <p>The Wally Shop is your sustainable grocery solution. Order your favorite local, organic produce and have it delivered same-day in all reusable packaging. This means no plastic packaging. Ever. 
+              Return your packaging during a future delivery, and we'll clean and reuse it.</p>
+              <p>You take care of the earth - we'll take care of the groceries.</p>
             </div>
 
             <div className="row">
