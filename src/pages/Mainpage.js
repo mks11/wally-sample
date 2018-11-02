@@ -228,7 +228,7 @@ class Mainpage extends Component {
     ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress || this.userStore.getAddressById(this.userStore.user.preferred_address)
+        const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
         if (selectedAddress) {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
