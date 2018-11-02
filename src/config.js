@@ -1,6 +1,6 @@
 //w,export const BASE_URL = "http://api.tws.rizkifuad.com"
 export const BASE_URL = "https://the-wally-shop.herokuapp.com"
-// export const BASE_URL = "localhost:4001"
+// export const BASE_URL = "https://065c2f15.ngrok.io"
 
 export const API_GET_USER = BASE_URL + "/api/user"
 export const API_EDIT_USER = BASE_URL + "/api/user"
