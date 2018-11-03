@@ -65,7 +65,7 @@ class CheckoutStore {
 
     this.cart = res.data
     if (order_summary) {
-      this.getOrderSummary(auth)
+      this.getOrderSummary(auth, delivery)
     }
   }
 

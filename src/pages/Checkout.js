@@ -103,7 +103,6 @@ class Checkout extends Component {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
-
       })
 
       dataOrder = data
@@ -140,8 +139,10 @@ class Checkout extends Component {
       return
     }
 
-    this.setState({addressError: false})
-    this.setState({timeDropdown: !this.state.timeDropdown})
+    this.setState({
+      addressError: false,
+      timeDropdown: !this.state.timeDropdown
+    })
   }
 
   hideTimeDropdown(e) {
