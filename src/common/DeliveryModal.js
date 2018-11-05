@@ -62,6 +62,7 @@ class DeliveryModal extends Component {
       }
 
       this.userStore.addFakeAddress(dataMap)
+      this.handleSubmitAddress(dataMap)
       const fakeUser =  this.userStore.loadFakeUser()
       this.setState({fakeUser})
 
@@ -72,7 +73,6 @@ class DeliveryModal extends Component {
     const address = this.userStore.selectedDeliveryAddress
     this.handleSubmitAddress(address)
     return response
-
   }
 
 
@@ -124,6 +124,7 @@ class DeliveryModal extends Component {
                     selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                     user={user}
                     locking={true}
+                    button={!this.state.isAddressSelected}
                     onUnlock={this.handleUnlockAddress}
                     onAddNew={this.handleAddNewAddress}
                     onSubmit={this.handleSubmitAddress}
