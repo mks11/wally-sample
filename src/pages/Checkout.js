@@ -86,7 +86,6 @@ class Checkout extends Component {
         this.loadData()
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
-          console.log(selectedAddress)
           this.setState({selectedAddress: selectedAddress._id})
         }
 
@@ -99,7 +98,8 @@ class Checkout extends Component {
 
   loadData() {
     let dataOrder
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
+    const deliveryData = this.userStore.getDeliveryParams()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
@@ -108,7 +108,7 @@ class Checkout extends Component {
       dataOrder = data
       return data
     }).then(data => {
-      return this.checkoutStore.getDeliveryTimes(this.state.selectedAddress)
+      return this.checkoutStore.getDeliveryTimes(deliveryData)
     }).then(times => {
       this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
     }).catch((e) => {
@@ -187,7 +187,6 @@ class Checkout extends Component {
 
       this.setState({deliveryTimes, lockAddress: true, addressError: false})
     }).catch((e) => {
-      console.log(e.response)
       if (e.response.data.error) {
         this.setState({invalidSelectAddress: e.response.data.error.message})
       }
@@ -331,7 +330,6 @@ class Checkout extends Component {
 
 
   handleConfirmAddress(e) {
-    console.log('cook')
     this.setState({invalidAddressText: null})
     if (!this.state.newStreetAddress) {
       this.setState({invalidAddressText: 'Street address cannot be empty'})

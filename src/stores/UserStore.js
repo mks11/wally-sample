@@ -192,7 +192,6 @@ class UserStore {
     if (delivery) {
       // console.log('gent in')
       const deliveryData = JSON.parse(delivery)
-      // console.log('deliveryData')
       this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
     }
@@ -368,7 +367,6 @@ class UserStore {
   }
 
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
-        console.log("adjusting", {delivery_date, deliveryTimes})
     if (delivery_date && deliveryTimes && this.selectedDeliveryTime) {
       const currentDate = this.selectedDeliveryTime.date
       const date = moment(delivery_date).format('YYYY-MM-DD')
@@ -389,9 +387,7 @@ class UserStore {
           data.day = day
 
           this.setDeliveryTime(data)
-
         }
-
       }
     }
   }

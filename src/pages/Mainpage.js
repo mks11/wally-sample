@@ -545,6 +545,7 @@ class Mainpage extends Component {
       address,
       // times
     })
+    this.userStore.setDeliveryAddress(address)
     // this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
     //   const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
     //   this.setState({selectedAddressChanged: false})
@@ -560,6 +561,7 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
+      this.userStore.setDeliveryTime(data)
     } else {
       this.setState({selectedTimeChanged: false})
     }
