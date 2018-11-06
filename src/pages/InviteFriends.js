@@ -17,11 +17,11 @@ class InviteFriends extends Component {
 
   render() {
     return (
-      <section className="page-section bg-fruitfull" style={{backgroundPositionY: '115px'}}>
+      <section className="page-section bg-fruitfull">
         <div className="container-fluid">
           <div class="row">
             <div class="col-md-4">
-              <h1 className="text-black">Shop package-free groceries</h1>
+              <h1 className="text-white">Shop package-free groceries</h1>
             </div>
             <div class="col-md-6">
               <div className="card">

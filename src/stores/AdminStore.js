@@ -15,7 +15,7 @@ import {
   API_ADMIN_POST_BLOG_POST,
 } from '../config'
 import axios from 'axios'
-// import moment from 'moment'
+import moment from 'moment'
 
 class AdminStore {
   timeframes = []
@@ -31,8 +31,8 @@ class AdminStore {
   packagings = []
 
   async getTimeFrames() {
-    // const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const time = '2018-10-22 15:30:00'
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    // const time = '2018-11-04 15:30:00'
     const res = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`)
     this.timeframes = res.data.timeframes
   }

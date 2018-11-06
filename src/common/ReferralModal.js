@@ -43,7 +43,7 @@ class ReferralModal extends Component {
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">Who wants brownie points?</h3>
             <span className="mb-1">
-            For every friend you refer, you’ll get 15% off once they order, and they’ll get 15% off their first month of deliveries if they sign up within 30 days.
+            For every friend you refer, you’ll get 15% off once they order, and they’ll get 15% off their first month of deliveries.
             </span>
             <p className="mb-5 text-center"><small>Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleToggle}>here</Link></small></p>
             <div className="referral-wrap p-2">

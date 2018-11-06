@@ -1154,12 +1154,13 @@ a.view-all{
 }
 
 section.page-section.bg-fruitfull {
-  background: url('../images/pear_blanket.jpg');
+  background: url('../images/wally-home-banner-wood.jpg');
   /*min-height: 800px;*/
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
   margin: 0 auto;
-  padding-top:10px;
+  padding-top:0px;
 }
 
 .card {
