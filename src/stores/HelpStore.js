@@ -27,7 +27,7 @@ class HelpStore{
 
   async getQuestions(id){
     const resp = await axios(`${API_HELP_GET_QUESTION_SINGLE}${id}`)
-    this.questions = resp.data
+    this.questions = resp.data.questions
     return this.questions
   }
 
