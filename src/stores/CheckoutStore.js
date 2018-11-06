@@ -34,8 +34,6 @@ class CheckoutStore {
     url += '&delivery_zip=' + delivery.zip
     url += '&delivery_date=' + delivery.date
 
-
-    console.log({auth})
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.get(url)
       localStorage.setItem('cart', JSON.stringify(res.data))
@@ -65,7 +63,7 @@ class CheckoutStore {
 
     this.cart = res.data
     if (order_summary) {
-      this.getOrderSummary(auth)
+      this.getOrderSummary(auth, delivery)
     }
   }
 
@@ -78,7 +76,6 @@ class CheckoutStore {
 
   async createOrder(data, auth) {
     const res = await axios.post(`${API_CREATE_ORDER}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, data, auth)
-    console.log('order', res.data)
     return res.data  
   }
 

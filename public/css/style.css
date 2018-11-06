@@ -1766,6 +1766,19 @@ a {
     padding: 20px 30px;
   }
 
+  .modal-dialog {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .modal-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+  }
+
 }
 
 .top-bar {

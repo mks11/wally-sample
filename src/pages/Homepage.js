@@ -34,6 +34,7 @@ class Homepage extends Component {
     this.handleValidateZip = this.handleValidateZip.bind(this)
     this.handleSubscribe = this.handleSubscribe.bind(this)
     this.handleStart = this.handleStart.bind(this)
+    this.handleExplore = this.handleExplore.bind(this)
     this.zipStore = this.props.store.zip
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
@@ -113,6 +114,11 @@ class Homepage extends Component {
     e.preventDefault()
   }
 
+  handleExplore(e) {
+    this.routing.push('/main')
+    e.preventDefault()
+  }
+
   handleZip(e) {
     this.setState({zip: e.target.value})
     e.preventDefault()
@@ -157,7 +163,7 @@ class Homepage extends Component {
     )
 
     const ButtonExplore = () => (
-      <button onClick={this.handleStart} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
+      <button onClick={this.handleExplore} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         EXPLORE
       </button>
     )

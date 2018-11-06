@@ -4,7 +4,6 @@ import { formatMoney, connect } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import { AsyncTypeahead} from 'react-bootstrap-typeahead'
-import ClickOutside from 'react-click-outside'
 import {
   Carousel,
   CarouselItem,
@@ -546,6 +545,7 @@ class Mainpage extends Component {
       address,
       // times
     })
+    this.userStore.setDeliveryAddress(address)
     // this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
     //   const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
     //   this.setState({selectedAddressChanged: false})
@@ -561,6 +561,7 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
+      this.userStore.setDeliveryTime(data)
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -904,20 +905,29 @@ class Mainpage extends Component {
                 <div className="col-2 left-column" style={{width:200}}>
                   <div className="dropdown dropdown-fwidth">
 
-                    <ClickOutside onClickOutside={e => this.uiStore.hideCategoriesDropdown()} className="pt-1">
-                      <h3 onClick={this.handleCategoriesDropdown}><strong>Categories</strong> <i className="fa fa-chevron-down"></i></h3>
+                      <h3
+                        onMouseEnter={this.handleCategoriesDropdown}
+                        onMouseLeave={this.handleCategoriesDropdown}
+                      >
+                        <strong>Categories</strong> <i className="fa fa-chevron-down"></i>
+                      </h3>
 
-                      <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
-                        <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
+                      <div
+                        className="dropdown-wrapper"
+                        onMouseEnter={this.handleCategoriesDropdown}
+                        onMouseLeave={this.handleCategoriesDropdown}
+                      >
+                        <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
+                          <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
 
-                        {this.productStore.categories.map((s,i) => (
-                          <React.Fragment key={i}>
-                            {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
-                          </React.Fragment>
+                          {this.productStore.categories.map((s,i) => (
+                            <React.Fragment key={i}>
+                              {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
+                            </React.Fragment>
 
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </ClickOutside>
                   </div>
                 </div>
                 <div className="media col">
