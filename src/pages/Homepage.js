@@ -92,7 +92,7 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
 
-    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: true})
+    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
       .then(() => {
         this.setState({
           heroStatus: 'invalid_zip_success',
