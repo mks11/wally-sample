@@ -109,7 +109,8 @@ class CheckoutStore {
 
     function addTimes(data) {
       const timeFirst = data[0].split('-')[0]
-      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
+      const toProvide = data[1] + ' ' + timeFirst
+      const day = moment(toProvide, 'YYYY-MM-DD h:mm').calendar(null,{
         sameDay: '[Today]',
         nextDay: '[Tomorrow]',
         nextWeek: 'dddd',
