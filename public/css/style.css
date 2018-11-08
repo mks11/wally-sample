@@ -1381,7 +1381,7 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 
 /* New Style */
-.header-wrap{position: relative;z-index:1030;}
+.header-wrap{/*position: relative;*/z-index:1030;}
 
 .card1{border: 1px solid #ececec;margin-bottom: 30px;}
 .card1.error{border: 2px solid red;}
