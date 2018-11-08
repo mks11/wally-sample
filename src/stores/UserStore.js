@@ -190,7 +190,6 @@ class UserStore {
     }
 
     if (delivery) {
-      // console.log('gent in')
       const deliveryData = JSON.parse(delivery)
       this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
