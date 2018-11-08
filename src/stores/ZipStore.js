@@ -1,5 +1,9 @@
 import {observable, decorate, action} from 'mobx'
-import { GET_ZIP_CODES,API_SUBSCRIBE_EMAIL } from '../config'
+import {
+  GET_ZIP_CODES,
+  API_SUBSCRIBE_EMAIL,
+  API_SUBSCRIBE_NOTIFICATIONS
+} from '../config'
 import axios from 'axios'
 
 class ZipStore {
@@ -19,6 +23,11 @@ class ZipStore {
 
   async subscribe(data) {
     const res = await axios.post(API_SUBSCRIBE_EMAIL, data)
+    return res.data
+  }
+
+  async subscribeNotifications(data) {
+    const res = await axios.post(API_SUBSCRIBE_NOTIFICATIONS, data)
     return res.data
   }
 }
