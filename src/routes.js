@@ -19,6 +19,7 @@ import InviteFriends from './pages/InviteFriends';
 import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import ManageShopper from './pages/ManageShopper';
 import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
@@ -39,6 +40,7 @@ export default (
         <Route exact path="/tnc" component={Tnc}/>
         <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/blog" component={Blog}/>
+        <Route exact path="/blog/:id" component={BlogPost}/>
         <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>
         <Route exact path="/help/topics" component={HelpSingle}/>
