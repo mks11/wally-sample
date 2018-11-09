@@ -487,7 +487,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   /* .nav-open nav.aw-nav--toggle svg.icon-menu{display:none!important;} */
   .nav-open nav.aw-nav--toggle svg.icon-close{display:block;}
   .landing-section h1{max-width:300px;font-size: 32px;}
-  .landing-section h2{font-size: 24px;}
+  .landing-section h2{font-size: 16px;}
   .landing-section p{max-width:320px;margin-left: auto;margin-right: auto;}
   .pricing-head{min-height:auto;}
   .card-pricing{box-shadow:none;-webkit-box-shadow:none;background-color:transparent;}
