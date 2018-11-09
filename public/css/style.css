@@ -1591,6 +1591,7 @@ input[aria-expanded="true"] + .autocomplete-dropdown-container {
 }
 .carousel .carousel-inner img {
   height: auto;
+  max-height: 450px;
   width: 100%;
 }
 
