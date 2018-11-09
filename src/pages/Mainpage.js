@@ -344,6 +344,7 @@ class Mainpage extends Component {
   }
 
   search(keyword) {
+    if (!keyword) return
     this.uiStore.hideBackdrop()
 
     const instance = this._typeahead.getInstance();
@@ -371,17 +372,29 @@ class Mainpage extends Component {
       }, [])
 
 
-
-      this.setState({searchSidebar: filters, 
+      this.setState({
+        searchSidebar: filters,
         searchFilter: cur,
-        searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat: 'All Categories', searchDisplayed: data.products })
+        searchAheadLoading: false,
+        searchResult: data,
+        searchPage: true,
+        searchTerms: keyword,
+        currentSearchCatId,
+        currentSearchCat: 'All Categories',
+        searchDisplayed: data.products
+      })
     })
   }
 
-  handleSearchSubmit(e) {
+  handleSearchSubmit = (e) => {
+    if (this._typeahead.state.query === "") this.handleResetResults()
     if (e.keyCode === 13) {
       this.search(e.target.value)
     }
+  }
+
+  handleResetResults = () => {
+    this.setState({searchPage: false}, this.loadData)
   }
 
   handleSelected(e) {
