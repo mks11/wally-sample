@@ -171,6 +171,18 @@ border-radius: 0;}
 .aw-hero .container-fluid > .row{height:calc(100vh - 70px);}
 .aw-header .btn-top-account button {margin: 0 5px;}
 
+.subscribe-control .custom-control {
+  display: inline;
+}
+.subscribe-control .custom-control-label::before {
+  background: white !important;
+}
+.subscribe-control .custom-control-label {
+  font-size: 20px;
+  color:white;
+  margin-bottom: 10px;
+}
+
 .howto-item{text-align: center;margin-bottom: 30px;padding-left:5px;padding-right:5px;}
 .aw-iconbox{margin-bottom: 30px;position: relative;}
 .howto-item img, .aw-iconbox img{height:135px;display:block;margin-right:auto;margin-left:auto;margin-bottom: 30px;}
@@ -296,6 +308,7 @@ font-size:20px;}
   position: relative;
   padding: 2px;
 }
+
 @media screen and (max-width: 500px) {
   .blog-post-item {
     width: 80%;
@@ -923,7 +936,7 @@ ul.list-payments li{
 }
 
 .login-wrap, .signup-wrap {
-  width: 62%;
+  width: 80%;
   margin: 0 auto;
 }
 
