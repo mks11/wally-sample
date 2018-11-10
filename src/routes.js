@@ -25,6 +25,7 @@ import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
 import BlogPosts from "./pages/BlogPosts";
+import SubscribeSuccess from "./pages/SubscribeSuccess";
 
 export default (
     <Fragment>
@@ -55,6 +56,7 @@ export default (
         <Route exact path="/signup" component={Signup}/>
         <Route exact path="/products/search" component={Mainpage}/>
         <Route exact path="/product/:product_id" component={Mainpage}/>
+        <Route exact path="/subscribed" component={SubscribeSuccess}/>
         <Route exact path="/" component={Homepage}/>
       </Switch>
     </Fragment>
