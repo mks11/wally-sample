@@ -114,16 +114,17 @@ class ProductModal extends Component {
       infoPackageClass += ' open'
     }
 
+    const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     let qtyOptions = []
+    var minSize = 1
+    if (inventory.price_unit == "lb" || inventory.price_unit == "oz") minSize = 0.25
     for (var i = 1, len = 10; i <= len; i++) {
-      qtyOptions.push(i*product.min_size)
+      qtyOptions.push(i*minSize)
     }
 
-
-    const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     let price = inventory.price / 100
     let price_unit = inventory.price_unit
-    let unit_type = product.unit_type
+    let unit_type = inventory.price_unit
     let unit_size = product.unit_size
 
     let unit = 1
@@ -132,28 +133,14 @@ class ProductModal extends Component {
       unit = parseFloat(unit_size.split(' ')[0])
     }
 
-    // let unit = 1
-    // if (price_unit) {
-    //   unit = parseFloat(price_unit.split(' ')[0])
-    // } else {
-    //   // price_unit = unit + ' ' + product.unit_type
-    // }
-    //
-    // price = price*unit
-
-    const totalPrice = price  * unit * this.state.qty
-
+    const totalPrice = price * this.state.qty
 
     const packaging = product.packaging[0] ? product.packaging[0] : null
     const packaging_type = packaging.type
     const packaging_description = packaging.description
 
-    // const producer = inventory.producer
-
-
-    // console.log('unittype', unit_type)
-    let  qty_unit_type = unit_type 
-    if (qty_unit_type === 'unit' || qty_unit_type === 'ea') {
+    let qty_unit_type = unit_type 
+    if (qty_unit_type !== 'lb' && qty_unit_type !== 'oz') {
       qty_unit_type = ''
     }
 

@@ -86,17 +86,15 @@ class Product extends Component {
   render() {
     const product = this.props.product
     let price = product.product_price/100
-    let price_unit = product.product_size
+    let price_unit = product.price_unit
 
     let unit = 1
-    if (price_unit) {
-      unit = parseFloat(price_unit.split(' ')[0])
+    if (price_unit != "ea") {
+      price_unit = unit + ' ' + product.price_unit
+    } else if (!product.price_unit) {
+      price_unit = ""
     } else {
-      price_unit = unit + ' ' + product.unit_type
-    }
-
-    if (product.unit_type === 'unit') {
-      price_unit = ''
+      price_unit = ""
     }
 
     // price *= unit
