@@ -20,6 +20,7 @@ import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import CartAdd from './pages/CartAdd';
 import ManageShopper from './pages/ManageShopper';
 import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
@@ -48,6 +49,7 @@ export default (
         <Route exact path="/help/detail/:id" component={HelpSingleAnswer}/>
         <Route exact path="/help/question/:question" component={HelpAnswer}/>
         <Route exact path="/about" component={About}/>
+        <Route exact path="/cart/add" component={CartAdd}/>
         <Route exact path="/checkout" component={Checkout}/>
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>

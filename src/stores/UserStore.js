@@ -38,6 +38,8 @@ class UserStore {
 
   refUrl = ''
 
+  cameFromCartUrl = false
+
   toggleDeliveryModal(toggle) {
     this.deliveryModal = toggle
   }
@@ -424,6 +426,8 @@ decorate(UserStore, {
   refPromo: observable,
 
   refUrl: observable,
+
+  cameFromCartUrl: observable,
 
   login: action,
   getUser: action,
