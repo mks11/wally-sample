@@ -926,12 +926,10 @@ class Mainpage extends Component {
                       >
                         <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
                           <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
-
-                          {this.productStore.categories.map((s,i) => (
+                          {this.state.sidebar.map((s,i) => (
                             <React.Fragment key={i}>
                               {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
                             </React.Fragment>
-
                           ))}
                         </div>
                       </div>
