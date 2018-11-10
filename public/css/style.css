@@ -282,7 +282,25 @@ font-size:20px;}
 .blog-pagination{padding-top: 20px;}
 .pagination .page-link{font-weight: 700;}
 .blog-list{font-family: 'Aleo', sans-serif; font-size: 18px}
+.blog-posts-images {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-bottom: 30px;
+}
 
+.blog-post-item {
+  flex: 0 0 auto;
+  width: 33.3%;
+  height: auto;
+  position: relative;
+  padding: 2px;
+}
+@media screen and (max-width: 500px) {
+  .blog-post-item {
+    width: 80%;
+  }
+}
 /* Partners */
 .section-partners .page-lead{max-width:520px;}
 .aw-howto .page-lead{max-width:440px;}

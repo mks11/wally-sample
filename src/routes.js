@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 
 import Homepage from './pages/Homepage';
@@ -24,9 +24,11 @@ import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
+import BlogPosts from "./pages/BlogPosts";
 
 export default (
     <Fragment>
+      <Switch>
         <Route exact path="/manage/shopper" component={ManageShopper} />
         <Route exact path="/manage/fulfillment" component={ManageFulfillment} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
@@ -39,6 +41,7 @@ export default (
         <Route exact path="/tnc" component={Tnc}/>
         <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/blog" component={Blog}/>
+        <Route exact path="/blog/posts" component={BlogPosts}/>
         <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>
         <Route exact path="/help/topics" component={HelpSingle}/>
@@ -53,5 +56,6 @@ export default (
         <Route exact path="/products/search" component={Mainpage}/>
         <Route exact path="/product/:product_id" component={Mainpage}/>
         <Route exact path="/" component={Homepage}/>
+      </Switch>
     </Fragment>
 );
