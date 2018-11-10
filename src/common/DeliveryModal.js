@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
+import {Modal} from "react-bootstrap";
 import { connect } from '../utils'
 // import { Link } from 'react-router-dom'
 // import ClickOutside from 'react-click-outside'
@@ -110,12 +110,12 @@ class DeliveryModal extends Component {
     console.log('user', user)
 
     return (
-      <Modal isOpen={this.userStore.deliveryModal}>
+      <Modal show={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm modal-header--sm-nomargin">
           <div><h3>Select delivery time &amp; location</h3></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
         </div>
-        <ModalBody className="modal-body-no-footer">
+        <Modal.Body className="modal-body-no-footer">
           <div className="checkout-wrap">
             <div className="">
               <div >
@@ -141,7 +141,7 @@ class DeliveryModal extends Component {
             </div>
           </div>
 
-        </ModalBody>
+        </Modal.Body>
       </Modal>
     );
   }
