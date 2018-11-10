@@ -50,6 +50,8 @@ export default (
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>
         <Route exact path="/signup" component={Signup}/>
+        <Route exact path="/products/search" component={Mainpage}/>
+        <Route exact path="/product/:product_id" component={Mainpage}/>
         <Route exact path="/" component={Homepage}/>
     </Fragment>
 );

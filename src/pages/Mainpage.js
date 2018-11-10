@@ -3,6 +3,7 @@ import ReactGA from 'react-ga';
 import {formatMoney, connect} from '../utils'
 import {Link} from 'react-router-dom'
 import {APP_URL, PRODUCT_BASE_URL} from '../config'
+import queryString from 'query-string';
 import {AsyncTypeahead} from 'react-bootstrap-typeahead'
 import {
   Carousel,
@@ -73,18 +74,6 @@ class Product extends Component {
     this.productStore = this.props.store.product
   }
 
-  handleProductModal() {
-    if (!this.userStore.selectedDeliveryAddress && !this.userStore.selectedDeliveryTime) {
-      this.userStore.toggleDeliveryModal(true)
-      this.productStore.activeProductId = this.props.product.product_id
-    } else {
-      console.log(this.userStore.getDeliveryParams())
-      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
-      })
-    }
-  }
-
   render() {
     const product = this.props.product
     let price = product.product_price/100
@@ -102,7 +91,7 @@ class Product extends Component {
     }
 
     // price *= unit
-    return ( <div className={this.props.className + " " + "product-thumbnail"} onClick={e => this.handleProductModal()}>
+    return ( <div className={this.props.className + " " + "product-thumbnail"} onClick={() => this.props.handleProductModal(product.product_id)}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
         <div className="col-6 product-price">
@@ -143,13 +132,13 @@ class ProductList extends Component {
         {mode === "limit" && <Slider {...sliderSettings}>
           { display.products.map((p, i) => {
             return (
-              <Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
+              <Product key={i} product={p} deliveryTimes={deliveryTimes} handleProductModal={() => this.props.handleProductModal(p.product_id)}/>)
           })}
         </Slider>}
         {mode === "all" &&  <div className="container-fluid">
           <div className={`row flex-row`} >
             { display.products.map((p, i) => {
-                return (<Product className="col-lg-3 col-md-4 col-6 col-sm-6" key={i} product={p} deliveryTimes={deliveryTimes}/>)
+                return (<Product className="col-lg-3 col-md-4 col-6 col-sm-6" key={i} product={p} deliveryTimes={deliveryTimes}  handleProductModal={() => this.props.handleProductModal(p.product_id)}/>)
               }
             )}
           </div>
@@ -229,7 +218,9 @@ class Mainpage extends Component {
             this.loadData()
           })
         }
-
+        if (this.props.match.params.product_id) {
+          this.handleProductModal(this.props.match.params.product_id)
+        }
       })
 
     const $ = window.$
@@ -259,6 +250,12 @@ class Mainpage extends Component {
       //
 
     })
+    if (this.props.location.search) {
+      const query = (queryString.parse(this.props.location.search))
+        if (query.keyword) {
+          this.search(query.keyword)
+      }
+    }
   }
 
   loadData() {
@@ -292,6 +289,18 @@ class Mainpage extends Component {
     const id = this.props.match.params.id
     if (this.id !== id) {
       this.loadData()
+    }
+  }
+
+  handleProductModal = (productId) => {
+    if (!this.userStore.selectedDeliveryAddress && !this.userStore.selectedDeliveryTime) {
+      this.userStore.toggleDeliveryModal(true)
+      this.productStore.activeProductId = productId
+    } else {
+      console.log(this.userStore.getDeliveryParams())
+      this.productStore.showModal(productId, null, this.userStore.getDeliveryParams()).then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
+      })
     }
   }
 
@@ -329,6 +338,7 @@ class Mainpage extends Component {
   }
 
   handleSearch(keyword) {
+    console.log(keyword)
     this.setState({searchAheadLoading: true})
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
@@ -1122,7 +1132,7 @@ class Mainpage extends Component {
                     </div>
 
                     { mainDisplay.map((p, i) => (
-                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode}  deliveryTimes={this.state.deliveryTimes}/>
+                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode} handleProductModal={this.handleProductModal} deliveryTimes={this.state.deliveryTimes}/>
                     )
                     )}
 
@@ -1144,7 +1154,7 @@ class Mainpage extends Component {
 
                         <div className="row">
                           { this.state.searchDisplayed.map((p, i) => (
-                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes} />
+                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.props.handleProductModal(p.product_id)}/>
                           ))}
                         </div>
 
