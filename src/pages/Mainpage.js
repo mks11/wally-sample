@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactGA from 'react-ga';
-import { formatMoney, connect } from '../utils'
-import { Link } from 'react-router-dom'
-import { APP_URL, PRODUCT_BASE_URL } from '../config'
-import { AsyncTypeahead} from 'react-bootstrap-typeahead'
+import {formatMoney, connect} from '../utils'
+import {Link} from 'react-router-dom'
+import {APP_URL, PRODUCT_BASE_URL} from '../config'
+import {AsyncTypeahead} from 'react-bootstrap-typeahead'
 import {
   Carousel,
   CarouselItem,
   CarouselIndicators,
   Button,
 } from 'reactstrap';
+import Slider from "react-slick";
 
 import DeliveryModal from '../common/DeliveryModal.js';
 import DeliveryChangeModal from '../common/DeliveryChangeModal.js';
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
+import SlickArrow from "../common/SlickArrow";
 
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-1.png'
 const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-2.png'
@@ -100,7 +102,7 @@ class Product extends Component {
     }
 
     // price *= unit
-    return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
+    return ( <div className={this.props.className + " " + "product-thumbnail"} onClick={e => this.handleProductModal()}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
         <div className="col-6 product-price">
@@ -121,24 +123,16 @@ Product = connect("store")(Product)
 
 class ProductList extends Component {
 
-  componentDidMount() {
-    const $ = window.$
-
-    $('.big-arrow.left-arrow').click(function() {
-      $(this).siblings('.container-fluid').animate({
-        scrollLeft: '+=100'
-      }, 100, 'linear');
-    })
-    $('.big-arrow.right-arrow').click(function() {
-      $(this).siblings('.container-fluid').animate({
-        scrollLeft: '-=100'
-      }, 100, 'linear');
-    })
-  }
-
   render() {
-    const { display, mode, deliveryTimes } = this.props
-
+    const {display, mode, deliveryTimes} = this.props
+    const sliderSettings = {
+      dots: false,
+      infinite: false,
+      slidesToShow: window.screen.width > 768 ? 4 : 2,
+      slidesToScroll: window.screen.width > 768 ? 2 : 1,
+      prevArrow: <SlickArrow flip/>,
+      nextArrow: <SlickArrow/>
+    };
     return (
       <div className="product">
         <h2>{display.cat_name}</h2>
@@ -146,21 +140,20 @@ class ProductList extends Component {
           <h5>{display.cat_name}</h5>
           <Link to={"/main/" + display.cat_id }>View All {display.number_products} ></Link>
         </div>
-
-        {mode === 'limit' && 
-          <Button className="big-arrow right-arrow" />
-        }
-        <div className="container-fluid">
-          <div className={`row flex-row ${mode === 'limit' ? 'flex-nowrap' : ''}`} >
+        {mode === "limit" && <Slider {...sliderSettings}>
+          { display.products.map((p, i) => {
+            return (
+              <Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
+          })}
+        </Slider>}
+        {mode === "all" &&  <div className="container-fluid">
+          <div className={`row flex-row`} >
             { display.products.map((p, i) => {
-              return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
-            }
+                return (<Product className="col-lg-3 col-md-4 col-6 col-sm-6" key={i} product={p} deliveryTimes={deliveryTimes}/>)
+              }
             )}
           </div>
-        </div>
-        {mode === 'limit' && 
-          <Button className="big-arrow left-arrow" />
-        }
+        </div>}
       </div>
     )
   }

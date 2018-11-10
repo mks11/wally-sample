@@ -164,7 +164,7 @@ class ProductModal extends Component {
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.productStore.hideModal(e)} ></button>
         </div>
-        <ModalBody className="modal-body-no-footer">
+        <ModalBody className="modal-body-no-footer product-modal">
           <div className="row">
             <div className="col-md-6 product-modal-left">
               <div className="row mb-3">
