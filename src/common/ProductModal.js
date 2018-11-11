@@ -144,6 +144,9 @@ class ProductModal extends Component {
       qty_unit_type = ''
     }
 
+    let display_unit = unit_type
+    if (unit_type == 'ea') display_unit = "unit"
+
 
     return (
       <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
@@ -177,7 +180,8 @@ class ProductModal extends Component {
 
             <div className="col-md-6">
               <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
-              <div>Ship and sold by The Wally Shop</div>
+              <div>Ship and sold by The Wally Shop.</div>
+              <div>Sold by the {display_unit}.</div>
               <hr />
 
               <div className={infoPackageClass}>
@@ -232,8 +236,8 @@ class ProductModal extends Component {
           </div>
           <div className="row">
             <div className="col-12">
-              <h4>About This Product</h4>
-              <span>{product.description}</span>
+              {/* <h4>About This Product</h4>
+              <span>{product.description}</span> */}
               <hr />
               <h3>Farms</h3>
 
