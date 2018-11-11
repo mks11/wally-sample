@@ -317,7 +317,12 @@ class Mainpage extends Component {
 
   handleCheckoutMobile() {
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+        this.uiStore.toggleCartMobile(false)
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()
