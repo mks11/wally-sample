@@ -107,7 +107,6 @@ class DeliveryModal extends Component {
     }
 
     const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
-    console.log('user', user)
 
     return (
       <Modal isOpen={this.userStore.deliveryModal}>

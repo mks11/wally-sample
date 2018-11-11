@@ -72,7 +72,7 @@ class Product extends Component {
   }
 
   handleProductModal() {
-    if (!this.userStore.selectedDeliveryAddress && !this.userStore.selectedDeliveryTime) {
+    if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = this.props.product.product_id
     } else {
@@ -305,7 +305,11 @@ class Mainpage extends Component {
   handleCheckout() {
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.modalStore.toggleLogin()
     }
