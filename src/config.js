@@ -75,7 +75,7 @@ export const API_BLOG_POST = BASE_URL + "/api/blog"
 export const INSTAGRAM = "https://www.instagram.com/thewallyshop/"
 export const FACEBOOK = "https://facebook.com/thewallyshop"
 
-export const GOOGLE_API_KEY="AIzaSyB2IlvjI5MCPefFjne3cgbklq_1899QiXU"
+export const GOOGLE_API_KEY="AIzaSyB1VsxMUiBN9H89Qgs5Z1eXtbkCyNB1KGQ"
 
 export const APP_URL = "https://thewallyshop.co"
 export const STRIPE_API_KEY = "pk_live_QV08YsHEj9zFZeHcx3O6X5Wn"
