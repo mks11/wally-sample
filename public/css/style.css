@@ -2028,7 +2028,17 @@ a {
 }
 
 .blog-item {
+  height: 400px;
   border-bottom: 3px solid #ebebeb;
+}
+.blog-item .col:first-child {
+  overflow: hidden;
+}
+.blog-item.blog-post {
+  height: auto;
+}
+.blog-item.blog-post .img-fluid {
+  margin-bottom: 1rem;
 }
 
 .blog-date {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Title from '../common/page/Title'
+import { Row, Col } from 'reactstrap';
 import { connect } from '../utils'
 import moment from 'moment'
 
@@ -44,17 +45,23 @@ class BlogPost extends Component {
         <Title content="Blog" />
         <section>
           <div className="container mt-5">
-            <div className="row blog-item">
-              <div className="col">
-                <img className="img-fluid" src={item.image_ref} alt="" />
-              </div>
-              <div className="col">
-                <h2 className="m-0 p-0">{item.title}</h2>
-                <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
-                <p dangerouslySetInnerHTML={{__html: item.body}}></p>
-              </div>
+            <Row className="blog-item blog-post">
+              <Col>
+                <Row>
+                  <Col>
+                    <img className="img-fluid" src={item.image_ref} alt="" />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <h2 className="m-0 p-0">{item.title}</h2>
+                    <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
+                    <p dangerouslySetInnerHTML={{__html: item.body}}></p>
+                  </Col>
+                </Row>
+              </Col>
               <hr/>
-            </div>
+            </Row>
           </div>
 
         </section>
