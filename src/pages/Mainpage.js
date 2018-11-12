@@ -227,6 +227,15 @@ class Mainpage extends Component {
     ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
+        if (this.userStore.cameFromCartUrl) {
+          const delivery = this.userStore.getDeliveryParams()
+          if (delivery.zip && delivery.date) {
+            this.checkoutStore.updateCartItems(delivery)
+          } else {
+            status && this.userStore.toggleDeliveryModal(true)
+          }
+        }
+
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
         if (selectedAddress) {
           this.userStore.setDeliveryAddress(selectedAddress)
@@ -236,7 +245,6 @@ class Mainpage extends Component {
             this.loadData()
           })
         }
-
       })
 
     const $ = window.$
@@ -619,7 +627,13 @@ class Mainpage extends Component {
   }
 
   handleChangeDelivery = () => {
-    // this.setState({selectedAddressChanged: false, selectedTimeChanged: false})
+    if (this.userStore.cameFromCartUrl) {
+      const delivery = this.userStore.getDeliveryParams()
+      if (delivery.zip && delivery.date) {
+        this.checkoutStore.updateCartItems(delivery)
+      }
+    }
+
     this.loadData()
     const address = this.userStore.selectedDeliveryAddress
     this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {

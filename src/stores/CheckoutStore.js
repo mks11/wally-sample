@@ -53,10 +53,8 @@ class CheckoutStore {
       cart_id = this.order.cart_id
     }
 
-    data.cart_id = cart_id
-
     const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
-    const url = `${API_GET_CURRENT_CART}?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
+    const url = `${API_GET_CURRENT_CART+cart_id}?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
     let res
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.patch(url, data)
@@ -71,9 +69,8 @@ class CheckoutStore {
   }
 
   async updateCartItems(delivery) {
-    // const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
-    // const res = await axios.patch(`${API_GET_CURRENT_CART}/items?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
-    const res = await axios.patch(`${API_GET_CURRENT_CART}/items`)
+    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
+    const res = await axios.patch(`${API_GET_CURRENT_CART}/items?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, { cart_id: this.cart._id })
     this.order = res.data
     return res.data
   }

@@ -37,8 +37,6 @@ class LoginModal extends Component {
         this.modalStore.toggleLogin()
         this.routing.push(this.modalStore.loginNextRoute)
         this.setState({email: '', password: ''})
-        this.userStore.cameFromCartUrl && this.checkoutStore.updateCartItems()
-        // this.modalStore.setLoginNextRoute('/main')
       }).catch((e) => {
         console.error('Failed to login', e)
         const msg = e.response.data.error.message
