@@ -242,7 +242,6 @@ class Mainpage extends Component {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
             this.setState({deliveryTimes})
-            this.loadData()
           })
         }
       })
