@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 import FacebookLogin from 'react-facebook-login';
+import {Modal} from "react-bootstrap";
 
 import { FB_KEY } from '../config'
 
@@ -104,12 +105,12 @@ class SignupModal extends Component {
       buttonClass += ' active'
     }
     return (
-      <Modal isOpen={this.modalStore.signup} toggle={this.handleToggle}>
+      <Modal show={this.modalStore.signup} onHide={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
-        <ModalBody>
+        <Modal.Body>
           <div className="signup-wrap">
             <h3 className="m-0 mb-2">Sign up</h3>
             <span className="mb-5">Shop package-free groceries</span>
@@ -160,13 +161,13 @@ class SignupModal extends Component {
 
             </form>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <div className="login-wrap mb-5">
             <span className="t-18">Already have an account</span>
             <a onClick={e=>this.handleLogin()} className="btn-text btn-text--login">LOGIN</a>
           </div>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     );
   }
