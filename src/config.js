@@ -1,4 +1,3 @@
-//w,export const BASE_URL = "http://api.tws.rizkifuad.com"
 export const BASE_URL = "https://the-wally-shop.herokuapp.com"
 // export const BASE_URL = "https://155f3968.ngrok.io"
 
