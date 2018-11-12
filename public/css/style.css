@@ -2041,6 +2041,9 @@ color:#6e8692
     position: relative;
     font-weight: 700;
   }
+.blog-item h2 > a {
+  color: inherit;
+}
 
 .blog-date{color:#6e8692;font-family: 'Aleo', sans-serif;font-size: 15px;margin-bottom: 20px;}
 .readmore{margin-bottom: 0;font-size: 16px;position: relative;font-family: 'Circe', sans-serif;font-weight: 700;text-decoration: none;}
