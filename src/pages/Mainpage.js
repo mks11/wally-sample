@@ -76,7 +76,7 @@ class Product extends Component {
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = this.props.product.product_id
     } else {
-      console.log(this.userStore.getDeliveryParams())
+      // console.log(this.userStore.getDeliveryParams())
       this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
       })
@@ -571,7 +571,6 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
-      this.userStore.setDeliveryTime(data)
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -649,7 +648,8 @@ class Mainpage extends Component {
       return
     }
 
-      this.setState({selectedTimeChanged: false})
+    this.setState({selectedTimeChanged: false})
+    this.userStore.setDeliveryTime(this.state.selectedTime)
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
