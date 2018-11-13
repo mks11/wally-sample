@@ -1152,7 +1152,7 @@ class Mainpage extends Component {
 
                         <div className="row">
                           { this.state.searchDisplayed.map((p, i) => (
-                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.props.handleProductModal(p.product_id)}/>
+                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.handleProductModal(p.product_id)}/>
                           ))}
                         </div>
 

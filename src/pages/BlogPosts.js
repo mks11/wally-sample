@@ -34,11 +34,11 @@ class BlogPosts extends Component {
         <section>
           <div className="container mt-5 blog-posts-images">
             { this.state.items.map((item, key) => (
+              <Link to={`${item._id}`}>
               <div className="blog-post-item" key={key}>
-                <Link to={`${item._id}`}>
-                <img className="img-fluid" src={item.image_ref} alt="" />
-                </Link>
+                <div style={{width: 400, height: 400, background: `url(${item.image_ref}),no-repeat`, backgroundSize: 'cover', backgroundPosition: 'center, center'}}  />
               </div>
+              </Link>
             ))}
           </div>
         </section>
