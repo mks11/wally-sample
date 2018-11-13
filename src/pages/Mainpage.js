@@ -286,7 +286,7 @@ class Mainpage extends Component {
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
 
-      this.userStore.getStatus(true)
+      this.userStore.getStatus(false)
         .then((status) => {
           if (this.userStore.cameFromCartUrl) {
             const delivery = this.userStore.getDeliveryParams()
