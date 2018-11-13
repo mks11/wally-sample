@@ -16,7 +16,6 @@
     "mobx-react-router": "^4.0.4",
     "moment": "^2.22.2",
     "qs": "^6.5.2",
-    "query-string": "^6.2.0",
     "react": "^16.4.1",
     "react-bootstrap": "^1.0.0-beta.2",
     "react-bootstrap-typeahead": "^3.2.1",
