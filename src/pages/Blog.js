@@ -26,28 +26,14 @@ class Blog extends Component {
   loadData() {
     this.contentStore.getBlogPost().then((items) => {
       for(const i in items) {
-        items[i].need_readmore = items[i].body.length >= 100
+        items[i].need_readmore = items[i].body.length >= 150
         items[i].readmore = false
-        items[i].body_stripped = items[i].body.substring(0,100)
+        items[i].body_stripped = items[i].body.substring(0,150)
         items[i].body_displayed = items[i].body_stripped + "..."
       }
 
       this.setState({items})
     })
-  }
-
-  handleReadmore = (key) => {
-    const items = this.state.items
-    items[key].readmore = true
-    items[key].body_displayed = items[key].body
-    this.setState({items})
-  }
-
-  handleReadless = (key) => {
-    const items = this.state.items
-    items[key].readmore = false
-    items[key].body_displayed = items[key].body_stripped + "..."
-    this.setState({items})
   }
 
   render() {
@@ -67,19 +53,7 @@ class Blog extends Component {
                   </h2>
                   <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
                   <p dangerouslySetInnerHTML={{__html: item.body_displayed}}></p>
-                  {item.need_readmore && 
-                      <React.Fragment>
-                      {item.readmore ?
-                        <a className="readmore" onClick={e=>this.handleReadless(key)}>
-                        Read less 
-                        <i className="fa fa-chevron-up"></i></a>
-                        :
-                        <a className="readmore" onClick={e=>this.handleReadmore(key)}>
-                          Read more 
-                          <i className="fa fa-chevron-down"></i></a>
-                      }
-                    </React.Fragment>
-                  }
+                  <Link to={`/blog/${item._id}`} className="readmore">Read more &nbsp;<i className="fa fa-chevron-right"></i></Link>
                   </div>
                   <hr/>
               </div>

@@ -76,7 +76,7 @@ class Product extends Component {
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = this.props.product.product_id
     } else {
-      console.log(this.userStore.getDeliveryParams())
+      // console.log(this.userStore.getDeliveryParams())
       this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
       })
@@ -225,16 +225,23 @@ class Mainpage extends Component {
     ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
+        if (this.userStore.cameFromCartUrl) {
+          const delivery = this.userStore.getDeliveryParams()
+          if (delivery.zip && delivery.date) {
+            this.checkoutStore.updateCartItems(delivery)
+          } else {
+            status && this.userStore.toggleDeliveryModal(true)
+          }
+        }
+
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
         if (selectedAddress) {
           this.userStore.setDeliveryAddress(selectedAddress)
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
             this.setState({deliveryTimes})
-            this.loadData()
           })
         }
-
       })
 
     const $ = window.$
@@ -569,7 +576,6 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
-      this.userStore.setDeliveryTime(data)
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -618,7 +624,13 @@ class Mainpage extends Component {
   }
 
   handleChangeDelivery = () => {
-    // this.setState({selectedAddressChanged: false, selectedTimeChanged: false})
+    if (this.userStore.cameFromCartUrl) {
+      const delivery = this.userStore.getDeliveryParams()
+      if (delivery.zip && delivery.date) {
+        this.checkoutStore.updateCartItems(delivery)
+      }
+    }
+
     this.loadData()
     const address = this.userStore.selectedDeliveryAddress
     this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
@@ -647,7 +659,8 @@ class Mainpage extends Component {
       return
     }
 
-      this.setState({selectedTimeChanged: false})
+    this.setState({selectedTimeChanged: false})
+    this.userStore.setDeliveryTime(this.state.selectedTime)
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
