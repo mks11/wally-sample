@@ -34,7 +34,11 @@ class ProductStore {
       alert('Item not available in inventory')
       return
     }
-    this.customer_quantity = customer_quantity ? customer_quantity : this.activeProduct.min_size
+    const inventory = this.activeProduct.available_inventory[0]
+    var min_size = 1
+    if (inventory.price_unit == "lb" || inventory.price_unit == "oz") min_size = 0.25
+
+    this.customer_quantity = customer_quantity ? customer_quantity : min_size
     this.open = true
     this.modal = true
 
