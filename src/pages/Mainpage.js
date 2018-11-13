@@ -783,34 +783,6 @@ class Mainpage extends Component {
                     <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                   </div>
                 </div>
-                <div className="row mt-2 grey-row" onClick={e => this.userStore.toggleDeliveryModal(true)}>
-                  <div className="col-auto">
-                    <div className="d-flex justify-content-between">
-                      <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '37px'}}>
-                        {this.userStore.selectedDeliveryAddress && 
-                          <React.Fragment>
-                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
-                          </React.Fragment>
-                        }
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="col-auto">
-                    <div className="d-flex justify-content-between">
-                      <i className="fa fa-clock-o bar-icon"></i>
-                      <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
-                        <React.Fragment>
-                          {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
-                        </React.Fragment>
-                        : null
-                      }
-
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="col-md-12 col-sm-8 right-column d-none d-md-block">
@@ -1034,7 +1006,36 @@ class Mainpage extends Component {
           </div>
         </div>
       </div>
+        <div className="product-mobile-controls">
+          <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
+            <div className="col-auto">
+              <div className="d-flex justify-content-between">
+                <i className="fa fa-map-marker bar-icon"></i>
+                <span style={{lineHeight: '37px'}}>
+                        {this.userStore.selectedDeliveryAddress &&
+                        <React.Fragment>
+                          {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                        </React.Fragment>
+                        }
+                      </span>
+              </div>
+            </div>
 
+            <div className="col-auto">
+              <div className="d-flex justify-content-between">
+                <i className="fa fa-clock-o bar-icon"></i>
+                <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
+                  <React.Fragment>
+                    {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
+                  </React.Fragment>
+                  : null
+                }
+
+                    </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
       <div className="product-content">
         <div className="container">
