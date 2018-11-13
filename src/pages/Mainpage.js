@@ -783,7 +783,7 @@ class Mainpage extends Component {
                     <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                   </div>
                 </div>
-                <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
+                <div className="row mt-2 grey-row" onClick={e => this.userStore.toggleDeliveryModal(true)}>
                   <div className="col-auto">
                     <div className="d-flex justify-content-between">
                       <i className="fa fa-map-marker bar-icon"></i>

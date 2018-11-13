@@ -581,7 +581,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: #c0d6cd;
   color: #fff;
   line-height: 1;
-  visibility: hidden;
+  visibility: hidden;navbar-toggler-icon
   opacity: 0;
   transition: 0.27s all;
 }
@@ -591,12 +591,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 .aw-nav--mobile ul {
   list-style-type: none;
 }
-
+.grey-row {
+  background: #d3d3d3;
+}
 .aw-nav--mobile li a {
   text-decoration: none;
   display: inline-block;
   padding: 15px 10px;
-  color: #fff;
+  color: #263a52 !important;
   line-height: 1;
 }
 
