@@ -3,7 +3,7 @@ import ReactGA from 'react-ga';
 import {formatMoney, connect} from '../utils'
 import {Link} from 'react-router-dom'
 import {APP_URL, PRODUCT_BASE_URL} from '../config'
-import queryString from 'query-string';
+import {parse} from 'qs';
 import {AsyncTypeahead} from 'react-bootstrap-typeahead'
 import {
   Carousel,
@@ -251,7 +251,7 @@ class Mainpage extends Component {
 
     })
     if (this.props.location.search) {
-      const query = (queryString.parse(this.props.location.search))
+      const query = parse(this.props.location.search.slice(1))
         if (query.keyword) {
           this.search(query.keyword)
       }
