@@ -235,11 +235,11 @@ class Mainpage extends Component {
             this.setState({deliveryTimes})
           })
         }
+
+        this.loadData(status)
       })
 
     const $ = window.$
-
-    this.loadData()
 
     $(window).bind('scroll', function () {
       let thTop = 570
@@ -264,7 +264,7 @@ class Mainpage extends Component {
     })
   }
 
-  loadData() {
+  loadData(userStatus) {
     const id = this.props.match.params.id
     this.id = id
 
@@ -286,17 +286,15 @@ class Mainpage extends Component {
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
 
-      this.userStore.getStatus(false)
-        .then((status) => {
-          if (this.userStore.cameFromCartUrl) {
-            const delivery = this.userStore.getDeliveryParams()
-            if (delivery.zip && delivery.date) {
-              this.checkoutStore.updateCartItems(delivery)
-            } else {
-              status && this.userStore.toggleDeliveryModal(true)
-            }
-          }
-        })
+      if (this.userStore.cameFromCartUrl) {
+        const delivery = this.userStore.getDeliveryParams()
+        if (delivery.zip && delivery.date) {
+          this.checkoutStore.updateCartItems(delivery)
+          this.userStore.cameFromCartUrl = false
+        } else {
+          userStatus && this.userStore.toggleDeliveryModal(true)
+        }
+      }
     }).catch((e) => {
       console.error('Failed to load current cart', e)
     })
@@ -631,6 +629,7 @@ class Mainpage extends Component {
       const delivery = this.userStore.getDeliveryParams()
       if (delivery.zip && delivery.date) {
         this.checkoutStore.updateCartItems(delivery)
+        this.userStore.cameFromCartUrl = false
       }
     }
 
