@@ -90,7 +90,7 @@ class Product extends Component {
 
     let unit = 1
     if (price_unit != "ea") {
-      price_unit = unit + ' ' + product.price_unit
+      price_unit = "per " + product.price_unit
     } else if (!product.price_unit) {
       price_unit = ""
     } else {
