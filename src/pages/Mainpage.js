@@ -225,15 +225,6 @@ class Mainpage extends Component {
     ReactGA.pageview("/main");
     this.userStore.getStatus(true)
       .then((status) => {
-        if (this.userStore.cameFromCartUrl) {
-          const delivery = this.userStore.getDeliveryParams()
-          if (delivery.zip && delivery.date) {
-            this.checkoutStore.updateCartItems(delivery)
-          } else {
-            status && this.userStore.toggleDeliveryModal(true)
-          }
-        }
-
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
         if (selectedAddress) {
           this.userStore.setDeliveryAddress(selectedAddress)
@@ -242,13 +233,11 @@ class Mainpage extends Component {
             this.setState({deliveryTimes})
           })
         }
+
+        this.loadData(status)
       })
 
     const $ = window.$
-
-    this.loadData()
-
-    // const self = this
 
     $(window).bind('scroll', function () {
       let thTop = 570
@@ -273,7 +262,7 @@ class Mainpage extends Component {
     })
   }
 
-  loadData() {
+  loadData(userStatus) {
     const id = this.props.match.params.id
     this.id = id
 
@@ -294,6 +283,16 @@ class Mainpage extends Component {
 
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+
+      if (this.userStore.cameFromCartUrl) {
+        const delivery = this.userStore.getDeliveryParams()
+        if (delivery.zip && delivery.date) {
+          this.checkoutStore.updateCartItems(delivery)
+          this.userStore.cameFromCartUrl = false
+        } else {
+          userStatus && this.userStore.toggleDeliveryModal(true)
+        }
+      }
     }).catch((e) => {
       console.error('Failed to load current cart', e)
     })
@@ -628,6 +627,7 @@ class Mainpage extends Component {
       const delivery = this.userStore.getDeliveryParams()
       if (delivery.zip && delivery.date) {
         this.checkoutStore.updateCartItems(delivery)
+        this.userStore.cameFromCartUrl = false
       }
     }
 

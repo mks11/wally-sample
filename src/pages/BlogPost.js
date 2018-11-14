@@ -47,18 +47,10 @@ class BlogPost extends Component {
           <div className="container mt-5">
             <Row className="blog-item blog-post">
               <Col>
-                <Row>
-                  <Col>
-                    <img className="img-fluid" src={item.image_ref} alt="" />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <h2 className="m-0 p-0">{item.title}</h2>
-                    <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
-                    <p dangerouslySetInnerHTML={{__html: item.body}}></p>
-                  </Col>
-                </Row>
+                <img className="img-fluid" src={item.image_ref} alt="" />
+                <h2 className="m-0 p-0">{item.title}</h2>
+                <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
+                <p dangerouslySetInnerHTML={{__html: item.body}}></p>
               </Col>
               <hr/>
             </Row>

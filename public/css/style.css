@@ -2039,6 +2039,20 @@ a {
 }
 .blog-item.blog-post .img-fluid {
   margin-bottom: 1rem;
+  float: left;
+  margin-right: 3rem;
+}
+
+@media (min-width: 576px) {
+  .blog-item.blog-post .img-fluid {
+    width: calc(50vw - 4rem);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .blog-item.blog-post .img-fluid {
+    width: 100%;
+  }
 }
 
 .blog-date {
