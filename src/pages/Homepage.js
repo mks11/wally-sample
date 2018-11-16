@@ -229,8 +229,7 @@ class Homepage extends Component {
             <div className="tagline">
               <h2>It's what's on the inside that counts.</h2>
               <p></p>
-              <p>The Wally Shop is your sustainable grocery solution. Order your favorite local, organic produce and have it delivered same-day in all reusable packaging. This means no plastic packaging. Ever. 
-              Return your packaging during a future delivery, and we'll clean and reuse it.</p>
+              <p>Say goodbye to wasteful packaging with The Wally Shop. Order local, organic produce and we'll deliver it same-day from farmers markets and bulk stores. The best part? We deliver in all reusable packaging, which means no plastic. Ever. Return your packaging during a future delivery, and we'll clean and reuse it.</p>
               <p>You take care of the earth - we'll take care of the groceries.</p>
             </div>
 
