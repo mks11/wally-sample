@@ -193,7 +193,7 @@ class Homepage extends Component {
                         className="zip"
                         type="number"
                         value={this.state.zip}
-                        placeholder="Enter zipcode..."
+                        placeholder="Enter zip code..."
                         onKeyDown={this.handleZipEnter}
                         onChange={this.handleZip}/>
                       {this.state.invalidZip && <div className="text-error">Invalid zip codes</div>}
