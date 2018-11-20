@@ -158,7 +158,7 @@ class TopNav extends Component {
           this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
-                <div onClick={}>
+                <div>
                   No Deliveries on Thanksgiving - farmers need a day off too! Shop now.
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
