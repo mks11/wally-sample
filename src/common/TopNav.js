@@ -158,8 +158,11 @@ class TopNav extends Component {
           this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
+                { /* 
+                <div onClick={this.handleReferralModal}>
+                 */ }
                 <div>
-                  Farmers need a day off too! No Deliveries on Thursday - order before 2PM Wednesday for your feast.
+                  Farmers need a day off too! No deliveries on Thursday - order before 2PM Wednesday for your feast.
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
