@@ -159,7 +159,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div>
-                  No Deliveries on Thanksgiving - farmers need a day off too! Shop now.
+                  Farmers need a day off too! No Deliveries on Thursday - order before 2PM Wednesday for your feast.
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
