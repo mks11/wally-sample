@@ -74,6 +74,18 @@ class Product extends Component {
     this.productStore = this.props.store.product
   }
 
+  handleProductModal() {
+    if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+      this.userStore.toggleDeliveryModal(true)
+      this.productStore.activeProductId = this.props.product.product_id
+    } else {
+      // console.log(this.userStore.getDeliveryParams())
+      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
+      })
+    }
+  }
+
   render() {
     const product = this.props.product
     let price = product.product_price/100
@@ -81,7 +93,7 @@ class Product extends Component {
 
     let unit = 1
     if (price_unit != "ea") {
-      price_unit = unit + ' ' + product.price_unit
+      price_unit = "per " + product.price_unit
     } else if (!product.price_unit) {
       price_unit = ""
     } else {
@@ -213,19 +225,16 @@ class Mainpage extends Component {
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
             this.setState({deliveryTimes})
-            this.loadData()
           })
         }
         if (this.props.match.params.product_id) {
           this.handleProductModal(this.props.match.params.product_id)
         }
+
+        this.loadData(status)
       })
 
     const $ = window.$
-
-    this.loadData()
-
-    // const self = this
 
     $(window).bind('scroll', function () {
       let thTop = 570
@@ -256,7 +265,7 @@ class Mainpage extends Component {
     }
   }
 
-  loadData() {
+  loadData(userStatus) {
     const id = this.props.match.params.id
     this.id = id
 
@@ -277,6 +286,16 @@ class Mainpage extends Component {
 
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+
+      if (this.userStore.cameFromCartUrl) {
+        const delivery = this.userStore.getDeliveryParams()
+        if (delivery.zip && delivery.date) {
+          this.checkoutStore.updateCartItems(delivery)
+          this.userStore.cameFromCartUrl = false
+        } else {
+          userStatus && this.userStore.toggleDeliveryModal(true)
+        }
+      }
     }).catch((e) => {
       console.error('Failed to load current cart', e)
     })
@@ -305,7 +324,11 @@ class Mainpage extends Component {
   handleCheckout() {
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.modalStore.toggleLogin()
     }
@@ -313,7 +336,12 @@ class Mainpage extends Component {
 
   handleCheckoutMobile() {
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+        this.uiStore.toggleCartMobile(false)
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()
@@ -576,7 +604,6 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
-      this.userStore.setDeliveryTime(data)
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -625,7 +652,14 @@ class Mainpage extends Component {
   }
 
   handleChangeDelivery = () => {
-    // this.setState({selectedAddressChanged: false, selectedTimeChanged: false})
+    if (this.userStore.cameFromCartUrl) {
+      const delivery = this.userStore.getDeliveryParams()
+      if (delivery.zip && delivery.date) {
+        this.checkoutStore.updateCartItems(delivery)
+        this.userStore.cameFromCartUrl = false
+      }
+    }
+
     this.loadData()
     const address = this.userStore.selectedDeliveryAddress
     this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
@@ -654,7 +688,8 @@ class Mainpage extends Component {
       return
     }
 
-      this.setState({selectedTimeChanged: false})
+    this.setState({selectedTimeChanged: false})
+    this.userStore.setDeliveryTime(this.state.selectedTime)
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 

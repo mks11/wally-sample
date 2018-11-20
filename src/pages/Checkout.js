@@ -83,6 +83,11 @@ class Checkout extends Component {
     ReactGA.pageview("/checkout");
     this.userStore.getStatus(true)
       .then((status) => {
+        if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+          this.userStore.toggleDeliveryModal(true)
+          this.routing.push('/main')
+        }
+
         this.loadData()
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)

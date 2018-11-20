@@ -92,10 +92,12 @@ class DeliveryModal extends Component {
   }
 
   handleSubmit = (data) => {
-    this.userStore.setDeliveryAddress(this.state.selectedAddress)
-    this.userStore.setDeliveryTime(this.state.selectedTime)
-    this.userStore.toggleDeliveryModal(false)
-    this.props.onChangeSubmit()
+    if (this.state.selectedAddress && this.state.selectedTime) {
+      this.userStore.setDeliveryAddress(this.state.selectedAddress)
+      this.userStore.setDeliveryTime(this.state.selectedTime)
+      this.userStore.toggleDeliveryModal(false)
+      this.props.onChangeSubmit()
+    }
   }
 
 
@@ -107,7 +109,6 @@ class DeliveryModal extends Component {
     }
 
     const user = this.userStore.user ? this.userStore.user : this.state.fakeUser
-    console.log('user', user)
 
     return (
       <Modal show={this.userStore.deliveryModal}>

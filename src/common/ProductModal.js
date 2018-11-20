@@ -231,7 +231,7 @@ class ProductModal extends Component {
               <br/>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
               <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
-              <div className="text-muted">Final price based on approximate weight</div>
+              <div className="text-muted">Final total based on approximate weight</div>
             </div>
           </div>
           <div className="row">

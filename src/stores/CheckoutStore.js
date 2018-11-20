@@ -1,8 +1,10 @@
 import {observable, decorate, action} from 'mobx'
 import { 
-  API_GET_CURRENT_CART, API_EDIT_CURRENT_CART,
-  API_GET_ORDER_SUMMARY, API_DELIVERY_TIMES,
-API_CREATE_ORDER,
+  API_GET_CURRENT_CART,
+  API_EDIT_CURRENT_CART,
+  API_GET_ORDER_SUMMARY,
+  API_DELIVERY_TIMES,
+  API_CREATE_ORDER,
   API_CHECK_PROMO } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -29,8 +31,8 @@ class CheckoutStore {
       url += '/' + this.cart._id
     }
     
-    const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    url += '?time=' + time
+    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
+    url += '?time=' + currentTime
     url += '&delivery_zip=' + delivery.zip
     url += '&delivery_date=' + delivery.date
 
@@ -53,7 +55,8 @@ class CheckoutStore {
       cart_id = this.order.cart_id
     }
 
-    const url = `${API_EDIT_CURRENT_CART+cart_id}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
+    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
+    const url = `${API_EDIT_CURRENT_CART+cart_id}?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
     let res
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.patch(url, data)
@@ -65,6 +68,13 @@ class CheckoutStore {
     if (order_summary) {
       this.getOrderSummary(auth, delivery)
     }
+  }
+
+  async updateCartItems(delivery) {
+    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss')
+    const res = await axios.patch(`${API_GET_CURRENT_CART}/items?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, { cart_id: this.cart._id })
+    this.order = res.data
+    return res.data
   }
 
   async getOrderSummary(auth, delivery) {
