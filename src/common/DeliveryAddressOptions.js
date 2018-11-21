@@ -56,7 +56,7 @@ class DeliveryAddressOptions extends Component {
 
   handleAddNewAddress = () => {
 
-    console.log('newpreffered address', this.state.newPreferedAddress)
+    // console.log('newpreffered address', this.state.newPreferedAddress)
     this.setState({invalidText: null})
     if (!this.state.newStreetAddress) {
       this.setState({invalidText: 'Street address cannot be empty'})
@@ -124,7 +124,7 @@ class DeliveryAddressOptions extends Component {
         address[addressType] = val;
       }
     }
-    console.log('adddres', address)
+    // console.log('adddres', address)
 
     let city = address.locality
     if (!city && address.administrative_area_level_1) {

@@ -134,42 +134,6 @@ class Checkout extends Component {
     }
   }
 
-  applyPromo() {
-    this.setState({
-      appliedPromo: true,
-    })
-    this.checkoutStore.applyPromo()
-  }
-
-  toggleTimeDropdown(e) {
-    if (!this.state.lockAddress) {
-      this.setState({addressError: true})
-      return
-    }
-
-    this.setState({
-      addressError: false,
-      timeDropdown: !this.state.timeDropdown
-    })
-  }
-
-  hideTimeDropdown(e) {
-    if (!this.state.timeDropdown) {
-      return
-    }
-
-    this.setState({timeDropdown: false})
-  }
-
-  handleSelectAddress(address_id) {
-    this.setState({selectedAddress: address_id})
-    if (address_id === '0') {
-      this.setState({newAddress: true, newContactName: this.userStore.user.name, newPhoneNumber: this.userStore.user.primary_telephone})
-    } else {
-      this.setState({newAddress: false})
-    }
-  }
-
   handleSelectPayment(payment_id) {
     this.setState({selectedPayment: payment_id})
     if (payment_id === "0") {
@@ -179,53 +143,36 @@ class Checkout extends Component {
     }
   }
 
-  handleSubmitAddress() {
-    if (!this.state.selectedAddress) return
-    this.setState({invalidSelectAddress: null})
-    const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
-    let deliveryTimes = []
-    this.checkoutStore.getDeliveryTimes({
-      street_address: address.street_address,
-      zip: address.zip,
-    }, this.userStore.getHeaderAuth()).then((data) => {
-      const times = data.delivery_windows
-      for (var i = 0, len = times.length; i < len; i++) {
-        addTimes(times[i])
-      }
-
-      this.setState({deliveryTimes, lockAddress: true, addressError: false})
-    }).catch((e) => {
-      if (e.response.data.error) {
-        this.setState({invalidSelectAddress: e.response.data.error.message})
-      }
-      console.error(e)
-    })
-
-    function addTimes(data) {
-      const timeFirst = data[0].split('-')[0]
-      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday]',
-        lastWeek: '[Last] dddd',
-        sameElse: 'DD/MM/YYYY'
-      })
-
-      const findTime = deliveryTimes.findIndex((data) => data.day === day)
-
-      const obj = {
-        time: data[0],
-        date: data[1],
-        availability: data[2]
-      }
-
-      if (findTime === -1) {
-        deliveryTimes.push({day: day, data: [obj]})
-      } else {
-        deliveryTimes[findTime].data.push(obj)
-      }
+  handleSelectAddress = (data) => {
+    const selectedAddress  = this.userStore.selectedDeliveryAddress
+    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
+      this.setState({selectedAddress: data, selectedAddressChanged: true})
+    } else {
+      this.setState({selectedAddressChanged: false})
     }
+  }
+
+  handleAddNewAddress = async (data) => {
+    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
+
+    const dataMap = {
+      name: newContactName, 
+      state: newState,
+      delivery_notes: newDeliveryNotes,
+      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
+      preferred_address: newPreferedAddress
+    }
+
+    const response = await this.userStore.saveAddress(dataMap)
+    const address = this.userStore.selectedDeliveryAddress
+    this.handleSubmitAddress(address)
+    return response
+  }
+
+  handleSubmitAddress = async (address) => {
+    this.modalStore.showDeliveryChange('address', {
+      address,
+    })
   }
 
   handleSubmitPayment() {
@@ -325,13 +272,6 @@ class Checkout extends Component {
 
   }
 
-  handleChangeTime(day, time, date, availability) {
-    if (availability) {
-      return
-    }
-    this.setState({selectedDay: day, selectedDate: date, selectedTime: time, lockTime: true, timeDropdown: false})
-  }
-
   handleAddPayment = (data) => {
     return this.userStore.savePayment(data).then((data) => {
       this.userStore.setUserData(data)
@@ -339,68 +279,6 @@ class Checkout extends Component {
 
       return data
     })
-  }
-
-
-  handleConfirmAddress(e) {
-    this.setState({invalidAddressText: null})
-    if (!this.state.newStreetAddress) {
-      this.setState({invalidAddressText: 'Street address cannot be empty'})
-      return
-    }
-
-    // if (!this.state.newAptNo) {
-    //   this.setState({invalidAddressText: 'Unit cannot be empty'})
-    //   return
-    // }
-
-    if (!this.state.newContactName) {
-      this.setState({invalidAddressText: 'Name cannot be empty'})
-      return
-    }
-
-    if (!this.state.newPhoneNumber) {
-      this.setState({invalidAddressText: 'Telephone cannot be empty'})
-      return
-    }
-
-    // if (!this.state.delivery_notes) {
-    //   this.setState({invalidText: 'Delivery notes cannot be empty'})
-    //   return
-    // }
-    //
-    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = this.state
-
-    this.userStore.saveAddress({
-      name: newContactName, 
-      state: newState,
-      delivery_notes: newDeliveryNotes,
-      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
-      preferred_address: newPreferedAddress
-    }).then((data) => {
-      this.userStore.setUserData(data)
-      this.setState({
-        selectedAddress: this.userStore.user.preferred_address,
-        newAddress: false,
-        invalidAddressText: '',
-        newStreetAddress: '',
-        newAptNo: '',
-        newZip: '',
-        newContactName: '',
-        newPhoneNumber: '',
-        newDeliveryNotes:'',
-        newState:'',
-        newCity: '',
-        newCountry: '',
-        newPreferedAddress: false
-      })
-    }).catch((e) => {
-      const msg = e.response.data.error.message
-      this.setState({invalidAddressText: msg})
-      console.error('Failed to save address', e)
-    })
-
-    e.preventDefault()
   }
 
   showServicePopup() {
@@ -495,10 +373,12 @@ class Checkout extends Component {
               <div style={{maxWidth: '440px'}}>
                 {this.userStore.user && 
                   <DeliveryAddressOptions
-                    editable={false}
-                    lock={true}
+                    lock={false}
                     selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                     user={this.userStore.user}
+                    onAddNew={this.handleAddNewAddress}
+                    onSubmit={this.handleSubmitAddress}
+                    onSelect={this.handleSelectAddress}
                   />
                 }
                 {this.userStore.user && 
@@ -507,6 +387,7 @@ class Checkout extends Component {
                       data={this.state.deliveryTimes}
                       selected={this.userStore.selectedDeliveryTime}
                       onSelectTime={this.handleSelectTime}
+                      title={true}
                     />
                 }
                 <div className="custom-control custom-checkbox mt-2 mb-3">
