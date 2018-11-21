@@ -1121,49 +1121,50 @@ class Mainpage extends Component {
               </div>
 
               { !this.state.searchPage &&
-                  <div className="col-md-10 col-sm-8 product-content-right">
-                    {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
+                  <div className="col-md-10 col-sm-8">
+                    <div className="product-content-right">
+                      {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
-                    <div className="product-breadcrumb">
-                      <span>
-                        <Link to ={"/main"} className="text-black">
-                          All Categories
-                        </Link>
-                      </span>
-                      {this.productStore.path.map((p, i) => (
-                        <span key={i}>
-                          { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                      <div className="product-breadcrumb">
+                        <span>
+                          <Link to ={"/main"} className="text-black">
+                            All Categories
+                          </Link>
                         </span>
-                      ))}
+                        {this.productStore.path.map((p, i) => (
+                          <span key={i}>
+                            { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                          </span>
+                        ))}
+                      </div>
+
+                      { mainDisplay.map((p, i) => (
+                        <ProductList key={i} display={p} mode={this.state.categoryTypeMode}  deliveryTimes={this.state.deliveryTimes}/>
+                      )
+                      )}
                     </div>
-
-                    { mainDisplay.map((p, i) => (
-                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode}  deliveryTimes={this.state.deliveryTimes}/>
-                    )
-                    )}
-
-
                   </div> }
 
                   { this.state.searchPage &&
-                      <div className="col-md-10 col-sm-8 product-content-right">
-                        {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
+                      <div className="col-md-10 col-sm-8">
+                        <div className="product-content-right">
+                          {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
-                        <div className="product-breadcrumb">
-                          <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
-                          <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                          <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
-                            {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
-                          </span>
-                          <hr/>
+                          <div className="product-breadcrumb">
+                            <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
+                            <h3 className="text-italic">"{this.state.searchTerms}"</h3>
+                            <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
+                              {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
+                            </span>
+                            <hr/>
+                          </div>
+
+                          <div className="row">
+                            { this.state.searchDisplayed.map((p, i) => (
+                              <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes} />
+                            ))}
+                          </div>
                         </div>
-
-                        <div className="row">
-                          { this.state.searchDisplayed.map((p, i) => (
-                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes} />
-                          ))}
-                        </div>
-
                       </div> }
                     </div>
                   </div>
