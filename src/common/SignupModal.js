@@ -98,10 +98,6 @@ class SignupModal extends Component {
     })
   }
 
-  componentDidMount() {
-    logModalView('/signup')
-  }
-
   render() {
     let buttonClass = 'btn btn-main'
     if (this.state.name && this.state.email && this.state.password) {

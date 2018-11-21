@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logEvent } from '../utils'
 
 class DeleteModal extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class DeleteModal extends Component {
   }
 
   handleDelete() {
+    logEvent({category: "Cart", action: "ConfirmDelete" })
     const order_summary = this.routing.location.pathname.indexOf('checkout') !== -1
     this.checkoutStore.editCurrentCart({
       quantity: 0, 

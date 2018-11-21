@@ -8,12 +8,13 @@ export const logPageView = () => {
   ReactGA.pageview(window.location.pathname);
 }
 
-export const logEvent = (category = '', action = '', value=null, label='') => {
+export const logEvent = ({category = '', action = '', value=null, label=''} = {}) => {
   if (category && action) {
     console.log("Logging event for ", category, action, value, label);
     var GAEvent = { category: category, action: action };
-    if (label) GAEvent[label] = label;
-    if (value) GAEvent[value] = value;
+    if (label) GAEvent["label"] = label;
+    if (value) GAEvent["value"] = parseFloat(value);
+    console.log("GAEvent is", GAEvent);
     ReactGA.event(GAEvent);
   }
 }
@@ -21,7 +22,7 @@ export const logEvent = (category = '', action = '', value=null, label='') => {
 export const logModalView = (modalPath = '') => {
   if (modalPath) {
     console.log("Logging modal view for ", modalPath);
-    ReactGA.modalView(modalPath);
+    ReactGA.modalview(modalPath);
   }
 }
 

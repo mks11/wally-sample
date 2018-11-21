@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logEvent } from '../utils'
 
 class DeliveryChangeModal extends Component {
   handleChangeDelivery = () => {
@@ -8,6 +8,7 @@ class DeliveryChangeModal extends Component {
     const userStore = this.props.store.user
 
     if (modalStore.deliveryChangeType === 'address') {
+      logEvent({ category: "DeliveryOptions", action: "ConfirmAddressChange" })
       userStore.setDeliveryAddress(modalStore.deliveryChangeData.address)
       if (modalStore.deliveryChangeData.times && modalStore.deliveryChangeData.times.length > 0) {
         // const items = modalStore.deliveryChangeData.times[0]
@@ -16,6 +17,7 @@ class DeliveryChangeModal extends Component {
         // userStore.setDeliveryTime(selected)
       }
     } else {
+      logEvent({ category: "DeliveryOptions", action: "ConfirmTimeChange" })
       userStore.setDeliveryTime(modalStore.deliveryChangeData)
     }
     modalStore.hideDeliveryChange()

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logModalView, logEvent } from '../utils'
 // import { Link } from 'react-router-dom'
 // import ClickOutside from 'react-click-outside'
 // import CardSmall from './CardSmall';
@@ -37,7 +37,6 @@ class DeliveryModal extends Component {
       preferred_address = this.userStore.user.preferred_address
     }
     const fakeUser = this.userStore.loadFakeUser()
-
     this.setState({selectedAddress: preferred_address, fakeUser})
   }
 
@@ -72,6 +71,7 @@ class DeliveryModal extends Component {
     const response = await this.userStore.saveAddress(dataMap)
     const address = this.userStore.selectedDeliveryAddress
     this.handleSubmitAddress(address)
+    logEvent({ category: "DeliveryOptions", action: "SubmitNewAddress" })
     return response
   }
 
@@ -84,6 +84,7 @@ class DeliveryModal extends Component {
       
     const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
     this.setState({isAddressSelected: true, selectedAddress: address, deliveryTimes})
+    logEvent({ category: "DeliveryOptions", action: "SubmitAddress" })
     return data 
   }
 
@@ -93,6 +94,7 @@ class DeliveryModal extends Component {
 
   handleSubmit = (data) => {
     if (this.state.selectedAddress && this.state.selectedTime) {
+      logEvent({ category: "DeliveryOptions", action: "SubmitDeliveryOptions" })
       this.userStore.setDeliveryAddress(this.state.selectedAddress)
       this.userStore.setDeliveryTime(this.state.selectedTime)
       this.userStore.toggleDeliveryModal(false)
@@ -100,6 +102,10 @@ class DeliveryModal extends Component {
     }
   }
 
+  handleCloseModal = () => {
+    logEvent({ category: "DeliveryOptions", action: "CloseDeliveryOptionsWindow" })
+    this.userStore.toggleDeliveryModal(false)
+  }
 
 
   render() {
@@ -114,7 +120,7 @@ class DeliveryModal extends Component {
       <Modal isOpen={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm modal-header--sm-nomargin">
           <div><h3>Select delivery time &amp; location</h3></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
+          <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal()}></button>
         </div>
         <ModalBody className="modal-body-no-footer">
           <div className="checkout-wrap">
