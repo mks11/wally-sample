@@ -235,7 +235,6 @@ class UserStore {
   async getStatus(update) {
     this.readStorage()
     if (!this.token && !this.token.accessToken) {
-      this.logout()
       this.status = false
       return this.status
     }

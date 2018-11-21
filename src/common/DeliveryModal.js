@@ -30,7 +30,7 @@ class DeliveryModal extends Component {
     if (prevProps.deliveryTimes !== this.props.deliveryTimes) {
       this.setState({deliveryTimes: this.props.deliveryTimes})
     }
-    if (this.userStore.deliveryModal && !prevState.selectedAddress) {
+    if (this.userStore.deliveryModal && !prevState.selectedAddress && this.userStore.selectedDeliveryAddress) {
       this.setState({selectedAddress: this.userStore.selectedDeliveryAddress})
     }
   }

@@ -73,7 +73,6 @@ class DeliveryAddressOptions extends Component {
       return
     }
 
-
     this.props.onAddNew(this.state).then((data) => {
       const lastAddress = data.addresses[data.addresses.length - 1]
       this.setState({
