@@ -309,11 +309,7 @@ class Mainpage extends Component {
   handleCheckout() {
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-        this.userStore.toggleDeliveryModal(true)
-      } else {
-        this.routing.push('/checkout')
-      }
+      this.routing.push('/checkout')
     } else {
       this.modalStore.toggleLogin()
     }
@@ -321,12 +317,7 @@ class Mainpage extends Component {
 
   handleCheckoutMobile() {
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-        this.uiStore.toggleCartMobile(false)
-        this.userStore.toggleDeliveryModal(true)
-      } else {
-        this.routing.push('/checkout')
-      }
+      this.routing.push('/checkout')
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()
@@ -907,7 +898,6 @@ class Mainpage extends Component {
                               lock={false}
                               data={this.state.deliveryTimes}
                               selected={this.userStore.selectedDeliveryTime}
-                              isAddressSelected={true}
                               onSelectTime={this.handleSelectTime}
                             />
                           </div>
@@ -1170,7 +1160,7 @@ class Mainpage extends Component {
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal onAddToCart={this.handleAddToCart}/> }
-                <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery} deliveryTimes={this.state.deliveryTimes}/>
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>

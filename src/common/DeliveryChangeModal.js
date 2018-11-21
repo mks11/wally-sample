@@ -19,7 +19,7 @@ class DeliveryChangeModal extends Component {
       userStore.setDeliveryTime(modalStore.deliveryChangeData)
     }
     modalStore.hideDeliveryChange()
-    this.props.onChangeSubmit()
+    this.props.onChangeSubmit && this.props.onChangeSubmit()
   }
 
   render() {

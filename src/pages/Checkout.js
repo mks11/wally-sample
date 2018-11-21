@@ -13,8 +13,9 @@ import {StripeProvider, Elements} from 'react-stripe-elements'
 import { connect, formatMoney } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
-import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
-import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
+import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
+import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
+import DeliveryChangeModal from '../common/DeliveryChangeModal';
 
 class Checkout extends Component {
   constructor(props) {
@@ -83,9 +84,9 @@ class Checkout extends Component {
     ReactGA.pageview("/checkout");
     this.userStore.getStatus(true)
       .then((status) => {
-        if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-          this.userStore.toggleDeliveryModal(true)
-          this.routing.push('/main')
+        const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
+        if (selectedAddress) {
+          this.userStore.setDeliveryAddress(selectedAddress)
         }
 
         this.loadData()
@@ -115,6 +116,8 @@ class Checkout extends Component {
     }).then(data => {
       return this.checkoutStore.getDeliveryTimes(deliveryData)
     }).then(times => {
+      const deliveryTimes = this.checkoutStore.transformDeliveryTimes(times)
+      this.setState({deliveryTimes})
       this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
     }).catch((e) => {
       console.error(e)
@@ -228,6 +231,11 @@ class Checkout extends Component {
   handleSubmitPayment() {
     if (!this.state.selectedPayment) return
     this.setState({lockPayment: true})
+  }
+
+  handleSelectTime = (selectedTime) => {
+    this.modalStore.showDeliveryChange('time', selectedTime)
+    // this.userStore.setDeliveryTime(data)
   }
 
   handleEdit(id, quantity) {
@@ -495,12 +503,10 @@ class Checkout extends Component {
                 }
                 {this.userStore.user && 
                     <DeliveryTimeOptions
-                      editable={false}
-                      lock={true}
-                      data={[]}
+                      lock={false}
+                      data={this.state.deliveryTimes}
                       selected={this.userStore.selectedDeliveryTime}
-                      dropdown={false}
-                      isAddressSelected={true}
+                      onSelectTime={this.handleSelectTime}
                     />
                 }
                 <div className="custom-control custom-checkbox mt-2 mb-3">
@@ -722,6 +728,7 @@ class Checkout extends Component {
                         </div>
                       </div>
                       { this.productStore.open && <ProductModal/> }
+                      <DeliveryChangeModal />
                     </div>
     );
   }
