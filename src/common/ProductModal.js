@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { formatMoney, connect } from '../utils'
+import { formatMoney, connect, logModalView, logEvent } from '../utils'
 import { PRODUCT_BASE_URL } from '../config'
 
 class ProductModal extends Component {
@@ -39,6 +39,8 @@ class ProductModal extends Component {
     }
 
     this.setState({subtitutes})
+
+    logModalView('/product/' + this.productStore.activeProductId)
     
   }
 
@@ -76,6 +78,7 @@ class ProductModal extends Component {
   }
 
   handleAddToCart() {
+    logEvent(category="Cart", action="AddToCart", value=this.state.qty, label=this.productStore.activeProductId)
     const product = this.productStore.activeProduct
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     const order_summary = this.routing.location.pathname.indexOf('checkout') !== -1
@@ -100,6 +103,7 @@ class ProductModal extends Component {
   }
 
   handleSelectSubtitute(id) {
+    logEvent(category="Cart", action="ChooseSubstitute", label=id)
     this.setState({selectedSubtitute: id})
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
+import { validateEmail, connect, logModalView } from '../utils'
 import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
@@ -96,6 +96,10 @@ class SignupModal extends Component {
       // const msg = e.response.data.error.message
       // this.setState({invalidText: msg})
     })
+  }
+
+  componentDidMount() {
+    logModalView('/signup')
   }
 
   render() {
