@@ -36,7 +36,7 @@ class Checkout extends Component {
       selectedDate: null,
       selectedTime: null,
 
-      lockAddress: false,
+      lockAddress: true,
       lockPayment: false,
       lockTime: false,
       confirmHome: false,
@@ -182,6 +182,11 @@ class Checkout extends Component {
 
   handleSubmitAddress = async (address) => {
     this.userStore.setDeliveryAddress(address)
+    this.setState({lockAddress: true})
+  }
+
+  handleUnlockAddress = () => {
+    this.setState({lockAddress: false})
   }
 
   handleSubmitPayment() {
@@ -385,12 +390,14 @@ class Checkout extends Component {
               <div style={{maxWidth: '440px'}}>
                 {this.userStore.user && 
                   <DeliveryAddressOptions
-                    lock={false}
+                    lock={this.state.lockAddress}
+                    editable={true}
                     selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                     user={this.userStore.user}
                     onAddNew={this.handleAddNewAddress}
                     onSubmit={this.handleSubmitAddress}
                     onSelect={this.handleSelectAddress}
+                    onUnlock={this.handleUnlockAddress}
                   />
                 }
                 {this.userStore.user && 

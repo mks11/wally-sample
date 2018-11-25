@@ -50,7 +50,7 @@ class DeliveryModal extends Component {
 
   render() {
     let btnSubmitClass  = 'btn btn-main mt-3'
-    if (this.state.selectedAddress && this.state.selectedTime) {
+    if (this.state.selectedTime) {
       btnSubmitClass += ' active'
     }
 

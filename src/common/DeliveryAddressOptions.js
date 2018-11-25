@@ -152,7 +152,7 @@ class DeliveryAddressOptions extends Component {
 
   unlock = () => {
     this.setState({lock: false})
-    this.props.onUnlock()
+    this.props.onUnlock && this.props.onUnlock()
   }
 
 
