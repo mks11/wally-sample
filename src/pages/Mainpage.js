@@ -72,15 +72,15 @@ class Product extends Component {
   }
 
   handleProductModal() {
-    // if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-      // this.userStore.toggleDeliveryModal(true)
-      // this.productStore.activeProductId = this.props.product.product_id
-    // } else {
+    if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
+      this.userStore.toggleDeliveryModal(true)
+      this.productStore.activeProductId = this.props.product.product_id
+    } else {
       // console.log(this.userStore.getDeliveryParams())
       this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
       })
-    // }
+    }
   }
 
   render() {
@@ -227,13 +227,13 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
-        if (selectedAddress) {
-          this.userStore.setDeliveryAddress(selectedAddress)
+        // if (selectedAddress) {
+          // this.userStore.setDeliveryAddress(selectedAddress)
           this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
             const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
             this.setState({deliveryTimes})
           })
-        }
+        // }
 
         this.loadData(status)
       })

@@ -124,6 +124,16 @@ class Checkout extends Component {
     })
   }
 
+  updateData() {
+    const deliveryData = this.userStore.getDeliveryParams()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
+        appliedPromo: this.checkoutStore.order.promo_amount,
+        appliedPromoCode: this.checkoutStore.order.promo,
+      })
+    })
+  }
+
   applyStoreCredit() {
     if (this.state.applicableStoreCreditAmount) {
       this.setState({
@@ -147,6 +157,7 @@ class Checkout extends Component {
     const selectedAddress  = this.userStore.selectedDeliveryAddress
     if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
       this.setState({selectedAddress: data, selectedAddressChanged: true})
+      this.userStore.setDeliveryAddress(data)
     } else {
       this.setState({selectedAddressChanged: false})
     }
@@ -165,14 +176,12 @@ class Checkout extends Component {
 
     const response = await this.userStore.saveAddress(dataMap)
     const address = this.userStore.selectedDeliveryAddress
-    this.handleSubmitAddress(address)
+    this.userStore.setDeliveryAddress(address)
     return response
   }
 
   handleSubmitAddress = async (address) => {
-    this.modalStore.showDeliveryChange('address', {
-      address,
-    })
+    this.userStore.setDeliveryAddress(address)
   }
 
   handleSubmitPayment() {
@@ -181,8 +190,11 @@ class Checkout extends Component {
   }
 
   handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange('time', selectedTime)
-    // this.userStore.setDeliveryTime(data)
+    this.modalStore.showDeliveryChange('time', selectedTime)    
+  }
+
+  handleChangeDelivery = () => {
+    this.updateData()
   }
 
   handleEdit(id, quantity) {
@@ -609,7 +621,7 @@ class Checkout extends Component {
                         </div>
                       </div>
                       { this.productStore.open && <ProductModal/> }
-                      <DeliveryChangeModal />
+                      <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
                     </div>
     );
   }

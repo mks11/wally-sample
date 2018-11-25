@@ -1854,6 +1854,10 @@ a {
   }
 }
 
+.delivery-time-modal {
+  overflow: visible
+}
+
 .btn-cart-mobile{
   position: fixed;
   bottom: 20px;

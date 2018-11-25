@@ -40,8 +40,8 @@ class DeliveryModal extends Component {
   }
 
   handleSubmit = (data) => {
-    if (this.state.selectedAddress && this.state.selectedTime) {
-      this.userStore.setDeliveryAddress(this.state.selectedAddress)
+    if (/*this.state.selectedAddress && */this.state.selectedTime) {
+      // this.userStore.setDeliveryAddress(this.state.selectedAddress)
       this.userStore.setDeliveryTime(this.state.selectedTime)
       this.userStore.toggleDeliveryModal(false)
       this.props.onChangeSubmit()
@@ -60,7 +60,7 @@ class DeliveryModal extends Component {
           <div><h3>Select delivery time</h3></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
         </div>
-        <ModalBody className="modal-body-no-footer">
+        <ModalBody className="modal-body-no-footer delivery-time-modal">
           <div className="checkout-wrap">
             <div className="">
               <div >
