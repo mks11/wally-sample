@@ -10,7 +10,7 @@ import CardSmall from '../common/CardSmall';
 import ClickOutside from 'react-click-outside'
 import {StripeProvider, Elements} from 'react-stripe-elements'
 
-import { connect, formatMoney } from '../utils'
+import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
@@ -193,6 +193,7 @@ class Checkout extends Component {
   }
 
   handleSubmitPayment() {
+    logEvent({ category: "Checkout", action: "SubmitPayment" })
     if (!this.state.selectedPayment) return
     this.setState({lockPayment: true})
   }
@@ -237,7 +238,7 @@ class Checkout extends Component {
       this.setState({invalidText: 'Please select payment'})
       return
     }
-
+    logEvent({ category: "Checkout", action: "ConfirmCheckout" })
 
     this.checkoutStore.createOrder({
       store_credit: this.state.appliedStoreCreditAmount > 0,
@@ -267,7 +268,7 @@ class Checkout extends Component {
       this.setState({invalidText: 'Promo code empty'})
       return
     }
-
+    logEvent({ category: "Checkout", action: "AddPromo", label: promoCode })
     this.checkoutStore.checkPromo({
       subTotal,
       promoCode
@@ -294,6 +295,7 @@ class Checkout extends Component {
 
   handleAddPayment = (data) => {
     return this.userStore.savePayment(data).then((data) => {
+      logEvent({ category: "Checkout", action: "SubmitNewPayment" })
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
 
@@ -323,6 +325,11 @@ class Checkout extends Component {
 
   hidePackagingPopup() {
     this.setState({packagingdeposit: false})
+  }
+
+  handleConfirmHome() {
+    logEvent({ category: "Checkout", action: "ConfirmAtHome" })
+    this.setState({confirmHome: !this.state.confirmHome})
   }
 
   render() {
@@ -413,8 +420,8 @@ class Checkout extends Component {
                     />
                 }
                 <div className="custom-control custom-checkbox mt-2 mb-3">
-                  <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-                  <label className="custom-control-label" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
+                  <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.handleConfirmHome()} />
+                  <label className="custom-control-label" onClick={e=>this.handleConfirmHome()}>I confirm that I will be at home or have a doorman</label>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}

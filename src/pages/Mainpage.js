@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { formatMoney, connect } from '../utils'
+import { formatMoney, connect, logEvent, logModalView } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import { AsyncTypeahead} from 'react-bootstrap-typeahead'
@@ -73,6 +73,7 @@ class Product extends Component {
 
   handleProductModal() {
     if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
+      logModalView('/delivery-options-window')
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = this.props.product.product_id
     } else {
@@ -223,7 +224,7 @@ class Mainpage extends Component {
   }
 
   componentDidMount() {
-    ReactGA.pageview("/main");
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
@@ -308,6 +309,7 @@ class Mainpage extends Component {
   }
 
   handleCheckout() {
+    logEvent({ category: "Cart", action: "ClickCheckout" })
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
       this.routing.push('/checkout')
@@ -317,6 +319,7 @@ class Mainpage extends Component {
   }
 
   handleCheckoutMobile() {
+    logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
       this.routing.push('/checkout')
     } else {
@@ -326,16 +329,19 @@ class Mainpage extends Component {
   }
 
   handleEdit(data) {
+    logEvent({category: "Cart", action: "ClickEditProduct"})
     this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams()).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
     })
   }
 
   handleDelete(id) {
+    logEvent({category: "Cart", action: "ClickDeleteProduct"})
     this.checkoutStore.toggleDeleteModal(id)
   }
 
   handleDeleteMobile(id) {
+    logEvent({category: "Cart", action: "ClickDeleteProductMobile"})
     this.uiStore.toggleCartMobile()
     this.checkoutStore.toggleDeleteModal(id)
   }
@@ -400,9 +406,11 @@ class Mainpage extends Component {
   handleShowCartDropdown = () => {
     this.uiStore.hideAllDropdown()
     this.uiStore.toggleCartDropdown(true)
+    logModalView('/cart')
   }
 
   handleHideCartDropdown = () => {
+    logEvent({category: 'Cart', action: "CloseCart"})
     this.uiStore.toggleCartDropdown(false)
   }
 
@@ -567,6 +575,7 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
+      logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -632,6 +641,7 @@ class Mainpage extends Component {
   }
 
   handleSubmitDeliveryAddress= () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditAddressChoice" })
     if (!this.state.selectedAddressChanged) {
       return
     }
@@ -647,6 +657,7 @@ class Mainpage extends Component {
   }
 
   handleSubmitDeliveryTime= () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
     if (!this.state.selectedTimeChanged) {
       return
     }
@@ -658,6 +669,12 @@ class Mainpage extends Component {
 
   handleAddToCart = (data) => {
     data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+  }
+
+  handleOpenCartMobile = () => {
+    logModalView('/cart-mobile')
+    this.uiStore.toggleCartMobile(true)
+
   }
 
   render() {
@@ -1163,7 +1180,7 @@ class Mainpage extends Component {
                 { this.productStore.open && <ProductModal onAddToCart={this.handleAddToCart}/> }
                 <DeliveryModal onChangeSubmit={this.handleChangeDelivery} deliveryTimes={this.state.deliveryTimes}/>
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
-                <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
+                <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
                   {cartItems.length>0 ?

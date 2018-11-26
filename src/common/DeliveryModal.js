@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logModalView, logEvent } from '../utils'
+// import { Link } from 'react-router-dom'
+// import ClickOutside from 'react-click-outside'
+// import CardSmall from './CardSmall';
+// import {StripeProvider, Elements} from 'react-stripe-elements'
+// import { STRIPE_API_KEY } from '../config'
+// import PlacesAutocomplete, {
+//   geocodeByAddress,
+//   getLatLng,
+// } from 'react-places-autocomplete';
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 
 class DeliveryModal extends Component {
@@ -21,8 +30,6 @@ class DeliveryModal extends Component {
     if (this.userStore.user) {
       preferred_address = this.userStore.user.preferred_address
     }
-    // const fakeUser = this.userStore.loadFakeUser()
-
     this.setState({selectedAddress: preferred_address || this.userStore.selectedDeliveryAddress})
   }
 
@@ -41,11 +48,16 @@ class DeliveryModal extends Component {
 
   handleSubmit = (data) => {
     if (/*this.state.selectedAddress && */this.state.selectedTime) {
-      // this.userStore.setDeliveryAddress(this.state.selectedAddress)
+      logEvent({ category: "DeliveryOptions", action: "SubmitDeliveryOptions" })
       this.userStore.setDeliveryTime(this.state.selectedTime)
       this.userStore.toggleDeliveryModal(false)
       this.props.onChangeSubmit()
     }
+  }
+
+  handleCloseModal = () => {
+    logEvent({ category: "DeliveryOptions", action: "CloseDeliveryOptionsWindow" })
+    this.userStore.toggleDeliveryModal(false)
   }
 
   render() {
@@ -58,7 +70,7 @@ class DeliveryModal extends Component {
       <Modal isOpen={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm modal-header--sm-nomargin">
           <div><h3>Select delivery time</h3></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.userStore.toggleDeliveryModal(false)}></button>
+          <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal()}></button>
         </div>
         <ModalBody className="modal-body-no-footer delivery-time-modal">
           <div className="checkout-wrap">

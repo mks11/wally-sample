@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { formatMoney, connect } from '../utils'
+import { formatMoney, connect, logModalView, logEvent } from '../utils'
 import { PRODUCT_BASE_URL } from '../config'
 
 class ProductModal extends Component {
@@ -39,6 +39,8 @@ class ProductModal extends Component {
     }
 
     this.setState({subtitutes})
+
+    logModalView('/product/' + this.productStore.activeProductId)
     
   }
 
@@ -76,6 +78,7 @@ class ProductModal extends Component {
   }
 
   handleAddToCart() {
+    logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:this.productStore.activeProductId})
     const product = this.productStore.activeProduct
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     const order_summary = this.routing.location.pathname.indexOf('checkout') !== -1
@@ -100,7 +103,13 @@ class ProductModal extends Component {
   }
 
   handleSelectSubtitute(id) {
+    logEvent({category:"Product", action:"ChooseSubstitute"})
     this.setState({selectedSubtitute: id})
+  }
+
+  handleCloseModal(e) {
+    logEvent({category:"Product", action:"ClickClosed", label:this.productStore.activeProductId})
+    this.productStore.hideModal(e)
   }
 
 
@@ -152,7 +161,7 @@ class ProductModal extends Component {
       <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
         <div className="modal-header">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.productStore.hideModal(e)} ></button>
+          <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal(e)} ></button>
         </div>
         <ModalBody className="modal-body-no-footer">
           <div className="row">

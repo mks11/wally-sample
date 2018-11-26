@@ -1,5 +1,30 @@
 import {inject, observer} from 'mobx-react'
+import ReactGA from 'react-ga'
 const connect = str => Comp => inject([str])(observer(Comp));
+
+export const logPageView = () => {
+  console.log('Logging pageview for ${window.location.pathname}');
+  ReactGA.set({ page: window.location.pathname });
+  ReactGA.pageview(window.location.pathname);
+}
+
+export const logEvent = ({category = '', action = '', value=null, label=''} = {}) => {
+  if (category && action) {
+    console.log("Logging event for ", category, action, value, label);
+    var GAEvent = { category: category, action: action };
+    if (label) GAEvent["label"] = label;
+    if (value) GAEvent["value"] = parseFloat(value);
+    console.log("GAEvent is", GAEvent);
+    ReactGA.event(GAEvent);
+  }
+}
+
+export const logModalView = (modalPath = '') => {
+  if (modalPath) {
+    console.log("Logging modal view for ", modalPath);
+    ReactGA.modalview(modalPath);
+  }
+}
 
 const validateEmail = (email) => {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
