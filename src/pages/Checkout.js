@@ -93,6 +93,8 @@ class Checkout extends Component {
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
           this.setState({selectedAddress: selectedAddress._id})
+        } else {
+          this.setState({lockAddress: false})
         }
 
         if (this.userStore.user.payment.length > 0) {
@@ -177,6 +179,7 @@ class Checkout extends Component {
     const response = await this.userStore.saveAddress(dataMap)
     const address = this.userStore.selectedDeliveryAddress
     this.userStore.setDeliveryAddress(address)
+    this.setState({lockAddress: true})
     return response
   }
 
