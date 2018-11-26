@@ -83,6 +83,8 @@ class DeliveryModal extends Component {
                   onSelectTime={this.handleSelectTime}
                 />
               </div>
+            <div><br></br></div>
+            <div className="font-italic mb-1 text-center">Order by 2:00PM for same day delivery</div>
             <button onClick={this.handleSubmit} className={btnSubmitClass}>Submit</button>
             </div>
           </div>
