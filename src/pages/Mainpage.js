@@ -312,7 +312,11 @@ class Mainpage extends Component {
     logEvent({ category: "Cart", action: "ClickCheckout" })
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryTime) {
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.modalStore.toggleLogin()
     }
@@ -321,7 +325,11 @@ class Mainpage extends Component {
   handleCheckoutMobile() {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
-      this.routing.push('/checkout')
+      if (!this.userStore.selectedDeliveryTime) {
+        this.userStore.toggleDeliveryModal(true)
+      } else {
+        this.routing.push('/checkout')
+      }
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleLogin()

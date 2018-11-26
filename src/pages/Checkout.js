@@ -84,22 +84,26 @@ class Checkout extends Component {
     ReactGA.pageview("/checkout");
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
-        if (selectedAddress) {
-          this.userStore.setDeliveryAddress(selectedAddress)
-        }
+        if (status) {
+          const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
+          if (selectedAddress) {
+            this.userStore.setDeliveryAddress(selectedAddress)
+          }
 
-        this.loadData()
-        if (this.userStore.user.addresses.length > 0) {
-          const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
-          this.setState({selectedAddress: selectedAddress._id})
+          this.loadData()
+          if (this.userStore.user.addresses.length > 0) {
+            const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
+            this.setState({selectedAddress: selectedAddress._id})
+          } else {
+            this.setState({lockAddress: false})
+          }
+
+          if (this.userStore.user.payment.length > 0) {
+            const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
+            this.setState({selectedPayment: selectedPayment._id})
+          }
         } else {
-          this.setState({lockAddress: false})
-        }
-
-        if (this.userStore.user.payment.length > 0) {
-          const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
-          this.setState({selectedPayment: selectedPayment._id})
+          this.routing.push('/main')
         }
       })
   }
