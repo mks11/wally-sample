@@ -125,37 +125,31 @@ class ProductModal extends Component {
 
     const inventory = product.available_inventory[0] ? product.available_inventory[0] : null
     let qtyOptions = []
-    var minSize = 1
-    if (inventory.price_unit == "lb" || inventory.price_unit == "oz") minSize = 0.25
-    for (var i = 1, len = 10; i <= len; i++) {
-      qtyOptions.push(i*minSize)
+    var minSize = product.min_size
+    // if (inventory.price_unit == "lb" || inventory.price_unit == "oz") minSize = 0.25
+    for (var i = 0, len = 9; i <= len; i++) {
+      qtyOptions.push(minSize + i * product.increment_size)
     }
 
     let price = inventory.price / 100
-    let price_unit = inventory.price_unit
-    let unit_type = inventory.price_unit
-    let unit_size = product.unit_size
-
-    let unit = 1
-
-    if (price_unit !== unit_type &&  unit_size) {
-      unit = parseFloat(unit_size.split(' ')[0])
-    }
-
     const totalPrice = price * this.state.qty
+
+    var unit_type = product.unit_type
+    if (!unit_type) unit_type = product.price_unit
+    var price_unit = ""
+    if (['ea'].includes(unit_type)) {
+        if (product.subcat_name) {
+          price_unit += product.subcat_name  
+        } else {
+          price_unit += 'unit'
+        }
+    } else {
+      price_unit += unit_type
+    }
 
     const packaging = product.packaging[0] ? product.packaging[0] : null
     const packaging_type = packaging.type
     const packaging_description = packaging.description
-
-    let qty_unit_type = unit_type 
-    if (qty_unit_type !== 'lb' && qty_unit_type !== 'oz') {
-      qty_unit_type = ''
-    }
-
-    let display_unit = unit_type
-    if (unit_type == 'ea') display_unit = "unit"
-
 
     return (
       <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
@@ -169,7 +163,6 @@ class ProductModal extends Component {
               <div className="row mb-3">
                 <div className="col-sm-6">
                   <h3 className="mb-0">{product.name}</h3>
-                  {/* <div>Hillside Farms, NY</div>*/}
                 </div>
                 <div className="col-sm-6">
                   <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
@@ -190,7 +183,7 @@ class ProductModal extends Component {
             <div className="col-md-6">
               <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
               <div>Ship and sold by The Wally Shop.</div>
-              <div>Sold by the {display_unit}.</div>
+              <div>Sold by the {price_unit}.</div>
               <hr />
 
               <div className={infoPackageClass}>
@@ -207,13 +200,13 @@ class ProductModal extends Component {
               <div className="form-group" style={{maxWidth: '140px'}}>
                 <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
                   { qtyOptions.map((v, i) => {
-                    let unit = qty_unit_type
-                    if (unit !== '' && v>1) {
-                      unit = qty_unit_type+'s'
-                    }
+                    // let unit = qty_unit_type
+                    // if (unit !== '' && v>1) {
+                    //   unit = qty_unit_type+'s'
+                    // }
 
                     return(
-                      <option key={i} value={v}>{v} {unit}</option>
+                      <option key={i} value={v}>{v}</option>
                     )
                   })}
                 </select>

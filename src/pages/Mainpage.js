@@ -87,18 +87,20 @@ class Product extends Component {
   render() {
     const product = this.props.product
     let price = product.product_price/100
-    let price_unit = product.price_unit
+    var unit_type = product.unit_type
+    if (!unit_type) unit_type = product.price_unit
+    var price_unit = "per "
 
-    let unit = 1
-    if (price_unit != "ea") {
-      price_unit = "per " + product.price_unit
-    } else if (!product.price_unit) {
-      price_unit = ""
+    if (['ea'].includes(unit_type)) {
+      if (product.subcat_name) {
+        price_unit += product.subcat_name  
+      } else {
+        price_unit += 'unit'
+      }
     } else {
-      price_unit = ""
+      price_unit += unit_type
     }
 
-    // price *= unit
     return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
