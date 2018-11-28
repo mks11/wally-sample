@@ -101,6 +101,9 @@ class Product extends Component {
       price_unit += unit_type
     }
 
+    var producer = ""
+    if (product.producer) producer += product.producer
+
     return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
@@ -111,8 +114,10 @@ class Product extends Component {
           {price_unit}
         </div>
       </div>
-      { product.product_name && <span className="product-desc">{product.product_name}</span>}
-      { product.name && <span className="product-desc">{product.name}</span>}
+      { producer && <span className="product-producer">{producer}</span>}
+      <br></br>
+      { product.product_name && <span className="product-desc"><strong>{product.product_name}</strong></span>}
+      { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
     </div>
     )
   }

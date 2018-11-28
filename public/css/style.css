@@ -1404,6 +1404,16 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   border-right: 1px solid #ececec
 }
 
+.product-producer {
+  font-size: 13px
+}
+
+@media (max-width: 768px) {
+  .product-producer {
+    font-size: 9px
+  } 
+}
+
 /* New Style */
 .header-wrap{/*position: relative;*/z-index:1030;}
 

@@ -147,6 +147,17 @@ class ProductModal extends Component {
       price_unit += unit_type
     }
 
+    var weight_unit = "lbs"
+    var unit_weight = product.unit_weight;
+    if (unit_weight && product.unit_weight && unit_weight < 0.05) {
+      weight_unit = "oz"
+      unit_weight = unit_weight * 16
+    }
+
+    if (unit_weight) {
+      unit_weight.toFixed(1)
+    }
+
     const packaging = product.packaging[0] ? product.packaging[0] : null
     const packaging_type = packaging.type
     const packaging_description = packaging.description
@@ -184,6 +195,7 @@ class ProductModal extends Component {
               <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
               <div>Ship and sold by The Wally Shop.</div>
               <div>Sold by the {price_unit}.</div>
+              { (['ea', 'bunch', 'pint'].includes(unit_type) && product.unit_weight) && <div>Average weight is {product.unit_weight} {weight_unit}.</div> }
               <hr />
 
               <div className={infoPackageClass}>
