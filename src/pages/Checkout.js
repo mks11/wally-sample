@@ -572,8 +572,13 @@ class Checkout extends Component {
                     </div>
 
                     <div className="summary">
-                      <span>Store credit</span>
-                      <span>{formatMoney(order.applied_store_credit/100)}</span>
+                      <span>Applied Discount</span>
+                      <span>-{formatMoney(order.promo_discount/100)}</span>
+                    </div>
+
+                    <div className="summary">
+                      <span>Applied Store credit</span>
+                      <span>-{formatMoney(order.applied_store_credit/100)}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
