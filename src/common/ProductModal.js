@@ -245,7 +245,7 @@ class ProductModal extends Component {
               <br/>
               <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
               <button onClick={e => this.handleAddToCart()} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
-              <div className="text-muted">Final total based on approximate weight</div>
+              <div className="text-muted">Final total subject to measured weights and at-location prices</div>
             </div>
           </div>
           <div className="row">
@@ -265,7 +265,7 @@ class ProductModal extends Component {
                       <div><span className="font-weight-bold">Organic</span>: {product.organic ? 'Yes' : 'No'}</div>
                     </div>
                   </div>
-                  <div><span className="font-weight-bold">Farms</span>: {product.farms && product.farms.join(',')}</div>
+                  <div><span className="font-weight-bold">Farms</span>: {product.farms && product.farms.join(', ')}</div>
                 </div>
               </div>
             </div>
