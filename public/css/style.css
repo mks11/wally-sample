@@ -1414,6 +1414,12 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   } 
 }
 
+@media (min-width: 768px) {
+  .product-desc {
+    font-size: 16px
+  }
+}
+
 /* New Style */
 .header-wrap{/*position: relative;*/z-index:1030;}
 

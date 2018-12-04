@@ -107,10 +107,10 @@ class Product extends Component {
     return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
-        <div className="col-6 product-price">
+        <div className="col-3 product-price">
           {formatMoney(price)}
         </div>
-        <div className="col-6 product-weight">
+        <div className="col-9 product-weight">
           {price_unit}
         </div>
       </div>

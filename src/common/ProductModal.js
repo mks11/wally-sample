@@ -128,7 +128,9 @@ class ProductModal extends Component {
     var minSize = product.min_size
     // if (inventory.price_unit == "lb" || inventory.price_unit == "oz") minSize = 0.25
     for (var i = 0, len = 9; i <= len; i++) {
-      qtyOptions.push(minSize + i * product.increment_size)
+      var opt = minSize + i * product.increment_size
+      qtyOptions.push(+(opt.toFixed(3)))
+      
     }
 
     let price = inventory.price / 100
