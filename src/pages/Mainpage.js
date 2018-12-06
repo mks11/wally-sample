@@ -234,14 +234,15 @@ class Mainpage extends Component {
     ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
-        // if (selectedAddress) {
-          // this.userStore.setDeliveryAddress(selectedAddress)
-          this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
-            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-            this.setState({deliveryTimes})
-          })
-        // }
+        const selectedAddress = this.userStore.selectedDeliveryAddress
+          || (this.userStore.user
+            ? this.userStore.getAddressById(this.userStore.user.preferred_address)
+            : null)
+
+        this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({deliveryTimes})
+        })
 
         this.loadData(status)
       })
@@ -572,17 +573,8 @@ class Mainpage extends Component {
   handleSubmitAddress = async (address) => {
     this.modalStore.showDeliveryChange('address', {
       address,
-      // times
     })
     this.userStore.setDeliveryAddress(address)
-    // this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
-    //   const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
-    //   this.setState({selectedAddressChanged: false})
-    //   this.modalStore.showDeliveryChange('address', {
-    //     address,
-    //     times
-    //   })
-    // })
     return
   }
 

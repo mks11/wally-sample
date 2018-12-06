@@ -106,7 +106,7 @@ class TopNav extends Component {
 
 
     let topBarClass = 'top-bar d-none'
-    if (this.uiStore.topBar && this.userStore.status) {
+    if (this.uiStore.topBar) {
       topBarClass = 'top-bar'
       headerWrapClass += ' top-bar-open'
     }
@@ -154,20 +154,16 @@ class TopNav extends Component {
           </div>
         </div>
         <header className="aw-header navbar-white">
-          {
-          this.userStore.status ? (
-            <div className={topBarClass}>
-              <div className="container">
-                <div onClick={this.handleReferralModal}>
-                  Refer a friend and get 15% off
-                </div>
-                <button className="close-top-bar" onClick={this.handleCloseTopBar}>
-                  <i className="fa fa-times-circle" aria-hidden="true" ></i>
-                </button>
+          <div className={topBarClass}>
+            <div className="container">
+              <div onClick={this.handleReferralModal}>
+                Happy Planet. Happy Bellies. Happy Holidays. Get a Wally Shop gift card today.
               </div>
+              <button className="close-top-bar" onClick={this.handleCloseTopBar}>
+                <i className="fa fa-times-circle" aria-hidden="true" ></i>
+              </button>
             </div>
-            ) : null
-          }
+          </div>
           <div className="container">
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
