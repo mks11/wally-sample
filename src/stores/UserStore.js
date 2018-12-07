@@ -35,6 +35,7 @@ class UserStore {
   activePayment = null
 
   refPromo = null
+  giftCardPromo = null
 
   refUrl = ''
 
@@ -423,6 +424,7 @@ decorate(UserStore, {
   togglePromoSuccessModal: action,
 
   refPromo: observable,
+  giftCardPromo: observable,
 
   refUrl: observable,
 

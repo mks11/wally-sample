@@ -234,6 +234,8 @@ class Mainpage extends Component {
     ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
+        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+        
         const selectedAddress = this.userStore.selectedDeliveryAddress
           || (this.userStore.user
             ? this.userStore.getAddressById(this.userStore.user.preferred_address)
@@ -308,6 +310,31 @@ class Mainpage extends Component {
     })
   }
 
+  processGiftCardPromo(userStatus) {
+    if (userStatus) {
+      this.checkoutStore.checkPromo({ promoCode: this.userStore.giftCardPromo }, this.userStore.getHeaderAuth())
+      .then((data) => {
+        let msg = ''
+        if (data.valid) {
+          msg = 'Store Credit Redeemed'
+          this.userStore.getUser().then(() => {
+            this.loadData()
+          })
+        } else {
+          msg = 'Invalid Promo-code'
+        }
+        this.modalStore.toggleResultReferral(msg)
+        this.userStore.giftCardPromo = null
+      })
+      .catch((e) => {
+        const msg = !e.response.data.error ? 'Check Promo failed' : e.response.data.error.message
+        this.modalStore.toggleResultReferral(msg)
+        this.userStore.giftCardPromo = null
+      })
+    } else {
+      this.modalStore.toggleLogin()
+    }
+  }
 
   componentDidUpdate() {
     const id = this.props.match.params.id

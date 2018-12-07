@@ -13,6 +13,8 @@ class ModalStore {
 
   invite = false
   referral = false
+  resultReferral = false
+  resultReferralMsg = null
 
   product = false
   productId = null
@@ -72,6 +74,11 @@ class ModalStore {
     this.referral = !this.referral
   }
 
+  toggleResultReferral(msg) {
+    this.resultReferralMsg = msg || null
+    this.resultReferral = !this.resultReferral
+  }
+
   toggleWelcome() {
     this.welcome = !this.welcome
   }
@@ -114,6 +121,8 @@ decorate(ModalStore, {
   invalidZipSuccess: observable,
   invite: observable,
   referral: observable,
+  resultReferral: observable,
+  resultReferralMsg: observable,
   product: observable,
   productId: observable,
   changeProduct: observable,
@@ -127,6 +136,7 @@ decorate(ModalStore, {
   toggleInvalidSuccess: action,
   toggleInvite: action,
   toggleReferral: action,
+  toggleResultReferral: action,
   toggleWelcome: action,
   setLoginNextRoute: action,
   deliveryChange: observable,

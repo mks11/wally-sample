@@ -47,7 +47,7 @@ class SignupModal extends Component {
       email: this.state.email,
       password: this.state.password,
       signup_zip: this.zipStore.selectedZip,
-      reference_promo: this.userStore.refPromo
+      reference_promo: this.userStore.refPromo || this.userStore.giftCardPromo
     }).then((data) => {
       this.userStore.setUserData(data.user)
       this.userStore.setToken(data.token)

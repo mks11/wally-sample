@@ -26,13 +26,7 @@ class GiftCheckout extends Component {
   componentDidMount() {
     ReactGA.pageview("/giftcard");
 
-    const queryParams = qs.parse(this.props.location.search)
-    const { giftcard } = queryParams
-
-    if (giftcard) {
-      console.log(giftcard)
-      this.routing.push('/')
-    }
+    this.handleGiftcardRedirect()
 
     this.userStore.getStatus(true)
       .then((status) => {
@@ -45,7 +39,18 @@ class GiftCheckout extends Component {
       })
   }
 
-  handleGiftCheckoutSubmit = e => {
+  handleGiftcardRedirect() {
+    const queryParams = qs.parse(this.props.location.search)
+    const { giftcard } = queryParams
+
+    if (giftcard) {
+      this.userStore.giftCardPromo = giftcard
+      this.routing.push('/main')
+    }
+  }
+
+  handleGiftCheckoutSubmit = data => {
+    console.log(data)
   }
 
   handleAddPayment = data => {
