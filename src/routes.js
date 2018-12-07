@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
+import GiftCheckout from './pages/GiftCheckout';
 import InviteFriends from './pages/InviteFriends';
 import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
@@ -51,6 +52,7 @@ export default (
         <Route exact path="/about" component={About}/>
         <Route exact path="/cart/add" component={CartAdd}/>
         <Route exact path="/checkout" component={Checkout}/>
+        <Route exact path="/gift/checkout" component={GiftCheckout}/>
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>
         <Route exact path="/signup" component={Signup}/>

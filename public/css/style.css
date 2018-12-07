@@ -2164,3 +2164,78 @@ color:#6e8692
   border-radius: 12px;
   border: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.gift-checkout-wrap {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 50px;
+}
+
+.gift-checkout-wrap .gift-icon {
+  color: #78C98D;
+  padding: 10px;
+}
+
+.gift-checkout-wrap .gift-amount-btn-group {
+  width: 100%;
+}
+
+.gift-checkout-wrap .gift-amount-btn {
+  border: 2px solid #ced4da;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.gift-checkout-wrap .gift-amount-btn.selected {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.gift-checkout-wrap #giftAmount {
+  margin-top: 10px;
+}
+
+.gift-checkout-wrap label {
+  font-size: 18px;
+}
+
+.gift-checkout-wrap textarea {
+  height: 100px;
+}
+
+.gift-checkout-wrap .btn {
+  border-radius: 10px;
+}
+
+.gift-checkout-wrap .gift-submit {
+  background-color: #cecece;
+  border: 0;
+  font-size: 22px;
+  height: 60px;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.gift-checkout-wrap .gift-submit.active {
+  background-color: #78C98D !important;
+}
