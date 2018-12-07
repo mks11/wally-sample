@@ -54,11 +54,7 @@ class About extends Component {
                 <div className="tagline">
                   <h1>Our Name</h1>
                   <p className="">
-                  The name “The Wally Shop” was inspired by a cooperative of individuals from India called the dabbawala. Dubbed the world’s “best food delivery system”, they visit suburbs to pick up worker’s freshly made lunch tiffins - usually prepared by a wife - and deliver them to their respective husbands working in the city. After lunch, the tiffins are collected and returned.
-                  </p>
-
-                  <p>
-                  At The Wally Shop, our goal is similar: we offer same-day delivery and a completely closed loop system with to exclusively reusable packaging. And by shopping at farmers markets and local stores for healthy, organic ingredients, The Wally Shop gives you a fresh take on package groceries.
+                  The name "The Wally Shop" was inspired by an incredible cooperative of individuals from India called the dabbawalla. Dubbed the world’s “best food delivery system”, they visit suburbs to pick up worker’s freshly made lunch tiffins - usually prepared by a wife - and deliver them to their respective husbands working in the city. After lunch, the tiffins are collected and returned. At The Wally Shop, our goal is similar: we offer same-day delivery and a completely closed loop system with exclusively reusable packaging. And by shopping at farmers markets and local stores for healthy, organic ingredients, The Wally Shop gives you a fresh take on package-free groceries.
                   </p>
                 </div>  
               </div> 
