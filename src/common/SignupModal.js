@@ -54,6 +54,7 @@ class SignupModal extends Component {
       this.modalStore.toggleSignup()
       this.modalStore.toggleWelcome()
       this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(),  this.userStore.getDeliveryParams())
+      this.userStore.giftCardPromo = null
     }).catch((e) => {
       console.error('Failed to signup', e)
       const msg = e.response.data.error.message

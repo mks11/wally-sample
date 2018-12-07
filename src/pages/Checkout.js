@@ -9,7 +9,7 @@ import ProductModal from '../common/ProductModal';
 import ClickOutside from 'react-click-outside'
 import PaymentSelect from '../common/PaymentSelect'
 
-import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
+import { connect, formatMoney, logEvent, logModalView, logPageView, datesEqual } from '../utils'
 
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
@@ -118,11 +118,15 @@ class Checkout extends Component {
       dataOrder = data
       return data
     }).then(data => {
-      return this.checkoutStore.getDeliveryTimes(deliveryData)
-    }).then(times => {
-      const deliveryTimes = this.checkoutStore.transformDeliveryTimes(times)
-      this.setState({deliveryTimes})
-      this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
+      if (!datesEqual(data.delivery_date, deliveryData.date)) {
+        return this.checkoutStore.getDeliveryTimes().then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({deliveryTimes})
+          this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, deliveryTimes)
+          this.setState({invalidText: 'Please select address'})
+        })
+      }
+      return null
     }).catch((e) => {
       console.error(e)
     })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { formatMoney, connect, logEvent, logModalView } from '../utils'
+import { formatMoney, connect, logEvent, logModalView, datesEqual } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import { AsyncTypeahead} from 'react-bootstrap-typeahead'
@@ -294,6 +294,13 @@ class Mainpage extends Component {
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
+      if (!datesEqual(data.delivery_date, this.userStore.getDeliveryParams().date)) {
+        this.checkoutStore.getDeliveryTimes().then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({deliveryTimes})
+          this.userStore.toggleDeliveryModal(true)
+        })
+      }
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
 
       if (this.userStore.cameFromCartUrl) {
