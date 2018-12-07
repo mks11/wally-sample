@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
 import GiftForm from './gift/GiftForm';
-import {StripeProvider, Elements} from 'react-stripe-elements'
 
-import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
+import { connect } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
 class GiftCheckout extends Component {
@@ -25,7 +23,7 @@ class GiftCheckout extends Component {
 
 
   componentDidMount() {
-    ReactGA.pageview("/gift/checkout");
+    ReactGA.pageview("/giftcard");
     this.userStore.getStatus(true)
       .then((status) => {
         if (status) {
@@ -37,40 +35,24 @@ class GiftCheckout extends Component {
       })
   }
 
-  loadData() {
-    let dataOrder
-    const deliveryData = this.userStore.getDeliveryParams()
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
-      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
-        appliedPromo: this.checkoutStore.order.promo_amount,
-        appliedPromoCode: this.checkoutStore.order.promo,
-      })
-
-      dataOrder = data
-      return data
-    }).then(data => {
-      return this.checkoutStore.getDeliveryTimes(deliveryData)
-    }).then(times => {
-      const deliveryTimes = this.checkoutStore.transformDeliveryTimes(times)
-      this.setState({deliveryTimes})
-      this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
-    }).catch((e) => {
-      console.error(e)
-    })
-  }
-
   handleGiftCheckoutSubmit = e => {
   }
 
+  handleAddPayment = data => {
+    return this.userStore.savePayment(data).then((data) => {
+      this.userStore.setUserData(data)
+      this.setState({
+        selectedPayment: this.userStore.user.preferred_payment,
+        newPayment: false
+      })
+      return data
+    })
+  }
+
   render() {
-    const selectedPayment = null //this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
-
-    let paymentFormClass = 'addPaymentForm'
-    if (!this.state.newPayment) {
-      paymentFormClass += ' d-none'
-    }
-
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
+    const userPayment = this.userStore.user && this.userStore.user.payment || null
+    const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
 
     return (
       <div className="App">
@@ -83,6 +65,9 @@ class GiftCheckout extends Component {
             <GiftForm
               giftFrom={giftFrom}
               onSubmit={this.handleGiftCheckoutSubmit}
+              onAddPayment={this.handleAddPayment}
+              userPayment={userPayment}
+              userPreferredPayment={userPreferredPayment}
             />
           </div>
         </div>

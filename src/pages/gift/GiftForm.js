@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import AmountGroup from './AmountGroup';
 import { validateEmail } from '../../utils'
+import PaymentSelect from '../../common/PaymentSelect'
 
 class GiftForm extends Component {
   constructor(props) {
     super(props)
-
-    const { giftFrom } = this.props
     
     this.state = {
       customGiftAmount: false,
+      lockPayment: false,
 
       giftAmount: '',
+      giftPayment: null,
       giftTo: '',
-      giftFrom: giftFrom || '',
+      giftFrom: '',
       giftMessage: '',
 
       successMessage: null,
@@ -23,45 +24,26 @@ class GiftForm extends Component {
     }
   }
 
-  formStructure = () => {
-    return {
-      giftAmount: {
-        label: 'Amount',
-        value: this.state.giftAmount,
-        type: 'text',
-        placeholder: ''
-      },
-      payment: {
-        label: 'Credit Card',
-      },
-      giftTo: {
-        label: 'To',
-        value: this.state.giftTo,
-        type: 'email',
-        placeholder: 'Enter recipient\'s email address'
-      },
-      giftFrom: {
-        label: 'From',
-        value: this.state.giftFrom,
-        type: 'email',
-        placeholder: 'Enter your email address'
-      },
-      giftMessage: {
-        label: 'Your Message',
-        value: this.state.giftMessage,
-        type: 'textarea',
-        placeholder: 'Write a message for your recipient (optional)',
-      }
-    }
-  }
-
   validateForm = ({ beforeSend = false }) => {
-    const { giftTo, giftFrom, giftAmount } = this.state
+    const {
+      giftTo,
+      giftFrom,
+      giftAmount,
+      lockPayment
+    } = this.state
 
     if (beforeSend) {
-      if (!giftAmount.length ) {
+      if (!giftAmount.length) {
         this.setState({
           errorMessage: 'Please select the amount',
+          formIsValid: false,
+        })
+        return
+      }
+
+      if (!lockPayment) {
+        this.setState({
+          errorMessage: 'Please select payment',
           formIsValid: false,
         })
         return
@@ -75,6 +57,7 @@ class GiftForm extends Component {
         })
         return
       }
+      
       this.setState({ formIsValid: true })
     } else {
       if (giftAmount.length && giftTo.length && giftFrom.length) {
@@ -83,10 +66,18 @@ class GiftForm extends Component {
     }
   }
 
+  handlePaymentSubmit = (lock, selectedPayment) => {
+    this.setState({
+      lockPayment: lock,
+      giftPayment: selectedPayment,
+    })
+  }
+
   handleGiftCheckoutSubmit = e => {
     const { onSubmit } = this.props
     const {
       giftAmount,
+      giftPayment,
       giftTo,
       giftFrom,
       giftMessage,
@@ -97,6 +88,7 @@ class GiftForm extends Component {
     
     formIsValid && onSubmit && onSubmit({
       amount: giftAmount,
+      payment: giftPayment,
       to: giftTo,
       from: giftFrom,
       message: giftMessage,
@@ -133,74 +125,100 @@ class GiftForm extends Component {
       successMessage,
       formIsValid,
     } = this.state
-    const structure = this.formStructure()
+    const {
+      onAddPayment,
+      userPayment,
+      userPreferredPayment,
+      giftFrom,
+    } = this.props
 
     return (
-      <Form onSubmit={this.handleGiftCheckoutSubmit}>
-        {
-          Object.keys(structure).map(key => {
-            let innerComponent = null
-
-            switch(key) {
-              case 'giftAmount':
-                innerComponent = (
-                  <React.Fragment>
-                    <AmountGroup
-                      amountClick={this.handleAmountChange}
-                      customClick={this.handleCustomAmounClick}
-                    />
-                    {
-                      customGiftAmount
-                        ? (
-                          <Input
-                            type={structure[key].type}
-                            name={key}
-                            id={key}
-                            value={structure[key].value}
-                            placeholder={structure[key].placeholder}
-                            onChange={this.handleInputChange}
-                            onBlur={this.validateForm}
-                          />
-                        ) : null
-                    }
-                  </React.Fragment>
-                )
-                break;
-              case 'payment':
-                break;
-              default:
-                innerComponent = (
+      <div className="gift-card-form">
+        <FormGroup row>
+          <Label for="giftAmount" sm={3} className="text-md-right">Amount</Label>
+          <Col sm={9}>
+            <AmountGroup
+              amountClick={this.handleAmountChange}
+              customClick={this.handleCustomAmounClick}
+            />
+            {
+              customGiftAmount
+                ? (
                   <Input
-                    type={structure[key].type}
-                    name={key}
-                    id={key}
-                    value={structure[key].value}
-                    placeholder={structure[key].placeholder}
+                    type="number"
+                    name="giftAmount"
+                    id="giftAmount"
                     onChange={this.handleInputChange}
                     onBlur={this.validateForm}
                   />
-                )
-                break;
+                ) : null
             }
-
-            return (
-              <FormGroup row key={key}>
-                <Label for={key} sm={3} className="text-md-right">{structure[key].label}</Label>
-                <Col sm={9}>
-                  {innerComponent}
-                </Col>
-              </FormGroup>
-            )
-          })
-        }
+          </Col>
+        </FormGroup>
+        <FormGroup row >
+          <Label sm={3} className="text-md-right">Credit Card</Label>
+          <Col sm={9}>
+            <PaymentSelect
+              {...{
+                userPayment,
+                userPreferredPayment,
+                onAddPayment,
+                onSubmitPayment: this.handlePaymentSubmit,
+              }}
+            />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="giftTo" sm={3} className="text-md-right">To</Label>
+          <Col sm={9}>
+            <Input
+              type="email"
+              name="giftTo"
+              id="giftTo"
+              placeholder="Enter recipient's email address"
+              onChange={this.handleInputChange}
+              onBlur={this.validateForm}
+            />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="giftFrom" sm={3} className="text-md-right">From</Label>
+          <Col sm={9}>
+            <Input
+              type="email"
+              name="giftFrom"
+              id="giftFrom"
+              value={this.state.giftFrom || giftFrom}
+              placeholder="Enter your email address"
+              onChange={this.handleInputChange}
+              onBlur={this.validateForm}
+            />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="giftMessage" sm={3} className="text-md-right">Your message</Label>
+          <Col sm={9}>
+            <Input
+              type="textarea"
+              name="giftMessage"
+              id="giftMessage"
+              placeholder="Write a message for your recipient (optional)"
+              onChange={this.handleInputChange}
+              onBlur={this.validateForm}
+            />
+          </Col>
+        </FormGroup>
         <FormGroup row>
           <Col sm={{ size: 9, offset: 3 }}>
-            <Button className={`gift-submit ${formIsValid ? 'active' : ''}`}>Purchase Gift Card</Button>
+            <Button
+              className={`gift-submit ${formIsValid ? 'active' : ''}`}
+              onClick={this.handleGiftCheckoutSubmit}
+            >Purchase Gift Card</Button>
             {errorMessage && <div className="text-error text-center mt-2">{errorMessage}</div>}
             {successMessage && <div className="text-success text-center mt-2">{successMessage}</div>}
           </Col>
         </FormGroup>
-      </Form>
+      </div>
     )
   }
 }

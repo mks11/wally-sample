@@ -139,7 +139,7 @@ class TopNav extends Component {
 
                       <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
-                      <li><a onClick={this.handleNavMobile.bind(this, '/gift/checkout')}>Gift Card</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                     </ul>
                   </nav>
                 </div>
@@ -194,7 +194,7 @@ class TopNav extends Component {
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
-                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/gift/checkout" className="dropdown-item">Gift Card</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
                                   <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>
@@ -206,7 +206,7 @@ class TopNav extends Component {
                           <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/gift/checkout">Gift Card</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
                         </React.Fragment>
                     }
                   </ul>
