@@ -9,7 +9,6 @@ class PaymentSelect extends Component {
     super(props)
 
     this.state = {
-      lockPayment: false,
       selectedPayment: null,
       newPayment: false
     }
@@ -27,7 +26,6 @@ class PaymentSelect extends Component {
     const { selectedPayment } = this.state
 
     if (selectedPayment) {
-      this.setState({ lockPayment: true })
       onSubmitPayment && onSubmitPayment(true, selectedPayment)
     }
   }
@@ -39,7 +37,6 @@ class PaymentSelect extends Component {
 
   render() {
     const {
-      lockPayment,
       selectedPayment,
       newPayment,
     } = this.state
@@ -47,6 +44,7 @@ class PaymentSelect extends Component {
     const {
       userPayment,
       userPreferredPayment,
+      lockPayment,
     } = this.props
 
     const paymentFormClass = `addPaymentForm ${!newPayment ? 'd-none' : ''}`

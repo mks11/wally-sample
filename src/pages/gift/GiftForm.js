@@ -124,6 +124,7 @@ class GiftForm extends Component {
       errorMessage,
       successMessage,
       formIsValid,
+      lockPayment,
     } = this.state
     const {
       onAddPayment,
@@ -160,6 +161,7 @@ class GiftForm extends Component {
           <Col sm={9}>
             <PaymentSelect
               {...{
+                lockPayment,
                 userPayment,
                 userPreferredPayment,
                 onAddPayment,

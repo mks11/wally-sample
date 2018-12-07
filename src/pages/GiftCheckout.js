@@ -6,7 +6,6 @@ import FontAwesome from 'react-fontawesome';
 import GiftForm from './gift/GiftForm';
 
 import { connect } from '../utils'
-import { STRIPE_API_KEY } from '../config'
 
 class GiftCheckout extends Component {
   constructor(props) {

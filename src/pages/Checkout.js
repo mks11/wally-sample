@@ -6,12 +6,10 @@ import { Input } from 'reactstrap'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
 import ProductModal from '../common/ProductModal';
-import CardSmall from '../common/CardSmall';
 import ClickOutside from 'react-click-outside'
-import {StripeProvider, Elements} from 'react-stripe-elements'
+import PaymentSelect from '../common/PaymentSelect'
 
 import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
-import { STRIPE_API_KEY } from '../config'
 
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
@@ -196,10 +194,12 @@ class Checkout extends Component {
     this.setState({lockAddress: false})
   }
 
-  handleSubmitPayment() {
+  handleSubmitPayment = (lock, selectedPayment) => {
     logEvent({ category: "Checkout", action: "SubmitPayment" })
-    if (!this.state.selectedPayment) return
-    this.setState({lockPayment: true})
+    this.setState({
+      selectedPayment,
+      lockPayment: lock,
+    })
   }
 
   handleSelectTime = (selectedTime) => {
@@ -359,11 +359,6 @@ class Checkout extends Component {
     //   addressFormClass += ' d-none'
     // }
 
-    let paymentFormClass = 'addPaymentForm'
-    if (!this.state.newPayment) {
-      paymentFormClass += ' d-none'
-    }
-
     let buttonPlaceOrderClass = 'btn btn-main'
     if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome) {
       buttonPlaceOrderClass += ' active' 
@@ -430,88 +425,15 @@ class Checkout extends Component {
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
                 </h3>
-
-                <div className="card1">
-                  <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
-                    { this.userStore.user.payment.map((data, index) => {
-
-                      if (this.state.lockPayment && selectedPayment !== data._id) {
-                        return null
-                      }
-                      return (
-                        <div 
-                          className={"custom-control custom-radio bb1" + (data._id === selectedPayment ? " active" : "")}
-                          key={index}>
-                          <input type="radio" id={"payment"+index}
-                            value={data._id} 
-                            checked={data._id === selectedPayment}
-                            name="customRadio" className="custom-control-input"
-                            onChange={e => this.handleSelectPayment(data._id)}
-                          />
-                          <label className="custom-control-label" htmlFor={"payment"+index} onClick={e=>this.handleSelectPayment(data._id)}>
-                            <img src="images/card.png" alt="" /> *****{data.last4}
-                          </label>
-                          {this.userStore.user.preferred_payment === data._id &&
-                              <a href="#" className="address-rbtn link-blue" style={{top:'10px'}}>DEFAULT</a>
-                          }
-                        </div>
-                      )
-                    })}
-
-                    { !this.state.lockPayment ?  (
-                      <div>
-                        <div 
-                          className={"custom-control custom-radio bb1" + ("0" === selectedPayment ? " active" : "")}
-                        >
-                          <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
-                            value="0"
-                            checked={selectedPayment === "0"}
-                            onChange={e=>this.handleSelectPayment(selectedPayment)}/>
-                          <label className="custom-control-label" htmlFor="paymentAdd" onClick={e=>this.handleSelectPayment('0')} >Add new card</label>
-                        </div>
-                        <div className={paymentFormClass}>
-                          {/* 
-                      <div className="row no-gutters">
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Card number" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="MM/YY" />
-                          </div>
-                        </div>
-                        <div className="col-md-2">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="CVV" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Zipcode" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Make default payment method</label>
-                      </div>
-                      <hr />
-                      <button className="btn btn-main active inline-round">CONFIRM</button>
-                      <div className="error-msg d-none">Invalid card information</div>
-                      */}
-
-                      <StripeProvider apiKey={STRIPE_API_KEY}>
-                        <Elements>
-                          <CardSmall  addPayment={this.handleAddPayment} />
-                        </Elements>
-                      </StripeProvider>
-                    </div>
-                  </div>):null}
-                  { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
-                </div>
-              </div>
+                <PaymentSelect
+                  {...{
+                    lockPayment: this.state.lockPayment,
+                    userPayment: this.userStore.user.payment,
+                    userPreferredPayment: this.userStore.user.preferred_payment,
+                    onAddPayment: this.handleAddPayment,
+                    onSubmitPayment: this.handleSubmitPayment,
+                  }}
+                />
             </div>
           </div>
           <div className="">
