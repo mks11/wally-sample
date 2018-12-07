@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import qs from 'query-string'
 import { Link } from 'react-router-dom'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
@@ -18,11 +19,21 @@ class GiftCheckout extends Component {
 
     this.userStore = this.props.store.user
     this.checkoutStore = this.props.store.checkout
+    this.routing = this.props.store.routing
   }
 
 
   componentDidMount() {
     ReactGA.pageview("/giftcard");
+
+    const queryParams = qs.parse(this.props.location.search)
+    const { giftcard } = queryParams
+
+    if (giftcard) {
+      console.log(giftcard)
+      this.routing.push('/')
+    }
+
     this.userStore.getStatus(true)
       .then((status) => {
         if (status) {
