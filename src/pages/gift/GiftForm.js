@@ -24,6 +24,15 @@ class GiftForm extends Component {
     }
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if(!prevState.giftFrom && nextProps.giftFrom !== prevState.giftFrom){
+      return {
+        giftFrom: nextProps.giftFrom,
+      }
+    }
+    else return prevState
+  }
+
   validateForm = ({ beforeSend = false }) => {
     const {
       giftTo,
@@ -125,12 +134,12 @@ class GiftForm extends Component {
       successMessage,
       formIsValid,
       lockPayment,
+      giftFrom,
     } = this.state
     const {
       onAddPayment,
       userPayment,
       userPreferredPayment,
-      giftFrom,
     } = this.props
 
     return (
@@ -190,7 +199,7 @@ class GiftForm extends Component {
               type="email"
               name="giftFrom"
               id="giftFrom"
-              value={this.state.giftFrom || giftFrom}
+              value={giftFrom}
               placeholder="Enter your email address"
               onChange={this.handleInputChange}
               onBlur={this.validateForm}
