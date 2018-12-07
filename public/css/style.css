@@ -109,6 +109,7 @@ border-radius:0;}
 }
 
 .aw-header .mobile-top-nav {
+  position: relative;
   justify-content: space-between;
 }
 
@@ -1790,7 +1791,7 @@ a {
     top: 89px;
   }
   .header-wrap.top-bar-open + .aw-main {
-    padding-top: 28px;
+    padding-top: 48px;
   }
 
   .carousel-item{width:100%; margin: auto;}
@@ -1838,14 +1839,14 @@ a {
 }
 
 .top-bar .container {
-  padding:0;
+  padding: 0 15px;
   position: relative;
 }
 
 .close-top-bar {
   position: absolute;
-  right: 20px;
-  top: 0px;
+  right: 15px;
+  top: 10px;
   border: none;
   background: none;
   z-index: 10;
