@@ -169,6 +169,9 @@ nav.aw-nav a.dropdown-item:hover::after {
 border-radius: 0;}
 
 .aw-hero .container-fluid > .row{height:calc(100vh - 70px);}
+.aw-header .btn-top-account {
+  padding-left: 0;
+}
 .aw-header .btn-top-account button {margin: 0 5px;}
 
 .howto-item{text-align: center;margin-bottom: 30px;padding-left:5px;padding-right:5px;}
@@ -2188,6 +2191,12 @@ color:#6e8692
   max-width: 700px;
   margin: 50px auto;
   padding: 50px;
+}
+
+@media (max-width: 576px) {
+  .gift-checkout-wrap {
+    padding: 20px;
+  }
 }
 
 .gift-checkout-wrap .gift-icon {
