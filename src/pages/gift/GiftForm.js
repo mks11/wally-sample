@@ -140,6 +140,7 @@ class GiftForm extends Component {
       onAddPayment,
       userPayment,
       userPreferredPayment,
+      userGuest,
     } = this.props
 
     return (
@@ -175,6 +176,7 @@ class GiftForm extends Component {
                 userPreferredPayment,
                 onAddPayment,
                 onSubmitPayment: this.handlePaymentSubmit,
+                userGuest,
               }}
             />
           </Col>

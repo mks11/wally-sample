@@ -45,6 +45,7 @@ class PaymentSelect extends Component {
       userPayment,
       userPreferredPayment,
       lockPayment,
+      userGuest,
     } = this.props
 
     const paymentFormClass = `addPaymentForm ${!newPayment ? 'd-none' : ''}`
@@ -104,7 +105,7 @@ class PaymentSelect extends Component {
                 <div className={paymentFormClass}>
                   <StripeProvider apiKey={STRIPE_API_KEY}>
                     <Elements>
-                      <CardSmall addPayment={this.handleAddPayment} />
+                      <CardSmall addPayment={this.handleAddPayment} userGuest={userGuest} />
                     </Elements>
                   </StripeProvider>
                 </div>

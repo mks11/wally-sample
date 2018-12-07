@@ -128,6 +128,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
 
   render() {
+    const { fontSize, userGuest } = this.props
 
     let buttonClass = 'btn btn-main inline-round my-3'
     if (this.state.cardnumber && this.state.cvc && this.state.mmyy && this.state.zip) {
@@ -144,7 +145,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onFocus={handleFocus}
                 onReady={(c) => this._cardnumber = c}
                 placeholder="Card Number"
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
               <CardExpiryElement
                 className="card-element-input w-20"
@@ -152,7 +153,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onChange={this.handleChange}
                 onFocus={handleFocus}
                 onReady={(c) => this._cardexpiry = c}
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
               <CardCVCElement
                 className="card-element-input w-20"
@@ -160,7 +161,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onChange={this.handleChange}
                 onFocus={handleFocus}
                 onReady={(c) => this._cvc = c}
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
 
             <PostalCodeElement
@@ -170,17 +171,20 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
               onChange={this.handleChange}
               onFocus={handleFocus}
               onReady={(c) => this._zip = c}
-              {...createOptions(this.props.fontSize)}
+              {...createOptions(fontSize)}
             />
 
           </FormGroup>
 
-        <FormGroup check className="my-4">
-          <Label check>
-            <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
-            Make default payment card
-          </Label>
-        </FormGroup>
+          { !userGuest ? (
+            <FormGroup check className="my-4">
+              <Label check>
+                <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
+                Make default payment card
+              </Label>
+            </FormGroup>
+            ) : null
+          }
 
         <button type="submit" className={buttonClass}>CONFIRM</button>
         { this.state.invalidText ? <span className="text-error text-block">{this.state.invalidText}</span>: null}

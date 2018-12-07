@@ -68,6 +68,7 @@ class GiftCheckout extends Component {
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
     const userPayment = this.userStore.user && this.userStore.user.payment || null
     const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
+    const userGuest = !this.userStore.status
 
     return (
       <div className="App">
@@ -83,6 +84,7 @@ class GiftCheckout extends Component {
               onAddPayment={this.handleAddPayment}
               userPayment={userPayment}
               userPreferredPayment={userPreferredPayment}
+              userGuest={userGuest}
             />
           </div>
         </div>

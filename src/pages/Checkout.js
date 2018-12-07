@@ -432,6 +432,7 @@ class Checkout extends Component {
                     userPreferredPayment: this.userStore.user.preferred_payment,
                     onAddPayment: this.handleAddPayment,
                     onSubmitPayment: this.handleSubmitPayment,
+                    userGuest: !this.userStore.status,
                   }}
                 />
             </div>
