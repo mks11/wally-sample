@@ -169,11 +169,53 @@ nav.aw-nav a.dropdown-item:hover::after {
   border: 1px solid #000;
 border-radius: 0;}
 
-.aw-hero .container-fluid > .row{height:calc(100vh - 70px);}
+.aw-hero .container-fluid > .row{height:calc(84vh - 70px);}
 .aw-header .btn-top-account {
   padding-left: 0;
 }
 .aw-header .btn-top-account button {margin: 0 5px;}
+
+.welcome-section {
+  background-color: #faf5ee;
+  padding: 5rem 0;
+}
+.welcome-section h2 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.homepage-info-section {
+  background-color: #c0d6cd;
+  color: #fff;
+  overflow: hidden;
+}
+.homepage-info-section .col-sm-6 {
+  padding: 0;
+}
+.text-info-section {
+  padding: 10rem 4rem;
+  max-width: 600px;
+}
+.bg-info-section {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+@media (max-width: 576px) {
+  .bg-info-section {
+    padding-bottom: 60%;
+  }
+  .text-info-section {
+    padding: 5rem 2rem;
+  }
+}
+.bg-info-section-1 {
+  background-image: url(../images/home_section_1.png)
+}
+.bg-info-section-2 {
+  background-image: url(../images/home_section_2.png)
+}
 
 .howto-item{text-align: center;margin-bottom: 30px;padding-left:5px;padding-right:5px;}
 .aw-iconbox{margin-bottom: 30px;position: relative;}
