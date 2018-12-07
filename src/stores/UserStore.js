@@ -7,6 +7,7 @@ import {
   API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
+  API_PURCHASE_GIFTCARD,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -297,6 +298,11 @@ class UserStore {
 
   async addPromo(promoCode) {
     const res = await axios.post(`${API_USER_ADD_PROMO}?promo_code=${promoCode}`, this.getHeaderAuth())
+    return res.data
+  }
+
+  async purchaseGiftCard(data) {
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data)
     return res.data
   }
 

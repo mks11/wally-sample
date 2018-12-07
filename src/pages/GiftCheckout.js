@@ -12,6 +12,7 @@ class GiftCheckout extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      stripeToken: null,
       selectedPayment: null,
       lockPayment: false,
       newPayment: false,
@@ -50,10 +51,27 @@ class GiftCheckout extends Component {
   }
 
   handleGiftCheckoutSubmit = data => {
-    console.log(data)
+    let finalData = data
+    if (!data.payment_id) {
+      finalData.stripeToken = this.state.stripeToken
+    }
+
+    this.userStore.purchaseGiftCard(finalData)
+      .then(res => {
+        if (res.success) {
+          this.routing.push('/main')
+        } else {
+          this.setState({ purchaseFaild: 'Gift card purchase failed' })
+        }
+      })
+      .catch(e => {
+        const msg = !e.response.data.error ? 'Purchase failed' : e.response.data.error.message
+        this.setState({ purchaseFaild: msg })
+      })
   }
 
   handleAddPayment = data => {
+    this.setState({ stripeToken: data.stripeToken })
     return this.userStore.savePayment(data).then((data) => {
       this.userStore.setUserData(data)
       this.setState({
@@ -65,6 +83,7 @@ class GiftCheckout extends Component {
   }
 
   render() {
+    const { purchaseFaild } = this.state
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
     const userPayment = this.userStore.user && this.userStore.user.payment || null
     const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
@@ -85,6 +104,7 @@ class GiftCheckout extends Component {
               userPayment={userPayment}
               userPreferredPayment={userPreferredPayment}
               userGuest={userGuest}
+              customErrorMsg={purchaseFaild}
             />
           </div>
         </div>

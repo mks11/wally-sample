@@ -97,9 +97,9 @@ class GiftForm extends Component {
     
     formIsValid && onSubmit && onSubmit({
       amount: giftAmount,
-      payment: giftPayment,
-      to: giftTo,
-      from: giftFrom,
+      payment_id: giftPayment,
+      recipient: giftTo,
+      sender: giftFrom,
       message: giftMessage,
     })
     
@@ -141,6 +141,7 @@ class GiftForm extends Component {
       userPayment,
       userPreferredPayment,
       userGuest,
+      customErrorMsg,
     } = this.props
 
     return (
@@ -227,7 +228,7 @@ class GiftForm extends Component {
               className={`gift-submit ${formIsValid ? 'active' : ''}`}
               onClick={this.handleGiftCheckoutSubmit}
             >Purchase Gift Card</Button>
-            {errorMessage && <div className="text-error text-center mt-2">{errorMessage}</div>}
+            {errorMessage || customErrorMsg && <div className="text-error text-center mt-2">{errorMessage || customErrorMsg}</div>}
             {successMessage && <div className="text-success text-center mt-2">{successMessage}</div>}
           </Col>
         </FormGroup>
