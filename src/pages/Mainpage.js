@@ -286,18 +286,20 @@ class Mainpage extends Component {
 
     this.setState({categoryTypeMode})
 
+    const deliveryData = this.userStore.getDeliveryParams()
+
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
-    this.productStore.getProductDisplayed(id, this.userStore.getDeliveryParams()).then((data) => {
+    this.productStore.getProductDisplayed(id, deliveryData).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
-    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
-      if (!datesEqual(data.delivery_date, this.userStore.getDeliveryParams().date)) {
+    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+      if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
         this.checkoutStore.getDeliveryTimes().then((data) => {
           const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-          this.setState({deliveryTimes})
+          this.setState({ deliveryTimes })
           this.userStore.toggleDeliveryModal(true)
         })
       }

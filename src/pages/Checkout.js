@@ -118,12 +118,12 @@ class Checkout extends Component {
       dataOrder = data
       return data
     }).then(data => {
-      if (!datesEqual(data.delivery_date, deliveryData.date)) {
+      if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
         return this.checkoutStore.getDeliveryTimes().then((data) => {
           const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
           this.setState({deliveryTimes})
           this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, deliveryTimes)
-          this.setState({invalidText: 'Please select address'})
+          this.setState({invalidText: 'Please select delivery time'})
         })
       }
       return null
@@ -207,7 +207,8 @@ class Checkout extends Component {
   }
 
   handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange('time', selectedTime)    
+    this.modalStore.showDeliveryChange('time', selectedTime)
+    this.setState({ invalidText: '' })
   }
 
   handleChangeDelivery = () => {
