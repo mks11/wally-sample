@@ -78,8 +78,9 @@ class TopNav extends Component {
   }
 
   handleReferralModal = (e) => {
-    this.modalStore.toggleReferral()
-    this.userStore.referFriend()
+    this.routing.push('/giftcard')
+    // this.modalStore.toggleReferral()
+    // this.userStore.referFriend()
     e.preventDefault()
   }
 

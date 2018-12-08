@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Col, Button, FormGroup, Label, Input } from 'reactstrap'
 import AmountGroup from './AmountGroup';
-import { validateEmail } from '../../utils'
+import { validateEmail, formatMoney } from '../../utils'
 import PaymentSelect from '../../common/PaymentSelect'
 
 class GiftForm extends Component {
@@ -96,7 +96,7 @@ class GiftForm extends Component {
     this.validateForm({ beforeSend: true })
     
     formIsValid && onSubmit && onSubmit({
-      amount: giftAmount,
+      amount: parseFloat(giftAmount) * 100,
       payment_id: giftPayment,
       recipient: giftTo,
       sender: giftFrom,

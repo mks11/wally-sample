@@ -72,14 +72,15 @@ class GiftCheckout extends Component {
 
   handleAddPayment = data => {
     this.setState({ stripeToken: data.stripeToken })
-    return this.userStore.savePayment(data).then((data) => {
-      this.userStore.setUserData(data)
-      this.setState({
-        selectedPayment: this.userStore.user.preferred_payment,
-        newPayment: false
+    if (this.userStore.status) {
+      this.userStore.savePayment(data).then((data) => {
+        this.userStore.setUserData(data)
+        this.setState({
+          selectedPayment: this.userStore.user.preferred_payment,
+          newPayment: false
+        })
       })
-      return data
-    })
+    }
   }
 
   render() {
