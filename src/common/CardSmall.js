@@ -84,7 +84,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
-      // this.props.stripe.createSource()
+      const { userGuest } = this.props
       this.props.stripe
         .createToken()
         .then((payload) => {
@@ -92,12 +92,20 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
             throw payload
           }
 
-          return this.props.addPayment({
-            preferred_payment: this.state.preferred_payment,
-            billing_zip: this.state.billing_zip,
-            stripeToken: payload.token.id
-          })
-          // console.log('[token]', payload))
+          if (userGuest) {
+            return this.props.addPayment({
+              preferred_payment: this.state.preferred_payment,
+              billing_zip: this.state.billing_zip,
+              stripeToken: payload.token.id,
+              last4: payload.token.card.last4,
+            })
+          } else {
+            return this.props.addPayment({
+              preferred_payment: this.state.preferred_payment,
+              billing_zip: this.state.billing_zip,
+              stripeToken: payload.token.id
+            })
+          }
         }).then((data) => {
           this.setState({
             invalidText: ''

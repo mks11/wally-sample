@@ -15,7 +15,7 @@ class GiftCheckout extends Component {
       stripeToken: null,
       selectedPayment: null,
       lockPayment: false,
-      newPayment: false,
+      guestUserPayment: null,
     }
 
     this.userStore = this.props.store.user
@@ -71,22 +71,30 @@ class GiftCheckout extends Component {
   }
 
   handleAddPayment = data => {
-    this.setState({ stripeToken: data.stripeToken })
+    const guestPayment = !this.userStore.status ? [{
+      _id: 'guestuser_id',
+      last4: data.last4,
+    }] : null
+
+    this.setState({
+      stripeToken: data.stripeToken,
+      guestUserPayment: guestPayment,
+    })
+
     if (this.userStore.status) {
       this.userStore.savePayment(data).then((data) => {
         this.userStore.setUserData(data)
         this.setState({
           selectedPayment: this.userStore.user.preferred_payment,
-          newPayment: false
         })
       })
     }
   }
 
   render() {
-    const { purchaseFaild } = this.state
+    const { purchaseFaild, guestUserPayment } = this.state
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
-    const userPayment = this.userStore.user && this.userStore.user.payment || null
+    const userPayment = this.userStore.user && this.userStore.user.payment || guestUserPayment
     const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
     const userGuest = !this.userStore.status
 
