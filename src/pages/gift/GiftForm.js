@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Col, Button, FormGroup, Label, Input } from 'reactstrap'
+import CurrencyInput from 'react-currency-input'
 import AmountGroup from './AmountGroup';
-import { validateEmail, formatMoney } from '../../utils'
+import { validateEmail } from '../../utils'
 import PaymentSelect from '../../common/PaymentSelect'
 
 class GiftForm extends Component {
@@ -94,9 +95,12 @@ class GiftForm extends Component {
     } = this.state
 
     this.validateForm({ beforeSend: true })
+
+    const giftAmountStr = giftAmount.replace('$', '')
+    const giftNumberAmount = parseFloat(giftAmountStr).toFixed(2) * 100
     
     formIsValid && onSubmit && onSubmit({
-      amount: parseFloat(giftAmount) * 100,
+      amount: giftNumberAmount,
       payment_id: giftPayment,
       recipient: giftTo,
       sender: giftFrom,
@@ -135,6 +139,7 @@ class GiftForm extends Component {
       formIsValid,
       lockPayment,
       giftFrom,
+      giftAmount,
     } = this.state
     const {
       onAddPayment,
@@ -156,11 +161,13 @@ class GiftForm extends Component {
             {
               customGiftAmount
                 ? (
-                  <Input
-                    type="number"
+                  <CurrencyInput
+                    prefix="$"
                     name="giftAmount"
                     id="giftAmount"
-                    onChange={this.handleInputChange}
+                    className="form-control"
+                    value={giftAmount}
+                    onChangeEvent={this.handleInputChange}
                     onBlur={this.validateForm}
                   />
                 ) : null
@@ -228,7 +235,7 @@ class GiftForm extends Component {
               className={`gift-submit ${formIsValid ? 'active' : ''}`}
               onClick={this.handleGiftCheckoutSubmit}
             >Purchase Gift Card</Button>
-            {errorMessage || customErrorMsg && <div className="text-error text-center mt-2">{errorMessage || customErrorMsg}</div>}
+            {(errorMessage || customErrorMsg) && <div className="text-error text-center mt-2">{errorMessage || customErrorMsg}</div>}
             {successMessage && <div className="text-success text-center mt-2">{successMessage}</div>}
           </Col>
         </FormGroup>

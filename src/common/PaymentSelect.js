@@ -10,7 +10,7 @@ class PaymentSelect extends Component {
 
     this.state = {
       selectedPayment: null,
-      newPayment: false
+      newPayment: false,
     }
   }
 
@@ -33,6 +33,8 @@ class PaymentSelect extends Component {
   handleAddPayment = data => {
     const { onAddPayment } = this.props
     onAddPayment && onAddPayment(data)
+    
+    this.setState({ newPayment: false })
   }
 
   render() {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { Link } from 'react-router-dom'
 import { Row, Col, Input, Container } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 
@@ -223,62 +222,6 @@ class Homepage extends Component {
             </div>
           </div>
         </section>
-
-        {/* <section className="page-section aw-our--story">
-          <div className="container">
-            <div className="tagline">
-              <h2>It's what's on the inside that counts.</h2>
-              <p></p>
-              <p>Say goodbye to wasteful packaging with The Wally Shop. Order local, organic produce and we'll deliver it same-day from farmers markets and bulk stores. The best part? We deliver in all reusable packaging, which means no plastic. Ever. Return your packaging during a future delivery, and we'll clean and reuse it.</p>
-              <p>You take care of the earth - we'll take care of the groceries.</p>
-            </div>
-
-            <div className="row">
-              <div className="col-md-12 mb-md-4">
-                <div className="row">
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home1_hd.jpg" alt=""/>
-                      <h4>Shop produce from local, organic farmers markets & shops</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home2_hd.jpg" alt=""/>
-                      <h4>Get it delivered in all reusable packaging</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home3_hd.jpg" alt=""/>
-                      <h4>Return packaging at a future delivery for reuse</h4>
-                    </div>
-                  </div>
-                </div>
-                <Row>
-                  <Col>
-                    <div className="text-center">
-                      <Link to="/main" className="btn btn-primary btn-explore">Explore</Link>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </div>
-
-          <br /><br />
-          <div className="container">
-            <h3>All available zip codes</h3>
-            <hr />
-            <div className="mb-5">
-              <div className="row ">
-                { this.zipStore.zipcodes.map((z,key) => (
-                  <div className="col-sm-1" key={key}>{z}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section> */}
         <section className="welcome-section">
           <Container>
             <Row>

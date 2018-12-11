@@ -152,15 +152,6 @@ class Checkout extends Component {
     }
   }
 
-  handleSelectPayment(payment_id) {
-    this.setState({selectedPayment: payment_id})
-    if (payment_id === "0") {
-      this.setState({newPayment: true})
-    } else {
-      this.setState({newPayment: false})
-    }
-  }
-
   handleSelectAddress = (data) => {
     const selectedAddress  = this.userStore.selectedDeliveryAddress
     if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
@@ -348,31 +339,12 @@ class Checkout extends Component {
 
     const order = this.checkoutStore.order
 
-    // let timeDropdownClass = "dropdown-menu"
-    // if (this.state.timeDropdown && this.state.lockAddress) {
-    //   timeDropdownClass += " show"
-    // }
-
-    // const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount/100 : 0
-    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount/100 : 0
-
-    // const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
-    const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
-
-    // let addressFormClass = 'addAdressForm mb-4'
-    // if (!this.state.newAddress) {
-    //   addressFormClass += ' d-none'
-    // }
+    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount / 100 : 0
 
     let buttonPlaceOrderClass = 'btn btn-main'
     if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome) {
       buttonPlaceOrderClass += ' active' 
     }
-
-    // let addressCardClass = 'card1'
-    // if (this.state.addressError) {
-    //   addressCardClass += ' error'
-    // }
 
     const cart_items = order && order.cart_items ? order.cart_items : []
 
