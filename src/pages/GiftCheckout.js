@@ -71,16 +71,6 @@ class GiftCheckout extends Component {
   }
 
   handleAddPayment = data => {
-    const guestPayment = !this.userStore.status ? [{
-      _id: 'guestuser_id',
-      last4: data.last4,
-    }] : null
-
-    this.setState({
-      stripeToken: data.stripeToken,
-      guestUserPayment: guestPayment,
-    })
-
     if (this.userStore.status) {
       this.userStore.savePayment(data).then((data) => {
         this.userStore.setUserData(data)
@@ -88,11 +78,22 @@ class GiftCheckout extends Component {
           selectedPayment: this.userStore.user.preferred_payment,
         })
       })
-    }
+    } else {
+      const guestPayment = !this.userStore.status ? [{
+        _id: 'guestuser_id',
+        last4: data.last4,
+      }] : null
+  
+      this.setState({
+        stripeToken: data.stripeToken,
+        guestUserPayment: guestPayment,
+        selectedPayment: 'guestuser_id',
+      })
+    } 
   }
 
   render() {
-    const { purchaseFaild, guestUserPayment } = this.state
+    const { purchaseFaild, guestUserPayment, selectedPayment } = this.state
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
     const userPayment = this.userStore.user && this.userStore.user.payment || guestUserPayment
     const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
@@ -114,6 +115,7 @@ class GiftCheckout extends Component {
               userPreferredPayment={userPreferredPayment}
               userGuest={userGuest}
               customErrorMsg={purchaseFaild}
+              forceSelect={selectedPayment}
             />
           </div>
         </div>

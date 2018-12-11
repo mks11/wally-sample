@@ -46,29 +46,31 @@ class PaymentSelect extends Component {
     const {
       userPayment,
       userPreferredPayment,
+      forceSelect,
       lockPayment,
       userGuest,
     } = this.props
 
     const paymentFormClass = `addPaymentForm ${!newPayment ? 'd-none' : ''}`
+    const selected = forceSelect || selectedPayment
 
     return (
       <div className="card1">
         <div className={`card-body ${lockPayment ? 'lock' : ''}`}>
           { userPayment && userPayment.map((data, index) => {
 
-            if (lockPayment && selectedPayment !== data._id) {
+            if (lockPayment && selected !== data._id) {
               return null
             }
             return (
               <div 
-                className={`custom-control custom-radio bb1 ${data._id === selectedPayment ? 'active' : ''}`}
+                className={`custom-control custom-radio bb1 ${data._id === selected ? 'active' : ''}`}
                 key={index}>
                 <input
                   type="radio"
                   id={`payment${index}`}
                   value={data._id} 
-                  checked={data._id === selectedPayment}
+                  checked={data._id === selected}
                   name="customRadio" className="custom-control-input"
                   onChange={e => this.handleSelectPayment(data._id)}
                 />
@@ -88,7 +90,7 @@ class PaymentSelect extends Component {
             ? (
               <div>
                 <div 
-                  className={`custom-control custom-radio bb1 ${"0" === selectedPayment ? 'active' : ''}`}
+                  className={`custom-control custom-radio bb1 ${"0" === selected ? 'active' : ''}`}
                 >
                   <input
                     type="radio"
@@ -96,8 +98,8 @@ class PaymentSelect extends Component {
                     name="customRadio"
                     className="custom-control-input" 
                     value="0"
-                    checked={selectedPayment === "0"}
-                    onChange={e=>this.handleSelectPayment(selectedPayment)}/>
+                    checked={selected === "0"}
+                    onChange={e=>this.handleSelectPayment(selected)}/>
                   <label
                     className="custom-control-label"
                     htmlFor="paymentAdd"

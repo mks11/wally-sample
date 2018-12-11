@@ -83,6 +83,13 @@ class GiftForm extends Component {
     })
   }
 
+  handleAddPayment = data => {
+    const { onAddPayment, userGuest } = this.props
+    onAddPayment && onAddPayment(data)
+
+    this.setState({ lockPayment: userGuest })
+  }
+
   handleGiftCheckoutSubmit = e => {
     const { onSubmit } = this.props
     const {
@@ -101,7 +108,7 @@ class GiftForm extends Component {
     
     formIsValid && onSubmit && onSubmit({
       amount: giftNumberAmount,
-      payment_id: giftPayment,
+      payment_id: giftPayment === 'guestuser_id' ? null : giftPayment,
       recipient: giftTo,
       sender: giftFrom,
       message: giftMessage,
@@ -142,11 +149,11 @@ class GiftForm extends Component {
       giftAmount,
     } = this.state
     const {
-      onAddPayment,
       userPayment,
       userPreferredPayment,
       userGuest,
       customErrorMsg,
+      forceSelect,
     } = this.props
 
     return (
@@ -182,9 +189,10 @@ class GiftForm extends Component {
                 lockPayment,
                 userPayment,
                 userPreferredPayment,
-                onAddPayment,
+                onAddPayment: this.handleAddPayment,
                 onSubmitPayment: this.handlePaymentSubmit,
                 userGuest,
+                forceSelect,
               }}
             />
           </Col>

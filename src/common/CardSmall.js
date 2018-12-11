@@ -82,6 +82,10 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
 
   handleSubmit = (ev) => {
+    this.setState({
+      invalidText: ''
+    })
+
     ev.preventDefault();
     if (this.props.stripe) {
       const { userGuest } = this.props
@@ -107,9 +111,6 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
             })
           }
         }).then((data) => {
-          this.setState({
-            invalidText: ''
-          })
           this._cardnumber.clear()
           this._cardexpiry.clear()
           this._cvc.clear()
