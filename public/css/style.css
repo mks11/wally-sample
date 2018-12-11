@@ -169,7 +169,7 @@ nav.aw-nav a.dropdown-item:hover::after {
   border: 1px solid #000;
 border-radius: 0;}
 
-.aw-hero .container-fluid > .row{height:calc(84vh - 70px);}
+.aw-hero .container-fluid > .row{height:calc(60vh - 70px);}
 .aw-header .btn-top-account {
   padding-left: 0;
 }
@@ -183,11 +183,15 @@ border-radius: 0;}
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  font-size: 2.2rem;
 }
 .homepage-info-section {
   background-color: #c0d6cd;
   color: #fff;
   overflow: hidden;
+}
+.homepage-info-section.dark-bg {
+  background-color: #263a52;
 }
 .homepage-info-section .col-sm-6 {
   padding: 0;
@@ -195,6 +199,9 @@ border-radius: 0;}
 .text-info-section {
   padding: 10rem 4rem;
   max-width: 600px;
+}
+.text-info-section.force-black {
+  color: #000;
 }
 .bg-info-section {
   background-position: center center;

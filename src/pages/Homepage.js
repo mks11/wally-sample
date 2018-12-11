@@ -237,7 +237,7 @@ class Homepage extends Component {
         <section className="homepage-info-section">
           <Row>
             <Col sm={6} className="order-2 order-sm-1">
-              <div className="text-info-section float-right">
+              <div className="text-info-section float-right force-black">
                 <h2>We’re the 21st century milk man</h2>
                 <p>With each order, The Wally Shop lends you our reusable packaging in exchange for a deposit fee, which you can easily return to a courier upon any future delivery. We’ll wash  and reuse all the returned packaging, and you’ll get your deposit fee back as store credit - so you can save money and the planet at the same time.</p>
               </div>
@@ -247,7 +247,7 @@ class Homepage extends Component {
             </Col>
           </Row>
         </section>
-        <section className="homepage-info-section">
+        <section className="homepage-info-section dark-bg">
           <Row>
             <Col sm={6} className="order-1 order-sm-1">
               <div className="bg-info-section bg-info-section-2"></div>
@@ -268,18 +268,6 @@ class Homepage extends Component {
               </Col>
               <Col sm={5}>
                 <p>While we’re all for recycling, reducing your waste is even better when it comes to making sustainable choices. That’s why we only offer reusable packaging like organic cotton bags and mason jars. So you can finally say goodbye to all of those pesky plastic bags.</p>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-        <section className="welcome-section">
-          <Container>
-            <Row>
-              <Col sm={{ size: 5, offset: 1 }}>
-                <h2>Who is Wally?</h2>
-              </Col>
-              <Col sm={5}>
-                <p>Our name was inspired by an incredible cooperative of individuals from India called the <i>dabbawalla</i>. Dubbed the world’s “best food delivery system”, they visit suburbs to pick up worker’s freshly made lunch tiffins - usually prepared by a wife - and deliver them to their respective husbands working in the city. After lunch, the tiffins are collected and returned. At The Wally Shop, our goal is similar: we offer same-day delivery and a completely closed loop system with exclusively reusable packaging. And by shopping at farmers markets and local stores for healthy, organic ingredients, The Wally Shop gives you a fresh take on package-free groceries.</p>
               </Col>
             </Row>
           </Container>
