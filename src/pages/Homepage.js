@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { Link } from 'react-router-dom'
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col, Input, Container } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 
 
@@ -223,61 +222,55 @@ class Homepage extends Component {
             </div>
           </div>
         </section>
-
-        <section className="page-section aw-our--story">
-          <div className="container">
-            <div className="tagline">
-              <h2>It's what's on the inside that counts.</h2>
-              <p></p>
-              <p>Say goodbye to wasteful packaging with The Wally Shop. Order local, organic produce and we'll deliver it same-day from farmers markets and bulk stores. The best part? We deliver in all reusable packaging, which means no plastic. Ever. Return your packaging during a future delivery, and we'll clean and reuse it.</p>
-              <p>You take care of the earth - we'll take care of the groceries.</p>
-            </div>
-
-            <div className="row">
-              <div className="col-md-12 mb-md-4">
-                <div className="row">
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home1_hd.jpg" alt=""/>
-                      <h4>Shop produce from local, organic farmers markets & shops</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home2_hd.jpg" alt=""/>
-                      <h4>Get it delivered in all reusable packaging</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home3_hd.jpg" alt=""/>
-                      <h4>Return packaging at a future delivery for reuse</h4>
-                    </div>
-                  </div>
-                </div>
-                <Row>
-                  <Col>
-                    <div className="text-center">
-                      <Link to="/main" className="btn btn-primary btn-explore">Explore</Link>
-                    </div>
-                  </Col>
-                </Row>
+        <section className="welcome-section">
+          <Container>
+            <Row>
+              <Col sm={{ size: 5, offset: 1 }}>
+                <h2>Welcome to the sustainable grocery solution</h2>
+              </Col>
+              <Col sm={5}>
+                <p>The Wally Shop cares about the environment and really, really good food. We give you the best of both worlds by providing all reusable packaging, offering same day delivery, and bringing you the freshest local, organic produce - and we mean that. Because we source from local markets, your evening delivery will have produce that was on the farm that morning. It’s farmers market fresh, without the farmers market trip.</p>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+        <section className="homepage-info-section">
+          <Row>
+            <Col sm={6} className="order-2 order-sm-1">
+              <div className="text-info-section float-right force-black">
+                <h2>We’re the 21st century milk man</h2>
+                <p>With each order, The Wally Shop lends you our reusable packaging in exchange for a deposit fee, which you can easily return to a courier upon any future delivery. We’ll wash  and reuse all the returned packaging, and you’ll get your deposit fee back as store credit - so you can save money and the planet at the same time.</p>
               </div>
-            </div>
-          </div>
-
-          <br /><br />
-          <div className="container">
-            <h3>All available zip codes</h3>
-            <hr />
-            <div className="mb-5">
-              <div className="row ">
-                { this.zipStore.zipcodes.map((z,key) => (
-                  <div className="col-sm-1" key={key}>{z}</div>
-                ))}
+            </Col>
+            <Col sm={6} className="order-1 order-sm-2">
+              <div className="bg-info-section bg-info-section-1"></div>
+            </Col>
+          </Row>
+        </section>
+        <section className="homepage-info-section dark-bg">
+          <Row>
+            <Col sm={6} className="order-1 order-sm-1">
+              <div className="bg-info-section bg-info-section-2"></div>
+            </Col>
+            <Col sm={6} className="order-2 order-sm-2">
+              <div className="text-info-section">
+                <h2>Quality above all else</h2>
+                <p>Want to know the secret to how professional chefs make amazing food with just a handful of ingredients? They get high quality, incredibly fresh produce from the farmers market. From ripe summer tomatoes to creamy butternut squashes to crispy apples, our couriers hand select the best market produce for all of your foodie needs.</p>
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
+        </section>
+        <section className="welcome-section">
+          <Container>
+            <Row>
+              <Col sm={{ size: 5, offset: 1 }}>
+                <h2>Reduce > recycle</h2>
+              </Col>
+              <Col sm={5}>
+                <p>While we’re all for recycling, reducing your waste is even better when it comes to making sustainable choices. That’s why we only offer reusable packaging like organic cotton bags and mason jars. So you can finally say goodbye to all of those pesky plastic bags.</p>
+              </Col>
+            </Row>
+          </Container>
         </section>
       </div>
     );

@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { connect, logModalView, logEvent } from '../utils'
-// import { Link } from 'react-router-dom'
-// import ClickOutside from 'react-click-outside'
-// import CardSmall from './CardSmall';
-// import {StripeProvider, Elements} from 'react-stripe-elements'
-// import { STRIPE_API_KEY } from '../config'
-// import PlacesAutocomplete, {
-//   geocodeByAddress,
-//   getLatLng,
-// } from 'react-places-autocomplete';
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 
 class DeliveryModal extends Component {
@@ -47,7 +38,7 @@ class DeliveryModal extends Component {
   }
 
   handleSubmit = (data) => {
-    if (/*this.state.selectedAddress && */this.state.selectedTime) {
+    if (this.state.selectedTime) {
       logEvent({ category: "DeliveryOptions", action: "SubmitDeliveryOptions" })
       this.userStore.setDeliveryTime(this.state.selectedTime)
       this.userStore.toggleDeliveryModal(false)

@@ -18,6 +18,7 @@ export const API_ADDRESS_REMOVE = BASE_URL + "/api/user/address/"
 export const API_PAYMENT_NEW = BASE_URL + "/api/user/payment"
 export const API_PAYMENT_EDIT = BASE_URL + "/api/user/payment"
 export const API_PAYMENT_REMOVE = BASE_URL + "/api/user/payment/"
+export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard"
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/"
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"

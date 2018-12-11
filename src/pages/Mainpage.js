@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { formatMoney, connect, logEvent, logModalView } from '../utils'
+import { formatMoney, connect, logEvent, logModalView, datesEqual } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import { AsyncTypeahead} from 'react-bootstrap-typeahead'
@@ -234,14 +234,17 @@ class Mainpage extends Component {
     ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
-        const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
-        // if (selectedAddress) {
-          // this.userStore.setDeliveryAddress(selectedAddress)
-          this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
-            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-            this.setState({deliveryTimes})
-          })
-        // }
+        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+        
+        const selectedAddress = this.userStore.selectedDeliveryAddress
+          || (this.userStore.user
+            ? this.userStore.getAddressById(this.userStore.user.preferred_address)
+            : null)
+
+        this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({deliveryTimes})
+        })
 
         this.loadData(status)
       })
@@ -283,14 +286,23 @@ class Mainpage extends Component {
 
     this.setState({categoryTypeMode})
 
+    const deliveryData = this.userStore.getDeliveryParams()
+
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
-    this.productStore.getProductDisplayed(id, this.userStore.getDeliveryParams()).then((data) => {
+    this.productStore.getProductDisplayed(id, deliveryData).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
 
-    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), this.userStore.getDeliveryParams()).then((data) => {
+    this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+      if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
+        this.checkoutStore.getDeliveryTimes().then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({ deliveryTimes })
+          this.userStore.toggleDeliveryModal(true)
+        })
+      }
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
 
       if (this.userStore.cameFromCartUrl) {
@@ -307,6 +319,31 @@ class Mainpage extends Component {
     })
   }
 
+  processGiftCardPromo(userStatus) {
+    if (userStatus) {
+      this.checkoutStore.checkPromo({ promoCode: this.userStore.giftCardPromo }, this.userStore.getHeaderAuth())
+      .then((data) => {
+        let msg = ''
+        if (data.valid) {
+          msg = 'Store Credit Redeemed'
+          this.userStore.getUser().then(() => {
+            this.loadData()
+          })
+        } else {
+          msg = 'Invalid Promo-code'
+        }
+        this.modalStore.toggleResultReferral(msg)
+        this.userStore.giftCardPromo = null
+      })
+      .catch((e) => {
+        const msg = !e.response.data.error ? 'Check Promo failed' : e.response.data.error.message
+        this.modalStore.toggleResultReferral(msg)
+        this.userStore.giftCardPromo = null
+      })
+    } else {
+      this.modalStore.toggleLogin()
+    }
+  }
 
   componentDidUpdate() {
     const id = this.props.match.params.id
@@ -572,17 +609,8 @@ class Mainpage extends Component {
   handleSubmitAddress = async (address) => {
     this.modalStore.showDeliveryChange('address', {
       address,
-      // times
     })
     this.userStore.setDeliveryAddress(address)
-    // this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
-    //   const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
-    //   this.setState({selectedAddressChanged: false})
-    //   this.modalStore.showDeliveryChange('address', {
-    //     address,
-    //     times
-    //   })
-    // })
     return
   }
 

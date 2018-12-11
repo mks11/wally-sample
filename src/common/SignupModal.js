@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { validateEmail, connect, logModalView } from '../utils'
+import { validateEmail, connect } from '../utils'
 import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
@@ -47,13 +47,14 @@ class SignupModal extends Component {
       email: this.state.email,
       password: this.state.password,
       signup_zip: this.zipStore.selectedZip,
-      reference_promo: this.userStore.refPromo
+      reference_promo: this.userStore.refPromo || this.userStore.giftCardPromo
     }).then((data) => {
       this.userStore.setUserData(data.user)
       this.userStore.setToken(data.token)
       this.modalStore.toggleSignup()
       this.modalStore.toggleWelcome()
       this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(),  this.userStore.getDeliveryParams())
+      this.userStore.giftCardPromo = null
     }).catch((e) => {
       console.error('Failed to signup', e)
       const msg = e.response.data.error.message
