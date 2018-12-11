@@ -283,7 +283,7 @@ class Homepage extends Component {
           <Container>
             <Row>
               <Col sm={{ size: 5, offset: 1 }}>
-                <h2>Welcome to the sustainable grocery solution (About TWS)</h2>
+                <h2>Welcome to the sustainable grocery solution</h2>
               </Col>
               <Col sm={5}>
                 <p>The Wally Shop cares about the environment and really, really good food. We give you the best of both worlds by providing all reusable packaging, offering same day delivery, and bringing you the freshest local, organic produce - and we mean that. Because we source from local markets, your evening delivery will have produce that was on the farm that morning. It’s farmers market fresh, without the farmers market trip.</p>
