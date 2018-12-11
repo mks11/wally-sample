@@ -19,16 +19,6 @@ class PaymentSelect extends Component {
     }
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.forceSelect !== prevState.selectedPayment ||
-      nextProps.userPreferredPayment !== prevState.selectedPayment){
-      return {
-        selectedPayment: nextProps.forceSelect || nextProps.userPreferredPayment,
-      }
-    }
-    else return prevState;
-  }
-
   handleSelectPayment = payment_id => {
     this.setState({
       newPayment: payment_id === "0",
@@ -67,7 +57,7 @@ class PaymentSelect extends Component {
     } = this.props
 
     const paymentFormClass = `addPaymentForm ${!newPayment ? 'd-none' : ''}`
-    const selected = forceSelect || userPreferredPayment || selectedPayment
+    const selected = forceSelect || selectedPayment
 
     return (
       <div className="card1">
