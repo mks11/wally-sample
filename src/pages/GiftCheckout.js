@@ -105,7 +105,7 @@ class GiftCheckout extends Component {
         <div className="container">
           <div className="gift-checkout-wrap card1 card-shadow">
             <h3>Get fresh with a Wally Shop gift card</h3>
-            <p>Check our available zip codes to be sure that your recipient is in an area that The Wally Shop operates. Click <Link to="/help/topics/5b92991899ddae0fb0f0a59f">here</Link> for more.</p>
+            <p>Check our <Link to="/help/topics/5b92991899ddae0fb0f0a59f">available zip codes</Link> to be sure that your recipient is in an area that The Wally Shop operates.</p>
             <h3><FontAwesome name="gift" className="gift-icon" />Build Gift Card</h3>
             <GiftForm
               giftFrom={giftFrom}
