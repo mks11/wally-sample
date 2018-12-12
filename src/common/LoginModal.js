@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
-import FacebookLogin from 'react-facebook-login';
-import {Modal} from "react-bootstrap";
+  import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
 
@@ -141,15 +140,16 @@ class LoginModal extends Component {
         <div>{ this.state.invalidText && <span className="text-error text-center my-3">{this.state.invalidText}</span>}</div>
       )
     }
+
     return (
-      <Modal show={store.modal.login} onHide={this.handleToggle}>
+      <Modal isOpen={store.modal.login} toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           { this.modalStore.loginStep >=2  ? <button className="btn-icon btn-icon--back" onClick={e => this.handlePrev(e)}></button>
               : <div></div>
           }
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
-        <Modal.Body>
+        <ModalBody>
           <div className="login-wrap pb-2">
             { this.modalStore.loginStep <= 2 && (
               <div>
@@ -219,14 +219,14 @@ class LoginModal extends Component {
 
             </form>
           </div>
-        </Modal.Body>
+        </ModalBody>
         {this.modalStore.loginStep === 1 &&
-        <Modal.Footer>
+        <ModalFooter>
           <div className="login-wrap mb-5">
             <span className="t-18">New to The Wally Shop</span>
             <a onClick={e=>this.handleLogin(e)} className="btn-text btn-text--login">SIGN UP</a>
           </div>
-        </Modal.Footer>
+        </ModalFooter>
         }
       </Modal>
     );

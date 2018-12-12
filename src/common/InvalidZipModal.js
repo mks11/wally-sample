@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Modal, ModalBody, Input, FormGroup, Label} from 'reactstrap';
+import { Modal, ModalBody, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 
 class InvalidZipModal extends Component {
@@ -22,7 +22,7 @@ class InvalidZipModal extends Component {
       return
     }
 
-    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.zipStore.selectedZip, subscribe: this.state.allowSubscribe})
+    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.zipStore.selectedZip, subscribe: false})
       .then(() => {
         this.modalStore.toggleInvalidZip()
         this.modalStore.toggleInvalidZipSuccess()
@@ -60,15 +60,6 @@ class InvalidZipModal extends Component {
                 placeholder="Enter your email"
                 onChange={(e) => this.setState({email: e.target.value})}/>
               <div>{ this.state.invalidText ? <span className="text-error text-center my-3">{this.state.invalidText}</span> : null}</div>
-              <div className="subscribe-control">
-                <div className="custom-control custom-checkbox">
-                  <input type="checkbox" className="custom-control-input" checked={this.state.allowSubscribe} onChange={e=>this.setState({allowSubscribe: !this.state.allowSubscribe})} />
-                  <label className="custom-control-label"
-                         style={{color: "black"}}
-                         onClick={e=>this.setState({allowSubscribe: !this.state.allowSubscribe})}
-                  >Want the latest news, tasty recipes and more?</label>
-                </div>
-              </div>
               <button className={buttonClass} onClick={(e) => this.handleSubmit(e)}>SUBMIT</button>
             </form>
           </div>

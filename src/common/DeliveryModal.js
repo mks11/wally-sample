@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Modal} from "react-bootstrap";
+import { Modal, ModalBody } from 'reactstrap';
 import { connect, logModalView, logEvent } from '../utils'
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 
@@ -58,12 +58,12 @@ class DeliveryModal extends Component {
     }
 
     return (
-      <Modal show={this.userStore.deliveryModal}>
+      <Modal isOpen={this.userStore.deliveryModal}>
         <div className="modal-header modal-header--sm modal-header--sm-nomargin">
           <div><h3>Select delivery time</h3></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal()}></button>
         </div>
-        <Modal.Body className="modal-body-no-footer delivery-time-modal">
+        <ModalBody className="modal-body-no-footer delivery-time-modal">
           <div className="checkout-wrap">
             <div className="">
               <div >
@@ -80,7 +80,7 @@ class DeliveryModal extends Component {
             </div>
           </div>
 
-        </Modal.Body>
+        </ModalBody>
       </Modal>
     );
   }

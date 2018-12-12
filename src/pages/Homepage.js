@@ -16,7 +16,7 @@ class Homepage extends Component {
       heroText: 'Shop package-free groceries',
       heroDescription: 'Currently in beta in select zip codes.',
       heroDescriptionAlign: 'center',
-      allowSubscribe: false,
+
       invalidEmail: false,
       invalidZip: false,
 
@@ -91,7 +91,7 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
 
-    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: this.state.allowSubscribe})
+    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
       .then(() => {
         this.setState({
           heroStatus: 'invalid_zip_success',
@@ -211,14 +211,6 @@ class Homepage extends Component {
                         onChange={this.handleEmail}
                       />
                       {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
-                      <div className="subscribe-control">
-                        <div className="custom-control custom-checkbox">
-                          <input type="checkbox" className="custom-control-input" checked={this.state.allowSubscribe} onChange={e=>this.setState({allowSubscribe: !this.state.allowSubscribe})} />
-                          <label className="custom-control-label"
-                                 onClick={e=>this.setState({allowSubscribe: !this.state.allowSubscribe})}
-                          >Want the latest news, tasty recipes and more?</label>
-                        </div>
-                      </div>
                       <ButtonNotify/>
                     </div>
                 }
