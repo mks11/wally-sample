@@ -577,7 +577,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: #c0d6cd;
   color: #fff;
   line-height: 1;
-  visibility: hidden;
+  visibility: hidden;navbar-toggler-icon
   opacity: 0;
   transition: 0.27s all;
 }
@@ -587,12 +587,11 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 .aw-nav--mobile ul {
   list-style-type: none;
 }
-
 .aw-nav--mobile li a {
   text-decoration: none;
   display: inline-block;
   padding: 15px 10px;
-  color: #fff;
+  color: #263a52 !important;
   line-height: 1;
 }
 
@@ -605,8 +604,20 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
     display: inline-block;
     vertical-align: middle;
   }
-}
+  .product-mobile-controls {
+    display: none;
+  }
 
+}
+.product-mobile-controls {
+  background: #d2d2d2;
+  padding: 15px;
+
+}
+.product-mobile-controls > .row {
+  margin: 0 !important;
+  background: white;
+}
 .aw-nav--mobile .btn {
   color: #fff;
   background-color: transparent;
