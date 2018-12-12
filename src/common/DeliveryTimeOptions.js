@@ -9,20 +9,8 @@ class DeliveryTimeOptions extends Component {
     data: []
   }
 
-  componentDidMount() {
-    this.setState({addressError: false})
-  }
-
-  componentWillReceiveProps(nextProps) {
-      this.setState({ addressError: false});
-  }
-
   toggleTimeDropdown(e) {
     if (this.props.lock) {
-      return
-    }
-    if (!this.props.isAddressSelected) {
-      this.setState({addressError: true})
       return
     }
     this.setState({timeDropdown: !this.state.timeDropdown})
@@ -40,7 +28,6 @@ class DeliveryTimeOptions extends Component {
     if (availability) {
       return
     }
-    console.log('change time')
     this.setState({
       selected: {day, time, date},
       lock: true, timeDropdown: false})
@@ -77,7 +64,6 @@ class DeliveryTimeOptions extends Component {
         {showTitle && 
             <h3 className="m-0 mb-3 p-r">Time 
               {(lock && editable) && <a onClick={this.unlock} className="address-rbtn link-blue">CHANGE</a> }
-              {this.state.addressError  ? <span className="address-rbtn text-error sm">Address required</span> : null}
             </h3>
         }
         <div className="dropdown show">

@@ -10,11 +10,12 @@ import CardSmall from '../common/CardSmall';
 import ClickOutside from 'react-click-outside'
 import {StripeProvider, Elements} from 'react-stripe-elements'
 
-import { connect, formatMoney } from '../utils'
+import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
 import { STRIPE_API_KEY } from '../config'
 
-import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
-import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
+import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
+import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
+import DeliveryChangeModal from '../common/DeliveryChangeModal';
 
 class Checkout extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class Checkout extends Component {
       selectedDate: null,
       selectedTime: null,
 
-      lockAddress: false,
+      lockAddress: true,
       lockPayment: false,
       lockTime: false,
       confirmHome: false,
@@ -83,20 +84,26 @@ class Checkout extends Component {
     ReactGA.pageview("/checkout");
     this.userStore.getStatus(true)
       .then((status) => {
-        if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-          this.userStore.toggleDeliveryModal(true)
+        if (status) {
+          const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
+          if (selectedAddress) {
+            this.userStore.setDeliveryAddress(selectedAddress)
+          }
+
+          this.loadData()
+          if (this.userStore.user.addresses.length > 0) {
+            const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
+            this.setState({selectedAddress: selectedAddress._id})
+          } else {
+            this.setState({lockAddress: false})
+          }
+
+          if (this.userStore.user.payment.length > 0) {
+            const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
+            this.setState({selectedPayment: selectedPayment._id})
+          }
+        } else {
           this.routing.push('/main')
-        }
-
-        this.loadData()
-        if (this.userStore.user.addresses.length > 0) {
-          const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
-          this.setState({selectedAddress: selectedAddress._id})
-        }
-
-        if (this.userStore.user.payment.length > 0) {
-          const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
-          this.setState({selectedPayment: selectedPayment._id})
         }
       })
   }
@@ -115,9 +122,21 @@ class Checkout extends Component {
     }).then(data => {
       return this.checkoutStore.getDeliveryTimes(deliveryData)
     }).then(times => {
+      const deliveryTimes = this.checkoutStore.transformDeliveryTimes(times)
+      this.setState({deliveryTimes})
       this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
     }).catch((e) => {
       console.error(e)
+    })
+  }
+
+  updateData() {
+    const deliveryData = this.userStore.getDeliveryParams()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
+        appliedPromo: this.checkoutStore.order.promo_amount,
+        appliedPromoCode: this.checkoutStore.order.promo,
+      })
     })
   }
 
@@ -131,42 +150,6 @@ class Checkout extends Component {
     }
   }
 
-  applyPromo() {
-    this.setState({
-      appliedPromo: true,
-    })
-    this.checkoutStore.applyPromo()
-  }
-
-  toggleTimeDropdown(e) {
-    if (!this.state.lockAddress) {
-      this.setState({addressError: true})
-      return
-    }
-
-    this.setState({
-      addressError: false,
-      timeDropdown: !this.state.timeDropdown
-    })
-  }
-
-  hideTimeDropdown(e) {
-    if (!this.state.timeDropdown) {
-      return
-    }
-
-    this.setState({timeDropdown: false})
-  }
-
-  handleSelectAddress(address_id) {
-    this.setState({selectedAddress: address_id})
-    if (address_id === '0') {
-      this.setState({newAddress: true, newContactName: this.userStore.user.name, newPhoneNumber: this.userStore.user.primary_telephone})
-    } else {
-      this.setState({newAddress: false})
-    }
-  }
-
   handleSelectPayment(payment_id) {
     this.setState({selectedPayment: payment_id})
     if (payment_id === "0") {
@@ -176,58 +159,55 @@ class Checkout extends Component {
     }
   }
 
-  handleSubmitAddress() {
-    if (!this.state.selectedAddress) return
-    this.setState({invalidSelectAddress: null})
-    const address = this.userStore.user.addresses.find((d) => d._id === this.state.selectedAddress)
-    let deliveryTimes = []
-    this.checkoutStore.getDeliveryTimes({
-      street_address: address.street_address,
-      zip: address.zip,
-    }, this.userStore.getHeaderAuth()).then((data) => {
-      const times = data.delivery_windows
-      for (var i = 0, len = times.length; i < len; i++) {
-        addTimes(times[i])
-      }
-
-      this.setState({deliveryTimes, lockAddress: true, addressError: false})
-    }).catch((e) => {
-      if (e.response.data.error) {
-        this.setState({invalidSelectAddress: e.response.data.error.message})
-      }
-      console.error(e)
-    })
-
-    function addTimes(data) {
-      const timeFirst = data[0].split('-')[0]
-      const day = moment(data[1] + ' ' + timeFirst).calendar(null,{
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday]',
-        lastWeek: '[Last] dddd',
-        sameElse: 'DD/MM/YYYY'
-      })
-
-      const findTime = deliveryTimes.findIndex((data) => data.day === day)
-
-      const obj = {
-        time: data[0],
-        date: data[1],
-        availability: data[2]
-      }
-
-      if (findTime === -1) {
-        deliveryTimes.push({day: day, data: [obj]})
-      } else {
-        deliveryTimes[findTime].data.push(obj)
-      }
+  handleSelectAddress = (data) => {
+    const selectedAddress  = this.userStore.selectedDeliveryAddress
+    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
+      this.setState({selectedAddress: data, selectedAddressChanged: true})
+      this.userStore.setDeliveryAddress(data)
+    } else {
+      this.setState({selectedAddressChanged: false})
     }
   }
 
+  handleAddNewAddress = async (data) => {
+    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
+
+    const dataMap = {
+      name: newContactName, 
+      state: newState,
+      delivery_notes: newDeliveryNotes,
+      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
+      preferred_address: newPreferedAddress
+    }
+
+    const response = await this.userStore.saveAddress(dataMap)
+    const address = this.userStore.selectedDeliveryAddress
+    this.userStore.setDeliveryAddress(address)
+    this.setState({lockAddress: true})
+    return response
+  }
+
+  handleSubmitAddress = async (address) => {
+    this.userStore.setDeliveryAddress(address)
+    this.setState({lockAddress: true})
+  }
+
+  handleUnlockAddress = () => {
+    this.setState({lockAddress: false})
+  }
+
   handleSubmitPayment() {
+    logEvent({ category: "Checkout", action: "SubmitPayment" })
     if (!this.state.selectedPayment) return
     this.setState({lockPayment: true})
+  }
+
+  handleSelectTime = (selectedTime) => {
+    this.modalStore.showDeliveryChange('time', selectedTime)    
+  }
+
+  handleChangeDelivery = () => {
+    this.updateData()
   }
 
   handleEdit(id, quantity) {
@@ -262,7 +242,7 @@ class Checkout extends Component {
       this.setState({invalidText: 'Please select payment'})
       return
     }
-
+    logEvent({ category: "Checkout", action: "ConfirmCheckout" })
 
     this.checkoutStore.createOrder({
       store_credit: this.state.appliedStoreCreditAmount > 0,
@@ -292,7 +272,7 @@ class Checkout extends Component {
       this.setState({invalidText: 'Promo code empty'})
       return
     }
-
+    logEvent({ category: "Checkout", action: "AddPromo", label: promoCode })
     this.checkoutStore.checkPromo({
       subTotal,
       promoCode
@@ -317,82 +297,14 @@ class Checkout extends Component {
 
   }
 
-  handleChangeTime(day, time, date, availability) {
-    if (availability) {
-      return
-    }
-    this.setState({selectedDay: day, selectedDate: date, selectedTime: time, lockTime: true, timeDropdown: false})
-  }
-
   handleAddPayment = (data) => {
     return this.userStore.savePayment(data).then((data) => {
+      logEvent({ category: "Checkout", action: "SubmitNewPayment" })
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
 
       return data
     })
-  }
-
-
-  handleConfirmAddress(e) {
-    this.setState({invalidAddressText: null})
-    if (!this.state.newStreetAddress) {
-      this.setState({invalidAddressText: 'Street address cannot be empty'})
-      return
-    }
-
-    // if (!this.state.newAptNo) {
-    //   this.setState({invalidAddressText: 'Unit cannot be empty'})
-    //   return
-    // }
-
-    if (!this.state.newContactName) {
-      this.setState({invalidAddressText: 'Name cannot be empty'})
-      return
-    }
-
-    if (!this.state.newPhoneNumber) {
-      this.setState({invalidAddressText: 'Telephone cannot be empty'})
-      return
-    }
-
-    // if (!this.state.delivery_notes) {
-    //   this.setState({invalidText: 'Delivery notes cannot be empty'})
-    //   return
-    // }
-    //
-    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = this.state
-
-    this.userStore.saveAddress({
-      name: newContactName, 
-      state: newState,
-      delivery_notes: newDeliveryNotes,
-      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
-      preferred_address: newPreferedAddress
-    }).then((data) => {
-      this.userStore.setUserData(data)
-      this.setState({
-        selectedAddress: this.userStore.user.preferred_address,
-        newAddress: false,
-        invalidAddressText: '',
-        newStreetAddress: '',
-        newAptNo: '',
-        newZip: '',
-        newContactName: '',
-        newPhoneNumber: '',
-        newDeliveryNotes:'',
-        newState:'',
-        newCity: '',
-        newCountry: '',
-        newPreferedAddress: false
-      })
-    }).catch((e) => {
-      const msg = e.response.data.error.message
-      this.setState({invalidAddressText: msg})
-      console.error('Failed to save address', e)
-    })
-
-    e.preventDefault()
   }
 
   showServicePopup() {
@@ -417,6 +329,11 @@ class Checkout extends Component {
 
   hidePackagingPopup() {
     this.setState({packagingdeposit: false})
+  }
+
+  handleConfirmHome() {
+    logEvent({ category: "Checkout", action: "ConfirmAtHome" })
+    this.setState({confirmHome: !this.state.confirmHome})
   }
 
   render() {
@@ -487,25 +404,28 @@ class Checkout extends Component {
               <div style={{maxWidth: '440px'}}>
                 {this.userStore.user && 
                   <DeliveryAddressOptions
-                    editable={false}
-                    lock={true}
+                    lock={this.state.lockAddress}
+                    editable={true}
                     selected={this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : null}
                     user={this.userStore.user}
+                    onAddNew={this.handleAddNewAddress}
+                    onSubmit={this.handleSubmitAddress}
+                    onSelect={this.handleSelectAddress}
+                    onUnlock={this.handleUnlockAddress}
                   />
                 }
                 {this.userStore.user && 
                     <DeliveryTimeOptions
-                      editable={false}
-                      lock={true}
-                      data={[]}
+                      lock={false}
+                      data={this.state.deliveryTimes}
                       selected={this.userStore.selectedDeliveryTime}
-                      dropdown={false}
-                      isAddressSelected={true}
+                      onSelectTime={this.handleSelectTime}
+                      title={true}
                     />
                 }
                 <div className="custom-control custom-checkbox mt-2 mb-3">
-                  <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.setState({confirmHome: !this.state.confirmHome})} />
-                  <label className="custom-control-label" onClick={e=>this.setState({confirmHome: !this.state.confirmHome})}>I confirm that I will be at home or have a doorman</label>
+                  <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.handleConfirmHome()} />
+                  <label className="custom-control-label" onClick={e=>this.handleConfirmHome()}>I confirm that I will be at home or have a doorman</label>
                 </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
@@ -652,8 +572,13 @@ class Checkout extends Component {
                     </div>
 
                     <div className="summary">
-                      <span>Store credit</span>
-                      <span>{formatMoney(order.applied_store_credit/100)}</span>
+                      <span>Applied Discount</span>
+                      <span>-{formatMoney(order.promo_discount/100)}</span>
+                    </div>
+
+                    <div className="summary">
+                      <span>Applied Store credit</span>
+                      <span>-{formatMoney(order.applied_store_credit/100)}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
@@ -715,13 +640,14 @@ class Checkout extends Component {
                               </div>
 
                               <p className="mt-3">
-                                Prices and totals are subject to final adjustments based on available products and weight. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
+                                Prices and totals are subject to final adjustments based on available products, weights and at-location prices. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
                             </p>
                             </section>
                           </div>
                         </div>
                       </div>
                       { this.productStore.open && <ProductModal/> }
+                      <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
                     </div>
     );
   }

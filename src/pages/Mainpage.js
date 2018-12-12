@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import ReactGA from 'react-ga';
-import {formatMoney, connect} from '../utils'
-import {Link} from 'react-router-dom'
-import {APP_URL, PRODUCT_BASE_URL} from '../config'
+import { formatMoney, connect, logEvent, logModalView } from '../utils'
+import { Link } from 'react-router-dom'
+import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import {parse} from 'qs';
-import {AsyncTypeahead} from 'react-bootstrap-typeahead'
+import { AsyncTypeahead} from 'react-bootstrap-typeahead'
 import {
   Carousel,
   CarouselItem,
@@ -74,45 +74,41 @@ class Product extends Component {
     this.productStore = this.props.store.product
   }
 
-  handleProductModal() {
-    if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-      this.userStore.toggleDeliveryModal(true)
-      this.productStore.activeProductId = this.props.product.product_id
-    } else {
-      // console.log(this.userStore.getDeliveryParams())
-      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
-      })
-    }
-  }
-
   render() {
     const product = this.props.product
     let price = product.product_price/100
-    let price_unit = product.price_unit
+    var unit_type = product.unit_type
+    if (!unit_type) unit_type = product.price_unit
+    var price_unit = "per "
 
-    let unit = 1
-    if (price_unit != "ea") {
-      price_unit = "per " + product.price_unit
-    } else if (!product.price_unit) {
-      price_unit = ""
+    if (['ea'].includes(unit_type)) {
+      if (product.subcat_name) {
+        price_unit += product.subcat_name  
+      } else {
+        price_unit += 'unit'
+      }
     } else {
-      price_unit = ""
+      price_unit += unit_type
     }
 
-    // price *= unit
+    var producer = ""
+    if (product.producer) producer += product.producer
+
     return ( <div className={this.props.className + " " + "product-thumbnail"} onClick={() => this.props.handleProductModal(product.product_id)}>
+
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
-        <div className="col-6 product-price">
+        <div className="col-3 product-price">
           {formatMoney(price)}
         </div>
-        <div className="col-6 product-weight">
+        <div className="col-9 product-weight">
           {price_unit}
         </div>
       </div>
-      { product.product_name && <span className="product-desc">{product.product_name}</span>}
-      { product.name && <span className="product-desc">{product.name}</span>}
+      { producer && <span className="product-producer">{producer}</span>}
+      <br></br>
+      { product.product_name && <span className="product-desc"><strong>{product.product_name}</strong></span>}
+      { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
     </div>
     )
   }
@@ -169,6 +165,7 @@ class Mainpage extends Component {
     this.modalStore = this.props.store.modal
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
+    this.zipStore = this.props.store.zip
 
     this.state = {
       searchAhead: [],
@@ -216,23 +213,19 @@ class Mainpage extends Component {
   }
 
   componentDidMount() {
-    ReactGA.pageview("/main");
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
         const selectedAddress = this.userStore.selectedDeliveryAddress || (this.userStore.user ? this.userStore.getAddressById(this.userStore.user.preferred_address) : null)
-        if (selectedAddress) {
-          this.userStore.setDeliveryAddress(selectedAddress)
-          this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
-            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-            this.setState({deliveryTimes})
-          })
-        }
+        this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
+          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+          this.setState({deliveryTimes})
+        })
+        this.loadData(status)
         if (this.props.match.params.product_id) {
           this.handleProductModal(this.props.match.params.product_id)
         }
-
-        this.loadData(status)
-      })
+    })
 
     const $ = window.$
 
@@ -310,11 +303,12 @@ class Mainpage extends Component {
   }
 
   handleProductModal = (productId) => {
-    if (!this.userStore.selectedDeliveryAddress && !this.userStore.selectedDeliveryTime) {
+    if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
+      logModalView('/delivery-options-window')
       this.userStore.toggleDeliveryModal(true)
       this.productStore.activeProductId = productId
     } else {
-      console.log(this.userStore.getDeliveryParams())
+      // console.log(this.userStore.getDeliveryParams())
       this.productStore.showModal(productId, null, this.userStore.getDeliveryParams()).then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
       })
@@ -322,9 +316,10 @@ class Mainpage extends Component {
   }
 
   handleCheckout() {
+    logEvent({ category: "Cart", action: "ClickCheckout" })
     this.uiStore.toggleCartDropdown()
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
+      if (!this.userStore.selectedDeliveryTime) {
         this.userStore.toggleDeliveryModal(true)
       } else {
         this.routing.push('/checkout')
@@ -335,9 +330,9 @@ class Mainpage extends Component {
   }
 
   handleCheckoutMobile() {
+    logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryAddress || !this.userStore.selectedDeliveryTime) {
-        this.uiStore.toggleCartMobile(false)
+      if (!this.userStore.selectedDeliveryTime) {
         this.userStore.toggleDeliveryModal(true)
       } else {
         this.routing.push('/checkout')
@@ -349,16 +344,19 @@ class Mainpage extends Component {
   }
 
   handleEdit(data) {
+    logEvent({category: "Cart", action: "ClickEditProduct"})
     this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams()).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
     })
   }
 
   handleDelete(id) {
+    logEvent({category: "Cart", action: "ClickDeleteProduct"})
     this.checkoutStore.toggleDeleteModal(id)
   }
 
   handleDeleteMobile(id) {
+    logEvent({category: "Cart", action: "ClickDeleteProductMobile"})
     this.uiStore.toggleCartMobile()
     this.checkoutStore.toggleDeleteModal(id)
   }
@@ -437,9 +435,11 @@ class Mainpage extends Component {
   handleShowCartDropdown = () => {
     this.uiStore.hideAllDropdown()
     this.uiStore.toggleCartDropdown(true)
+    logModalView('/cart')
   }
 
   handleHideCartDropdown = () => {
+    logEvent({category: 'Cart', action: "CloseCart"})
     this.uiStore.toggleCartDropdown(false)
   }
 
@@ -604,6 +604,7 @@ class Mainpage extends Component {
     const selectedTime  = this.userStore.selectedDeliveryTime
     if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
       this.setState({selectedTime: data, selectedTimeChanged: true})
+      logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
     } else {
       this.setState({selectedTimeChanged: false})
     }
@@ -669,6 +670,7 @@ class Mainpage extends Component {
   }
 
   handleSubmitDeliveryAddress= () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditAddressChoice" })
     if (!this.state.selectedAddressChanged) {
       return
     }
@@ -684,6 +686,7 @@ class Mainpage extends Component {
   }
 
   handleSubmitDeliveryTime= () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
     if (!this.state.selectedTimeChanged) {
       return
     }
@@ -694,7 +697,13 @@ class Mainpage extends Component {
   }
 
   handleAddToCart = (data) => {
-    this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+    data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+  }
+
+  handleOpenCartMobile = () => {
+    logModalView('/cart-mobile')
+    this.uiStore.toggleCartMobile(true)
+
   }
 
   render() {
@@ -908,7 +917,6 @@ class Mainpage extends Component {
                               lock={false}
                               data={this.state.deliveryTimes}
                               selected={this.userStore.selectedDeliveryTime}
-                              isAddressSelected={true}
                               onSelectTime={this.handleSelectTime}
                             />
                           </div>
@@ -1149,57 +1157,59 @@ class Mainpage extends Component {
               </div>
 
               { !this.state.searchPage &&
-                  <div className="col-md-10 col-sm-8 product-content-right">
-                    {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
+                  <div className="col-md-10 col-sm-8">
+                    <div className="product-content-right">
+                      {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
-                    <div className="product-breadcrumb">
-                      <span>
-                        <Link to ={"/main"} className="text-black">
-                          All Categories
-                        </Link>
-                      </span>
-                      {this.productStore.path.map((p, i) => (
-                        <span key={i}>
-                          { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                      <div className="product-breadcrumb">
+                        <span>
+                          <Link to ={"/main"} className="text-black">
+                            All Categories
+                          </Link>
                         </span>
-                      ))}
+                        {this.productStore.path.map((p, i) => (
+                          <span key={i}>
+                            { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                          </span>
+                        ))}
+                      </div>
+
+                      { mainDisplay.map((p, i) => (
+                        <ProductList key={i} display={p} mode={this.state.categoryTypeMode} handleProductModal={this.handleProductModal} deliveryTimes={this.state.deliveryTimes}/>
+                      )
+                      )}
                     </div>
-
-                    { mainDisplay.map((p, i) => (
-                      <ProductList key={i} display={p} mode={this.state.categoryTypeMode} handleProductModal={this.handleProductModal} deliveryTimes={this.state.deliveryTimes}/>
-                    )
-                    )}
-
-
                   </div> }
 
                   { this.state.searchPage &&
-                      <div className="col-md-10 col-sm-8 product-content-right">
-                        {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
+                      <div className="col-md-10 col-sm-8">
+                        <div className="product-content-right">
+                          {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
-                        <div className="product-breadcrumb">
-                          <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
-                          <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                          <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
-                            {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
-                          </span>
-                          <hr/>
+                          <div className="product-breadcrumb">
+                            <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
+                            <h3 className="text-italic">"{this.state.searchTerms}"</h3>
+                            <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
+                              {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
+                            </span>
+                            <hr/>
+                          </div>
+
+                          <div className="row">
+                            { this.state.searchDisplayed.map((p, i) => (
+                              <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.handleProductModal(p.product_id)}/>
+                            ))}
+                          </div>
+
                         </div>
-
-                        <div className="row">
-                          { this.state.searchDisplayed.map((p, i) => (
-                            <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.handleProductModal(p.product_id)}/>
-                          ))}
-                        </div>
-
                       </div> }
                     </div>
                   </div>
                 </div>
                 { this.productStore.open && <ProductModal onAddToCart={this.handleAddToCart}/> }
-                <DeliveryModal onChangeSubmit={this.handleChangeDelivery}/>
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery} deliveryTimes={this.state.deliveryTimes}/>
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
-                <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.uiStore.toggleCartMobile(true)}><span>{cartItems.length}</span>View Order</button>
+                <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
                   {cartItems.length>0 ?
