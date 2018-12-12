@@ -117,6 +117,8 @@ class UserStore {
   }
 
   getHeaderAuth() {
+    if (!this.token.accessToken) return null
+    
     const options = {
       headers: {'Authorization': 'Bearer ' + this.token.accessToken}
     }
