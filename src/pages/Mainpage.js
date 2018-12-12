@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactGA from 'react-ga';
 import { formatMoney, connect, logEvent, logModalView, datesEqual } from '../utils'
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
+import {parse} from 'qs';
 import { AsyncTypeahead} from 'react-bootstrap-typeahead'
 import {
   Carousel,
@@ -10,12 +11,14 @@ import {
   CarouselIndicators,
   Button,
 } from 'reactstrap';
+import Slider from "react-slick";
 
 import DeliveryModal from '../common/DeliveryModal.js';
 import DeliveryChangeModal from '../common/DeliveryChangeModal.js';
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 import DeliveryAddressOptions from '../common/DeliveryAddressOptions.js';
 import ProductModal from '../common/ProductModal';
+import SlickArrow from "../common/SlickArrow";
 
 const banner1 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-1.png'
 const banner2 = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/banner-images/banner-2.png'
@@ -71,19 +74,6 @@ class Product extends Component {
     this.productStore = this.props.store.product
   }
 
-  handleProductModal() {
-    if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
-      logModalView('/delivery-options-window')
-      this.userStore.toggleDeliveryModal(true)
-      this.productStore.activeProductId = this.props.product.product_id
-    } else {
-      // console.log(this.userStore.getDeliveryParams())
-      this.productStore.showModal(this.props.product.product_id, null, this.userStore.getDeliveryParams()).then((data) => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
-      })
-    }
-  }
-
   render() {
     const product = this.props.product
     let price = product.product_price/100
@@ -104,7 +94,8 @@ class Product extends Component {
     var producer = ""
     if (product.producer) producer += product.producer
 
-    return ( <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={e => this.handleProductModal()}>
+    return ( <div className={this.props.className + " " + "product-thumbnail"} onClick={() => this.props.handleProductModal(product.product_id)}>
+
       <img src={PRODUCT_BASE_URL + product.product_id + "/" + product.image_refs[0]} alt="" />
       <div className="row product-detail">
         <div className="col-3 product-price">
@@ -127,24 +118,16 @@ Product = connect("store")(Product)
 
 class ProductList extends Component {
 
-  componentDidMount() {
-    const $ = window.$
-
-    $('.big-arrow.left-arrow').click(function() {
-      $(this).siblings('.container-fluid').animate({
-        scrollLeft: '+=100'
-      }, 100, 'linear');
-    })
-    $('.big-arrow.right-arrow').click(function() {
-      $(this).siblings('.container-fluid').animate({
-        scrollLeft: '-=100'
-      }, 100, 'linear');
-    })
-  }
-
   render() {
-    const { display, mode, deliveryTimes } = this.props
-
+    const {display, mode, deliveryTimes} = this.props
+    const sliderSettings = {
+      dots: false,
+      infinite: false,
+      slidesToShow: window.screen.width > 768 ? 4 : 2,
+      slidesToScroll: window.screen.width > 768 ? 2 : 1,
+      prevArrow: <SlickArrow flip/>,
+      nextArrow: <SlickArrow/>
+    };
     return (
       <div className="product">
         <h2>{display.cat_name}</h2>
@@ -152,21 +135,20 @@ class ProductList extends Component {
           <h5>{display.cat_name}</h5>
           <Link to={"/main/" + display.cat_id }>View All {display.number_products} ></Link>
         </div>
-
-        {mode === 'limit' && 
-          <Button className="big-arrow right-arrow" />
-        }
-        <div className="container-fluid">
-          <div className={`row flex-row ${mode === 'limit' ? 'flex-nowrap' : ''}`} >
+        {mode === "limit" && <Slider {...sliderSettings}>
+          { display.products.map((p, i) => {
+            return (
+              <Product key={i} product={p} deliveryTimes={deliveryTimes} handleProductModal={() => this.props.handleProductModal(p.product_id)}/>)
+          })}
+        </Slider>}
+        {mode === "all" &&  <div className="container-fluid">
+          <div className={`row flex-row`} >
             { display.products.map((p, i) => {
-              return (<Product key={i} product={p} deliveryTimes={deliveryTimes}/>)
-            }
+                return (<Product className="col-lg-3 col-md-4 col-6 col-sm-6" key={i} product={p} deliveryTimes={deliveryTimes}  handleProductModal={() => this.props.handleProductModal(p.product_id)}/>)
+              }
             )}
           </div>
-        </div>
-        {mode === 'limit' && 
-          <Button className="big-arrow left-arrow" />
-        }
+        </div>}
       </div>
     )
   }
@@ -247,7 +229,10 @@ class Mainpage extends Component {
         })
 
         this.loadData(status)
-      })
+        if (this.props.match.params.product_id) {
+          this.handleProductModal(this.props.match.params.product_id)
+        }
+    })
 
     const $ = window.$
 
@@ -272,6 +257,12 @@ class Mainpage extends Component {
       //
 
     })
+    if (this.props.location.search) {
+      const query = parse(this.props.location.search.slice(1))
+        if (query.keyword) {
+          this.search(query.keyword)
+      }
+    }
   }
 
   loadData(userStatus) {
@@ -352,6 +343,19 @@ class Mainpage extends Component {
     }
   }
 
+  handleProductModal = (productId) => {
+    if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
+      logModalView('/delivery-options-window')
+      this.userStore.toggleDeliveryModal(true)
+      this.productStore.activeProductId = productId
+    } else {
+      // console.log(this.userStore.getDeliveryParams())
+      this.productStore.showModal(productId, null, this.userStore.getDeliveryParams()).then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, this.props.deliveryTimes)
+      })
+    }
+  }
+
   handleCheckout() {
     logEvent({ category: "Cart", action: "ClickCheckout" })
     this.uiStore.toggleCartDropdown()
@@ -399,6 +403,7 @@ class Mainpage extends Component {
   }
 
   handleSearch(keyword) {
+    console.log(keyword)
     this.setState({searchAheadLoading: true})
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
@@ -407,6 +412,7 @@ class Mainpage extends Component {
   }
 
   search(keyword) {
+    if (!keyword) return
     this.uiStore.hideBackdrop()
 
     const instance = this._typeahead.getInstance();
@@ -434,17 +440,29 @@ class Mainpage extends Component {
       }, [])
 
 
-
-      this.setState({searchSidebar: filters, 
+      this.setState({
+        searchSidebar: filters,
         searchFilter: cur,
-        searchAheadLoading: false, searchResult: data, searchPage: true, searchTerms: keyword, currentSearchCatId, currentSearchCat: 'All Categories', searchDisplayed: data.products })
+        searchAheadLoading: false,
+        searchResult: data,
+        searchPage: true,
+        searchTerms: keyword,
+        currentSearchCatId,
+        currentSearchCat: 'All Categories',
+        searchDisplayed: data.products
+      })
     })
   }
 
-  handleSearchSubmit(e) {
+  handleSearchSubmit = (e) => {
+    if (this._typeahead.state.query === "") this.handleResetResults()
     if (e.keyCode === 13) {
       this.search(e.target.value)
     }
+  }
+
+  handleResetResults = () => {
+    this.setState({searchPage: false}, this.loadData)
   }
 
   handleSelected(e) {
@@ -841,34 +859,6 @@ class Mainpage extends Component {
                     <button className="btn btn-transparent" onClick={e=>this.uiStore.toggleCategoryMobile()}><span className="catsearch-icon"></span></button>
                   </div>
                 </div>
-                <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
-                  <div className="col-auto">
-                    <div className="d-flex justify-content-between">
-                      <i className="fa fa-map-marker bar-icon"></i>
-                      <span style={{lineHeight: '37px'}}>
-                        {this.userStore.selectedDeliveryAddress && 
-                          <React.Fragment>
-                            {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
-                          </React.Fragment>
-                        }
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="col-auto">
-                    <div className="d-flex justify-content-between">
-                      <i className="fa fa-clock-o bar-icon"></i>
-                      <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
-                        <React.Fragment>
-                          {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
-                        </React.Fragment>
-                        : null
-                      }
-
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="col-md-12 col-sm-8 right-column d-none d-md-block">
@@ -991,12 +981,10 @@ class Mainpage extends Component {
                       >
                         <div className={categoriesDropdownClass} aria-labelledby="dropdownMenuButton">
                           <Link to="/main" className="dropdown-item" onClick={e=>this.handleAllCategoriesDropdown()}>All Categories</Link>
-
-                          {this.productStore.categories.map((s,i) => (
+                          {this.state.sidebar.map((s,i) => (
                             <React.Fragment key={i}>
                               {(!s.parent_id && s.cat_id.length<=3) && <Link to={"/main/"+ (s.cat_id ? s.cat_id:'')} className="dropdown-item" key={i} onClick={e=> this.uiStore.hideCategoriesDropdown()}>{s.cat_name}</Link>}
                             </React.Fragment>
-
                           ))}
                         </div>
                       </div>
@@ -1093,7 +1081,36 @@ class Mainpage extends Component {
           </div>
         </div>
       </div>
+        <div className="product-mobile-controls">
+          <div className="row mt-2" onClick={e => this.userStore.toggleDeliveryModal(true)}>
+            <div className="col-auto">
+              <div className="d-flex justify-content-between">
+                <i className="fa fa-map-marker bar-icon"></i>
+                <span style={{lineHeight: '37px'}}>
+                        {this.userStore.selectedDeliveryAddress &&
+                        <React.Fragment>
+                          {this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}
+                        </React.Fragment>
+                        }
+                      </span>
+              </div>
+            </div>
 
+            <div className="col-auto">
+              <div className="d-flex justify-content-between">
+                <i className="fa fa-clock-o bar-icon"></i>
+                <span style={{lineHeight: '37px'}}>{this.userStore.selectedDeliveryTime !== null ?
+                  <React.Fragment>
+                    {this.userStore.selectedDeliveryTime.day}, {this.userStore.selectedDeliveryTime.time}
+                  </React.Fragment>
+                  : null
+                }
+
+                    </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
       <div className="product-content">
         <div className="container">
@@ -1190,7 +1207,7 @@ class Mainpage extends Component {
                       </div>
 
                       { mainDisplay.map((p, i) => (
-                        <ProductList key={i} display={p} mode={this.state.categoryTypeMode}  deliveryTimes={this.state.deliveryTimes}/>
+                        <ProductList key={i} display={p} mode={this.state.categoryTypeMode} handleProductModal={this.handleProductModal} deliveryTimes={this.state.deliveryTimes}/>
                       )
                       )}
                     </div>
@@ -1212,9 +1229,10 @@ class Mainpage extends Component {
 
                           <div className="row">
                             { this.state.searchDisplayed.map((p, i) => (
-                              <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes} />
+                              <Product key={i} product={p} deliveryTimes={this.state.deliveryTimes}  handleProductModal={() => this.handleProductModal(p.product_id)}/>
                             ))}
                           </div>
+
                         </div>
                       </div> }
                     </div>

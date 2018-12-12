@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
 import { formatMoney, connect, logModalView, logEvent } from '../utils'
 import { PRODUCT_BASE_URL } from '../config'
+import {Modal} from "react-bootstrap";
 
 class ProductModal extends Component {
   constructor(props) {
@@ -165,12 +165,12 @@ class ProductModal extends Component {
     const packaging_description = packaging.description
 
     return (
-      <Modal isOpen={this.productStore.modal} size="lg" onClosed={e => this.productStore.closeModal()} toggle={e => this.productStore.hideModal(e)}>
+      <Modal show={this.productStore.modal} size="lg" onExited={e => this.productStore.closeModal()} onHide={e => this.productStore.hideModal(e)}>
         <div className="modal-header">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal(e)} ></button>
         </div>
-        <ModalBody className="modal-body-no-footer">
+        <Modal.Body className="modal-body-no-footer product-modal">
           <div className="row">
             <div className="col-md-6 product-modal-left">
               <div className="row mb-3">
@@ -273,7 +273,7 @@ class ProductModal extends Component {
             </div>
 
           </div>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
     );
   }
