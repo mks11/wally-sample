@@ -302,7 +302,7 @@ class UserStore {
   }
 
   async purchaseGiftCard(data) {
-    const res = await axios.post(API_PURCHASE_GIFTCARD, data)
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data, this.getHeaderAuth())
     return res.data
   }
 
