@@ -88,6 +88,11 @@ class Checkout extends Component {
             this.userStore.setDeliveryAddress(selectedAddress)
           }
 
+          this.checkoutStore.getDeliveryTimes().then((data) => {
+            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+            this.setState({deliveryTimes})
+          })
+
           this.loadData()
           if (this.userStore.user.addresses.length > 0) {
             const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)

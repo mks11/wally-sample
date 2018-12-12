@@ -8,8 +8,13 @@ class PaymentSelect extends Component {
   constructor(props) {
     super(props)
 
+    const {
+      forceSelect,
+      userPreferredPayment,
+    } = props
+
     this.state = {
-      selectedPayment: null,
+      selectedPayment: forceSelect || userPreferredPayment,
       newPayment: false,
     }
   }
