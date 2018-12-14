@@ -132,13 +132,13 @@ class ProductList extends Component {
 
     $('.big-arrow.left-arrow').click(function() {
       $(this).siblings('.container-fluid').animate({
-        scrollLeft: '+=100'
-      }, 100, 'linear');
+        scrollLeft: '+=25'
+      }, 50, 'linear');
     })
     $('.big-arrow.right-arrow').click(function() {
       $(this).siblings('.container-fluid').animate({
-        scrollLeft: '-=100'
-      }, 100, 'linear');
+        scrollLeft: '-=25'
+      }, 50, 'linear');
     })
   }
 
