@@ -68,7 +68,7 @@ class Checkout extends Component {
       taxpopup: false,
       servicepopup: false,
       packagingdeposit: false,
-
+      placeOrderRequest: false,
     }
 
     this.userStore = this.props.store.user
@@ -223,23 +223,29 @@ class Checkout extends Component {
   }
 
   handlePlaceOrder() {
-    this.setState({invalidText: ''})
+    const { placeOrderRequest } = this.state
+
+    if (placeOrderRequest) {
+      return
+    }
+
+    this.setState({invalidText: '', placeOrderRequest: true })
     if (!this.userStore.selectedDeliveryAddress) {
-      this.setState({invalidText: 'Please select address'})
+      this.setState({invalidText: 'Please select address', placeOrderRequest: false })
       return
     }
 
     if (!this.userStore.selectedDeliveryTime) {
-      this.setState({invalidText: 'Please select delivery time'})
+      this.setState({invalidText: 'Please select delivery time', placeOrderRequest: false })
       return
     }
 
     if (!this.state.confirmHome) {
-      this.setState({invalidText: 'Please confirm that you are home'})
+      this.setState({invalidText: 'Please confirm that you are home', placeOrderRequest: false})
       return
     }
     if (!this.state.lockPayment) {
-      this.setState({invalidText: 'Please select payment'})
+      this.setState({invalidText: 'Please select payment', placeOrderRequest: false})
       return
     }
     logEvent({ category: "Checkout", action: "ConfirmCheckout" })
@@ -257,10 +263,11 @@ class Checkout extends Component {
       });
       this.routing.push('/orders/' + data.order._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
+      this.setState({ placeOrderRequest: false })
     }).catch((e) => {
       console.error('Failed to submit order', e)
       const msg = e.response.data.error.message
-      this.setState({invalidText: msg})
+      this.setState({ invalidText: msg, placeOrderRequest: false })
     })
   }
 
@@ -365,7 +372,7 @@ class Checkout extends Component {
     }
 
     let buttonPlaceOrderClass = 'btn btn-main'
-    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome) {
+    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome && !this.state.placeOrderRequest) {
       buttonPlaceOrderClass += ' active' 
     }
 

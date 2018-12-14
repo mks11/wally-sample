@@ -34,17 +34,17 @@ class SignupModal extends Component {
 
     this.setState({invalidText: '', signupRequest: true })
     if(!validateEmail(this.state.email)) {
-      this.setState({invalidText: 'Email not valid'})
+      this.setState({invalidText: 'Email not valid', signupRequest: false })
       return
     }
 
     if (!this.state.name) {
-      this.setState({invalidText: 'Name cannot be empty'})
+      this.setState({invalidText: 'Name cannot be empty', signupRequest: false })
       return
     }
 
     if (!this.state.password) {
-      this.setState({invalidText: 'Password cannot be empty'})
+      this.setState({invalidText: 'Password cannot be empty', signupRequest: false })
       return
     }
 
