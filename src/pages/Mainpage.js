@@ -373,6 +373,11 @@ class Mainpage extends Component {
   search(keyword) {
     this.uiStore.hideBackdrop()
 
+    if (!keyword.length) {
+      this.setState({ searchPage: false})
+      return
+    }
+
     const instance = this._typeahead.getInstance();
     instance.blur();
 
