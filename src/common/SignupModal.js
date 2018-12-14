@@ -16,7 +16,8 @@ class SignupModal extends Component {
 
       invalidText: '',
 
-      facebookRequest: false
+      facebookRequest: false,
+      signupRequest: false,
     }
 
     this.modalStore = this.props.store.modal
@@ -25,8 +26,13 @@ class SignupModal extends Component {
     this.routing = this.props.store.routing
     this.checkoutStore = this.props.store.checkout
   }
+
   handleSubmit(e) {
-    this.setState({invalidText: ''})
+    if (this.state.signupRequest) {
+      return
+    }
+
+    this.setState({invalidText: '', signupRequest: true })
     if(!validateEmail(this.state.email)) {
       this.setState({invalidText: 'Email not valid'})
       return
@@ -54,6 +60,7 @@ class SignupModal extends Component {
       this.modalStore.toggleSignup()
       this.modalStore.toggleWelcome()
       this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(),  this.userStore.getDeliveryParams())
+      this.setState({ signupRequest: false })
     }).catch((e) => {
       console.error('Failed to signup', e)
       const msg = e.response.data.error.message
