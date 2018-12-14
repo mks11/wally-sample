@@ -1790,7 +1790,8 @@ a {
     padding-top: 28px;
   }
 
-  .carousel-item{width:100%; margin: auto;}
+  .carousel-item{width:100%; margin: auto;height:calc(50vh - 80px);}
+  .carousel-item img { margin-top: -50%; }
 
   .product-thumbnail img{display:block;max-width:100%;width:100%;height:auto;}
   .product-content-left.fixed{position:relative; top: unset;}
