@@ -251,7 +251,8 @@ class Mainpage extends Component {
     $(window).bind('scroll', function () {
       let thTop = 570
       if (window.innerWidth <= 500) {
-        thTop = 731
+        return
+        // thTop = 731
       }
       if ($(window).scrollTop() > thTop) {
         $('.product-top').addClass('fixed');
@@ -804,8 +805,8 @@ class Mainpage extends Component {
           <div className="container">
             <div className="row">
               <div className="d-md-none col-sm-12">
-                <div className="row">
-                  <div className="col-10">
+                <div className="row  d-none d-sm-block">
+                  <div className="col-1">
                     <h3>Categories</h3>
                   </div>
 

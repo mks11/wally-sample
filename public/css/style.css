@@ -1741,7 +1741,7 @@ a {
 @media (max-width:576px){
   .product-top.fixed {
     position: fixed;
-    top: 58px;
+    top: 80px;
   }
 
   .search-form{
@@ -1868,6 +1868,15 @@ a {
   .modal-body,
   .modal-body-no-footer {
     overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .modal-dialog.modal-lg {
+    margin: 0;
+  }
+
+  .product-carousel .slick-item {
+    width: 80%;
   }
 }
 
