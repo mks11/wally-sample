@@ -100,6 +100,7 @@ class SignupModal extends Component {
       this.setState({facebookRequest: false})
     }).catch((e) => {
       console.error('Failed to signup', e)
+      this.setState({facebookRequest: false})
       // const msg = e.response.data.error.message
       // this.setState({invalidText: msg})
     })

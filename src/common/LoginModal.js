@@ -107,6 +107,7 @@ class LoginModal extends Component {
       this.setState({facebookRequest: false})
     }).catch((e) => {
       console.error('Failed to login', e)
+      this.setState({facebookRequest: false})
       // const msg = e.response.data.error.message
       // this.setState({invalidText: msg})
     })
