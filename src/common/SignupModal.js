@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Modal, Input } from 'reactstrap';
 import { validateEmail, connect } from '../utils'
 import FacebookLogin from 'react-facebook-login';
-import {Modal} from "react-bootstrap";
 
 import { FB_KEY } from '../config'
 

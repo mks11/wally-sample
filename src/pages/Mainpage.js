@@ -4,7 +4,7 @@ import { formatMoney, connect, logEvent, logModalView, datesEqual } from '../uti
 import { Link } from 'react-router-dom'
 import { APP_URL, PRODUCT_BASE_URL } from '../config'
 import {parse} from 'qs';
-import { AsyncTypeahead} from 'react-bootstrap-typeahead'
+import { AsyncTypeahead } from 'react-bootstrap-typeahead'
 import {
   Carousel,
   CarouselItem,

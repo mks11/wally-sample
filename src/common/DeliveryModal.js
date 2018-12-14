@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Modal} from "react-bootstrap";
+import { Modal } from 'reactstrap';
 import { connect, logModalView, logEvent } from '../utils'
 import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { formatMoney, connect, logModalView, logEvent } from '../utils'
 import { PRODUCT_BASE_URL } from '../config'
-import {Modal} from "react-bootstrap";
+import { Modal } from 'reactstrap'
 
 class ProductModal extends Component {
   constructor(props) {
