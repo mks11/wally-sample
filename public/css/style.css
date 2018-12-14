@@ -82,7 +82,7 @@ border-radius:0;}
 }
 
 /* Header */
-.aw-header{padding-top: 0px;padding-bottom: 10px;}
+.aw-header{padding-top: 0px;padding-bottom: 10px;min-height: 80px;}
 .aw-header .container{padding-top: 10px}
 .aw-logo{height:50px;}
 .aw-logo svg{width:auto;height:50px;}
@@ -1235,7 +1235,7 @@ section.page-section.bg-fruitfull {
   background: #fff;
   z-index: 100;
 }
-.product-top.fixed{position:fixed;top:69px;}
+.product-top.fixed{position:fixed;top:80px;}
 .product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 5px; height:35px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 4px;}
 .left-column{display:inline-block;position:relative;visibility: visible;opacity:1; cursor:pointer;}
