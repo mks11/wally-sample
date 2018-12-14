@@ -2106,6 +2106,12 @@ a {
   margin-right: 3rem;
 }
 
+.btn-main.blog-get-started {
+  background-color: #c0d6cd;
+  margin-bottom: 30px;
+  max-width: 250px;
+}
+
 @media (min-width: 576px) {
   .blog-item.blog-post .img-fluid {
     width: calc(50vw - 4rem);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import Title from '../common/page/Title'
 import { Row, Col } from 'reactstrap';
 import { connect } from '../utils'
@@ -53,6 +54,11 @@ class BlogPost extends Component {
                 <p dangerouslySetInnerHTML={{__html: item.body}}></p>
               </Col>
               <hr/>
+            </Row>
+            <Row>
+              <Col>
+                <Link className="btn btn-main active blog-get-started" to="/">Get Started</Link>
+              </Col>
             </Row>
           </div>
 
