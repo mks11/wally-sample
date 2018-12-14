@@ -263,6 +263,7 @@ class Checkout extends Component {
       });
       this.routing.push('/orders/' + data.order._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
+      this.userStore.setDeliveryTime(null)
       this.setState({ placeOrderRequest: false })
     }).catch((e) => {
       console.error('Failed to submit order', e)
