@@ -39,6 +39,7 @@ class UserStore {
   refUrl = ''
 
   cameFromCartUrl = false
+  feedback = null
 
   toggleDeliveryModal(toggle) {
     this.deliveryModal = toggle
@@ -427,6 +428,7 @@ decorate(UserStore, {
   refUrl: observable,
 
   cameFromCartUrl: observable,
+  feedback: observable,
 
   login: action,
   getUser: action,

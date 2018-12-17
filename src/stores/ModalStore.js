@@ -10,6 +10,7 @@ class ModalStore {
   zip = false
   invalidZip = false
   invalidZipSuccess = false
+  feedback = false
 
   invite = false
   referral = false
@@ -101,6 +102,10 @@ class ModalStore {
     this.changePrice = !this.changePrice
   }
 
+  toggleFeedback() {
+    this.feedback = !this.feedback
+  }
+
 }
 
 decorate(ModalStore, {
@@ -112,6 +117,7 @@ decorate(ModalStore, {
   zip: observable,
   invalidZip: observable,
   invalidZipSuccess: observable,
+  feedback: observable,
   invite: observable,
   referral: observable,
   product: observable,
@@ -134,7 +140,8 @@ decorate(ModalStore, {
   hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
-  toggleChangePrice: action
+  toggleChangePrice: action,
+  toggleFeedback: action,
 })
 
 

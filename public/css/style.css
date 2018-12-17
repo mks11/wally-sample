@@ -2180,3 +2180,14 @@ color:#6e8692
   border-radius: 12px;
   border: 0;
 }
+
+.feedback-modal textarea {
+  height: 150px;
+}
+.feedback-modal .btn {
+  width: 100%;
+}
+
+.feedback-modal .btn.active {
+  background-color: #78C98D !important;
+}

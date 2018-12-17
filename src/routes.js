@@ -26,6 +26,7 @@ import ManageFulfillment from './pages/ManageFulfillment';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
+import Feedback from './pages/Feedback';
 
 export default (
     <Fragment>
@@ -55,5 +56,6 @@ export default (
         <Route exact path="/main/:id" component={Mainpage}/>
         <Route exact path="/signup" component={Signup}/>
         <Route exact path="/" component={Homepage}/>
+        <Route exact path="/feedback" component={Feedback}/>
     </Fragment>
 );
