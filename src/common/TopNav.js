@@ -24,7 +24,7 @@ class TopNav extends Component {
   }
 
   handleLogo() {
-    this.props.store.routing.push('/main')
+    this.props.store.routing.push('/')
   }
 
   handleInvite() {
@@ -78,8 +78,9 @@ class TopNav extends Component {
   }
 
   handleReferralModal = (e) => {
-    this.modalStore.toggleReferral()
-    this.userStore.referFriend()
+    this.routing.push('/giftcard')
+    // this.modalStore.toggleReferral()
+    // this.userStore.referFriend()
     e.preventDefault()
   }
 
@@ -106,7 +107,7 @@ class TopNav extends Component {
 
 
     let topBarClass = 'top-bar d-none'
-    if (this.uiStore.topBar && this.userStore.status) {
+    if (this.uiStore.topBar) {
       topBarClass = 'top-bar'
       headerWrapClass += ' top-bar-open'
     }
@@ -139,6 +140,7 @@ class TopNav extends Component {
 
                       <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                     </ul>
                   </nav>
                 </div>
@@ -154,20 +156,16 @@ class TopNav extends Component {
           </div>
         </div>
         <header className="aw-header navbar-white">
-          {
-          this.userStore.status ? (
-            <div className={topBarClass}>
-              <div className="container">
-                <div onClick={this.handleReferralModal}>
-                  Refer a friend and get 15% off
-                </div>
-                <button className="close-top-bar" onClick={this.handleCloseTopBar}>
-                  <i className="fa fa-times-circle" aria-hidden="true" ></i>
-                </button>
+          <div className={topBarClass}>
+            <div className="container">
+              <div onClick={this.handleReferralModal}>
+                Happy Planet. Happy Bellies. Happy Holidays. Get a Wally Shop gift card today.
               </div>
+              <button className="close-top-bar" onClick={this.handleCloseTopBar}>
+                <i className="fa fa-times-circle" aria-hidden="true" ></i>
+              </button>
             </div>
-            ) : null
-          }
+          </div>
           <div className="container">
             <div className="row align-items-center mobile-top-nav">
               <div className="col-auto">
@@ -197,6 +195,7 @@ class TopNav extends Component {
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
                                   <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
+                                  <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
                                   <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>
@@ -208,6 +207,7 @@ class TopNav extends Component {
                           <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
                         </React.Fragment>
                     }
                   </ul>

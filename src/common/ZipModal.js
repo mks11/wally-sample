@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, ModalBody, Input } from 'reactstrap';
+import { Modal, Input } from 'reactstrap';
 import { connect } from '../utils'
 
 class ZipModal extends Component {
@@ -53,12 +53,12 @@ class ZipModal extends Component {
       buttonClass += ' active'
     }
     return (
-      <Modal isOpen={store.modal.zip} toggle={this.handleToggle}>
+      <Modal show={store.modal.zip} onHide={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
-        <ModalBody className="modal-body-no-footer">
+        <Modal.Body className="modal-body-no-footer">
           <div className="login-wrap pb-5">
             <h3 className="m-0 mb-2">What's your zipcode?</h3>
             <span className="mb-5">The Wally Shop is only available in select zipcodes.</span>
@@ -73,7 +73,7 @@ class ZipModal extends Component {
               <button type="button" className={buttonClass} onClick={(e) => this.handleSubmit(e)}>SUBMIT</button>
             </form>
           </div>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
     );
   }

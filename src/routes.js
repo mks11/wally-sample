@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 
 import Homepage from './pages/Homepage';
@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
+import GiftCheckout from './pages/GiftCheckout';
 import InviteFriends from './pages/InviteFriends';
 import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
@@ -27,9 +28,12 @@ import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
+import BlogPosts from "./pages/BlogPosts";
+import SubscribeSuccess from "./pages/SubscribeSuccess";
 
 export default (
     <Fragment>
+      <Switch>
         <Route exact path="/manage/shopper" component={ManageShopper} />
         <Route exact path="/manage/fulfillment" component={ManageFulfillment} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
@@ -42,6 +46,7 @@ export default (
         <Route exact path="/tnc" component={Tnc}/>
         <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/blog" component={Blog}/>
+        <Route exact path="/blog/posts" component={BlogPosts}/>
         <Route exact path="/blog/:id" component={BlogPost}/>
         <Route exact path="/orders/:id" component={OrderConfirmation}/>
         <Route exact path="/help" component={Help}/>
@@ -52,10 +57,15 @@ export default (
         <Route exact path="/about" component={About}/>
         <Route exact path="/cart/add" component={CartAdd}/>
         <Route exact path="/checkout" component={Checkout}/>
+        <Route exact path="/giftcard" component={GiftCheckout}/>
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>
         <Route exact path="/signup" component={Signup}/>
+        <Route exact path="/products/search" component={Mainpage}/>
+        <Route exact path="/product/:product_id" component={Mainpage}/>
+        <Route exact path="/subscribed" component={SubscribeSuccess}/>
         <Route exact path="/" component={Homepage}/>
         <Route exact path="/feedback" component={Feedback}/>
+      </Switch>
     </Fragment>
 );

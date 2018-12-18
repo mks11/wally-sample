@@ -7,6 +7,7 @@ import {
   API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
+  API_PURCHASE_GIFTCARD,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -35,6 +36,7 @@ class UserStore {
   activePayment = null
 
   refPromo = null
+  giftCardPromo = null
 
   refUrl = ''
 
@@ -300,6 +302,11 @@ class UserStore {
     return res.data
   }
 
+  async purchaseGiftCard(data) {
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data)
+    return res.data
+  }
+
   async resetPassword(token, data) {
     const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data)
     return res.data
@@ -424,6 +431,7 @@ decorate(UserStore, {
   togglePromoSuccessModal: action,
 
   refPromo: observable,
+  giftCardPromo: observable,
 
   refUrl: observable,
 

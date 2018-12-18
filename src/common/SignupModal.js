@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { validateEmail, connect, logModalView } from '../utils'
+import { Modal, Input } from 'reactstrap';
+import { validateEmail, connect } from '../utils'
 import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
@@ -53,7 +53,7 @@ class SignupModal extends Component {
       email: this.state.email,
       password: this.state.password,
       signup_zip: this.zipStore.selectedZip,
-      reference_promo: this.userStore.refPromo
+      reference_promo: this.userStore.refPromo || this.userStore.giftCardPromo
     }).then((data) => {
       this.userStore.setUserData(data.user)
       this.userStore.setToken(data.token)
@@ -61,6 +61,7 @@ class SignupModal extends Component {
       this.modalStore.toggleWelcome()
       this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(),  this.userStore.getDeliveryParams())
       this.setState({ signupRequest: false })
+      this.userStore.giftCardPromo = null
     }).catch((e) => {
       console.error('Failed to signup', e)
       const msg = e.response.data.error.message
@@ -112,12 +113,12 @@ class SignupModal extends Component {
       buttonClass += ' active'
     }
     return (
-      <Modal isOpen={this.modalStore.signup} toggle={this.handleToggle}>
+      <Modal show={this.modalStore.signup} onHide={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
         </div>
-        <ModalBody>
+        <Modal.Body>
           <div className="signup-wrap">
             <h3 className="m-0 mb-2">Sign up</h3>
             <span className="mb-5">Shop package-free groceries</span>
@@ -168,13 +169,13 @@ class SignupModal extends Component {
 
             </form>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <div className="login-wrap mb-5">
             <span className="t-18">Already have an account</span>
             <a onClick={e=>this.handleLogin()} className="btn-text btn-text--login">LOGIN</a>
           </div>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     );
   }

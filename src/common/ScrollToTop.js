@@ -4,7 +4,6 @@ import {withRouter} from 'react-router-dom'
 class ScrollToTop extends React.Component {
   constructor(props) {
     super(props)
-    console.log(this.routing)
   }
   componentDidMount() {
   }

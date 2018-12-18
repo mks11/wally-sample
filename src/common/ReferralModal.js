@@ -6,10 +6,6 @@ import { connect } from '../utils'
 class ReferralModal extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      link: ''
-    }
-
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
   }
