@@ -3,7 +3,6 @@ import BoxOrder from '../common/page/help/BoxOrder';
 import Title from '../common/page/Title';
 import PropTypes from 'prop-types';
 import { connect } from '../utils'
-import {Link} from "react-router-dom";
 
 class HelpSingle extends Component {
   state = {
@@ -42,7 +41,7 @@ class HelpSingle extends Component {
     const { title, methodName } = this.props.location.state;
     const data   = this.helpStore[methodName]
     return (
-      <BoxOrder
+      <BoxOrder 
         title={title}
         data={data}
       />
@@ -91,15 +90,7 @@ class HelpSingle extends Component {
                           <i className="fa fa-chevron-right fa-2x"></i>
                         </span>
                         <div className="answer ml-3">
-                            {item.read_more ?
-                                <React.Fragment>
-                                    {item.answer_text.substring(0, 50)}...<Link className="text-violet text-bold" to={"/help/detail/" + item._id}>Read more</Link>
-                                </React.Fragment>
-                                :
-                                <React.Fragment>
-                                    {item.answer_text}
-                                </React.Fragment>
-                            }
+                          {item.answer_text}
                         </div>
                       </div>
                     </li>

@@ -16,6 +16,7 @@ class GiftCheckout extends Component {
       selectedPayment: null,
       lockPayment: false,
       guestUserPayment: null,
+      processGiftCard: false,
     }
 
     this.userStore = this.props.store.user
@@ -37,6 +38,7 @@ class GiftCheckout extends Component {
             this.setState({selectedPayment: selectedPayment._id})
           }
         }
+        this.setState({ processGiftCard: true })
       })
   }
 
@@ -61,12 +63,12 @@ class GiftCheckout extends Component {
         if (res.success) {
           this.routing.push('/main')
         } else {
-          this.setState({ purchaseFaild: 'Gift card purchase failed' })
+          this.setState({ purchaseFailed: 'Gift card purchase failed' })
         }
       })
       .catch(e => {
         const msg = !e.response.data.error ? 'Purchase failed' : e.response.data.error.message
-        this.setState({ purchaseFaild: msg })
+        this.setState({ purchaseFailed: msg })
       })
   }
 
@@ -93,7 +95,15 @@ class GiftCheckout extends Component {
   }
 
   render() {
-    const { purchaseFaild, guestUserPayment, selectedPayment } = this.state
+    const {
+      purchaseFailed,
+      guestUserPayment,
+      selectedPayment,
+      processGiftCard
+    } = this.state
+
+    if (!processGiftCard) return null
+
     const giftFrom = this.userStore.user && this.userStore.user.email || ''
     const userPayment = this.userStore.user && this.userStore.user.payment || guestUserPayment
     const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
@@ -105,7 +115,7 @@ class GiftCheckout extends Component {
         <div className="container">
           <div className="gift-checkout-wrap card1 card-shadow">
             <h3>Get fresh with a Wally Shop gift card</h3>
-            <p>Check our available zip codes to be sure that your recipient is in an area that The Wally Shop operates. Click <Link to="/help/topics/5b92991899ddae0fb0f0a59f">here</Link> for more.</p>
+            <p>Check our <Link to="/help/topics/5b92991899ddae0fb0f0a59f">available zip codes</Link> to be sure that your recipient is in an area that The Wally Shop operates.</p>
             <h3><FontAwesome name="gift" className="gift-icon" />Build Gift Card</h3>
             <GiftForm
               giftFrom={giftFrom}
@@ -114,8 +124,8 @@ class GiftCheckout extends Component {
               userPayment={userPayment}
               userPreferredPayment={userPreferredPayment}
               userGuest={userGuest}
-              customErrorMsg={purchaseFaild}
-              forceSelect={selectedPayment}
+              customErrorMsg={purchaseFailed}
+              forceSelect={userGuest ? selectedPayment : null}
             />
           </div>
         </div>

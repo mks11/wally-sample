@@ -12,7 +12,6 @@ class Footer extends Component {
 
     this.zipStore = this.props.store.zip
     this.userStore = this.props.store.user
-    this.routing = this.props.store.routing
   }
   
   handleSubscribe() {
@@ -24,8 +23,10 @@ class Footer extends Component {
     this.setState({invalidText: false})
 
     this.userStore.subscribeNewsletter(this.state.email).then(() => {
-      this.routing.push('/subscribed')
-
+      this.setState({invalidText: '', successText: 'Subscribed!'})
+      setTimeout(() => {
+        this.setState({successText: ''})
+      }, 1500)
     }).catch((e) => {
       this.setState({invalidText: 'Failed to subscribe'})
     })

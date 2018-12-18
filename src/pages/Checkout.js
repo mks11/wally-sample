@@ -88,6 +88,11 @@ class Checkout extends Component {
             this.userStore.setDeliveryAddress(selectedAddress)
           }
 
+          this.checkoutStore.getDeliveryTimes().then((data) => {
+            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
+            this.setState({deliveryTimes})
+          })
+
           this.loadData()
           if (this.userStore.user.addresses.length > 0) {
             const selectedAddress = this.userStore.user.addresses.find((d) => d._id === this.userStore.user.preferred_address)
@@ -472,7 +477,7 @@ class Checkout extends Component {
                     <div className={packagingdepositClass}>
                       <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>
                         <div className="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
-                            <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
+                        This charge correlates to how many pieces of reusable packaging we lend you. Once you return our reusable packaging to a Wally Shop courier, you'll get the deposit back as store credit. <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
                       <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
@@ -548,7 +553,7 @@ class Checkout extends Component {
                               </div>
 
                               <p className="mt-3">
-                                Prices and totals are subject to final adjustments based on available products, weights and at-location prices. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
+                                Prices and totals are subject to final adjustments based on available products, weights and at-location prices. The packaging deposit will be returned to your account as store credit upon the return of used packaging during any future order. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
                             </p>
                             </section>
                           </div>

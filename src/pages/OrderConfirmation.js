@@ -3,10 +3,24 @@ import { Link } from 'react-router-dom'
 import { connect } from '../utils'
 
 class OrderConfirmation extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.routing = this.props.store.routing
+  constructor(props) {
+    super(props)
 
+    this.routing = this.props.store.routing
+    this.userStore = this.props.store.user
+    this.modalStore = this.props.store.modal
+  }
+
+  componentDidMount() {
+    this.userStore.getStatus(true)
+      .then((status) => {
+        if (status) {
+          this.userStore.referFriend()
+          this.modalStore.toggleReferral()
+        } else {
+          this.routing.push('/main')
+        }
+      })
   }
 
   handleShopMore() {

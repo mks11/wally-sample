@@ -118,9 +118,8 @@ class UserStore {
   }
 
   getHeaderAuth() {
-    const options = {
-      headers: {'Authorization': 'Bearer ' + this.token.accessToken}
-    }
+    const options = {};
+    if (this.token.accessToken) options.headers = {'Authorization': 'Bearer ' + this.token.accessToken}
 
     return options
   }
@@ -303,7 +302,7 @@ class UserStore {
   }
 
   async purchaseGiftCard(data) {
-    const res = await axios.post(API_PURCHASE_GIFTCARD, data)
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data, this.getHeaderAuth())
     return res.data
   }
 
