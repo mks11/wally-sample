@@ -4,8 +4,8 @@ import moment from 'moment'
 const connect = str => Comp => inject([str])(observer(Comp));
 
 export const datesEqual = (aDate, bDate) => {
-  const a = moment(aDate).format('YYYY-MM-DD')
-  const b = moment(bDate).format('YYYY-MM-DD')
+  const a = moment.utc(aDate).format('YYYY-MM-DD')
+  const b = moment.utc(bDate).format('YYYY-MM-DD')
   return a === b
 }
 
