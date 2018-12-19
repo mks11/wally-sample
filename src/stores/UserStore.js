@@ -376,7 +376,7 @@ class UserStore {
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
     if (delivery_date && deliveryTimes && this.selectedDeliveryTime) {
       const currentDate = this.selectedDeliveryTime.date
-      const date = moment(delivery_date).format('YYYY-MM-DD')
+      const date = moment.utc(delivery_date).format('YYYY-MM-DD')
       if (date !== currentDate) {
         const day = moment(date).calendar(null,{
           sameDay: '[Today]',
