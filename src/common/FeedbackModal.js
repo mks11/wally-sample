@@ -17,6 +17,7 @@ class FeedbackModal extends Component {
     this.modalStore = this.props.store.modal
     this.routing = this.props.store.routing
     this.userStore = this.props.store.user
+    this.orderStore = this.props.store.order
 
     this.state = {
       feedbackValue: 0,
@@ -62,14 +63,20 @@ class FeedbackModal extends Component {
 
     if (feedbackValue && feedbackEmail && feedbackOrder) {
       const feedback = {
-        feedbackValue,
-        feedbackEmail,
-        feedbackOrder,
-        feedbackMsg,
+        feedback: feedbackValue,
+        email: feedbackEmail,
+        order_id: feedbackOrder,
+        feedback_notes: feedbackMsg,
       }
       
-      console.log(feedback)
-      // this.modalStore.toggleFeedback()
+      this.orderStore.submitFeedback(feedback)
+        .then(res => {
+          this.modalStore.toggleFeedback()
+        })
+        .catch(e => {
+          console.log(e)
+          this.modalStore.toggleFeedback()
+        })
     }
     e.preventDefault()
   }
