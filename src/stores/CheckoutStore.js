@@ -13,9 +13,6 @@ class CheckoutStore {
   cart  = null
   order = null
 
-  deleteModal = null
-  deleteId = null
-
   async clearCart(auth) {
     localStorage.removeItem('cart')
     return this.getCurrentCart(auth, {})
@@ -101,11 +98,6 @@ class CheckoutStore {
     return res.data
   }
 
-  toggleDeleteModal(id) {
-    this.deleteModal = !this.deleteModal
-    this.deleteId = id
-  }
-
   async checkPromo(data, auth) {
     let res
     if (!data.subTotal) {
@@ -161,13 +153,10 @@ class CheckoutStore {
 decorate(CheckoutStore, {
   cart: observable,
   order: observable,
-  deleteModal: observable,
-  deleteId: observable,
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
   checkPromo: action,
-  toggleDeleteModal: action,
   transformDeliveryTimes: action
 })
 

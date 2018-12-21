@@ -332,16 +332,16 @@ class Mainpage extends Component {
         } else {
           msg = 'Invalid Promo-code'
         }
-        this.modalStore.toggleResultReferral(msg)
+        this.modalStore.toggleModal('referralresult', msg)
         this.userStore.giftCardPromo = null
       })
       .catch((e) => {
         const msg = !e.response.data.error ? 'Check Promo failed' : e.response.data.error.message
-        this.modalStore.toggleResultReferral(msg)
+        this.modalStore.toggleModal('referralresult', msg)
         this.userStore.giftCardPromo = null
       })
     } else {
-      this.modalStore.toggleLogin()
+      this.modalStore.toggleModal('login')
     }
   }
 
@@ -362,7 +362,7 @@ class Mainpage extends Component {
         this.routing.push('/checkout')
       }
     } else {
-      this.modalStore.toggleLogin()
+      this.modalStore.toggleModal('login')
     }
   }
 
@@ -376,7 +376,7 @@ class Mainpage extends Component {
       }
     } else {
       this.uiStore.toggleCartMobile(false)
-      this.modalStore.toggleLogin()
+      this.modalStore.toggleModal('login')
     }
   }
 
@@ -389,13 +389,13 @@ class Mainpage extends Component {
 
   handleDelete(id) {
     logEvent({category: "Cart", action: "ClickDeleteProduct"})
-    this.checkoutStore.toggleDeleteModal(id)
+    this.modalStore.toggleModal('delete', id)
   }
 
   handleDeleteMobile(id) {
     logEvent({category: "Cart", action: "ClickDeleteProductMobile"})
     this.uiStore.toggleCartMobile()
-    this.checkoutStore.toggleDeleteModal(id)
+    this.modalStore.toggleModal('delete', id)
   }
 
   handleSearch(keyword) {

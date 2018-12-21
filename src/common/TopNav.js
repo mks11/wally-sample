@@ -15,12 +15,12 @@ class TopNav extends Component {
 
   handleLogin() {
     this.routing.push('/main')
-    this.modalStore.toggleLogin()
+    this.modalStore.toggleModal('login')
   }
 
   handleSignup() {
     this.routing.push('/main')
-    this.modalStore.toggleZip()
+    this.modalStore.toggleModal('zip')
   }
 
   handleLogo() {
@@ -29,9 +29,8 @@ class TopNav extends Component {
 
   handleInvite() {
     this.uiStore.hideAccountDropdown()
-    // this.modalStore.toggleInvite()
-    this.modalStore.toggleReferral()
-    this.userStore.referFriend()
+    // this.modalStore.toggleModal('invite')
+    this.modalStore.toggleModal('referral')
   }
 
   handleLogout() {
@@ -79,8 +78,6 @@ class TopNav extends Component {
 
   handleReferralModal = (e) => {
     this.routing.push('/giftcard')
-    // this.modalStore.toggleReferral()
-    // this.userStore.referFriend()
     e.preventDefault()
   }
 

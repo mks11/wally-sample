@@ -26,7 +26,7 @@ class Feedback extends Component {
         email: email,
         order: order,
       }
-      this.modalStore.toggleFeedback()
+      this.modalStore.toggleModal('feedback')
     }
     
     this.props.store.routing.push('/main')

@@ -648,9 +648,8 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 .modal-content {
   border: none;
   border-radius: 0;
-}
-.modal-dialog {
   box-shadow: 1px 5px 5px rgba(0,0,0,.3);
+  border-bottom: none;
 }
 
 @media (min-width: 992px) {
@@ -674,23 +673,27 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 
 .modal-header {
   border-bottom: none;
-}
-.modal-content {
-  border-bottom: none;
+  justify-content: flex-end;
 }
 
 .btn-icon--back {
-  background: url("../images/left_arrow2.png") no-repeat;
+  background: url(../images/left_arrow2.png) no-repeat;
   background-size: 12px 20px;
   width:12px;
   height:20px;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
 }
 
 .btn-icon--close {
-  background: url("../images/cancel_cross2.png") no-repeat;
+  background: url(../images/cancel_cross2.png) no-repeat;
   background-size: 20px;
   width:20px;
   height:20px;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 
 .space-bw {
@@ -985,7 +988,12 @@ ul.list-payments li{
 .signup-wrap {
   padding: 0 10px;
   padding-bottom: 34px;
-  border-bottom: 2px solid #cecece;
+}
+
+.signup-wrap .login-wrap,
+.login-wrap .login-wrap {
+  margin-top: 2rem;
+  width: 100%;
 }
 
 .order-wrap {
@@ -1044,8 +1052,11 @@ span.tnc {
 .btn-text--login {
   font-size:20px;
   font-weight: bold;
-  color: #6060a8;
+  color: #000;
   cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
 }
 
 
@@ -1942,9 +1953,11 @@ a {
 }
 
 .modal-body {
-  max-height: calc(100vh - 270px);
-  max-height:600px;
+  min-height: 200px;
+  padding: 3rem 0;
   overflow: scroll;
+  -webkit-transition: height 1s;
+  transition: height 1s;
 }
 
 .modal-body-no-footer {
@@ -1956,6 +1969,7 @@ a {
   .modal-body-no-footer {
     overflow-y: auto;
     max-height: 100vh;
+    padding-top: 4rem;
   }
 
   .modal-dialog.modal-lg {
