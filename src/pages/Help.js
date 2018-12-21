@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import moment from 'moment'
 import Title from '../common/page/Title'
 import BoxOrder from '../common/page/help/BoxOrder'
-import { connect } from '../utils'
+import { connect, formatMoney } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'
 import  ReportSuccessModal from './orders/ReportSuccessModal'
@@ -82,7 +82,7 @@ class Help extends Component {
     for (const d of data) {
       total += parseFloat(d.customer_quantity)
     }
-    return total
+    return formatMoney(total)
   }
 
   printItems(data) {

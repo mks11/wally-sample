@@ -64,7 +64,7 @@ class Orders extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th className="pr-4">Orders placed</th>
+                    <th className="pr-4">Order Placed</th>
                     <th className="pr-4">Items</th>
                     <th className="pr-4">Total</th>
                   </tr>

@@ -77,6 +77,10 @@ class ProductModal extends Component {
     this.setState({infoPackage: !this.state.infoPackage})
   }
 
+  toggleSubstituteRecommendation() {
+    this.setState({ substituteRecommendation: !this.state.substituteRecommendation })
+  }
+
   handleAddToCart() {
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:this.productStore.activeProductId})
     const product = this.productStore.activeProduct
@@ -240,8 +244,20 @@ class ProductModal extends Component {
                     onChange={e=>this.handleSelectSubtitute(sub.id)} />
 
                   <label className="custom-control-label small" onClick={e=>this.handleSelectSubtitute(sub.id)}>
-                    {sub.text}
+                    {sub.text}&nbsp;
                   </label>
+                  {
+                    key === 1 ? (
+                      <React.Fragment>
+                        <i onClick={e => this.toggleSubstituteRecommendation(e)} className="fa fa-info-circle"></i>
+                        <div className={`${this.state.substituteRecommendation ? 'open' : ''}`}>
+                          <div className="package-info-popover substitue-popover">
+                            <p>We'll do our best to get a near perfect substitute for you, like spring onions for scallions. If we're unsure about it, we'll contact you to make sure the substitution works for you.</p>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    ) : null
+                  }
                 </div>
               ))}
               <br/>

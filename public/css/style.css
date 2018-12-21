@@ -1590,6 +1590,16 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
 .package-info-popover p{font-size: 14px;}
 .package-info-popover p:last-child{margin-bottom: 0;}
 
+.substitue-popover {
+  left: auto;
+  right: 0;
+  top: 20px;
+}
+.substitue-popover:before,
+.substitue-popover:after {
+  display: none;
+}
+
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;
 
   -webkit-box-align: start;-ms-flex-align: start;align-items: flex-start;
@@ -1895,6 +1905,10 @@ a {
     height: auto;
     min-height: 100%;
     border-radius: 0;
+  }
+
+  .product-modal-left .slick-item {
+    width: 80%;
   }
 
 }
