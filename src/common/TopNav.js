@@ -158,8 +158,8 @@ class TopNav extends Component {
           this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
-                <div onClick={this.handleReferralModal}>
-                  Refer a friend and get 15% off
+                <div>
+                  Closed for Christmas! Make sure to order before the 25th for your Christmas groceries.
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
