@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import qs from 'query-string'
+import qs from 'qs'
 import { Link } from 'react-router-dom'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';

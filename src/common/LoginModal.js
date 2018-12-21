@@ -125,6 +125,9 @@ class LoginModal extends Component {
 
   render() {
     const store = this.props.store
+    const {
+      facebookRequest
+    } = this.state
 
     let buttonNextClass = 'btn btn-main'
     if (this.state.email) {
@@ -180,7 +183,7 @@ class LoginModal extends Component {
                   </div>
                   <FacebookLogin
                     appId={FB_KEY}
-                    cssClass="btn btn-blue-fb"
+                    cssClass={`btn btn-blue-fb ${facebookRequest ? 'inactive' : ''}`}
                     autoLoad={false}
                     textButton="FACEBOOK"
                     fields="name,email,picture"

@@ -740,6 +740,10 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   display: block;
 }
 
+.btn-blue-fb.inactive {
+  background-color: #cecece;
+}
+
 .btn-transparent {
   width: auto;
   background: none;
