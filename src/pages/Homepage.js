@@ -57,6 +57,8 @@ class Homepage extends Component {
         console.error('Failed to get status', e)
         this.setState({fetching: false})
       })
+
+      this.zipStore.loadZipCodes()
   }
 
   handleValidateZip() {
