@@ -4,12 +4,12 @@ import ReactGA from 'react-ga';
 // import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
 import routes from './routes';
-import TopNav from './common/TopNav.js'
-import Footer from './common/Footer.js'
 
-import ScrollToTop from './common/ScrollToTop.js'
+import TopNav from './common/TopNav'
+import Footer from './common/Footer'
+import ScrollToTop from './common/ScrollToTop'
 import RootModal from './modals/RootModal'
-import Backdrop from './common/Backdrop.js'
+import Backdrop from './common/Backdrop'
 
 //router
 import { Router } from 'react-router-dom'
@@ -21,9 +21,9 @@ import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 import store  from './stores'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faStroopwafel } from '@fortawesome/free-solid-svg-icons'
+import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faStroopwafel)
+library.add(faStroopwafel, faSearch)
 
 const routingStore = new RouterStore()
 const browserHistory = createBrowserHistory()
