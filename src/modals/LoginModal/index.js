@@ -28,7 +28,7 @@ class LoginModal extends Component {
       email,
       password,
     } = this.state
-    const { user } = this.props.stores
+    const { user, routing } = this.props.stores
 
     if (!password) {
       this.setState({ invalidText: 'Password cannot be empty'})
@@ -38,6 +38,7 @@ class LoginModal extends Component {
     user.login(email, password)
       .then(user => {
         this.props.toggle()
+        routing.push('/')
       }).catch(e => {
         console.error('Failed to login', e)
         const msg = e.response.data.error.message
