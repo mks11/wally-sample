@@ -220,7 +220,7 @@ class Checkout extends Component {
       product_id : data.product_id,
       inventory_id : data.inventory[0]._id
     }
-    this.checkoutStore.toggleDeleteModal(id)
+    this.modalStore.toggleModal('delete', id)
   }
 
   handlePlaceOrder() {

@@ -30,7 +30,6 @@ class Account extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         if (!status) {
-          // this.modalStore.toggleLogin()
           this.props.store.routing.push('/')
         } else {
           const user = this.userStore.user

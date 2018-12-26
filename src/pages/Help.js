@@ -77,7 +77,7 @@ class Help extends Component {
   }
   countItems(data) {
     let total = 0 
-    if (!data) return total
+    if (!data) return formatMoney(total)
 
     for (const d of data) {
       total += parseFloat(d.customer_quantity)
@@ -180,6 +180,7 @@ class Help extends Component {
                                       <th scope="col" style={{width: '110px'}}>Order Placed</th>
                                       <th scope="col">Items</th>
                                       <th scope="col" style={{width: '80px'}}>Total</th>
+                                      <th />
                                     </tr>
                                   </thead>
                                   <tbody>

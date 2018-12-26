@@ -118,10 +118,9 @@ class UserStore {
   }
 
   getHeaderAuth() {
-    const options = {};
-    if (this.token.accessToken) options.headers = {'Authorization': 'Bearer ' + this.token.accessToken}
-
-    return options
+    return {
+      headers: { 'Authorization': 'Bearer ' + this.token.accessToken }
+    }
   }
 
   async referFriend() {
@@ -302,7 +301,9 @@ class UserStore {
   }
 
   async purchaseGiftCard(data) {
-    const res = await axios.post(API_PURCHASE_GIFTCARD, data, this.getHeaderAuth())
+    const auth = this.getHeaderAuth()
+    const options = auth.headers.Authorization === 'Bearer undefined' ? {} : auth
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data, options)
     return res.data
   }
 

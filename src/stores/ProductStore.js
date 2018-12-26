@@ -55,16 +55,6 @@ class ProductStore {
       })
   }
 
-  limitDisplay(data)  {
-    const display = []
-    const limit = data.length >= 4 ? 4 : data.length
-    for (let i = 0; i < limit; i++) {
-      display.push(data[i])
-    }
-    
-    return display
-  }
-
   async getProductDisplayed(id, delivery) {
     this.fetch = true
     const time = moment().format('YYYY-MM-DD HH:mm:ss')

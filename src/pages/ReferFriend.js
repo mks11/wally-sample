@@ -15,8 +15,7 @@ class ReferFriend extends Component {
         if (!status) {
           this.props.store.routing.push('/main')
         } else {
-          this.userStore.referFriend()
-          this.modalStore.toggleReferral()
+          this.modalStore.toggleModal('referral')
           this.props.store.routing.push('/main')
         }
       })

@@ -46,7 +46,7 @@ class ResetPassword extends Component {
         confirm_password: this.state.confirmPassword
       }).then(() => {
       this.routing.push('/main')
-      this.modalStore.toggleLogin()
+      this.modalStore.toggleModal('login')
     }).catch((e) => {
       if (!e.response.data.error) {
         return

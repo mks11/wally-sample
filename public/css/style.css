@@ -648,9 +648,8 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 .modal-content {
   border: none;
   border-radius: 0;
-}
-.modal-dialog {
   box-shadow: 1px 5px 5px rgba(0,0,0,.3);
+  border-bottom: none;
 }
 
 @media (min-width: 992px) {
@@ -674,23 +673,27 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 
 .modal-header {
   border-bottom: none;
-}
-.modal-content {
-  border-bottom: none;
+  justify-content: flex-end;
 }
 
 .btn-icon--back {
-  background: url("../images/left_arrow2.png") no-repeat;
+  background: url(../images/left_arrow2.png) no-repeat;
   background-size: 12px 20px;
   width:12px;
   height:20px;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
 }
 
 .btn-icon--close {
-  background: url("../images/cancel_cross2.png") no-repeat;
+  background: url(../images/cancel_cross2.png) no-repeat;
   background-size: 20px;
   width:20px;
   height:20px;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 
 .space-bw {
@@ -985,7 +988,12 @@ ul.list-payments li{
 .signup-wrap {
   padding: 0 10px;
   padding-bottom: 34px;
-  border-bottom: 2px solid #cecece;
+}
+
+.signup-wrap .login-wrap,
+.login-wrap .login-wrap {
+  margin-top: 2rem;
+  width: 100%;
 }
 
 .order-wrap {
@@ -1044,8 +1052,11 @@ span.tnc {
 .btn-text--login {
   font-size:20px;
   font-weight: bold;
-  color: #6060a8;
+  color: #000;
   cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
 }
 
 
@@ -1308,9 +1319,9 @@ section.page-section.bg-fruitfull {
   background: #fff;
   z-index: 100;
 }
-.product-top.fixed{position:fixed;top:80px;}
-.product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 5px; height:35px;}
-.product-top h3 i{font-size: 14px;float: right;margin-top: 4px;}
+.product-top.fixed{position:fixed;top:82px;}
+.product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 10px; height:35px;}
+.product-top h3 i{font-size: 14px;float: right;margin-top: 2px;}
 .left-column{display:inline-block;position:relative;visibility: visible;opacity:1; cursor:pointer;}
 .left-column.hide{transform: translateX(-100%);visibility: hidden;opacity:0;display:none;}
 .left-column.hide.hide-block{transform: translateX(-100%);visibility: hidden;opacity:0;display:inline-block;}
@@ -1334,7 +1345,7 @@ position: absolute;content:'';top:0;bottom:0;left:-15px;border-left:2px solid tr
 .dropdown-fwidth .dropdown-item:hover::before, .dropdown-fwidth .dropdown-item:focus::before,
 .account-dropdown .dropdown-item:hover::before, .account-dropdown .dropdown-item:focus:before{border-left-color:#6060a8;}
 .dropdown-fwidth .dropdown-item+.dropdown-item{border-top:1px solid #ececec;}
-.product-top .dropdown-menu{margin-top: 20px;}
+.product-top .dropdown-menu{margin-top: 15px;}
 .rbt-menu.dropdown-menu {margin-top:0;border:0;    left: -38px!important;
 width: inherit !important;}
 
@@ -1346,7 +1357,8 @@ span.dropdown-item.lg {
 .search-product .form-control{border: 1px solid #ececec;border-left:0;padding:6px 10px;border-radius: 10px;height:auto;line-height:26px;font-size:16px;}
 .search-product .form-control:focus{box-shadow:none;}
 .search-product .input-group-text{padding:3px 5px 3px 15px;background-color:#fff;border-color:#ececec;border-radius:10px 0 0 10px; border-right:none;}
-.product-top .media-right{margin-left: 50px;}
+.product-top .dropdown-cart-wrapper{margin-left: 50px;}
+.search-wrapper { -webkit-box-flex: 1;-ms-flex: 1;flex: 1; }
 .product-cart-counter{cursor: pointer;border:1px solid #ececec;border-radius: 10px;padding:7px 10px;line-height:24px;font-size:16px;}
 .product-cart-counter.active{background: #78C98D; color: #fff; border:none;}
 .product-cart-counter.active span{border-left: 1px solid #fff}
@@ -1370,17 +1382,42 @@ span.dropdown-item.lg {
   left: auto;
 }
 
+.dropdown-address,
+.dropdown-time,
+.dropdown-categories {
+  height: 100%;
+}
+
+.bdr-right {
+  border-right: 1px solid #ddd;
+}
+
 .product-cart-counter:hover + .dropdown-wrapper > .dropdown-menu,
 .dropdown-address:hover + .dropdown-wrapper > .dropdown-menu,
-.dropdown-time:hover + .dropdown-wrapper >.dropdown-menu,
+.dropdown-time:hover + .dropdown-wrapper > .dropdown-menu,
+.dropdown-categories:hover + .dropdown-wrapper > .dropdown-menu,
 .dropdown-wrapper:hover > .dropdown-menu {
   display: block;
 }
 
-.dropdown-cart .dropdown-menu{left:auto;right:0;width:340px;max-height:none;padding-bottom: 20px;overflow:visible;}
-.dropdown-cart .dropdown-menu::before, .dropdown-cart .dropdown-menu::after{position: absolute;content:'';top:-20px;right:45px;
-border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid #ececec;}
-.dropdown-cart .dropdown-menu::after{border-bottom:20px solid #fff;top:-18px;}
+.dropdown-details,
+.dropdown-details-mobile {
+  margin-left: 10px;
+}
+
+.dropdown-details {
+  display: none;
+}
+
+.dropdown-address:hover .dropdown-details,
+.dropdown-time:hover .dropdown-details {
+  display: block;
+} 
+
+.dropdown-cart .dropdown-menu{top:2px;left:auto;right:0;width:340px;max-height:none;padding-bottom: 20px;overflow:visible;}
+.dropdown-cart .dropdown-menu::before, .dropdown-cart .dropdown-menu::after{position: absolute;content:'';top:-16px;right:45px;
+border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:15px solid #ececec;}
+.dropdown-cart .dropdown-menu::after{border-bottom:15px solid #fff;top:-14px;}
 .dropdown-cart h3{font-size: 24px;font-weight: 700;}
 .order-scroll{max-height:calc(50vh - 100px);overflow-y:auto;padding-right: 10px;}
 
@@ -1942,9 +1979,11 @@ a {
 }
 
 .modal-body {
-  max-height: calc(100vh - 270px);
-  max-height:600px;
+  min-height: 200px;
+  padding: 3rem 0;
   overflow: scroll;
+  -webkit-transition: height 1s;
+  transition: height 1s;
 }
 
 .modal-body-no-footer {
@@ -1956,6 +1995,7 @@ a {
   .modal-body-no-footer {
     overflow-y: auto;
     max-height: 100vh;
+    padding-top: 4rem;
   }
 
   .modal-dialog.modal-lg {
@@ -2164,10 +2204,8 @@ a {
 
 .fa.bar-icon {
   height: 35px;
-  vertical-align:middle;
   display: block;
   font-size: 22px;
-  margin-right:10px;
   text-align: center;
   padding-top:7px;
 }
