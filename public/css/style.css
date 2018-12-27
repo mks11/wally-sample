@@ -1527,7 +1527,7 @@ font-weight: 400;height:auto;padding:20px}
 h3.p-r .address-rbtn{top:9px;}
 
 .item-summaries{padding-top:20px;padding-bottom: 20px;}
-.summary{color:#bbb;line-height:30px;position:relative;}
+.summary{color:#888;line-height:30px;position:relative;font-weight:500;}
 .summary span+span, .item-total span+span{float:right;}
 .item-total{    font-size: 18px;
   font-weight: 700;
