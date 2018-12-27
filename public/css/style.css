@@ -179,6 +179,10 @@ border-radius: 0;}
   background-color: #faf5ee;
   padding: 5rem 0;
 }
+.welcome-section.dark-blue {
+  background-color: #263a52;
+  color: #fff;
+}
 .welcome-section h2 {
   position: relative;
   top: 50%;
@@ -190,8 +194,8 @@ border-radius: 0;}
   color: #fff;
   overflow: hidden;
 }
-.homepage-info-section.dark-bg {
-  background-color: #263a52;
+.homepage-info-section.alt-bg {
+  background-color: #faf5ee;
 }
 .homepage-info-section .col-sm-6 {
   padding: 0;
