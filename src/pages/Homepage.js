@@ -249,20 +249,20 @@ class Homepage extends Component {
             </Col>
           </Row>
         </section>
-        <section className="homepage-info-section dark-bg">
+        <section className="homepage-info-section alt-bg">
           <Row>
             <Col sm={6} className="order-1 order-sm-1">
               <div className="bg-info-section bg-info-section-2"></div>
             </Col>
             <Col sm={6} className="order-2 order-sm-2">
-              <div className="text-info-section">
+              <div className="text-info-section force-black">
                 <h2>Quality above all else</h2>
                 <p>Want to know the secret to how professional chefs make amazing food with just a handful of ingredients? They get high quality, incredibly fresh produce from the farmers market. From ripe summer tomatoes to creamy butternut squashes to crispy apples, our couriers hand select the best market produce for all of your foodie needs.</p>
               </div>
             </Col>
           </Row>
         </section>
-        <section className="welcome-section">
+        <section className="welcome-section dark-blue">
           <Container>
             <Row>
               <Col sm={{ size: 5, offset: 1 }}>

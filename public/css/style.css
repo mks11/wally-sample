@@ -179,6 +179,10 @@ border-radius: 0;}
   background-color: #faf5ee;
   padding: 5rem 0;
 }
+.welcome-section.dark-blue {
+  background-color: #263a52;
+  color: #fff;
+}
 .welcome-section h2 {
   position: relative;
   top: 50%;
@@ -190,8 +194,8 @@ border-radius: 0;}
   color: #fff;
   overflow: hidden;
 }
-.homepage-info-section.dark-bg {
-  background-color: #263a52;
+.homepage-info-section.alt-bg {
+  background-color: #faf5ee;
 }
 .homepage-info-section .col-sm-6 {
   padding: 0;
@@ -1584,7 +1588,7 @@ font-weight: 400;height:auto;padding:20px}
 h3.p-r .address-rbtn{top:9px;}
 
 .item-summaries{padding-top:20px;padding-bottom: 20px;}
-.summary{color:#bbb;line-height:30px;position:relative;}
+.summary{color:#888;line-height:30px;position:relative;font-weight:500;}
 .summary span+span, .item-total span+span{float:right;}
 .item-total{    font-size: 18px;
   font-weight: 700;
