@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
-import ProductModal from '../common/ProductModal';
+// import ProductModal from '../common/ProductModal';
 import ClickOutside from 'react-click-outside'
 import PaymentSelect from '../common/PaymentSelect'
 
@@ -213,6 +213,7 @@ class Checkout extends Component {
 
   handleEdit(id, quantity) {
     this.productStore.showModal(id, quantity, this.userStore.getDeliveryParams())
+    this.modalStore.toggleModal('product')
   }
 
   handleDelete(data) {
@@ -559,7 +560,6 @@ class Checkout extends Component {
                           </div>
                         </div>
                       </div>
-                      { this.productStore.open && <ProductModal/> }
                       <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
                     </div>
     );

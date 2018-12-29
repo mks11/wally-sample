@@ -47,7 +47,7 @@ class InvalidZipModal extends Component {
       <div className="login-wrap">
         <h3 className="m-0 mb-2">Hope to be there soon!</h3>
         <span className="mb-5">Sign up to be notified once we are.</span>
-        <form>
+        <div className="form-wrapper">
           <Input
             className="aw-input--control aw-input--center aw-input--bordered mb-5"
             type="text"
@@ -60,7 +60,7 @@ class InvalidZipModal extends Component {
               : null
           }
           <button className={`btn btn-main ${email ? 'active' : ''}`} onClick={this.handleSubmit}>SUBMIT</button>
-        </form>
+        </div>
       </div>
     )
   }

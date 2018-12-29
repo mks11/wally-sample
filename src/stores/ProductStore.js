@@ -6,10 +6,6 @@ import axios from 'axios'
 import moment from 'moment'
 
 class ProductStore {
-  // modal state open
-  open = false
-  modal = false
-
   main_display = []
   path = []
   sidebar = []
@@ -39,9 +35,6 @@ class ProductStore {
     if (inventory.price_unit == "lb" || inventory.price_unit == "oz") min_size = 0.25
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
-    this.open = true
-    this.modal = true
-
     return res.data
   }
 
@@ -83,20 +76,9 @@ class ProductStore {
     const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     return res.data
   }
-
-  hideModal() {
-    this.modal = false
-  }
-
-  closeModal() {
-    this.open = false
-  }
-
 }
 
 decorate(ProductStore, {
-  open: observable,
-  modal: observable,
   main_display: observable,
   path: observable,
   sidebar: observable,
@@ -106,8 +88,6 @@ decorate(ProductStore, {
   activeProduct: observable,
   activeProductId: observable,
   showModal: action,
-  hideModal: action,
-  closeModal: action,
   getAdvertisements: action,
   getProductDisplayed: action,
   getCategories: action,

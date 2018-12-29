@@ -109,9 +109,8 @@ class Homepage extends Component {
   }
 
   handleStart(e) {
-    const store = this.props.store
     this.routing.push('/main')
-    store.modal.toggleSignup()
+    this.modalStore.toggleModal('signup')
     e.preventDefault()
   }
 

@@ -74,6 +74,7 @@ class ProductTop extends Component {
     this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams())
       .then(data => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+        this.modalStore.toggleModal('product')
       })
   }
 

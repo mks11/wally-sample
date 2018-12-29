@@ -33,7 +33,7 @@ class Signup extends Component {
   }
 
   handleSignup() {
-    this.modalStore.toggleSignup()
+    this.modalStore.toggleModal()
     this.routing.push('/main')
   }
 

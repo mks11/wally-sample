@@ -6,7 +6,7 @@ import { APP_URL } from 'config'
 
 import DeliveryModal from 'common/DeliveryModal.js';
 import DeliveryChangeModal from 'common/DeliveryChangeModal.js';
-import ProductModal from 'common/ProductModal';
+// import ProductModal from 'common/ProductModal';
 
 import Hero from './Hero'
 import Product from './Product'
@@ -231,10 +231,6 @@ class Mainpage extends Component {
     })
   }
 
-  handleAddToCart = (data) => {
-    data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
-  }
-
   handleOpenCartMobile = () => {
     logModalView('/cart-mobile')
     this.uiStore.toggleCartMobile(true)
@@ -249,6 +245,7 @@ class Mainpage extends Component {
       this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
         .then((data) => {
           this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
+          this.modalStore.toggleModal('product')
         })
     }
   }
@@ -476,7 +473,6 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                { this.productStore.open && <ProductModal onAddToCart={this.handleAddToCart}/> }
                 <DeliveryModal onChangeSubmit={this.handleChangeDelivery} deliveryTimes={this.state.deliveryTimes}/>
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>

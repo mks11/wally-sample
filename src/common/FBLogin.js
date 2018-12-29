@@ -12,6 +12,13 @@ class FBLogin extends Component {
   }
 
   responseFacebook = responseData => {
+    const { onSubmit }= this.props
+
+    if (responseData.status === undefined) {
+      this.setState({ facebookRequest: false })
+      return
+    }
+
     if (!this.state.facebookRequest) {
       this.setState({ facebookRequest: true })
 
@@ -19,7 +26,7 @@ class FBLogin extends Component {
       const data = { ...responseData, ...additionalData }
 
       this.userStore.loginFacebook(data).then(res => {
-        this.modalStore.toggleSignup()
+        onSubmit && onSubmit()
         this.setState({ facebookRequest: false })
       }).catch(e => {
         console.error('Failed to signup', e)

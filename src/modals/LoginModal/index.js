@@ -153,7 +153,7 @@ class LoginModal extends Component {
                 <span>or</span>
                 <hr/>
               </div>
-              <FBLogin />
+              <FBLogin onSubmit={this.props.toggle} />
               <hr className="mt-5"/>
             </div>
           )
