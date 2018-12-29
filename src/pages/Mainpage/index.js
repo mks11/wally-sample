@@ -28,6 +28,8 @@ class Mainpage extends Component {
     this.zipStore = this.props.store.zip
 
     this.state = {
+      deliveryTimes: this.checkoutStore.deliveryTimes,
+
       searchPage: false,
       searchResult:[],
       searchDisplayed:[],
@@ -54,16 +56,7 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-        
-        const selectedAddress = this.userStore.selectedDeliveryAddress
-          || (this.userStore.user
-            ? this.userStore.getAddressById(this.userStore.user.preferred_address)
-            : null)
-
-        this.checkoutStore.getDeliveryTimes(selectedAddress).then((data) => {
-          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-          this.setState({deliveryTimes})
-        })
+        this.checkoutStore.getDeliveryTimes()
         this.loadData(status)
       })
   }
@@ -91,9 +84,7 @@ class Mainpage extends Component {
 
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
       if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
-        this.checkoutStore.getDeliveryTimes().then((data) => {
-          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-          this.setState({ deliveryTimes })
+        this.checkoutStore.getDeliveryTimes().then(() => {
           this.userStore.toggleDeliveryModal(true)
         })
       }
@@ -224,11 +215,7 @@ class Mainpage extends Component {
     }
 
     this.loadData()
-    const address = this.userStore.selectedDeliveryAddress
-    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
-      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
-      this.setState({deliveryTimes: times})
-    })
+    this.checkoutStore.getDeliveryTimes()
   }
 
   handleOpenCartMobile = () => {

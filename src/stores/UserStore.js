@@ -388,7 +388,7 @@ class UserStore {
           sameElse: 'DD/MM/YYYY'
         })
 
-        const deliveryDate = deliveryTimes.find((data) => data.day === day)
+        const deliveryDate = deliveryTimes.find(data => data.day === day)
         if (deliveryDate) {
           let data = deliveryDate.data[0]
 
