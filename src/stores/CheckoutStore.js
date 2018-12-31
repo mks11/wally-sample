@@ -12,6 +12,7 @@ import moment from 'moment'
 class CheckoutStore {
   cart  = null
   order = null
+  deliveryTimes = []
 
   async clearCart(auth) {
     localStorage.removeItem('cart')
@@ -87,14 +88,10 @@ class CheckoutStore {
     return res.data  
   }
 
-  async check(id) {
-    const resp = await axios.get(API_GET_ORDER_SUMMARY + id)
-    this.order = resp.data
-  }
-
-  async getDeliveryTimes(data, auth) {
+  async getDeliveryTimes(auth) {
     // const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}&zip=${data.zip}`, auth)
     const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, auth)
+    this.transformDeliveryTimes(res.data)
     return res.data
   }
 
@@ -112,40 +109,37 @@ class CheckoutStore {
   transformDeliveryTimes(data) {
     if (!data) return
 
-    let deliveryTimes = []
     const times = data.delivery_windows
     for (var i = 0, len = times.length; i < len; i++) {
-      addTimes(times[i])
+      this.addTimes(times[i])
+    }
+  }
+
+  addTimes(data) {
+    const timeFirst = data[0].split('-')[0]
+    const toProvide = data[1] + ' ' + timeFirst
+    const day = moment(toProvide, 'YYYY-MM-DD h:mm').calendar(null,{
+      sameDay: '[Today]',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday]',
+      lastWeek: '[Last] dddd',
+      sameElse: 'DD/MM/YYYY'
+    })
+
+    const findTime = this.deliveryTimes.findIndex(data => data.day === day)
+
+    const obj = {
+      time: data[0],
+      date: data[1],
+      availability: data[2]
     }
 
-    function addTimes(data) {
-      const timeFirst = data[0].split('-')[0]
-      const toProvide = data[1] + ' ' + timeFirst
-      const day = moment(toProvide, 'YYYY-MM-DD h:mm').calendar(null,{
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday]',
-        lastWeek: '[Last] dddd',
-        sameElse: 'DD/MM/YYYY'
-      })
-
-      const findTime = deliveryTimes.findIndex((data) => data.day === day)
-
-      const obj = {
-        time: data[0],
-        date: data[1],
-        availability: data[2]
-      }
-
-      if (findTime === -1) {
-        deliveryTimes.push({day: day, data: [obj]})
-      } else {
-        deliveryTimes[findTime].data.push(obj)
-      }
+    if (findTime === -1) {
+      this.deliveryTimes.push({ day: day, data: [obj] })
+    } else {
+      this.deliveryTimes[findTime].data.push(obj)
     }
-
-    return deliveryTimes
   }
 
 }
@@ -153,11 +147,13 @@ class CheckoutStore {
 decorate(CheckoutStore, {
   cart: observable,
   order: observable,
+  deliveryTimes: observable,
+
+  getDeliveryTimes: action,
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
   checkPromo: action,
-  transformDeliveryTimes: action
 })
 
 

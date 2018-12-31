@@ -17,7 +17,7 @@ class SignupModal extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     const {
       name,
       email,
@@ -64,7 +64,7 @@ class SignupModal extends Component {
       }).catch(e => {
         console.error('Failed to signup', e)
         const msg = e.response.data.error.message
-        this.setState({ invalidText: msg })
+        this.setState({ invalidText: msg, signupRequest: false })
       })
     }
     e.preventDefault()
@@ -90,6 +90,7 @@ class SignupModal extends Component {
       email,
       password,
       invalidText,
+      signupRequest,
     } = this.state
     const { zip, user } = this.props.stores
     const additionalFBdata = {
@@ -101,7 +102,7 @@ class SignupModal extends Component {
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
         <span className="mb-5">Shop package-free groceries</span>
-        <form>
+        <div className="form-wrapper">
           <Input
             autoFocus
             className="aw-input--control"
@@ -136,7 +137,7 @@ class SignupModal extends Component {
           }
 
           <button
-            className={`btn btn-main ${(name && email && password) ? 'active' : ''}`}
+            className={`btn btn-main ${(name && email && password && !signupRequest) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
             SUBMIT
@@ -148,8 +149,11 @@ class SignupModal extends Component {
             <hr/>
           </div>
 
-          <FBLogin additionalData={additionalFBdata} />
-        </form>
+          <FBLogin
+            additionalData={additionalFBdata}
+            onSubmit={this.props.toggle}
+          />
+        </div>
         <div className="login-wrap">
           <span className="t-18">Already have an account</span>
           <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOGIN</button>

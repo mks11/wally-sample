@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
-import ProductModal from '../common/ProductModal';
+// import ProductModal from '../common/ProductModal';
 import ClickOutside from 'react-click-outside'
 import PaymentSelect from '../common/PaymentSelect'
 
@@ -18,6 +18,14 @@ import DeliveryChangeModal from '../common/DeliveryChangeModal';
 class Checkout extends Component {
   constructor(props) {
     super(props)
+
+    this.userStore = this.props.store.user
+    this.uiStore = this.props.store.ui
+    this.modalStore = this.props.store.modal
+    this.productStore = this.props.store.product
+    this.checkoutStore = this.props.store.checkout
+    this.routing = this.props.store.routing
+
     this.state = {
       timeDropdown: false,
 
@@ -61,20 +69,13 @@ class Checkout extends Component {
       newCountry: '',
       newPreferedAddress: false,
 
-      deliveryTimes: [],
+      deliveryTimes: this.checkoutStore.deliveryTimes,
 
       taxpopup: false,
       servicepopup: false,
       packagingdeposit: false,
       placeOrderRequest: false,
     }
-
-    this.userStore = this.props.store.user
-    this.uiStore = this.props.store.ui
-    this.modalStore = this.props.store.modal
-    this.productStore = this.props.store.product
-    this.checkoutStore = this.props.store.checkout
-    this.routing = this.props.store.routing
   }
 
 
@@ -88,10 +89,7 @@ class Checkout extends Component {
             this.userStore.setDeliveryAddress(selectedAddress)
           }
 
-          this.checkoutStore.getDeliveryTimes().then((data) => {
-            const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-            this.setState({deliveryTimes})
-          })
+          this.checkoutStore.getDeliveryTimes()
 
           this.loadData()
           if (this.userStore.user.addresses.length > 0) {
@@ -124,10 +122,8 @@ class Checkout extends Component {
       return data
     }).then(data => {
       if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
-        return this.checkoutStore.getDeliveryTimes().then((data) => {
-          const deliveryTimes = this.checkoutStore.transformDeliveryTimes(data)
-          this.setState({deliveryTimes})
-          this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, deliveryTimes)
+        return this.checkoutStore.getDeliveryTimes().then(() => {
+          this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, this.state.deliveryTimes)
           this.setState({invalidText: 'Please select delivery time'})
         })
       }
@@ -213,6 +209,7 @@ class Checkout extends Component {
 
   handleEdit(id, quantity) {
     this.productStore.showModal(id, quantity, this.userStore.getDeliveryParams())
+    this.modalStore.toggleModal('product')
   }
 
   handleDelete(data) {
@@ -559,7 +556,6 @@ class Checkout extends Component {
                           </div>
                         </div>
                       </div>
-                      { this.productStore.open && <ProductModal/> }
                       <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
                     </div>
     );

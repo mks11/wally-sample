@@ -24,6 +24,7 @@ class ProductTop extends Component {
     this.modalStore = props.store.modal
 
     this.state = {
+      deliveryTimes:this.checkoutStore.deliveryTimes,
       selectedAddressChanged: false,
       selectedTimeChanged: false,
       selectedAddress: this.userStore.selectedDeliveryAddress,
@@ -74,6 +75,7 @@ class ProductTop extends Component {
     this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams())
       .then(data => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+        this.modalStore.toggleModal('product')
       })
   }
 
@@ -137,13 +139,10 @@ class ProductTop extends Component {
     if (!this.state.selectedAddressChanged) {
       return
     }
-    const address = this.state.selectedAddress
-    this.checkoutStore.getDeliveryTimes(address).then((deliveryTimes) => {
-      const times = this.checkoutStore.transformDeliveryTimes(deliveryTimes)
-      this.setState({deliveryTimes: times})
+    this.checkoutStore.getDeliveryTimes().then(() => {
       this.modalStore.showDeliveryChange('address', {
-        address,
-        times 
+        address: this.state.selectedAddress,
+        times: this.state.deliveryTimes 
       })
     })
   }

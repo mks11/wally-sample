@@ -13,6 +13,7 @@ import InviteModal from './InviteModal'
 import InvalidZipModal from './InvalidZipModal'
 import InvalidZipSuccessModal from './InvalidZipSuccessModal'
 import DeleteModal from './DeleteModal'
+import ProductModal from './ProductModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -26,6 +27,7 @@ const ModalRoutes = {
   referralresult: ReferralResultModal,
   invite: InviteModal,
   delete: DeleteModal,
+  product: ProductModal,
 }
 
 class RootModal extends Component {
@@ -52,6 +54,9 @@ class RootModal extends Component {
     } = this.modalStore
 
     const ModalToRender = ModalRoutes[modalId] || this.renderEmpty
+    
+    // temporary hack 
+    const isLarge = modalId === 'product'
 
     return (
       <Modal
@@ -59,6 +64,7 @@ class RootModal extends Component {
         isOpen={isOpen}
         contentClassName="modal-bg-pinneapple-bottom"
         centered
+        size={isLarge ? 'lg' : ''}
       >
         <ModalBody>
           <button className="btn-icon btn-icon--close" onClick={this.toggleModal}></button>
