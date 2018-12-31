@@ -82,7 +82,7 @@ border-radius:0;}
 }
 
 /* Header */
-.aw-header{padding-top: 0px;padding-bottom: 10px;min-height: 80px;}
+.aw-header{padding-top: 0px;padding-bottom: 10px;}
 .aw-header .container{padding-top: 10px}
 .aw-logo{height:50px;}
 .aw-logo svg{width:auto;height:50px;}
@@ -111,6 +111,10 @@ border-radius:0;}
 .aw-header .mobile-top-nav {
   position: relative;
   justify-content: space-between;
+}
+
+.top-nav {
+  min-height: 63px;
 }
 
 .aw-nav {

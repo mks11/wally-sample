@@ -14,6 +14,7 @@ import InvalidZipModal from './InvalidZipModal'
 import InvalidZipSuccessModal from './InvalidZipSuccessModal'
 import DeleteModal from './DeleteModal'
 import ProductModal from './ProductModal'
+import DeliveryModal from './DeliveryModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -28,6 +29,7 @@ const ModalRoutes = {
   invite: InviteModal,
   delete: DeleteModal,
   product: ProductModal,
+  delivery: DeliveryModal,
 }
 
 class RootModal extends Component {
