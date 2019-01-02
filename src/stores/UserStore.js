@@ -26,7 +26,6 @@ class UserStore {
   paymentModal = false
   paymentModalOpen = false
 
-  deliveryModal = false
   selectedDeliveryAddress = null
   selectedDeliveryTime = null
 
@@ -42,10 +41,6 @@ class UserStore {
 
   cameFromCartUrl = false
   feedback = null
-
-  toggleDeliveryModal(toggle) {
-    this.deliveryModal = toggle
-  }
 
   togglePromoModal() {
     this.promoModal = !this.promoModal
@@ -419,12 +414,8 @@ decorate(UserStore, {
   promoModal: observable,
   promoSuccessModal: observable,
 
-
-  deliveryModal: observable,
   selectedDeliveryAddress: observable,
   selectedDeliveryTime: observable,
-
-  toggleDeliveryModal: action,
 
   addPromo: action,
   togglePromoModal: action,

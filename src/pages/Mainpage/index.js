@@ -4,7 +4,6 @@ import { formatMoney, connect, logEvent, logModalView, datesEqual } from 'utils'
 import { Link } from 'react-router-dom'
 import { APP_URL } from 'config'
 
-import DeliveryModal from 'common/DeliveryModal.js';
 import DeliveryChangeModal from 'common/DeliveryChangeModal.js';
 // import ProductModal from 'common/ProductModal';
 
@@ -85,7 +84,7 @@ class Mainpage extends Component {
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
       if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
         this.checkoutStore.getDeliveryTimes().then(() => {
-          this.userStore.toggleDeliveryModal(true)
+          this.modalStore.toggleModal('delivery')
         })
       }
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
@@ -96,7 +95,7 @@ class Mainpage extends Component {
           this.checkoutStore.updateCartItems(delivery)
           this.userStore.cameFromCartUrl = false
         } else {
-          userStatus && this.userStore.toggleDeliveryModal(true)
+          this.modalStore.toggleModal('delivery')
         }
       }
     }).catch((e) => {
@@ -141,7 +140,7 @@ class Mainpage extends Component {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
       if (!this.userStore.selectedDeliveryTime) {
-        this.userStore.toggleDeliveryModal(true)
+        this.modalStore.toggleModal('delivery')
       } else {
         this.routing.push('/checkout')
       }
@@ -226,7 +225,7 @@ class Mainpage extends Component {
   handleProductModal = (product_id, deliveryTimes) => {
     if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
       logModalView('/delivery-options-window')
-      this.userStore.toggleDeliveryModal(true)
+      this.modalStore.toggleModal('delivery')
       this.productStore.activeProductId = product_id
     } else {
       this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
@@ -460,7 +459,7 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                <DeliveryModal onChangeSubmit={this.handleChangeDelivery} deliveryTimes={this.state.deliveryTimes}/>
+                {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>
                 <div className={cartMobileClass}>

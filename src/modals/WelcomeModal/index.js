@@ -6,6 +6,10 @@ class WelcomeModal extends Component {
     super(props)
   }
 
+  handleStart = () => {
+    this.props.toggle()
+  }
+
   render() {
     return (
       <div className="login-wrap">
@@ -16,7 +20,7 @@ class WelcomeModal extends Component {
           <br/>
           Ready to start shopping?
         </p>
-        <Link to="/main" className="btn btn-main active">START SHOPPING</Link>
+        <button onClick={this.handleStart} className="btn btn-main active">START SHOPPING</button>
       </div>
     )
   }
