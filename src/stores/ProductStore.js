@@ -90,6 +90,7 @@ class ProductStore {
 
   async searchKeyword(keyword, delivery) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    keyword = encodeURIComponent(keyword)
     const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
     return res.data
   }
