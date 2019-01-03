@@ -158,8 +158,8 @@ class TopNav extends Component {
         <header className="aw-header navbar-white">
           <div className={topBarClass}>
             <div className="container">
-              <div>
-                Closed for New Years! Wishing everyone a happy and safe celebration!
+              <div onClick={this.handleReferralModal}>
+                Happy Planet. Happy Bellies. Get a Wally Shop gift card today.
               </div>
               <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                 <i className="fa fa-times-circle" aria-hidden="true" ></i>
