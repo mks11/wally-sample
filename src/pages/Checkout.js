@@ -250,12 +250,13 @@ class Checkout extends Component {
     }
     logEvent({ category: "Checkout", action: "ConfirmCheckout" })
 
-    this.checkoutStore.createOrder({
+    this.checkoutStore.submitOrder({
       store_credit: this.state.appliedStoreCreditAmount > 0,
       user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
       address_id: this.userStore.selectedDeliveryAddress.address_id,
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
+      tip_amount: this.state.appliedTipAmount || 0,
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
