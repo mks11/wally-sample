@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
 import Title from '../common/page/Title'
 import FontAwesome from 'react-fontawesome';
-// import ProductModal from '../common/ProductModal';
 import ClickOutside from 'react-click-outside'
 import PaymentSelect from '../common/PaymentSelect'
 
@@ -35,6 +34,9 @@ class Checkout extends Component {
 
       appliedPromo: false,
       appliedPromoCode: '',
+
+      appliedTipAmount: '',
+      tippingpopup: false,
 
       selectedAddress: null,
       selectedPayment: null,
@@ -270,7 +272,7 @@ class Checkout extends Component {
     })
   }
 
-  handleCheckPromo() {
+  handleCheckPromo = () => {
     const subTotal = this.checkoutStore.order.subtotal
     const promoCode = this.state.appliedPromoCode
 
@@ -303,6 +305,10 @@ class Checkout extends Component {
 
   }
 
+  handleAddTip = () => {
+
+  }
+
   handleAddPayment = (data) => {
     return this.userStore.savePayment(data).then((data) => {
       logEvent({ category: "Checkout", action: "SubmitNewPayment" })
@@ -329,12 +335,20 @@ class Checkout extends Component {
     this.setState({taxpopup: false})
   }
 
-  showPackagingPopup() {
+  showPackagingPopup = () => {
     this.setState({packagingdeposit: true})
   }
 
-  hidePackagingPopup() {
+  hidePackagingPopup = () => {
     this.setState({packagingdeposit: false})
+  }
+
+  showTippingPopup = () => {
+    this.setState({ tippingpopup: true })
+  }
+
+  hideTippingPopup = () => {
+    this.setState({ tippingpopup: false })
   }
 
   handleConfirmHome() {
@@ -357,24 +371,6 @@ class Checkout extends Component {
     }
 
     const cart_items = order && order.cart_items ? order.cart_items : []
-
-    let taxpopupClass = 'summary'
-    if (this.state.taxpopup) {
-      taxpopupClass += ' open'
-    }
-
-    let servicepopupClass = 'summary'
-    if (this.state.servicepopup) {
-      servicepopupClass += ' open'
-    }
-
-
-    let packagingdepositClass = 'summary'
-    if (this.state.packagingdeposit) {
-      packagingdepositClass += ' open'
-    }
-
-
 
     return (
       <div className="App">
@@ -454,13 +450,13 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
-                    <div className={taxpopupClass}>
+                    <div className={`summary ${this.state.taxpopup ? 'open' : ''}`}>
                       <span onClick={e=>this.showTaxPopup()}>Tax</span>
                       <span>{formatMoney((order.tax_amount)/100)}</span>
                     </div>
-                    <div className={servicepopupClass}>
+                    <div className={`summary ${this.state.servicepopup ? 'open' : ''}`}>
                       <ClickOutside onClickOutside={e=>this.hideServicePopup()}>
-                        <div className="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right"><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
                             <Link className="text-violet" to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
@@ -471,13 +467,13 @@ class Checkout extends Component {
                       <span>Delivery fee</span>
                       <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
-                    <div className={packagingdepositClass}>
-                      <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>
-                        <div className="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                    <div className={`summary ${this.state.packagingdeposit ? 'open' : ''}`}>
+                      <ClickOutside onClickOutside={this.hidePackagingPopup}>
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
                         This charge correlates to how many pieces of reusable packaging we lend you. Once you return our reusable packaging to a Wally Shop courier, you'll get the deposit back as store credit. <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
-                      <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
+                      <span onClick={this.showPackagingPopup}>Packaging deposit  <FontAwesome name='info-circle' /></span>
                       <span>{formatMoney(order.packaging_deposit/100)}</span>
                     </div>
 
@@ -489,6 +485,16 @@ class Checkout extends Component {
                     <div className="summary">
                       <span>Applied Store credit</span>
                       <span>-{formatMoney(order.applied_store_credit/100)}</span>
+                    </div>
+
+                    <div className={`summary ${this.state.tippingpopup ? 'open' : ''}`}>
+                      <ClickOutside onClickOutside={this.hideTippingPopup}>
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                        100% of the tip amount goes to our shoppers and couriers, on top of the wages they earn.
+                        </div></div>
+                      </ClickOutside>
+                      <span onClick={this.showTippingPopup}>Tip Amount  <FontAwesome name='info-circle' /></span>
+                      <span>{formatMoney(order.tip_amount/100)}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
@@ -523,20 +529,33 @@ class Checkout extends Component {
                                 </div>
                                 :null}
 
-                                {!this.state.appliedPromo ? 
+                                  {
+                                    !this.state.appliedPromo ? 
+                                      <div className="form-group">
+                                        <span className="text-blue">Have a promo code</span>
+                                        <div className="aw-input--group aw-input--group-sm">
+                                          <Input
+                                            className="aw-input--control aw-input--left aw-input--bordered"
+                                            type="text"
+                                            placeholder="Enter promocode here"
+                                            onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
+
+                                          <button onClick={this.handleCheckPromo} type="button" className="btn btn-transparent">APPLY</button>
+                                        </div>
+                                      </div>
+                                      :null
+                                  }
                                     <div className="form-group">
-                                      <span className="text-blue">Have a promo code</span>
+                                      <span className="text-blue">Want to tip</span>
                                       <div className="aw-input--group aw-input--group-sm">
                                         <Input
                                           className="aw-input--control aw-input--left aw-input--bordered"
                                           type="text"
-                                          placeholder="Enter promocode here"
-                                          onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
-
-                                        <button onClick={e => this.handleCheckPromo()} type="button" className="btn btn-transparent">APPLY</button>
+                                          placeholder="Enter tip amount here"
+                                          onChange={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}/>
+                                        <button onClick={this.handleAddTip} type="button" className="btn btn-transparent">APPLY</button>
                                       </div>
                                     </div>
-                                    :null}
                                   </div>
                                   <hr className="mt-4" />
                                   <div className="item-total">
