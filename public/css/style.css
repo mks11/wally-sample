@@ -10,7 +10,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-body{padding-top:60px; font-family: 'Circe', sans-serif;}
+body{padding-top:50px; font-family: 'Circe', sans-serif;}
 .btn-outline-white{border-color:#fff;border-width:2px;color:#fff;}
 .btn-outline-white:hover, .btn-outline-white:focus{background-color: #fff;color:#323f93;}
 .btn-success{border:0;font-family: 'Circe', sans-serif;font-size: 18px;line-height:24px;padding:13px 30px;

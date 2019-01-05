@@ -1124,6 +1124,12 @@ body {
   }
 }
 
+.shopper-table .completed {
+  background: grey;
+}
+.shopper-table .missing {
+  background: lightcoral;
+}
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }

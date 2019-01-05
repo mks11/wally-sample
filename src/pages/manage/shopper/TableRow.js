@@ -7,7 +7,7 @@ import {
 
 
 const TableRow = ({ item, onEditClick }) => (
-  <tr>
+  <tr className={`${item.completed ? 'completed' : ''} ${item.missing ? 'missing' : ''}`}>
     <td>{item.organic ? 'Y' : 'N'}</td>
     <td>{item.substitue_for_name || item.product_name}</td>
     <td>{item.product_producer}</td>
