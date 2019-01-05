@@ -586,7 +586,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   transition: 0.27s all;
 }
 .top-bar-open .aw-nav--mobile {
-  top: 80px
+  top: 60px
 }
 .aw-nav--mobile ul {
   list-style-type: none;

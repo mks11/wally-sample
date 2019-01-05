@@ -57,7 +57,7 @@ class ManageShopper extends Component {
 
     const { timeframes, locations } = this.adminStore
     const { timeframe } = this.state
-
+    console.log(timeframes)
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -70,7 +70,7 @@ class ManageShopper extends Component {
                 <div className="mb-3">
                   <div className="mb-2 font-weight-bold">Time Frame:</div>
                   <CustomDropdown
-                    values={timeframes.map(item => { return { id: item, title: item }})}
+                    values={[{id: 'all', title: 'All Timeframes'}, ...timeframes.map(item => { return { id: item, title: item }})]}
                     onItemClick={this.loadShopLocations}
                   />
                 </div>
