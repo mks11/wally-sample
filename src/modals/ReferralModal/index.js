@@ -45,7 +45,7 @@ class ReferralModal extends Component {
       <div className="login-wrap">
         <h3 className="m-0 mb-2">Who wants brownie points?</h3>
         <span className="mb-1">
-        Give a friend 15% off for 30 days after their first order, and you'll get it too. Refer as many people as you'd like with the unique code below - it now pays to have friends.
+        An organized pantry, a farm fresh apple, and skipping single-use plastics - share these and other little joys when you refer a friend to The Wally Shop, and you’ll both get 15% off your orders for 30 days.
         </span>
         <p className="mb-5 text-center"><small>Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleHere}>here</Link></small></p>
         <div className="referral-wrap p-2">
