@@ -2361,25 +2361,26 @@ color:#6e8692
   }
 }
 
-.gift-checkout-wrap .gift-icon {
-  color: #78C98D;
-  padding: 10px;
-}
-
-.gift-checkout-wrap .gift-amount-btn-group {
+.amount-btn-group {
   width: 100%;
 }
 
-.gift-checkout-wrap .gift-amount-btn {
+.amount-btn {
   border: 2px solid #ced4da;
   width: 100%;
   padding-left: 0;
   padding-right: 0;
+  border-radius: 10px;
 }
 
-.gift-checkout-wrap .gift-amount-btn.selected {
+.amount-btn.selected {
   background-color: #6c757d;
   color: #fff;
+}
+
+.gift-checkout-wrap .gift-icon {
+  color: #78C98D;
+  padding: 10px;
 }
 
 .gift-checkout-wrap #giftAmount {
@@ -2394,10 +2395,6 @@ color:#6e8692
   height: 100px;
 }
 
-.gift-checkout-wrap .btn {
-  border-radius: 10px;
-}
-
 .gift-checkout-wrap .gift-submit {
   background-color: #cecece;
   border: 0;
@@ -2409,4 +2406,13 @@ color:#6e8692
 
 .gift-checkout-wrap .gift-submit.active {
   background-color: #78C98D !important;
+}
+
+
+
+
+
+
+.checkout-tips {
+  padding: 10px 0;
 }

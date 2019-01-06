@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Col, Button, FormGroup, Label, Input } from 'reactstrap'
 import CurrencyInput from 'react-currency-input'
-import AmountGroup from './AmountGroup';
-import { validateEmail } from '../../utils'
-import PaymentSelect from '../../common/PaymentSelect'
+import AmountGroup from 'common/AmountGroup';
+import { validateEmail } from 'utils'
+import PaymentSelect from 'common/PaymentSelect'
 
 class GiftForm extends Component {
   constructor(props) {
@@ -164,6 +164,7 @@ class GiftForm extends Component {
             <AmountGroup
               amountClick={this.handleAmountChange}
               customClick={this.handleCustomAmounClick}
+              values={[25, 50, 100]}
             />
             {
               customGiftAmount

@@ -76,9 +76,9 @@ class CheckoutStore {
     return res.data
   }
 
-  async getOrderSummary(auth, delivery) {
+  async getOrderSummary(auth, delivery, tip = 0) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(`${API_GET_ORDER_SUMMARY}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, auth)
+    const res = await axios.get(`${API_GET_ORDER_SUMMARY}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}&tip_amount=${tip}`, auth)
     this.order = res.data
     return res.data
   }

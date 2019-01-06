@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
-import ReactGA from 'react-ga';
+import React, { Component } from 'react'
+import ReactGA from 'react-ga'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
-import Title from '../common/page/Title'
-import FontAwesome from 'react-fontawesome';
+import Title from 'common/page/Title'
+import FontAwesome from 'react-fontawesome'
 import ClickOutside from 'react-click-outside'
-import PaymentSelect from '../common/PaymentSelect'
+import PaymentSelect from 'common/PaymentSelect'
+import AmountGroup from 'common/AmountGroup'
 
 import { connect, formatMoney, logEvent, logModalView, logPageView, datesEqual } from '../utils'
 
-import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
-import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
-import DeliveryChangeModal from '../common/DeliveryChangeModal';
+import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
+import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
+import DeliveryChangeModal from 'common/DeliveryChangeModal'
 
 class Checkout extends Component {
   constructor(props) {
@@ -35,8 +36,9 @@ class Checkout extends Component {
       appliedPromo: false,
       appliedPromoCode: '',
 
-      appliedTipAmount: '',
+      appliedTipAmount: 0,
       tippingpopup: false,
+      tipReadOnly: true,
 
       selectedAddress: null,
       selectedPayment: null,
@@ -114,7 +116,8 @@ class Checkout extends Component {
   loadData() {
     let dataOrder
     const deliveryData = this.userStore.getDeliveryParams()
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+    const tip = (this.state.appliedTipAmount * 100).toFixed()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
@@ -137,7 +140,8 @@ class Checkout extends Component {
 
   updateData() {
     const deliveryData = this.userStore.getDeliveryParams()
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+    const tip = (this.state.appliedTipAmount * 100).toFixed()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
@@ -256,7 +260,7 @@ class Checkout extends Component {
       address_id: this.userStore.selectedDeliveryAddress.address_id,
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
-      tip_amount: this.state.appliedTipAmount || 0,
+      tip_amount: (this.state.appliedTipAmount * 100).toFixed(),
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
@@ -307,7 +311,7 @@ class Checkout extends Component {
   }
 
   handleAddTip = () => {
-
+    this.updateData()
   }
 
   handleAddPayment = (data) => {
@@ -355,6 +359,19 @@ class Checkout extends Component {
   handleConfirmHome() {
     logEvent({ category: "Checkout", action: "ConfirmAtHome" })
     this.setState({confirmHome: !this.state.confirmHome})
+  }
+
+  handleTipAmountChange = value => {
+    const order = this.checkoutStore.order
+    const tipAmount = (value / 100) * order.subtotal
+    this.setState({
+      appliedTipAmount: (tipAmount / 100).toFixed(2),
+      tipReadOnly: true,
+    })
+  }
+
+  handleTipCustomAmounClick = () => {
+    this.setState({ tipReadOnly: false })
   }
 
   render() {
@@ -548,11 +565,20 @@ class Checkout extends Component {
                                   }
                                     <div className="form-group">
                                       <span className="text-blue">Want to tip</span>
+                                      <AmountGroup
+                                        className="checkout-tips"
+                                        amountClick={this.handleTipAmountChange}
+                                        customClick={this.handleTipCustomAmounClick}
+                                        values={[0, 15, 20, 25]}
+                                        selected={15}
+                                      />
                                       <div className="aw-input--group aw-input--group-sm">
                                         <Input
+                                          readOnly={this.state.tipReadOnly}
                                           className="aw-input--control aw-input--left aw-input--bordered"
-                                          type="text"
+                                          type="number"
                                           placeholder="Enter tip amount here"
+                                          value={this.state.appliedTipAmount}
                                           onChange={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}/>
                                         <button onClick={this.handleAddTip} type="button" className="btn btn-transparent">APPLY</button>
                                       </div>

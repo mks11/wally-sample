@@ -6,9 +6,15 @@ class AmountGroup extends Component {
     super(props)
 
     this.state = {
-      amountValues: [25, 50, 100],
-      selected: null,
+      amountValues: props.values || [],
+      selected: props.selected || null,
     }
+  }
+
+  componentDidMount() {
+    const { selected } = this.state
+    const { amountClick } = this.props
+    selected && amountClick && amountClick(selected)
   }
 
   handleAmountClick = value => {
@@ -25,13 +31,14 @@ class AmountGroup extends Component {
 
   render() {
     const { amountValues, selected } = this.state
+    const { className } = this.props
 
     const defaultButtons = amountValues.map((value, index) => (
       <Button
         key={index}
         outline
         type="button"
-        className={`gift-amount-btn ${selected === value ? 'selected' : ''}`}
+        className={`amount-btn ${selected === value ? 'selected' : ''}`}
         onClick={() => this.handleAmountClick(value)}
       >{`$${value}`}</Button>
     ))
@@ -39,13 +46,13 @@ class AmountGroup extends Component {
       <Button
         outline
         type="button"
-        className={`gift-amount-btn ${selected === 'custom' ? 'selected' : ''}`}
+        className={`amount-btn ${selected === 'custom' ? 'selected' : ''}`}
         onClick={this.handleCustomClick}
       >Custom</Button>
     )
 
     return (
-      <ButtonGroup className="gift-amount-btn-group">
+      <ButtonGroup className={`${className} amount-btn-group`}>
         {defaultButtons}
         {customButton}
       </ButtonGroup>
