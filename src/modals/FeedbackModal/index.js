@@ -28,8 +28,11 @@ class FeedbackModal extends Component {
         order,
       } = user.feedback
 
+      const parsedValue = parseInt(value)
+      const feedbackValue = (parsedValue < 4 && parsedValue > -1) ? parsedValue : 1
+
       this.setState({
-        feedbackValue: parseInt(value),
+        feedbackValue,
         feedbackEmail: email,
         feedbackOrder: order,
       })
