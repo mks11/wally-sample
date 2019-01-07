@@ -2328,10 +2328,18 @@ color:#6e8692
   width: 100%;
 }
 
-.feedback-modal .btn.active {
-  background-color: #78C98D !important;
+.feedback-modal .feedback-btn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
 }
 
+.feedback-modal .feedback-btn.active {
+  background-color: #78C98D !important;
+}
 
 
 

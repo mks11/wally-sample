@@ -88,21 +88,27 @@ class FeedbackModal extends Component {
         <FormGroup row>
           <Col sm={4}>
             <Button
-              className={`${feedbackValue === 0 ? 'active' : ''}`}
+              className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
-            >0</Button>
+            >
+              <img src="images/smile.svg" />
+            </Button>
           </Col>
           <Col sm={4}>
             <Button
-              className={`${feedbackValue === 1 ? 'active' : ''}`}
+              className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
-            >1</Button>
+            >
+              <img src="images/meh.svg" />
+            </Button>
           </Col>
           <Col sm={4}>
             <Button
-              className={`${feedbackValue === 2 ? 'active' : ''}`}
+              className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
-            >2</Button>
+            >
+              <img src="images/sad.svg" />
+            </Button>
           </Col>
         </FormGroup>
         <FormGroup row>
