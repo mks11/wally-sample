@@ -34,7 +34,6 @@ class ShopperTable extends Component {
       shopitemsFarms,
     } = this.adminStore
     const {timeframe} = this.props
-
     const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.product_price, 0)
     const renderStatus = (shopitem) => {
       if (shopitem.completed) {
@@ -45,49 +44,6 @@ class ShopperTable extends Component {
         return 'Incomplete'
       }
     }
-    // todo remove this
-    shopitems = [
-      {
-        _id: 1,
-        product_id: 'prod_123',
-        inventory_id: 'invetory_123',
-        organic: true,
-        product_name: 'Awesome product',
-        location: 'test location',
-        product_producer: 'Farm B',
-        product_price: 450,
-        missing: true,
-        box_number: 'ABC213',
-        substitute_for_name: null,
-        product_substitute_reason: '',
-        farm_substitue_reason: '',
-        price_substitute_reason: '',
-        product_missing_reason: '',
-        price_unit: '1 Ct',
-        quantity: 16,
-        warehouse_placement: null
-      },
-      {
-        _id: 2,
-        product_id: 'prod_456',
-        inventory_id: 'invetory_567',
-        location: 'test location 2',
-        organic: true,
-        product_name: 'Awesome product 2',
-        product_producer: 'Farm A',
-        product_price: 345,
-        missing: false,
-        box_number: 'XYZ213',
-        substitute_for_name: null,
-        product_substitute_reason: '',
-        farm_substitue_reason: '',
-        price_substitute_reason: '',
-        product_missing_reason: '',
-        price_unit: '1 Ct',
-        quantity: 9,
-        warehouse_placement: 'Somewhere else'
-      }
-    ]
 
     return (
       <Paper elevation={8}>
@@ -101,12 +57,12 @@ class ShopperTable extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {shopitems.map(shopitem => {
+            {shopitems.map((shopitem, i) => {
               return (
                 <TableRow
                   key={shopitem.product_id}
                   className={`row ${shopitem.completed ? 'completed' : ''} ${shopitem.missing ? 'missing' : ''}`}
-                  onClick={() => this.props.toggleSingleProductView(shopitem)}
+                  onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
                   <TableCell component="th" scope="row" padding={"dense"}>
                     {shopitem.location}

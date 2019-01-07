@@ -1194,3 +1194,16 @@ background: #d4d4d4;
 .post-edtior-page textarea {
   height: 300px;
 }
+
+.single-product .row {
+  align-items: center;
+  font-size: 18px;
+}
+.single-product .row strong {
+  font-size: 16px;
+}
+.single-product .nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

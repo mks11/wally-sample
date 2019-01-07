@@ -18,7 +18,8 @@ class ManageShopper extends Component {
       timeframe: null,
       location: null,
       isProductView: false,
-      selectedProduct: {}
+      selectedProduct: {},
+      selectedIndex: null
     }
 
     this.userStore = this.props.store.user
@@ -56,8 +57,8 @@ class ManageShopper extends Component {
     this.setState({location})
   }
 
-  toggleSingleProductView = (product) => {
-    this.setState({isProductView: !this.state.isProductView, selectedProduct: product})
+  toggleSingleProductView = (product, index) => {
+    this.setState({isProductView: !this.state.isProductView, selectedProduct: product, selectedIndex: index})
     if (!product) {
       const {timeframe, location} = this.state
       this.adminStore.getShopItems(timeframe, location)
@@ -65,56 +66,79 @@ class ManageShopper extends Component {
     }
   }
 
+  //todo fix this
+  handlePrevProductClick = (e) => {
+    e.preventDefault()
+    let {shopitems} = this.adminStore
+    const {selectedIndex} = this.state
+    this.setState({selectedProduct: shopitems[selectedIndex - 1]})
+  }
+
+  handleNextProductClick = (e) => {
+    e.preventDefault()
+    const {shopitems} = this.adminStore
+    const {selectedIndex} = this.state
+    this.setState({selectedProduct: shopitems[selectedIndex + 1]})
+  }
+
   render() {
     if (!this.userStore.user) return null
-
+    const {
+      shopitemsFarms,
+    } = this.adminStore
     const {timeframes, locations} = this.adminStore
     const {timeframe, isProductView, selectedProduct} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper"/>
         <Title content="Shopper Portal"/>
+        {!isProductView ?
+          <React.Fragment>
+            <section className="page-section pt-1">
+              <Container>
+                <Row>
+                  <Col md="6" sm="12">
+                    <div className="mb-3">
+                      <div className="mb-2 font-weight-bold">Time Frame:</div>
+                      <CustomDropdown
+                        values={[{id: 'all', title: 'All Timeframes'}, ...timeframes.map(item => {
+                          return {id: item, title: item}
+                        })]}
+                        onItemClick={this.loadShopLocations}
+                      />
+                    </div>
+                  </Col>
+                  <Col md="6" sm="12">
+                    <div className="mb-3">
+                      <div className="mb-2 font-weight-bold">Location:</div>
+                      <CustomDropdown
+                        values={[{id: 'all', title: 'All Locations'}, ...locations.map(item => {
+                          return {id: item, title: item}
+                        })]}
+                        onItemClick={this.loadShopItems}
+                      />
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
+            </section>
 
-        <section className="page-section pt-1">
-          <Container>
-            <Row>
-              <Col md="6" sm="12">
-                <div className="mb-3">
-                  <div className="mb-2 font-weight-bold">Time Frame:</div>
-                  <CustomDropdown
-                    values={[{id: 'all', title: 'All Timeframes'}, ...timeframes.map(item => {
-                      return {id: item, title: item}
-                    })]}
-                    onItemClick={this.loadShopLocations}
-                  />
-                </div>
-              </Col>
-              <Col md="6" sm="12">
-                <div className="mb-3">
-                  <div className="mb-2 font-weight-bold">Location:</div>
-                  <CustomDropdown
-                    values={[{id: 'all', title: 'All Locations'}, ...locations.map(item => {
-                      return {id: item, title: item}
-                    })]}
-                    onItemClick={this.loadShopItems}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-
-        <section className="page-section pt-1">
-          <Container>
-            <h2>Shop Location View</h2>
-            <ShopperTable {...{timeframe}} toggleSingleProductView={this.toggleSingleProductView}/>
-          </Container>
-        </section>
-        <SingleProductView
-          isOpen={isProductView}
-          toggle={this.toggleSingleProductView}
-          product={selectedProduct}
-        />
+            <section className="page-section pt-1">
+              <Container>
+                <h2>Shop Location View</h2>
+                <ShopperTable {...{timeframe}} toggleSingleProductView={this.toggleSingleProductView}/>
+              </Container>
+            </section>
+          </React.Fragment>
+          :
+          <SingleProductView
+            toggle={this.toggleSingleProductView}
+            product={selectedProduct}
+            onPrevProduct={this.handlePrevProductClick}
+            onNextProduct={this.handleNextProductClick}
+            shopitemsFarms={shopitemsFarms}
+          />
+        }
       </div>
     );
   }
