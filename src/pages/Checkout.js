@@ -591,11 +591,15 @@ class Checkout extends Component {
                                         <CurrencyInput
                                           readOnly={this.state.tipReadOnly}
                                           prefix="$"
-                                          className="aw-input--control aw-input--left aw-input--bordered form-control"
+                                          className={`aw-input--control aw-input--left aw-input--bordered form-control ${!this.state.tipReadOnly ? 'focus-input' : ''}`}
                                           value={this.state.appliedTipAmount}
                                           onChangeEvent={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}
                                         />
-                                        <button onClick={this.handleAddTip} type="button" className="btn btn-transparent">APPLY</button>
+                                        {
+                                          !this.state.tipReadOnly
+                                            ? <button onClick={this.handleAddTip} type="button" className="btn btn-transparent tip-apply">APPLY</button>
+                                            : null
+                                        }
                                       </div>
                                     </div>
                                   </div>

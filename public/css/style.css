@@ -886,7 +886,8 @@ textarea.aw-input--control, textarea.aw-input--control:focus{
   border: none;
   border-bottom: 2px solid #78C98D;
 }
-.aw-input--bordered:focus {
+.aw-input--bordered:focus,
+.aw-input--bordered.focus-input {
   border: 2px solid #78C98D;
 }
 .aw-input--center {text-align:center;}
@@ -2423,4 +2424,7 @@ color:#6e8692
 
 .checkout-tips {
   padding: 10px 0;
+}
+.tip-apply {
+  color: #6060a8;
 }
