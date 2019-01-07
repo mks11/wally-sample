@@ -574,7 +574,7 @@ class Checkout extends Component {
                                         customClick={this.handleTipCustomAmounClick}
                                         values={[0, 15, 20, 25]}
                                         selected={15}
-                                        prefix="%"
+                                        suffix="%"
                                       />
                                       <div className="aw-input--group aw-input--group-sm">
                                         <CurrencyInput
