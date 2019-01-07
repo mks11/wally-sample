@@ -167,7 +167,7 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
-        <header className="aw-header navbar-white">
+        <header className={`aw-header navbar-white ${isAdmin ? 'admin-navbar' : ''}`}>
           {
           this.userStore.status && !isAdmin ? (
             <div className={topBarClass}>

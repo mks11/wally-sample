@@ -586,7 +586,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   transition: 0.27s all;
 }
 .top-bar-open .aw-nav--mobile {
-  top: 60px
+  top: 80px
 }
 .aw-nav--mobile ul {
   list-style-type: none;
@@ -1123,17 +1123,42 @@ body {
     padding: 0.1rem;
   }
 }
+.shopper-table tr {
+    cursor: pointer;
+}
+
+.shopper-table .row:hover {
+background: #d4d4d4;
+}
 
 .shopper-table .completed {
-  background: grey;
+  background: lightgrey;
 }
+.shopper-table .completed:hover {
+  background: #bbbbbb;
+}
+
 .shopper-table .missing {
   background: lightcoral;
+}
+.shopper-table .missing:hover {
+  background: #c76464;
 }
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }
-
+.xl-modal {
+    max-width: 90%;
+    width: 90%;
+  font-style: 16px;
+}
+.xl-modal .modal-header {
+  border-bottom: 1px solid #e9ecef;
+}
+.xl-modal .modal-footer {
+  border-top: 1px solid #e9ecef;
+  justify-content: space-between;
+}
 .shopper-location {
   padding: 5px 10px;
   cursor: pointer;
