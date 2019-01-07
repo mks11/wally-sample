@@ -3,6 +3,7 @@ import ReactGA from 'react-ga'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
+import CurrencyInput from 'react-currency-input'
 import Title from 'common/page/Title'
 import FontAwesome from 'react-fontawesome'
 import ClickOutside from 'react-click-outside'
@@ -390,6 +391,8 @@ class Checkout extends Component {
 
     const cart_items = order && order.cart_items ? order.cart_items : []
 
+    const orderTotal = order.tip_amount ? (order.total / 100) : ((order.total / 100) + parseFloat(this.state.appliedTipAmount))
+
     return (
       <div className="App">
         <Title content="Checkout" />
@@ -512,7 +515,7 @@ class Checkout extends Component {
                         </div></div>
                       </ClickOutside>
                       <span onClick={this.showTippingPopup}>Tip Amount  <FontAwesome name='info-circle' /></span>
-                      <span>{formatMoney(order.tip_amount/100)}</span>
+                      <span>{order.tip_amount ? formatMoney(order.tip_amount/100) : formatMoney(this.state.appliedTipAmount)}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
@@ -571,15 +574,16 @@ class Checkout extends Component {
                                         customClick={this.handleTipCustomAmounClick}
                                         values={[0, 15, 20, 25]}
                                         selected={15}
+                                        prefix="%"
                                       />
                                       <div className="aw-input--group aw-input--group-sm">
-                                        <Input
+                                        <CurrencyInput
                                           readOnly={this.state.tipReadOnly}
-                                          className="aw-input--control aw-input--left aw-input--bordered"
-                                          type="number"
-                                          placeholder="Enter tip amount here"
+                                          prefix="$"
+                                          className="aw-input--control aw-input--left aw-input--bordered form-control"
                                           value={this.state.appliedTipAmount}
-                                          onChange={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}/>
+                                          onChangeEvent={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}
+                                        />
                                         <button onClick={this.handleAddTip} type="button" className="btn btn-transparent">APPLY</button>
                                       </div>
                                     </div>
@@ -587,7 +591,7 @@ class Checkout extends Component {
                                   <hr className="mt-4" />
                                   <div className="item-total">
                                     <span>Total</span>
-                                    <span>{formatMoney(order.total/100)}</span>
+                                    <span>{formatMoney(orderTotal)}</span>
                                   </div>
                                   <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
                                   {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}

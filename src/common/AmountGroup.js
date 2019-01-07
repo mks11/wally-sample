@@ -31,7 +31,7 @@ class AmountGroup extends Component {
 
   render() {
     const { amountValues, selected } = this.state
-    const { className } = this.props
+    const { className, prefix } = this.props
 
     const defaultButtons = amountValues.map((value, index) => (
       <Button
@@ -40,7 +40,7 @@ class AmountGroup extends Component {
         type="button"
         className={`amount-btn ${selected === value ? 'selected' : ''}`}
         onClick={() => this.handleAmountClick(value)}
-      >{`$${value}`}</Button>
+      >{`${prefix}${value}`}</Button>
     ))
     const customButton = (
       <Button
