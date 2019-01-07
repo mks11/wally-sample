@@ -10,7 +10,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-body{padding-top:50px; font-family: 'Circe', sans-serif;}
+body{padding-top:70px; font-family: 'Circe', sans-serif;}
 .btn-outline-white{border-color:#fff;border-width:2px;color:#fff;}
 .btn-outline-white:hover, .btn-outline-white:focus{background-color: #fff;color:#323f93;}
 .btn-success{border:0;font-family: 'Circe', sans-serif;font-size: 18px;line-height:24px;padding:13px 30px;
@@ -82,7 +82,8 @@ border-radius:0;}
 }
 
 /* Header */
-.aw-header{padding-top: 0px;padding-bottom: 0px;}
+.aw-header{padding-top: 0px;padding-bottom: 10px;}
+.aw-header .container{padding-top: 10px;}
 .aw-logo{height:50px;}
 .aw-logo svg{width:auto;height:50px;}
 .aw-header:not(.navbar-white) .cls-1{fill:#fff;}
@@ -98,7 +99,7 @@ border-radius:0;}
 .aw-header.navbar-white .navbar-toggler-icon {
   background-image: url("../images/hamburger.png");
   max-width: 23px;
-  margin-top: -15px;
+  margin-top: 7px;
   margin-right: 7px;
 }
 
@@ -704,7 +705,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   border-radius: 0;
   left:50%;
   margin-left: -115px;
-  margin-top: 8px;
+  margin-top: 18px;
   border:0;
   box-shadow:2px 4px 6px rgba(0,0,0,.2);
 }
@@ -1923,7 +1924,6 @@ a {
   background-size: 34px 34px;
   max-width: 40px;
   width: 40px;
-  margin-top: 7px;
   height: 40px;
 }
 
@@ -2163,4 +2163,19 @@ color:#6e8692
   background-color: #78C98D;
   border-radius: 12px;
   border: 0;
+}
+@media screen and (min-width: 800px) {
+.aw-header.admin-navbar {
+  padding-bottom: 0;
+}
+.admin-navbar .container {
+  padding-top: 0;
+}
+.admin-backdrop {
+  top: -7px !important;
+}
+
+.admin-navbar .account-dropdown .dropdown-menu{
+  margin-top: 8px;
+}
 }

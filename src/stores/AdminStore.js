@@ -20,8 +20,57 @@ import moment from 'moment'
 class AdminStore {
   timeframes = []
   locations = []
+  // todo remove this
 
   shopitems = []
+ /* shopitems = [
+    {
+      _id: 1,
+      product_id: 'prod_123',
+      inventory_id: 'invetory_123',
+      organic: true,
+      product_name: 'Awesome product',
+      location: 'test location',
+      product_producer: 'Farm B',
+      product_price: 450,
+      missing: true,
+      local: true,
+      box_number: 'ABC213',
+      substitute_for_name: null,
+      product_substitute_reason: '',
+      farm_substitue_reason: '',
+      price_substitute_reason: '',
+      product_missing_reason: '',
+      price_unit: '1 Ct',
+      quantity: 16,
+      shop_price: 300,
+      estimated_price: 100,
+      warehouse_placement: null,
+    },
+    {
+      _id: 2,
+      product_id: 'prod_456',
+      inventory_id: 'invetory_567',
+      location: 'test location 2',
+      organic: true,
+      local: false,
+      product_name: 'Awesome product 2',
+      product_producer: 'Farm A',
+      product_price: 345,
+      shop_price: 100,
+      missing: false,
+      box_number: 'XYZ213',
+      substitute_for_name: null,
+      product_substitute_reason: '',
+      farm_substitue_reason: '',
+      price_substitute_reason: '',
+      product_missing_reason: '',
+      price_unit: '1 Ct',
+      quantity: 9,
+      estimated_price: 200,
+      warehouse_placement: 'Somewhere else'
+    }
+  ]*/
   shopitemsFarms = {}
 
   routes = []
