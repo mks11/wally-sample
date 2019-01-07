@@ -22,7 +22,8 @@ class AdminStore {
   locations = []
   // todo remove this
 
-  shopitems = [
+  shopitems = []
+ /* shopitems = [
     {
       _id: 1,
       product_id: 'prod_123',
@@ -69,7 +70,7 @@ class AdminStore {
       estimated_price: 200,
       warehouse_placement: 'Somewhere else'
     }
-  ]
+  ]*/
   shopitemsFarms = {}
 
   routes = []
@@ -92,8 +93,7 @@ class AdminStore {
 
   async getShopItems(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
-  //  this.shopitems = res.data.shop_items
-    //todo uncomment this
+    this.shopitems = res.data.shop_items
   }
 
   async getShopItemsFarms(timeframe, shop_location) {
