@@ -117,7 +117,7 @@ class Checkout extends Component {
   loadData() {
     let dataOrder
     const deliveryData = this.userStore.getDeliveryParams()
-    const tip = (this.state.appliedTipAmount * 100).toFixed()
+    const tip = this.parseAppliedTip()
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
@@ -141,13 +141,24 @@ class Checkout extends Component {
 
   updateData() {
     const deliveryData = this.userStore.getDeliveryParams()
-    const tip = (this.state.appliedTipAmount * 100).toFixed()
+    const tip = this.parseAppliedTip()
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
       })
     })
+  }
+
+  parseAppliedTip() {
+    const { appliedTipAmount } = this.state
+    let tipValue = appliedTipAmount
+
+    if (typeof appliedTipAmount === 'string') {
+      tipValue = appliedTipAmount.replace('$', '')
+    }
+
+    return (parseFloat(tipValue) * 100).toFixed()
   }
 
   applyStoreCredit() {
@@ -261,7 +272,7 @@ class Checkout extends Component {
       address_id: this.userStore.selectedDeliveryAddress.address_id,
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
-      tip_amount: (this.state.appliedTipAmount * 100).toFixed(),
+      tip_amount: this.parseAppliedTip(),
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
