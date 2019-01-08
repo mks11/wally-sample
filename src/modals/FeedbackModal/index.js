@@ -89,7 +89,7 @@ class FeedbackModal extends Component {
       <div className="login-wrap feedback-modal">
         <h3 className="m-0 mb-2">How did we do?</h3>
         <FormGroup row>
-          <Col sm={4}>
+          <Col xs={4}>
             <Button
               className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
@@ -97,7 +97,7 @@ class FeedbackModal extends Component {
               <img src="images/smile.svg" />
             </Button>
           </Col>
-          <Col sm={4}>
+          <Col xs={4}>
             <Button
               className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
@@ -105,7 +105,7 @@ class FeedbackModal extends Component {
               <img src="images/meh.svg" />
             </Button>
           </Col>
-          <Col sm={4}>
+          <Col xs={4}>
             <Button
               className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
