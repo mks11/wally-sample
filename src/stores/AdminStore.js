@@ -1,5 +1,5 @@
 import { observable, decorate, action } from 'mobx'
-import { 
+import {
   API_ADMIN_GET_TIME_FRAMES,
   API_ADMIN_GET_SHOP_LOCATIONS,
   API_ADMIN_GET_SHOP_ITEMS,
@@ -23,7 +23,7 @@ class AdminStore {
   // todo remove this
 
   shopitems = []
- /* shopitems = [
+/*  shopitems = [
     {
       _id: 1,
       product_id: 'prod_123',
@@ -35,6 +35,7 @@ class AdminStore {
       product_price: 450,
       missing: true,
       local: true,
+      completed: true,
       box_number: 'ABC213',
       substitute_for_name: null,
       product_substitute_reason: '',
@@ -46,6 +47,7 @@ class AdminStore {
       shop_price: 300,
       estimated_price: 100,
       warehouse_placement: null,
+      unit_type: 'bunch'
     },
     {
       _id: 2,
@@ -55,10 +57,11 @@ class AdminStore {
       organic: true,
       local: false,
       product_name: 'Awesome product 2',
+      product_shop: 'test shop',
       product_producer: 'Farm A',
       product_price: 345,
       shop_price: 100,
-      missing: false,
+      completed: false,
       box_number: 'XYZ213',
       substitute_for_name: null,
       product_substitute_reason: '',

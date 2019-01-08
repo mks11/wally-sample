@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter'
 import {connect} from '../../utils'
+import {Button} from "reactstrap"
 
 class ShopperTable extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class ShopperTable extends Component {
       shopitemsFarms,
     } = this.adminStore
     const {timeframe} = this.props
-    const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.product_price, 0)
+    const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.shop_price, 0)
     const renderStatus = (shopitem) => {
       if (shopitem.completed) {
         return 'Completed'
@@ -46,7 +47,7 @@ class ShopperTable extends Component {
     }
 
     return (
-      <Paper elevation={8}>
+      <Paper elevation={1}>
         <Table className={"shopper-table"}>
           <TableHead>
             <TableRow>
@@ -65,7 +66,7 @@ class ShopperTable extends Component {
                   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
                   <TableCell component="th" scope="row" padding={"dense"}>
-                    {shopitem.location}
+                    {shopitem.product_producer} - {shopitem.product_shop}
                   </TableCell>
                   <TableCell>{shopitem.product_name}</TableCell>
                   <TableCell align="right">{shopitem.quantity}</TableCell>

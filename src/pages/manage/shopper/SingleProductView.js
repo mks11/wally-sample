@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from '../../../utils'
-import {Container, Input, Label, Row} from "reactstrap";
+import {Container, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row} from "reactstrap"
 import {
   ListGroup,
   ListGroupItem,
@@ -26,7 +26,7 @@ class SingleProductView extends Component {
       producer: {label: props.product.product_producer, value:props.product.product_producer, id: props.product.product_producer},
       local: props.product.local,
       organic: props.product.organic,
-      shopPrice: props.product.shop_price,
+      shopPrice: props.product.shop_price / 100,
       farmValues: this.prepareFarmValues({
         shopitem: props.product,
         other: props.shopitemsFarms
@@ -34,6 +34,7 @@ class SingleProductView extends Component {
       isEdit: false,
       missing: false,
       substitute: false,
+      completed: Boolean(props.product.completed),
       subProductName: '',
       finalQuantity: '',
       totalPaid: '',
@@ -65,7 +66,7 @@ class SingleProductView extends Component {
   }
 
   render() {
-    const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues} = this.state
+    const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed} = this.state
     return (
       <section className="page-section pt-1 single-product">
         <Container>
@@ -152,8 +153,13 @@ class SingleProductView extends Component {
                   <strong>Product Price:</strong>
                 </Col>
                 <Col sm={10}>
-                  <FormControl placeholder="Product Price" name="shopPrice" value={shopPrice} disabled={!substitute}
-                               onChange={this.handleInputChange}/>
+                  <InputGroup>
+                    <Input placeholder="Product Price" name="shopPrice" value={shopPrice} disabled={!substitute}
+                           onChange={this.handleInputChange}/>
+                    <InputGroupAddon addonType="append">
+                      <InputGroupText>$</InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
                 </Col>
               </Row>
             </FormGroup>
@@ -163,7 +169,7 @@ class SingleProductView extends Component {
                   <strong>Estimated Price:</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.estimated_price}
+                  {product.estimated_price / 100}
                 </Col>
               </Row>
             </FormGroup>
@@ -184,7 +190,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={4}>
                   <Input type="select" name="substitute" value={substitute}
-                         onChange={e => this.setState({substitute: e.target.value === "true"})} disabled={!isEdit}>
+                         onChange={e => this.setState({substitute: e.target.value === "true"})} disabled={ completed ? !isEdit : false}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                   </Input>
@@ -194,7 +200,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={4}>
                   <Input type="select" name="missing" value={missing}
-                         onChange={e => this.setState({missing: e.target.value === "true"})} disabled={!isEdit}>
+                         onChange={e => this.setState({missing: e.target.value === "true"})} disabled={completed ? !isEdit : false}>
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </Input>
@@ -220,6 +226,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}
+                               disabled={!isEdit}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
@@ -231,6 +238,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Total" name="totalPaid" value={totalPaid}
+                               disabled={!isEdit}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
@@ -242,7 +250,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Weight" name="weight" value={weight}
-                               disabled={product.unit_type === 'ea' || product.unit_type === 'bunch' || product.unit_type === 'pint'}
+                               disabled={product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'pint'}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
