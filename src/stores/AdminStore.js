@@ -23,7 +23,7 @@ class AdminStore {
   // todo remove this
 
   shopitems = []
-  shopitems = [
+/*  shopitems = [
     {
       _id: 1,
       product_id: 'prod_123',
@@ -73,7 +73,7 @@ class AdminStore {
       estimated_price: 200,
       warehouse_placement: 'Somewhere else'
     }
-  ]
+  ]*/
   shopitemsFarms = {}
 
   routes = []
