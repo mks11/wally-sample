@@ -23,7 +23,11 @@ class SingleProductView extends Component {
     super(props)
     this.state = {
       product: props.product,
-      producer: {label: props.product.product_producer, value:props.product.product_producer, id: props.product.product_producer},
+      producer: {
+        label: props.product.product_producer,
+        value: props.product.product_producer,
+        id: props.product.product_producer
+      },
       local: props.product.local,
       organic: props.product.organic,
       shopPrice: props.product.shop_price / 100,
@@ -41,10 +45,38 @@ class SingleProductView extends Component {
       weight: ''
     }
     this.userStore = this.props.store.user
+    this.adminStore = this.props.store.admin
   }
 
-  componentDidMount() {
-    console.log(this.props)
+  componentDidUpdate(prevProps) {
+    if ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) {
+      const {props} = this
+      this.setState(
+        {
+          product: props.product,
+          producer: {
+            label: props.product.product_producer,
+            value: props.product.product_producer,
+            id: props.product.product_producer
+          },
+          local: props.product.local,
+          organic: props.product.organic,
+          shopPrice: props.product.shop_price / 100,
+          farmValues: this.prepareFarmValues({
+            shopitem: props.product,
+            other: props.shopitemsFarms
+          }),
+          isEdit: false,
+          missing: false,
+          substitute: false,
+          completed: Boolean(props.product.completed),
+          subProductName: '',
+          finalQuantity: '',
+          totalPaid: '',
+          weight: ''
+        }
+      )
+    }
   }
 
   handleInputChange = (e) => {
@@ -52,16 +84,47 @@ class SingleProductView extends Component {
   }
 
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault()
+    const {isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight} = this.state
+    const data = {
+      product_id: product.product_id,
+      inventory_id: product.inventory_id,
+      product_producer: producer.value,
+      product_location: producer.value,
+      product_name: product.product_name,
+      missing,
+      local,
+      completed,
+      substitute,
+      organic,
+      quantity,
+      final_quantity: finalQuantity,
+      shop_price: shopPrice,
+      total_paid: totalPaid,
+      weight,
+      ...substitute && {substitute_for_name: product.product_name}
+    }
+    if (!completed) {
+      if (isEdit) {
+        this.adminStore.updateShopItem(this.props.timeframe, product.product_id, data)
+        this.setState({isEdit: false})
+        if (substitute) this.setState({subProductName: product.product_name})
+      } else {
+        this.setState({isEdit: true})
+      }
+    } else {
+      this.adminStore.updateShopItem(this.props.timeframe, product.product_id, data)
+      this.setState({isEdit: false})
+    }
   }
 
-  prepareFarmValues = ({ shopitem, other }) => {
-    const { product_id, product_producer } = shopitem
+  prepareFarmValues = ({shopitem, other}) => {
+    const {product_id, product_producer} = shopitem
     const initial = product_producer
     const restFarms = (other && other[product_id]) || []
-    return [...new Set([ initial, ...restFarms ])].map(item => {
-      return { id: item, title: item, label: item, value: item }
+    return [...new Set([initial, ...restFarms])].map(item => {
+      return {id: item, title: item, label: item, value: item}
     })
   }
 
@@ -95,7 +158,8 @@ class SingleProductView extends Component {
                   <strong>Producer:</strong>
                 </Col>
                 <Col sm={10}>
-                  <Select  placeholder="Producer" options={farmValues} value={producer} isDisabled={!isEdit} onChange={e => this.setState({producer: e})}/>
+                  <Select placeholder="Producer" options={farmValues} value={producer} isDisabled={!isEdit}
+                          onChange={e => this.setState({producer: e})}/>
                 </Col>
               </Row>
             </FormGroup>
@@ -125,7 +189,8 @@ class SingleProductView extends Component {
                   <strong>Local:</strong>
                 </Col>
                 <Col sm={10}>
-                  <Input type="select" name="local" value={local} onChange={e => this.setState({local: e.target.value === "true"})}
+                  <Input type="select" name="local" value={local}
+                         onChange={e => this.setState({local: e.target.value === "true"})}
                          disabled={!substitute}>
                     <option value="true">True</option>
                     <option value="false">False</option>
@@ -190,7 +255,8 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={4}>
                   <Input type="select" name="substitute" value={substitute}
-                         onChange={e => this.setState({substitute: e.target.value === "true"})} disabled={ completed ? !isEdit : false}>
+                         onChange={e => this.setState({substitute: e.target.value === "true"})}
+                         disabled={completed ? false : !isEdit}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                   </Input>
@@ -200,7 +266,8 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={4}>
                   <Input type="select" name="missing" value={missing}
-                         onChange={e => this.setState({missing: e.target.value === "true"})} disabled={completed ? !isEdit : false}>
+                         onChange={e => this.setState({missing: e.target.value === "true"})}
+                         disabled={completed ? false : !isEdit}>
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </Input>
@@ -256,15 +323,16 @@ class SingleProductView extends Component {
               </Row>
             </FormGroup>
             <div className="nav-buttons">
-              <Button variant="contained" size={"small"} onClick={this.props.onPrevProduct}>
+              <Button variant="contained" size={"small"} onClick={this.props.onPrevProduct}
+                      disabled={this.props.prevDisabled}>
                 <ArrowLeft/>
                 Previous
               </Button>
-              <Button variant="contained" color="primary" size={"large"} type={isEdit ? "submit" : "button"}
-                      onClick={() => isEdit ? {} : this.setState({isEdit: true})}>
-                {isEdit ? 'Submit' : 'Edit'}
+              <Button variant="contained" color="primary" size={"large"} type={"submit"}>
+                {completed ? 'Submit' : isEdit ? 'Submit' : 'Edit'}
               </Button>
-              <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}>
+              <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}
+                      disabled={this.props.nextDisabled}>
                 Next
                 <ArrowRight/>
               </Button>

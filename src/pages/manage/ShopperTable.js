@@ -31,9 +31,9 @@ class ShopperTable extends Component {
 
   render() {
     let {
-      shopitems,
       shopitemsFarms,
     } = this.adminStore
+    const {shopitems} = this.props
     const {timeframe} = this.props
     const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.shop_price, 0)
     const renderStatus = (shopitem) => {
