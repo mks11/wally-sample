@@ -10,6 +10,7 @@ import ShopperTable from './manage/ShopperTable'
 import CustomDropdown from '../common/CustomDropdown'
 import SingleProductView from './manage/shopper/SingleProductView'
 import {connect} from '../utils'
+import {toJS} from 'mobx';
 
 class ManageShopper extends Component {
   constructor(props) {
@@ -66,28 +67,44 @@ class ManageShopper extends Component {
     }
   }
 
-  //todo fix this
+  prevProductExists = () => {
+    let {shopitems} = this.adminStore
+    shopitems = toJS(shopitems)
+    const {selectedIndex} = this.state
+    return typeof shopitems[selectedIndex - 1] !== 'undefined'
+  }
+
+  nextProductExists = () => {
+    let {shopitems} = this.adminStore
+    shopitems = toJS(shopitems)
+    const {selectedIndex} = this.state
+    return typeof shopitems[selectedIndex + 1] !== 'undefined'
+  }
+
   handlePrevProductClick = (e) => {
     e.preventDefault()
     let {shopitems} = this.adminStore
+    shopitems = toJS(shopitems)
     const {selectedIndex} = this.state
-    this.setState({selectedProduct: shopitems[selectedIndex - 1]})
+    this.setState({selectedProduct: shopitems[selectedIndex - 1], selectedIndex: selectedIndex - 1})
   }
 
   handleNextProductClick = (e) => {
     e.preventDefault()
-    const {shopitems} = this.adminStore
+    let {shopitems} = this.adminStore
+    shopitems = toJS(shopitems)
     const {selectedIndex} = this.state
-    this.setState({selectedProduct: shopitems[selectedIndex + 1]})
+    this.setState({selectedProduct: shopitems[selectedIndex + 1], selectedIndex: selectedIndex + 1})
   }
 
   render() {
     if (!this.userStore.user) return null
     const {
+      shopitems,
       shopitemsFarms,
     } = this.adminStore
     const {timeframes, locations} = this.adminStore
-    const {timeframe, isProductView, selectedProduct} = this.state
+    const {timeframe, isProductView, selectedProduct, selectedIndex} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper"/>
@@ -126,17 +143,22 @@ class ManageShopper extends Component {
             <section className="page-section pt-1">
               <Container>
                 <h2>Shop Location View</h2>
-                <ShopperTable {...{timeframe}} toggleSingleProductView={this.toggleSingleProductView}/>
+                <ShopperTable {...{timeframe}} shopitems={shopitems}
+                              toggleSingleProductView={this.toggleSingleProductView}/>
               </Container>
             </section>
           </React.Fragment>
           :
           <SingleProductView
-            toggle={this.toggleSingleProductView}
+            toggle={() => this.toggleSingleProductView()}
             product={selectedProduct}
             onPrevProduct={this.handlePrevProductClick}
             onNextProduct={this.handleNextProductClick}
             shopitemsFarms={shopitemsFarms}
+            selectedIndex={selectedIndex}
+            prevDisabled={!this.prevProductExists()}
+            nextDisabled={!this.nextProductExists()}
+            timeframe={timeframe}
           />
         }
       </div>

@@ -20,7 +20,6 @@ import moment from 'moment'
 class AdminStore {
   timeframes = []
   locations = []
-  // todo remove this
 
   shopitems = []
 /*  shopitems = [

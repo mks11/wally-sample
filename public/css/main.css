@@ -1123,7 +1123,7 @@ body {
     padding: 0.1rem;
   }
 }
-.shopper-table tr {
+.shopper-table .row {
     cursor: pointer;
 }
 
