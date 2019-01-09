@@ -47,7 +47,7 @@ class ShopperTable extends Component {
     }
 
     return (
-      <Paper elevation={1}>
+      <Paper elevation={1} className={"scrollable-table"}>
         <Table className={"shopper-table"}>
           <TableHead>
             <TableRow>

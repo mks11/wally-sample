@@ -22,7 +22,7 @@ class AdminStore {
   locations = []
 
   shopitems = []
-/*  shopitems = [
+  shopitems = [
     {
       _id: 1,
       product_id: 'prod_123',
@@ -32,7 +32,6 @@ class AdminStore {
       location: 'test location',
       product_producer: 'Farm B',
       product_price: 450,
-      missing: true,
       local: true,
       completed: true,
       box_number: 'ABC213',
@@ -44,6 +43,7 @@ class AdminStore {
       price_unit: '1 Ct',
       quantity: 16,
       shop_price: 300,
+      estimated_total: 200,
       estimated_price: 100,
       warehouse_placement: null,
       unit_type: 'bunch'
@@ -72,8 +72,8 @@ class AdminStore {
       estimated_price: 200,
       warehouse_placement: 'Somewhere else'
     }
-  ]*/
-  shopitemsFarms = {}
+  ]
+  shopitemsFarms = ['test', 'test1']
 
   routes = []
   orders = []
@@ -100,7 +100,7 @@ class AdminStore {
 
   async getShopItemsFarms(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS_FARMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
-    this.shopitemsFarms = res.data.farms
+ //   this.shopitemsFarms = res.data.farms
   }
 
   async updateShopItem(timeframe, shopitem_id, data) {
