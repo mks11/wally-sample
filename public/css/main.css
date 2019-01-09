@@ -1129,13 +1129,15 @@ body {
 }
 
 .shopper-table .row:hover {
-    background: #d6d6d6;
+    background: #e8e8e8;
 }
 
 .shopper-table .completed {
     background: lightgrey;
 }
-
+.shopper-table .completed:hover {
+    background: #bebebe;
+}
 .shopper-table .missing {
     background: lightcoral;
 }
