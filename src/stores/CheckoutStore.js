@@ -109,6 +109,7 @@ class CheckoutStore {
   transformDeliveryTimes(data) {
     if (!data) return
 
+    this.deliveryTimes = []
     const times = data.delivery_windows
     for (var i = 0, len = times.length; i < len; i++) {
       this.addTimes(times[i])

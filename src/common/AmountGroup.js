@@ -14,13 +14,13 @@ class AmountGroup extends Component {
   componentDidMount() {
     const { selected } = this.state
     const { amountClick } = this.props
-    selected && amountClick && amountClick(selected)
+    selected && amountClick && amountClick(selected, false)
   }
 
   handleAmountClick = value => {
     const { amountClick } = this.props
     this.setState({ selected: value })
-    amountClick && amountClick(value)
+    amountClick && amountClick(value, true)
   }
 
   handleCustomClick = e => {
