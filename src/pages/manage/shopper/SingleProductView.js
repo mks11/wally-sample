@@ -42,7 +42,8 @@ class SingleProductView extends Component {
       subProductName: '',
       finalQuantity: '',
       totalPaid: '',
-      weight: ''
+      weight: '',
+      missingReason: "Out of season"
     }
     this.userStore = this.props.store.user
     this.adminStore = this.props.store.admin
@@ -86,7 +87,7 @@ class SingleProductView extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const {isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight} = this.state
+    const {isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason} = this.state
     const data = {
       product_id: product.product_id,
       inventory_id: product.inventory_id,
@@ -103,7 +104,8 @@ class SingleProductView extends Component {
       shop_price: Number(shopPrice) * 100,
       total_paid: Number(totalPaid) * 100,
       weight: Number(weight),
-      substitute_for_name: substitute ? product.product_name : null
+      substitute_for_name: substitute ? product.product_name : null,
+      product_missing_reason: missing ? missingReason : null
     }
     if (!completed) {
       if (isEdit) {
@@ -134,7 +136,7 @@ class SingleProductView extends Component {
   }
 
   render() {
-    const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed} = this.state
+    const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
     return (
       <section className="page-section pt-1 single-product">
         <Container>
@@ -251,7 +253,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <InputGroup>
-                    <Input value={product.estimated_total ? product.estimated_total / 100 : null} disabled={true} type={"number"}/>
+                    <Input value={product.estimated_total ? product.estimated_total / 100 : ''} disabled={true} type={"number"}/>
                     <InputGroupAddon addonType="append">
                       <InputGroupText>$</InputGroupText>
                     </InputGroupAddon>
@@ -333,6 +335,22 @@ class SingleProductView extends Component {
                                type={"number"}
                                disabled={(product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'pint') || completed}
                                onChange={this.handleInputChange}/>
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col componentClass={ControlLabel} sm={2}>
+                  <strong>Missing Product Reason:</strong>
+                </Col>
+                <Col sm={10}>
+                  <Input type="select" name="missing_reason" value={missingReason}
+                         onChange={e => this.setState({missingReason: e.target.value})}
+                         disabled={!missing}>
+                    <option value="Out of season">Out of season</option>
+                    <option value="Vendor missing">Vendor missing</option>
+                    <option value="Out of stock">Out of stock</option>
+                  </Input>
                 </Col>
               </Row>
             </FormGroup>

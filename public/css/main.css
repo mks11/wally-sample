@@ -1123,27 +1123,27 @@ body {
     padding: 0.1rem;
   }
 }
+
 .shopper-table .row {
     cursor: pointer;
 }
 
 .shopper-table .row:hover {
-background: #d4d4d4;
+    background: #d6d6d6;
 }
 
 .shopper-table .completed {
-  background: lightgrey;
-}
-.shopper-table .completed:hover {
-  background: #bbbbbb;
+    background: lightgrey;
 }
 
 .shopper-table .missing {
-  background: lightcoral;
+    background: lightcoral;
 }
+
 .shopper-table .missing:hover {
-  background: #c76464;
+    background: #c76464;
 }
+
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }
