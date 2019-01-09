@@ -179,7 +179,7 @@ class SingleProductView extends Component {
                   <strong>Quantity (if sub.):</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.quantity_with_sub}
+                  {product.quantity_for_sub}
                 </Col>
               </Row>
             </FormGroup>
@@ -231,10 +231,10 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Estimated Price:</strong>
+                  <strong>Shop Price:</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.estimated_price / 100}
+                  {product.shop_price / 100}
                 </Col>
               </Row>
             </FormGroup>
