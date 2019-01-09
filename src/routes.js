@@ -22,7 +22,7 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import CartAdd from './pages/CartAdd';
 import ManageShopper from './pages/ManageShopper';
-import ManageFulfillment from './pages/ManageFulfillment';
+import ManagePackaging from './pages/ManagePackaging';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
@@ -30,7 +30,7 @@ import Signup from './pages/Signup';
 export default (
     <Fragment>
         <Route exact path="/manage/shopper" component={ManageShopper} />
-        <Route exact path="/manage/fulfillment" component={ManageFulfillment} />
+        <Route exact path="/manage/packaging" component={ManagePackaging} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
         <Route exact path="/manage/blog" component={ManageBlog} />
         <Route exact path="/user" component={Account}/>

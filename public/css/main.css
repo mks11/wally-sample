@@ -1142,7 +1142,29 @@ body {
     background: lightcoral;
 }
 
-.shopper-table .missing:hover {
+.packaging-table .missing:hover {
+  background: #c76464;
+}
+
+.packaging-table .row {
+  cursor: pointer;
+}
+
+.packaging-table .row:hover {
+  background: #e8e8e8;
+}
+
+.packaging-table .paid {
+  background: lightgrey;
+}
+.packaging-table .paid:hover {
+  background: #bebebe;
+}
+.packaging-table .payment_issue {
+  background: lightcoral;
+}
+
+.packaging-table .payment_issue:hover {
     background: #c76464;
 }
 
@@ -1221,4 +1243,8 @@ body {
 
 .scrollable-table {
   overflow-x: auto;
+}
+
+.single-order-total {
+  margin: 20px auto;
 }

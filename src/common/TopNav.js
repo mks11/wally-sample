@@ -205,7 +205,7 @@ class TopNav extends Component {
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
                                       < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/fulfillment" className="dropdown-item">Fulfillment</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>

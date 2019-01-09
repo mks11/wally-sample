@@ -1,4 +1,4 @@
-import { observable, decorate, action } from 'mobx'
+import {observable, decorate, action} from 'mobx'
 import {
   API_ADMIN_GET_TIME_FRAMES,
   API_ADMIN_GET_SHOP_LOCATIONS,
@@ -22,57 +22,6 @@ class AdminStore {
   locations = []
 
   shopitems = []
- /* shopitems = [
-    {
-      _id: 1,
-      product_id: 'prod_123',
-      inventory_id: 'invetory_123',
-      organic: true,
-      product_name: 'Awesome product',
-      location: 'test location',
-      product_producer: 'Farm B',
-      product_price: 450,
-      local: true,
-      completed: true,
-      box_number: 'ABC213',
-      substitute_for_name: null,
-      product_substitute_reason: '',
-      farm_substitue_reason: '',
-      price_substitute_reason: '',
-      product_missing_reason: '',
-      price_unit: '1 Ct',
-      quantity: 16,
-      shop_price: 300,
-      estimated_total: 200,
-      estimated_price: 100,
-      warehouse_placement: null,
-      unit_type: 'bunch'
-    },
-    {
-      _id: 2,
-      product_id: 'prod_456',
-      inventory_id: 'invetory_567',
-      location: 'test location 2',
-      organic: true,
-      local: false,
-      product_name: 'Awesome product 2',
-      product_shop: 'test shop',
-      product_producer: 'Farm A',
-      product_price: 345,
-      shop_price: 100,
-      completed: false,
-      box_number: 'XYZ213',
-      substitute_for_name: null,
-      product_substitute_reason: '',
-      farm_substitue_reason: '',
-      price_substitute_reason: '',
-      product_missing_reason: '',
-      price_unit: '1 Ct',
-      quantity: 9,
-      estimated_price: 200,
-      warehouse_placement: 'Somewhere else'
-    }
-  ]*/
   shopitemsFarms = []
 
   routes = []
@@ -123,9 +72,9 @@ class AdminStore {
     this.routes = res.data
   }
 
-  async getRouteOrders(id, options) {
-    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/orders`, options)
-    this.orders = res.data
+  async getRouteOrders(id, timeframe, options) {
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ''}`, options)
+    this.orders = res.data[0]
   }
 
   async updateRoutePlacement(id, data, options) {
