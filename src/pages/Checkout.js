@@ -42,6 +42,7 @@ class Checkout extends Component {
       tippingpopup: false,
       tipReadOnly: true,
       tipApplyEdited: false,
+      freezedTipAmount: null,
 
       selectedAddress: null,
       selectedPayment: null,
@@ -392,30 +393,36 @@ class Checkout extends Component {
     this.setState({
       appliedTipAmount: (tipAmount / 100).toFixed(2),
       tipReadOnly: true,
-      appliedTipAmountChanged: clickedByUser
+      appliedTipAmountChanged: clickedByUser,
+      freezedTipAmount: null,
     })
   }
 
   handleTipCustomAmounClick = () => {
-    this.setState({ tipReadOnly: false })
+    this.setState({
+      tipReadOnly: false,
+      freezedTipAmount: this.state.appliedTipAmount,
+    })
   }
 
   updateTotal() {
     const order = this.checkoutStore.order
+    const customTip = this.state.freezedTipAmount || this.state.appliedTipAmount
     let total = (order.total / 100)
     
     if (!order.tip_amount || this.state.appliedTipAmountChanged) {
       const currentTipAmount = order.tip_amount || 0 
-      total = ((order.total - currentTipAmount) / 100) + parseFloat(this.state.appliedTipAmount)
+      total = ((order.total - currentTipAmount) / 100) + parseFloat(customTip)
     }
     return total
   }
 
   updateTipAmount() {
     const order = this.checkoutStore.order
+    const customTip = this.state.freezedTipAmount || this.state.appliedTipAmount
     const tipAmount = (order.tip_amount && !this.state.appliedTipAmountChanged)
       ? formatMoney(order.tip_amount/100)
-      : formatMoney(this.state.appliedTipAmount)
+      : formatMoney(customTip)
     
     return tipAmount
   }
