@@ -44,7 +44,7 @@ class SingleProductView extends Component {
       subProductName: props.product.substitute_for_name,
       finalQuantity: props.product.final_quantity,
       totalPaid: props.product.total_paid,
-      weight:  props.product.weight,
+      weight: props.product.weight,
       missingReason: props.product.product_missing_reason || "Out of season"
     }
     this.userStore = this.props.store.user
@@ -72,13 +72,13 @@ class SingleProductView extends Component {
             other: props.shopitemsFarms
           }),
           isEdit: false,
-          missing:  props.product.missing,
+          missing: props.product.missing,
           substitute: props.product.substitute,
           completed: Boolean(props.product.completed),
           subProductName: props.product.substitute_for_name,
           finalQuantity: props.product.final_quantity,
           totalPaid: props.product.total_paid,
-          weight:  props.product.weight,
+          weight: props.product.weight,
           missingReason: props.product.product_missing_reason || "Out of season"
         }
       )
@@ -259,7 +259,8 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <InputGroup>
-                    <Input value={product.estimated_total ? product.estimated_total / 100 : ''} disabled={true} type={"number"}/>
+                    <Input value={product.estimated_total ? product.estimated_total / 100 : ''} disabled={true}
+                           type={"number"}/>
                     <InputGroupAddon addonType="append">
                       <InputGroupText>$</InputGroupText>
                     </InputGroupAddon>
@@ -275,7 +276,7 @@ class SingleProductView extends Component {
                 <Col sm={4}>
                   <Input type="select" name="substitute" value={substitute}
                          onChange={e => this.setState({substitute: e.target.value === "true"})}
-                         disabled={completed ? !isEdit : !isEdit}>
+                         disabled={completed === false ? false : completed ? !isEdit : !isEdit}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                   </Input>
@@ -286,7 +287,7 @@ class SingleProductView extends Component {
                 <Col sm={4}>
                   <Input type="select" name="missing" value={missing}
                          onChange={e => this.setState({missing: e.target.value === "true"})}
-                         disabled={completed ? !isEdit : !isEdit}>
+                         disabled={completed === false ? false : completed ? !isEdit : !isEdit}>
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </Input>
@@ -313,7 +314,7 @@ class SingleProductView extends Component {
                 <Col sm={10}>
                   <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}
                                type={"number"}
-                               disabled={!isEdit}
+                               disabled={completed === false ? false : !isEdit}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
@@ -326,7 +327,7 @@ class SingleProductView extends Component {
                 <Col sm={10}>
                   <FormControl placeholder="Enter Total" name="totalPaid" value={totalPaid}
                                type={"number"}
-                               disabled={!isEdit}
+                               disabled={completed === false ? false : !isEdit}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
@@ -367,7 +368,7 @@ class SingleProductView extends Component {
                 Previous
               </Button>
               <Button variant="contained" color="primary" size={"large"} type={"submit"}>
-                {completed ? isEdit ? 'Submit' : 'Edit' : isEdit ? 'Submit' : 'Edit'}
+                {completed === false ? 'Submit' : completed ? isEdit ? 'Submit' : 'Edit' : isEdit ? 'Submit' : 'Edit'}
               </Button>
               <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}
                       disabled={this.props.nextDisabled}>
