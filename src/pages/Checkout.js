@@ -230,7 +230,9 @@ class Checkout extends Component {
 
   handleEdit(id, quantity) {
     this.productStore.showModal(id, quantity, this.userStore.getDeliveryParams())
-    this.modalStore.toggleModal('product')
+      .then(() => {
+        this.modalStore.toggleModal('product')
+      })
   }
 
   handleDelete(data) {
