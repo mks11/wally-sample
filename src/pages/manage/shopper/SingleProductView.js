@@ -39,11 +39,11 @@ class SingleProductView extends Component {
       missing: false,
       substitute: false,
       completed: Boolean(props.product.completed),
-      subProductName: '',
-      finalQuantity: '',
-      totalPaid: '',
-      weight: '',
-      missingReason: "Out of season"
+      subProductName: props.product.substitute_for_name,
+      finalQuantity: props.product.final_quantity,
+      totalPaid: props.product.total_paid,
+      weight:  props.product.weight,
+      missingReason: props.product.product_missing_reason || "Out of season"
     }
     this.userStore = this.props.store.user
     this.adminStore = this.props.store.admin
@@ -68,13 +68,14 @@ class SingleProductView extends Component {
             other: props.shopitemsFarms
           }),
           isEdit: false,
-          missing: false,
-          substitute: false,
+          missing:  props.product.missing,
+          substitute: props.product.substitute,
           completed: Boolean(props.product.completed),
-          subProductName: '',
-          finalQuantity: '',
-          totalPaid: '',
-          weight: ''
+          subProductName: props.product.substitute_for_name,
+          finalQuantity: props.product.final_quantity,
+          totalPaid: props.product.total_paid,
+          weight:  props.product.weight,
+          missingReason: props.product.product_missing_reason || "Out of season"
         }
       )
     }
@@ -130,13 +131,13 @@ class SingleProductView extends Component {
     const initial = product_producer
     const restFarms = (other) || []
     return [...new Set([initial, ...restFarms])].map(item => {
-      console.log(item)
       return {id: item, title: item, label: item, value: item}
     })
   }
 
   render() {
     const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
+    console.log(product);
     return (
       <section className="page-section pt-1 single-product">
         <Container>
