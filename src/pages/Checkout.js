@@ -38,8 +38,10 @@ class Checkout extends Component {
       appliedPromoCode: '',
 
       appliedTipAmount: 0,
+      appliedTipAmountChanged: false,
       tippingpopup: false,
       tipReadOnly: true,
+      tipApplyEdited: false,
 
       selectedAddress: null,
       selectedPayment: null,
@@ -323,7 +325,18 @@ class Checkout extends Component {
   }
 
   handleAddTip = () => {
-    this.updateData()
+    if (!this.state.tipApplyEdited) {
+      this.setState({ tipApplyEdited: true })
+      this.updateData()
+    }
+  }
+
+  handleChangeTip = e => {
+    this.setState({
+      tipApplyEdited: false,
+      appliedTipAmount: e.target.value,
+      invalidText: '',
+    })
   }
 
   handleAddPayment = (data) => {
@@ -373,17 +386,38 @@ class Checkout extends Component {
     this.setState({confirmHome: !this.state.confirmHome})
   }
 
-  handleTipAmountChange = value => {
+  handleTipAmountChange = (value, clickedByUser) => {
     const order = this.checkoutStore.order
     const tipAmount = (value / 100) * order.subtotal
     this.setState({
       appliedTipAmount: (tipAmount / 100).toFixed(2),
       tipReadOnly: true,
+      appliedTipAmountChanged: clickedByUser
     })
   }
 
   handleTipCustomAmounClick = () => {
     this.setState({ tipReadOnly: false })
+  }
+
+  updateTotal() {
+    const order = this.checkoutStore.order
+    let total = (order.total / 100)
+    
+    if (!order.tip_amount || this.state.appliedTipAmountChanged) {
+      const currentTipAmount = order.tip_amount || 0 
+      total = ((order.total - currentTipAmount) / 100) + parseFloat(this.state.appliedTipAmount)
+    }
+    return total
+  }
+
+  updateTipAmount() {
+    const order = this.checkoutStore.order
+    const tipAmount = (order.tip_amount && !this.state.appliedTipAmountChanged)
+      ? formatMoney(order.tip_amount/100)
+      : formatMoney(this.state.appliedTipAmount)
+    
+    return tipAmount
   }
 
   render() {
@@ -402,7 +436,7 @@ class Checkout extends Component {
 
     const cart_items = order && order.cart_items ? order.cart_items : []
 
-    const orderTotal = order.tip_amount ? (order.total / 100) : ((order.total / 100) + parseFloat(this.state.appliedTipAmount))
+    const orderTotal = this.updateTotal()
 
     return (
       <div className="App">
@@ -526,7 +560,7 @@ class Checkout extends Component {
                         </div></div>
                       </ClickOutside>
                       <span onClick={this.showTippingPopup}>Tip Amount  <FontAwesome name='info-circle' /></span>
-                      <span>{order.tip_amount ? formatMoney(order.tip_amount/100) : formatMoney(this.state.appliedTipAmount)}</span>
+                      <span>{this.updateTipAmount()}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
@@ -572,7 +606,7 @@ class Checkout extends Component {
                                             placeholder="Enter promocode here"
                                             onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
 
-                                          <button onClick={this.handleCheckPromo} type="button" className="btn btn-transparent">APPLY</button>
+                                          <button onClick={this.handleCheckPromo} type="button" className="btn btn-transparent purple-apply-btn">APPLY</button>
                                         </div>
                                       </div>
                                       :null
@@ -593,11 +627,15 @@ class Checkout extends Component {
                                           prefix="$"
                                           className={`aw-input--control aw-input--left aw-input--bordered form-control ${!this.state.tipReadOnly ? 'focus-input' : ''}`}
                                           value={this.state.appliedTipAmount}
-                                          onChangeEvent={(e) => this.setState({ invalidText: '', appliedTipAmount: e.target.value })}
+                                          onChangeEvent={this.handleChangeTip}
                                         />
                                         {
                                           !this.state.tipReadOnly
-                                            ? <button onClick={this.handleAddTip} type="button" className="btn btn-transparent tip-apply">APPLY</button>
+                                            ? <button
+                                                onClick={this.handleAddTip}
+                                                type="button"
+                                                className={`btn btn-transparent purple-apply-btn ${this.state.tipApplyEdited ? 'grey-btn' : ''}`}
+                                              >APPLY</button>
                                             : null
                                         }
                                       </div>

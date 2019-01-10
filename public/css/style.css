@@ -2428,6 +2428,9 @@ color:#6e8692
 .checkout-tips {
   padding: 10px 0;
 }
-.tip-apply {
+.purple-apply-btn {
   color: #6060a8;
+}
+.purple-apply-btn.grey-btn {
+  color: #888;
 }

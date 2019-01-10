@@ -60,7 +60,7 @@ class FeedbackModal extends Component {
       feedbackMsg,
     } = this.state
 
-    if (feedbackValue && feedbackEmail && feedbackOrder) {
+    if (feedbackValue !== null && feedbackEmail && feedbackOrder) {
       const feedback = {
         feedback: feedbackValue,
         email: feedbackEmail,
