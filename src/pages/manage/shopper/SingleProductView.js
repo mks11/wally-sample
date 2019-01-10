@@ -21,7 +21,9 @@ import Select from 'react-select'
 class SingleProductView extends Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
+      id: props.product._id,
       product: props.product,
       producer: {
         label: props.product.product_producer,
@@ -52,8 +54,10 @@ class SingleProductView extends Component {
   componentDidUpdate(prevProps) {
     if ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) {
       const {props} = this
+      console.log(props)
       this.setState(
         {
+          id: props.product._id,
           product: props.product,
           producer: {
             label: props.product.product_producer,
@@ -88,13 +92,14 @@ class SingleProductView extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const {isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason} = this.state
+    const {id, isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
     const data = {
+      id,
       product_id: product.product_id,
       inventory_id: product.inventory_id,
       product_producer: producer.value,
       product_location: producer.value,
-      product_name: product.product_name,
+      product_name: substitute ? subProductName : product.product_name,
       missing,
       local,
       completed,
@@ -110,7 +115,7 @@ class SingleProductView extends Component {
     }
     if (!completed) {
       if (isEdit) {
-        this.adminStore.updateShopItem(this.props.timeframe, product.product_id, data)
+        this.adminStore.updateShopItem(this.props.timeframe, id, data)
         this.setState({isEdit: false})
         if (substitute) this.setState({subProductName: product.product_name})
       } else {
@@ -118,7 +123,7 @@ class SingleProductView extends Component {
       }
     } else {
       if (isEdit) {
-        this.adminStore.updateShopItem(this.props.timeframe, product.product_id, data)
+        this.adminStore.updateShopItem(this.props.timeframe, id, data)
         this.setState({isEdit: false})
       } else {
         this.setState({isEdit: true})
