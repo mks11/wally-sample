@@ -238,7 +238,7 @@ class Homepage extends Component {
         <section className="homepage-info-section">
           <Row>
             <Col sm={6} className="order-2 order-sm-1">
-              <div className="text-info-section float-right force-black">
+              <div className="text-info-section float-right">
                 <h2>We’re the 21st century milk man</h2>
                 <p>With each order, The Wally Shop lends you our reusable packaging in exchange for a deposit fee, which you can easily return to a courier upon any future delivery. We’ll wash  and reuse all the returned packaging, and you’ll get your deposit fee back as store credit - so you can save money and the planet at the same time.</p>
               </div>
@@ -261,7 +261,20 @@ class Homepage extends Component {
             </Col>
           </Row>
         </section>
-        <section className="welcome-section dark-blue">
+        <section className="homepage-info-section third-bg">
+          <Row>
+            <Col sm={6} className="order-2 order-sm-1">
+              <div className="text-info-section float-right">
+                <h2>We’re the 21st century milk man</h2>
+                <p>With each order, The Wally Shop lends you our reusable packaging in exchange for a deposit fee, which you can easily return to a courier upon any future delivery. We’ll wash  and reuse all the returned packaging, and you’ll get your deposit fee back as store credit - so you can save money and the planet at the same time.</p>
+              </div>
+            </Col>
+            <Col sm={6} className="order-1 order-sm-2">
+              <div className="bg-info-section bg-info-section-1"></div>
+            </Col>
+          </Row>
+        </section>
+        <section className="welcome-section">
           <Container>
             <Row>
               <Col sm={{ size: 5, offset: 1 }}>

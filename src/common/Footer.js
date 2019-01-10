@@ -38,7 +38,7 @@ class Footer extends Component {
   }
   render() {
     return (
-      <footer className="aw-footer bg-darkblue">
+      <footer className="aw-footer bg-beige">
         <div className="container">
           <div className="row">
             <div className="col-auto col-sm-2">
@@ -97,7 +97,7 @@ class Footer extends Component {
           </div>
         </div>
         <div className="container">
-          <div className="footer-bottom">
+          <div className="footer-bottom bg-beige">
             <div className="container">
               <form className="form-inline" style={{position: 'relative'}}>
                 <label htmlFor="subscribe-email">Subscribe to our newsletter</label>
