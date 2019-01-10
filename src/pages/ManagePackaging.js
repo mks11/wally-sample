@@ -90,7 +90,15 @@ class ManagePackaging extends Component {
     const {timeframes, packagings} = this.adminStore
     const {singleOrderOpen} = this.state
     const {orders} = this.adminStore
-
+    const renderStatus = (status) => {
+      if (status === "completed") {
+        return 'Completed'
+      } else if (status === "payment_issue") {
+        return 'Payment Issue'
+      } else {
+        return 'Paid'
+      }
+    }
     return (
       <div className="App">
         <ManageTabs page="fulfillment"/>
@@ -133,7 +141,7 @@ class ManagePackaging extends Component {
                             onClick={() => this.toggleSingleOrderView({order})}
                           >
                             <TableCell>{order._id}</TableCell>
-                            <TableCell className={"text-capitalize"}>{order.status}</TableCell>
+                            <TableCell className={"text-capitalize"}>{renderStatus(order.status)}</TableCell>
                           </TableRow>
                         }
                       )}

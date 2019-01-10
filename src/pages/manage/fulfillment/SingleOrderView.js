@@ -1,10 +1,21 @@
 import React, {Component} from 'react';
 import {connect} from '../../../utils'
-import {Container, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label} from "reactstrap"
+import {
+  Container,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Label,
+  Modal, ModalBody,
+  ModalHeader,
+  ModalFooter
+} from "reactstrap"
 import {
   Col,
   Row,
-  ControlLabel, FormControl
+  ControlLabel, FormControl, Form
 } from "react-bootstrap";
 import Button from '@material-ui/core/Button/Button'
 import CloseIcon from '@material-ui/icons/Close';
@@ -26,8 +37,12 @@ class SingleOrderView extends Component {
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
-      packagings: props.packagings.map(packaging => {return {...packaging, quantity: 0}})
+      packagings: props.packagings.map(packaging => {
+        return {...packaging, quantity: 0}
+      }),
+      confirmModalOpen: false
     }
+    this.adminStore = this.props.store.admin
   }
 
   saveCartRow = (cart_item, index) => {
@@ -39,14 +54,45 @@ class SingleOrderView extends Component {
         return item
       }
     })
-    /*    cart_items[index] = cart_item
-        this.setState({cart_items})*/
+  }
+
+  onChangePackaging = (e, i) => {
+    const packagings = [...this.state.packagings]
+    packagings[i] = {...packagings[i], quantity: e.target.value}
+    this.setState({packagings})
+  }
+
+  toggleConfirmModal = () => {
+    this.setState({confirmModalOpen: !this.state.confirmModalOpen})
+  }
+
+  handleSubmit = () => {
+    const {packagings, cart_items, selectedOrder} = this.state
+    const item_quantities = cart_items.map(item => {
+      return {
+        product_id: item.product_id,
+        quantity: item.missing ? 0 : Number(item.customer_quantity)
+      }
+    })
+
+    const newPackagings = packagings.map(packaging => {
+      return {
+        type: packaging.type,
+        quantity: Number(packaging.quantity)
+      }
+    })
+    const payload = {
+      item_quantities,
+      packagings: newPackagings
+    }
+    this.adminStore.packageOrder(selectedOrder._id, payload)
+    this.props.toggle({})
   }
 
   render() {
     const {cart_items, selectedOrder, packagings} = this.state
     return (
-      <section className="page-section pt-1 single-product">
+      <section className="page-section pt-1 single-order">
         <Container>
           <div className="mb-3">
             <Button variant="contained" color="default" onClick={this.props.toggle}>
@@ -94,15 +140,38 @@ class SingleOrderView extends Component {
           <Table className={"packaging-table"}>
             <TableBody>
               {packagings.map((packaging, i) =>
-                <TableRow>
-                  <TableCell><strong>{packaging.type}</strong></TableCell>
-                  <TableCell> <FormControl placeholder="Enter Quantity" value={packaging.quantity}/></TableCell>
+                <TableRow key={i}>
+                  <TableCell>
+                    <strong>{packaging.type}</strong>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl placeholder="Enter Quantity" value={packaging.quantity}
+                                 type={"number"}
+                                 onChange={(e) => this.onChangePackaging(e, i)}/>
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
-
+          <div className="nav-buttons">
+            <Button variant="contained" color="primary" size={"large"} type={"button"}
+                    onClick={this.toggleConfirmModal}>
+              Package Order
+            </Button>
+          </div>
         </Container>
+        <Modal isOpen={this.state.confirmModalOpen} toggle={this.toggleConfirmModal} className="single-order-modal">
+          <ModalHeader toggle={this.toggleConfirmModal}>Confirm Packaging</ModalHeader>
+          <ModalBody>
+            Please check and confirm the packaging
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="contained" color="primary" size={"large"} type={"button"}
+                    onClick={this.handleSubmit}>
+              Confirm
+            </Button>
+          </ModalFooter>
+        </Modal>
       </section>
     );
   }

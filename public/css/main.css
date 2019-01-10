@@ -1248,3 +1248,17 @@ body {
 .single-order-total {
   margin: 20px auto;
 }
+
+.single-order .nav-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 30px auto;
+}
+
+.single-order-modal .modal-footer {
+  justify-content: flex-end !important;
+}
+
+.single-order-modal .modal-body {
+  font-size: 16px;
+}
