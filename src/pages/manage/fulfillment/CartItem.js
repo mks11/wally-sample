@@ -39,6 +39,12 @@ class CartItem extends Component {
     this.setState({cart_item})
   }
 
+  onSelect = (e) => {
+    const {cart_item} = this.state
+    cart_item[e.target.name] = e.target.value === "true"
+    this.setState({cart_item})
+  }
+
   render() {
     const {isEdit, cart_item} = this.state
     return (
@@ -56,7 +62,7 @@ class CartItem extends Component {
                            name="missing"
                            value={cart_item.missing}
                            disabled={!isEdit}
-                           onChange={this.onInputChange}
+                           onChange={this.onSelect}
         >
           <option value={true}>True</option>
           <option value={false}>False</option>
