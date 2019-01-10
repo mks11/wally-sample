@@ -146,9 +146,11 @@ class Checkout extends Component {
     const deliveryData = this.userStore.getDeliveryParams()
     const tip = this.parseAppliedTip()
     this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
-      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
+      this.setState({
+        applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
+        appliedTipAmount: this.checkoutStore.order.tip_amount / 100,
       })
     })
   }
@@ -329,7 +331,10 @@ class Checkout extends Component {
 
   handleAddTip = () => {
     if (!this.state.tipApplyEdited) {
-      this.setState({ tipApplyEdited: true })
+      this.setState({
+        tipApplyEdited: true,
+        freezedTipAmount: null,
+      })
       this.updateData()
     }
   }
@@ -423,7 +428,7 @@ class Checkout extends Component {
     const order = this.checkoutStore.order
     const customTip = this.state.freezedTipAmount || this.state.appliedTipAmount
     const tipAmount = (order.tip_amount && !this.state.appliedTipAmountChanged)
-      ? formatMoney(order.tip_amount/100)
+      ? formatMoney(order.tip_amount / 100)
       : formatMoney(customTip)
     
     return tipAmount
