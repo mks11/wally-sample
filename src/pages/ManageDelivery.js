@@ -120,6 +120,7 @@ class ManageDelivery extends Component {
           <section className="page-section pt-1 delivery-page">
             <Container>
               <h2>Orders</h2>
+              <hr className={"line"}/>
               <Table className={"delivery-table"}>
                 <TableBody>
                   {orders && orders.map((order, i) => {
@@ -157,7 +158,7 @@ class ManageDelivery extends Component {
             </Container>
           </section>
         </React.Fragment> : null}
-        {selectedOrder ? <OrderDetailView orderId={selectedOrder} toggle={() => this.toggleOrder()} onSubmit={this.onOrderSubmit}/> : null}
+        {selectedOrder ? <OrderDetailView orderId={selectedOrder} toggle={() => this.toggleOrder()}/> : null}
       </div>
     );
   }

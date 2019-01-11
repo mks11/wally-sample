@@ -1277,10 +1277,20 @@ body {
   margin: 30px auto;
 }
 
-.single-order-modal .modal-footer {
+.single-order-modal .modal-footer, .missing-modal .modal-footer {
   justify-content: flex-end !important;
 }
 
-.single-order-modal .modal-body {
+.single-order-modal .modal-footer, .missing-modal .modal-footer {
   font-size: 16px;
+    max-height: unset;
 }
+
+ .missing-modal .modal-body {
+     max-height: unset;
+     overflow: unset;
+ }
+ .missing-modal .modal-body p {
+     font-size: 16px;
+     margin-top: 10px;
+ }

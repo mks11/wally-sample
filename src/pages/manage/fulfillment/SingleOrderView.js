@@ -85,7 +85,9 @@ class SingleOrderView extends Component {
       item_quantities,
       packagings: newPackagings
     }
-    this.adminStore.packageOrder(selectedOrder._id, payload)
+    const options = this.userStore.getHeaderAuth()
+
+    this.adminStore.packageOrder(selectedOrder._id, payload, options)
     this.props.toggle({})
   }
 

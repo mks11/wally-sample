@@ -93,13 +93,13 @@ class AdminStore {
     this.packagings = res.data
   }
 
-  async packageOrder(id, data) {
-    const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data) // API_CREATE_ORDER
+  async packageOrder(id, data, options) {
+    const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data, options) // API_CREATE_ORDER
     this.updateOrderItem(id, res.data)
   }
 
-  async completeOrder(id, data) {
-    const res = await axios.patch(`${API_ADMIN_COMPLETE_ORDER}/${id}/complete`, data) // API_CREATE_ORDER
+  async completeOrder(id, data, options) {
+    const res = await axios.patch(`${API_ADMIN_COMPLETE_ORDER}/${id}/complete`, data, options) // API_CREATE_ORDER
     this.updateOrderItem(id, res.data)
   }
 
