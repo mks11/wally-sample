@@ -68,6 +68,7 @@ class AdminStore {
   }
 
   async getRoutes(timeframe, options) {
+    this.routes = []
     const res = await axios.get(`${API_ADMIN_GET_ROUTES}?timeframe=${timeframe}`, options)
     this.routes = res.data
   }

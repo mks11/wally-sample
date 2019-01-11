@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Row,
   Col,
@@ -11,13 +11,20 @@ import ManageTabs from './manage/ManageTabs'
 import CustomDropdown from '../common/CustomDropdown'
 import OrderDetailView from './manage/delivery/OrderDetailView'
 
-import { connect } from '../utils'
+import {connect} from '../utils'
+import Paper from "@material-ui/core/Paper/Paper";
+import TableHead from "@material-ui/core/TableHead/TableHead";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableFooter from "@material-ui/core/TableFooter/TableFooter";
 
 class ManageDelivery extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedOrder: null
+      selectedOrder: null,
+      singleOrderOpen: false
     }
 
     this.userStore = this.props.store.user
@@ -40,7 +47,7 @@ class ManageDelivery extends Component {
   }
 
   loadData() {
-    const date = + new Date()
+    const date = +new Date()
     this.adminStore.getTimeFrames(date)
   }
 
@@ -54,59 +61,70 @@ class ManageDelivery extends Component {
     this.adminStore.getRouteOrders(routeId, options)
   }
 
-  openOrder = (e) => {
-    const routeId = e.target.getAttribute('order-id')
-    this.setState({
-      selectedOrder: routeId,
-      selectedRoute: null,
-    })
+  toggleOrder = (routeId) => {
+    if (routeId) {
+      this.setState({
+        selectedOrder: routeId,
+        selectedRoute: null,
+        singleOrderOpen: true
+      })
+    } else {
+      this.setState({
+        selectedOrder: null,
+        selectedRoute: null,
+        singleOrderOpen: false
+      })
+    }
   }
 
   render() {
     if (!this.userStore.user) return null
 
-    const { timeframes, routes, orders } = this.adminStore
-    const { selectedOrder } = this.state
-      
+    const {timeframes, routes, orders} = this.adminStore
+    const {selectedOrder, singleOrderOpen} = this.state
+
     return (
       <div className="App">
-        <ManageTabs page="delivery" />
-        <Title content="Delivery Portal" />
+        <ManageTabs page="delivery"/>
+        <Title content={singleOrderOpen ? 'Single Order View' : "Delivery Portal"}/>
+        {!singleOrderOpen ? <React.Fragment>
+          <section className="page-section pt-1 delivery-page">
+            <Container>
+              <Row>
+                <Col md="6" sm="12">
+                  <div className="mb-3">
+                    <div className="mb-2 font-weight-bold">Time Frame:</div>
+                    <CustomDropdown
+                      values={timeframes.map(item => {
+                        return {id: item, title: item}
+                      })}
+                      onItemClick={this.loadRoutes}
+                    />
+                  </div>
+                </Col>
+                <Col md="6" sm="12">
+                  <div className="mb-3">
+                    <div className="mb-2 font-weight-bold">Delivery Route:</div>
+                    <CustomDropdown
+                      values={routes.map(item => {
+                        return {id: item._id, title: item.route_number}
+                      })}
+                      onItemClick={this.loadOrders}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+          </section>
 
-        <section className="page-section pt-1 delivery-page">
-          <Container>
-            <Row>
-              <Col md="6" sm="12">
-                <div className="mb-3">
-                  <div className="mb-2 font-weight-bold">Time Frame:</div>
-                  <CustomDropdown
-                    values={timeframes.map(item => { return { id: item, title: item }})}
-                    onItemClick={this.loadRoutes}
-                  />
-                </div>
-              </Col>
-              <Col md="6" sm="12">
-                <div className="mb-3">
-                  <div className="mb-2 font-weight-bold">Delivery Route:</div>
-                  <CustomDropdown
-                    values={routes.map(item => { return { id: item._id, title: item.route_number }})}
-                    onItemClick={this.loadOrders}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-
-        <section className="page-section pt-1 delivery-page">
-          <Container>
-            <h2>Orders</h2>
-            <Table responsive>
-              <tbody>
-                {
-                  orders && orders.map(item => {
+          <section className="page-section pt-1 delivery-page">
+            <Container>
+              <h2>Orders</h2>
+              <Table className={"delivery-table"}>
+                <TableBody>
+                  {orders && orders.map((order, i) => {
                     let status = ''
-                    switch(item.status) {
+                    switch (order.status) {
                       case 'paid':
                         status = 'Incomplete'
                         break
@@ -119,31 +137,27 @@ class ManageDelivery extends Component {
                       default:
                         break
                     }
-
                     return (
-                      <tr key={item._id}>
-                        <td>Order #{item._id}</td>
-                        <td>{item.street_address}</td>
-                        <td>{status}</td>
-                        <td>
-                          <Button
-                            color="primary"
-                            order-id={item._id}
-                            onClick={this.openOrder}
-                          >
-                            View Details
-                          </Button>
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </Table>
-          </Container>
-        </section>
-
-        { selectedOrder ? <OrderDetailView orderId={selectedOrder} onSubmit={this.onOrderSubmit} /> : null}
+                      <TableRow
+                        className={`row ${status}`}
+                        key={order._id}
+                        onClick={() => this.toggleOrder(order._id)}
+                      >
+                        <TableCell>{order._id}</TableCell>
+                        <TableCell>{order.street_address}</TableCell>
+                        <TableCell>{order.user_name}</TableCell>
+                        <TableCell>{order.telephone}</TableCell>
+                        <TableCell>NEW USER - TODO</TableCell>
+                        <TableCell>{status}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Container>
+          </section>
+        </React.Fragment> : null}
+        {selectedOrder ? <OrderDetailView orderId={selectedOrder} toggle={() => this.toggleOrder()} onSubmit={this.onOrderSubmit}/> : null}
       </div>
     );
   }

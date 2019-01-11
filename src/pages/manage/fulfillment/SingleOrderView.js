@@ -94,7 +94,7 @@ class SingleOrderView extends Component {
     return (
       <section className="page-section pt-1 single-order">
         <Container>
-          <div className="mb-3">
+          <div className="mb-4">
             <Button variant="contained" color="default" onClick={this.props.toggle}>
               <CloseIcon/>
               <Typography>Close</Typography>
