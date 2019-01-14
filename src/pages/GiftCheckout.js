@@ -43,7 +43,7 @@ class GiftCheckout extends Component {
   }
 
   handleGiftcardRedirect() {
-    const queryParams = qs.parse(this.props.location.search)
+    const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
     const { giftcard } = queryParams
 
     if (giftcard) {
