@@ -95,6 +95,16 @@ class Help extends Component {
     return items.join(', ')
   }
 
+  printPackaging(data) {
+    let items = []
+    if (!data) return items
+
+    for (const d of data) {
+      items.push(d.type)
+    }
+    return items.join(', ')
+  }
+
   goToTopics(id, name) {
     this.helpStore.activeTopics = name
     this.routing.push('/help/topics/'+id)
@@ -177,7 +187,7 @@ class Help extends Component {
                                 <React.Fragment key={key}>
                                   <thead>
                                     <tr>
-                                      <th scope="col" style={{width: '110px'}}>Order Placed</th>
+                                      <th scope="col" style={{width: '110px'}}>{item.cart_items ? "Order Placed" : "Packaging Returned"}</th>
                                       <th scope="col">Items</th>
                                       <th scope="col" style={{width: '80px'}}>Total</th>
                                       <th />
@@ -186,8 +196,8 @@ class Help extends Component {
                                   <tbody>
                                     <tr>
                                       <td>{item.delivery_time ? moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
-                                      <td>{this.printItems(item.cart_items)}</td>
-                                      <td>{this.countItems(item.cart_items)}</td>
+                                      <td>{item.cart_items ? this.printItems(item.cart_items) : this.printPackaging(item.returns)}</td>
+                                      <td>{item.total ? (formatMoney(item.total/100) : "$0.00") : (formatMoney(item.total_credit/100) : "$0.00")}</td>
                                       <td>
                                         <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
                                           Help

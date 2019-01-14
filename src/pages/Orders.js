@@ -53,6 +53,15 @@ class Orders extends Component {
     return items.join(', ')
   }
 
+  printPackaging(data) {
+    console.log(data)
+    let items = []
+    for (const d of data) {
+      items.push(d.type)
+    }
+    return items.join(', ')
+  }
+
   render() {
     return (
       <div className="App">
@@ -64,22 +73,22 @@ class Orders extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th className="pr-4">Order Placed</th>
+                    <th className="pr-4">{item.cart_items ? "Order Placed" : "Packaging Returned"}</th>
                     <th className="pr-4">Items</th>
                     <th className="pr-4">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    {item.delivery_time && (<td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>)}
-                    {item.cart_items && (<td>{item.cart_items.length}</td>)}
-                    {item.total && (<td>{formatMoney(item.total/100)}</td>)}
+                    {item.delivery_time ? (<td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>) : (<td>{moment(item.return_date.substring(0,10)).format('MMM DD, YYYY')}</td>)}
+                    {item.cart_items ? (<td>{item.cart_items.length}</td>) : (<td>{item.returns.length}</td>)}
+                    {item.total ? (<td>{item.total ? formatMoney(item.total/100) : "$0.00"}</td>) : (<td>{item.total_credit ? formatMoney(item.total_credit/100) : "$0.00"}</td>)}
                   </tr>
                 </tbody>
               </table>
               <hr className="my-1"/>
               <span className="text-bold">Order #: {item._id}</span><br/>
-              {item.cart_items && (<span>{this.printItems(item.cart_items)}</span>)}
+              {item.cart_items ? (<span>{this.printItems(item.cart_items)}</span>) : (<span>{this.printPackaging(item.returns)}</span>)}
               <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
             </div>
             ))}
