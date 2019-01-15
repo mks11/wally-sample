@@ -280,7 +280,7 @@ class Mainpage extends Component {
 
     let categoryTypeMode = 'all'
 
-    if (!this.id || this.id.length <= 3) {
+    if (!this.id) {
       categoryTypeMode = 'limit'
     }
 
