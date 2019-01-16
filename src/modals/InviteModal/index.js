@@ -39,7 +39,7 @@ class InviteModal extends Component {
       <div className="login-wrap">
         <h3 className="m-0 mb-2">Who wants brownie points?</h3>
         <span className="mb-5">
-          Share the link below to give your friends free delivery their first month. 
+          <small>Share the link below to give your friends free delivery their first month.</small>
         </span>
         <div className="referral-wrap p-2">
           <input

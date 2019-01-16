@@ -64,7 +64,6 @@ class RootModal extends Component {
       <Modal
         autoFocus={false}
         isOpen={isOpen}
-        contentClassName="modal-bg-pinneapple-bottom"
         centered
         size={isLarge ? 'lg' : ''}
       >

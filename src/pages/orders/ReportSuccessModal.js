@@ -6,7 +6,7 @@ class ReportSuccessModal extends Component {
    render() {
     const orderStore = this.props.store.order
     return (
-      <Modal isOpen={orderStore.reportSuccessModal} contentClassName="modal-bg-pinneapple-bottom">
+      <Modal isOpen={orderStore.reportSuccessModal}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => orderStore.toggleReportSuccess(e)}></button>

@@ -11,7 +11,7 @@ class PromoSuccessModal extends Component {
 
   render() {
     return (
-      <Modal isOpen={this.userStore.promoSuccessModal} contentClassName="modal-bg-pinneapple-bottom">
+      <Modal isOpen={this.userStore.promoSuccessModal}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => this.userStore.togglePromoSuccessModal()}></button>
