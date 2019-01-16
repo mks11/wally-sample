@@ -113,6 +113,10 @@ border-radius:0;}
   justify-content: space-between;
 }
 
+.top-nav {
+  min-height: 63px;
+}
+
 .aw-nav {
   font-size: 16px;
   font-weight: normal;
