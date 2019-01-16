@@ -1171,15 +1171,6 @@ a.view-all{
 
 }
 
-.modal-bg-pinneapple {
-  background: url('../images/pinneapple.png') no-repeat #fff;
-}
-
-.modal-bg-pinneapple-bottom {
-  background: url('../images/pinneapple_bottom.png') no-repeat #fff;
-  background-position: bottom right;
-}
-
 .referral-wrap {
   border-radius: 6px;
   border: 2px dashed #ececec;
@@ -2046,18 +2037,23 @@ a {
 }
 
 .cart-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   font-weight: 700;
   z-index: 2000;
   position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  left: 0; right: 0;
+  top: 0; bottom: 0;
   background-color: #fff;
   line-height: 1;
   visibility: hidden;
   opacity: 0;
   transition: 0.27s all;
+}
+
+.cart-mobile .btn-close-cart {
+  display: inline-flex;
 }
 
 .cart-mobile.open {
@@ -2098,13 +2094,12 @@ a {
 
 
 .btn.btn-checkout-mobile {
-  position: absolute;
-  bottom:20px;
   width: 90%;
-  margin: 0 5%;
+  margin: 5px auto;
 }
 
 .tbl-cart-mobile {
+  overflow: auto;
   width: 100%;
   padding: 10px 7%;
   border-top: .5px solid #cbcbcb;

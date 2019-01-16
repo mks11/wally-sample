@@ -27,7 +27,7 @@ class DeliveryChangeModal extends Component {
   render() {
     const modalStore = this.props.store.modal
     return (
-      <Modal isOpen={modalStore.deliveryChange} contentClassName="modal-bg-pinneapple-bottom">
+      <Modal isOpen={modalStore.deliveryChange}>
         <div className="modal-header modal-header--sm">
           <div></div>
           <button className="btn-icon btn-icon--close" onClick={e => modalStore.hideDeliveryChange(e)}></button>

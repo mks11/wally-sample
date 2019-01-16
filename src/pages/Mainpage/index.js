@@ -403,9 +403,7 @@ class Mainpage extends Component {
 
                       <div className="product-breadcrumb">
                         <span>
-                          <Link to ={"/main"} className="text-black">
-                            All Categories
-                          </Link>
+                          <Link to ="/main" className="text-black">All Categories</Link>
                         </span>
                         {this.productStore.path.map((p, i) => (
                           <span key={i}>
@@ -437,7 +435,10 @@ class Mainpage extends Component {
                             <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
                             <h3 className="text-italic">"{this.state.searchTerms}"</h3>
                             <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
-                              {this.state.searchFilter.length > 0 ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>: <React.Fragment> in All Categories </React.Fragment>}
+                              {
+                                this.state.searchFilter.length > 0 
+                                  ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>
+                                  : <React.Fragment> in <Link to ="/main">All Categories</Link></React.Fragment>}
                             </span>
                             <hr/>
                           </div>
@@ -466,7 +467,7 @@ class Mainpage extends Component {
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
                   {cartItems.length>0 ?
                       <React.Fragment>
-                        <h2 className="ml-4">Order</h2>
+                        <h2 className="ml-4 mb-2">Order</h2>
                         <div className="tbl-cart-mobile">
                           <table>
                             <tbody>
