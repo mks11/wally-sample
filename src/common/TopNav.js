@@ -82,6 +82,8 @@ class TopNav extends Component {
     if (this.userStore.user) {
       this.modalStore.toggleReferral()
       this.userStore.referFriend()  
+    } else {
+      this.props.store.routing.push('/help/topics/5bd1d5d71ee5e4f1d0b42c27')
     }
     e.preventDefault()
   }
@@ -161,7 +163,7 @@ class TopNav extends Component {
           <div className={topBarClass}>
             <div className="container">
               <div onClick={this.handleReferralModal}>
-                Get 15% off all month when you refer a friend.
+                Get 15% off all month when you refer a friend. Click for details.
               </div>
               <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                 <i className="fa fa-times-circle" aria-hidden="true" ></i>
