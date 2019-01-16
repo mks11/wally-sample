@@ -78,9 +78,11 @@ class TopNav extends Component {
   }
 
   handleReferralModal = (e) => {
-    this.routing.push('/giftcard')
-    // this.modalStore.toggleReferral()
-    // this.userStore.referFriend()
+    // this.routing.push('/giftcard')
+    if (this.userStore.user) {
+      this.modalStore.toggleReferral()
+      this.userStore.referFriend()  
+    }
     e.preventDefault()
   }
 
@@ -159,7 +161,7 @@ class TopNav extends Component {
           <div className={topBarClass}>
             <div className="container">
               <div onClick={this.handleReferralModal}>
-                Happy Planet. Happy Bellies. Get a Wally Shop gift card today.
+                Get 15% off all month when you refer a friend.
               </div>
               <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                 <i className="fa fa-times-circle" aria-hidden="true" ></i>

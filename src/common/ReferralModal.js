@@ -41,7 +41,7 @@ class ReferralModal extends Component {
             <span className="mb-1">
             An organized pantry, a farm fresh apple, and skipping single-use plastics - share these and other little joys when you refer a friend to The Wally Shop, and you’ll both get 15% off your orders for 30 days.
             </span>
-            <p className="mb-5 text-center"><small>Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleToggle}>here</Link></small></p>
+            <p className="mb-5 text-center"><small>Share the link below - Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleToggle}>here</Link></small></p>
             <div className="referral-wrap p-2">
               <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el} readOnly />
               <span className="referral-link">{this.userStore.refUrl}</span>
