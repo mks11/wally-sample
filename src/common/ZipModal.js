@@ -24,7 +24,7 @@ class ZipModal extends Component {
 
     this.modalStore.toggleZip()
     this.zipStore.selectedZip = this.state.zip
-    logEvent({ category: "Signup", action: "SubmitZip", value: this.state.zip, label: "SignupZip" })
+    logEvent({ category: "Signup", action: "SubmitZip", label: this.state.zip })
     if(this.zipStore.validateZipCode(this.state.zip)) {
       this.modalStore.toggleSignup()
     } else {

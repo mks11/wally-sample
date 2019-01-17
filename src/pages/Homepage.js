@@ -68,7 +68,7 @@ class Homepage extends Component {
     this.setState({invalidZip: false})
 
     this.zipStore.selectedZip = this.state.zip
-    logEvent({ category: "Homepage", action: "SubmitZip", value: this.state.zip, label: "SignupZip" })
+    logEvent({ category: "Homepage", action: "SubmitZip", label: this.state.zip })
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
