@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody, Input } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logEvent, logModalView, logPageView } from '../utils'
 
 class ZipModal extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class ZipModal extends Component {
 
     this.modalStore.toggleZip()
     this.zipStore.selectedZip = this.state.zip
+    logEvent({ category: "Signup", action: "SubmitZip", value: this.state.zip, label: "SignupZip" })
     if(this.zipStore.validateZipCode(this.state.zip)) {
       this.modalStore.toggleSignup()
     } else {
@@ -35,6 +36,7 @@ class ZipModal extends Component {
   }
 
   handleToggle = () => {
+    logEvent({ category: "Signup", action: "CloseZip" })
     this.setState({zip: ''})
     this.modalStore.toggleZip()
   }

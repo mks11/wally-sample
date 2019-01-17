@@ -411,7 +411,7 @@ class Mainpage extends Component {
 
     const instance = this._typeahead.getInstance();
     instance.blur();
-
+    logEvent({ category: "Search", action: "SearchKeyword", label: keyword })
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams()).then((data) => {
       let filters = []
       filters = data && data.filters ?

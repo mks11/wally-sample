@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { connect } from '../utils'
+import { connect, logEvent, logModalView, logPageView } from '../utils'
+import ReactGA from 'react-ga';
 
 class ReferFriend extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ class ReferFriend extends Component {
         if (!status) {
           this.props.store.routing.push('/main')
         } else {
+          ReactGA.pageview(window.location.pathname);
+          logModalView('/refer');
           this.userStore.referFriend()
           this.modalStore.toggleReferral()
           this.props.store.routing.push('/main')

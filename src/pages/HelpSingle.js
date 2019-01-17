@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import BoxOrder from '../common/page/help/BoxOrder';
 import Title from '../common/page/Title';
 import PropTypes from 'prop-types';
-import { connect } from '../utils'
+import { connect } from '../utils';
+import ReactGA from 'react-ga';
 
 class HelpSingle extends Component {
   state = {
@@ -18,6 +19,7 @@ class HelpSingle extends Component {
   }
 
   componentDidMount(){
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()

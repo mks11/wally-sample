@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logEvent, logModalView, logPageView } from '../utils'
 
 class ReferralModal extends Component {
   constructor(props) {
@@ -14,7 +14,13 @@ class ReferralModal extends Component {
     this.modalStore.toggleReferral()
   }
 
+  handleToggleClose = () => {
+    logEvent({ category: "Refer", action: "CloseRefer" })
+    this.modalStore.toggleReferral()
+  }
+
   handleCopy = () => {
+    logEvent({ category: "Refer", action: "CopyReferralLink" })
     const $el = this.el
     console.log($el)
     $el.select()
@@ -33,7 +39,7 @@ class ReferralModal extends Component {
       <Modal isOpen={store.modal.referral} contentClassName="modal-bg-pinneapple" toggle={this.handleToggle}>
         <div className="modal-header modal-header--sm">
           <div></div>
-          <button className="btn-icon btn-icon--close" onClick={this.handleToggle}></button>
+          <button className="btn-icon btn-icon--close" onClick={this.handleToggleClose}></button>
         </div>
         <ModalBody className="modal-body-no-footer">
           <div className="login-wrap pb-5">
@@ -41,7 +47,7 @@ class ReferralModal extends Component {
             <span className="mb-1">
             An organized pantry, a farm fresh apple, and skipping single-use plastics - share these and other little joys when you refer a friend to The Wally Shop, and you’ll both get 15% off your orders for 30 days.
             </span>
-            <p className="mb-5 text-center"><small>Share the link below - Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleToggle}>here</Link></small></p>
+            <p className="mb-5 text-center"><small>Share the link below - Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29" onClick={this.handleToggle}>here</Link></small></p>
             <div className="referral-wrap p-2">
               <input type="text" style={{position: 'absolute', zIndex:-100}} value={this.userStore.refUrl} ref={el => this.el = el} readOnly />
               <span className="referral-link">{this.userStore.refUrl}</span>

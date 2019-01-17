@@ -6,6 +6,8 @@ import { connect } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'
 import  ReportSuccessModal from './orders/ReportSuccessModal'
+import ReactGA from 'react-ga';
+
 
 class Help extends Component {
   state = {
@@ -25,7 +27,7 @@ class Help extends Component {
   }
 
   componentDidMount(){
-
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()

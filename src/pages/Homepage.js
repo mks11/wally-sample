@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
 
 
 class Homepage extends Component {
@@ -68,7 +68,7 @@ class Homepage extends Component {
     this.setState({invalidZip: false})
 
     this.zipStore.selectedZip = this.state.zip
-
+    logEvent({ category: "Homepage", action: "SubmitZip", value: this.state.zip, label: "SignupZip" })
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
@@ -91,7 +91,7 @@ class Homepage extends Component {
     }
 
     this.setState({invalidEmail: ''})
-
+    logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
     this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
       .then(() => {
         this.setState({
@@ -108,13 +108,16 @@ class Homepage extends Component {
   }
 
   handleStart(e) {
+    logEvent({ category: "Homepage", action: "StartShopping" })
     const store = this.props.store
     this.routing.push('/main')
+    logModalView('/signup-info')
     store.modal.toggleSignup()
     e.preventDefault()
   }
 
   handleExplore(e) {
+    logEvent({ category: "Homepage", action: "ExploreShopping" })
     this.routing.push('/main')
     e.preventDefault()
   }

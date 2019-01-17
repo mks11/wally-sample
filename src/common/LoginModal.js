@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
-  import FacebookLogin from 'react-facebook-login';
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
+import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
 
@@ -71,11 +71,13 @@ class LoginModal extends Component {
   }
 
   handleLogin(e) {
+    logModalView('/signup-zip')
     this.modalStore.toggleZip()
     this.modalStore.toggleLogin()
   }
 
   handleToggle = () => {
+    logEvent({ category: "Login", action: "CloseLogin" })
     this.setState({invalidText: '', email: '', password: ''})
     this.modalStore.toggleLogin()
   }

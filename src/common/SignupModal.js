@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Modal, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
 import FacebookLogin from 'react-facebook-login';
 
 import { FB_KEY } from '../config'
@@ -25,6 +25,7 @@ class SignupModal extends Component {
     this.routing = this.props.store.routing
     this.checkoutStore = this.props.store.checkout
   }
+
   handleSubmit(e) {
     this.setState({invalidText: ''})
     if(!validateEmail(this.state.email)) {
@@ -42,6 +43,7 @@ class SignupModal extends Component {
       return
     }
 
+    logEvent({ category: "Signup", action: "SubmitInfo" })
     this.userStore.signup({
       name: this.state.name,
       email: this.state.email,
@@ -78,6 +80,7 @@ class SignupModal extends Component {
   }
 
   handleToggle = () => {
+    logEvent({ category: "Signup", action: "CloseInfo" })
     this.modalStore.toggleSignup()
   }
 
@@ -85,6 +88,7 @@ class SignupModal extends Component {
     if (this.state.facebookRequest) {
       return
     }
+    logEvent({ category: "Signup", action: "SubmitFB" })
     this.setState({facebookRequest: true, signup_zip: this.zipStore.selectedZip})
     data.signup_zip = this.zipStore.selectedZip
     data.reference_promo = this.userStore.refPromo

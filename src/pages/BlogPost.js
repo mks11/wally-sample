@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import Title from '../common/page/Title'
 import { Row, Col } from 'reactstrap';
 import { connect } from '../utils'
@@ -17,6 +18,7 @@ class BlogPost extends Component {
     this.routing = this.props.store.routing
   }
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()

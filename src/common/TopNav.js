@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { formatMoney, connect } from '../utils'
+import { formatMoney, connect, logEvent, logModalView, logPageView } from '../utils'
 import ClickOutside from 'react-click-outside'
 
 class TopNav extends Component {
@@ -14,11 +14,13 @@ class TopNav extends Component {
   }
 
   handleLogin() {
+    logModalView('/login')
     this.routing.push('/main')
     this.modalStore.toggleLogin()
   }
 
   handleSignup() {
+    logModalView('/signup-zip')
     this.routing.push('/main')
     this.modalStore.toggleZip()
   }
@@ -28,6 +30,7 @@ class TopNav extends Component {
   }
 
   handleInvite() {
+    logModalView('/refer')
     this.uiStore.hideAccountDropdown()
     // this.modalStore.toggleInvite()
     this.modalStore.toggleReferral()
@@ -80,6 +83,7 @@ class TopNav extends Component {
   handleReferralModal = (e) => {
     // this.routing.push('/giftcard')
     if (this.userStore.user) {
+      logModalView('/refer')
       this.modalStore.toggleReferral()
       this.userStore.referFriend()  
     } else {

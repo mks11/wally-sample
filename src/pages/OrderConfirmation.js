@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import { connect } from '../utils'
+import { Link } from 'react-router-dom';
+import { connect, logEvent, logModalView, logPageView } from '../utils';
+import ReactGA from 'react-ga';
 
 class OrderConfirmation extends Component {
   constructor(props) {
@@ -12,6 +13,8 @@ class OrderConfirmation extends Component {
   }
 
   componentDidMount() {
+    logModalView('/refer');
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus(true)
       .then((status) => {
         if (status) {
@@ -44,7 +47,7 @@ class OrderConfirmation extends Component {
                 KEEP SHOPPING
               </button>
               <span>
-                For every friend you refer, you’ll get 15% off for a month once they purchase, and they’ll get 15% off their first month as well. Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27">here.</Link>
+                For every friend you refer, you’ll get 15% off for a month once they purchase, and they’ll get 15% off their first month as well. Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
               </span>
             </div>
         </div>
