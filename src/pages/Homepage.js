@@ -261,7 +261,9 @@ class Homepage extends Component {
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <Link to="/main" className="btn btn-primary btn-explore">Explore</Link>
+                      <button onClick={this.handleExplore} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
+                        EXPLORE
+                      </button>
                     </div>
                   </Col>
                 </Row>
