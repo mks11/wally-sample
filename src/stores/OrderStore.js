@@ -3,6 +3,7 @@ import {
   API_GET_ORDERS,
   API_SUBMIT_ISSUE,
   API_SUBMIT_FEEDBACK,
+  API_SUBMIT_SERVICE_FEEDBACK,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -37,6 +38,11 @@ class OrderStore {
 
   async submitFeedback(data) {
     const res = await axios.post(API_SUBMIT_FEEDBACK, data)
+    return res
+  }
+
+  async submitServiceFeedback(data) {
+    const res = await axios.post(API_SUBMIT_SERVICE_FEEDBACK, data)
     return res
   }
 }

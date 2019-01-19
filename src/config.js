@@ -40,6 +40,7 @@ export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 export const API_GET_ORDERS = BASE_URL + "/api/orders"
 export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
 export const API_SUBMIT_FEEDBACK = BASE_URL + "/api/order/feedback"
+export const API_SUBMIT_SERVICE_FEEDBACK = BASE_URL + "/api/service/feedback"
 
 export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes"
 export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/locations"

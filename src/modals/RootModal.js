@@ -8,6 +8,7 @@ import SignupModal from './SignupModal'
 import LoginModal from './LoginModal'
 import ReferralModal from './ReferralModal'
 import FeedbackModal from './FeedbackModal'
+import ServiceFeedbackModal from './ServiceFeedbackModal'
 import ReferralResultModal from './ReferralResultModal'
 import InviteModal from './InviteModal'
 import InvalidZipModal from './InvalidZipModal'
@@ -25,6 +26,7 @@ const ModalRoutes = {
   login: LoginModal,
   referral: ReferralModal,
   feedback: FeedbackModal,
+  servicefeedback: ServiceFeedbackModal,
   referralresult: ReferralResultModal,
   invite: InviteModal,
   delete: DeleteModal,
