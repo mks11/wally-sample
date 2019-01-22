@@ -62,6 +62,7 @@ export default (
         <Route exact path="/signup" component={Signup}/>
         <Route exact path="/" component={Homepage}/>
         <Route exact path="/feedback" component={Feedback}/>
+        <Route exact path="/servicefeedback" component={Feedback}/>
       </Switch>
     </Fragment>
 );

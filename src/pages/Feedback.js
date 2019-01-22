@@ -11,6 +11,9 @@ class Feedback extends Component {
   }
 
   componentDidMount() {
+    const path = this.props.location.pathname
+    const modalName = path === '/servicefeedback' ? 'servicefeedback' : 'feedback'
+
     const query = this.props.location.search
     const parsedQuery = qs.parse(query, { ignoreQueryPrefix: true })
 
@@ -20,13 +23,14 @@ class Feedback extends Component {
       order,
     } = parsedQuery
 
-    if(feedback && email && order) {
+    if(feedback && email) {
       this.userStore.feedback = {
         value: feedback,
         email: email,
         order: order,
       }
-      this.modalStore.toggleModal('feedback')
+
+      this.modalStore.toggleModal(modalName)
     }
     
     this.props.store.routing.push('/main')
