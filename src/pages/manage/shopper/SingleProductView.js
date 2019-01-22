@@ -21,7 +21,6 @@ import Select from 'react-select'
 class SingleProductView extends Component {
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
       id: props.product._id,
       product: props.product,
@@ -38,10 +37,10 @@ class SingleProductView extends Component {
         other: props.shopitemsFarms
       }),
       isEdit: false,
-      missing: false,
-      substitute: false,
+      missing: props.product.missing === "true" || false,
+      substitute: props.product.substitute === "true" || false,
       completed: Boolean(props.product.completed),
-      subProductName: props.product.substitute_for_name,
+      subProductName: props.product.substitute_for_name || '',
       finalQuantity: props.product.final_quantity,
       totalPaid: props.product.total_paid,
       weight: props.product.weight,
@@ -54,7 +53,6 @@ class SingleProductView extends Component {
   componentDidUpdate(prevProps) {
     if ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) {
       const {props} = this
-      console.log(props)
       this.setState(
         {
           id: props.product._id,
@@ -72,10 +70,10 @@ class SingleProductView extends Component {
             other: props.shopitemsFarms
           }),
           isEdit: false,
-          missing: props.product.missing,
-          substitute: props.product.substitute,
+          missing: props.product.missing === "true" || false,
+          substitute: props.product.substitute === "true" || false,
           completed: Boolean(props.product.completed),
-          subProductName: props.product.substitute_for_name,
+          subProductName: props.product.substitute_for_name || '',
           finalQuantity: props.product.final_quantity,
           totalPaid: props.product.total_paid,
           weight: props.product.weight,
@@ -114,13 +112,8 @@ class SingleProductView extends Component {
       product_missing_reason: missing ? missingReason : null
     }
     if (!completed) {
-      if (isEdit) {
         this.adminStore.updateShopItem(this.props.timeframe, id, data)
-        this.setState({isEdit: false})
         if (substitute) this.setState({subProductName: product.product_name})
-      } else {
-        this.setState({isEdit: true})
-      }
     } else {
       if (isEdit) {
         this.adminStore.updateShopItem(this.props.timeframe, id, data)
@@ -142,7 +135,6 @@ class SingleProductView extends Component {
 
   render() {
     const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
-    console.log(product);
     return (
       <section className="page-section pt-1 single-product">
         <Container>

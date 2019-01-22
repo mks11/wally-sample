@@ -42,6 +42,7 @@ class SingleOrderView extends Component {
       }),
       confirmModalOpen: false
     }
+    this.userStore = this.props.store.user
     this.adminStore = this.props.store.admin
   }
 
@@ -110,7 +111,7 @@ class SingleOrderView extends Component {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Substitute For</TableCell>
-                  <TableCell>Total Paid</TableCell>
+                  <TableCell>Final Price</TableCell>
                   <TableCell>Quantity</TableCell>
                   <TableCell>Missing</TableCell>
                   <TableCell>Options</TableCell>

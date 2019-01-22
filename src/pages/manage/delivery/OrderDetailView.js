@@ -144,7 +144,7 @@ class OrderDetailView extends Component {
             </div>
           </Row>
           <Row className="pack-order-details">
-            <Col xs="4">Order # {singleorder.id}</Col>
+            <Col xs="4">Order # {singleorder._id}</Col>
             <Col xs="4">Name: {singleorder.user_name}</Col>
             <Col xs="4">Phone Number: {singleorder.telephone}</Col>
             <Col
@@ -172,9 +172,8 @@ class OrderDetailView extends Component {
                           <Input
                             placeholder="Enter # bags"
                             package-id={item._id}
-                            value={editedPackagings[item._id] || 0}
+                            value={editedPackagings[item._id] || ''}
                             onChange={this.onPackageNumberChange}
-                            type="number"
                           />
                         </td>
                       </tr>

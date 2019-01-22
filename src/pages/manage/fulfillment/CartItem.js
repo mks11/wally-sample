@@ -51,7 +51,7 @@ class CartItem extends Component {
       <TableRow>
         <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.substitute_for_name}</TableCell>
-        <TableCell>{cart_item.total / 100} $</TableCell>
+        <TableCell>{cart_item.product_price / 100} $</TableCell>
         <TableCell> <FormControl placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.customer_quantity}
                                  name={"customer_quantity"}
                                  type={"number"}

@@ -24,9 +24,9 @@ class ManageDelivery extends Component {
     super(props)
     this.state = {
       selectedOrder: null,
-      singleOrderOpen: false
+      singleOrderOpen: false,
+      timeframe: null
     }
-
     this.userStore = this.props.store.user
     this.adminStore = this.props.store.admin
   }
@@ -53,12 +53,14 @@ class ManageDelivery extends Component {
 
   loadRoutes = (timeframe) => {
     const options = this.userStore.getHeaderAuth()
+    this.setState({timeframe})
     this.adminStore.getRoutes(timeframe, options)
   }
 
   loadOrders = (routeId) => {
     const options = this.userStore.getHeaderAuth()
-    this.adminStore.getRouteOrders(routeId, options)
+    const {timeframe} = this.state
+    this.adminStore.getRouteOrders(routeId, timeframe, options)
   }
 
   toggleOrder = (routeId) => {
@@ -124,23 +126,10 @@ class ManageDelivery extends Component {
               <Table className={"delivery-table"}>
                 <TableBody>
                   {orders && orders.map((order, i) => {
-                    let status = ''
-                    switch (order.status) {
-                      case 'paid':
-                        status = 'Incomplete'
-                        break
-                      case 'delivery_issue':
-                        status = 'Missing'
-                        break
-                      case 'delivered':
-                        status = 'Delivered'
-                        break
-                      default:
-                        break
-                    }
+                    order = order[0]
                     return (
                       <TableRow
-                        className={`row ${status}`}
+                        className={`row ${order.status}`}
                         key={order._id}
                         onClick={() => this.toggleOrder(order._id)}
                       >
@@ -149,7 +138,7 @@ class ManageDelivery extends Component {
                         <TableCell>{order.user_name}</TableCell>
                         <TableCell>{order.telephone}</TableCell>
                         <TableCell>NEW USER - TODO</TableCell>
-                        <TableCell>{status}</TableCell>
+                        <TableCell className={"text-capitalize"}>{order.status.replace('_',' ')}</TableCell>
                       </TableRow>
                     );
                   })}

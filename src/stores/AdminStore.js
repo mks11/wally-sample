@@ -70,12 +70,13 @@ class AdminStore {
   async getRoutes(timeframe, options) {
     this.routes = []
     const res = await axios.get(`${API_ADMIN_GET_ROUTES}?timeframe=${timeframe}`, options)
+    this.orders = []
     this.routes = res.data
   }
 
   async getRouteOrders(id, timeframe, options) {
     const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ''}`, options)
-    this.orders = res.data[0]
+    this.orders = res.data
   }
 
   async updateRoutePlacement(id, data, options) {
@@ -84,11 +85,13 @@ class AdminStore {
   }
 
   async getOrder(id, options) {
+    this.singleorder = {}
     const res = await axios.get(`${API_ADMIN_GET_ORDER}/${id}`, options)
     this.singleorder = res.data
   }
 
   async getPackagings() {
+    this.packagings = []
     const res = await axios.get(`${API_ADMIN_GET_PACKAGINGS}`)
     this.packagings = res.data
   }
