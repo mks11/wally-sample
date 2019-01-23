@@ -74,12 +74,12 @@ class GiftCheckout extends Component {
 
   handleAddPayment = data => {
     if (this.userStore.status) {
-      this.userStore.savePayment(data).then((data) => {
+      if (data) {
         this.userStore.setUserData(data)
         this.setState({
           selectedPayment: this.userStore.user.preferred_payment,
         })
-      })
+      }
     } else {
       const guestPayment = !this.userStore.status ? [{
         _id: 'guestuser_id',

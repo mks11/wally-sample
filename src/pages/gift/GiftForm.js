@@ -86,8 +86,10 @@ class GiftForm extends Component {
   handleAddPayment = data => {
     const { onAddPayment, userGuest } = this.props
     onAddPayment && onAddPayment(data)
-
-    this.setState({ lockPayment: userGuest })
+    
+    if (data) {
+      this.setState({ lockPayment: userGuest })
+    } 
   }
 
   handleGiftCheckoutSubmit = e => {

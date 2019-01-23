@@ -163,7 +163,6 @@ class ProductTop extends Component {
     }
 
     this.setState({ selectedTimeChanged: false })
-    this.userStore.setDeliveryTime(this.state.selectedTime)
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 

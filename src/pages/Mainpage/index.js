@@ -57,7 +57,6 @@ class Mainpage extends Component {
       categoryTypeMode = 'limit'
     }
     
-    console.log('id ', id, categoryTypeMode)
     this.setState({categoryTypeMode})
 
     const deliveryData = this.userStore.getDeliveryParams()

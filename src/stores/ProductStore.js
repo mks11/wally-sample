@@ -43,7 +43,7 @@ class ProductStore {
     }
     const inventory = this.activeProduct.available_inventory[0]
     var min_size = 1
-    if (inventory.price_unit == "lb" || inventory.price_unit == "oz") min_size = 0.25
+    if (inventory.price_unit == "lb") min_size = 0.25
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
     return res.data
