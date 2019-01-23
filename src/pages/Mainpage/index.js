@@ -28,22 +28,8 @@ class Mainpage extends Component {
 
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
-
-      searchPage: false,
-      searchResult:[],
-      searchDisplayed:[],
-      searchTerms: '',
-      searchFilter: [],
-      searchAll: true,
-
       sidebar:[],
-      searchSidebar:[],
-
-      currentSearchCat: null,
-      currentSearchCatId: null,
-
       categoryTypeMode: 'limit',
-
       showMobileSearch: false,
     }
 
@@ -56,20 +42,22 @@ class Mainpage extends Component {
       .then((status) => {
         this.userStore.giftCardPromo && this.processGiftCardPromo(status)
         this.checkoutStore.getDeliveryTimes()
-        this.loadData(status)
+        this.loadData()
       })
   }
 
-  loadData(userStatus) {
+  loadData() {
     const id = this.props.match.params.id
     this.id = id
 
+    
     let categoryTypeMode = 'all'
-
+    
     if (!this.id || this.id.length <= 3) {
       categoryTypeMode = 'limit'
     }
-
+    
+    console.log('id ', id, categoryTypeMode)
     this.setState({categoryTypeMode})
 
     const deliveryData = this.userStore.getDeliveryParams()
@@ -157,51 +145,15 @@ class Mainpage extends Component {
   }
 
   toggleSearchCheck(id) {
-    const cur = this.state.searchFilter
-    const index = cur.indexOf(id)
-    if (index === -1) {
-      cur.push(id)
-    } else {
-      cur.splice(index, 1)
-    }
-
-    const products = this.state.searchResult.products
-    const filtered = products.filter((d) => {
-      return cur.indexOf(d.cat_id) !== -1
-    })
-
-    let curCat = this.state.searchResult.filters.reduce((sum, d) => {
-      if (cur.indexOf(d.cat_id) !== -1) {
-        sum.push(d.cat_name)
-      }
-      return sum
-    }, [])
-    let currentSearchCat= curCat.join(', ')
-
-    let all = false
-
-    if (cur.length === this.state.searchResult.filters.length) {
-      all = true
-      currentSearchCat = 'All Categories'
-    }
-
-    this.setState({searchAll: all, searchFilter: cur, searchDisplayed: filtered, currentSearchCat})
-
+    this.productStore.searchCategory(id)
   }
 
   searchCheck(id) {
-    return this.state.searchFilter.indexOf(id) !== -1
+    return this.productStore.currentSearchFilter.indexOf(id) !== -1
   }
 
-  toggleSearchAll() {
-    if (!this.state.searchAll) {
-       const curFilter = this.state.searchResult.filters.map((sum, d) => {
-        sum.push(d.cat_id)
-        return sum
-      }, [])
-      this.setState({searchFilter: curFilter, searchDisplayed: this.state.searchResult.products, currentSearchCat: 'All Categories'})
-    }
-    this.setState({searchAll: !this.state.searchAll})
+  toggleSearchAll = () => {
+    this.productStore.searchAll()
   }
 
   handleChangeDelivery = () => {
@@ -240,34 +192,11 @@ class Mainpage extends Component {
     this.uiStore.hideBackdrop()
 
     if (!keyword.length) {
-      this.setState({ searchPage: false })
+      this.productStore.resetSearch()
       return
     }
 
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams())
-      .then(data => {
-        const filters = (data && data.filters)
-                          ? data.filters
-                          : []
-
-        const currentSearchCatId = data.filters.length > 0 ? filters[0].cat_id : null
-
-        const cur = data.filters.reduce((sum, d) => {
-          sum.push(d.cat_id)
-          return sum
-        }, [])
-
-        this.setState({
-          searchSidebar: filters, 
-          searchFilter: cur,
-          searchResult: data,
-          searchPage: true,
-          searchTerms: keyword,
-          currentSearchCatId,
-          currentSearchCat: 'All Categories',
-          searchDisplayed: data.products
-        })
-      })
   }
 
   handleMobileSearchClose = () => {
@@ -285,6 +214,10 @@ class Mainpage extends Component {
     }
   }
 
+  handleCategoryClick = () => {
+    this.productStore.resetSearch()
+  }
+
   render() {
     const {
       showMobileSearch,
@@ -292,25 +225,15 @@ class Mainpage extends Component {
     } = this.state
 
     const id = this.props.match.params.id
+    const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
+    const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null
+    const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null
 
-    let cartMobileClass = 'cart-mobile d-md-none'
-    if (this.uiStore.cartMobile) {
-      cartMobileClass += ' open'
-    }
+    const categoryLink = 
+      this.productStore.currentSearchCategory === 'All Categories'
+        ? <Link to="/main" onClick={this.handleCategoryClick}>{this.productStore.currentSearchCategory}</Link>
+        : this.productStore.currentSearchCategory
 
-    let cartCount = 0, cartItems = [], cartSubtotal = 0
-
-    if (this.checkoutStore.cart) {
-      const cart_items = this.checkoutStore.cart.cart_items
-      cartCount = cart_items.length
-      cartItems = cart_items
-      cartSubtotal = this.checkoutStore.cart.subtotal / 100
-    }
-
-    const mainDisplay = this.productStore.main_display
-
-    const ads1 = this.productStore.ads1 ? this.productStore.ads1 :null
-    const ads2 = this.productStore.ads2 ? this.productStore.ads2 :null
 
     return (
       <div className="App">
@@ -318,13 +241,13 @@ class Mainpage extends Component {
         <ProductTop
           onMobileSearchClick={this.handleMobileSearchOpen}
           onSearch={this.handleSearch}
+          onCategoryClick={this.handleCategoryClick}
         />
 
       <div className="product-content">
         <div className="container">
           <div className="row ">
             <div className="col-md-2 col-sm-4">
-              {/* <div className="product-content-left d-none d-md-block d-lg-block"> */}
                 <div className="product-content-left">
                   <div className="mb-4">
                     <h4>The Wally Shop</h4>
@@ -334,110 +257,64 @@ class Mainpage extends Component {
                     </ul>
                   </div>
 
-                  {/*                  <div className="mb-4">
-                    <h4 className="mb-4"><Link to="/main" className={id ? "": "text-violet"}>All Categories</Link></h4>
-                  </div>
-                  */
-                  }
-
-                  {!this.state.searchPage && sidebar.map((s,i) => {
-
-                    let parentSidebarClass = ''
-                    let link = '/main/'
-
-                    if (id === s.cat_id) {
-                      parentSidebarClass = 'text-violet'
-                    }
-                    link += s.cat_id
-
-                    // if (typeof id === 'undefined' && !s.cat_id) {
-                    //   parentSidebarClass = 'text-violet'
-                    //   link = '/main'
-                    // }
-
-                    return (
-                      <div className="mb-0" key={i}>
-                        <h4><Link to={link} className={parentSidebarClass} replace>{s.cat_name}</Link></h4>
-                        <ul>  
-                          {s.subcats && s.subcats.map((sc, idx) => (
-                            <li key={idx}><Link to={"/main/" + (sc.cat_id ? sc.cat_id: '')} 
-                                className={id === sc.cat_id ? "text-violet": ""}
-                              >{sc.cat_name}</Link></li>
-                          ) )}
-                        </ul>
-                      </div>
-                    )
-                  })}
-
-                  {this.state.searchPage && <h4>Sub Categories</h4>}
-                  {this.state.searchPage && 
-                      <React.Fragment>
-                        <div  className="custom-control custom-checkbox mt-2 mb-3">
-                          <input type="checkbox" className="custom-control-input" checked={this.state.searchAll} onChange={e=>this.toggleSearchAll()} />
-                          <label className="custom-control-label" onClick={e=>this.toggleSearchAll()}>All Categories</label>
-                        </div>
-
-                        {this.state.searchSidebar.map((s,key) => (
-                          <div key={key} className="custom-control custom-checkbox mt-2 mb-3">
-                            <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.searchCheck(s.cat_id)} onChange={e=>this.toggleSearchCheck(s.cat_id)} />
-                            <label className="custom-control-label" onClick={e=>this.toggleSearchCheck(s.cat_id)}>{s.cat_name}</label>
+                  {
+                    this.productStore.search.state
+                      ? (
+                        <React.Fragment>
+                          <h4>Sub Categories</h4>
+                          <div  className="custom-control custom-checkbox mt-2 mb-3">
+                            <input type="checkbox" className="custom-control-input" checked={this.productStore.search.all} onChange={this.toggleSearchAll} />
+                            <label className="custom-control-label" onClick={this.toggleSearchAll}>All Categories</label>
                           </div>
-                        ))}
 
-                      </React.Fragment>
+                          {this.productStore.search.filters.map((s,key) => (
+                            <div key={key} className="custom-control custom-checkbox mt-2 mb-3">
+                              <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.searchCheck(s.cat_id)} onChange={()=>this.toggleSearchCheck(s.cat_id)} />
+                              <label className="custom-control-label" onClick={e=>this.toggleSearchCheck(s.cat_id)}>{s.cat_name}</label>
+                            </div>
+                          ))}
+                        </React.Fragment>
+                      ) : (
+                        sidebar.map((s,i) => {
+                          return (
+                            <div className="mb-0" key={i}>
+                              <h4><Link to={`/main/${s.cat_id}`} className={`${id === s.cat_id ? '' : ''}`} replace>{s.cat_name}</Link></h4>
+                              <ul>  
+                                {s.subcats && s.subcats.map((sc, idx) => (
+                                  <li key={idx}><Link to={`/main/${sc.cat_id || ''}`} 
+                                      className={id === sc.cat_id ? "text-violet": ""}
+                                    >{sc.cat_name}</Link></li>
+                                ) )}
+                              </ul>
+                            </div>
+                          )
+                        })
+                      )
                   }
 
-                  <br/>
-                  <div>
-                    {ads1 && <img src={APP_URL + ads1} alt="" />}
+                    <br/>
+                    <div>
+                      {ads1 && <img src={APP_URL + ads1.image} alt="" />}
+                    </div>
+                    <br/>
                   </div>
-                  <br/>
+
                 </div>
 
-              </div>
-
-              { !this.state.searchPage &&
-                  <div className="col-md-10 col-sm-8">
-                    <div className="product-content-right">
-                      {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
-
-                      <div className="product-breadcrumb">
-                        <span>
-                          <Link to ="/main" className="text-black">All Categories</Link>
-                        </span>
-                        {this.productStore.path.map((p, i) => (
-                          <span key={i}>
-                            { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
-                          </span>
-                        ))}
-                      </div>
-
-                      { 
-                        mainDisplay.map((product, index) => (
-                          <ProductList
-                            key={index}
-                            display={product}
-                            mode={this.state.categoryTypeMode}
-                            deliveryTimes={this.state.deliveryTimes}
-                            onProductClick={this.handleProductModal}
-                          />
-                        ))
-                      }
-                    </div>
-                  </div> }
-
-                  { this.state.searchPage &&
+              {
+                this.productStore.search.state 
+                  ? (
                       <div className="col-md-10 col-sm-8">
                         <div className="product-content-right">
                           {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <div className="search-term">Search: <span className="text-violet">"{this.state.searchTerms}"</span></div>
-                            <h3 className="text-italic">"{this.state.searchTerms}"</h3>
-                            <span className="search-count">{this.state.searchDisplayed.length} search result(s) for "{this.state.searchTerms}" 
+                            <div className="search-term">Search: <span className="text-violet">"{this.productStore.search.term}"</span></div>
+                            <h3 className="text-italic">"{this.productStore.search.term}"</h3>
+                            <span className="search-count">{this.productStore.search.display.length} search result(s) for "{this.productStore.search.term}" 
                               {
-                                this.state.searchFilter.length > 0 
-                                  ? <React.Fragment> in {this.state.currentSearchCat}</React.Fragment>
+                                this.productStore.currentSearchFilter.length > 0 
+                                  ? <React.Fragment> in {categoryLink}</React.Fragment>
                                   : <React.Fragment> in <Link to ="/main">All Categories</Link></React.Fragment>}
                             </span>
                             <hr/>
@@ -445,7 +322,7 @@ class Mainpage extends Component {
 
                           <div className="row">
                             { 
-                              this.state.searchDisplayed.map((product, index) => (
+                              this.productStore.search.display.map((product, index) => (
                                 <Product
                                   key={index}
                                   product={product}
@@ -456,14 +333,45 @@ class Mainpage extends Component {
                             }
                           </div>
                         </div>
-                      </div> }
+                      </div>
+                  ) : (
+                    <div className="col-md-10 col-sm-8">
+                      <div className="product-content-right">
+                        {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
+
+                        <div className="product-breadcrumb">
+                          <span>
+                            <Link to ="/main" className="text-black">All Categories</Link>
+                          </span>
+                          {this.productStore.path.map((p, i) => (
+                            <span key={i}>
+                              { i !== 0 && <span><span> &gt; </span> <Link to={p[1]} className={(p[1] === id ? 'text-bold text-violet' : 'text-black')}>{p[0]}</Link></span>}
+                            </span>
+                          ))}
+                        </div>
+
+                        { 
+                          this.productStore.main_display.map((product, index) => (
+                            <ProductList
+                              key={index}
+                              display={product}
+                              mode={this.state.categoryTypeMode}
+                              deliveryTimes={this.state.deliveryTimes}
+                              onProductClick={this.handleProductModal}
+                            />
+                          ))
+                        }
+                      </div>
+                    </div>
+                  )
+                }
                     </div>
                   </div>
                 </div>
                 {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>
-                <div className={cartMobileClass}>
+                <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
                   {cartItems.length>0 ?
                       <React.Fragment>

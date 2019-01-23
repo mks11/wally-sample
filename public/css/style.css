@@ -1324,7 +1324,7 @@ section.page-section.bg-fruitfull {
   z-index: 100;
 }
 .product-top.fixed{position:fixed;top:82px;}
-.product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 10px; height:35px;}
+.product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 10px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 2px;}
 .left-column{display:inline-block;position:relative;visibility: visible;opacity:1; cursor:pointer;}
 .left-column.hide{transform: translateX(-100%);visibility: hidden;opacity:0;display:none;}

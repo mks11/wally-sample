@@ -173,7 +173,7 @@ class ProductTop extends Component {
       selectedTimeChanged,
       fakeUser,
     } = this.state
-    const { onSearch } = this.props
+    const { onSearch, onCategoryClick } = this.props
     const user = this.userStore.user ? this.userStore.user : fakeUser
 
     return (
@@ -250,7 +250,11 @@ class ProductTop extends Component {
 
               <div className="dropdown-wrapper dropdown-fwidth">
                 <div className="dropdown-menu dropdown-menu-right">
-                  <Link to="/main" className="dropdown-item">All Categories</Link>
+                  <Link
+                    to="/main"
+                    className="dropdown-item"
+                    onClick={onCategoryClick}
+                  >All Categories</Link>
                   {
                     this.productStore.categories.map((s,i) => (
                       (!s.parent_id && s.cat_id.length <= 3) &&
@@ -258,6 +262,7 @@ class ProductTop extends Component {
                           to={"/main/"+ (s.cat_id ? s.cat_id:'')}
                           className="dropdown-item"
                           key={i}
+                          onClick={onCategoryClick}
                         >{s.cat_name}</Link>
                     ))
                   }
