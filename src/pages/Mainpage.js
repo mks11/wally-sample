@@ -37,29 +37,23 @@ const heroItems = [
     link: '/help/detail/5b9159765e3b27043b178f93'
   },
   {
-    src: banner2,
+    src: banner3,
     altText: 'Slide 2',
     caption: 'Slide 2',
-    link: '/help/detail/5b91595b5e3b27043b178f92'
-  },
-  {
-    src: banner3,
-    altText: 'Slide 3',
-    caption: 'Slide 3',
     link: '/help/topics/5b9158325e3b27043b178f91'
   },
 ];
 
 if (window.innerWidth <= 800 && window.innerWidth > 500) {
   heroItems[0].src = bannerMobileHoriz1
-  heroItems[1].src = bannerMobileHoriz2
-  heroItems[2].src = bannerMobileHoriz3
+  heroItems[1].src = bannerMobileHoriz3
+  // heroItems[2].src = bannerMobileHoriz3
 }
 
 if (window.innerWidth <= 500) {
   heroItems[0].src = bannerMobile1
-  heroItems[1].src = bannerMobile2
-  heroItems[2].src = bannerMobile3
+  heroItems[1].src = bannerMobile3
+  // heroItems[2].src = bannerMobile3
 }
 
 
