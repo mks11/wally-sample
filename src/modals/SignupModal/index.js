@@ -104,7 +104,6 @@ class SignupModal extends Component {
         <span className="mb-5">Shop package-free groceries</span>
         <div className="form-wrapper">
           <Input
-            autoFocus
             className="aw-input--control"
             type="text"
             name="name"

@@ -138,7 +138,6 @@ class ProductModal extends Component {
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     let qtyOptions = []
     var minSize = activeProduct.min_size
-    // if (inventory.price_unit == "lb" || inventory.price_unit == "oz") minSize = 0.25
     for (var i = 0, len = 9; i <= len; i++) {
       var opt = minSize + i * activeProduct.increment_size
       qtyOptions.push(+(opt.toFixed(3)))

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import CardSmall from './CardSmall';
 import {StripeProvider, Elements} from 'react-stripe-elements'
+import { connect } from 'utils'
 
 import { STRIPE_API_KEY } from '../config'
 
 class PaymentSelect extends Component {
   constructor(props) {
     super(props)
+    this.userStore = props.store.user
 
     const {
       forceSelect,
@@ -16,6 +18,7 @@ class PaymentSelect extends Component {
     this.state = {
       selectedPayment: forceSelect || userPreferredPayment,
       newPayment: false,
+      error: false,
     }
   }
 
@@ -23,6 +26,7 @@ class PaymentSelect extends Component {
     this.setState({
       newPayment: payment_id === "0",
       selectedPayment: payment_id,
+      error: false,
     })
   }
 
@@ -37,15 +41,23 @@ class PaymentSelect extends Component {
 
   handleAddPayment = data => {
     const { onAddPayment } = this.props
-    onAddPayment && onAddPayment(data)
-    
-    this.setState({ newPayment: false })
+    this.setState({ error: false })
+
+    this.userStore.savePayment(data)
+      .then(data => {
+        onAddPayment && onAddPayment(data)
+      })
+      .catch(_ => {
+        this.setState({ error: true })
+        onAddPayment && onAddPayment(null)
+      })
   }
 
   render() {
     const {
       selectedPayment,
       newPayment,
+      error,
     } = this.state
 
     const {
@@ -122,10 +134,11 @@ class PaymentSelect extends Component {
             ) : null
           }
           { (!lockPayment && !newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
+          { error && <span className="text-error text-block">Failed to add new payment</span>}
       </div>
     </div>
     )
   }
 }
 
-export default PaymentSelect
+export default connect("store")(PaymentSelect)

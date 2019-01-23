@@ -51,7 +51,6 @@ class ZipModal extends Component {
         <h3 className="m-0 mb-2">What's your zipcode?</h3>
         <span className="mb-5">The Wally Shop is only available in select zipcodes.</span>
         <Input
-          autoFocus
           className="aw-input--control aw-input--center mb-5"
           type="number"
           placeholder="Enter your zipcode"

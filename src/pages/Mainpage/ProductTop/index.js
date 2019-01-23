@@ -29,6 +29,7 @@ class ProductTop extends Component {
       selectedAddress: this.userStore.selectedDeliveryAddress,
       selectedTime: this.userStore.selectedDeliveryTime,
       fakeUser: this.userStore.loadFakeUser(),
+      stickyPos: 0,
     }
   }
 
@@ -37,17 +38,23 @@ class ProductTop extends Component {
     $(window).bind('scroll', this.handleFixedTop)
   }
 
+  componentDidUpdate(_, prevState) {
+    const $ = window.$
+    const stickyPos = $('.product-top').offset().top - 100
+    if (prevState.stickyPos !== stickyPos) {
+      this.setState({ stickyPos })
+    }
+  }
+
   componentWillUnmount() {
     const $ = window.$
     $(window).unbind('scroll', this.handleFixedTop)
   }
 
-  handleFixedTop() {
+  handleFixedTop = () => {
+    const { stickyPos } = this.state
     const $ = window.$
-    if (window.innerWidth <= 500) {
-      return
-    }
-    if ($(window).scrollTop() > 570) {
+    if ($(window).scrollTop() >= stickyPos) {
       $('.product-top').addClass('fixed');
     } else {
       $('.product-top').removeClass('fixed');
@@ -163,7 +170,6 @@ class ProductTop extends Component {
     }
 
     this.setState({ selectedTimeChanged: false })
-    this.userStore.setDeliveryTime(this.state.selectedTime)
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
@@ -173,7 +179,7 @@ class ProductTop extends Component {
       selectedTimeChanged,
       fakeUser,
     } = this.state
-    const { onSearch } = this.props
+    const { onSearch, onCategoryClick } = this.props
     const user = this.userStore.user ? this.userStore.user : fakeUser
 
     return (
@@ -250,7 +256,11 @@ class ProductTop extends Component {
 
               <div className="dropdown-wrapper dropdown-fwidth">
                 <div className="dropdown-menu dropdown-menu-right">
-                  <Link to="/main" className="dropdown-item">All Categories</Link>
+                  <Link
+                    to="/main"
+                    className="dropdown-item"
+                    onClick={onCategoryClick}
+                  >All Categories</Link>
                   {
                     this.productStore.categories.map((s,i) => (
                       (!s.parent_id && s.cat_id.length <= 3) &&
@@ -258,6 +268,7 @@ class ProductTop extends Component {
                           to={"/main/"+ (s.cat_id ? s.cat_id:'')}
                           className="dropdown-item"
                           key={i}
+                          onClick={onCategoryClick}
                         >{s.cat_name}</Link>
                     ))
                   }

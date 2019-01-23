@@ -347,14 +347,12 @@ class Checkout extends Component {
     })
   }
 
-  handleAddPayment = (data) => {
-    return this.userStore.savePayment(data).then((data) => {
+  handleAddPayment = data => {
+    if (data) {
       logEvent({ category: "Checkout", action: "SubmitNewPayment" })
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
-
-      return data
-    })
+    }
   }
 
   showServicePopup() {

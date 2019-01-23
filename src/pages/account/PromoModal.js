@@ -76,7 +76,6 @@ class PromoModal extends Component {
             <span className="mb-5">Please input your promo code</span>
             <form onSubmit={e => e.preventDefault()}>
               <Input
-                autoFocus
                 className="aw-input--control aw-input--center mb-5"
                 type="text"
                 placeholder="Enter your promocode"

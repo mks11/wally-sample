@@ -39,7 +39,7 @@ class OrderConfirmation extends Component {
             <p style={{fontSize:'25px'}}>Thank you for your order! You should receive an order confirmation email shortly. When you’re finished with any Wally Shop containers or bags, simply return them to the courier upon your next, or any future, Wally Shop delivery.</p>
             
             <div className="btn-hero--wrapper mb-3 mt-4">
-              <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block btn-success btn-get--started btn-left mr-4" data-submit="Submit">
+              <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block btn-success btn-get--started btn-left mr-4 confirm-submit" data-submit="Submit">
                 KEEP SHOPPING
               </button>
               <span>

@@ -91,12 +91,18 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
           if (payload.error) {
             throw payload
           }
-          console.log('payload',payload)
+          // console.log('payload',payload)
 
-          return this.props.addPayment({
+          this.props.userStore.savePayment({
             preferred_payment: this.state.preferred_payment,
             billing_zip: this.state.billing_zip,
             stripeToken: payload.token.id
+          })
+          .then(data => {
+            this.props.addPayment(data)
+          })
+          .catch(_ => {
+            this.setState({invalidText: 'Failed to add new payment'})
           })
           // console.log('[token]', payload))
         }).then((data) => {
