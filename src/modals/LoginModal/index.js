@@ -135,7 +135,6 @@ class LoginModal extends Component {
           { step === 1 && (
             <div>
               <Input
-                autoFocus
                 className="aw-input--control aw-input--center"
                 type="text"
                 name="email"
@@ -162,7 +161,6 @@ class LoginModal extends Component {
           { step === 2 &&
             <div>
               <Input
-                autoFocus
                 className="aw-input--control aw-input--center"
                 type="password"
                 name="password"

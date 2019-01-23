@@ -7,14 +7,16 @@ class ProductList extends Component {
   componentDidMount() {
     const $ = window.$
 
+    const speed = window.innerWidth <= 500 ? '40' : '25';
+
     $('.big-arrow.left-arrow').click(function() {
       $(this).siblings('.container-fluid').animate({
-        scrollLeft: '+=25'
+        scrollLeft: `+=${speed}`
       }, 50, 'linear');
     })
     $('.big-arrow.right-arrow').click(function() {
       $(this).siblings('.container-fluid').animate({
-        scrollLeft: '-=25'
+        scrollLeft: `-=${speed}`
       }, 50, 'linear');
     })
   }

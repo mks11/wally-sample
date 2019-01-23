@@ -12,6 +12,7 @@ import Product from './Product'
 import ProductList from './ProductList'
 import ProductTop from './ProductTop'
 import MobileSearch from './MobileSearch'
+import MobileCartBtn from './MobileCartBtn'
 
 class Mainpage extends Component {
 
@@ -369,7 +370,10 @@ class Mainpage extends Component {
                 </div>
                 {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
-                <button className="btn-cart-mobile btn d-md-none" type="button" onClick={e=>this.handleOpenCartMobile()}><span>{cartItems.length}</span>View Order</button>
+                <MobileCartBtn
+                  onClick={this.handleOpenCartMobile}
+                  items={cartItems.length}
+                />
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button> 
                   {cartItems.length>0 ?

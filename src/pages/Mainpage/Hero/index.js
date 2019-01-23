@@ -38,7 +38,8 @@ class Hero extends Component {
     super(props)
 
     this.state = {
-      activeIndex: 0
+      activeIndex: 0,
+      width: window.innerWidth,
     }
   }
 
@@ -53,33 +54,46 @@ class Hero extends Component {
     }
   }
 
+  componentWillMount() {
+    window.addEventListener('resize', this.handleWindowSizeChange)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowSizeChange)
+  }
+  
+  handleWindowSizeChange = () => {
+    this.setState({ width: window.innerWidth })
+  };
+
   onExiting = () => { this.animating = true }
 
   onExited = () => { this.animating = false }
 
   next = () => {
-    if (this.animating) return;
+    if (this.animating) return
     const { activeIndex } = this.state
-    const nextIndex = activeIndex === heroItems.length - 1 ? 0 : activeIndex + 1;
-    this.setState({ activeIndex: nextIndex });
+    const nextIndex = activeIndex === heroItems.length - 1 ? 0 : activeIndex + 1
+    this.setState({ activeIndex: nextIndex })
   }
 
   previous = () => {
-    if (this.animating) return;
+    if (this.animating) return
     const { activeIndex } = this.state
-    const nextIndex = activeIndex === 0 ? heroItems.length - 1 : activeIndex - 1;
-    this.setState({ activeIndex: nextIndex });
+    const nextIndex = activeIndex === 0 ? heroItems.length - 1 : activeIndex - 1
+    this.setState({ activeIndex: nextIndex })
   }
 
   goToIndex = index => {
     if (this.animating) return;
-    this.setState({ activeIndex: index });
+    this.setState({ activeIndex: index })
   }
 
   render() {
-    const { activeIndex } = this.state;
+    const { activeIndex, width } = this.state
+    const isMobile = width <= 500
 
-    return (
+    let heroContent = (
       <Carousel
         activeIndex={activeIndex}
         next={this.next}
@@ -110,6 +124,23 @@ class Hero extends Component {
         }
       </Carousel>
     )
+
+    if (isMobile) {
+      const link = heroItems[2].link
+      const src = getBannerImageLink(3, true)
+
+      heroContent = (
+        <Link to={link}>
+          <img
+            className="img-fluid"
+            src={src}
+            alt=""
+          />
+        </Link>
+      )
+    }
+
+    return heroContent
   }
 }
 
