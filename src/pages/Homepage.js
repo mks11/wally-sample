@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom'
 import { Row, Col, Input, Container } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
 
 
 class Homepage extends Component {
@@ -69,7 +70,7 @@ class Homepage extends Component {
     this.setState({invalidZip: false})
 
     this.zipStore.selectedZip = this.state.zip
-
+    logEvent({ category: "Homepage", action: "SubmitZip", label: this.state.zip })
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
@@ -92,7 +93,7 @@ class Homepage extends Component {
     }
 
     this.setState({invalidEmail: ''})
-
+    logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
     this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
       .then(() => {
         this.setState({
@@ -109,12 +110,15 @@ class Homepage extends Component {
   }
 
   handleStart(e) {
+    logEvent({ category: "Homepage", action: "StartShopping" })
+    logModalView('/signup-info')
     this.routing.push('/main')
     this.modalStore.toggleModal('signup')
     e.preventDefault()
   }
 
   handleExplore(e) {
+    logEvent({ category: "Homepage", action: "ExploreShopping" })
     this.routing.push('/main')
     e.preventDefault()
   }
@@ -242,22 +246,7 @@ class Homepage extends Component {
                 <h2>We’re the 21st century milk man</h2>
                 <p>With each order, The Wally Shop lends you our reusable packaging in exchange for a deposit fee, which you can easily return to a courier upon any future delivery. We’ll wash  and reuse all the returned packaging, and you’ll get your deposit fee back as store credit - so you can save money and the planet at the same time.</p>
               </div>
-            </Col>
-            <Col sm={6} className="order-1 order-sm-2">
-              <div className="bg-info-section bg-info-section-1"></div>
-            </Col>
-          </Row>
-        </section>
-        <section className="homepage-info-section alt-bg">
-          <Row>
-            <Col sm={6} className="order-1 order-sm-1">
-              <div className="bg-info-section bg-info-section-2"></div>
-            </Col>
-            <Col sm={6} className="order-2 order-sm-2">
-              <div className="text-info-section force-black">
-                <h2>Quality above all else</h2>
-                <p>Want to know the secret to how professional chefs make amazing food with just a handful of ingredients? They get high quality, incredibly fresh produce from the farmers market. From ripe summer tomatoes to creamy butternut squashes to crispy apples, our couriers hand select the best market produce for all of your foodie needs.</p>
-              </div>
+              <br /><br />
             </Col>
           </Row>
         </section>

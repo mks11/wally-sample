@@ -23,14 +23,8 @@ const heroItems = [
     src: getBannerImageLink(2),
     altText: 'Slide 2',
     caption: 'Slide 2',
-    link: '/help/detail/5b91595b5e3b27043b178f92'
-  },
-  {
-    src: getBannerImageLink(3),
-    altText: 'Slide 3',
-    caption: 'Slide 3',
     link: '/help/topics/5b9158325e3b27043b178f91'
-  },
+  }
 ]
 
 class Hero extends Component {
@@ -126,8 +120,8 @@ class Hero extends Component {
     )
 
     if (isMobile) {
-      const link = heroItems[2].link
-      const src = getBannerImageLink(3, true)
+      const link = heroItems[1].link
+      const src = getBannerImageLink(2, true)
 
       heroContent = (
         <Link to={link}>

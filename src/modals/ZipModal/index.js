@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
-import { connect } from '../../utils'
+import { connect, logEvent, logModalView, logPageView } from '../../utils'
 
 class ZipModal extends Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class ZipModal extends Component {
     const { zip } = this.props.stores
 
     zip.selectedZip = zipValue
+    logEvent({ category: "Signup", action: "SubmitZip", label: zipValue })
     if(zip.validateZipCode(zipValue)) {
       this.props.switchTo('signup')
     } else {

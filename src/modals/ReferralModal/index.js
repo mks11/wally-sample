@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { logEvent, logModalView, logPageView } from '../../utils'
 
 class ReferralModal extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class ReferralModal extends Component {
   }
 
   handleCopy = () => {
+    logEvent({ category: "Refer", action: "CopyReferralLink" })
     const $el = this.el
     // console.log($el)
     $el.select()
@@ -47,7 +49,7 @@ class ReferralModal extends Component {
         <span className="mb-1">
           <small>An organized pantry, a farm fresh apple, and skipping single-use plastics - share these and other little joys when you refer a friend to The Wally Shop, and you’ll both get 15% off your orders for 30 days.</small>
         </span>
-        <p className="mb-5 text-center"><small>Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27" onClick={this.handleHere}>here</Link></small></p>
+        <p className="mb-5 text-center"><small>Share the link below - Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29" onClick={this.handleHere}>here</Link></small></p>
         <div className="referral-wrap p-2">
           <input
             type="text"

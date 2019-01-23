@@ -1,6 +1,6 @@
-
 import React, { Component } from 'react';
-import { connect } from '../utils'
+import { connect, logEvent, logModalView, logPageView } from '../utils'
+import ReactGA from 'react-ga';
 
 
 class InviteFriends extends Component {
@@ -11,11 +11,13 @@ class InviteFriends extends Component {
   }
 
   handleSignup() {
+    logEvent({ category: "ReferSignup", action: "StartSignup" })
     this.modalStore.toggleModal('zip')
     this.routing.push('/main')
   }
 
   render() {
+    ReactGA.pageview(window.location.pathname);
     return (
       <section className="page-section bg-fruitfull">
         <div className="container-fluid">

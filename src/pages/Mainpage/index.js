@@ -54,7 +54,7 @@ class Mainpage extends Component {
     
     let categoryTypeMode = 'all'
     
-    if (!this.id || this.id.length <= 3) {
+    if (!this.id) {
       categoryTypeMode = 'limit'
     }
     
@@ -195,7 +195,7 @@ class Mainpage extends Component {
       this.productStore.resetSearch()
       return
     }
-
+    logEvent({ category: "Search", action: "SearchKeyword", label: keyword })
     this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams())
   }
 

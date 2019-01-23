@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
-import { validateEmail } from '../../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../../utils'
 import FBLogin from '../../common/FBLogin'
 
 const ErrorInfo = props => {
@@ -74,6 +74,7 @@ class LoginModal extends Component {
   }
 
   handleLogin = e => {
+    logModalView('/signup-zip')
     this.props.switchTo('zip')
   }
 

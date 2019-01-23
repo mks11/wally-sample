@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap';
-import { validateEmail } from '../../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../../utils'
 import FBLogin from '../../common/FBLogin'
 
 class SignupModal extends Component {
@@ -48,6 +48,7 @@ class SignupModal extends Component {
         checkout
       } = this.props.stores
 
+      logEvent({ category: "Signup", action: "SubmitInfo" })
       user.signup({
         name,
         email,

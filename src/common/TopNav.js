@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { formatMoney, connect } from '../utils'
+import { formatMoney, connect, logEvent, logModalView, logPageView } from '../utils'
 import ClickOutside from 'react-click-outside'
 
 class TopNav extends Component {
@@ -14,11 +14,13 @@ class TopNav extends Component {
   }
 
   handleLogin() {
+    logModalView('/login')
     this.routing.push('/main')
     this.modalStore.toggleModal('login')
   }
 
   handleSignup() {
+    logModalView('/signup-zip')
     this.routing.push('/main')
     this.modalStore.toggleModal('zip')
   }
@@ -28,6 +30,7 @@ class TopNav extends Component {
   }
 
   handleInvite() {
+    logModalView('/refer')
     this.uiStore.hideAccountDropdown()
     // this.modalStore.toggleModal('invite')
     this.modalStore.toggleModal('referral')
@@ -77,7 +80,12 @@ class TopNav extends Component {
   }
 
   handleReferralModal = (e) => {
-    this.routing.push('/giftcard')
+    if (this.userStore.user) {
+      logModalView('/refer')
+      this.modalStore.toggleModal('referral')
+    } else {
+      this.props.store.routing.push('/help/topics/5bd1d5d71ee5e4f1d0b42c27')
+    }
     e.preventDefault()
   }
 
@@ -156,7 +164,7 @@ class TopNav extends Component {
           <div className={topBarClass}>
             <div className="container">
               <div onClick={this.handleReferralModal}>
-                Happy Planet. Happy Bellies. Get a Wally Shop gift card today.
+                Get 15% off all month when you refer a friend. Click for details.
               </div>
               <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                 <i className="fa fa-times-circle" aria-hidden="true" ></i>
