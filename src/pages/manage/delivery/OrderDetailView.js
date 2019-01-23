@@ -109,6 +109,7 @@ class OrderDetailView extends Component {
     const options = this.userStore.getHeaderAuth()
 
     this.adminStore.completeOrder(orderId, payload, options)
+    console.log(onSubmit)
     onSubmit && onSubmit()
     this.props.toggle({})
   }

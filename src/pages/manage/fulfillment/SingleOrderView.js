@@ -69,6 +69,7 @@ class SingleOrderView extends Component {
 
   handleSubmit = () => {
     const {packagings, cart_items, selectedOrder} = this.state
+    const {onSubmit} = this.props
     const item_quantities = cart_items.map(item => {
       return {
         product_id: item.product_id,
@@ -89,6 +90,7 @@ class SingleOrderView extends Component {
     const options = this.userStore.getHeaderAuth()
 
     this.adminStore.packageOrder(selectedOrder._id, payload, options)
+   onSubmit && onSubmit()
     this.props.toggle({})
   }
 

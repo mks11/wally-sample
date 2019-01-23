@@ -37,8 +37,8 @@ class SingleProductView extends Component {
         other: props.shopitemsFarms
       }),
       isEdit: false,
-      missing: props.product.missing === "true" || false,
-      substitute: props.product.substitute === "true" || false,
+      missing: String(props.product.missing) === "true" || false,
+      substitute: !!props.product.substitute_for_name,
       completed: Boolean(props.product.completed),
       subProductName: props.product.substitute_for_name || '',
       finalQuantity: props.product.final_quantity,
@@ -53,6 +53,7 @@ class SingleProductView extends Component {
   componentDidUpdate(prevProps) {
     if ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) {
       const {props} = this
+      console.log(props.product);
       this.setState(
         {
           id: props.product._id,
@@ -70,8 +71,8 @@ class SingleProductView extends Component {
             other: props.shopitemsFarms
           }),
           isEdit: false,
-          missing: props.product.missing === "true" || false,
-          substitute: props.product.substitute === "true" || false,
+          missing: String(props.product.missing) === "true" || false,
+          substitute: !!props.product.substitute_for_name,
           completed: Boolean(props.product.completed),
           subProductName: props.product.substitute_for_name || '',
           finalQuantity: props.product.final_quantity,
@@ -196,7 +197,7 @@ class SingleProductView extends Component {
                 <Col sm={10}>
                   <Input type="select" name="local" value={local}
                          onChange={e => this.setState({local: e.target.value === "true"})}
-                         disabled={!substitute}>
+                         disabled={!isEdit || isEdit && !substitute}>
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </Input>
@@ -210,7 +211,8 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <Input type="select" name="organic" value={organic}
-                         onChange={e => this.setState({organic: e.target.value === "true"})} disabled={!substitute}>
+                         onChange={e => this.setState({organic: e.target.value === "true"})}
+                         disabled={!isEdit || isEdit && !substitute}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                   </Input>
@@ -224,7 +226,8 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <InputGroup>
-                    <Input placeholder="Product Price" name="shopPrice" value={shopPrice} disabled={!substitute}
+                    <Input placeholder="Product Price" name="shopPrice" value={shopPrice}
+                           disabled={!isEdit || isEdit && !substitute}
                            type={"number"}
                            onChange={this.handleInputChange}/>
                     <InputGroupAddon addonType="append">
@@ -293,7 +296,7 @@ class SingleProductView extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Substitute Product Name" name="subProductName" value={subProductName}
-                               disabled={!substitute}
+                               disabled={!isEdit || (isEdit && !substitute)}
                                onChange={this.handleInputChange}/>
                 </Col>
               </Row>
@@ -345,7 +348,7 @@ class SingleProductView extends Component {
                 <Col sm={10}>
                   <Input type="select" name="missing_reason" value={missingReason}
                          onChange={e => this.setState({missingReason: e.target.value})}
-                         disabled={!missing}>
+                         disabled={!isEdit || (isEdit && !missing || !substitute)}>
                     <option value="Out of season">Out of season</option>
                     <option value="Vendor missing">Vendor missing</option>
                     <option value="Out of stock">Out of stock</option>
@@ -359,7 +362,7 @@ class SingleProductView extends Component {
                 <ArrowLeft/>
                 Previous
               </Button>
-              <Button variant="contained" color="primary" size={"large"} type={"submit"}>
+              <Button variant="contained" color="primary" size={"large"} type={"submit"} dissabled={this.adminStore.loading}>
                 {completed === false ? 'Submit' : completed ? isEdit ? 'Submit' : 'Edit' : isEdit ? 'Submit' : 'Edit'}
               </Button>
               <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}

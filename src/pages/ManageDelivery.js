@@ -108,9 +108,11 @@ class ManageDelivery extends Component {
                   <div className="mb-3">
                     <div className="mb-2 font-weight-bold">Delivery Route:</div>
                     <CustomDropdown
-                      values={routes.map(item => {
+                      values={[
+                        {id: 'all', title: 'All'}
+                          ,...routes.map(item => {
                         return {id: item._id, title: item.route_number}
-                      })}
+                      })]}
                       onItemClick={this.loadOrders}
                     />
                   </div>

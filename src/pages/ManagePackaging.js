@@ -126,7 +126,8 @@ class ManagePackaging extends Component {
                                         <TableBody>
                                             {orders && orders.length > 0 &&
                                             orders.map(order => {
-                                                    return <TableRow
+                                                console.log(order);
+                                                return <TableRow
                                                         key={order._id}
                                                         className={`row ${order.status}`}
                                                         onClick={() => this.toggleSingleOrderView({order})}

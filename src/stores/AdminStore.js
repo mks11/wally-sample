@@ -30,6 +30,7 @@ class AdminStore {
 
   packagings = []
 
+  loading = false
   async getTimeFrames() {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     // const time = '2018-11-04 15:30:00'
@@ -53,7 +54,9 @@ class AdminStore {
   }
 
   async updateShopItem(timeframe, shopitem_id, data) {
+    this.loading = true
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
+    this.loading = false
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
@@ -98,6 +101,7 @@ class AdminStore {
 
   async packageOrder(id, data, options) {
     const res = await axios.patch(`${API_ADMIN_PACKAGE_ORDER}/${id}/package`, data, options) // API_CREATE_ORDER
+    console.log(res.data);
     this.updateOrderItem(id, res.data)
   }
 
@@ -140,7 +144,7 @@ class AdminStore {
 
   updateOrderItem(id, updateditem) {
     this.orders = this.orders.map(item => {
-      if (item.id === id) {
+      if (item._id === id) {
         item = updateditem
       }
       return item

@@ -1168,6 +1168,14 @@ body {
     background: #c76464;
 }
 
+.packaging-table .delivery_issues {
+  background: lightcoral;
+}
+
+.packaging-table .delivery_issue:hover {
+  background: #c76464;
+}
+
 .delivery-table .row {
   cursor: pointer;
 }
