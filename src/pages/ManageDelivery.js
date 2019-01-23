@@ -126,7 +126,6 @@ class ManageDelivery extends Component {
               <Table className={"delivery-table"}>
                 <TableBody>
                   {orders && orders.map((order, i) => {
-                    order = order[0]
                     return (
                       <TableRow
                         className={`row ${order.status}`}
