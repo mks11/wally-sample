@@ -22,7 +22,7 @@ const TableRow = ({ item, onEditClick, onClick }) => (
         <Col xs="6">
           <Row>
             <Col><b>Qty:</b></Col>
-            <Col>{item.quantity}</Col>
+            <Col>{item.quantity} {item.unit_type}</Col>
           </Row>
         </Col>
       </Row>

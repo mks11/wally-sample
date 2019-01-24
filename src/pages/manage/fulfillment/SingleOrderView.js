@@ -132,7 +132,7 @@ class SingleOrderView extends Component {
                 <strong>Subtotal:</strong>
               </Col>
               <Col sm={4}>
-                {selectedOrder.subtotal / 100} $
+                $ {selectedOrder.subtotal / 100}
               </Col>
               <Col componentClass={ControlLabel} sm={2}>
                 <strong>Original Subtotal:</strong>

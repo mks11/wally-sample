@@ -42,9 +42,9 @@ class SingleProductView extends Component {
       completed: Boolean(props.product.completed),
       subProductName: props.product.substitute_for_name || '',
       finalQuantity: props.product.final_quantity,
-      totalPaid: props.product.total_paid,
+      totalPaid: props.product.total_paid / 100,
       weight: props.product.weight,
-      missingReason: props.product.product_missing_reason || "Out of season"
+      missingReason: props.product.product_missing_reason || "Out of season",
     }
     this.userStore = this.props.store.user
     this.adminStore = this.props.store.admin
@@ -76,9 +76,9 @@ class SingleProductView extends Component {
           completed: Boolean(props.product.completed),
           subProductName: props.product.substitute_for_name || '',
           finalQuantity: props.product.final_quantity,
-          totalPaid: props.product.total_paid,
+          totalPaid: props.product.total_paid / 100,
           weight: props.product.weight,
-          missingReason: props.product.product_missing_reason || "Out of season"
+          missingReason: props.product.product_missing_reason || "Out of season",
         }
       )
     }
@@ -110,7 +110,7 @@ class SingleProductView extends Component {
       total_paid: Number(totalPaid) * 100,
       weight: Number(weight),
       substitute_for_name: substitute ? product.product_name : null,
-      product_missing_reason: missing ? missingReason : null
+      product_missing_reason: missing ? missingReason : null,
     }
     if (!completed) {
         this.adminStore.updateShopItem(this.props.timeframe, id, data)
@@ -175,7 +175,7 @@ class SingleProductView extends Component {
                   <strong>Quantity:</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.quantity}
+                  {product.quantity} {product.unit_type}
                 </Col>
               </Row>
             </FormGroup>
@@ -185,7 +185,7 @@ class SingleProductView extends Component {
                   <strong>Quantity (if sub.):</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.quantity_for_sub}
+                  {product.quantity_for_sub} {product.unit_type}
                 </Col>
               </Row>
             </FormGroup>
@@ -222,16 +222,16 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Product Price:</strong>
+                  <strong>Shop Price:</strong>
                 </Col>
                 <Col sm={10}>
                   <InputGroup>
-                    <Input placeholder="Product Price" name="shopPrice" value={shopPrice}
+                    <Input placeholder="Shop Price" name="shopPrice" value={shopPrice}
                            disabled={!isEdit || isEdit && !substitute}
                            type={"number"}
                            onChange={this.handleInputChange}/>
                     <InputGroupAddon addonType="append">
-                      <InputGroupText>$</InputGroupText>
+                      <InputGroupText>$ / {product.price_unit}</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                 </Col>
@@ -240,26 +240,20 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Shop Price:</strong>
+                  <strong>Wally Shop Price:</strong>
                 </Col>
                 <Col sm={10}>
-                  {product.shop_price / 100}
+                  ${product.shop_price / 100} / {product.unit_type}
                 </Col>
               </Row>
             </FormGroup>
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Estimated Price:</strong>
+                  <strong>Estimated Total:</strong>
                 </Col>
                 <Col sm={10}>
-                  <InputGroup>
-                    <Input value={product.estimated_total ? product.estimated_total / 100 : ''} disabled={true}
-                           type={"number"}/>
-                    <InputGroupAddon addonType="append">
-                      <InputGroupText>$</InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
+                  ${product.estimated_total ? product.estimated_total / 100 : ''}
                 </Col>
               </Row>
             </FormGroup>
@@ -304,7 +298,7 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Final Quantity:</strong>
+                  <strong>Final Quantity ({product.unit_type}):</strong>
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}
@@ -317,7 +311,7 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Total Paid:</strong>
+                  <strong>Total Paid ($):</strong>
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Total" name="totalPaid" value={totalPaid}
@@ -330,7 +324,7 @@ class SingleProductView extends Component {
             <FormGroup>
               <Row>
                 <Col componentClass={ControlLabel} sm={2}>
-                  <strong>Weight:</strong>
+                  <strong>Weight (lbs):</strong>
                 </Col>
                 <Col sm={10}>
                   <FormControl placeholder="Enter Weight" name="weight" value={weight}

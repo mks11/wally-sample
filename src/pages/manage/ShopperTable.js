@@ -69,7 +69,7 @@ class ShopperTable extends Component {
                     {shopitem.product_producer} - {shopitem.product_shop}
                   </TableCell>
                   <TableCell>{shopitem.product_name}</TableCell>
-                  <TableCell align="right">{shopitem.quantity}</TableCell>
+                  <TableCell align="right">{shopitem.quantity} {shopitem.unit_type}</TableCell>
                   <TableCell>{renderStatus(shopitem)}</TableCell>
                 </TableRow>
               );
