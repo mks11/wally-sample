@@ -149,6 +149,7 @@ class SignupModal extends Component {
           </div>
 
           <FBLogin
+            userStore={user}
             additionalData={additionalFBdata}
             onSubmit={this.props.toggle}
           />

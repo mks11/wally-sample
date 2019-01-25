@@ -118,6 +118,7 @@ class LoginModal extends Component {
       password,
       invalidText,
     } = this.state
+    const { user } = this.props.stores
 
     return (
       <div className="login-wrap">
@@ -152,7 +153,10 @@ class LoginModal extends Component {
                 <span>or</span>
                 <hr/>
               </div>
-              <FBLogin onSubmit={this.props.toggle} />
+              <FBLogin
+                userStore={user}
+                onSubmit={this.props.toggle}
+              />
               <hr className="mt-5"/>
             </div>
           )

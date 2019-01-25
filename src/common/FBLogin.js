@@ -12,12 +12,7 @@ class FBLogin extends Component {
   }
 
   responseFacebook = responseData => {
-    const { onSubmit }= this.props
-
-    if (responseData.status === undefined) {
-      this.setState({ facebookRequest: false })
-      return
-    }
+    const { onSubmit, userStore }= this.props
 
     if (!this.state.facebookRequest) {
       this.setState({ facebookRequest: true })
@@ -25,7 +20,7 @@ class FBLogin extends Component {
       const { additionalData } = this.props
       const data = { ...responseData, ...additionalData }
 
-      this.userStore.loginFacebook(data).then(res => {
+      userStore.loginFacebook(data).then(res => {
         onSubmit && onSubmit()
         this.setState({ facebookRequest: false })
       }).catch(e => {
@@ -47,7 +42,7 @@ class FBLogin extends Component {
         fields="name,email,picture"
         scope="public_profile,email"
         callback={this.responseFacebook}
-        disableMobileRedirect
+        disableMobileRedirect={true}
       />
     )
   }
