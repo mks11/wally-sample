@@ -8,7 +8,8 @@ const MobileSearch = props => {
     sidebar,
     id,
     onClose,
-    onSearch
+    onSearch,
+    onCategoryClick,
   } = props
 
   return (
@@ -52,7 +53,7 @@ const MobileSearch = props => {
                       <Link
                         to={link}
                         className={parentSidebarClass}
-                        onClick={onClose}
+                        onClick={onCategoryClick}
                         replace
                       >{s.cat_name}</Link>
                     </div>
@@ -62,6 +63,7 @@ const MobileSearch = props => {
                         <Link
                           to={`/main/${sc.cat_id || ''}`} 
                           className={id === sc.cat_id ? "text-violet": ""}
+                          onClick={onCategoryClick}
                         >{sc.cat_name}</Link></li>
                       ) )}
                     </ul>

@@ -29,7 +29,7 @@ class ProductStore {
   }
 
   currentSearchFilter = []
-  currentSearchCategory = null
+  currentSearchCategory = 'All Categories'
 
   async showModal(product_id, customer_quantity, delivery) {
     this.activeProductId = product_id
