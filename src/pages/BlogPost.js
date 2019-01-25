@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import ReactGA from 'react-ga';
 import Title from '../common/page/Title'
 import { Row, Col } from 'reactstrap';
-import { connect } from '../utils'
+import { connect, logEvent } from '../utils'
 import moment from 'moment'
 
 class BlogPost extends Component {
@@ -17,6 +17,7 @@ class BlogPost extends Component {
     this.userStore = this.props.store.user
     this.contentStore = this.props.store.content
     this.routing = this.props.store.routing
+    this.handleGetStarted = this.handleGetStarted.bind(this)
   }
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
@@ -24,6 +25,12 @@ class BlogPost extends Component {
       .then((status) => {
         this.loadData()
       })
+  }
+
+  handleGetStarted(e) {
+    logEvent({ category: "BlogPost", action: "GetStarted" })
+    this.routing.push('/')
+    e.preventDefault()
   }
 
   loadData() {
@@ -59,7 +66,9 @@ class BlogPost extends Component {
             </Row>
             <Row>
               <Col>
-                <Link className="btn btn-main active blog-get-started" to="/">Get Started</Link>
+                <button onClick={this.handleGetStarted} className="btn btn-main active blog-get-started" data-submit="Submit">
+                  Get started
+                </button>
               </Col>
             </Row>
           </div>
