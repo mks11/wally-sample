@@ -37,7 +37,7 @@ class SingleProductView extends Component {
                 shopitem: props.product,
                 other: props.shopitemsFarms
             }),
-            isEdit: true,
+            isEdit: false,
             missing: String(props.product.missing) === "true" || false,
             substitute: !!props.product.substitute_for_name,
             completed: Boolean(props.product.completed),
