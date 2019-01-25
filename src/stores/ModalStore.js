@@ -12,9 +12,14 @@ class ModalStore {
   changeFarm = false
   changePrice = false
 
+  delivery = false
   deliveryChange = false
   deliveryChangeType = null
   deliveryChangeData = null
+
+  toggleDelivery() {
+    this.delivery = !this.delivery
+  }
 
   showDeliveryChange(type, data) {
     this.deliveryChange = true
@@ -75,12 +80,14 @@ decorate(ModalStore, {
   changeFarm: observable,
   changePrice: observable,
 
+  delivery: observable,
   deliveryChange: observable,
   showDeliveryChange: action,
   hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
   toggleChangePrice: action,
+  toggleDelivery: action,
 })
 
 

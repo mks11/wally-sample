@@ -16,13 +16,14 @@ class DeliveryModal extends Component {
   }
 
   handleSubmit = () => {
-    const { user } = this.props.stores
+    const { user, checkout } = this.props.stores
 
     if (this.state.selectedTime) {
       logEvent({ category: "DeliveryOptions", action: "SubmitDeliveryOptions" })
       user.setDeliveryTime(this.state.selectedTime)
       this.props.toggle()
-      this.props.onChangeSubmit && this.props.onChangeSubmit()
+      checkout.getDeliveryTimes()
+      // this.props.onChangeSubmit && this.props.onChangeSubmit()
     }
   }
 
