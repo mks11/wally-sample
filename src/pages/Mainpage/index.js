@@ -130,6 +130,7 @@ class Mainpage extends Component {
       if (!this.userStore.selectedDeliveryTime) {
         this.modalStore.toggleModal('delivery')
       } else {
+        this.uiStore.toggleCartMobile(false)
         this.routing.push('/checkout')
       }
     } else {

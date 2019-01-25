@@ -32,7 +32,6 @@ class MobileCartBtn extends Component {
     const { footerPos } = this.state
     const $ = window.$
     const scrollTop = $(window).scrollTop()
-    console.log(scrollTop, footerPos)
 
     this.setState({
       hide: scrollTop >= footerPos
