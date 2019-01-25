@@ -58,9 +58,9 @@ class SignupModal extends Component {
       }).then(data => {
         user.setUserData(data.user)
         user.setToken(data.token)
-        this.props.switchTo('welcome')
         checkout.getCurrentCart(user.getHeaderAuth(),  user.getDeliveryParams())
         this.setState({ signupRequest: false })
+        this.props.switchTo('welcome')
         user.giftCardPromo = null
       }).catch(e => {
         console.error('Failed to signup', e)
