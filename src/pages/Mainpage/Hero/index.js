@@ -85,7 +85,7 @@ class Hero extends Component {
 
   render() {
     const { activeIndex, width } = this.state
-    const isMobile = width <= 500
+    const isMobile = width <= 576 || (width <= 767 && width > 576)
 
     let heroContent = (
       <Carousel
@@ -123,15 +123,16 @@ class Hero extends Component {
       const link = heroItems[1].link
       const src = getBannerImageLink(2, true)
 
-      heroContent = (
-        <Link to={link}>
-          <img
-            className="img-fluid"
-            src={src}
-            alt=""
-          />
-        </Link>
-      )
+      // heroContent = (
+      //   <Link to={link}>
+      //     <img
+      //       className="img-fluid"
+      //       src={src}
+      //       alt=""
+      //     />
+      //   </Link>
+      // )
+      heroContent = null
     }
 
     return heroContent
