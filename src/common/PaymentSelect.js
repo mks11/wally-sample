@@ -40,17 +40,21 @@ class PaymentSelect extends Component {
   }
 
   handleAddPayment = data => {
-    const { onAddPayment } = this.props
+    const { onAddPayment, userGuest } = this.props
     this.setState({ error: false })
 
-    this.userStore.savePayment(data)
-      .then(data => {
-        onAddPayment && onAddPayment(data)
-      })
-      .catch(_ => {
-        this.setState({ error: true })
-        onAddPayment && onAddPayment(null)
-      })
+    if (userGuest) {
+      onAddPayment && onAddPayment(data)
+    } else {
+      this.userStore.savePayment(data)
+        .then(data => {
+          onAddPayment && onAddPayment(data)
+        })
+        .catch(_ => {
+          this.setState({ error: true })
+          onAddPayment && onAddPayment(null)
+        })
+    }
   }
 
   render() {
