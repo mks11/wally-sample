@@ -68,7 +68,7 @@ class ProductTop extends Component {
   handleCheckout = () => {
     if (this.userStore.status) {
       if (!this.userStore.selectedDeliveryTime) {
-        this.modalStore.toggleModal('delivery')
+        this.modalStore.toggleDelivery()
       } else {
         this.routing.push('/checkout')
       }
@@ -291,7 +291,7 @@ class ProductTop extends Component {
             <Col xs="auto" className="d-block d-md-none">
               <div
                 className="dropdown-time d-flex"
-                onClick={() => this.modalStore.toggleModal('delivery')}
+                onClick={() => this.modalStore.toggleDelivery()}
               >
                 <i className="fa fa-clock-o bar-icon" />
                 <span className="dropdown-details-mobile align-self-center">

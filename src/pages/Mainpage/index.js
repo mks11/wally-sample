@@ -4,7 +4,8 @@ import { formatMoney, connect, logEvent, logModalView, datesEqual } from 'utils'
 import { Link } from 'react-router-dom'
 import { APP_URL } from 'config'
 
-import DeliveryChangeModal from 'common/DeliveryChangeModal.js';
+import DeliveryModal from 'common/DeliveryModal'
+import DeliveryChangeModal from 'common/DeliveryChangeModal'
 // import ProductModal from 'common/ProductModal';
 
 import Hero from './Hero'
@@ -51,13 +52,7 @@ class Mainpage extends Component {
     const id = this.props.match.params.id
     this.id = id
 
-    
-    let categoryTypeMode = 'all'
-    
-    if (!this.id || this.id.length <= 3) {
-      categoryTypeMode = 'limit'
-    }
-    
+    const categoryTypeMode = (!this.id || this.id.length <= 3) ? 'limit' : 'all'    
     this.setState({categoryTypeMode})
 
     const deliveryData = this.userStore.getDeliveryParams()
@@ -72,7 +67,7 @@ class Mainpage extends Component {
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
       if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
         this.checkoutStore.getDeliveryTimes().then(() => {
-          this.modalStore.toggleModal('delivery')
+          this.modalStore.toggleDelivery()
         })
       }
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
@@ -83,7 +78,7 @@ class Mainpage extends Component {
           this.checkoutStore.updateCartItems(delivery)
           this.userStore.cameFromCartUrl = false
         } else {
-          this.modalStore.toggleModal('delivery')
+          this.modalStore.toggleDelivery()
         }
       }
     }).catch((e) => {
@@ -128,7 +123,7 @@ class Mainpage extends Component {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
       if (!this.userStore.selectedDeliveryTime) {
-        this.modalStore.toggleModal('delivery')
+        this.modalStore.toggleDelivery()
       } else {
         this.uiStore.toggleCartMobile(false)
         this.routing.push('/checkout')
@@ -178,7 +173,7 @@ class Mainpage extends Component {
   handleProductModal = (product_id, deliveryTimes) => {
     if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
       logModalView('/delivery-options-window')
-      this.modalStore.toggleModal('delivery')
+      this.modalStore.toggleDelivery()
       this.productStore.activeProductId = product_id
     } else {
       this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
@@ -369,7 +364,7 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
+                <DeliveryModal onChangeSubmit={this.handleChangeDelivery} />
                 <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
                 <MobileCartBtn
                   onClick={this.handleOpenCartMobile}
