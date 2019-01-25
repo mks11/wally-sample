@@ -29,7 +29,6 @@ class ProductTop extends Component {
       selectedAddress: this.userStore.selectedDeliveryAddress,
       selectedTime: this.userStore.selectedDeliveryTime,
       fakeUser: this.userStore.loadFakeUser(),
-      stickyPos: 0,
     }
   }
 
@@ -38,22 +37,14 @@ class ProductTop extends Component {
     $(window).bind('scroll', this.handleFixedTop)
   }
 
-  componentDidUpdate(_, prevState) {
-    const $ = window.$
-    const stickyPos = $('.product-top').offset().top - 100
-    if (prevState.stickyPos !== stickyPos) {
-      this.setState({ stickyPos })
-    }
-  }
-
   componentWillUnmount() {
     const $ = window.$
     $(window).unbind('scroll', this.handleFixedTop)
   }
 
   handleFixedTop = () => {
-    const { stickyPos } = this.state
     const $ = window.$
+    const stickyPos = 450
     if ($(window).scrollTop() >= stickyPos) {
       $('.product-top').addClass('fixed');
     } else {
