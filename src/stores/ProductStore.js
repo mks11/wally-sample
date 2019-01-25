@@ -83,6 +83,7 @@ class ProductStore {
   }
 
   async searchKeyword(keyword, delivery) {
+    const term = keyword
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     keyword = encodeURIComponent(keyword)
     const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
@@ -93,7 +94,7 @@ class ProductStore {
       all: true,
       result: res.data.products || [],
       display: res.data.products || [],
-      term: keyword,
+      term,
       filters: res.data.filters || []
     }
     this.currentSearchFilter = res.data.filters.map(filter => filter.cat_id)
