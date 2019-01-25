@@ -93,7 +93,7 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover, 
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
-.aw-header, .aw-header.navbar-white{background-color: #fff;}
+.aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
 .navbar-toggler {
 }
 .aw-header.navbar-white .navbar-toggler-icon {
@@ -284,7 +284,7 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#263a52;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
+background-color:#78C98D;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:60px;}
 .footer-fb a{
@@ -2008,7 +2008,7 @@ a {
   margin: 0;
   padding: 5px 0;
   text-align: center;
-  background: #c0d6cd;
+  background: #ffffff;
   font-family: 'Circe', sans-serif;
   cursor: pointer;
 }
