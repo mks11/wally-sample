@@ -67,7 +67,7 @@ class BlogPost extends Component {
             <Row>
               <Col>
                 <button onClick={this.handleGetStarted} className="btn btn-main active blog-get-started" data-submit="Submit">
-                  Get started
+                  Start shopping
                 </button>
               </Col>
             </Row>
