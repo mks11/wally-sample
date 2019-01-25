@@ -18,7 +18,7 @@ class ManageShopper extends Component {
     this.state = {
       timeframe: null,
       location: null,
-      isProductView: false,
+      isProductView: true,
       selectedProduct: {},
       selectedIndex: null
     }
