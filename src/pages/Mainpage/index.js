@@ -215,6 +215,7 @@ class Mainpage extends Component {
   }
 
   handleCategoryClick = () => {
+    this.setState({ showMobileSearch: false })
     this.productStore.resetSearch()
   }
 
@@ -408,6 +409,7 @@ class Mainpage extends Component {
                   show={showMobileSearch}
                   onClose={this.handleMobileSearchClose}
                   onSearch={this.handleMobileSearch}
+                  onCategoryClick={this.handleCategoryClick}
                   sidebar={sidebar}
                   id={id}
                 />
