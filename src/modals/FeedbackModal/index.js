@@ -91,8 +91,8 @@ class FeedbackModal extends Component {
         <FormGroup row>
           <Col xs={4}>
             <Button
-              className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
-              onClick={() => this.handleFeedbackValueChange(0)}
+              className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
+              onClick={() => this.handleFeedbackValueChange(2)}
             >
               <img src="images/smile.svg" />
             </Button>
@@ -107,8 +107,8 @@ class FeedbackModal extends Component {
           </Col>
           <Col xs={4}>
             <Button
-              className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
-              onClick={() => this.handleFeedbackValueChange(2)}
+              className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
+              onClick={() => this.handleFeedbackValueChange(0)}
             >
               <img src="images/sad.svg" />
             </Button>
