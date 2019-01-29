@@ -141,7 +141,6 @@ class ProductModal extends Component {
     for (var i = 0, len = 9; i <= len; i++) {
       var opt = minSize + i * activeProduct.increment_size
       qtyOptions.push(+(opt.toFixed(3)))
-      
     }
 
     let price = inventory.price / 100
@@ -218,7 +217,7 @@ class ProductModal extends Component {
             <div><strong>Choose your quantity</strong></div>
             <div className="form-group" style={{maxWidth: '140px'}}>
               <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
-                { qtyOptions.map((v, i) => (<option key={i} value={v}>{v}</option>)) }
+                { qtyOptions.map((v, i) => (<option key={i} value={v}>{`${v} ${price_unit}`}</option>)) }
               </select>
             </div>
             <hr/>

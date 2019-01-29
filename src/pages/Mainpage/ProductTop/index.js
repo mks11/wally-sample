@@ -44,7 +44,8 @@ class ProductTop extends Component {
 
   handleFixedTop = () => {
     const $ = window.$
-    const stickyPos = 450
+    const isMobile = window.innerWidth <= 576 || (window.innerWidth <= 767 && window.innerWidth > 576)
+    const stickyPos = isMobile ? 20 : 450
     if ($(window).scrollTop() >= stickyPos) {
       $('.product-top').addClass('fixed');
     } else {

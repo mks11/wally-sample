@@ -687,6 +687,11 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   justify-content: flex-end;
 }
 
+.modal-header h2 {
+  width: 100%;
+  text-align: center;
+}
+
 .btn-icon--back {
   background: url(../images/left_arrow2.png) no-repeat;
   background-size: 12px 20px;
@@ -1171,15 +1176,12 @@ a.view-all{
   float:left;
 }
 
-.modal-bg {
-
-}
-
 .referral-wrap {
   border-radius: 6px;
   border: 2px dashed #ececec;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
+  background-color: #c0d6cd;
 }
 
 .referral-wrap .referral-link {
