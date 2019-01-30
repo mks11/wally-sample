@@ -37,13 +37,13 @@ class SingleProductView extends Component {
                 shopitem: props.product,
                 other: props.shopitemsFarms
             }),
-            isEdit: false,
-            missing: String(props.product.missing) === "true" || false,
+            isEdit: !props.completed,
+            missing: !!props.product.missing,
             substitute: !!props.product.substitute_for_name,
             completed: Boolean(props.product.completed),
             subProductName: props.product.substitute_for_name || '',
             finalQuantity: props.product.final_quantity || '',
-            totalPaid: props.product.total_paid / 100 ,
+            totalPaid: props.product.total_paid / 100 || '',
             weight: props.product.weight || '',
             missingReason: props.product.product_missing_reason || "Out of season",
         }
@@ -70,13 +70,13 @@ class SingleProductView extends Component {
                         shopitem: props.product,
                         other: props.shopitemsFarms
                     }),
-                    isEdit: false,
-                    missing: String(props.product.missing) === "true" || false,
+                    isEdit: !props.product.completed,
+                    missing: !!props.product.missing,
                     substitute: !!props.product.substitute_for_name,
                     completed: Boolean(props.product.completed),
                     subProductName: props.product.substitute_for_name || '',
                     finalQuantity: props.product.final_quantity || '',
-                    totalPaid: props.product.total_paid / 100,
+                    totalPaid: props.product.total_paid / 100 || '',
                     weight: props.product.weight || '',
                     missingReason: props.product.product_missing_reason || "Out of season",
                 }
@@ -112,17 +112,12 @@ class SingleProductView extends Component {
             substitute_for_name: substitute ? product.product_name : null,
             product_missing_reason: missing ? missingReason : null,
         }
-        if (!completed) {
+        if (isEdit) {
             this.adminStore.updateShopItem(this.props.timeframe, id, data)
             if (substitute) this.setState({subProductName: product.product_name})
             this.setState({isEdit: false})
         } else {
-            if (isEdit) {
-                this.adminStore.updateShopItem(this.props.timeframe, id, data)
-                this.setState({isEdit: false})
-            } else {
                 this.setState({isEdit: true})
-            }
         }
     }
 
@@ -143,7 +138,7 @@ class SingleProductView extends Component {
 
     render() {
         const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
-        console.log(producer);
+        console.log(this.state);
         return (
             <section className="page-section pt-1 single-product">
                 <Container>
@@ -359,16 +354,16 @@ class SingleProductView extends Component {
                         </FormGroup>
                         <div className="nav-buttons">
                             <Button variant="contained" size={"small"} onClick={this.props.onPrevProduct}
-                                    disabled={this.props.prevDisabled}>
+                                    disabled={this.props.prevDisabled ||this.adminStore.loading}>
                                 <ArrowLeft/>
                                 Previous
                             </Button>
                             <Button variant="contained" color="primary" size={"large"} type={"submit"}
-                                    dissabled={this.adminStore.loading}>
-                                {completed === false ? 'Submit' : completed ? isEdit ? 'Submit' : 'Edit' : isEdit ? 'Submit' : 'Edit'}
+                                    disabled={this.adminStore.loading}>
+                                {isEdit ? 'Submit' : "Edit"}
                             </Button>
                             <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}
-                                    disabled={this.props.nextDisabled}>
+                                    disabled={this.props.prevDisabled ||this.adminStore.loading}>
                                 Next
                                 <ArrowRight/>
                             </Button>
