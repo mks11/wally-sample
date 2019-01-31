@@ -48,15 +48,23 @@ class CartItem extends Component {
   render() {
     const {isEdit, cart_item} = this.state
     return (
-      <TableRow>
+      <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.substitute_for_name}</TableCell>
         <TableCell>$ {cart_item.product_price / 100}</TableCell>
-        <TableCell> <FormControl placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.customer_quantity}
-                                 name={"customer_quantity"}
-                                 type={"number"}
-                                 onChange={this.onInputChange}
-                                 disabled={!isEdit}/></TableCell>
+        <TableCell>
+            <InputGroup>
+                <Input placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.customer_quantity}
+                       type={"number"}
+                       name={"customer_quantity"}
+                       onChange={this.onInputChange}
+                       disabled={!isEdit}
+/>
+                {<InputGroupAddon addonType="append">
+                    <InputGroupText>{cart_item.price_unit}</InputGroupText>
+                </InputGroupAddon>}
+            </InputGroup>
+        </TableCell>
         <TableCell>
           <Input type="select"
                            name="missing"

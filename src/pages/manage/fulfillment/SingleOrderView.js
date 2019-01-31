@@ -150,14 +150,9 @@ class SingleOrderView extends Component {
                     <strong>{packaging.type}</strong>
                   </TableCell>
                   <TableCell>
-                    <InputGroup>
                       <Input placeholder="Enter Quantity" value={packaging.quantity}
                              type={"number"}
                              onChange={(e) => this.onChangePackaging(e, i)}/>
-                      {<InputGroupAddon addonType="append">
-                        <InputGroupText>{selectedOrder.unit}</InputGroupText>
-                      </InputGroupAddon>}
-                    </InputGroup>
                   </TableCell>
                 </TableRow>
               )}

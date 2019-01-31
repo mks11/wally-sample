@@ -81,6 +81,7 @@ class ManagePackaging extends Component {
             this.setState({singleOrderOpen: true, selectedOrder: order})
         } else {
             this.setState({singleOrderOpen: false, selectedOrder: null})
+            this.loadOrders()
         }
     }
 
