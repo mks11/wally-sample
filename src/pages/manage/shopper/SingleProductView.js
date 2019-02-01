@@ -41,7 +41,7 @@ class SingleProductView extends Component {
             missing: !!props.product.missing,
             substitute: !!props.product.substitute_for_name,
             completed: Boolean(props.product.completed),
-            subProductName: props.product.substitute_for_name || '',
+            subProductName: props.product.substitute_for_name ? props.product.product_name : '',
             finalQuantity: props.product.final_quantity || '',
             totalPaid: props.product.total_paid / 100 || '',
             weight: props.product.weight || '',
@@ -74,7 +74,7 @@ class SingleProductView extends Component {
                     missing: !!props.product.missing,
                     substitute: !!props.product.substitute_for_name,
                     completed: Boolean(props.product.completed),
-                    subProductName: props.product.substitute_for_name || '',
+                    subProductName: props.product.substitute_for_name ? props.product.product_name : '',
                     finalQuantity: props.product.final_quantity || '',
                     totalPaid: props.product.total_paid / 100 || '',
                     weight: props.product.weight || '',
@@ -157,7 +157,7 @@ class SingleProductView extends Component {
                                     <strong>Product:</strong>
                                 </Col>
                                 <Col sm={10}>
-                                    {product.product_name}
+                                    {subProductName ? subProductName : product.product_name}
                                 </Col>
                             </Row>
                         </FormGroup>
@@ -303,7 +303,7 @@ class SingleProductView extends Component {
                         <FormGroup>
                             <Row>
                                 <Col componentClass={ControlLabel} sm={2}>
-                                    <strong>Final Quantity ({product.unit_type}):</strong>
+                                    <strong>Final Quantity ({product.unit_type != 'oz' ? product.unit_type : 'lbs'}):</strong>
                                 </Col>
                                 <Col sm={10}>
                                     <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}
