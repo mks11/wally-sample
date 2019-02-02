@@ -3,18 +3,20 @@ import ReactGA from 'react-ga'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
-import CurrencyInput from 'react-currency-input'
-import Title from 'common/page/Title'
 import FontAwesome from 'react-fontawesome'
+import CurrencyInput from 'react-currency-input'
 import ClickOutside from 'react-click-outside'
+import Title from 'common/page/Title'
 import PaymentSelect from 'common/PaymentSelect'
 import AmountGroup from 'common/AmountGroup'
 
-import { connect, formatMoney, logEvent, logModalView, logPageView, datesEqual } from '../utils'
+import { connect, formatMoney, logEvent, logModalView, logPageView, datesEqual } from 'utils'
 
 import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 import DeliveryChangeModal from 'common/DeliveryChangeModal'
+
+import DeliveryNotes from './DeliveryNotes'
 
 class Checkout extends Component {
   constructor(props) {
@@ -54,6 +56,7 @@ class Checkout extends Component {
       lockPayment: false,
       lockTime: false,
       confirmHome: false,
+      confirmHomeError: false,
 
       newAddress: false,
       newPayment: false,
@@ -83,6 +86,8 @@ class Checkout extends Component {
       servicepopup: false,
       packagingdeposit: false,
       placeOrderRequest: false,
+
+      order_notes: '',
     }
   }
 
@@ -246,7 +251,7 @@ class Checkout extends Component {
   }
 
   handlePlaceOrder() {
-    const { placeOrderRequest } = this.state
+    const { placeOrderRequest, order_notes } = this.state
 
     if (placeOrderRequest) {
       return
@@ -264,7 +269,11 @@ class Checkout extends Component {
     }
 
     if (!this.state.confirmHome) {
-      this.setState({invalidText: 'Please confirm that you are home', placeOrderRequest: false})
+      this.setState({
+        invalidText: 'Please confirm that you are home',
+        placeOrderRequest: false,
+        confirmHomeError: true,
+      })
       return
     }
     if (!this.state.lockPayment) {
@@ -280,6 +289,7 @@ class Checkout extends Component {
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
       tip_amount: this.parseAppliedTip(),
+      order_notes,
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
@@ -387,9 +397,12 @@ class Checkout extends Component {
     this.setState({ tippingpopup: false })
   }
 
-  handleConfirmHome() {
+  handleConfirmHome = () => {
     logEvent({ category: "Checkout", action: "ConfirmAtHome" })
-    this.setState({confirmHome: !this.state.confirmHome})
+    this.setState({
+      confirmHome: !this.state.confirmHome,
+      confirmHomeError: !!this.state.confirmHome,
+    })
   }
 
   handleTipAmountChange = (value, clickedByUser) => {
@@ -432,6 +445,10 @@ class Checkout extends Component {
     return tipAmount
   }
 
+  handleDeliveryNotesSubmit = notes => {
+    this.setState({ order_notes: notes })
+  }
+
   render() {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null
@@ -442,7 +459,7 @@ class Checkout extends Component {
     const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount / 100 : 0
 
     let buttonPlaceOrderClass = 'btn btn-main'
-    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome && !this.state.placeOrderRequest) {
+    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && !this.state.placeOrderRequest) {
       buttonPlaceOrderClass += ' active' 
     }
 
@@ -479,10 +496,6 @@ class Checkout extends Component {
                       title={true}
                     />
                 }
-                <div className="custom-control custom-checkbox mt-2 mb-3">
-                  <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={e=>this.handleConfirmHome()} />
-                  <label className="custom-control-label" onClick={e=>this.handleConfirmHome()}>I confirm that I will be at home or have a doorman</label>
-                </div>
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
                 </h3>
@@ -494,7 +507,11 @@ class Checkout extends Component {
                     onAddPayment: this.handleAddPayment,
                     onSubmitPayment: this.handleSubmitPayment,
                     userGuest: !this.userStore.status,
+                    preselect: true,
                   }}
+                />
+                <DeliveryNotes
+                  onSubmit={this.handleDeliveryNotesSubmit}
                 />
             </div>
           </div>
@@ -657,6 +674,10 @@ class Checkout extends Component {
                                   <div className="item-total">
                                     <span>Total</span>
                                     <span>{formatMoney(orderTotal)}</span>
+                                  </div>
+                                  <div className="custom-control custom-checkbox mt-2 mb-3">
+                                    <input type="checkbox" className="custom-control-input" id="homeCheck" checked={this.state.confirmHome} onChange={this.handleConfirmHome} />
+                                    <label className={`custom-control-label ${this.state.confirmHomeError ? 'text-error' : ''}`} onClick={this.handleConfirmHome}>I confirm that I will be at home or have a doorman</label>
                                   </div>
                                   <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
                                   {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}

@@ -2480,3 +2480,18 @@ color:#6e8692
 .purple-apply-btn.grey-btn {
   color: #888;
 }
+
+
+.delivery-notes .card-body {
+  border: 1px solid #ececec;
+}
+
+.delivery-notes textarea {
+  resize: none;
+  padding: 10px;
+  height: 150px;
+}
+
+.delivery-notes textarea:focus {
+  border: 2px solid #78C98D;
+}

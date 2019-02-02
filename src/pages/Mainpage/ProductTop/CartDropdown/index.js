@@ -51,6 +51,7 @@ class CartDropdown extends Component {
             className={`product-cart-counter ${count > 0 ? 'active' : ''}`}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
+            onClick={this.handleCheckout}
           >
             <i className="fa fa-shopping-bag" /><span><strong>{count} {count > 1 ? 'Items' : 'Item'}</strong></span>
           </div>

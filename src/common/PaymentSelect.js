@@ -13,6 +13,7 @@ class PaymentSelect extends Component {
     const {
       forceSelect,
       userPreferredPayment,
+      preselect = false,
     } = props
 
     this.state = {
@@ -20,6 +21,8 @@ class PaymentSelect extends Component {
       newPayment: false,
       error: false,
     }
+
+    preselect && this.handleSubmitPayment()
   }
 
   handleSelectPayment = payment_id => {

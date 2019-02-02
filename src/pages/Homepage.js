@@ -98,8 +98,8 @@ class Homepage extends Component {
       .then(() => {
         this.setState({
           heroStatus: 'invalid_zip_success',
-          heroText: 'Thanks!\n We\'ll notify you when we launch in your area.\n Follow us on Instagram @thewallyshop and stay up to date on all things sustainability.',
-          heroDescription: '',
+          heroText: 'We\'ll notify you when we launch in your area.',
+          heroDescription: 'Join the Wally community and get inspired with our tips on living your best (sustainable) life on Instagram @thewallyshop.',
         })
       }).catch((e) => {
         console.error('Failed to subscribe', e)
