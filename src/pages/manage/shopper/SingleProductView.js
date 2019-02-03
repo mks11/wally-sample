@@ -37,7 +37,7 @@ class SingleProductView extends Component {
                 shopitem: props.product,
                 other: props.shopitemsFarms
             }),
-            isEdit: !props.completed,
+            isEdit: !props.product.completed,
             missing: !!props.product.missing,
             substitute: !!props.product.substitute_for_name,
             completed: Boolean(props.product.completed),
@@ -52,7 +52,9 @@ class SingleProductView extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) {
+        if (
+            ((prevProps.selectedIndex || prevProps.selectedIndex === 0) && (prevProps.selectedIndex !== this.props.selectedIndex)) ||
+            (prevProps.product.completed !== this.props.product.completed)) {
             const {props} = this
             this.setState(
                 {
@@ -110,16 +112,17 @@ class SingleProductView extends Component {
             total_paid: Number(totalPaid) * 100,
             weight: Number(weight),
             substitute_for_name: substitute ? product.product_name : null,
-            product_missing_reason: missing ? missingReason : null,
+            product_missing_reason: missingReason,
         }
         if (isEdit) {
-            this.adminStore.updateShopItem(this.props.timeframe, id, data)
+            this.adminStore.updateShopItem(this.props.timeframe, id, data, this.props.toggle, this.props.selectedIndex)
             if (substitute) this.setState({subProductName: product.product_name})
             this.setState({isEdit: false})
         } else {
-                this.setState({isEdit: true})
+            this.setState({isEdit: true})
         }
     }
+
 
     prepareFarmValues = ({shopitem, other}) => {
         const {product_id, product_producer} = shopitem
@@ -138,12 +141,11 @@ class SingleProductView extends Component {
 
     render() {
         const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
-        console.log(this.state);
         return (
             <section className="page-section pt-1 single-product">
                 <Container>
                     <div className="mb-3">
-                        <Button variant="contained" color="default" onClick={this.props.toggle}>
+                        <Button variant="contained" color="default" onClick={() => this.props.toggle()}>
                             <CloseIcon/>
                             <Typography>Close</Typography>
                         </Button>
@@ -303,7 +305,8 @@ class SingleProductView extends Component {
                         <FormGroup>
                             <Row>
                                 <Col componentClass={ControlLabel} sm={2}>
-                                    <strong>Final Quantity ({product.unit_type != 'oz' ? product.unit_type : 'lbs'}):</strong>
+                                    <strong>Final Quantity
+                                        ({product.unit_type != 'oz' ? product.unit_type : 'lbs'}):</strong>
                                 </Col>
                                 <Col sm={10}>
                                     <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}
@@ -354,7 +357,7 @@ class SingleProductView extends Component {
                         </FormGroup>
                         <div className="nav-buttons">
                             <Button variant="contained" size={"small"} onClick={this.props.onPrevProduct}
-                                    disabled={this.props.prevDisabled ||this.adminStore.loading}>
+                                    disabled={this.props.prevDisabled || this.adminStore.loading}>
                                 <ArrowLeft/>
                                 Previous
                             </Button>
@@ -363,7 +366,7 @@ class SingleProductView extends Component {
                                 {isEdit ? 'Submit' : "Edit"}
                             </Button>
                             <Button variant="contained" size={"small"} onClick={this.props.onNextProduct}
-                                    disabled={this.props.prevDisabled ||this.adminStore.loading}>
+                                    disabled={this.props.prevDisabled || this.adminStore.loading}>
                                 Next
                                 <ArrowRight/>
                             </Button>

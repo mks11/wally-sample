@@ -53,10 +53,11 @@ class AdminStore {
     this.shopitemsFarms = res.data.farms
   }
 
-  async updateShopItem(timeframe, shopitem_id, data) {
+  async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {
     this.loading = true
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
     this.loading = false
+    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
@@ -126,7 +127,7 @@ class AdminStore {
 
   updateStoreShopItem(id, updateditem) {
     this.shopitems = this.shopitems.map(item => {
-      if (item.product_id === id) {
+      if (item._id === id) {
         item = updateditem
       }
       return item

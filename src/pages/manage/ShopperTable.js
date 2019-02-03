@@ -62,7 +62,7 @@ class ShopperTable extends Component {
               return (
                 <TableRow
                   key={shopitem.product_id}
-                  className={`row ${shopitem.completed ? 'completed' : ''} ${shopitem.missing ? 'missing' : ''}`}
+                  className={`row ${renderStatus(shopitem).toLocaleLowerCase()} `}
                   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
                   <TableCell component="th" scope="row" padding={"dense"}>

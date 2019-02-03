@@ -59,12 +59,15 @@ class ManageShopper extends Component {
   }
 
   toggleSingleProductView = (product, index) => {
-    this.setState({isProductView: !this.state.isProductView, selectedProduct: product, selectedIndex: index})
-    if (!product) {
+    if (product ) {
+      this.setState({isProductView: true, selectedProduct: product, selectedIndex: index})
+    } else {
       const {timeframe, location} = this.state
+      this.setState({isProductView: false, selectedProduct: {}, selectedIndex: null})
       this.adminStore.getShopItems(timeframe, location)
       this.adminStore.getShopItemsFarms(timeframe, location)
       this.adminStore.getShopLocations(timeframe)
+      this.adminStore.loading = false
     }
   }
 
@@ -151,7 +154,7 @@ class ManageShopper extends Component {
           </React.Fragment>
           :
           <SingleProductView
-            toggle={() => this.toggleSingleProductView()}
+            toggle={this.toggleSingleProductView}
             product={selectedProduct}
             onPrevProduct={this.handlePrevProductClick}
             onNextProduct={this.handleNextProductClick}
