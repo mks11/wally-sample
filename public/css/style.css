@@ -10,7 +10,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-body{padding-top:70px; font-family: 'Circe', sans-serif;}
+body{padding:0; font-family: 'Circe', sans-serif;}
 .btn-outline-white{border-color:#fff;border-width:2px;color:#fff;}
 .btn-outline-white:hover, .btn-outline-white:focus{background-color: #fff;color:#323f93;}
 .btn-success{border:0;font-family: 'Circe', sans-serif;font-size: 18px;line-height:24px;padding:13px 30px;
@@ -600,7 +600,9 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   .slick-arrow{margin-top: -40px;}
 }
 @media (max-width:576px){
-  body{padding-top:60px;}
+  .header-wrap + .aw-main {
+    padding-top: 60px;
+  }
   p{font-size: 14px;}
   .page-title{font-size: 22px;}
   .page-title.fz28, h3.fz28{font-size: 20px;}
@@ -1822,7 +1824,7 @@ button.btn.btn-danger.btn-add-cart {
 }
 .product-top.fixed + .product-content .product-content-left,
 .product-top.fixed + .product-content .product-content-right {
-  margin-top:95px;
+  margin-top:65px;
 }
 ::-webkit-scrollbar {
   right:0;
@@ -1933,7 +1935,7 @@ a {
     top: 89px;
   }
   .header-wrap.top-bar-open + .aw-main {
-    padding-top: 28px;
+    padding-top: 88px;
   }
 
   .carousel-item{width:100%; margin: auto;height:calc(50vh - 80px);}
@@ -1999,7 +2001,7 @@ a {
     top: 89px;
   }
   .header-wrap.top-bar-open + .aw-main {
-    padding-top: 28px;
+    padding-top: 88px;
   }
   .btn-icon--close {
     position: fixed;

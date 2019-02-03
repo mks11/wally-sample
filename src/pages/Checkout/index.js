@@ -116,6 +116,9 @@ class Checkout extends Component {
             const selectedPayment = this.userStore.user.payment.find((d) => d._id === this.userStore.user.preferred_payment)
             this.setState({selectedPayment: selectedPayment._id})
           }
+
+          const { checkoutFirst } = this.userStore.flags || {}
+          !checkoutFirst && this.modalStore.toggleModal('checkoutfirst')
         } else {
           this.routing.push('/main')
         }

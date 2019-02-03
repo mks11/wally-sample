@@ -42,6 +42,8 @@ class UserStore {
   cameFromCartUrl = false
   feedback = null
 
+  flags = null
+
   togglePromoModal() {
     this.promoModal = !this.promoModal
   }
@@ -181,6 +183,7 @@ class UserStore {
     const token = localStorage.getItem('token')
     const user = localStorage.getItem('user')
     const delivery = localStorage.getItem('delivery')
+    const flags = localStorage.getItem('flags')
 
     if (token && user) {
       this.token = JSON.parse(token)
@@ -192,6 +195,8 @@ class UserStore {
       this.selectedDeliveryAddress = deliveryData.address
       this.selectedDeliveryTime = deliveryData.time
     }
+
+    this.flags = flags && JSON.parse(flags)
   }
 
   setDeliveryData() {
@@ -394,6 +399,16 @@ class UserStore {
       }
     }
   }
+
+  updateFlags(id, value) {
+    const lsFlags = localStorage.getItem('flags')
+    const flags = lsFlags ? JSON.parse(lsFlags) : {}
+
+    flags[id] = value
+    this.flags = flags
+
+    localStorage.setItem('flags', JSON.stringify(flags))
+  }
 }
 
 
@@ -428,6 +443,8 @@ decorate(UserStore, {
 
   cameFromCartUrl: observable,
   feedback: observable,
+
+  flags: observable,
 
   login: action,
   getUser: action,
@@ -466,7 +483,8 @@ decorate(UserStore, {
   addFakeAddress: action,
   adjustDeliveryTimes: action,
 
-  getAddressById: action
+  getAddressById: action,
+  updateFlags: action,
 })
 
 

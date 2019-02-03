@@ -29,24 +29,41 @@ class ProductTop extends Component {
       selectedAddress: this.userStore.selectedDeliveryAddress,
       selectedTime: this.userStore.selectedDeliveryTime,
       fakeUser: this.userStore.loadFakeUser(),
+
+      sticky: 0,
     }
   }
 
   componentDidMount() {
     const $ = window.$
+    const self = this
+    $(document).ready(function() {
+      self.calculateSticyPosition()
+    })
     $(window).bind('scroll', this.handleFixedTop)
+    $(window).bind('resize', this.calculateSticyPosition)
   }
 
   componentWillUnmount() {
     const $ = window.$
     $(window).unbind('scroll', this.handleFixedTop)
+    $(window).unbind('resize', this.calculateSticyPosition)
+  }
+
+  calculateSticyPosition = () => {
+    const element =  document.getElementsByClassName('carousel')[0]
+    const newSticky = element ? element.offsetHeight : 0
+    this.setState({
+      sticky: newSticky
+    })
   }
 
   handleFixedTop = () => {
     const $ = window.$
+    const { sticky } = this.state
     const isMobile = window.innerWidth <= 576 || (window.innerWidth <= 767 && window.innerWidth > 576)
-    const stickyPos = isMobile ? 20 : 450
-    if ($(window).scrollTop() >= stickyPos) {
+    const stickyPos = isMobile ? 0 : sticky
+    if (window.pageYOffset >= stickyPos) {
       $('.product-top').addClass('fixed');
     } else {
       $('.product-top').removeClass('fixed');
