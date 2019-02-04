@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
 import Title from '../common/page/Title'
 import { connect } from '../utils'
@@ -17,6 +18,7 @@ class Blog extends Component {
     this.routing = this.props.store.routing
   }
   componentDidMount() {
+    ReactGA.pageview("/blog");
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()

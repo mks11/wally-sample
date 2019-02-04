@@ -82,9 +82,13 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
 
   handleSubmit = (ev) => {
+    this.setState({
+      invalidText: ''
+    })
+
     ev.preventDefault();
     if (this.props.stripe) {
-      // this.props.stripe.createSource()
+      const { userGuest } = this.props
       this.props.stripe
         .createToken()
         .then((payload) => {
@@ -92,16 +96,21 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
             throw payload
           }
 
-          return this.props.addPayment({
-            preferred_payment: this.state.preferred_payment,
-            billing_zip: this.state.billing_zip,
-            stripeToken: payload.token.id
-          })
-          // console.log('[token]', payload))
+          if (userGuest) {
+            return this.props.addPayment({
+              preferred_payment: this.state.preferred_payment,
+              billing_zip: this.state.billing_zip,
+              stripeToken: payload.token.id,
+              last4: payload.token.card.last4,
+            })
+          } else {
+            return this.props.addPayment({
+              preferred_payment: this.state.preferred_payment,
+              billing_zip: this.state.billing_zip,
+              stripeToken: payload.token.id
+            })
+          }
         }).then((data) => {
-          this.setState({
-            invalidText: ''
-          })
           this._cardnumber.clear()
           this._cardexpiry.clear()
           this._cvc.clear()
@@ -128,6 +137,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
 
 
   render() {
+    const { fontSize, userGuest } = this.props
 
     let buttonClass = 'btn btn-main inline-round my-3'
     if (this.state.cardnumber && this.state.cvc && this.state.mmyy && this.state.zip) {
@@ -144,7 +154,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onFocus={handleFocus}
                 onReady={(c) => this._cardnumber = c}
                 placeholder="Card Number"
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
               <CardExpiryElement
                 className="card-element-input w-20"
@@ -152,7 +162,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onChange={this.handleChange}
                 onFocus={handleFocus}
                 onReady={(c) => this._cardexpiry = c}
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
               <CardCVCElement
                 className="card-element-input w-20"
@@ -160,7 +170,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
                 onChange={this.handleChange}
                 onFocus={handleFocus}
                 onReady={(c) => this._cvc = c}
-                {...createOptions(this.props.fontSize)}
+                {...createOptions(fontSize)}
               />
 
             <PostalCodeElement
@@ -170,17 +180,20 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
               onChange={this.handleChange}
               onFocus={handleFocus}
               onReady={(c) => this._zip = c}
-              {...createOptions(this.props.fontSize)}
+              {...createOptions(fontSize)}
             />
 
           </FormGroup>
 
-        <FormGroup check className="my-4">
-          <Label check>
-            <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
-            Make default payment card
-          </Label>
-        </FormGroup>
+          { !userGuest ? (
+            <FormGroup check className="my-4">
+              <Label check>
+                <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
+                Make default payment card
+              </Label>
+            </FormGroup>
+            ) : null
+          }
 
         <button type="submit" className={buttonClass}>CONFIRM</button>
         { this.state.invalidText ? <span className="text-error text-block">{this.state.invalidText}</span>: null}

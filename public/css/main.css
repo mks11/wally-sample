@@ -209,6 +209,10 @@ h4 {
   background-color: #c0d6cd;
 }
 
+.bg-beige {
+  background-color: #bbb0a6;
+}
+
 .full-height {
   min-height: 100vh;
 }
@@ -337,7 +341,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
 
 .btn-inline-black {
-  color: #faf5ee;
+  color: #fff;
   background-color: #263a52;
   border-color: #263a52;
   border-width: 2px;
@@ -549,15 +553,11 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   height: 48px;
   padding: 0;
   position: absolute;
-  right: 0;
-  top: 50%;
+  right: -10px;
+  top: 43%;
   -webkit-transform: translate(0, -50%);
           transform: translate(0, -50%);
   background-color: transparent;
-}
-
-.top-bar-open .aw-nav--toggle {
-  top: 61%;
 }
 
 .aw-nav--toggle svg {
@@ -579,14 +579,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   top: 60px;
   bottom: 0;
   background-color: #c0d6cd;
-  color: #fff;
+  color: #263a52;
   line-height: 1;
   visibility: hidden;
   opacity: 0;
   transition: 0.27s all;
 }
 .top-bar-open .aw-nav--mobile {
-  top: 80px
+  top: 100px
 }
 .aw-nav--mobile ul {
   list-style-type: none;
@@ -1088,11 +1088,11 @@ body {
 }
 
 .header-wrap.top-bar-open + .aw-main .product-top.fixed {
-  top:115px;
+  top:110px;
 }
 
 .header-wrap.top-bar-open + .aw-main  {
-  padding-top:34px;
+  padding-top:28px;
 }
 
 .admin-tabs .active-tab {

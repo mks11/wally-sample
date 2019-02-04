@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Title from '../common/page/Title'
-import { connect } from '../utils'
+import Title from '../common/page/Title';
+import ReactGA from 'react-ga';
+import { connect, logEvent, logModalView, logPageView } from '../utils'
 
 class About extends Component {
   constructor(props, context){
@@ -9,6 +10,7 @@ class About extends Component {
     this.routing = this.props.store.routing
   }
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus()
       .then((status) => {
         // this.loadData()

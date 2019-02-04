@@ -6,10 +6,6 @@ import axios from 'axios'
 import moment from 'moment'
 
 class ProductStore {
-  // modal state open
-  open = false
-  modal = false
-
   main_display = []
   path = []
   sidebar = []
@@ -20,9 +16,20 @@ class ProductStore {
 
   customer_quantity = null
 
-
   ads1 = null
   ads2 = null
+
+  search = {
+    state: false,
+    all: true,
+    result: [],
+    display: [],
+    term: '',
+    filters: [],
+  }
+
+  currentSearchFilter = []
+  currentSearchCategory = 'All Categories'
 
   async showModal(product_id, customer_quantity, delivery) {
     this.activeProductId = product_id
@@ -36,12 +43,9 @@ class ProductStore {
     }
     const inventory = this.activeProduct.available_inventory[0]
     var min_size = 1
-    if (inventory.price_unit == "lb" || inventory.price_unit == "oz") min_size = 0.25
+    if (inventory.price_unit == "lb") min_size = 0.25
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
-    this.open = true
-    this.modal = true
-
     return res.data
   }
 
@@ -53,16 +57,6 @@ class ProductStore {
       }).catch((e) => {
         console.error('Failed to load advertisement', e)
       })
-  }
-
-  limitDisplay(data)  {
-    const display = []
-    const limit = data.length >= 4 ? 4 : data.length
-    for (let i = 0; i < limit; i++) {
-      display.push(data[i])
-    }
-    
-    return display
   }
 
   async getProductDisplayed(id, delivery) {
@@ -89,24 +83,83 @@ class ProductStore {
   }
 
   async searchKeyword(keyword, delivery) {
+    const term = keyword
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    keyword = encodeURIComponent(keyword)
     const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+
+
+    this.search = {
+      state: true,
+      all: true,
+      result: res.data.products || [],
+      display: res.data.products || [],
+      term,
+      filters: res.data.filters || []
+    }
+    this.currentSearchFilter = res.data.filters.map(filter => filter.cat_id)
+    this.currentSearchCategory = 'All Categories'
+
     return res.data
   }
 
-  hideModal() {
-    this.modal = false
+  searchCategory(id) {
+    const index = this.currentSearchFilter.indexOf(id)
+    
+    index === -1
+      ? this.currentSearchFilter.push(id)
+      : this.currentSearchFilter.splice(index, 1)
+    
+    const filteredSearchResult = this.search.result.filter((d) => {
+      return this.currentSearchFilter.indexOf(d.cat_id) !== -1
+    })
+
+    let currentCategory = this.search.filters.reduce((sum, d) => {
+      if (this.currentSearchFilter.indexOf(d.cat_id) !== -1) {
+        sum.push(d.cat_name)
+      }
+      return sum
+    }, [])
+
+    let currentSearchCategory= currentCategory.join(', ')
+    this.search.all = false
+
+    if (this.currentSearchFilter.length === this.search.filters.length) {
+      this.search.all = true
+      currentSearchCategory = 'All Categories'
+    }
+
+    this.search.display = filteredSearchResult
+    this.currentSearchCategory = currentSearchCategory
   }
 
-  closeModal() {
-    this.open = false
+  searchAll() {
+    if (!this.search.all) {
+      this.currentSearchFilter = this.search.filters.map(filter=> filter.cat_id)
+      this.search.display = this.search.result.filter((d) => {
+        return this.currentSearchFilter.indexOf(d.cat_id) !== -1
+      })
+      this.currentSearchCategory = 'All Categories'
+    }
+    this.search.all = !this.search.all
   }
 
+  resetSearch() {
+    this.search = {
+      state: false,
+      all: true,
+      result: [],
+      display: [],
+      term: '',
+      filters: []
+    }
+    
+    this.currentSearchFilter = []
+    this.currentSearchCategory = 'All Categories'
+  }
 }
 
 decorate(ProductStore, {
-  open: observable,
-  modal: observable,
   main_display: observable,
   path: observable,
   sidebar: observable,
@@ -115,13 +168,17 @@ decorate(ProductStore, {
   categories: observable,
   activeProduct: observable,
   activeProductId: observable,
+  search: observable,
+  currentSearchFilter: observable,
+
   showModal: action,
-  hideModal: action,
-  closeModal: action,
   getAdvertisements: action,
   getProductDisplayed: action,
   getCategories: action,
   searchKeyword: action,
+  searchCategory: action,
+  searchAll: action,
+  resetSearch: action,
 })
 
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from '../utils'
 
 class CartAdd extends Component {
@@ -13,7 +13,7 @@ class CartAdd extends Component {
     this.userStore.getStatus()
       .then((status) => {
         if (!status) {
-          this.modalStore.toggleLogin()
+          this.modalStore.toggleModal('login')
           this.props.store.routing.push('/main')
         } else {
           this.props.store.routing.push('/main')

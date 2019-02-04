@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
-import { validateEmail, connect } from '../utils'
+import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
 
 
 class Homepage extends Component {
@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Currently in beta in select zip codes.',
+      heroDescription: 'Delivered in reusable packaging, picked back up again for reuse.',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -58,6 +58,11 @@ class Homepage extends Component {
         console.error('Failed to get status', e)
         this.setState({fetching: false})
       })
+
+    this.zipStore.loadZipCodes()
+      .catch((e) => {
+        console.error('Failed to load zipcodes: ', e)
+      })
   }
 
   handleValidateZip() {
@@ -68,7 +73,7 @@ class Homepage extends Component {
     this.setState({invalidZip: false})
 
     this.zipStore.selectedZip = this.state.zip
-
+    logEvent({ category: "Homepage", action: "SubmitZip", label: this.state.zip })
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.setState({
         heroStatus: 'success',
@@ -91,7 +96,7 @@ class Homepage extends Component {
     }
 
     this.setState({invalidEmail: ''})
-
+    logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
     this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
       .then(() => {
         this.setState({
@@ -108,13 +113,16 @@ class Homepage extends Component {
   }
 
   handleStart(e) {
+    logEvent({ category: "Homepage", action: "StartShopping" })
     const store = this.props.store
     this.routing.push('/main')
-    store.modal.toggleSignup()
+    logModalView('/signup-info')
+    this.modalStore.toggleModal('signup')
     e.preventDefault()
   }
 
   handleExplore(e) {
+    logEvent({ category: "Homepage", action: "ExploreShopping" })
     this.routing.push('/main')
     e.preventDefault()
   }
@@ -258,7 +266,9 @@ class Homepage extends Component {
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <Link to="/main" className="btn btn-primary btn-explore">Explore</Link>
+                      <button onClick={this.handleExplore} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
+                        EXPLORE
+                      </button>
                     </div>
                   </Col>
                 </Row>

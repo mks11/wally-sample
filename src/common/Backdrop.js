@@ -10,12 +10,8 @@ class Backdrop extends Component {
       const user = userStore.user
       isAdmin = user.type === 'admin'
     }
-    let className = "backdrop-wrap d-none"
-    if (uiStore.backdrop) {
-      className = 'backdrop-wrap'
-    }
     return (
-      <div className={className}>
+      <div className={`backdrop-wrap d-none ${uiStore.backdrop ? 'backdrop-wrap' : ''}`}>
         <div className="backdrop white" onClick={e => uiStore.hideAllDropdown()}/>
         <div style={{top: uiStore.backdropTop+'px', zIndex: uiStore.backdropZindex}} className={`backdrop ${isAdmin ? 'admin-backdrop' : ''}`} onClick={e => uiStore.hideAllDropdown()}/>
       </div>

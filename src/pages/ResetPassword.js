@@ -46,7 +46,7 @@ class ResetPassword extends Component {
         confirm_password: this.state.confirmPassword
       }).then(() => {
       this.routing.push('/main')
-      this.modalStore.toggleLogin()
+      this.modalStore.toggleModal('login')
     }).catch((e) => {
       if (!e.response.data.error) {
         return
@@ -69,7 +69,7 @@ class ResetPassword extends Component {
               <h3 className="m-0 mb-2">Reset your password</h3>
               <span className="mb-0">Please enter and verify your new password.</span>
               <span className="mb-3">Your password needs to be longer than 6 characters.</span>
-              <form>
+              <div className="form-wrapper">
                 <Input
                   className="aw-input--control aw-input--bordered"
                   type="password"
@@ -83,7 +83,7 @@ class ResetPassword extends Component {
                 <button type="button" className={buttonSubmitClass} onClick={this.handleSubmit}>SUBMIT</button>
 
                 { this.state.invalidText && <div className="text-error text-center my-3">{this.state.invalidText}</div>}
-              </form>
+              </div>
             </div>
           </div>
       </section>

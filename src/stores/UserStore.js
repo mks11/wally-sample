@@ -7,6 +7,7 @@ import {
   API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
+  API_PURCHASE_GIFTCARD,
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -25,7 +26,6 @@ class UserStore {
   paymentModal = false
   paymentModalOpen = false
 
-  deliveryModal = false
   selectedDeliveryAddress = null
   selectedDeliveryTime = null
 
@@ -35,14 +35,12 @@ class UserStore {
   activePayment = null
 
   refPromo = null
+  giftCardPromo = null
 
   refUrl = ''
 
   cameFromCartUrl = false
-
-  toggleDeliveryModal(toggle) {
-    this.deliveryModal = toggle
-  }
+  feedback = null
 
   togglePromoModal() {
     this.promoModal = !this.promoModal
@@ -115,11 +113,9 @@ class UserStore {
   }
 
   getHeaderAuth() {
-    const options = {
-      headers: {'Authorization': 'Bearer ' + this.token.accessToken}
+    return {
+      headers: { 'Authorization': 'Bearer ' + this.token.accessToken }
     }
-
-    return options
   }
 
   async referFriend() {
@@ -299,6 +295,13 @@ class UserStore {
     return res.data
   }
 
+  async purchaseGiftCard(data) {
+    const auth = this.getHeaderAuth()
+    const options = auth.headers.Authorization === 'Bearer undefined' ? {} : auth
+    const res = await axios.post(API_PURCHASE_GIFTCARD, data, options)
+    return res.data
+  }
+
   async resetPassword(token, data) {
     const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data)
     return res.data
@@ -369,7 +372,7 @@ class UserStore {
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
     if (delivery_date && deliveryTimes && this.selectedDeliveryTime) {
       const currentDate = this.selectedDeliveryTime.date
-      const date = moment(delivery_date).format('YYYY-MM-DD')
+      const date = moment.utc(delivery_date).format('YYYY-MM-DD')
       if (date !== currentDate) {
         const day = moment(date).calendar(null,{
           sameDay: '[Today]',
@@ -380,7 +383,7 @@ class UserStore {
           sameElse: 'DD/MM/YYYY'
         })
 
-        const deliveryDate = deliveryTimes.find((data) => data.day === day)
+        const deliveryDate = deliveryTimes.find(data => data.day === day)
         if (deliveryDate) {
           let data = deliveryDate.data[0]
 
@@ -411,22 +414,20 @@ decorate(UserStore, {
   promoModal: observable,
   promoSuccessModal: observable,
 
-
-  deliveryModal: observable,
   selectedDeliveryAddress: observable,
   selectedDeliveryTime: observable,
-
-  toggleDeliveryModal: action,
 
   addPromo: action,
   togglePromoModal: action,
   togglePromoSuccessModal: action,
 
   refPromo: observable,
+  giftCardPromo: observable,
 
   refUrl: observable,
 
   cameFromCartUrl: observable,
+  feedback: observable,
 
   login: action,
   getUser: action,

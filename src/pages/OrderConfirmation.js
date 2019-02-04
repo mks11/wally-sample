@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import { connect } from '../utils'
+import { Link } from 'react-router-dom';
+import { connect, logEvent, logModalView, logPageView } from '../utils';
+import ReactGA from 'react-ga';
 
 class OrderConfirmation extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.routing = this.props.store.routing
+  constructor(props) {
+    super(props)
 
+    this.routing = this.props.store.routing
+    this.userStore = this.props.store.user
+    this.modalStore = this.props.store.modal
+  }
+
+  componentDidMount() {
+    logModalView('/refer');
+    ReactGA.pageview(window.location.pathname);
+    this.userStore.getStatus(true)
+      .then((status) => {
+        if (status) {
+          this.modalStore.toggleModal('referral')
+        } else {
+          this.routing.push('/main')
+        }
+      })
   }
 
   handleShopMore() {
@@ -26,11 +42,11 @@ class OrderConfirmation extends Component {
             <p style={{fontSize:'25px'}}>Thank you for your order! You should receive an order confirmation email shortly. When you’re finished with any Wally Shop containers or bags, simply return them to the courier upon your next, or any future, Wally Shop delivery.</p>
             
             <div className="btn-hero--wrapper mb-3 mt-4">
-              <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block btn-success btn-get--started btn-left mr-4" data-submit="Submit">
+              <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block btn-success btn-get--started btn-left mr-4 confirm-submit" data-submit="Submit">
                 KEEP SHOPPING
               </button>
               <span>
-                For every friend you refer, you’ll get 15% off for a month once they purchase, and they’ll get 15% off their first month as well. Details <Link to="/help/topics/5bd1d5d71ee5e4f1d0b42c27">here.</Link>
+                For every friend you refer, you’ll get 15% off for a month once they purchase, and they’ll get 15% off their first month as well. Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
               </span>
             </div>
         </div>

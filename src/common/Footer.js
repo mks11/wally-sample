@@ -103,7 +103,7 @@ class Footer extends Component {
           </div>
         </div>
         <div className="container">
-          <div className="footer-bottom">
+          <div className="footer-bottom bg-darkblue">
             <div className="container">
               <form className="form-inline" style={{position: 'relative'}}>
                 <label htmlFor="subscribe-email">Subscribe to our newsletter</label>

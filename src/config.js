@@ -18,6 +18,7 @@ export const API_ADDRESS_REMOVE = BASE_URL + "/api/user/address/"
 export const API_PAYMENT_NEW = BASE_URL + "/api/user/payment"
 export const API_PAYMENT_EDIT = BASE_URL + "/api/user/payment"
 export const API_PAYMENT_REMOVE = BASE_URL + "/api/user/payment/"
+export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard"
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/"
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"
@@ -25,7 +26,6 @@ export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"
 export const API_GET_CATEGORIES = BASE_URL + "/api/categories"
 export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search"
 export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh"
-
 
 export const API_GET_CURRENT_CART = BASE_URL + "/api/cart"
 export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/"
@@ -39,8 +39,8 @@ export const API_DELIVERY_TIMES = BASE_URL + "/api/delivery_windows"
 
 export const API_GET_ORDERS = BASE_URL + "/api/orders"
 export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue"
-
-
+export const API_SUBMIT_FEEDBACK = BASE_URL + "/api/order/feedback"
+export const API_SUBMIT_SERVICE_FEEDBACK = BASE_URL + "/api/service/feedback"
 
 export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes"
 export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/locations"

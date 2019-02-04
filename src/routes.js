@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 
 import Homepage from './pages/Homepage';
@@ -15,20 +15,24 @@ import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
+import GiftCheckout from './pages/GiftCheckout';
 import InviteFriends from './pages/InviteFriends';
 import Tnc from './pages/Tnc';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import CartAdd from './pages/CartAdd';
+import ReferFriend from './pages/ReferFriend';
 import ManageShopper from './pages/ManageShopper';
 import ManagePackaging from './pages/ManagePackaging';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import Signup from './pages/Signup';
+import Feedback from './pages/Feedback';
 
 export default (
     <Fragment>
+      <Switch>
         <Route exact path="/manage/shopper" component={ManageShopper} />
         <Route exact path="/manage/packaging" component={ManagePackaging} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
@@ -50,10 +54,15 @@ export default (
         <Route exact path="/help/question/:question" component={HelpAnswer}/>
         <Route exact path="/about" component={About}/>
         <Route exact path="/cart/add" component={CartAdd}/>
+        <Route exact path="/refer" component={ReferFriend}/>
         <Route exact path="/checkout" component={Checkout}/>
+        <Route exact path="/giftcard" component={GiftCheckout}/>
         <Route exact path="/main" component={Mainpage}/>
         <Route exact path="/main/:id" component={Mainpage}/>
         <Route exact path="/signup" component={Signup}/>
         <Route exact path="/" component={Homepage}/>
+        <Route exact path="/feedback" component={Feedback}/>
+        <Route exact path="/servicefeedback" component={Feedback}/>
+      </Switch>
     </Fragment>
 );

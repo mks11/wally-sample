@@ -1,6 +1,13 @@
 import {inject, observer} from 'mobx-react'
 import ReactGA from 'react-ga'
+import moment from 'moment'
 const connect = str => Comp => inject([str])(observer(Comp));
+
+export const datesEqual = (aDate, bDate) => {
+  const a = moment.utc(aDate).format('YYYY-MM-DD')
+  const b = moment.utc(bDate).format('YYYY-MM-DD')
+  return a === b
+}
 
 export const logPageView = () => {
   console.log('Logging pageview for ${window.location.pathname}');

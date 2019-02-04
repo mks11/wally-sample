@@ -1,6 +1,6 @@
-
 import React, { Component } from 'react';
-import { connect } from '../utils'
+import { connect, logEvent, logModalView, logPageView } from '../utils'
+import ReactGA from 'react-ga';
 
 
 class InviteFriends extends Component {
@@ -11,11 +11,13 @@ class InviteFriends extends Component {
   }
 
   handleSignup() {
-    this.modalStore.toggleZip()
+    logEvent({ category: "ReferSignup", action: "StartSignup" })
+    this.modalStore.toggleModal('zip')
     this.routing.push('/main')
   }
 
   render() {
+    ReactGA.pageview(window.location.pathname);
     return (
       <section className="page-section bg-fruitfull">
         <div className="container-fluid">
@@ -27,7 +29,7 @@ class InviteFriends extends Component {
               <div className="card">
                 <h3 className="m-0 mb-2">You've been hooked up with 15% off orders your first month.</h3>
                 <span className="mb-3">Sign up and get your discount for your first month.</span>
-                <button className="btn btn-main mt-3 active" onClick={e=>this.handleSignup()}>SUBMIT</button>
+                <button className="btn btn-main mt-3 active" onClick={e=>this.handleSignup()}>SIGN UP</button>
               </div>
           </div>
         </div>

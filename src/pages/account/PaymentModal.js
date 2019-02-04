@@ -26,7 +26,6 @@ class PaymentModal extends Component {
 
 
     this.userStore = this.props.store.user
-    this.handleAddPayment = this.handleAddPayment.bind(this)
   }
 
   componentDidMount() {
@@ -47,40 +46,11 @@ class PaymentModal extends Component {
     }
   }
 
-  handleAddPayment(data) {
-    return this.userStore.savePayment(data).then((data) => {
+  handleAddPayment = data => {
+    if (data) {
       this.userStore.setUserData(data)
       this.userStore.hidePaymentModal()
-      return data
-    })
-    // this.setState({invalidText: null})
-    // if (!this.state.cardnumber) {
-    //   this.setState({invalidText: 'Cardnumber cannot be empty'})
-    //   return
-    // }
-    //
-    // if (!this.state.cvv) {
-    //   this.setState({invalidText: 'CVV cannot be empty'})
-    //   return
-    // }
-    //
-    // if (!this.state.mmyy) {
-    //   this.setState({invalidText: 'Expiration date cannot be empty'})
-    //   return
-    // }
-    //
-    // if (!this.state.zip) {
-    //   this.setState({invalidText: 'Zip cannot be empty'})
-    //   return
-    // }
-    // this.userStore.savePayment(this.state).then((data) => {
-    //   this.userStore.hidePaymentModal()
-    // }).catch((e) => {
-    //   console.log('Failed to save payment', e)
-    //   const msg = e.response.data.error.message
-    //   this.setState({invalidText: msg})
-    // })
-    // e.preventDefault()
+    }
   }
 
   handleMakeDefault() {
@@ -124,7 +94,10 @@ class PaymentModal extends Component {
         {this.state.mode === 'add' &&
             <StripeProvider apiKey={STRIPE_API_KEY}>
               <Elements>
-                <Card  addPayment={this.handleAddPayment} />
+                <Card 
+                  addPayment={this.handleAddPayment}
+                  userStore={this.userStore}
+                />
               </Elements>
             </StripeProvider>
         }

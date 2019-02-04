@@ -2,10 +2,12 @@ import React, { Fragment, Component } from 'react';
 import moment from 'moment'
 import Title from '../common/page/Title'
 import BoxOrder from '../common/page/help/BoxOrder'
-import { connect } from '../utils'
+import { connect, formatMoney } from '../utils'
 import { Link } from 'react-router-dom'
 import  ReportModal from './orders/ReportModal'
 import  ReportSuccessModal from './orders/ReportSuccessModal'
+import ReactGA from 'react-ga';
+
 
 class Help extends Component {
   state = {
@@ -25,7 +27,7 @@ class Help extends Component {
   }
 
   componentDidMount(){
-
+    ReactGA.pageview(window.location.pathname);
     this.userStore.getStatus()
       .then((status) => {
         this.loadData()
@@ -77,12 +79,12 @@ class Help extends Component {
   }
   countItems(data) {
     let total = 0 
-    if (!data) return total
+    if (!data) return formatMoney(total)
 
     for (const d of data) {
       total += parseFloat(d.customer_quantity)
     }
-    return total
+    return formatMoney(total)
   }
 
   printItems(data) {
@@ -91,6 +93,16 @@ class Help extends Component {
 
     for (const d of data) {
       items.push(d.product_name)
+    }
+    return items.join(', ')
+  }
+
+  printPackaging(data) {
+    let items = []
+    if (!data) return items
+
+    for (const d of data) {
+      items.push(d.type)
     }
     return items.join(', ')
   }
@@ -177,16 +189,17 @@ class Help extends Component {
                                 <React.Fragment key={key}>
                                   <thead>
                                     <tr>
-                                      <th scope="col" style={{width: '110px'}}>Order Placed</th>
+                                      <th scope="col" style={{width: '110px'}}>{item.cart_items ? "Order Placed" : "Packaging Returned"}</th>
                                       <th scope="col">Items</th>
                                       <th scope="col" style={{width: '80px'}}>Total</th>
+                                      <th />
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr>
                                       <td>{item.delivery_time ? moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
-                                      <td>{this.printItems(item.cart_items)}</td>
-                                      <td>{this.countItems(item.cart_items)}</td>
+                                      <td>{item.cart_items ? this.printItems(item.cart_items) : this.printPackaging(item.returns)}</td>
+                                      <td>{item.total ? (formatMoney(item.total/100) : "$0.00") : (formatMoney(item.total_credit/100) : "$0.00")}</td>
                                       <td>
                                         <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
                                           Help

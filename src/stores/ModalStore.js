@@ -1,18 +1,9 @@
 import {observable, decorate, action} from 'mobx'
 
 class ModalStore {
-  login = false
-  loginStep = 1
-  loginNextRoute = '/'
-
-  signup = false
-  welcome = false
-  zip = false
-  invalidZip = false
-  invalidZipSuccess = false
-
-  invite = false
-  referral = false
+  isOpen = false
+  modalId = null
+  msg = null
 
   product = false
   productId = null
@@ -21,9 +12,14 @@ class ModalStore {
   changeFarm = false
   changePrice = false
 
+  delivery = false
   deliveryChange = false
   deliveryChangeType = null
   deliveryChangeData = null
+
+  toggleDelivery() {
+    this.delivery = !this.delivery
+  }
 
   showDeliveryChange(type, data) {
     this.deliveryChange = true
@@ -37,44 +33,16 @@ class ModalStore {
     this.deliveryChangeData = null
   }
 
-  toggleLogin() {
-    this.login = !this.login
-    this.loginStep = 1
+  toggleModal(modalId, msg = null) {
+    this.switchModal(modalId)
+    this.isOpen = !this.isOpen
+    this.msg = msg
   }
 
-  setLoginStep(step) {
-    this.loginStep = step
+  switchModal(modalId) {
+    this.modalId = modalId || null
   }
 
-  toggleSignup() {
-    this.signup = !this.signup
-  }
-
-  toggleZip() {
-    this.zip = !this.zip
-  }
-
-  toggleInvalidZip() {
-    this.invalidZip = !this.invalidZip
-  }
-
-  toggleInvalidZipSuccess() {
-    this.invalidZipSuccess = !this.invalidZipSuccess
-  }
-
-
-
-  toggleInvite() {
-    this.invite = !this.invite
-  }
-
-  toggleReferral() {
-    this.referral = !this.referral
-  }
-
-  toggleWelcome() {
-    this.welcome = !this.welcome
-  }
 
   toggleProduct(id) {
     this.product = !this.product
@@ -83,10 +51,6 @@ class ModalStore {
     } else {
       this.productId = null
     }
-  }
-
-  setLoginNextRoute(route) {
-    this.loginNextRoute = '/checkout'
   }
 
   toggleChangeProduct() {
@@ -100,41 +64,30 @@ class ModalStore {
   toggleChangePrice() {
     this.changePrice = !this.changePrice
   }
-
 }
 
 decorate(ModalStore, {
-  login: observable,
-  loginStep: observable,
-  loginNextRoute: observable,
-  signup: observable,
-  welcome: observable,
-  zip: observable,
-  invalidZip: observable,
-  invalidZipSuccess: observable,
-  invite: observable,
-  referral: observable,
+  isOpen: observable,
+  modalId: observable,
+  msg: observable,
+  toggleModal: action,
+  switchModal: action,
+
+  feedback: observable,
   product: observable,
   productId: observable,
   changeProduct: observable,
   changeFarm: observable,
   changePrice: observable,
-  toggleLogin: action,
-  toggleSignup: action,
-  toggleZip: action,
-  setLoginStep: action,
-  toggleInvalidZip: action,
-  toggleInvalidSuccess: action,
-  toggleInvite: action,
-  toggleReferral: action,
-  toggleWelcome: action,
-  setLoginNextRoute: action,
+
+  delivery: observable,
   deliveryChange: observable,
   showDeliveryChange: action,
   hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
-  toggleChangePrice: action
+  toggleChangePrice: action,
+  toggleDelivery: action,
 })
 
 

@@ -1,98 +1,67 @@
-import React, { Component } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
-import { connect, logModalView, logEvent } from '../utils'
-// import { Link } from 'react-router-dom'
-// import ClickOutside from 'react-click-outside'
-// import CardSmall from './CardSmall';
-// import {StripeProvider, Elements} from 'react-stripe-elements'
-// import { STRIPE_API_KEY } from '../config'
-// import PlacesAutocomplete, {
-//   geocodeByAddress,
-//   getLatLng,
-// } from 'react-places-autocomplete';
-import DeliveryTimeOptions from '../common/DeliveryTimeOptions.js';
+import React, { Component } from 'react'
+import { Modal, ModalBody } from 'reactstrap'
+import { logModalView, logEvent, connect } from 'utils'
+import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
+
 
 class DeliveryModal extends Component {
   constructor(props) {
     super(props)
 
+    this.userStore = props.store.user
+    this.checkoutStore = props.store.checkout
+    this.modalStore = props.store.modal
+
     this.state = {
-      deliveryTimes: [],
-      selectedAddress: null,
       selectedTime: null,
     }
-
-    this.userStore = this.props.store.user
   }
 
-  componentDidMount() {
-    let preferred_address = null
-    if (this.userStore.user) {
-      preferred_address = this.userStore.user.preferred_address
-    }
-    this.setState({selectedAddress: preferred_address || this.userStore.selectedDeliveryAddress})
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.deliveryTimes !== this.props.deliveryTimes) {
-      this.setState({deliveryTimes: this.props.deliveryTimes})
-    }
-    if (this.userStore.deliveryModal && !prevState.selectedAddress && this.userStore.selectedDeliveryAddress) {
-      this.setState({selectedAddress: this.userStore.selectedDeliveryAddress})
-    }
-  }
-
-  handleSelectTime = (data) => {
-    this.setState({selectedTime: data})
-  }
-
-  handleSubmit = (data) => {
-    if (/*this.state.selectedAddress && */this.state.selectedTime) {
+  handleSubmit = () => {
+    if (this.state.selectedTime) {
       logEvent({ category: "DeliveryOptions", action: "SubmitDeliveryOptions" })
       this.userStore.setDeliveryTime(this.state.selectedTime)
-      this.userStore.toggleDeliveryModal(false)
-      this.props.onChangeSubmit()
+      this.modalStore.toggleDelivery()
+      this.props.onChangeSubmit && this.props.onChangeSubmit()
     }
+  }
+
+  handleSelectTime = data => {
+    this.setState({ selectedTime: data })
   }
 
   handleCloseModal = () => {
     logEvent({ category: "DeliveryOptions", action: "CloseDeliveryOptionsWindow" })
-    this.userStore.toggleDeliveryModal(false)
+    this.props.toggle()
   }
 
   render() {
-    let btnSubmitClass  = 'btn btn-main mt-3'
-    if (this.state.selectedTime) {
-      btnSubmitClass += ' active'
-    }
+    const { selectedTime } = this.state
 
     return (
-      <Modal isOpen={this.userStore.deliveryModal}>
-        <div className="modal-header modal-header--sm modal-header--sm-nomargin">
-          <div><h3>Select delivery time</h3></div>
-          <button className="btn-icon btn-icon--close" onClick={e => this.handleCloseModal()}></button>
-        </div>
-        <ModalBody className="modal-body-no-footer delivery-time-modal">
-          <div className="checkout-wrap">
+      <Modal isOpen={this.modalStore.delivery}>
+        <button className="btn-icon btn-icon--close" onClick={() => this.modalStore.toggleDelivery()}></button>
+        <ModalBody className="modal-body-no-footer">
+          <div className="login-wrap">
+            <h3 className="m-0 mb-2">Select delivery time</h3>
             <div className="">
               <div >
                 <DeliveryTimeOptions
                   lock={false}
-                  data={this.state.deliveryTimes}
+                  data={this.checkoutStore.deliveryTimes}
                   selected={this.userStore.selectedDeliveryTime}
                   onSelectTime={this.handleSelectTime}
                 />
               </div>
             <div><br></br></div>
             <div className="font-italic mb-1 text-center">Order by 2:00PM for same day delivery</div>
-            <button onClick={this.handleSubmit} className={btnSubmitClass}>Submit</button>
+            <button onClick={this.handleSubmit} className={`btn btn-main mt-3 ${selectedTime ? 'active' : ''}`}>Submit</button>
             </div>
           </div>
-
         </ModalBody>
       </Modal>
-    );
+    )
   }
 }
 
-export default connect("store")(DeliveryModal);
+export default connect("store")(DeliveryModal)

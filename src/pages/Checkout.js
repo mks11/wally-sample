@@ -1,25 +1,32 @@
-import React, { Component } from 'react';
-import ReactGA from 'react-ga';
+import React, { Component } from 'react'
+import ReactGA from 'react-ga'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
-import Title from '../common/page/Title'
-import FontAwesome from 'react-fontawesome';
-import ProductModal from '../common/ProductModal';
-import CardSmall from '../common/CardSmall';
+import CurrencyInput from 'react-currency-input'
+import Title from 'common/page/Title'
+import FontAwesome from 'react-fontawesome'
 import ClickOutside from 'react-click-outside'
-import {StripeProvider, Elements} from 'react-stripe-elements'
+import PaymentSelect from 'common/PaymentSelect'
+import AmountGroup from 'common/AmountGroup'
 
-import { connect, formatMoney, logEvent, logModalView, logPageView } from '../utils'
-import { STRIPE_API_KEY } from '../config'
+import { connect, formatMoney, logEvent, logModalView, logPageView, datesEqual } from '../utils'
 
-import DeliveryTimeOptions from '../common/DeliveryTimeOptions';
-import DeliveryAddressOptions from '../common/DeliveryAddressOptions';
-import DeliveryChangeModal from '../common/DeliveryChangeModal';
+import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
+import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
+import DeliveryChangeModal from 'common/DeliveryChangeModal'
 
 class Checkout extends Component {
   constructor(props) {
     super(props)
+
+    this.userStore = this.props.store.user
+    this.uiStore = this.props.store.ui
+    this.modalStore = this.props.store.modal
+    this.productStore = this.props.store.product
+    this.checkoutStore = this.props.store.checkout
+    this.routing = this.props.store.routing
+
     this.state = {
       timeDropdown: false,
 
@@ -29,6 +36,13 @@ class Checkout extends Component {
 
       appliedPromo: false,
       appliedPromoCode: '',
+
+      appliedTipAmount: 0,
+      appliedTipAmountChanged: false,
+      tippingpopup: false,
+      tipReadOnly: true,
+      tipApplyEdited: false,
+      freezedTipAmount: null,
 
       selectedAddress: null,
       selectedPayment: null,
@@ -63,20 +77,13 @@ class Checkout extends Component {
       newCountry: '',
       newPreferedAddress: false,
 
-      deliveryTimes: [],
+      deliveryTimes: this.checkoutStore.deliveryTimes,
 
       taxpopup: false,
       servicepopup: false,
       packagingdeposit: false,
-
+      placeOrderRequest: false,
     }
-
-    this.userStore = this.props.store.user
-    this.uiStore = this.props.store.ui
-    this.modalStore = this.props.store.modal
-    this.productStore = this.props.store.product
-    this.checkoutStore = this.props.store.checkout
-    this.routing = this.props.store.routing
   }
 
 
@@ -89,6 +96,8 @@ class Checkout extends Component {
           if (selectedAddress) {
             this.userStore.setDeliveryAddress(selectedAddress)
           }
+
+          this.checkoutStore.getDeliveryTimes()
 
           this.loadData()
           if (this.userStore.user.addresses.length > 0) {
@@ -111,7 +120,8 @@ class Checkout extends Component {
   loadData() {
     let dataOrder
     const deliveryData = this.userStore.getDeliveryParams()
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
+    const tip = this.parseAppliedTip()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
       this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
@@ -120,11 +130,13 @@ class Checkout extends Component {
       dataOrder = data
       return data
     }).then(data => {
-      return this.checkoutStore.getDeliveryTimes(deliveryData)
-    }).then(times => {
-      const deliveryTimes = this.checkoutStore.transformDeliveryTimes(times)
-      this.setState({deliveryTimes})
-      this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, times)
+      if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
+        return this.checkoutStore.getDeliveryTimes().then(() => {
+          this.userStore.adjustDeliveryTimes(dataOrder.delivery_date, this.state.deliveryTimes)
+          this.setState({invalidText: 'Please select delivery time'})
+        })
+      }
+      return null
     }).catch((e) => {
       console.error(e)
     })
@@ -132,12 +144,26 @@ class Checkout extends Component {
 
   updateData() {
     const deliveryData = this.userStore.getDeliveryParams()
-    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
-      this.setState({applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
+    const tip = this.parseAppliedTip()
+    this.checkoutStore.getOrderSummary(this.userStore.getHeaderAuth(), deliveryData, tip).then((data) => {
+      this.setState({
+        applicableStoreCreditAmount: this.checkoutStore.order.applicable_store_credit,
         appliedPromo: this.checkoutStore.order.promo_amount,
         appliedPromoCode: this.checkoutStore.order.promo,
+        appliedTipAmount: this.checkoutStore.order.tip_amount / 100,
       })
     })
+  }
+
+  parseAppliedTip() {
+    const { appliedTipAmount } = this.state
+    let tipValue = appliedTipAmount
+
+    if (typeof appliedTipAmount === 'string') {
+      tipValue = appliedTipAmount.replace('$', '')
+    }
+
+    return (parseFloat(tipValue) * 100).toFixed()
   }
 
   applyStoreCredit() {
@@ -147,15 +173,6 @@ class Checkout extends Component {
         appliedStoreCreditAmount: this.checkoutStore.order.applicable_store_credit
       })
       this.checkoutStore.order.total = this.checkoutStore.order.total - this.checkoutStore.order.applicable_store_credit
-    }
-  }
-
-  handleSelectPayment(payment_id) {
-    this.setState({selectedPayment: payment_id})
-    if (payment_id === "0") {
-      this.setState({newPayment: true})
-    } else {
-      this.setState({newPayment: false})
     }
   }
 
@@ -196,14 +213,17 @@ class Checkout extends Component {
     this.setState({lockAddress: false})
   }
 
-  handleSubmitPayment() {
+  handleSubmitPayment = (lock, selectedPayment) => {
     logEvent({ category: "Checkout", action: "SubmitPayment" })
-    if (!this.state.selectedPayment) return
-    this.setState({lockPayment: true})
+    this.setState({
+      selectedPayment,
+      lockPayment: lock,
+    })
   }
 
   handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange('time', selectedTime)    
+    this.modalStore.showDeliveryChange('time', selectedTime)
+    this.setState({ invalidText: '' })
   }
 
   handleChangeDelivery = () => {
@@ -212,6 +232,9 @@ class Checkout extends Component {
 
   handleEdit(id, quantity) {
     this.productStore.showModal(id, quantity, this.userStore.getDeliveryParams())
+      .then(() => {
+        this.modalStore.toggleModal('product')
+      })
   }
 
   handleDelete(data) {
@@ -219,37 +242,44 @@ class Checkout extends Component {
       product_id : data.product_id,
       inventory_id : data.inventory[0]._id
     }
-    this.checkoutStore.toggleDeleteModal(id)
+    this.modalStore.toggleModal('delete', id)
   }
 
   handlePlaceOrder() {
-    this.setState({invalidText: ''})
+    const { placeOrderRequest } = this.state
+
+    if (placeOrderRequest) {
+      return
+    }
+
+    this.setState({invalidText: '', placeOrderRequest: true })
     if (!this.userStore.selectedDeliveryAddress) {
-      this.setState({invalidText: 'Please select address'})
+      this.setState({invalidText: 'Please select address', placeOrderRequest: false })
       return
     }
 
     if (!this.userStore.selectedDeliveryTime) {
-      this.setState({invalidText: 'Please select delivery time'})
+      this.setState({invalidText: 'Please select delivery time', placeOrderRequest: false })
       return
     }
 
     if (!this.state.confirmHome) {
-      this.setState({invalidText: 'Please confirm that you are home'})
+      this.setState({invalidText: 'Please confirm that you are home', placeOrderRequest: false})
       return
     }
     if (!this.state.lockPayment) {
-      this.setState({invalidText: 'Please select payment'})
+      this.setState({invalidText: 'Please select payment', placeOrderRequest: false})
       return
     }
     logEvent({ category: "Checkout", action: "ConfirmCheckout" })
 
-    this.checkoutStore.createOrder({
+    this.checkoutStore.submitOrder({
       store_credit: this.state.appliedStoreCreditAmount > 0,
       user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
       address_id: this.userStore.selectedDeliveryAddress.address_id,
       payment_id: this.state.selectedPayment,
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
+      tip_amount: this.parseAppliedTip(),
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
@@ -257,14 +287,16 @@ class Checkout extends Component {
       });
       this.routing.push('/orders/' + data.order._id)
       this.checkoutStore.clearCart(this.userStore.getHeaderAuth())
+      this.userStore.setDeliveryTime(null)
+      this.setState({ placeOrderRequest: false })
     }).catch((e) => {
       console.error('Failed to submit order', e)
       const msg = e.response.data.error.message
-      this.setState({invalidText: msg})
+      this.setState({ invalidText: msg, placeOrderRequest: false })
     })
   }
 
-  handleCheckPromo() {
+  handleCheckPromo = () => {
     const subTotal = this.checkoutStore.order.subtotal
     const promoCode = this.state.appliedPromoCode
 
@@ -297,14 +329,30 @@ class Checkout extends Component {
 
   }
 
-  handleAddPayment = (data) => {
-    return this.userStore.savePayment(data).then((data) => {
+  handleAddTip = () => {
+    if (!this.state.tipApplyEdited) {
+      this.setState({
+        tipApplyEdited: true,
+        freezedTipAmount: null,
+      })
+      this.updateData()
+    }
+  }
+
+  handleChangeTip = e => {
+    this.setState({
+      tipApplyEdited: false,
+      appliedTipAmount: e.target.value,
+      invalidText: '',
+    })
+  }
+
+  handleAddPayment = data => {
+    if (data) {
       logEvent({ category: "Checkout", action: "SubmitNewPayment" })
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
-
-      return data
-    })
+    }
   }
 
   showServicePopup() {
@@ -323,17 +371,65 @@ class Checkout extends Component {
     this.setState({taxpopup: false})
   }
 
-  showPackagingPopup() {
+  showPackagingPopup = () => {
     this.setState({packagingdeposit: true})
   }
 
-  hidePackagingPopup() {
+  hidePackagingPopup = () => {
     this.setState({packagingdeposit: false})
+  }
+
+  showTippingPopup = () => {
+    this.setState({ tippingpopup: true })
+  }
+
+  hideTippingPopup = () => {
+    this.setState({ tippingpopup: false })
   }
 
   handleConfirmHome() {
     logEvent({ category: "Checkout", action: "ConfirmAtHome" })
     this.setState({confirmHome: !this.state.confirmHome})
+  }
+
+  handleTipAmountChange = (value, clickedByUser) => {
+    const order = this.checkoutStore.order
+    const tipAmount = (value / 100) * order.subtotal
+    this.setState({
+      appliedTipAmount: (tipAmount / 100).toFixed(2),
+      tipReadOnly: true,
+      appliedTipAmountChanged: clickedByUser,
+      freezedTipAmount: null,
+    })
+  }
+
+  handleTipCustomAmounClick = () => {
+    this.setState({
+      tipReadOnly: false,
+      freezedTipAmount: this.state.appliedTipAmount,
+    })
+  }
+
+  updateTotal() {
+    const order = this.checkoutStore.order
+    const customTip = this.state.freezedTipAmount || this.state.appliedTipAmount
+    let total = (order.total / 100)
+    
+    if (!order.tip_amount || this.state.appliedTipAmountChanged) {
+      const currentTipAmount = order.tip_amount || 0 
+      total = ((order.total - currentTipAmount) / 100) + parseFloat(customTip)
+    }
+    return total
+  }
+
+  updateTipAmount() {
+    const order = this.checkoutStore.order
+    const customTip = this.state.freezedTipAmount || this.state.appliedTipAmount
+    const tipAmount = (order.tip_amount && !this.state.appliedTipAmountChanged)
+      ? formatMoney(order.tip_amount / 100)
+      : formatMoney(customTip)
+    
+    return tipAmount
   }
 
   render() {
@@ -343,56 +439,16 @@ class Checkout extends Component {
 
     const order = this.checkoutStore.order
 
-    // let timeDropdownClass = "dropdown-menu"
-    // if (this.state.timeDropdown && this.state.lockAddress) {
-    //   timeDropdownClass += " show"
-    // }
-
-    // const appliedStoreCreditAmount = this.state.appliedStoreCreditAmount ? this.state.appliedStoreCreditAmount/100 : 0
-    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount/100 : 0
-
-    // const selectedAddress = this.state.selectedAddress ? this.state.selectedAddress : this.userStore.user.preferred_address
-    const selectedPayment = this.state.selectedPayment ? this.state.selectedPayment : this.userStore.user.preferred_payment
-
-    // let addressFormClass = 'addAdressForm mb-4'
-    // if (!this.state.newAddress) {
-    //   addressFormClass += ' d-none'
-    // }
-
-    let paymentFormClass = 'addPaymentForm'
-    if (!this.state.newPayment) {
-      paymentFormClass += ' d-none'
-    }
+    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount ? this.state.applicableStoreCreditAmount / 100 : 0
 
     let buttonPlaceOrderClass = 'btn btn-main'
-    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome) {
+    if (this.userStore.selectedDeliveryAddress && this.state.lockPayment && this.userStore.selectedDeliveryTime && this.state.confirmHome && !this.state.placeOrderRequest) {
       buttonPlaceOrderClass += ' active' 
     }
 
-    // let addressCardClass = 'card1'
-    // if (this.state.addressError) {
-    //   addressCardClass += ' error'
-    // }
-
     const cart_items = order && order.cart_items ? order.cart_items : []
 
-    let taxpopupClass = 'summary'
-    if (this.state.taxpopup) {
-      taxpopupClass += ' open'
-    }
-
-    let servicepopupClass = 'summary'
-    if (this.state.servicepopup) {
-      servicepopupClass += ' open'
-    }
-
-
-    let packagingdepositClass = 'summary'
-    if (this.state.packagingdeposit) {
-      packagingdepositClass += ' open'
-    }
-
-
+    const orderTotal = this.updateTotal()
 
     return (
       <div className="App">
@@ -430,88 +486,16 @@ class Checkout extends Component {
                 <h3 className="m-0 mb-3 p-r mt-5">Payment 
                   { this.state.lockPayment ? <a onClick={e => this.setState({lockPayment: false})} className="address-rbtn link-blue pointer">CHANGE</a> : null}
                 </h3>
-
-                <div className="card1">
-                  <div className={"card-body" + (this.state.lockPayment ? " lock" : "")}>
-                    { this.userStore.user.payment.map((data, index) => {
-
-                      if (this.state.lockPayment && selectedPayment !== data._id) {
-                        return null
-                      }
-                      return (
-                        <div 
-                          className={"custom-control custom-radio bb1" + (data._id === selectedPayment ? " active" : "")}
-                          key={index}>
-                          <input type="radio" id={"payment"+index}
-                            value={data._id} 
-                            checked={data._id === selectedPayment}
-                            name="customRadio" className="custom-control-input"
-                            onChange={e => this.handleSelectPayment(data._id)}
-                          />
-                          <label className="custom-control-label" htmlFor={"payment"+index} onClick={e=>this.handleSelectPayment(data._id)}>
-                            <img src="images/card.png" alt="" /> *****{data.last4}
-                          </label>
-                          {this.userStore.user.preferred_payment === data._id &&
-                              <a href="#" className="address-rbtn link-blue" style={{top:'10px'}}>DEFAULT</a>
-                          }
-                        </div>
-                      )
-                    })}
-
-                    { !this.state.lockPayment ?  (
-                      <div>
-                        <div 
-                          className={"custom-control custom-radio bb1" + ("0" === selectedPayment ? " active" : "")}
-                        >
-                          <input type="radio" id="paymentAdd" name="customRadio" className="custom-control-input" 
-                            value="0"
-                            checked={selectedPayment === "0"}
-                            onChange={e=>this.handleSelectPayment(selectedPayment)}/>
-                          <label className="custom-control-label" htmlFor="paymentAdd" onClick={e=>this.handleSelectPayment('0')} >Add new card</label>
-                        </div>
-                        <div className={paymentFormClass}>
-                          {/* 
-                      <div className="row no-gutters">
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Card number" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="MM/YY" />
-                          </div>
-                        </div>
-                        <div className="col-md-2">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="CVV" />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <input type="text" className="form-control input1" placeholder="Zipcode" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Make default payment method</label>
-                      </div>
-                      <hr />
-                      <button className="btn btn-main active inline-round">CONFIRM</button>
-                      <div className="error-msg d-none">Invalid card information</div>
-                      */}
-
-                      <StripeProvider apiKey={STRIPE_API_KEY}>
-                        <Elements>
-                          <CardSmall  addPayment={this.handleAddPayment} />
-                        </Elements>
-                      </StripeProvider>
-                    </div>
-                  </div>):null}
-                  { (!this.state.lockPayment && !this.state.newPayment) && <button className="btn btn-main active" onClick={e => this.handleSubmitPayment(e)}>SUBMIT</button>}
-                </div>
-              </div>
+                <PaymentSelect
+                  {...{
+                    lockPayment: this.state.lockPayment,
+                    userPayment: this.userStore.user.payment,
+                    userPreferredPayment: this.userStore.user.preferred_payment,
+                    onAddPayment: this.handleAddPayment,
+                    onSubmitPayment: this.handleSubmitPayment,
+                    userGuest: !this.userStore.status,
+                  }}
+                />
             </div>
           </div>
           <div className="">
@@ -544,13 +528,13 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
-                    <div className={taxpopupClass}>
+                    <div className={`summary ${this.state.taxpopup ? 'open' : ''}`}>
                       <span onClick={e=>this.showTaxPopup()}>Tax</span>
                       <span>{formatMoney((order.tax_amount)/100)}</span>
                     </div>
-                    <div className={servicepopupClass}>
+                    <div className={`summary ${this.state.servicepopup ? 'open' : ''}`}>
                       <ClickOutside onClickOutside={e=>this.hideServicePopup()}>
-                        <div className="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right"><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right"><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
                             <Link className="text-violet" to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
@@ -561,13 +545,13 @@ class Checkout extends Component {
                       <span>Delivery fee</span>
                       <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
-                    <div className={packagingdepositClass}>
-                      <ClickOutside onClickOutside={e=>this.hidePackagingPopup()}>
-                        <div className="popover bs-popover-right" role="tooltip" id="popover209736" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
-                            <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
+                    <div className={`summary ${this.state.packagingdeposit ? 'open' : ''}`}>
+                      <ClickOutside onClickOutside={this.hidePackagingPopup}>
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                        This charge correlates to how many pieces of reusable packaging we lend you. Once you return our reusable packaging to a Wally Shop courier, you'll get the deposit back as store credit. <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
                         </div></div>
                       </ClickOutside>
-                      <span onClick={e=>this.showPackagingPopup()}>Packaging deposit  <FontAwesome name='info-circle' /></span>
+                      <span onClick={this.showPackagingPopup}>Packaging deposit  <FontAwesome name='info-circle' /></span>
                       <span>{formatMoney(order.packaging_deposit/100)}</span>
                     </div>
 
@@ -579,6 +563,16 @@ class Checkout extends Component {
                     <div className="summary">
                       <span>Applied Store credit</span>
                       <span>-{formatMoney(order.applied_store_credit/100)}</span>
+                    </div>
+
+                    <div className={`summary ${this.state.tippingpopup ? 'open' : ''}`}>
+                      <ClickOutside onClickOutside={this.hideTippingPopup}>
+                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
+                        100% of the tip amount goes to our shoppers and couriers, on top of the wages they earn.
+                        </div></div>
+                      </ClickOutside>
+                      <span onClick={this.showTippingPopup}>Tip Amount  <FontAwesome name='info-circle' /></span>
+                      <span>{this.updateTipAmount()}</span>
                     </div>
 
                     {this.state.appliedStoreCredit ?
@@ -613,25 +607,56 @@ class Checkout extends Component {
                                 </div>
                                 :null}
 
-                                {!this.state.appliedPromo ? 
-                                    <div className="form-group">
-                                      <span className="text-blue">Have a promo code</span>
-                                      <div className="aw-input--group aw-input--group-sm">
-                                        <Input
-                                          className="aw-input--control aw-input--left aw-input--bordered"
-                                          type="text"
-                                          placeholder="Enter promocode here"
-                                          onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
+                                  {
+                                    !this.state.appliedPromo ? 
+                                      <div className="form-group">
+                                        <span className="text-blue">Have a promo code</span>
+                                        <div className="aw-input--group aw-input--group-sm">
+                                          <Input
+                                            className="aw-input--control aw-input--left aw-input--bordered"
+                                            type="text"
+                                            placeholder="Enter promocode here"
+                                            onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
 
-                                        <button onClick={e => this.handleCheckPromo()} type="button" className="btn btn-transparent">APPLY</button>
+                                          <button onClick={this.handleCheckPromo} type="button" className="btn btn-transparent purple-apply-btn">APPLY</button>
+                                        </div>
+                                      </div>
+                                      :null
+                                  }
+                                    <div className="form-group">
+                                      <span className="text-blue">Want to tip</span>
+                                      <AmountGroup
+                                        className="checkout-tips"
+                                        amountClick={this.handleTipAmountChange}
+                                        customClick={this.handleTipCustomAmounClick}
+                                        values={[0, 15, 20, 25]}
+                                        selected={15}
+                                        suffix="%"
+                                      />
+                                      <div className="aw-input--group aw-input--group-sm">
+                                        <CurrencyInput
+                                          readOnly={this.state.tipReadOnly}
+                                          prefix="$"
+                                          className={`aw-input--control aw-input--left aw-input--bordered form-control ${!this.state.tipReadOnly ? 'focus-input' : ''}`}
+                                          value={this.state.appliedTipAmount}
+                                          onChangeEvent={this.handleChangeTip}
+                                        />
+                                        {
+                                          !this.state.tipReadOnly
+                                            ? <button
+                                                onClick={this.handleAddTip}
+                                                type="button"
+                                                className={`btn btn-transparent purple-apply-btn ${this.state.tipApplyEdited ? 'grey-btn' : ''}`}
+                                              >APPLY</button>
+                                            : null
+                                        }
                                       </div>
                                     </div>
-                                    :null}
                                   </div>
                                   <hr className="mt-4" />
                                   <div className="item-total">
                                     <span>Total</span>
-                                    <span>{formatMoney(order.total/100)}</span>
+                                    <span>{formatMoney(orderTotal)}</span>
                                   </div>
                                   <button onClick={e => this.handlePlaceOrder()} className={buttonPlaceOrderClass}>PLACE ORDER</button>
                                   {this.state.invalidText ? <span className="text-error text-center d-block mt-2">{this.state.invalidText}</span>:null}
@@ -640,13 +665,12 @@ class Checkout extends Component {
                               </div>
 
                               <p className="mt-3">
-                                Prices and totals are subject to final adjustments based on available products, weights and at-location prices. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
+                                Prices and totals are subject to final adjustments based on available products, weights and at-location prices. The packaging deposit will be returned to your account as store credit upon the return of used packaging during any future order. By placing your order, you agree to be bound by the Terms of Service and Privacy Policy. Your card will be temporarily authorized for an amount slightly greater than the estimated order total. Your statement will reflect the final order total after order completion. <Link to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more.</Link>
                             </p>
                             </section>
                           </div>
                         </div>
                       </div>
-                      { this.productStore.open && <ProductModal/> }
                       <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
                     </div>
     );
