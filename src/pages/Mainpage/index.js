@@ -15,6 +15,7 @@ import ProductList from './ProductList'
 import ProductTop from './ProductTop'
 import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
+import CategoryCard from './CategoryCard'
 
 class Mainpage extends Component {
 
@@ -355,17 +356,33 @@ class Mainpage extends Component {
                           ))}
                         </div>
 
-                        { 
-                          this.productStore.main_display.map((product, index) => (
-                            <ProductList
-                              key={index}
-                              display={product}
-                              mode={this.state.categoryTypeMode}
-                              deliveryTimes={this.state.deliveryTimes}
-                              onProductClick={this.handleProductModal}
-                            />
-                          ))
+                        {
+                          this.state.categoryTypeMode === 'limit'
+                            ? (
+                              <div className="row">
+                              { 
+                                this.productStore.main_display.map((category, index) => (
+                                  <CategoryCard
+                                    key={index}
+                                    category={category}
+                                  />
+                                ))
+                              }
+                              </div>
+                            )
+                            : (
+                                this.productStore.main_display.map((category, index) => (
+                                  <ProductList
+                                    key={index}
+                                    display={category}
+                                    mode={this.state.categoryTypeMode}
+                                    deliveryTimes={this.state.deliveryTimes}
+                                    onProductClick={this.handleProductModal}
+                                  />
+                                ))
+                            )
                         }
+                        
                       </div>
                     </div>
                   )
