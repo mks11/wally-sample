@@ -12,11 +12,25 @@ class CartDropdown extends Component {
   }
 
   handleMouseEnter = () => {
+    const { ui } = this.props
+    ui.showBackdrop()
     logModalView('/cart')
   }
 
   handleMouseLeave = () => {
+    const { ui } = this.props
+    ui.hideBackdrop()
     logEvent({ category: 'Cart', action: "CloseCart" })
+  }
+
+  handleMouseEnterWithoutLog = () => {
+    const { ui } = this.props
+    ui.showBackdrop()
+  }
+
+  handleMouseLeaveWithoutLog = () => {
+    const { ui } = this.props
+    ui.hideBackdrop()
   }
 
   handleCheckout = () => {
@@ -56,7 +70,11 @@ class CartDropdown extends Component {
             <i className="fa fa-shopping-bag" /><span><strong>{count} {count > 1 ? 'Items' : 'Item'}</strong></span>
           </div>
 
-          <div className="dropdown-wrapper">
+          <div
+            className="dropdown-wrapper"
+            onMouseEnter={this.handleMouseEnterWithoutLog}
+            onMouseLeave={this.handleMouseLeaveWithoutLog}
+          >
             <div className="dropdown-menu dropdown-menu-right">
               { (items && count > 0) ?
                   <React.Fragment>
