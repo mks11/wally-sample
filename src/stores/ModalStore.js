@@ -17,6 +17,8 @@ class ModalStore {
   deliveryChangeType = null
   deliveryChangeData = null
 
+  mainFirst = false
+
   toggleDelivery() {
     this.delivery = !this.delivery
   }
@@ -64,6 +66,10 @@ class ModalStore {
   toggleChangePrice() {
     this.changePrice = !this.changePrice
   }
+
+  toggleMainFirst() {
+    this.mainFirst = !this.mainFirst
+  }
 }
 
 decorate(ModalStore, {
@@ -82,12 +88,14 @@ decorate(ModalStore, {
 
   delivery: observable,
   deliveryChange: observable,
+  mainFirst: observable,
   showDeliveryChange: action,
   hideDeliveryChange: action,
   toggleChangeProduct: action,
   toggleChangeFarm: action,
   toggleChangePrice: action,
   toggleDelivery: action,
+  toggleMainFirst: action,
 })
 
 

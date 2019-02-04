@@ -6,6 +6,7 @@ import { APP_URL } from 'config'
 
 import DeliveryModal from 'common/DeliveryModal'
 import DeliveryChangeModal from 'common/DeliveryChangeModal'
+import MainFirstModal from 'common/MainFirstModal'
 // import ProductModal from 'common/ProductModal';
 
 import Hero from './Hero'
@@ -47,7 +48,7 @@ class Mainpage extends Component {
         this.loadData()
 
         const { mainFirst } = this.userStore.flags || {}
-        !mainFirst && this.modalStore.toggleModal('mainfirst')
+        !mainFirst && this.modalStore.toggleMainFirst()
       })
   }
 
@@ -416,6 +417,8 @@ class Mainpage extends Component {
                   sidebar={sidebar}
                   id={id}
                 />
+
+                <MainFirstModal />
 
               </div>
     );
