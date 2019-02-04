@@ -177,7 +177,7 @@ class TopNav extends Component {
         </div>
         <header className={`aw-header navbar-white ${isAdmin ? 'admin-navbar' : ''}`}>
           {
-          this.userStore.status && !isAdmin ? (
+          ((this.userStore.status && !isAdmin) || !this.userStore.status) ? (
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
