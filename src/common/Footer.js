@@ -70,7 +70,7 @@ class Footer extends Component {
                     SUPPORT
                   </h4>
                   <ul>
-                    <li><a href="mailto:support@thewallyshop.co">Contact Us</a></li>
+                    <li><a href="mailto:info@thewallyshop.co">Contact Us</a></li>
                     <li><Link to={"/tnc"} >Terms &amp; Conditions</Link></li> 
                     <li><Link to={"/privacy"} >Privacy Policy</Link></li> 
                   </ul>
