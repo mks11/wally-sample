@@ -182,6 +182,14 @@ class ProductTop extends Component {
     this.modalStore.showDeliveryChange('time', this.state.selectedTime)
   }
 
+  handleMouseEnter = () => {
+    this.uiStore.showBackdrop()
+  }
+
+  handleMouseLeave = () => {
+    this.uiStore.hideBackdrop()
+  }
+
   render() {
     const {
       selectedAddressChanged,
@@ -196,14 +204,22 @@ class ProductTop extends Component {
         <Container>
           <Row>
             <Col xs="auto" className="d-none d-md-block bdr-right">
-              <div className="dropdown-address d-flex">
+              <div
+                className="dropdown-address d-flex"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <i className="fa fa-map-marker bar-icon" />
                 { 
                   this.userStore.selectedDeliveryAddress &&
                   <span className="dropdown-details align-self-center">{this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}</span>
                 }
               </div>
-              <div className="dropdown-wrapper">
+              <div
+                className="dropdown-wrapper"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <div className="dropdown-menu dropdown-large p-3">
 
                   <h3 className="m-0 mb-3 p-r">Delivery address</h3>
@@ -231,7 +247,11 @@ class ProductTop extends Component {
               </div>
             </Col>
             <Col xs="auto" className="d-none d-md-block bdr-right">
-              <div className="dropdown-time d-flex">
+              <div
+                className="dropdown-time d-flex"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <i className="fa fa-clock-o bar-icon" />
                 <span className="dropdown-details align-self-center">
                   {
@@ -241,7 +261,11 @@ class ProductTop extends Component {
                   }
                 </span>
               </div>
-              <div className="dropdown-wrapper">
+              <div
+                className="dropdown-wrapper"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <div className="dropdown-menu dropdown-large p-3">
                   <h3 className="m-0 mb-3 p-r">Time</h3>
                   <div className="scroller">
@@ -259,11 +283,19 @@ class ProductTop extends Component {
               </div>
             </Col>
             <Col xs={2} className="d-none d-md-block bdr-right">
-              <h3 className="dropdown-categories">
+              <h3
+                className="dropdown-categories"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <b>Categories</b><i className="fa fa-chevron-down d-none d-lg-block" />
               </h3>
 
-              <div className="dropdown-wrapper dropdown-fwidth">
+              <div
+                className="dropdown-wrapper dropdown-fwidth"
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
                 <div className="dropdown-menu dropdown-menu-right">
                   <Link
                     to="/main"
@@ -290,6 +322,7 @@ class ProductTop extends Component {
                   onSearch={onSearch}
                 />
                 <CartDropdown
+                  ui ={this.uiStore}
                   cart={this.checkoutStore.cart}
                   onCheckout={this.handleCheckout}
                   onEdit={this.handleEdit}

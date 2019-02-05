@@ -5,7 +5,7 @@ class Backdrop extends Component {
   render() {
     const uiStore = this.props.store.ui
     return (
-      <div className={`backdrop-wrap d-none ${uiStore.backdrop ? 'backdrop-wrap' : ''}`}>
+      <div className={`${uiStore.backdrop ? 'backdrop-wrap' : 'd-none'}`}>
         <div className="backdrop white" onClick={e => uiStore.hideAllDropdown()}></div>
         <div
           style={{
