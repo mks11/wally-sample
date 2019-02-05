@@ -273,7 +273,7 @@ class Checkout extends Component {
 
     if (!this.state.confirmHome) {
       this.setState({
-        invalidText: 'Please confirm that you are home',
+        invalidText: 'Please confirm that you will be home',
         placeOrderRequest: false,
         confirmHomeError: true,
       })
