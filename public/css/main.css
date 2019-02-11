@@ -595,9 +595,15 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 .aw-nav--mobile li a {
   text-decoration: none;
   display: inline-block;
-  padding: 15px 10px;
+  padding: 10px 10px;
   color: #fff;
   line-height: 1;
+}
+
+@media (min-width: 350px) {
+  .aw-nav--mobile li a {
+    padding: 15px 10px;
+  }  
 }
 
 .aw-nav--mobile li a:focus, .aw-nav--mobile li a:active, .aw-nav--mobile li a:hover {
@@ -681,7 +687,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .aw-nav--middle {
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 .aw-nav {

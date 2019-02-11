@@ -139,7 +139,6 @@ class TopNav extends Component {
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
                             <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Blog</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           //
@@ -160,6 +159,7 @@ class TopNav extends Component {
                       }
 
                       <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
@@ -214,7 +214,7 @@ class TopNav extends Component {
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                      < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
+                                      <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
@@ -239,6 +239,7 @@ class TopNav extends Component {
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
                                       <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
@@ -251,6 +252,7 @@ class TopNav extends Component {
                         :
                         <React.Fragment>
                           <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
