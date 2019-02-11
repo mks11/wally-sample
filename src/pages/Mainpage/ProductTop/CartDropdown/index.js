@@ -36,6 +36,8 @@ class CartDropdown extends Component {
   handleCheckout = () => {
     const { onCheckout } = this.props
     logEvent({ category: "Cart", action: "ClickCheckout" })
+    const { ui } = this.props
+    ui.hideBackdrop()
     onCheckout && onCheckout()
   }
 
