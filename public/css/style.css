@@ -1048,6 +1048,15 @@ span.tnc {
   color: #ff0000;
   font-size: 20px;
 }
+
+.info-popup {
+  font-size: 15px;
+}
+
+span.text-disclaimer {
+  font-size: 10px;
+}
+
 .text-block {
   display: block;
 }
