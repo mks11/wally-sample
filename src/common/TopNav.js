@@ -139,6 +139,7 @@ class TopNav extends Component {
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
                             <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Blog</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           //
@@ -159,6 +160,7 @@ class TopNav extends Component {
                       }
 
                       <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                     </ul>
