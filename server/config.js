@@ -782,7 +782,7 @@ module.exports = {
   "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
   "/api/admin/fulfillment/shopitem/warehouse-location": updateShopItemsWarehouseLocations,
   "/api/admin/routes": getRoutes,
-  "/api/admin/route/:id/orders": getRouteOrders,
+  "/api/admin/route/orders": getRouteOrders,
   "/api/admin/route/:id/placement": updateRoutePlacement,
   "/api/admin/order/:id": getOrder,
   "/api/admin/packagings": getPackagings,

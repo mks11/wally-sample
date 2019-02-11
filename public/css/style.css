@@ -83,14 +83,14 @@ border-radius:0;}
 
 /* Header */
 .aw-header{padding-top: 0px;padding-bottom: 10px;}
-.aw-header .container{padding-top: 10px}
+.aw-header .container{padding-top: 10px;}
 .aw-logo{height:50px;}
 .aw-logo svg{width:auto;height:50px;}
 .aw-header:not(.navbar-white) .cls-1{fill:#fff;}
 .aw-header:not(.navbar-white) nav.aw-nav a{color:#fff;}
 .aw-header:not(.navbar-white) .aw-logo--shape{fill: #323f93}
 .aw-header:not(.navbar-white) .btn-outline-black{border-color:#fff;color:#fff;}
-.aw-header:not(.navbar-white) .btn-outline-black:hover, 
+.aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
 .aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
@@ -2377,6 +2377,26 @@ color:#6e8692
   border: 0;
 }
 
+@media screen and (min-width: 800px) {
+  .aw-header.admin-navbar {
+    padding-bottom: 0;
+  }
+  .admin-navbar .container {
+    padding-top: 0;
+  }
+  .admin-backdrop {
+    top: -7px !important;
+  }
+
+  .admin-navbar .account-dropdown .dropdown-menu{
+    margin-top: 8px;
+  }
+}
+
+.cart-item .input-group-text {
+  padding: 10px 20px;
+}
+
 .feedback-modal textarea {
   height: 150px;
 }
@@ -2401,22 +2421,6 @@ color:#6e8692
   text-align: center;
   margin: 5px -5px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .gift-checkout-wrap {
   max-width: 700px;
@@ -2476,11 +2480,6 @@ color:#6e8692
 .gift-checkout-wrap .gift-submit.active {
   background-color: #78C98D !important;
 }
-
-
-
-
-
 
 .checkout-tips {
   padding: 10px 0;

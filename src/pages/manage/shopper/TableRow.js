@@ -6,8 +6,8 @@ import {
 } from 'reactstrap'
 
 
-const TableRow = ({ item, onEditClick }) => (
-  <tr>
+const TableRow = ({ item, onEditClick, onClick }) => (
+  <tr className={`${item.completed ? 'completed' : ''} ${item.missing ? 'missing' : ''}`} onClick={onClick}>
     <td>{item.organic ? 'Y' : 'N'}</td>
     <td>{item.substitue_for_name || item.product_name}</td>
     <td>{item.product_producer}</td>
@@ -22,7 +22,7 @@ const TableRow = ({ item, onEditClick }) => (
         <Col xs="6">
           <Row>
             <Col><b>Qty:</b></Col>
-            <Col>{item.quantity}</Col>
+            <Col>{item.quantity} {item.unit_type}</Col>
           </Row>
         </Col>
       </Row>

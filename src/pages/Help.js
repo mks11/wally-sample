@@ -291,9 +291,9 @@ class Help extends Component {
                         <div className="row">
                           <i className="fa fa-envelope ml-2"></i>
 
-                          <a href="mailto:support@thewallyshop.co" className="list-link ml-3">
+                          <a href="mailto:info@thewallyshop.co" className="list-link ml-3">
                             <h4> 
-                             support@thewallyshop.co
+                             info@thewallyshop.co
                             </h4>
                           </a>
                         </div>

@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Currently in beta in select zip codes.',
+      heroDescription: 'Delivered in reusable packaging, picked back up again for reuse.',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
