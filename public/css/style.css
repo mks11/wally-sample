@@ -2505,3 +2505,8 @@ color:#6e8692
 .delivery-notes textarea:focus {
   border: 2px solid #78C98D;
 }
+
+.howitworks img {
+  max-width: 100%;
+  height: auto;
+}

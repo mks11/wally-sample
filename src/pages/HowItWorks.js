@@ -30,6 +30,10 @@ class HowItWorks extends Component {
                 </ol>
               </p>
             </div>  
+
+            <div className="tagline howitworks">
+              <img alt="How It Works" src="images/howitworks.jpg" />
+            </div>
           </div>
         </section>
       </div>
