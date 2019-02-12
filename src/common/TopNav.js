@@ -183,7 +183,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
-                  Get 15% off all month when you refer a friend. Click for details.
+                  Give $10, get $10 when you refer a friend. Click for details.
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
@@ -237,7 +237,7 @@ class TopNav extends Component {
                                       <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
                                       < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
+                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
