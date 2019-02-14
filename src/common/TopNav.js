@@ -92,7 +92,7 @@ class TopNav extends Component {
   render() {
     let storeCredit, name
     let isAdmin = false
-    let bannerText = "Get $30 off your first order - use code NOPLASTIC"
+    let bannerText = "Get $30 off your first order with code NOPLASTIC."
     if (this.userStore.user) {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
