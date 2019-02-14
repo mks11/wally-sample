@@ -2532,7 +2532,7 @@ color:#6e8692
   background-size: cover;
   background-position: center center;
   background-color: #898f87;
-  height: 130px;
+  padding-top: 100%;
 }
 
 .howitworks img {
