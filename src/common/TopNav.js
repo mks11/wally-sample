@@ -84,7 +84,7 @@ class TopNav extends Component {
       logModalView('/refer')
       this.modalStore.toggleModal('referral')
     } else {
-      this.props.store.routing.push('/help/topics/5bd1d5d71ee5e4f1d0b42c27')
+      this.handleSignup()
     }
     e.preventDefault()
   }
@@ -92,7 +92,9 @@ class TopNav extends Component {
   render() {
     let storeCredit, name
     let isAdmin = false
+    let bannerText = "Get $30 off your first order - use code NOPLASTIC"
     if (this.userStore.user) {
+      bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
       storeCredit =  user.store_credit
@@ -183,7 +185,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
-                  Give $10, get $10 when you refer a friend. Click for details.
+                  {bannerText}
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
