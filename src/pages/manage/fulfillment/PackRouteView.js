@@ -62,7 +62,7 @@ class PackRouteView extends Component {
     const { orders } = this.adminStore
     const { route, route_placement } = this.state
     const { onOrderClick } = this.props
-
+    console.log(orders);
     return (
       <section className="page-section pt-1">
         <Container>

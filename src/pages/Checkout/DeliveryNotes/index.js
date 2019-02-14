@@ -38,7 +38,7 @@ class DeliveryNotes extends Component {
               ? <p>{notes}</p>
               : <Input
                   className="mb-3 aw-input--control aw-input--left aw-input--bordered"
-                  placeholder="Any comments regarding your order? Leave them here!"
+                  placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
                   type="textarea"
                   value={notes}
                   onChange={this.handleDeliveryNoteChange}

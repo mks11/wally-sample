@@ -50,6 +50,7 @@ const Tab = ({ item, page }) => {
 }
 
 const ManageTabs = ({ page }) => {
+  return null // todo remove this line to get old admin tabs
   return (
     <div className="admin-tabs mt-3">
       <Container>

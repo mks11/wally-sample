@@ -24,12 +24,12 @@ class MainFirstModal extends Component {
         <button className="btn-icon btn-icon--close" onClick={this.handleClose}></button>
         <ModalBody className="modal-body-no-footer">
           <div className="login-wrap">
-            <h3 className="m-0 mb-2">No mark up, no problem.</h3>
-            <p className="mb-5">
-              The prices you see on our website are the exact ones we pay at the farmers markets and bulk shops, so you can be sure you’re getting the lowest price possible.
+            <h3 className="m-0 mb-2">No price markups. Ever.</h3>
+            <p className="mb-5 info-popup">
+              The prices you pay are the exact ones we pay at the farmers markets and bulk shops, so you can be sure you’re getting the lowest price possible.
               <br/>
               <br/>
-              <small>Prices on website are general estimates; subject to change based on actual prices paid.</small>
+              <small>Prices on website are subject to change based on actual prices paid.</small>
             </p>
             <button onClick={this.handleClose} className="btn btn-main active">Got it!</button>
           </div>

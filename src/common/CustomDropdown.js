@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"
+import React, {PureComponent} from "react"
 import {
   Dropdown,
   DropdownToggle,
@@ -18,10 +18,17 @@ class CustomDropdown extends PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.values.length !== prevState.values.length){
-      return {
-        values: nextProps.values,
-        title: nextProps.values[0].title
+    if (nextProps.values.length !== prevState.values.length) {
+      if (nextProps.values.length) {
+        return {
+          values: nextProps.values,
+          title: nextProps.values[0].title
+        }
+      } else {
+        return {
+          values: [],
+          title: ''
+        }
       }
     }
     else return null;
@@ -35,19 +42,19 @@ class CustomDropdown extends PureComponent {
   }
 
   onDropdownItemClick = (e) => {
-    const { onItemClick } = this.props
-    const { values } = this.state
+    const {onItemClick} = this.props
+    const {values} = this.state
     const valueId = e.target.getAttribute('attr-id')
 
     onItemClick && onItemClick(valueId)
-    
     this.setState({
       title: values.find(item => item.id === valueId).title
     })
   }
+
   render() {
-    const { values } = this.props
-    const { open, title } = this.state
+    const {values} = this.props
+    const {open, title} = this.state
 
     return values && values.length ? (
       <Dropdown isOpen={open} toggle={this.toggle} direction="down" className="aw--custom-dropdown">

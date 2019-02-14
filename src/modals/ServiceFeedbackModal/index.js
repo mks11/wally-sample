@@ -83,7 +83,7 @@ class ServiceFeedbackModal extends Component {
     let msgPlaceholder
     switch(feedbackValue) {
       case 0:
-        msgPlaceholder = 'Let us know what you are waiting for'
+        msgPlaceholder = 'Let us know what you are waiting for:'
         break;
       case 1:
         msgPlaceholder = 'What would you like to change?'
@@ -124,7 +124,7 @@ class ServiceFeedbackModal extends Component {
             >
               <img src="images/sad.svg" />
             </Button>
-            <div className="feedback-caption">Don’t plan on ordering, here’s why: …</div>
+            <div className="feedback-caption">Won't order, here’s why: …</div>
           </Col>
         </FormGroup>
         <FormGroup row>

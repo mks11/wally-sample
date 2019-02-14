@@ -3,9 +3,7 @@ import ReactGA from 'react-ga'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
-import FontAwesome from 'react-fontawesome'
 import CurrencyInput from 'react-currency-input'
-import ClickOutside from 'react-click-outside'
 import Title from 'common/page/Title'
 import PaymentSelect from 'common/PaymentSelect'
 import AmountGroup from 'common/AmountGroup'
@@ -17,6 +15,10 @@ import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 import DeliveryChangeModal from 'common/DeliveryChangeModal'
 
 import DeliveryNotes from './DeliveryNotes'
+import ServiceSummary from './ServiceSummary'
+import PackagingSummary from './PackagingSummary'
+import TippingSummary from './TippingSummary'
+import PromoSummary from './PromoSummary'
 
 class Checkout extends Component {
   constructor(props) {
@@ -37,11 +39,9 @@ class Checkout extends Component {
       applicableStoreCreditAmount: 0,
 
       appliedPromo: false,
-      appliedPromoCode: '',
 
       appliedTipAmount: 0,
       appliedTipAmountChanged: false,
-      tippingpopup: false,
       tipReadOnly: true,
       tipApplyEdited: false,
       freezedTipAmount: null,
@@ -82,9 +82,6 @@ class Checkout extends Component {
 
       deliveryTimes: this.checkoutStore.deliveryTimes,
 
-      taxpopup: false,
-      servicepopup: false,
-      packagingdeposit: false,
       placeOrderRequest: false,
 
       order_notes: '',
@@ -273,7 +270,7 @@ class Checkout extends Component {
 
     if (!this.state.confirmHome) {
       this.setState({
-        invalidText: 'Please confirm that you are home',
+        invalidText: 'Please confirm that you will be home',
         placeOrderRequest: false,
         confirmHomeError: true,
       })
@@ -309,9 +306,8 @@ class Checkout extends Component {
     })
   }
 
-  handleCheckPromo = () => {
+  handleCheckPromo = promoCode => {
     const subTotal = this.checkoutStore.order.subtotal
-    const promoCode = this.state.appliedPromoCode
 
     if (!promoCode) {
       this.setState({invalidText: 'Promo code empty'})
@@ -366,38 +362,6 @@ class Checkout extends Component {
       this.userStore.setUserData(data)
       this.setState({selectedPayment: this.userStore.user.preferred_payment, newPayment: false})
     }
-  }
-
-  showServicePopup() {
-    this.setState({servicepopup: true})
-  }
-
-  hideServicePopup() {
-    this.setState({servicepopup: false})
-  }
-  showTaxPopup() {
-    this.setState({taxpopup: true})
-  }
-
-
-  hideTaxPopup() {
-    this.setState({taxpopup: false})
-  }
-
-  showPackagingPopup = () => {
-    this.setState({packagingdeposit: true})
-  }
-
-  hidePackagingPopup = () => {
-    this.setState({packagingdeposit: false})
-  }
-
-  showTippingPopup = () => {
-    this.setState({ tippingpopup: true })
-  }
-
-  hideTippingPopup = () => {
-    this.setState({ tippingpopup: false })
   }
 
   handleConfirmHome = () => {
@@ -548,32 +512,16 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
-                    <div className={`summary ${this.state.taxpopup ? 'open' : ''}`}>
-                      <span onClick={e=>this.showTaxPopup()}>Tax</span>
+                    <div className="summary">
+                      <span>Tax</span>
                       <span>{formatMoney((order.tax_amount)/100)}</span>
                     </div>
-                    <div className={`summary ${this.state.servicepopup ? 'open' : ''}`}>
-                      <ClickOutside onClickOutside={e=>this.hideServicePopup()}>
-                        <div className="popover bs-popover-right" role="tooltip" x-placement="right"><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
-                            <Link className="text-violet" to={"/help/topics/5b919926d94b070836bd5e4b"}>Learn more</Link>
-                        </div></div>
-                      </ClickOutside>
-                      <span onClick={e=>this.showServicePopup()}>Service fee <FontAwesome name='info-circle' /></span>
-                      <span>{formatMoney((order.service_amount)/100)}</span>
-                    </div>
+                    <ServiceSummary value={formatMoney((order.service_amount)/100)} />
                     <div className="summary">
                       <span>Delivery fee</span>
                       <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
-                    <div className={`summary ${this.state.packagingdeposit ? 'open' : ''}`}>
-                      <ClickOutside onClickOutside={this.hidePackagingPopup}>
-                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
-                        This charge correlates to how many pieces of reusable packaging we lend you. Once you return our reusable packaging to a Wally Shop courier, you'll get the deposit back as store credit. <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
-                        </div></div>
-                      </ClickOutside>
-                      <span onClick={this.showPackagingPopup}>Packaging deposit  <FontAwesome name='info-circle' /></span>
-                      <span>{formatMoney(order.packaging_deposit/100)}</span>
-                    </div>
+                    <PackagingSummary value={formatMoney(order.packaging_deposit/100)} />
 
                     <div className="summary">
                       <span>Applied Discount</span>
@@ -584,16 +532,7 @@ class Checkout extends Component {
                       <span>Applied Store credit</span>
                       <span>-{formatMoney(order.applied_store_credit/100)}</span>
                     </div>
-
-                    <div className={`summary ${this.state.tippingpopup ? 'open' : ''}`}>
-                      <ClickOutside onClickOutside={this.hideTippingPopup}>
-                        <div className="popover bs-popover-right" role="tooltip" x-placement="right" style={{left: '142px'}}><div className="arrow"></div><h3 className="popover-header"></h3><div className="popover-body">
-                        100% of the tip amount goes to our shoppers and couriers, on top of the wages they earn.
-                        </div></div>
-                      </ClickOutside>
-                      <span onClick={this.showTippingPopup}>Tip Amount  <FontAwesome name='info-circle' /></span>
-                      <span>{this.updateTipAmount()}</span>
-                    </div>
+                    <TippingSummary value={this.updateTipAmount()} />
 
                     {this.state.appliedStoreCredit ?
                         <div className="summary">
@@ -601,14 +540,6 @@ class Checkout extends Component {
                           <span>{formatMoney(this.state.appliedStoreCreditAmount/100)}</span>
                         </div>
                         :null}
-                        {/*
-                        {this.state.appliedPromo ?
-                            <div className="summary">
-                              <span>Promo code applied</span>
-                              <span>{this.state.appliedPromoCode}</span>
-                            </div>
-                            :null}
-                            */}
                           </div>
 
                           <div className="item-extras">
@@ -629,18 +560,7 @@ class Checkout extends Component {
 
                                   {
                                     !this.state.appliedPromo ? 
-                                      <div className="form-group">
-                                        <span className="text-blue">Have a promo code</span>
-                                        <div className="aw-input--group aw-input--group-sm">
-                                          <Input
-                                            className="aw-input--control aw-input--left aw-input--bordered"
-                                            type="text"
-                                            placeholder="Enter promocode here"
-                                            onChange={(e) => this.setState({invalidText: '', appliedPromoCode: e.target.value})}/>
-
-                                          <button onClick={this.handleCheckPromo} type="button" className="btn btn-transparent purple-apply-btn">APPLY</button>
-                                        </div>
-                                      </div>
+                                      <PromoSummary onApply={this.handleCheckPromo} />
                                       :null
                                   }
                                     <div className="form-group">

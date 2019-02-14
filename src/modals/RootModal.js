@@ -16,7 +16,7 @@ import InvalidZipSuccessModal from './InvalidZipSuccessModal'
 import DeleteModal from './DeleteModal'
 import ProductModal from './ProductModal'
 import DeliveryModal from './DeliveryModal'
-import ChekoutFirstModal from './ChekoutFirstModal'
+import CheckoutFirstModal from './CheckoutFirstModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -33,7 +33,7 @@ const ModalRoutes = {
   delete: DeleteModal,
   product: ProductModal,
   delivery: DeliveryModal,
-  checkoutfirst: ChekoutFirstModal,
+  checkoutfirst: CheckoutFirstModal,
 }
 
 class RootModal extends Component {

@@ -595,9 +595,15 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 .aw-nav--mobile li a {
   text-decoration: none;
   display: inline-block;
-  padding: 15px 10px;
+  padding: 10px 10px;
   color: #fff;
   line-height: 1;
+}
+
+@media (min-width: 350px) {
+  .aw-nav--mobile li a {
+    padding: 15px 10px;
+  }  
 }
 
 .aw-nav--mobile li a:focus, .aw-nav--mobile li a:active, .aw-nav--mobile li a:hover {
@@ -681,7 +687,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .aw-nav--middle {
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 .aw-nav {
@@ -1128,10 +1134,95 @@ body {
   }
 }
 
+.shopper-table .row {
+    cursor: pointer;
+}
+
+.shopper-table .row:hover {
+    background: #e8e8e8;
+}
+
+.shopper-table .completed {
+    background: lightgrey;
+}
+.shopper-table .completed:hover {
+    background: #bebebe;
+}
+.shopper-table .missing {
+    background: lightcoral;
+}
+
+.packaging-table .missing:hover {
+  background: #c76464;
+}
+
+.packaging-table .row {
+  cursor: pointer;
+}
+
+.packaging-table .row:hover {
+  background: #e8e8e8;
+}
+
+.packaging-table .paid {
+  background: lightgrey;
+}
+.packaging-table .paid:hover {
+  background: #bebebe;
+}
+.packaging-table .payment_issue {
+  background: lightcoral;
+}
+
+.packaging-table .payment_issue:hover {
+    background: #c76464;
+}
+
+.packaging-table .delivery_issues {
+  background: lightcoral;
+}
+
+.packaging-table .delivery_issue:hover {
+  background: #c76464;
+}
+
+.delivery-table .row {
+  cursor: pointer;
+}
+
+.delivery-table .row:hover {
+  background: #e8e8e8;
+}
+
+.delivery-table .delivered {
+  background: lightgrey;
+}
+.delivery-table .delivered:hover {
+  background: #bebebe;
+}
+.delivery-table .delivery_issue {
+  background: lightcoral;
+}
+
+.delivery-table .delivery_issue:hover {
+  background: #c76464;
+}
+
 .modal-shopper .aw--custom-dropdown {
   margin-bottom: 100px;
 }
-
+.xl-modal {
+    max-width: 90%;
+    width: 90%;
+  font-style: 16px;
+}
+.xl-modal .modal-header {
+  border-bottom: 1px solid #e9ecef;
+}
+.xl-modal .modal-footer {
+  border-top: 1px solid #e9ecef;
+  justify-content: space-between;
+}
 .shopper-location {
   padding: 5px 10px;
   cursor: pointer;
@@ -1167,3 +1258,57 @@ body {
 .post-edtior-page textarea {
   height: 300px;
 }
+
+.single-product .row {
+  align-items: center;
+  font-size: 18px;
+}
+.single-product .row strong {
+  font-size: 16px;
+}
+.single-product .nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.single-product .input-group-text {
+  align-items: center;
+  padding: .375rem .75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.scrollable-table {
+  overflow-x: auto;
+}
+
+.single-order-total {
+  margin: 20px auto;
+}
+
+.single-order .nav-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 30px auto;
+}
+
+.single-order-modal .modal-footer, .missing-modal .modal-footer {
+  justify-content: flex-end !important;
+}
+
+.single-order-modal .modal-footer, .missing-modal .modal-footer {
+  font-size: 16px;
+    max-height: unset;
+}
+
+ .missing-modal .modal-body {
+     max-height: unset;
+     overflow: unset;
+ }
+ .missing-modal .modal-body p {
+     font-size: 16px;
+     margin-top: 10px;
+ }
