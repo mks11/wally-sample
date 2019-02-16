@@ -83,23 +83,26 @@ class CartDropdown extends Component {
                     <h3 className="px-3">Orders:</h3>
                     <div className="order-summary">
                       <div className="order-scroll px-3">
-                        { items.map((c, i) => (
-                          <div className="item mt-3 pb-2" key={i}>
-                            <div className="item-left">
-                              <h4 className="item-name">{c.product_name}</h4>
-                              <span className="item-detail mb-1">{c.packaging_name}</span>
-                              <div className="item-link">
-                                <a className="text-blue mr-2" onClick={() => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
-                                <a className="text-dark-grey" onClick={() => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
+                        { items.map((c, i) => {
+                          const unit_type = c.unit_type || c.price_unit
+                          const showType = unit_type === 'packaging' ? c.packaging_name : unit_type
+                          return (
+                            <div className="item mt-3 pb-2" key={i}>
+                              <div className="item-left">
+                                <h4 className="item-name">{c.product_name}</h4>
+                                <span className="item-detail mb-1">{c.packaging_name}</span>
+                                <div className="item-link">
+                                  <a className="text-blue mr-2" onClick={() => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
+                                  <a className="text-dark-grey" onClick={() => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
+                                </div>
+                              </div>
+                              <div className="item-right">
+                                <h4>x{c.customer_quantity} {showType}</h4>
+                                <span className="item-price">{formatMoney(c.total/100)}</span>
                               </div>
                             </div>
-                            <div className="item-right">
-                              <h4>x{c.customer_quantity}</h4>
-                              <span className="item-price">{formatMoney(c.total/100)}</span>
-                            </div>
-                          </div>
-
-                        ))}
+                          )
+                        })}
                       </div>
                       <div className="item-total px-3">
                         <span>Total</span>

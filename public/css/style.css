@@ -1529,6 +1529,9 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 .product-price{
   color: #6060a8
 }
+.product-packaged {
+  font-style: italic;
+}
 .product-weight{text-align: right;}
 
 .product-modal-left{
@@ -1893,7 +1896,8 @@ a {
   }
   .product-price,
   .product-desc,
-  .product-weight {
+  .product-weight,
+  .product-packaged {
     font-size: .7rem;
   }
   .product-top.fixed {
@@ -1999,7 +2003,8 @@ a {
     font-size: 23px;
   }
   .product-price,
-  .product-desc {
+  .product-desc,
+  .product-packaged {
     font-size: .7rem;
   }
   .product-top.fixed {
@@ -2491,6 +2496,9 @@ color:#6e8692
   color: #888;
 }
 
+.delivery-notes {
+  margin-bottom: 30px;
+}
 
 .delivery-notes .card-body {
   border: 1px solid #ececec;
@@ -2504,4 +2512,12 @@ color:#6e8692
 
 .delivery-notes textarea:focus {
   border: 2px solid #78C98D;
+}
+
+
+
+
+
+.product-custom-value {
+  height: calc(2.25rem + 2px);
 }
