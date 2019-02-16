@@ -33,7 +33,7 @@ class QuantitySelectSpecial extends PureComponent {
   handleSelectChange = e => {
     const {
       onSelectChange,
-      onCustom,
+      onCustomSelect,
     } = this.props
 
     const notCustom = e.target.value !== 'custom'
@@ -45,12 +45,13 @@ class QuantitySelectSpecial extends PureComponent {
     })
 
     notCustom && onSelectChange && onSelectChange(e)
-    onCustom && onCustom(notCustom)
+    onCustomSelect && onCustomSelect(notCustom)
   }
 
   handleCustomValueChange = e => {
     const {
       onSelectChange,
+      onCustomChange,
     } = this.props
 
     const value = e.target.value
@@ -59,11 +60,12 @@ class QuantitySelectSpecial extends PureComponent {
     if (/^\d*[.]?\d*$/.test(value)) {
       this.setState({ customValue: value })
       onSelectChange && onSelectChange(e)
+      onCustomChange && onCustomChange(!value.length)
     }
   }
 
   render() {
-    const { price_unit } = this.props
+    const { price_unit, customError } = this.props
 
     const {
       innerValue,
@@ -91,6 +93,7 @@ class QuantitySelectSpecial extends PureComponent {
               disabled={disabled}
               value={customValue}
               onChange={this.handleCustomValueChange}
+              invalid={customError}
             />
           </Col>
         </Row>

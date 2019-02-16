@@ -30,6 +30,8 @@ class ProductModal extends Component {
       subtitutes: [],
       selectedSubtitute: 0,
       custom: false,
+      customIsEmpty: true,
+      customError: false,
       packagingAddon: '',
       quantityAddon: '',
     }
@@ -107,6 +109,14 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
+    const { custom, customIsEmpty } = this.state
+
+    if (customIsEmpty) {
+      this.setState({
+        customError: true,
+      })
+      return
+    }
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
@@ -119,7 +129,7 @@ class ProductModal extends Component {
     const isSpecialType = specialTypes.includes(packaging_type)
     const finalUnitType =
       isSpecialType
-        ? this.state.custom ? unit_type : 'packaging'
+        ? custom ? unit_type : 'packaging'
         : unit_type
 
     checkout.editCurrentCart({
@@ -147,11 +157,26 @@ class ProductModal extends Component {
   }
 
   handleSelectQuantity = e => {
-    this.setState({ qty: e.target.value })
+    this.setState({
+      qty: e.target.value,
+      customError: false,
+      customIsEmpty: false,
+    })
   }
 
   handleSelectCustom = custom => {
-    this.setState({ custom })
+    this.setState({
+      custom,
+      customError: false,
+      customIsEmpty: !custom,
+    })
+  }
+  
+  handleCustomChange = isEmpty => {
+    this.setState({
+      customIsEmpty: isEmpty,
+      customError: false,
+    })
   }
 
   handlePackagingAddon = e => {
@@ -161,6 +186,7 @@ class ProductModal extends Component {
   handleQuantityAddon = e => {
     this.setState=({ quantityAddon: e.target.value })
   }
+
 
   render() {
     const { product } = this.props.stores
@@ -267,7 +293,9 @@ class ProductModal extends Component {
                     value={this.state.qty}
                     onSelectChange={this.handleSelectQuantity}
                     price_unit={packaging_type}
-                    onCustom={this.handleSelectCustom}
+                    onCustomSelect={this.handleSelectCustom}
+                    onCustomChange={this.handleCustomChange}
+                    customError={this.state.customError}
                   />
                 : <QuantitySelect
                     value={this.state.qty}
