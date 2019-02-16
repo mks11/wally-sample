@@ -33,7 +33,7 @@ class ProductModal extends Component {
       customIsEmpty: true,
       customError: false,
       packagingAddon: '',
-      quantityAddon: '',
+      quantityAddon: 0,
     }
   }
 
@@ -109,9 +109,9 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon } = this.state
 
-    if (customIsEmpty) {
+    if (custom && customIsEmpty) {
       this.setState({
         customError: true,
       })
@@ -132,13 +132,24 @@ class ProductModal extends Component {
         ? custom ? unit_type : 'packaging'
         : unit_type
 
-    checkout.editCurrentCart({
-      quantity: this.state.qty, 
-      product_id: inventory.product_id,
+    const items = [
+      {
+        quantity: this.state.qty, 
+        product_id: inventory.product_id,
+        inventory_id: inventory._id,
+        sub_pref: this.state.selectedSubtitute,
+        unit_type: finalUnitType,
+      }
+    ]
+
+    quantityAddon > 0 && items.push({
+      quantity: quantityAddon,
+      product_id: packagingAddon,
       inventory_id: inventory._id,
-      sub_pref: this.state.selectedSubtitute,
-      unit_type: finalUnitType,
-    },
+    })
+
+    checkout.editCurrentCart(
+    { items },
     user.getHeaderAuth(),
     order_summary,
     user.getDeliveryParams())
@@ -180,11 +191,13 @@ class ProductModal extends Component {
   }
 
   handlePackagingAddon = e => {
-    this.setState=({ packagingAddon: e.target.value })
+    this.setState({
+      packagingAddon: e.target.value
+    })
   }
   
   handleQuantityAddon = e => {
-    this.setState=({ quantityAddon: e.target.value })
+    this.setState({ quantityAddon: e.target.value })
   }
 
 
@@ -341,6 +354,8 @@ class ProductModal extends Component {
                 ? (
                   <Addons
                     addons={activeProduct.addons}
+                    packagingAddon={this.state.packagingAddon}
+                    quantityAddon={this.state.quantityAddon}
                     onPackagingAddon={this.handlePackagingAddon}
                     onQuantityAddon={this.handleQuantityAddon}
                   />
