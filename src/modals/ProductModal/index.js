@@ -15,8 +15,8 @@ import QuantitySelect from './QuantitySelect'
 import Addons from './Addons'
 
 const specialTypes = [
-  'Mason Jar',
-  'Bread Bag',
+  // 'Mason Jar',
+  // 'Bread Bag',
 ]
 
 class ProductModal extends Component {
@@ -350,10 +350,10 @@ class ProductModal extends Component {
             ))}
             <hr/>
             {
-              activeProduct.addons && activeProduct.addons.length
+              activeProduct.add_ons && activeProduct.add_ons.length
                 ? (
                   <Addons
-                    addons={activeProduct.addons}
+                    addons={activeProduct.add_ons}
                     packagingAddon={this.state.packagingAddon}
                     quantityAddon={this.state.quantityAddon}
                     onPackagingAddon={this.handlePackagingAddon}

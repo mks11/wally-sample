@@ -1,5 +1,8 @@
 import React from 'react'
 import { FormGroup, Input, Row, Col } from 'reactstrap'
+import {
+  formatMoney
+} from 'utils'
 
 const Addons = ({
   addons,
@@ -16,7 +19,8 @@ const Addons = ({
           <Input type="select" value={packagingAddon} onChange={onPackagingAddon}>
             {
               addons.map((addon, i) => {
-                const value = `${addon.product_name} - ${addon.inventory[0].price}`
+                if (!addon.inventory || addon.inventory.length === 0) return
+                const value = `${addon.name} - ${formatMoney(addon.inventory[0].price/100)}`
                 return (
                   <option key={i} value={addon.product_id}>{`${value} per unit`}</option>
                 )
