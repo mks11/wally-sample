@@ -18,6 +18,7 @@ class ModalStore {
   deliveryChangeData = null
 
   mainFirst = false
+  addonsFirst = false
 
   toggleDelivery() {
     this.delivery = !this.delivery
@@ -70,6 +71,10 @@ class ModalStore {
   toggleMainFirst() {
     this.mainFirst = !this.mainFirst
   }
+
+  toggleAddonsFirst() {
+    this.addonsFirst = !this.addonsFirst
+  }
 }
 
 decorate(ModalStore, {
@@ -89,6 +94,8 @@ decorate(ModalStore, {
   delivery: observable,
   deliveryChange: observable,
   mainFirst: observable,
+  addonsFirst: observable,
+
   showDeliveryChange: action,
   hideDeliveryChange: action,
   toggleChangeProduct: action,

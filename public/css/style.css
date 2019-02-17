@@ -1662,8 +1662,15 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
   top: 20px;
 }
 .substitue-popover:before,
-.substitue-popover:after {
+.substitue-popover:after,
+.addon-popover:before,
+.addon-popover:after {
   display: none;
+}
+
+.addon-popover {
+  left: 50%;
+  top: 18px;
 }
 
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;
