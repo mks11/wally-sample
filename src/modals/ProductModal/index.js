@@ -46,7 +46,7 @@ class ProductModal extends Component {
       text: "Remove item"
     }]
 
-    const { product } = this.props.stores
+    const { product, modal, user } = this.props.stores
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
@@ -56,6 +56,11 @@ class ProductModal extends Component {
     }
     this.setState({ subtitutes })
     logModalView('/product/' + product.activeProductId)
+
+    if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
+      const { addonsFirst } = user.flags || {}
+      !addonsFirst && modal.toggleAddonsFirst()
+    }
   }
 
   componentDidUpdate() {
@@ -142,11 +147,16 @@ class ProductModal extends Component {
       }
     ]
 
-    quantityAddon > 0 && items.push({
-      quantity: quantityAddon,
-      product_id: packagingAddon,
-      inventory_id: inventory._id,
-    })
+    if (quantityAddon > 0) {
+      const addonProduct = activeProduct.add_ons.find(p => p.product_id === packagingAddon)
+      
+      items.push({
+        quantity: quantityAddon,
+        product_id: packagingAddon,
+        inventory_id: addonProduct.inventory[0]._id,
+        unit_type: addonProduct.unit_type
+      })
+    } 
 
     checkout.editCurrentCart(
     { items },
@@ -190,14 +200,12 @@ class ProductModal extends Component {
     })
   }
 
-  handlePackagingAddon = e => {
-    this.setState({
-      packagingAddon: e.target.value
-    })
+  handlePackagingAddon = value => {
+    this.setState({ packagingAddon: value })
   }
   
-  handleQuantityAddon = e => {
-    this.setState({ quantityAddon: e.target.value })
+  handleQuantityAddon = value => {
+    this.setState({ quantityAddon: value })
   }
 
 

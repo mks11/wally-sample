@@ -7,7 +7,7 @@ import { APP_URL } from 'config'
 import DeliveryModal from 'common/DeliveryModal'
 import DeliveryChangeModal from 'common/DeliveryChangeModal'
 import MainFirstModal from 'common/MainFirstModal'
-// import ProductModal from 'common/ProductModal';
+import AddonFirstModal from 'common/AddonFirstModal'
 
 import Hero from './Hero'
 import Product from './Product'
@@ -436,6 +436,7 @@ class Mainpage extends Component {
                 />
 
                 <MainFirstModal />
+                <AddonFirstModal />
 
               </div>
     );

@@ -1,46 +1,86 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { FormGroup, Input, Row, Col } from 'reactstrap'
 import {
   formatMoney
 } from 'utils'
 
-const Addons = ({
-  addons,
-  packagingAddon,
-  quantityAddon,
-  onPackagingAddon,
-  onQuantityAddon,
-}) => {
-  return (
-    <FormGroup className="product-addons">
-      <Row form>
-        <Col style={{maxWidth: '180px'}} xs="7">
-          <div><strong>Choose your packaging add on</strong></div>
-          <Input type="select" value={packagingAddon} onChange={onPackagingAddon}>
-            {
-              addons.map((addon, i) => {
-                if (!addon.inventory || addon.inventory.length === 0) return
-                const value = `${addon.name} - ${formatMoney(addon.inventory[0].price/100)}`
-                return (
-                  <option key={i} value={addon.product_id}>{`${value} per unit`}</option>
+class Addons extends PureComponent {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      popup: false,
+    }
+  }
+
+  componentDidMount() {
+    const {
+      addons,
+      onPackagingAddon,
+    } = this.props
+
+    onPackagingAddon && onPackagingAddon(addons[0].product_id)
+  }
+
+  handlePackagingAddon = e => {
+    const { onPackagingAddon } = this.props
+    onPackagingAddon && onPackagingAddon(e.target.value)
+  }
+
+  handleQuantityAddon = e => {
+    const { onQuantityAddon } = this.props
+    onQuantityAddon && onQuantityAddon(e.target.value)
+  }
+
+  toggleInfoAddon = () => {
+    this.setState({ popup: !this.state.popup })
+  }
+  
+  render () {
+    const {
+      addons,
+      packagingAddon,
+      quantityAddon,
+    } = this.props
+    const { popup } = this.state
+
+    return (
+      <FormGroup className="product-addons">
+        <Row form>
+          <Col style={{maxWidth: '180px'}} xs="7">
+            <div className={popup ? 'open' : ''}>
+              <div><strong>Choose your packaging add on</strong> <i onClick={this.toggleInfoAddon} className="fa fa-info-circle"></i></div>
+              <div className="package-info-popover addon-popover">
+                <h4>Info Addon title</h4>
+                <p>Info Addon description</p>
+              </div>
+            </div>
+            <Input type="select" value={packagingAddon} onChange={this.handlePackagingAddon}>
+              {
+                addons.map((addon, i) => {
+                  if (!addon.inventory || addon.inventory.length === 0) return
+                  const value = `${addon.name} - ${formatMoney(addon.inventory[0].price/100)}`
+                  return (
+                    <option key={i} value={addon.product_id}>{`${value} per unit`}</option>
+                  )
+                })
+              }
+            </Input>
+          </Col>
+          <Col style={{maxWidth: '140px'}} xs="5">
+          <div><strong>Choose your quantity</strong></div>
+            <Input type="select" value={quantityAddon} onChange={this.handleQuantityAddon}>
+              {
+                [...Array(6).keys()].map(i =>
+                  <option key={i} value={i}>{i}</option>
                 )
-              })
-            }
-          </Input>
-        </Col>
-        <Col style={{maxWidth: '140px'}} xs="5">
-        <div><strong>Choose your quantity</strong></div>
-          <Input type="select" value={quantityAddon} onChange={onQuantityAddon}>
-            {
-              [...Array(6).keys()].map(i =>
-                <option key={i} value={i}>{i}</option>
-              )
-            }
-          </Input>
-        </Col>
-      </Row>
-    </FormGroup>
-  )
+              }
+            </Input>
+          </Col>
+        </Row>
+      </FormGroup>
+    )
+  }
 }
 
 export default Addons
