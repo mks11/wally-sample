@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Mainpage from './pages/Mainpage';
 import About from './pages/About';
+import HowItWorks from './pages/HowItWorks';
 import Account from './pages/Account';
 import Help from './pages/Help';
 import HelpSingle from './pages/HelpSingle';
@@ -63,6 +64,7 @@ export default (
         <Route exact path="/" component={Homepage}/>
         <Route exact path="/feedback" component={Feedback}/>
         <Route exact path="/servicefeedback" component={Feedback}/>
+        <Route exact path="/howitworks" component={HowItWorks}/>
       </Switch>
     </Fragment>
 );

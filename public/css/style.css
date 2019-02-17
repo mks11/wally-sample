@@ -2514,10 +2514,40 @@ color:#6e8692
   border: 2px solid #78C98D;
 }
 
-
-
-
-
 .product-custom-value {
   height: calc(2.25rem + 2px);
+}
+
+.category-card-link,
+.category-card-link:hover {
+  text-decoration: none;
+  color: #000;
+}
+
+.category-card-name {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 7px 5px;
+  height: 60px;
+}
+
+.category-card {
+  margin-bottom: 15px;
+}
+
+.category-card:hover {
+  box-shadow: 0 2px 10px 0 hsla(0,0%,58.8%,.75);
+}
+
+.category-card-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-color: #898f87;
+  padding-top: 100%;
+}
+
+.howitworks img {
+  max-width: 100%;
+  height: auto;
 }

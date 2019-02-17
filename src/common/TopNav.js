@@ -84,7 +84,7 @@ class TopNav extends Component {
       logModalView('/refer')
       this.modalStore.toggleModal('referral')
     } else {
-      this.props.store.routing.push('/help/topics/5bd1d5d71ee5e4f1d0b42c27')
+      this.handleSignup()
     }
     e.preventDefault()
   }
@@ -92,7 +92,9 @@ class TopNav extends Component {
   render() {
     let storeCredit, name
     let isAdmin = false
+    let bannerText = "Get $30 off your first order with code NOPLASTIC."
     if (this.userStore.user) {
+      bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
       storeCredit =  user.store_credit
@@ -159,6 +161,8 @@ class TopNav extends Component {
                       }
 
                       <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
+                      <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
                       <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                     </ul>
@@ -181,7 +185,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
-                  Get 15% off all month when you refer a friend. Click for details.
+                  {bannerText}
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
@@ -212,7 +216,7 @@ class TopNav extends Component {
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                      < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
+                                      <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
@@ -235,8 +239,9 @@ class TopNav extends Component {
                                       <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
                                       < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
+                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
@@ -249,6 +254,7 @@ class TopNav extends Component {
                         :
                         <React.Fragment>
                           <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
+                          <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
                           <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>

@@ -46,7 +46,7 @@ class OrderConfirmation extends Component {
                 KEEP SHOPPING
               </button>
               <span>
-                For every friend you refer, you’ll get 15% off for a month once they purchase, and they’ll get 15% off their first month as well. Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
+                For every friend you refer, you’ll get $10 once they purchase, and they’ll get $10 just for signing up! Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
               </span>
             </div>
         </div>
