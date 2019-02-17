@@ -47,6 +47,7 @@ class ProductModal extends Component {
     }]
 
     const { product, modal, user } = this.props.stores
+    this.state.qty = product.activeProduct.min_size
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
