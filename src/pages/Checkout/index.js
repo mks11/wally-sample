@@ -525,16 +525,11 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
-                    <div className="summary">
-                      <span>Tax</span>
-                      <span>{formatMoney((order.tax_amount)/100)}</span>
-                    </div>
                     <ServiceSummary value={formatMoney((order.service_amount)/100)} />
                     <div className="summary">
                       <span>Delivery fee</span>
                       <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
-                    <PackagingSummary value={formatMoney(order.packaging_deposit/100)} />
 
                     <div className="summary">
                       <span>Applied Discount</span>
@@ -546,6 +541,7 @@ class Checkout extends Component {
                       <span>-{formatMoney(order.applied_store_credit/100)}</span>
                     </div>
                     <TippingSummary value={this.updateTipAmount()} />
+                    <PackagingSummary value={("TBD")} />
 
                     {this.state.appliedStoreCredit ?
                         <div className="summary">

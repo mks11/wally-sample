@@ -24,12 +24,9 @@ class AddonFirstModal extends Component {
         <button className="btn-icon btn-icon--close" onClick={this.handleClose}></button>
         <ModalBody className="modal-body-no-footer">
           <div className="login-wrap">
-            <h3 className="m-0 mb-2">Add-ons are coming!</h3>
+            <h3 className="m-0 mb-2">Packaging Add Ons</h3>
             <p className="mb-5 info-popup">
-              The prices you pay are the exact ones we pay at the farmers markets and bulk shops, so you can be sure you’re getting the lowest price possible.
-              <br/>
-              <br/>
-              <small>Prices on website are subject to change based on actual prices paid.</small>
+              This product has an add on option: oil spout ($2.50). Add on items are not part of our returnable program, but are intended for you to reuse. Simply swap them onto fresh jars of liquids when you order them, and only return the jars. So keep and reuse the packaging add on at home, and return the jar to us - capish?
             </p>
             <button onClick={this.handleClose} className="btn btn-main active">Got it!</button>
           </div>
