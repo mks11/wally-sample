@@ -60,6 +60,11 @@ class CartDropdown extends Component {
     const count = items.length
     const subtotal = cart ? (cart.subtotal / 100) : 0
 
+    const deliveryFeeInfo =
+      cart && cart.subtotal < 3500
+        ? <span className="delivery-fee-info">Reduced delivery fee on orders above $35 - add $XX</span>
+        : null
+
     return (
       <div className="dropdown-cart-wrapper">
         <div className="btn-group dropdown-cart" >
@@ -80,7 +85,7 @@ class CartDropdown extends Component {
             <div className="dropdown-menu dropdown-menu-right">
               { (items && count > 0) ?
                   <React.Fragment>
-                    <h3 className="px-3">Orders:</h3>
+                    <h3 className="px-3">Orders: {deliveryFeeInfo}</h3>
                     <div className="order-summary">
                       <div className="order-scroll px-3">
                         { items.map((c, i) => {
