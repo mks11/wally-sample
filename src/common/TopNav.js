@@ -84,7 +84,7 @@ class TopNav extends Component {
       logModalView('/refer')
       this.modalStore.toggleModal('referral')
     } else {
-      this.props.store.routing.push('/help/topics/5bd1d5d71ee5e4f1d0b42c27')
+      this.handleSignup()
     }
     e.preventDefault()
   }
@@ -92,7 +92,9 @@ class TopNav extends Component {
   render() {
     let storeCredit, name
     let isAdmin = false
+    let bannerText = "Get $30 off your first order with code NOPLASTIC."
     if (this.userStore.user) {
+      bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
       storeCredit =  user.store_credit
@@ -183,7 +185,7 @@ class TopNav extends Component {
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
-                  Get 15% off all month when you refer a friend. Click for details.
+                  {bannerText}
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>
                   <i className="fa fa-times-circle" aria-hidden="true" ></i>
@@ -237,7 +239,7 @@ class TopNav extends Component {
                                       <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
                                       < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Get 15% Off</a>
+                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>

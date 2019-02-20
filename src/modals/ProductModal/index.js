@@ -10,6 +10,15 @@ import {
 } from 'utils'
 import { PRODUCT_BASE_URL } from 'config'
 
+import QuantitySelectSpecial from './QuantitySelectSpecial'
+import QuantitySelect from './QuantitySelect'
+import Addons from './Addons'
+
+const specialTypes = [
+  // 'Mason Jar',
+  // 'Bread Bag',
+]
+
 class ProductModal extends Component {
   constructor(props) {
     super(props)
@@ -19,7 +28,12 @@ class ProductModal extends Component {
       infoPackage: false,
       slick: false,
       subtitutes: [],
-      selectedSubtitute: 0
+      selectedSubtitute: 0,
+      custom: false,
+      customIsEmpty: true,
+      customError: false,
+      packagingAddon: '',
+      quantityAddon: 0,
     }
   }
 
@@ -32,7 +46,8 @@ class ProductModal extends Component {
       text: "Remove item"
     }]
 
-    const { product } = this.props.stores
+    const { product, modal, user } = this.props.stores
+    this.state.qty = product.activeProduct.min_size
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
@@ -42,6 +57,11 @@ class ProductModal extends Component {
     }
     this.setState({ subtitutes })
     logModalView('/product/' + product.activeProductId)
+
+    if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
+      const { addonsFirst } = user.flags || {}
+      !addonsFirst && modal.toggleAddonsFirst()
+    }
   }
 
   componentDidUpdate() {
@@ -95,18 +115,52 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
+    const { custom, customIsEmpty, quantityAddon, packagingAddon } = this.state
+
+    if (custom && customIsEmpty) {
+      this.setState({
+        customError: true,
+      })
+      return
+    }
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
+    const unit_type = activeProduct.unit_type || activeProduct.price_unit
+    const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
+    const packaging_type = packaging ? packaging.type : null
+    
+    const isSpecialType = specialTypes.includes(packaging_type)
+    const finalUnitType =
+      isSpecialType
+        ? custom ? unit_type : 'packaging'
+        : unit_type
 
-    checkout.editCurrentCart({
-      quantity: this.state.qty, 
-      product_id: inventory.product_id,
-      inventory_id: inventory._id,
-      sub_pref: this.state.selectedSubtitute
-    },
+    const items = [
+      {
+        quantity: this.state.qty, 
+        product_id: inventory.product_id,
+        inventory_id: inventory._id,
+        sub_pref: this.state.selectedSubtitute,
+        unit_type: finalUnitType,
+      }
+    ]
+
+    if (quantityAddon > 0) {
+      const addonProduct = activeProduct.add_ons.find(p => p.product_id === packagingAddon)
+      
+      items.push({
+        quantity: quantityAddon,
+        product_id: packagingAddon,
+        inventory_id: addonProduct.inventory[0]._id,
+        unit_type: addonProduct.unit_type
+      })
+    } 
+
+    checkout.editCurrentCart(
+    { items },
     user.getHeaderAuth(),
     order_summary,
     user.getDeliveryParams())
@@ -123,6 +177,38 @@ class ProductModal extends Component {
 
     this.props.toggle()
   }
+
+  handleSelectQuantity = e => {
+    this.setState({
+      qty: e.target.value,
+      customError: false,
+      customIsEmpty: false,
+    })
+  }
+
+  handleSelectCustom = custom => {
+    this.setState({
+      custom,
+      customError: false,
+      customIsEmpty: !custom,
+    })
+  }
+  
+  handleCustomChange = isEmpty => {
+    this.setState({
+      customIsEmpty: isEmpty,
+      customError: false,
+    })
+  }
+
+  handlePackagingAddon = value => {
+    this.setState({ packagingAddon: value })
+  }
+  
+  handleQuantityAddon = value => {
+    this.setState({ quantityAddon: value })
+  }
+
 
   render() {
     const { product } = this.props.stores
@@ -146,8 +232,7 @@ class ProductModal extends Component {
     let price = inventory.price / 100
     const totalPrice = price * this.state.qty
 
-    var unit_type = activeProduct.unit_type
-    if (!unit_type) unit_type = activeProduct.price_unit
+    const unit_type = activeProduct.unit_type || activeProduct.price_unit
     var price_unit = ""
     if (['ea'].includes(unit_type)) {
         if (activeProduct.subcat_name) {
@@ -170,9 +255,12 @@ class ProductModal extends Component {
       unit_weight.toFixed(1)
     }
 
+    const packaging_vol = activeProduct.packaging_vol
     const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
-    const packaging_type = packaging.type
-    const packaging_description = packaging.description
+    const packaging_type = packaging ? packaging.type : null
+    const packaging_description = packaging ? packaging.description : null
+
+    const isSpecialType = specialTypes.includes(packaging_type)
 
     return (
       <div className="product-modal-wrap">
@@ -212,14 +300,32 @@ class ProductModal extends Component {
                 <p><a href="#">Click here</a> to learn more or see full breakdown.</p>
               </div>
             </div>
-            <div className="mb-3">{packaging_type}</div>
+            <div className="mb-3">
+              { 
+                !isSpecialType 
+                  ? packaging_type
+                  : `"${packaging_type} (1 ${packaging_type} = ${packaging_vol} ${unit_type})"`
+              }
+            </div>
 
             <div><strong>Choose your quantity</strong></div>
-            <div className="form-group" style={{maxWidth: '140px'}}>
-              <select className="form-control" value={this.state.qty} onChange={e => this.setState({qty: e.target.value})}>
-                { qtyOptions.map((v, i) => (<option key={i} value={v}>{`${v} ${price_unit}`}</option>)) }
-              </select>
-            </div>
+            {
+              isSpecialType
+                ? <QuantitySelectSpecial
+                    value={this.state.qty}
+                    onSelectChange={this.handleSelectQuantity}
+                    price_unit={packaging_type}
+                    onCustomSelect={this.handleSelectCustom}
+                    onCustomChange={this.handleCustomChange}
+                    customError={this.state.customError}
+                  />
+                : <QuantitySelect
+                    value={this.state.qty}
+                    onSelectChange={this.handleSelectQuantity}
+                    options={qtyOptions}
+                    price_unit={price_unit}
+                  />
+            }
             <hr/>
             <div><strong>If item is unavailable:</strong></div>
             {this.state.subtitutes.map((sub, key) => (
@@ -251,6 +357,20 @@ class ProductModal extends Component {
                 }
               </div>
             ))}
+            <hr/>
+            {
+              activeProduct.add_ons && activeProduct.add_ons.length
+                ? (
+                  <Addons
+                    addons={activeProduct.add_ons}
+                    packagingAddon={this.state.packagingAddon}
+                    quantityAddon={this.state.quantityAddon}
+                    onPackagingAddon={this.handlePackagingAddon}
+                    onQuantityAddon={this.handleQuantityAddon}
+                  />
+                )
+                : null
+            }
             <br/>
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button onClick={this.handleAddToCart} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />

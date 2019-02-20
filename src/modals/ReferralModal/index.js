@@ -45,11 +45,11 @@ class ReferralModal extends Component {
 
     return (
       <div className="login-wrap">
-        <h3 className="m-0 mb-2">Who wants brownie points?</h3>
+        <h3 className="m-0 mb-2">Give $10, Get $10</h3>
         <span className="mb-1">
-          <small>An organized pantry, a farm fresh apple, and skipping single-use plastics - share these and other little joys when you refer a friend to The Wally Shop, and you’ll both get 15% off your orders for 30 days.</small>
+          <small>Give $10, and get $10 for every friend who places their first order.</small>
         </span>
-        <p className="mb-5 text-center"><small>Share the link below - Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29" onClick={this.handleHere}>here</Link></small></p>
+        <p className="mb-5 text-center"><small>Share the joys of skipping single-use when you refer a friend to The Wally Shop using the link below - Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29" onClick={this.handleHere}>here.</Link></small></p>
         <div className="referral-wrap p-2">
           <input
             type="text"

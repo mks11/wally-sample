@@ -7,7 +7,7 @@ const Product = props => {
 
   const producer = product.producer || null
   const price = product.product_price / 100
-  const unit_type = product.unit_type || product.price_unit
+  const unit_type = product.price_unit
   
   let price_unit = 'per '
   if (['ea'].includes(unit_type)) {
@@ -35,6 +35,7 @@ const Product = props => {
       <br></br>
       { product.product_name && <span className="product-desc"><strong>{product.product_name}</strong></span>}
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
+      <div className="product-packaged">packed in {product.packaging_type}</div>
     </div>
   )
 }

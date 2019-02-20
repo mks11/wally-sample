@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Input } from 'reactstrap'
 
-class DeliveryNotes extends Component {
+class Notes extends Component {
   constructor(props) {
     super(props)
 
@@ -27,18 +27,19 @@ class DeliveryNotes extends Component {
   }
 
   render() {
+    const { title, placeholder } = this.props
     const { fixed, notes } = this.state
 
     return (
       <div className="delivery-notes">
-        <h3 className="mb-3">Delivery Notes</h3>
+        <h3 className="mb-3">{title}</h3>
         <div className="card-body">
           {
             fixed
               ? <p>{notes}</p>
               : <Input
                   className="mb-3 aw-input--control aw-input--left aw-input--bordered"
-                  placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
+                  placeholder={placeholder}
                   type="textarea"
                   value={notes}
                   onChange={this.handleDeliveryNoteChange}
@@ -56,4 +57,4 @@ class DeliveryNotes extends Component {
   }  
 }
 
-export default DeliveryNotes
+export default Notes

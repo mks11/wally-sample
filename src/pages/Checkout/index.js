@@ -14,7 +14,7 @@ import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 import DeliveryChangeModal from 'common/DeliveryChangeModal'
 
-import DeliveryNotes from './DeliveryNotes'
+import Notes from './Notes'
 import ServiceSummary from './ServiceSummary'
 import PackagingSummary from './PackagingSummary'
 import TippingSummary from './TippingSummary'
@@ -85,6 +85,7 @@ class Checkout extends Component {
       placeOrderRequest: false,
 
       order_notes: '',
+      allergy_notes: '',
     }
   }
 
@@ -251,7 +252,7 @@ class Checkout extends Component {
   }
 
   handlePlaceOrder() {
-    const { placeOrderRequest, order_notes } = this.state
+    const { placeOrderRequest, order_notes, allergy_notes } = this.state
 
     if (placeOrderRequest) {
       return
@@ -290,6 +291,7 @@ class Checkout extends Component {
       delivery_time: this.userStore.selectedDeliveryTime.date + ' ' + this.userStore.selectedDeliveryTime.time,
       tip_amount: this.parseAppliedTip(),
       order_notes,
+      allergy_notes,
     }, this.userStore.getHeaderAuth()).then((data) => {
       ReactGA.event({
         category: 'Order',
@@ -416,6 +418,10 @@ class Checkout extends Component {
     this.setState({ order_notes: notes })
   }
 
+  handleAllergyNotesSubmit = notes => {
+    this.setState({ allergy_notes: notes })
+  }
+
   render() {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null
@@ -477,8 +483,15 @@ class Checkout extends Component {
                     preselect: true,
                   }}
                 />
-                <DeliveryNotes
+                <Notes
+                  title="Delivery Notes"
+                  placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
                   onSubmit={this.handleDeliveryNotesSubmit}
+                />
+                <Notes
+                  title="Any Allergens?"
+                  placeholder="Any allergies you want us to know about?"
+                  onSubmit={this.handleAllergyNotesSubmit}
                 />
             </div>
           </div>
@@ -512,16 +525,11 @@ class Checkout extends Component {
                       <span>Subtotal</span>
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
-                    <div className="summary">
-                      <span>Tax</span>
-                      <span>{formatMoney((order.tax_amount)/100)}</span>
-                    </div>
                     <ServiceSummary value={formatMoney((order.service_amount)/100)} />
                     <div className="summary">
                       <span>Delivery fee</span>
                       <span>{formatMoney(order.delivery_amount/100)}</span>
                     </div>
-                    <PackagingSummary value={formatMoney(order.packaging_deposit/100)} />
 
                     <div className="summary">
                       <span>Applied Discount</span>
@@ -533,6 +541,7 @@ class Checkout extends Component {
                       <span>-{formatMoney(order.applied_store_credit/100)}</span>
                     </div>
                     <TippingSummary value={this.updateTipAmount()} />
+                    <PackagingSummary value={("TBD")} />
 
                     {this.state.appliedStoreCredit ?
                         <div className="summary">

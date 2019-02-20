@@ -18,9 +18,13 @@ class DeleteModal extends Component {
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
 
     checkout.editCurrentCart({
-        quantity: 0, 
-        product_id: modal.msg.product_id,
-        inventory_id: modal.msg.inventory_id,
+        items: [
+          {
+            quantity: 0, 
+            product_id: modal.msg.product_id,
+            inventory_id: modal.msg.inventory_id,
+          }
+        ]
       },
       user.getHeaderAuth(),
       order_summary,
