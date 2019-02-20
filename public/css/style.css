@@ -1442,6 +1442,11 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 .dropdown-cart h3{font-size: 24px;font-weight: 700;}
 .order-scroll{max-height:calc(50vh - 100px);overflow-y:auto;padding-right: 10px;}
 
+.delivery-fee-info {
+  font-style: italic;
+  color: purple;
+  font-size: 10px;
+}
 /* .right-column{padding-left:50px;} */
 
 .product-content-left{padding-top: 30px;font-size: 15px;}
