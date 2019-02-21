@@ -51,12 +51,14 @@ class CartItem extends Component {
       <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.substitute_for_name}</TableCell>
-        <TableCell>$ {cart_item.product_price / 100}</TableCell>
+        <TableCell>${cart_item.initial_product_price / 100}</TableCell>
+        <TableCell>${cart_item.product_price / 100}</TableCell>
+        <TableCell>{cart_item.customer_quantity}</TableCell>
         <TableCell>
             <InputGroup>
-                <Input placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.customer_quantity}
+                <Input placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.final_quantity}
                        type={"number"}
-                       name={"customer_quantity"}
+                       name={"final_quantity"}
                        onChange={this.onInputChange}
                        disabled={!isEdit}
 />

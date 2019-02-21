@@ -153,7 +153,7 @@ class PackOrderView extends Component {
                             <Col xs="6">
                               <Row>
                                 <Col><b>Qty:</b></Col>
-                                <Col>{item.quantity}</Col>
+                                <Col>{item.final_quantity}</Col>
                               </Row>
                             </Col>
                             <Col xs="12">

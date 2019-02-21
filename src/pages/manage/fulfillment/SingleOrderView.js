@@ -73,7 +73,7 @@ class SingleOrderView extends Component {
     const item_quantities = cart_items.map(item => {
       return {
         product_id: item.product_id,
-        quantity: item.missing ? 0 : Number(item.customer_quantity)
+        quantity: item.missing ? 0 : Number(item.final_quantity)
       }
     })
 
@@ -113,7 +113,9 @@ class SingleOrderView extends Component {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Substitute For</TableCell>
+                  <TableCell>Initial Price</TableCell>
                   <TableCell>Final Price</TableCell>
+                  <TableCell>Initial Quantity</TableCell>
                   <TableCell>Quantity</TableCell>
                   <TableCell>Missing</TableCell>
                   <TableCell>Options</TableCell>
