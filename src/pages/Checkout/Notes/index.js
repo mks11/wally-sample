@@ -6,9 +6,15 @@ class Notes extends Component {
     super(props)
 
     this.state = {
-      notes: '',
-      fixed: false,
+      notes: props.default || '',
+      fixed: !!props.default || false,
     }
+  }
+
+  componentDidMount() {
+    const { onSubmit } = this.props
+    const { notes } = this.state
+    this.props.default && onSubmit && onSubmit(notes)
   }
 
   handleAction = () => {

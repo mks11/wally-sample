@@ -1,6 +1,8 @@
 import {observable, decorate, action} from 'mobx'
 
 class ModalStore {
+  modalPull = []
+
   isOpen = false
   modalId = null
   msg = null
@@ -17,7 +19,6 @@ class ModalStore {
   deliveryChangeType = null
   deliveryChangeData = null
 
-  mainFirst = false
   addonsFirst = false
 
   toggleDelivery() {
@@ -37,15 +38,20 @@ class ModalStore {
   }
 
   toggleModal(modalId, msg = null) {
-    this.switchModal(modalId)
-    this.isOpen = !this.isOpen
+    if (!this.modalPull.length) {
+      this.switchModal(modalId)
+      this.isOpen = !this.isOpen
+    }
+    
+    if(modalId && !this.modalPull.includes(modalId)) {
+      this.modalPull.push(modalId)
+    }
     this.msg = msg
   }
 
   switchModal(modalId) {
     this.modalId = modalId || null
   }
-
 
   toggleProduct(id) {
     this.product = !this.product
@@ -68,16 +74,13 @@ class ModalStore {
     this.changePrice = !this.changePrice
   }
 
-  toggleMainFirst() {
-    this.mainFirst = !this.mainFirst
-  }
-
   toggleAddonsFirst() {
     this.addonsFirst = !this.addonsFirst
   }
 }
 
 decorate(ModalStore, {
+  modalPull: observable,
   isOpen: observable,
   modalId: observable,
   msg: observable,
@@ -93,7 +96,6 @@ decorate(ModalStore, {
 
   delivery: observable,
   deliveryChange: observable,
-  mainFirst: observable,
   addonsFirst: observable,
 
   showDeliveryChange: action,
@@ -102,7 +104,6 @@ decorate(ModalStore, {
   toggleChangeFarm: action,
   toggleChangePrice: action,
   toggleDelivery: action,
-  toggleMainFirst: action,
 })
 
 

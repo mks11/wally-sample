@@ -17,6 +17,7 @@ import DeleteModal from './DeleteModal'
 import ProductModal from './ProductModal'
 import DeliveryModal from './DeliveryModal'
 import CheckoutFirstModal from './CheckoutFirstModal'
+import MainFirstModal from './MainFirstModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -34,6 +35,7 @@ const ModalRoutes = {
   product: ProductModal,
   delivery: DeliveryModal,
   checkoutfirst: CheckoutFirstModal,
+  mainFirst: MainFirstModal,
 }
 
 class RootModal extends Component {
@@ -43,7 +45,15 @@ class RootModal extends Component {
   }
 
   toggleModal = e => {
-    this.modalStore.toggleModal()
+    this.modalStore.modalPull.shift()
+    
+    if (this.modalStore.modalPull.length) {
+      const modalId = this.modalStore.modalPull[0]
+      this.switchModal(modalId)
+    } else {
+      this.modalStore.toggleModal()
+    }
+
     e && e.preventDefault()
   }
 
