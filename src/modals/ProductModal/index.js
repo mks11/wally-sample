@@ -256,7 +256,10 @@ class ProductModal extends Component {
     }
 
     const packaging_vol = activeProduct.packaging_vol
-    const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
+    const packaging = 
+      (activeProduct.packaging && activeProduct.packaging[0])
+        ? activeProduct.packaging[0]
+        : null
     const packaging_type = packaging ? packaging.type : null
     const packaging_description = packaging ? packaging.description : null
 
