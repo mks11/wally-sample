@@ -35,7 +35,7 @@ const Product = props => {
       <br></br>
       { product.product_name && <span className="product-desc"><strong>{product.product_name}</strong></span>}
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
-      <div className="product-packaged">packed in {product.packaging_type}</div>
+      <div className="product-packaged">packed in {product.std_packaging}</div>
     </div>
   )
 }

@@ -95,7 +95,10 @@ class CartDropdown extends Component {
                             <div className="item mt-3 pb-2" key={i}>
                               <div className="item-left">
                                 <h4 className="item-name">{c.product_name}</h4>
-                                <span className="item-detail mb-1">{c.packaging_name}</span>
+                                {
+                                  unit_type !== 'packaging' && <span className="item-detail mb-1">{c.packaging_name}</span>
+                                }
+                                
                                 <div className="item-link">
                                   <a className="text-blue mr-2" onClick={() => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
                                   <a className="text-dark-grey" onClick={() => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>

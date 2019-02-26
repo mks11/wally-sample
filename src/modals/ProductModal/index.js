@@ -9,15 +9,11 @@ import {
   logEvent
 } from 'utils'
 import { PRODUCT_BASE_URL } from 'config'
+import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelectSpecial from './QuantitySelectSpecial'
 import QuantitySelect from './QuantitySelect'
 import Addons from './Addons'
-
-const specialTypes = [
-  // 'Mason Jar',
-  // 'Bread Bag',
-]
 
 class ProductModal extends Component {
   constructor(props) {
@@ -34,6 +30,8 @@ class ProductModal extends Component {
       customError: false,
       packagingAddon: '',
       quantityAddon: 0,
+
+      packagingType: null,
     }
   }
 
@@ -115,7 +113,7 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon, packagingType } = this.state
 
     if (custom && customIsEmpty) {
       this.setState({
@@ -129,14 +127,15 @@ class ProductModal extends Component {
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
     const unit_type = activeProduct.unit_type || activeProduct.price_unit
-    const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
-    const packaging_type = packaging ? packaging.type : null
+    // const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
+    // const packaging_type = packaging ? packaging.type : null
     
-    const isSpecialType = specialTypes.includes(packaging_type)
-    const finalUnitType =
-      isSpecialType
-        ? custom ? unit_type : 'packaging'
-        : unit_type
+    // const finalUnitType =
+    //   activeProduct.buy_by_packaging
+    //     ? custom ? unit_type : 'packaging'
+    //     : unit_type
+    const packaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType) : null
+    const packagingId = packaging ? packaging.id : null
 
     const items = [
       {
@@ -144,7 +143,8 @@ class ProductModal extends Component {
         product_id: inventory.product_id,
         inventory_id: inventory._id,
         sub_pref: this.state.selectedSubtitute,
-        unit_type: finalUnitType,
+        unit_type: 'packaging',
+        packaging_id: packagingId,
       }
     ]
 
@@ -209,8 +209,16 @@ class ProductModal extends Component {
     this.setState({ quantityAddon: value })
   }
 
+  handlePackagingChange = value => {
+    this.setState({ packagingType: value })
+  }
+
+  handlePackagingCustomClick = () => {
+    this.setState({ packagingType: null })
+  }
 
   render() {
+    const { packagingType } = this.state
     const { product } = this.props.stores
     const activeProduct = product.activeProduct
 
@@ -260,10 +268,9 @@ class ProductModal extends Component {
       (activeProduct.packaging && activeProduct.packaging[0])
         ? activeProduct.packaging[0]
         : null
-    const packaging_type = packaging ? packaging.type : null
+    // const packaging_type = packaging ? packaging.type : null
+    const packaging_type = activeProduct.std_packaging || null
     const packaging_description = packaging ? packaging.description : null
-
-    const isSpecialType = specialTypes.includes(packaging_type)
 
     return (
       <div className="product-modal-wrap">
@@ -305,19 +312,32 @@ class ProductModal extends Component {
             </div>
             <div className="mb-3">
               { 
-                !isSpecialType 
+                !activeProduct.buy_by_packaging 
                   ? packaging_type
                   : `"${packaging_type} (1 ${packaging_type} = ${packaging_vol} ${unit_type})"`
               }
             </div>
+            {
+              !activeProduct.buy_by_packaging &&
+              (
+                <AmountGroup
+                  groupped={false}
+                  className="package-type-group"
+                  amountClick={this.handlePackagingChange}
+                  customClick={this.handlePackagingCustomClick}
+                  values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : ['8 oz', '16 ounce', '32 oz']}
+                  selected={activeProduct.packagings ? activeProduct.packagings[0].type : '8 oz'}
+                />
+              ) 
+            }
 
             <div><strong>Choose your quantity</strong></div>
             {
-              isSpecialType
+              activeProduct.buy_by_packaging
                 ? <QuantitySelectSpecial
                     value={this.state.qty}
                     onSelectChange={this.handleSelectQuantity}
-                    price_unit={packaging_type}
+                    price_unit={packagingType || packaging_type}
                     onCustomSelect={this.handleSelectCustom}
                     onCustomChange={this.handleCustomChange}
                     customError={this.state.customError}

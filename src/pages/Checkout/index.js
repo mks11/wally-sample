@@ -191,7 +191,6 @@ class Checkout extends Component {
       this.setState({selectedAddressChanged: false})
     }
   }
-
   handleAddNewAddress = async (data) => {
     const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
 
@@ -502,23 +501,29 @@ class Checkout extends Component {
                 <div className="card-body">
                   <h3 className="m-0 mb-2">Order Summary</h3>
                   <hr/>
-                  { cart_items.map((c, i) => (
+                  { cart_items.map((c, i) => {
+                    const unit_type = c.unit_type || c.price_unit
+                    const showType = unit_type === 'packaging' ? c.packaging_name : unit_type
 
-                    <div className="item mt-3 pb-2" key={i}>
-                      <div className="item-left">
-                        <h4 className="item-name">{c.product_name}</h4>
-                        <span className="item-detail mt-2 mb-1">{c.packaging_name}</span>
-                        <div className="item-link">
-                          <a onClick={e=>this.handleEdit(c.product_id, c.customer_quantity)} className="text-blue mr-2">EDIT</a>
-                          <a onClick={e=>this.handleDelete(c)} className="text-dark-grey">DELETE</a>
+                    return (
+                      <div className="item mt-3 pb-2" key={i}>
+                        <div className="item-left">
+                          <h4 className="item-name">{c.product_name}</h4>
+                          {
+                            unit_type !== 'packaging' && <span className="item-detail mt-2 mb-1">{c.packaging_name}</span>
+                          }
+                          <div className="item-link">
+                            <a onClick={e=>this.handleEdit(c.product_id, c.customer_quantity)} className="text-blue mr-2">EDIT</a>
+                            <a onClick={e=>this.handleDelete(c)} className="text-dark-grey">DELETE</a>
+                          </div>
+                        </div>
+                        <div className="item-right">
+                          <h4>x{c.customer_quantity} {showType}</h4>
+                          <span className="item-price">{formatMoney(c.total/100)}</span>
                         </div>
                       </div>
-                      <div className="item-right">
-                        <h4>x{c.customer_quantity}</h4>
-                        <span className="item-price">{formatMoney(c.total/100)}</span>
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
 
 
                   <div className="item-summaries">
