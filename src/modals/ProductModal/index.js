@@ -256,7 +256,10 @@ class ProductModal extends Component {
     }
 
     const packaging_vol = activeProduct.packaging_vol
-    const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
+    const packaging =
+      (activeProduct.packaging && activeProduct.packaging[0])
+        ? activeProduct.packaging[0]
+        : null
     const packaging_type = packaging ? packaging.type : null
     const packaging_description = packaging ? packaging.description : null
 
@@ -371,7 +374,6 @@ class ProductModal extends Component {
                 )
                 : null
             }
-            <br/>
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button onClick={this.handleAddToCart} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
             <div className="text-muted">Final total subject to measured weights and at-location prices</div>
@@ -379,11 +381,8 @@ class ProductModal extends Component {
         </Row>
         <Row>
           <Col>
-            {/* <h4>About This Product</h4>
-              <span>{product.description}</span> */}
             <hr />
-            <h3>Farms</h3>
-
+            <h3>Product Info</h3>
             <div className="media media-xs">
               <div className="media-body">
                 <div className="row">
@@ -395,6 +394,9 @@ class ProductModal extends Component {
                   </div>
                 </div>
                 <div><span className="font-weight-bold">Farms:</span> {activeProduct.farms && activeProduct.farms.join(', ')}</div>
+                {
+                  activeProduct.description && <div><span className="font-weight-bold">Description:</span> {activeProduct.description}</div>
+                }
               </div>
             </div>
           </Col>
