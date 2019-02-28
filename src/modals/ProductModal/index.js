@@ -34,6 +34,8 @@ class ProductModal extends Component {
       customError: false,
       packagingAddon: '',
       quantityAddon: 0,
+
+      outOfStock: false,
     }
   }
 
@@ -55,7 +57,10 @@ class ProductModal extends Component {
         text: "Substitute for organic only"
       })
     }
-    this.setState({ subtitutes })
+    this.setState({
+      subtitutes,
+      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock
+    })
     logModalView('/product/' + product.activeProductId)
 
     if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
@@ -115,7 +120,9 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock } = this.state
+
+    if (outOfStock) return
 
     if (custom && customIsEmpty) {
       this.setState({
@@ -376,7 +383,16 @@ class ProductModal extends Component {
             }
             <br/>
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
-            <button onClick={this.handleAddToCart} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
+            <button
+              onClick={this.handleAddToCart}
+              className={`btn btn-danger btn-add-cart mb-2 ${this.state.outOfStock ? 'inactive' : ''}`}
+            >
+              {
+                this.state.outOfStock
+                  ? 'Out of Stock'
+                  : 'Add to cart'
+              }
+            </button><br />
             <div className="text-muted">Final total subject to measured weights and at-location prices</div>
           </Col>
         </Row>

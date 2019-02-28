@@ -62,7 +62,7 @@ class CartDropdown extends Component {
 
     const deliveryFeeInfo =
       cart && cart.subtotal < 3500
-        ? <span className="delivery-fee-info">Reduced delivery fee on orders above $35 - add $XX</span>
+        ? <span className="delivery-fee-info">Reduced delivery fee on orders above $35 - add {formatMoney((3500 - cart.subtotal) / 100)}</span>
         : null
 
     return (

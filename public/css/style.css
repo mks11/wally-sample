@@ -1446,6 +1446,8 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   font-style: italic;
   color: purple;
   font-size: 10px;
+  display: block;
+  padding-top: 3px;
 }
 /* .right-column{padding-left:50px;} */
 
@@ -1536,6 +1538,9 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 .product-packaged {
   font-style: italic;
+}
+.product-packaged.out-of-stock {
+  color: red;
 }
 .product-weight{text-align: right;}
 
@@ -1845,6 +1850,9 @@ button.btn.btn-danger.btn-add-cart {
   text-transform: uppercase;
   font-weight:normal;
   line-height: .5;
+}
+button.btn.btn-danger.btn-add-cart.inactive {
+  background-color: #cecece;
 }
 .product-top.fixed + .product-content .product-content-left,
 .product-top.fixed + .product-content .product-content-right {
