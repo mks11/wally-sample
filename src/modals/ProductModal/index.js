@@ -11,7 +11,6 @@ import {
 import { PRODUCT_BASE_URL } from 'config'
 import AmountGroup from 'common/AmountGroup'
 
-import QuantitySelectSpecial from './QuantitySelectSpecial'
 import QuantitySelect from './QuantitySelect'
 import Addons from './Addons'
 
@@ -25,9 +24,6 @@ class ProductModal extends Component {
       slick: false,
       subtitutes: [],
       selectedSubtitute: 0,
-      custom: false,
-      customIsEmpty: true,
-      customError: false,
       packagingAddon: '',
       quantityAddon: 0,
 
@@ -113,14 +109,7 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon, packagingType } = this.state
-
-    if (custom && customIsEmpty) {
-      this.setState({
-        customError: true,
-      })
-      return
-    }
+    const { quantityAddon, packagingAddon, packagingType } = this.state
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
@@ -179,26 +168,7 @@ class ProductModal extends Component {
   }
 
   handleSelectQuantity = e => {
-    this.setState({
-      qty: e.target.value,
-      customError: false,
-      customIsEmpty: false,
-    })
-  }
-
-  handleSelectCustom = custom => {
-    this.setState({
-      custom,
-      customError: false,
-      customIsEmpty: !custom,
-    })
-  }
-  
-  handleCustomChange = isEmpty => {
-    this.setState({
-      customIsEmpty: isEmpty,
-      customError: false,
-    })
+    this.setState({ qty: e.target.value })
   }
 
   handlePackagingAddon = value => {
@@ -214,7 +184,7 @@ class ProductModal extends Component {
   }
 
   handlePackagingCustomClick = () => {
-    this.setState({ packagingType: null })
+    // this.setState({ packagingType: null })
   }
 
   render() {
@@ -314,11 +284,11 @@ class ProductModal extends Component {
               { 
                 !activeProduct.buy_by_packaging 
                   ? packaging_type
-                  : `"${packaging_type} (1 ${packaging_type} = ${packaging_vol} ${unit_type})"`
+                  : activeProduct.std_packaging
               }
             </div>
             {
-              !activeProduct.buy_by_packaging &&
+              activeProduct.buy_by_packaging &&
               (
                 <AmountGroup
                   groupped={false}
@@ -332,23 +302,12 @@ class ProductModal extends Component {
             }
 
             <div><strong>Choose your quantity</strong></div>
-            {
-              activeProduct.buy_by_packaging
-                ? <QuantitySelectSpecial
-                    value={this.state.qty}
-                    onSelectChange={this.handleSelectQuantity}
-                    price_unit={packagingType || packaging_type}
-                    onCustomSelect={this.handleSelectCustom}
-                    onCustomChange={this.handleCustomChange}
-                    customError={this.state.customError}
-                  />
-                : <QuantitySelect
-                    value={this.state.qty}
-                    onSelectChange={this.handleSelectQuantity}
-                    options={qtyOptions}
-                    price_unit={price_unit}
-                  />
-            }
+            <QuantitySelect
+              value={this.state.qty}
+              onSelectChange={this.handleSelectQuantity}
+              options={qtyOptions}
+              price_unit={packagingType || packaging_type}
+            />
             <hr/>
             <div><strong>If item is unavailable:</strong></div>
             {this.state.subtitutes.map((sub, key) => (
