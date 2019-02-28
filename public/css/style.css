@@ -2587,3 +2587,7 @@ color:#6e8692
 .package-type-group {
   margin: 7px -2px;
 }
+
+.package-type-group .btn {
+  font-size: 15px;
+}
