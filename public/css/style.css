@@ -1607,7 +1607,7 @@ textarea.input1, textarea.input2{height:auto;}
 font-weight: 400;height:auto;padding:20px}
 .btn-dropdown-outline.dropdown-toggle::after{position: absolute;right:20px;top:50%;margin-top: -2px;}
 .btn-dropdown-outline+.dropdown-menu{margin-top: 0;border-radius:0;right: 0;max-height:300px;overflow-y:scroll;}
-.text-muted{color:#bbb!important;}
+.text-muted{color:#888!important;}
 .dropdown-header{font-size:20px;color: #39393B;}
 .p-r{position: relative;}
 h3.p-r .address-rbtn{top:9px;}
