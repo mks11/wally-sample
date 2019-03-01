@@ -216,6 +216,9 @@ class ProductModal extends Component {
 
     if (!activeProduct) return null
 
+    let shipMessage = "Shipped and sold by The Wally Shop."
+    if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
+
     let infoPackageClass = 'package-info'
     if (this.state.infoPackage) {
       infoPackageClass += ' open'
@@ -287,7 +290,7 @@ class ProductModal extends Component {
           </Col>
           <Col sm="6">
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
-            <div>Ship and sold by The Wally Shop.</div>
+            <div>{shipMessage}</div>
             <div>Sold by the {price_unit}.</div>
             { (['ea', 'bunch', 'pint'].includes(unit_type) && activeProduct.unit_weight) && <div>Average weight is {activeProduct.unit_weight} {weight_unit}.</div> }
             <hr />
