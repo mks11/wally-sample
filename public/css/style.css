@@ -1853,6 +1853,7 @@ button.btn.btn-danger.btn-add-cart {
 }
 button.btn.btn-danger.btn-add-cart.inactive {
   background-color: #cecece;
+  border-color: #cecece;
 }
 .product-top.fixed + .product-content .product-content-left,
 .product-top.fixed + .product-content .product-content-right {
