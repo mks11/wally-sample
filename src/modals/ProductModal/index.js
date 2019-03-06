@@ -121,11 +121,10 @@ class ProductModal extends Component {
       (activeProduct.buy_by_packaging && packagingType)
         ? 'packaging'
         : unit_type
-    const packaging =
-      packagingType
-        ? activeProduct.packagings.find(p => p.type === packagingType)
-        : activeProduct.packagings[0] ? activeProduct.packagings[0] : null
-    const packagingId = packaging ? packaging.id : null
+    const packaging = activeProduct.packagings[0] ? activeProduct.packagings[0] : null
+    const defaultPackagingId = packaging ? packaging.id : null
+    const customPackaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType)._id : null
+    const packagingId = customPackaging || defaultPackagingId
 
     const items = [
       {
@@ -244,9 +243,9 @@ class ProductModal extends Component {
         ? activeProduct.packagings[0]
         : null
     const packaging_type =
-      activeProduct.buy_by_packaging
+      (activeProduct.buy_by_packaging && packagingType)
         ? activeProduct.std_packaging
-        : packaging ? packaging.type : null
+        : unit_type
     const packaging_description = packaging ? packaging.description : null
 
     return (
@@ -304,8 +303,8 @@ class ProductModal extends Component {
                     className="package-type-group"
                     amountClick={this.handlePackagingChange}
                     customClick={this.handlePackagingCustomClick}
-                    values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : ['8 oz', '16 ounce', '32 oz']}
-                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : '8 oz'}
+                    values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : []}
+                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
                   />
                 </React.Fragment>
               ) 
