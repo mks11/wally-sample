@@ -532,6 +532,16 @@ class Checkout extends Component {
                       <span>{formatMoney(order.subtotal/100)}</span>
                     </div>
                     {
+                      order.tax_amount === 0
+                        ? null
+                        : (
+                          <div className="summary">
+                            <span>Taxes</span>
+                            <span>{formatMoney(order.tax_amount/100)}</span>
+                          </div>
+                        )
+                    }
+                    {
                       order.service_amount === 0
                         ? null
                         : <ServiceSummary value={formatMoney((order.service_amount)/100)} />
@@ -551,7 +561,7 @@ class Checkout extends Component {
                         ? null
                         : (
                           <div className="summary">
-                            <span>Applied Discount</span>
+                            <span>Applied discount</span>
                             <span>-{formatMoney(order.promo_discount/100)}</span>
                           </div>
                         )
@@ -561,12 +571,12 @@ class Checkout extends Component {
                         ? null
                         : (
                           <div className="summary">
-                            <span>Applied Store credit</span>
+                            <span>Applied store credit</span>
                             <span>-{formatMoney(order.applied_store_credit/100)}</span>
                           </div>
                         )
                     }
-
+                    
                     <TippingSummary value={this.updateTipAmount()} />
                     <PackagingSummary value={("TBD")} />
 
