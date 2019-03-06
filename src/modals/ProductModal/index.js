@@ -116,14 +116,15 @@ class ProductModal extends Component {
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
     const unit_type = activeProduct.unit_type || activeProduct.price_unit
-    // const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
-    // const packaging_type = packaging ? packaging.type : null
     
-    // const finalUnitType =
-    //   activeProduct.buy_by_packaging
-    //     ? custom ? unit_type : 'packaging'
-    //     : unit_type
-    const packaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType) : null
+    const finalUnitType =
+      (activeProduct.buy_by_packaging && packagingType)
+        ? 'packaging'
+        : unit_type
+    const packaging =
+      packagingType
+        ? activeProduct.packagings.find(p => p.type === packagingType)
+        : activeProduct.packagings[0] ? activeProduct.packagings[0] : null
     const packagingId = packaging ? packaging.id : null
 
     const items = [
@@ -132,7 +133,7 @@ class ProductModal extends Component {
         product_id: inventory.product_id,
         inventory_id: inventory._id,
         sub_pref: this.state.selectedSubtitute,
-        unit_type: 'packaging',
+        unit_type: finalUnitType,
         packaging_id: packagingId,
       }
     ]
@@ -184,7 +185,7 @@ class ProductModal extends Component {
   }
 
   handlePackagingCustomClick = () => {
-    // this.setState({ packagingType: null })
+    this.setState({ packagingType: null })
   }
 
   render() {
@@ -204,9 +205,10 @@ class ProductModal extends Component {
 
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     let qtyOptions = []
-    var minSize = activeProduct.min_size
+    const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
+    const minSize = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.min_size
     for (var i = 0, len = 9; i <= len; i++) {
-      var opt = minSize + i * activeProduct.increment_size
+      var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
     }
 
@@ -238,11 +240,13 @@ class ProductModal extends Component {
 
     const packaging_vol = activeProduct.packaging_vol
     const packaging = 
-      (activeProduct.packaging && activeProduct.packaging[0])
-        ? activeProduct.packaging[0]
+      (activeProduct.packagings && activeProduct.packagings[0])
+        ? activeProduct.packagings[0]
         : null
-    // const packaging_type = packaging ? packaging.type : null
-    const packaging_type = activeProduct.std_packaging || null
+    const packaging_type =
+      activeProduct.buy_by_packaging
+        ? activeProduct.std_packaging
+        : packaging ? packaging.type : null
     const packaging_description = packaging ? packaging.description : null
 
     return (
@@ -293,14 +297,17 @@ class ProductModal extends Component {
             {
               activeProduct.buy_by_packaging &&
               (
-                <AmountGroup
-                  groupped={false}
-                  className="package-type-group"
-                  amountClick={this.handlePackagingChange}
-                  customClick={this.handlePackagingCustomClick}
-                  values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : ['8 oz', '16 ounce', '32 oz']}
-                  selected={activeProduct.packagings ? activeProduct.packagings[0].type : '8 oz'}
-                />
+                <React.Fragment>
+                  <div><strong>Size:</strong></div>
+                  <AmountGroup
+                    groupped={false}
+                    className="package-type-group"
+                    amountClick={this.handlePackagingChange}
+                    customClick={this.handlePackagingCustomClick}
+                    values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : ['8 oz', '16 ounce', '32 oz']}
+                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : '8 oz'}
+                  />
+                </React.Fragment>
               ) 
             }
 
