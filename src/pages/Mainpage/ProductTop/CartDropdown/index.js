@@ -60,10 +60,11 @@ class CartDropdown extends Component {
     const count = items.length
     const subtotal = cart ? (cart.subtotal / 100) : 0
 
-    const deliveryFeeInfo =
-      cart && cart.subtotal < 3500
-        ? <span className="delivery-fee-info">Reduced delivery fee on orders above $35 - add $XX</span>
-        : null
+    // const deliveryFeeInfo =
+    //   cart && cart.subtotal < 3500
+    //     ? <span className="delivery-fee-info">Reduced delivery fee on orders above $35 - add $XX</span>
+    //     : null
+    const deliveryFeeInfo = null
 
     return (
       <div className="dropdown-cart-wrapper">

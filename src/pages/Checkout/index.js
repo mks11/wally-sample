@@ -483,7 +483,7 @@ class Checkout extends Component {
                   }}
                 />
                 <Notes
-                  title="Delivery Notes"
+                  title="Order Notes"
                   placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
                   onSubmit={this.handleDeliveryNotesSubmit}
                 />
