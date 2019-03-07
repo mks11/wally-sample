@@ -1,5 +1,5 @@
-export const BASE_URL = "https://the-wally-shop.herokuapp.com"
-// export const BASE_URL = "http://localhost:4001"
+// export const BASE_URL = "https://the-wally-shop.herokuapp.com"
+export const BASE_URL = "https://21e652d7.ngrok.io"
 
 export const API_GET_USER = BASE_URL + "/api/user"
 export const API_EDIT_USER = BASE_URL + "/api/user"

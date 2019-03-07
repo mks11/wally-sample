@@ -214,16 +214,16 @@ class ProductModal extends Component {
     let price = inventory.price / 100
     const totalPrice = price * this.state.qty
 
-    const unit_type = activeProduct.unit_type || activeProduct.price_unit
+    const unit_type = activeProduct.unit_type
     var price_unit = ""
     if (['ea'].includes(unit_type)) {
         if (activeProduct.subcat_name) {
-          price_unit += activeProduct.subcat_name  
+          price_unit = activeProduct.subcat_name;
         } else {
-          price_unit += 'unit'
+          price_unit = 'unit';
         }
     } else {
-      price_unit += unit_type
+      price_unit += unit_type;
     }
 
     var weight_unit = "lbs"
@@ -237,16 +237,12 @@ class ProductModal extends Component {
       unit_weight.toFixed(1)
     }
 
-    const packaging_vol = activeProduct.packaging_vol
     const packaging = 
       (activeProduct.packagings && activeProduct.packagings[0])
         ? activeProduct.packagings[0]
         : null
-    const packaging_type =
-      (activeProduct.buy_by_packaging && packagingType)
-        ? activeProduct.std_packaging
-        : unit_type
-    const packaging_description = packaging ? packaging.description : null
+    const packaging_type = activeProduct.std_packaging
+    const packaging_description = packaging ? packaging.description : null 
 
     return (
       <div className="product-modal-wrap">
@@ -315,7 +311,7 @@ class ProductModal extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={packagingType || packaging_type}
+              price_unit={packagingType || price_unit}
             />
             <hr/>
             <div><strong>If item is unavailable:</strong></div>
