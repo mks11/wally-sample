@@ -60,10 +60,9 @@ class CartItem extends Component {
                        type={"number"}
                        name={"final_quantity"}
                        onChange={this.onInputChange}
-                       disabled={!isEdit}
-/>
+                       disabled={!isEdit}/>
                 {<InputGroupAddon addonType="append">
-                    <InputGroupText>{cart_item.price_unit}</InputGroupText>
+                    <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : cart_item.unit_type }</InputGroupText>
                 </InputGroupAddon>}
             </InputGroup>
         </TableCell>
