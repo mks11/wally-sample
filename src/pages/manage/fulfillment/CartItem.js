@@ -47,6 +47,8 @@ class CartItem extends Component {
 
   render() {
     const {isEdit, cart_item} = this.state
+    let unit_type = cart_item.unit_type
+    if (!unit_type) unit_type = cart_item.price_unit
     return (
       <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>
@@ -62,7 +64,7 @@ class CartItem extends Component {
                        onChange={this.onInputChange}
                        disabled={!isEdit}/>
                 {<InputGroupAddon addonType="append">
-                    <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : cart_item.unit_type }</InputGroupText>
+                  <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>  
                 </InputGroupAddon>}
             </InputGroup>
         </TableCell>
