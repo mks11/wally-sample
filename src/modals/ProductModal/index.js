@@ -369,7 +369,7 @@ class ProductModal extends Component {
             {/* <h4>About This Product</h4>
               <span>{product.description}</span> */}
             <hr />
-            <h3>Farms</h3>
+            <h3>Product Info</h3>
 
             <div className="media media-xs">
               <div className="media-body">
@@ -382,6 +382,9 @@ class ProductModal extends Component {
                   </div>
                 </div>
                 <div><span className="font-weight-bold">Farms:</span> {activeProduct.farms && activeProduct.farms.join(', ')}</div>
+                {
+                  activeProduct.instruction && <div><span className="font-weight-bold">Serving Instructions:</span> {activeProduct.instruction}</div>
+                }
               </div>
             </div>
           </Col>
