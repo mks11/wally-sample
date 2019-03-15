@@ -43,7 +43,7 @@ const Product = props => {
         {
           outOfStock
             ? 'Out of stock'
-            : `packed in ${product.packaging_type}`
+            : `packed in ${product.std_packaging}`
         }
       </div>
     </div>

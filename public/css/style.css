@@ -2572,3 +2572,34 @@ color:#6e8692
   max-width: 100%;
   height: auto;
 }
+
+
+.button-custom-group {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.button-custom-group .btn {
+  position: relative;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  margin: 0 3px;
+  padding: 15px 10px 13px;
+  border-radius: 5px;
+}
+
+.package-type-group {
+  margin: 0 -2px 7px;
+  flex-flow: wrap;
+}
+
+.package-type-group .btn {
+  font-size: 15px;
+  width: auto;
+  margin: 0 3px 3px;
+}
