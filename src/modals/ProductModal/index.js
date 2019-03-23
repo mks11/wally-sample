@@ -9,15 +9,10 @@ import {
   logEvent
 } from 'utils'
 import { PRODUCT_BASE_URL } from 'config'
+import AmountGroup from 'common/AmountGroup'
 
-import QuantitySelectSpecial from './QuantitySelectSpecial'
 import QuantitySelect from './QuantitySelect'
 import Addons from './Addons'
-
-const specialTypes = [
-  // 'Mason Jar',
-  // 'Bread Bag',
-]
 
 class ProductModal extends Component {
   constructor(props) {
@@ -29,11 +24,10 @@ class ProductModal extends Component {
       slick: false,
       subtitutes: [],
       selectedSubtitute: 0,
-      custom: false,
-      customIsEmpty: true,
-      customError: false,
       packagingAddon: '',
       quantityAddon: 0,
+      outOfStock: false,
+      packagingType: null,
     }
   }
 
@@ -55,7 +49,10 @@ class ProductModal extends Component {
         text: "Substitute for organic only"
       })
     }
-    this.setState({ subtitutes })
+    this.setState({
+      subtitutes,
+      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock
+    })
     logModalView('/product/' + product.activeProductId)
 
     if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
@@ -115,7 +112,9 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock, packagingType } = this.state
+
+    if (outOfStock) return
 
     if (custom && customIsEmpty) {
       this.setState({
@@ -129,14 +128,15 @@ class ProductModal extends Component {
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
     const unit_type = activeProduct.unit_type || activeProduct.price_unit
-    const packaging = activeProduct.packaging[0] ? activeProduct.packaging[0] : null
-    const packaging_type = packaging ? packaging.type : null
     
-    const isSpecialType = specialTypes.includes(packaging_type)
     const finalUnitType =
-      isSpecialType
-        ? custom ? unit_type : 'packaging'
+      (activeProduct.buy_by_packaging && packagingType)
+        ? 'packaging'
         : unit_type
+    const packaging = activeProduct.packagings[0] ? activeProduct.packagings[0] : null
+    const defaultPackagingId = packaging ? packaging.id : null
+    const customPackaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType)._id : null
+    const packagingId = customPackaging || defaultPackagingId
 
     const items = [
       {
@@ -145,6 +145,7 @@ class ProductModal extends Component {
         inventory_id: inventory._id,
         sub_pref: this.state.selectedSubtitute,
         unit_type: finalUnitType,
+        packaging_id: packagingId,
       }
     ]
 
@@ -179,26 +180,7 @@ class ProductModal extends Component {
   }
 
   handleSelectQuantity = e => {
-    this.setState({
-      qty: e.target.value,
-      customError: false,
-      customIsEmpty: false,
-    })
-  }
-
-  handleSelectCustom = custom => {
-    this.setState({
-      custom,
-      customError: false,
-      customIsEmpty: !custom,
-    })
-  }
-  
-  handleCustomChange = isEmpty => {
-    this.setState({
-      customIsEmpty: isEmpty,
-      customError: false,
-    })
+    this.setState({ qty: e.target.value })
   }
 
   handlePackagingAddon = value => {
@@ -209,12 +191,23 @@ class ProductModal extends Component {
     this.setState({ quantityAddon: value })
   }
 
+  handlePackagingChange = value => {
+    this.setState({ packagingType: value })
+  }
+
+  handlePackagingCustomClick = () => {
+    this.setState({ packagingType: null })
+  }
 
   render() {
+    const { packagingType } = this.state
     const { product } = this.props.stores
     const activeProduct = product.activeProduct
 
     if (!activeProduct) return null
+
+    let shipMessage = "Shipped and sold by The Wally Shop."
+    if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
     if (this.state.infoPackage) {
@@ -222,26 +215,30 @@ class ProductModal extends Component {
     }
 
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
+    const limitOptions = activeProduct.fbw && !activeProduct.out_of_stock
     let qtyOptions = []
-    var minSize = activeProduct.min_size
-    for (var i = 0, len = 9; i <= len; i++) {
-      var opt = minSize + i * activeProduct.increment_size
+
+    const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
+    const minSize = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.min_size
+    const maxQty = limitOptions ? Math.min(activeProduct.max_qty, 10) : 10
+    for (var i = 0; i < maxQty; i++) {
+      var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
     }
 
     let price = inventory.price / 100
     const totalPrice = price * this.state.qty
 
-    const unit_type = activeProduct.unit_type || activeProduct.price_unit
+    const unit_type = activeProduct.unit_type
     var price_unit = ""
     if (['ea'].includes(unit_type)) {
         if (activeProduct.subcat_name) {
-          price_unit += activeProduct.subcat_name  
+          price_unit = activeProduct.subcat_name;
         } else {
-          price_unit += 'unit'
+          price_unit = 'unit';
         }
     } else {
-      price_unit += unit_type
+      price_unit += unit_type;
     }
 
     var weight_unit = "lbs"
@@ -255,15 +252,12 @@ class ProductModal extends Component {
       unit_weight.toFixed(1)
     }
 
-    const packaging_vol = activeProduct.packaging_vol
-    const packaging =
-      (activeProduct.packaging && activeProduct.packaging[0])
-        ? activeProduct.packaging[0]
+    const packaging = 
+      (activeProduct.packagings && activeProduct.packagings[0])
+        ? activeProduct.packagings[0]
         : null
-    const packaging_type = packaging ? packaging.type : null
-    const packaging_description = packaging ? packaging.description : null
-
-    const isSpecialType = specialTypes.includes(packaging_type)
+    const packaging_type = activeProduct.std_packaging
+    const packaging_description = packaging ? packaging.description : null 
 
     return (
       <div className="product-modal-wrap">
@@ -290,7 +284,7 @@ class ProductModal extends Component {
           </Col>
           <Col sm="6">
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
-            <div>Ship and sold by The Wally Shop.</div>
+            <div>{shipMessage}</div>
             <div>Sold by the {price_unit}.</div>
             { (['ea', 'bunch', 'pint'].includes(unit_type) && activeProduct.unit_weight) && <div>Average weight is {activeProduct.unit_weight} {weight_unit}.</div> }
             <hr />
@@ -305,30 +299,35 @@ class ProductModal extends Component {
             </div>
             <div className="mb-3">
               { 
-                !isSpecialType 
+                !activeProduct.buy_by_packaging 
                   ? packaging_type
-                  : `"${packaging_type} (1 ${packaging_type} = ${packaging_vol} ${unit_type})"`
+                  : activeProduct.std_packaging
               }
             </div>
+            {
+              activeProduct.buy_by_packaging &&
+              (
+                <React.Fragment>
+                  <div><strong>Size:</strong></div>
+                  <AmountGroup
+                    groupped={false}
+                    className="package-type-group"
+                    amountClick={this.handlePackagingChange}
+                    customClick={this.handlePackagingCustomClick}
+                    values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : []}
+                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
+                  />
+                </React.Fragment>
+              ) 
+            }
 
             <div><strong>Choose your quantity</strong></div>
-            {
-              isSpecialType
-                ? <QuantitySelectSpecial
-                    value={this.state.qty}
-                    onSelectChange={this.handleSelectQuantity}
-                    price_unit={packaging_type}
-                    onCustomSelect={this.handleSelectCustom}
-                    onCustomChange={this.handleCustomChange}
-                    customError={this.state.customError}
-                  />
-                : <QuantitySelect
-                    value={this.state.qty}
-                    onSelectChange={this.handleSelectQuantity}
-                    options={qtyOptions}
-                    price_unit={price_unit}
-                  />
-            }
+            <QuantitySelect
+              value={this.state.qty}
+              onSelectChange={this.handleSelectQuantity}
+              options={qtyOptions}
+              price_unit={packagingType || price_unit}
+            />
             <hr/>
             <div><strong>If item is unavailable:</strong></div>
             {this.state.subtitutes.map((sub, key) => (
@@ -375,7 +374,16 @@ class ProductModal extends Component {
                 : null
             }
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
-            <button onClick={this.handleAddToCart} className="btn btn-danger btn-add-cart mb-2">Add to cart</button><br />
+            <button
+              onClick={this.handleAddToCart}
+              className={`btn btn-danger btn-add-cart mb-2 ${this.state.outOfStock ? 'inactive' : ''}`}
+            >
+              {
+                this.state.outOfStock
+                  ? 'Out of Stock'
+                  : 'Add to cart'
+              }
+            </button><br />
             <div className="text-muted">Final total subject to measured weights and at-location prices</div>
           </Col>
         </Row>
@@ -395,7 +403,10 @@ class ProductModal extends Component {
                 </div>
                 <div><span className="font-weight-bold">Farms:</span> {activeProduct.farms && activeProduct.farms.join(', ')}</div>
                 {
-                  activeProduct.description && <div><span className="font-weight-bold">Description:</span> {activeProduct.description}</div>
+                  activeProduct.fbw && activeProduct.description && <div><span className="font-weight-bold">Description:</span> {activeProduct.description}</div>
+                }
+                {
+                  activeProduct.fbw && activeProduct.instruction && <div><span className="font-weight-bold">Instructions:</span> {activeProduct.instruction}</div>
                 }
               </div>
             </div>

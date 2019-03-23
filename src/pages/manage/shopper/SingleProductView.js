@@ -334,7 +334,7 @@ class SingleProductView extends Component {
                                 </Col>
                                 <Col sm={10}>
                                     <FormControl placeholder="Enter Weight" name="weight" value={weight}
-                                                 disabled={!isEdit || isEdit && (product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'pint')}
+                                                 disabled={!isEdit || isEdit && (product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'pint' && product.unit_type !== 'packaging')}
                                                  onChange={this.handleInputChange}/>
                                 </Col>
                             </Row>

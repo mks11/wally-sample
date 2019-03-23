@@ -31,7 +31,7 @@ class AmountGroup extends Component {
 
   render() {
     const { amountValues, selected } = this.state
-    let { className, prefix, suffix } = this.props
+    let { className, prefix, suffix, groupped = true } = this.props
     prefix = prefix ? prefix : ''
     suffix = suffix ? suffix : ''
 
@@ -53,11 +53,26 @@ class AmountGroup extends Component {
       >Custom</Button>
     )
 
-    return (
-      <ButtonGroup className={`${className} amount-btn-group`}>
+    const buttons = (
+      <React.Fragment>
         {defaultButtons}
         {customButton}
-      </ButtonGroup>
+      </React.Fragment>
+    )
+
+
+    return (
+      groupped
+        ? (
+          <ButtonGroup className={`${className} amount-btn-group`}>
+            {buttons}
+          </ButtonGroup>
+        )
+        : (
+          <div className={`${className} button-custom-group`}>
+            {buttons}
+          </div>
+        )
     )
   }
 }

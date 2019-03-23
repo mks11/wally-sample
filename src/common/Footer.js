@@ -73,7 +73,8 @@ class Footer extends Component {
                   <ul>
                     <li><a href="mailto:info@thewallyshop.co">Contact Us</a></li>
                     <li><Link to={"/tnc"} >Terms &amp; Conditions</Link></li> 
-                    <li><Link to={"/privacy"} >Privacy Policy</Link></li> 
+                    <li><Link to={"/privacy"} >Privacy Policy</Link></li>
+                    <li><a href="mailto:info@thewallyshop.co">Sell through TWS?</a></li> 
                   </ul>
 
                 </div>

@@ -42,7 +42,7 @@ class ProductStore {
       return
     }
     const inventory = this.activeProduct.available_inventory[0]
-    var min_size = this.activeProduct.min_size
+    var min_size = this.activeProduct.buy_by_packaging ? 1 : this.activeProduct.min_size
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
     return res.data

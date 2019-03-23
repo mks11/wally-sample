@@ -44,6 +44,8 @@ class Addons extends PureComponent {
     } = this.props
     const { popup } = this.state
 
+    const addonsList = addons.map(addon => `${addon.name} (${formatMoney(addon.inventory[0].price/100)})`)
+
     return (
       <FormGroup className="product-addons">
         <Row form>
@@ -52,7 +54,7 @@ class Addons extends PureComponent {
               <div><strong>Add a packaging add on</strong> <i onClick={this.toggleInfoAddon} className="fa fa-info-circle"></i></div>
               <div className="package-info-popover addon-popover">
                 <h4>Packaging Add Ons</h4>
-                <p>This item has an add on option: oil spout ($2.50). Add on items are for you to keep, and not to return to us. Simply swap them onto fresh jars of oils when you order them, and only return the jars.</p>
+                <p>This item has add-on option(s): {addonsList.join(', ')}. Add-on items are for you to keep, and not to return to us. Simply swap them onto fresh jars of liquids when you order them, and only return the empty jars.</p>
               </div>
             </div>
             <Input type="select" value={packagingAddon} onChange={this.handlePackagingAddon}>

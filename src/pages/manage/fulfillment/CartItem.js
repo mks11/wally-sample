@@ -47,21 +47,24 @@ class CartItem extends Component {
 
   render() {
     const {isEdit, cart_item} = this.state
+    let unit_type = cart_item.unit_type
+    if (!unit_type) unit_type = cart_item.price_unit
     return (
       <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.substitute_for_name}</TableCell>
-        <TableCell>$ {cart_item.product_price / 100}</TableCell>
+        <TableCell>${cart_item.initial_product_price / 100}</TableCell>
+        <TableCell>${cart_item.product_price / 100}</TableCell>
+        <TableCell>{cart_item.customer_quantity}</TableCell>
         <TableCell>
             <InputGroup>
-                <Input placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.customer_quantity}
+                <Input placeholder="Quantity" value={cart_item.missing ? 0 : cart_item.final_quantity}
                        type={"number"}
-                       name={"customer_quantity"}
+                       name={"final_quantity"}
                        onChange={this.onInputChange}
-                       disabled={!isEdit}
-/>
+                       disabled={!isEdit}/>
                 {<InputGroupAddon addonType="append">
-                    <InputGroupText>{cart_item.price_unit}</InputGroupText>
+                  <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>  
                 </InputGroupAddon>}
             </InputGroup>
         </TableCell>
