@@ -220,8 +220,8 @@ class ProductModal extends Component {
 
     const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
     const minSize = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.min_size
-    const maxQty = limitOptions ? activeProduct.max_qty : 9
-    for (var i = 0; i <= maxQty; i++) {
+    const maxQty = limitOptions ? Math.min(activeProduct.max_qty, 10) : 10
+    for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
     }
