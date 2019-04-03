@@ -28,6 +28,7 @@ class ProductModal extends Component {
       quantityAddon: 0,
       outOfStock: false,
       packagingType: null,
+      priceMultiplier: 1
     }
   }
 
@@ -42,6 +43,8 @@ class ProductModal extends Component {
 
     const { product, modal, user } = this.props.stores
     this.state.qty = product.activeProduct.min_size
+    let priceMultiplier = product.activeProduct.buy_by_packaging ? product.activeProduct.packaging_vol[0] : 1
+    this.setState({ priceMultiplier: priceMultiplier });
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
@@ -192,7 +195,11 @@ class ProductModal extends Component {
   }
 
   handlePackagingChange = value => {
-    this.setState({ packagingType: value })
+    const { product } = this.props.stores
+    this.setState({ packagingType: value.type })
+    let idx = product.activeProduct.packaging_id.map(function(i) { return i.toString(); }).indexOf(value._id);
+    let vol = product.activeProduct.packaging_vol[idx];
+    this.setState({ priceMultiplier: vol })
   }
 
   handlePackagingCustomClick = () => {
@@ -227,7 +234,8 @@ class ProductModal extends Component {
     }
 
     let price = inventory.price / 100
-    const totalPrice = price * this.state.qty
+    
+    let totalPrice = price * this.state.qty * this.state.priceMultiplier
 
     const unit_type = activeProduct.unit_type
     var price_unit = ""
@@ -314,7 +322,7 @@ class ProductModal extends Component {
                     className="package-type-group"
                     amountClick={this.handlePackagingChange}
                     customClick={this.handlePackagingCustomClick}
-                    values={activeProduct.packagings ? activeProduct.packagings.map(p => p.type) : []}
+                    values={activeProduct.packagings ? activeProduct.packagings : []}
                     selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
                   />
                 </React.Fragment>
@@ -326,7 +334,7 @@ class ProductModal extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={packagingType || price_unit}
+              price_unit={activeProduct.buy_by_packaging ? "" : price_unit}
             />
             <hr/>
             <div><strong>If item is unavailable:</strong></div>
