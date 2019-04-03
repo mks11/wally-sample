@@ -46,6 +46,9 @@ class ProductModal extends Component {
     let priceMultiplier = product.activeProduct.buy_by_packaging ? product.activeProduct.packaging_vol[0] : 1
     this.setState({ priceMultiplier: priceMultiplier });
 
+    let packagingType = product.activeProduct.buy_by_packaging ? product.activeProduct.packagings[0].type : null
+    this.setState({ packagingType: packagingType });
+
     if (product.activeProduct.organic) {
       subtitutes.unshift({
         id: 2,
