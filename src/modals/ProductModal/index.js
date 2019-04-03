@@ -327,6 +327,8 @@ class ProductModal extends Component {
                     customClick={this.handlePackagingCustomClick}
                     values={activeProduct.packagings ? activeProduct.packagings : []}
                     selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
+                    weights={activeProduct.packagings ? activeProduct.packaging_vol : []}
+                    unit_type={activeProduct.unit_type}
                   />
                 </React.Fragment>
               ) 

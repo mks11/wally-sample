@@ -8,6 +8,8 @@ class AmountGroup extends Component {
     this.state = {
       amountValues: props.values || [],
       selected: props.selected || null,
+      weights: props.weights || [],
+      unit_type: props.unit_type || ""
     }
   }
 
@@ -30,7 +32,7 @@ class AmountGroup extends Component {
   }
 
   render() {
-    const { amountValues, selected } = this.state
+    const { amountValues, selected, weights, unit_type } = this.state
     let { className, prefix, suffix, groupped = true } = this.props
     prefix = prefix ? prefix : ''
     suffix = suffix ? suffix : ''
@@ -42,7 +44,7 @@ class AmountGroup extends Component {
         type="button"
         className={`amount-btn ${selected === value.type ? 'selected' : ''}`}
         onClick={() => this.handleAmountClick(value)}
-      >{`${prefix}${value.type}${suffix}`}</Button>
+      >{`${prefix}${value.type.slice(0, -1)}, ${Math.round(100*weights[index])/100} ${unit_type})${suffix}`}</Button>
     ))
     const customButton = (
       <Button
