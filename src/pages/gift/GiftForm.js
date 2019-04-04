@@ -167,7 +167,10 @@ class GiftForm extends Component {
               amountClick={this.handleAmountChange}
               customClick={this.handleCustomAmounClick}
               values={[25, 50, 100]}
+              selected={50}
               prefix="$"
+              custom={true}
+              product={false}
             />
             {
               customGiftAmount
