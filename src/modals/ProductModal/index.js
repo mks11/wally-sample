@@ -329,6 +329,8 @@ class ProductModal extends Component {
                     selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
                     weights={activeProduct.packagings ? activeProduct.packaging_vol : []}
                     unit_type={activeProduct.unit_type}
+                    custom={false}
+                    product={true}
                   />
                 </React.Fragment>
               ) 

@@ -9,7 +9,9 @@ class AmountGroup extends Component {
       amountValues: props.values || [],
       selected: props.selected || null,
       weights: props.weights || [],
-      unit_type: props.unit_type || ""
+      unit_type: props.unit_type || "",
+      custom: props.custom || false,
+      product: props.product || false
     }
   }
 
@@ -21,7 +23,13 @@ class AmountGroup extends Component {
 
   handleAmountClick = value => {
     const { amountClick } = this.props
-    this.setState({ selected: value.type })
+    const { product } = this.state
+    if (product) {
+      this.setState({ selected: value.type })
+    } else {
+      this.setState({ selected: value })
+    }
+    
     amountClick && amountClick(value, true)
   }
 
@@ -32,20 +40,33 @@ class AmountGroup extends Component {
   }
 
   render() {
-    const { amountValues, selected, weights, unit_type } = this.state
+    const { amountValues, selected, weights, unit_type, product, custom } = this.state
     let { className, prefix, suffix, groupped = true } = this.props
     prefix = prefix ? prefix : ''
     suffix = suffix ? suffix : ''
+    let defaultButtons = [];
 
-    const defaultButtons = amountValues.map((value, index) => (
-      <Button
-        key={index}
-        outline
-        type="button"
-        className={`amount-btn ${selected === value.type ? 'selected' : ''}`}
-        onClick={() => this.handleAmountClick(value)}
-      >{`${prefix}${value.type.slice(0, -1)}, ${Math.round(100*weights[index])/100} ${unit_type})${suffix}`}</Button>
-    ))
+    if (product) {
+      defaultButtons = amountValues.map((value, index) => (
+        <Button
+          key={index}
+          outline
+          type="button"
+          className={`amount-btn ${selected === value.type ? 'selected' : ''}`}
+          onClick={() => this.handleAmountClick(value)}
+        >{`${prefix}${value.type.slice(0, -1)}, ${Math.round(100*weights[index])/100} ${unit_type})${suffix}`}</Button>
+      ))
+    } else {
+      defaultButtons = amountValues.map((value, index) => (
+        <Button
+          key={index}
+          outline
+          type="button"
+          className={`amount-btn ${selected === value ? 'selected' : ''}`}
+          onClick={() => this.handleAmountClick(value)}
+        >{`${prefix}${value}${suffix}`}</Button>
+      ))
+    }
     const customButton = (
       <Button
         outline
@@ -58,7 +79,7 @@ class AmountGroup extends Component {
     const buttons = (
       <React.Fragment>
         {defaultButtons}
-        {/*customButton*/}
+        {custom ? customButton : null}
       </React.Fragment>
     )
 

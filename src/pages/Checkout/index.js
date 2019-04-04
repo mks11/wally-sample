@@ -618,6 +618,8 @@ class Checkout extends Component {
                                         values={[0, 15, 20, 25]}
                                         selected={15}
                                         suffix="%"
+                                        custom={true}
+                                        product={false}
                                       />
                                       <div className="aw-input--group aw-input--group-sm">
                                         <CurrencyInput
