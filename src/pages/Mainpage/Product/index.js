@@ -21,6 +21,14 @@ const Product = props => {
   }
 
   const outOfStock = product.out_of_stock && product.fbw
+  const unavailable = !product.available_for_delivery
+  let availableDays = [];
+  let availableDOW = [];
+  const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
+  if (unavailable) {
+    availableDays = product.available_days.sort()
+    availableDOW = availableDays.map(d => daysOfWeek[d]);
+  }
 
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
@@ -39,11 +47,11 @@ const Product = props => {
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
       {
       }
-      <div className={`product-packaged ${outOfStock ? 'out-of-stock' : ''}`}>
+      <div className={`product-packaged ${(outOfStock || unavailable) ? 'out-of-stock' : ''}`}>
         {
           outOfStock
             ? 'Out of stock'
-            : `packed in ${product.std_packaging}`
+            : (unavailable ? `Delivery days: ${availableDOW.join(', ')}` : `packed in ${product.std_packaging}`)
         }
       </div>
     </div>
