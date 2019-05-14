@@ -27,6 +27,8 @@ class ProductModal extends Component {
       packagingAddon: '',
       quantityAddon: 0,
       outOfStock: false,
+      available: true,
+      availableDays: [],
       packagingType: null,
       priceMultiplier: 1
     }
@@ -55,9 +57,16 @@ class ProductModal extends Component {
         text: "Substitute for organic only"
       })
     }
+
+    const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
+    let availableDays = product.activeProduct.available_days.sort()
+    availableDays = availableDays.map(d => daysOfWeek[d]);
+
     this.setState({
       subtitutes,
-      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock
+      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock,
+      available: product.activeProduct.available_for_delivery,
+      availableDays: availableDays
     })
     logModalView('/product/' + product.activeProductId)
 
@@ -118,9 +127,9 @@ class ProductModal extends Component {
 
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock, packagingType } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock, available, packagingType } = this.state
 
-    if (outOfStock) return
+    if (outOfStock || !available) return
 
     if (custom && customIsEmpty) {
       this.setState({
@@ -225,7 +234,7 @@ class ProductModal extends Component {
     }
 
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
-    const limitOptions = activeProduct.fbw && !activeProduct.out_of_stock
+    const limitOptions = activeProduct.fbw && !activeProduct.out_of_stock && activeProduct.available
     let qtyOptions = []
 
     const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
@@ -391,15 +400,29 @@ class ProductModal extends Component {
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button
               onClick={this.handleAddToCart}
-              className={`btn btn-danger btn-add-cart mb-2 ${this.state.outOfStock ? 'inactive' : ''}`}
+              className={`btn btn-danger btn-add-cart mb-2 ${(this.state.outOfStock || !this.state.available) ? 'inactive' : ''}`}
             >
               {
                 this.state.outOfStock
                   ? 'Out of Stock'
-                  : 'Add to cart'
+                  : (this.state.available ? 'Add to cart' : 'Unavailable')
               }
             </button><br />
-            <div className="text-muted">Final total subject to measured weights and at-location prices</div>
+            <div 
+              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
+            > 
+              {
+                this.state.available ? 'Final total subject to measured weights and at-location prices' : `Available days for delivery: ${this.state.availableDays.join(', ')}.`
+              }
+            </div>
+
+            <div 
+              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
+            > 
+              {
+                this.state.available ? '' : 'Click on clock icon next to categories to change delivery date.'
+              }
+            </div>
           </Col>
         </Row>
         <Row>
