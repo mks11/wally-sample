@@ -1,4 +1,4 @@
-export const BASE_URL = "https://evening-bayou-13995.herokuapp.com"
+export const BASE_URL = "https://the-wally-shop.herokuapp.com"
 // export const BASE_URL = "http://localhost:4001"
 
 export const API_GET_USER = BASE_URL + "/api/user"
@@ -77,7 +77,7 @@ export const FACEBOOK = "https://facebook.com/thewallyshop"
 export const GOOGLE_API_KEY="AIzaSyB1VsxMUiBN9H89Qgs5Z1eXtbkCyNB1KGQ"
 
 export const APP_URL = "https://thewallyshop.co"
-export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4"
+export const STRIPE_API_KEY = "pk_live_QV08YsHEj9zFZeHcx3O6X5Wn"
 export const FB_KEY = "1634254033370820"
 
 export const PRODUCT_BASE_URL = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images/'
