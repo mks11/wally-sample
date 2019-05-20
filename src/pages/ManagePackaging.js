@@ -127,7 +127,6 @@ class ManagePackaging extends Component {
                                         <TableBody>
                                             {orders && orders.length > 0 &&
                                             orders.map(order => {
-                                              console.log(order.status)
                                                 return <TableRow
                                                         key={order._id}
                                                         className={`row ${order.status}`}
