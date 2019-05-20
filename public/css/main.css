@@ -603,7 +603,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 @media (min-width: 350px) {
   .aw-nav--mobile li a {
     padding: 15px 10px;
-  }  
+  }
 }
 
 .aw-nav--mobile li a:focus, .aw-nav--mobile li a:active, .aw-nav--mobile li a:hover {
@@ -1164,9 +1164,15 @@ body {
   background: #e8e8e8;
 }
 
-.packaging-table .paid {
-  background: lightgrey;
+/*completed for milestone1.2 */
+.packaging-table .delivered {
+  background: green
 }
+
+.packaging-table .paid {
+  background: green;
+}
+
 .packaging-table .paid:hover {
   background: #bebebe;
 }
