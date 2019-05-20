@@ -79,7 +79,6 @@ class ShopperTable extends Component {
           </TableHead>
           <TableBody>
             {shopitems.sort(this.sortByStatus).map((shopitem, i) => {
-              console.log('id', shopitem.inventory_id)
               return (
                 <TableRow
                   key={shopitem.inventory_id}
@@ -92,9 +91,8 @@ class ShopperTable extends Component {
                   </TableCell>
                   <TableCell>{shopitem.product_name}</TableCell>
                   <TableCell align="right">
-                    {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell>
+                    {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : (shopitem.unit_type || shopitem.price_unit) }</TableCell>
                   <TableCell>{shopitem.is_substitute}</TableCell>
-                  {/* <TableCell>{renderStatus(shopitem)}</TableCell> */}
                   <TableCell>{shopitem.status}</TableCell>
                   <TableCell>
                     <StatusDropdown shopitem={shopitem} onSelect={this.onSelect.bind(this, shopitem.inventory_id)} />
