@@ -94,12 +94,13 @@ class SingleProductView extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        const {id, isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
+        const {id, isEdit, product, shopPrice, completed, organic, local, producer, shop, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
         const data = {
             id,
             product_id: product.product_id,
             inventory_id: product.inventory_id,
             product_producer: producer.value,
+            product_shop: shop,
             product_location: producer.value,
             product_name: substitute ? subProductName : product.product_name,
             missing,
