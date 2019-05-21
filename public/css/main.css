@@ -1314,11 +1314,6 @@ body {
     margin-top: 10px;
  }
 
-.product-name {
-   width: 70%;
-   padding: 0;
- }
-
 .cart-item-change {
   background: #f5bc53;
 }
@@ -1326,12 +1321,6 @@ body {
 .price-item-change {
   background: #f76c6c;
 }
-
-/* placeholder */
-.form-control {
-  padding: 0;
+.input-group{
+  flex-wrap: unset;
 }
-/* end */
-/* .product-name {
-  padding: 4px 0px 0px 10px;
-} */

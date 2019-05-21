@@ -126,8 +126,8 @@ class SingleOrderView extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cart_items.map((cart_item, i) =>
-                  <CartItem key={cart_item._id} cart_item={cart_item} index={i} saveCartRow={this.saveCartRow}/>
+                {cart_items.map((cart_item, i, order_id) =>
+                  <CartItem key={cart_item._id} order_id={selectedOrder._id} cart_item={cart_item} index={i} saveCartRow={this.saveCartRow}/>
                 )}
               </TableBody>
             </Table>

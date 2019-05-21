@@ -20,10 +20,11 @@ class CartItem extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      order_id: props.order_id,
       cart_item: props.cart_item,
+      weight: "",
       isEdit: false
     }
-    this.adminStore = this.props.store.admin
   }
 
   onClickButton = () => {
@@ -40,12 +41,12 @@ class CartItem extends Component {
   }
 
   handleItemUpdate = () => {
-    let cartItemId = this.state.cart_item._id
-    let cartItem = this.state.cart_item
-
-    console.log(cartItem.weight)
-    console.log(cartItem.product_price)
-    fetch(`http://localhost:4001/api/order/0PYL09/${cartItemId}`, {
+    const cartItemId = this.state.cart_item._id;
+    const cartItem = this.state.cart_item;
+    const orderId = this.state.order_id;
+    let weight = this.state.weight;
+    console.log(orderId)
+    fetch(`http://localhost:4001/api/order/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -56,20 +57,21 @@ class CartItem extends Component {
         product_producer: cartItem.product_producer,
         product_price: (cartItem.product_price/100),
         final_quantity: cartItem.final_quantity,
+        weight: weight
       })
     })
     .then(response => response.json())
     .then(cartItem => {
-      console.log(cartItem)
+      return cartItem
     })
     .catch(error => console.log(error))
   }
 
   onInputChange = (e) => {
-    const {cart_item} = this.state
-    cart_item[e.target.name] = e.target.value
-    this.setState({cart_item})
-  }
+     const {cart_item} = this.state
+     cart_item[e.target.name] = e.target.value
+     this.setState({cart_item})
+   }
 
   onSelect = (e) => {
     const {cart_item} = this.state
@@ -78,7 +80,7 @@ class CartItem extends Component {
   }
 
   render() {
-    const {isEdit, cart_item} = this.state
+    const {isEdit, cart_item, order_id, weight} = this.state
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
@@ -87,6 +89,8 @@ class CartItem extends Component {
     let pricePercentageChange = Math.abs(valuePriceChange / cart_item.product_price) * 100
     let valueQuantityChange = cart_item.final_quantity -cart_item.customer_quantity
     let quantityPercentageChange = Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100
+    const customColumnStyle = { width: 90 }
+    const customColumnNameStyle = { width: 300 };
     return (
       <TableRow className={ pricePercentageChange >= 5 || quantityPercentageChange >= 5 ?
         "price-item-change" : "cart-item" || cart_item.product_price !== cart_item.initial_product_price ||
@@ -95,10 +99,11 @@ class CartItem extends Component {
         <TableCell className="product-name">
           <InputGroup>
             <Input placeholder="Name" value={cart_item.product_name}
-            type={"text"}
-            name={"product_name"}
+            type="text"
+            name="product_name"
             onChange={this.onInputChange}
             disabled={!isEdit}
+            style={customColumnNameStyle}
             />
           </InputGroup>
         </TableCell>
@@ -106,11 +111,14 @@ class CartItem extends Component {
         <TableCell>${cart_item.initial_product_price / 100} / {cart_item.price_unit}</TableCell>
         <TableCell>
         <InputGroup>
+          <InputGroupText>$</InputGroupText>
           <Input placeholder="Final Price" value={cart_item.product_price /100}
-                  type={"number"}
-                  name={"final_price"}
+                  type="number"
+                  name="final_price"
                   onChange={this.onInputChange}
-                  disabled={!isEdit}/>
+                  disabled={!isEdit}
+                  style={customColumnStyle}
+                  />
           {<InputGroupAddon addonType="append">
             <InputGroupText>{cart_item.price_unit === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
           </InputGroupAddon>}
@@ -120,10 +128,12 @@ class CartItem extends Component {
         <TableCell>
             <InputGroup>
                 <Input placeholder="Final Quantity" value={cart_item.missing ? 0 : cart_item.final_quantity}
-                       type={"number"}
-                       name={"final_quantity"}
+                       type="number"
+                       name="final_quantity"
                        onChange={this.onInputChange}
-                       disabled={!isEdit}/>
+                       disabled={!isEdit}
+                      style={customColumnStyle}
+                       />
                 {<InputGroupAddon addonType="append">
                   <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
                 </InputGroupAddon>}
@@ -131,13 +141,13 @@ class CartItem extends Component {
         </TableCell>
         <TableCell>
         <InputGroup>
-        { unit_type === "lb" || unit_type === "oz" ?
-          <Input 
-                 type={"number"}
-                 name={"weight"}
-                 onChange={this.onInputChange}
-                 disabled={!isEdit}/> :
-                 <Input readOnly /> }
+        <Input placeholder="Weight" value={cart_item.unit_type ==" lb"
+        || cart_item.unit_type == "oz" ? this.state.weight : "" }
+               type="number"
+               name="weight"
+               onChange={this.onInputChange}
+               disabled={!isEdit}
+               style={customColumnStyle}/>
         </InputGroup>
         </TableCell>
         <TableCell>
@@ -145,7 +155,9 @@ class CartItem extends Component {
                  name="missing"
                  value={cart_item.missing}
                  disabled={!isEdit}
-                 onChange={this.onSelect}>
+                 onChange={this.onSelect}
+                style={customColumnStyle}
+                 >
           <option value={true}>True</option>
           <option value={false}>False</option>
         </Input>
