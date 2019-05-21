@@ -118,6 +118,7 @@ class SingleOrderView extends Component {
                   <TableCell>Final Price</TableCell>
                   <TableCell>Initial Quantity</TableCell>
                   <TableCell>Final Quantity</TableCell>
+                  <TableCell>Weight</TableCell>
                   <TableCell>Missing</TableCell>
                   <TableCell>Update</TableCell>
                   <TableCell>Initial Total</TableCell>

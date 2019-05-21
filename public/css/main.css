@@ -1164,12 +1164,10 @@ body {
   background: #e8e8e8;
 }
 
-/*completed for milestone1.2 */
 .packaging-table .delivered, .paid {
   background: green
 }
 
-/* end */
 .packaging-table .paid:hover {
   background: #bebebe;
 }
@@ -1328,3 +1326,12 @@ body {
 .price-item-change {
   background: #f76c6c;
 }
+
+/* placeholder */
+.form-control {
+  padding: 0;
+}
+/* end */
+/* .product-name {
+  padding: 4px 0px 0px 10px;
+} */

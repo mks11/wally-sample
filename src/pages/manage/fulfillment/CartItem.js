@@ -14,6 +14,7 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
+import axios from "axios";
 
 class CartItem extends Component {
   constructor(props) {
@@ -22,15 +23,46 @@ class CartItem extends Component {
       cart_item: props.cart_item,
       isEdit: false
     }
+    this.adminStore = this.props.store.admin
   }
 
   onClickButton = () => {
+    console.log(this.state.cart_item._id)
     if (this.state.isEdit) {
       this.props.saveCartRow(this.state.cart_item)
-      this.setState({isEdit: false})
+      this.handleItemUpdate()
+      this.setState({
+        isEdit: false
+      })
     } else {
       this.setState({isEdit: true})
     }
+  }
+
+  handleItemUpdate = () => {
+    let cartItemId = this.state.cart_item._id
+    let cartItem = this.state.cart_item
+
+    console.log(cartItem.weight)
+    console.log(cartItem.product_price)
+    fetch(`http://localhost:4001/api/order/0PYL09/${cartItemId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        product_name: cartItem.product_name,
+        substitute_for_name: cartItem.substitute_for_name,
+        product_producer: cartItem.product_producer,
+        product_price: (cartItem.product_price/100),
+        final_quantity: cartItem.final_quantity,
+      })
+    })
+    .then(response => response.json())
+    .then(cartItem => {
+      console.log(cartItem)
+    })
+    .catch(error => console.log(error))
   }
 
   onInputChange = (e) => {
@@ -45,13 +77,8 @@ class CartItem extends Component {
     this.setState({cart_item})
   }
 
-  // onColorChange = (value) => {
-  //   const {cart_item} = this.state
-  // }
-
   render() {
     const {isEdit, cart_item} = this.state
-    console.log(cart_item.product_name)
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
@@ -60,8 +87,6 @@ class CartItem extends Component {
     let pricePercentageChange = Math.abs(valuePriceChange / cart_item.product_price) * 100
     let valueQuantityChange = cart_item.final_quantity -cart_item.customer_quantity
     let quantityPercentageChange = Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100
-    console.log((valuePriceChange / cart_item.product_price) * 100 >= 5)
-
     return (
       <TableRow className={ pricePercentageChange >= 5 || quantityPercentageChange >= 5 ?
         "price-item-change" : "cart-item" || cart_item.product_price !== cart_item.initial_product_price ||
@@ -81,11 +106,11 @@ class CartItem extends Component {
         <TableCell>${cart_item.initial_product_price / 100} / {cart_item.price_unit}</TableCell>
         <TableCell>
         <InputGroup>
-          $<Input placeholder="Final Price" value={cart_item.product_price /100}
-          type={"number"}
-          name={"final_price"}
-          onChange={this.onInputChange}
-          disabled={!isEdit}/>
+          <Input placeholder="Final Price" value={cart_item.product_price /100}
+                  type={"number"}
+                  name={"final_price"}
+                  onChange={this.onInputChange}
+                  disabled={!isEdit}/>
           {<InputGroupAddon addonType="append">
             <InputGroupText>{cart_item.price_unit === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
           </InputGroupAddon>}
@@ -103,6 +128,17 @@ class CartItem extends Component {
                   <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
                 </InputGroupAddon>}
             </InputGroup>
+        </TableCell>
+        <TableCell>
+        <InputGroup>
+        { unit_type === "lb" || unit_type === "oz" ?
+          <Input 
+                 type={"number"}
+                 name={"weight"}
+                 onChange={this.onInputChange}
+                 disabled={!isEdit}/> :
+                 <Input readOnly /> }
+        </InputGroup>
         </TableCell>
         <TableCell>
           <Input type="select"
