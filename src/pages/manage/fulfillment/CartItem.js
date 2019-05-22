@@ -85,18 +85,20 @@ class CartItem extends Component {
     if (!unit_type) unit_type = cart_item.price_unit
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
     let finalTotal = (cart_item.product_price/100 * cart_item.final_quantity).toFixed(2)
-    let valuePriceChange = cart_item.initial_product_price -cart_item.product_price
-    let pricePercentageChange = Math.abs(valuePriceChange / cart_item.product_price) * 100
-    let valueQuantityChange = cart_item.final_quantity -cart_item.customer_quantity
+    let valuePriceChange = cart_item.initial_product_price - cart_item.product_price
+    let pricePercentageChange = Math.abs(valuePriceChange / cart_item.initial_product_price) * 100
+    let valueQuantityChange = cart_item.customer_quantity -cart_item.final_quantity
     let quantityPercentageChange = Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100
     const customColumnStyle = { width: 90 }
     const customColumnNameStyle = { width: 300 };
+    // console.log(pricePercentageChange, quantityPercentageChange)
+    console.log(cart_item.customer_quantity,cart_item.initial_product_price, cart_item.product_price,cart_item.final_quantity)
     return (
       <TableRow className={ pricePercentageChange >= 5 || quantityPercentageChange >= 5 ?
-        "price-item-change" : "cart-item" || cart_item.product_price !== cart_item.initial_product_price ||
-          cart_item.customer_quantity !== cart_item.final_quantity  ?
-         "cart-item-change" : "cart-item" } >
-        <TableCell className="product-name">
+        "price-item-change" : cart_item.product_price !== cart_item.initial_product_price ||
+          cart_item.final_quantity !== cart_item.customer_quantity  ?
+         "cart-item-change" : "cart-item" }>
+        <TableCell>
           <InputGroup>
             <Input placeholder="Name" value={cart_item.product_name}
             type="text"
@@ -112,7 +114,7 @@ class CartItem extends Component {
         <TableCell>
         <InputGroup>
           <InputGroupText>$</InputGroupText>
-          <Input placeholder="Final Price" value={cart_item.product_price /100}
+          <Input placeholder="Final Price" defaultValue={cart_item.product_price /100}
                   type="number"
                   name="final_price"
                   onChange={this.onInputChange}
@@ -120,7 +122,7 @@ class CartItem extends Component {
                   style={customColumnStyle}
                   />
           {<InputGroupAddon addonType="append">
-            <InputGroupText>{cart_item.price_unit === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
+            <InputGroupText>{cart_item.unit_type === "packaging" ? cart_item.packaging_name : unit_type }</InputGroupText>
           </InputGroupAddon>}
         </InputGroup>
         </TableCell>
@@ -141,8 +143,8 @@ class CartItem extends Component {
         </TableCell>
         <TableCell>
         <InputGroup>
-        <Input placeholder="Weight" value={cart_item.unit_type ==" lb"
-        || cart_item.unit_type == "oz" ? this.state.weight : "" }
+
+        <Input placeholder="Weight" value={this.state.weight}
                type="number"
                name="weight"
                onChange={this.onInputChange}
