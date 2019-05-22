@@ -61,9 +61,8 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async setShopItemStatus(status, shopitem_id) {
-    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?=${status}`)
-    // will finish this after new endpoint has been implemented
+  async setShopItemStatus(timeframe, shopitem_id, data) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {

@@ -35,10 +35,17 @@ class ShopperTable extends Component {
     this.setState({ [id]: selectedStatus })
   }
 
-  onUpdateClick = (shopitem_id, e) => {
+  onUpdateClick = (shopitem_id, inventory_id, product_id, e) => {
     e.stopPropagation()
     e.preventDefault()
-    this.adminStore.setShopItemStatus(this.state[shopitem_id], shopitem_id)
+    const { timeframe } = this.props;
+    const status = this.state[shopitem_id];
+    const payload = {
+      status,
+      inventory_id,
+      product_id,
+    }
+    this.adminStore.setShopItemStatus(timeframe, shopitem_id, payload);
   }
 
   sortByStatus = (a, b) => {
@@ -62,7 +69,7 @@ class ShopperTable extends Component {
         return 'Incomplete'
       }
     }
-
+    
     return (
       <Paper elevation={1} className={"scrollable-table"}>
         <Table className={"shopper-table"}>
@@ -79,6 +86,7 @@ class ShopperTable extends Component {
           </TableHead>
           <TableBody>
             {shopitems.sort(this.sortByStatus).map((shopitem, i) => {
+      console.log('shopitem :', shopitem);
               return (
                 <TableRow
                   key={shopitem.inventory_id}
@@ -98,7 +106,7 @@ class ShopperTable extends Component {
                     <StatusDropdown shopitem={shopitem} onSelect={this.onSelect.bind(this, shopitem.inventory_id)} />
                   </TableCell>
                   <TableCell>
-                    <Button onClick={this.onUpdateClick.bind(this, shopitem.inventory_id)}>Update</Button>
+                    <Button onClick={this.onUpdateClick.bind(this, shopitem.id, shopitem.inventory_id, shopitem.product_id)}>Update</Button>
                   </TableCell>
                 </TableRow>
               );
