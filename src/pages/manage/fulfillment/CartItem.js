@@ -25,6 +25,7 @@ class CartItem extends Component {
       weight: "",
       isEdit: false
     }
+    this.setWeight = this.setWeight.bind(this);
   }
 
   onClickButton = () => {
@@ -33,7 +34,8 @@ class CartItem extends Component {
       this.props.saveCartRow(this.state.cart_item)
       this.handleItemUpdate()
       this.setState({
-        isEdit: false
+        isEdit: false,
+        weight: this.state.weight
       })
     } else {
       this.setState({isEdit: true})
@@ -68,9 +70,15 @@ class CartItem extends Component {
   }
 
   onInputChange = (e) => {
-     const {cart_item} = this.state
+     const {cart_item, weight} = this.state
      cart_item[e.target.name] = e.target.value
-     this.setState({cart_item})
+     this.setState({cart_item, weight})
+   }
+
+   setWeight = (e) => {
+     this.setState({
+       weight: e.target.value,
+     })
    }
 
   onSelect = (e) => {
@@ -84,15 +92,14 @@ class CartItem extends Component {
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
-    let finalTotal = (cart_item.product_price/100 * cart_item.final_quantity).toFixed(2)
+    let finalTotal = (cart_item.product_price * cart_item.final_quantity).toFixed(2)
     let valuePriceChange = cart_item.initial_product_price - cart_item.product_price
-    let pricePercentageChange = Math.abs(valuePriceChange / cart_item.initial_product_price) * 100
-    let valueQuantityChange = cart_item.customer_quantity -cart_item.final_quantity
+    let pricePercentageChange = Math.abs(valuePriceChange / cart_item.product_price) * 100
+    let valueQuantityChange = cart_item.final_quantity - cart_item.customer_quantity
     let quantityPercentageChange = Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100
-    const customColumnStyle = { width: 90 }
+    const customColumnStyle = { width: 90, padding: 0 }
     const customColumnNameStyle = { width: 300 };
-    // console.log(pricePercentageChange, quantityPercentageChange)
-    console.log(cart_item.customer_quantity,cart_item.initial_product_price, cart_item.product_price,cart_item.final_quantity)
+
     return (
       <TableRow className={ pricePercentageChange >= 5 || quantityPercentageChange >= 5 ?
         "price-item-change" : cart_item.product_price !== cart_item.initial_product_price ||
@@ -114,9 +121,9 @@ class CartItem extends Component {
         <TableCell>
         <InputGroup>
           <InputGroupText>$</InputGroupText>
-          <Input placeholder="Final Price" defaultValue={cart_item.product_price /100}
+          <Input placeholder="Final Price" value={cart_item.product_price}
                   type="number"
-                  name="final_price"
+                  name="product_price"
                   onChange={this.onInputChange}
                   disabled={!isEdit}
                   style={customColumnStyle}
@@ -143,13 +150,14 @@ class CartItem extends Component {
         </TableCell>
         <TableCell>
         <InputGroup>
-
-        <Input placeholder="Weight" value={this.state.weight}
+        { cart_item.price_unit == "lb" || cart_item.price_unit == "oz" ?
+        <Input placeholder="Enter weight..." value={ weight }
                type="number"
                name="weight"
-               onChange={this.onInputChange}
+               onChange={this.setWeight}
                disabled={!isEdit}
-               style={customColumnStyle}/>
+               style={customColumnStyle}/> :
+               <Input readOnly /> }
         </InputGroup>
         </TableCell>
         <TableCell>
