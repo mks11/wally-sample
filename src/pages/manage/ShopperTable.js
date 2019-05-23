@@ -40,12 +40,7 @@ class ShopperTable extends Component {
     e.preventDefault()
     const { timeframe } = this.props;
     const status = this.state[shopitem_id];
-    const payload = {
-      status,
-      inventory_id,
-      product_id,
-    }
-    this.adminStore.setShopItemStatus(timeframe, shopitem_id, payload);
+    this.adminStore.setShopItemStatus(timeframe, shopitem_id, status);
   }
 
   sortByStatus = (a, b) => {
@@ -60,15 +55,15 @@ class ShopperTable extends Component {
     const {shopitems} = this.props
     const {timeframe} = this.props
     const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.estimated_total, 0)
-    const renderStatus = (shopitem) => {
-      if (shopitem.completed) {
-        return 'Completed'
-      } else if (shopitem.missing) {
-        return 'Missing'
-      } else {
-        return 'Incomplete'
-      }
-    }
+    // const renderStatus = (shopitem) => {
+    //   if (shopitem.completed) {
+    //     return 'Completed'
+    //   } else if (shopitem.missing) {
+    //     return 'Missing'
+    //   } else {
+    //     return 'Incomplete'
+    //   }
+    // }
     
     return (
       <Paper elevation={1} className={"scrollable-table"}>
