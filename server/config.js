@@ -735,6 +735,11 @@ const postBlogPost = {
   }
 }
 
+const updateCartItem = {
+  method: "PATCH",
+  response: {}
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -791,4 +796,5 @@ module.exports = {
 
   "/api/blog": getBlogPosts,
   "/api/admin/blog": postBlogPost,
+  "/api/order/:order_id/:cartitem_id":
 }

@@ -14,7 +14,6 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import axios from "axios";
 
 class CartItem extends Component {
   constructor(props) {
@@ -57,15 +56,12 @@ class CartItem extends Component {
         product_name: cartItem.product_name,
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
-        product_price: (cartItem.product_price/100),
+        product_price: (cartItem.product_price/ 100),
         final_quantity: cartItem.final_quantity,
         weight: weight
       })
     })
-    .then(response => response.json())
-    .then(cartItem => {
-      return cartItem
-    })
+    .then(response => console.log(response))
     .catch(error => console.log(error))
   }
 
@@ -91,15 +87,21 @@ class CartItem extends Component {
     const {isEdit, cart_item, order_id, weight} = this.state
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
+    // let finalPrice = 0;
+  //   if(typeof cart_item.product_price !== Number) {
+  //   finalPrice = (parseFloat(cart_item.product_price) / 100)
+  // } else {
+  //   finalPrice = (cart_item.product_price / 100)
+  // }
+  // parseFloat(cart_item.product_price).toFixed(2)
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
-    let finalTotal = (cart_item.product_price * cart_item.final_quantity).toFixed(2)
+    let finalTotal = (cart_item.product_price/100 * cart_item.final_quantity).toFixed(2)
     let valuePriceChange = cart_item.initial_product_price - cart_item.product_price
     let pricePercentageChange = Math.abs(valuePriceChange / cart_item.product_price) * 100
     let valueQuantityChange = cart_item.final_quantity - cart_item.customer_quantity
     let quantityPercentageChange = Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100
     const customColumnStyle = { width: 90, padding: 0 }
     const customColumnNameStyle = { width: 300 };
-
     return (
       <TableRow className={ pricePercentageChange >= 5 || quantityPercentageChange >= 5 ?
         "price-item-change" : cart_item.product_price !== cart_item.initial_product_price ||
@@ -121,7 +123,7 @@ class CartItem extends Component {
         <TableCell>
         <InputGroup>
           <InputGroupText>$</InputGroupText>
-          <Input placeholder="Final Price" value={cart_item.product_price}
+          <Input placeholder="Final Price" value={ cart_item.product_price }
                   type="number"
                   name="product_price"
                   onChange={this.onInputChange}
