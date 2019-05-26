@@ -46,8 +46,8 @@ class CartItem extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    console.log(orderId)
-    fetch(`http://localhost:4001/api/order/${orderId}/${cartItemId}`, {
+    let TEST_API_SERVER = "http://localhost:4001/api/order"
+    fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
