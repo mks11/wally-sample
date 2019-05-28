@@ -112,15 +112,17 @@ class SingleOrderView extends Component {
             <Table className={"packaging-table"} padding={"dense"}>
               <TableHead>
                 <TableRow>
+                  <TableCell>Missing</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Substitute For</TableCell>
+                  <TableCell>Substite For</TableCell>
+                  <TableCell>Substite Preference</TableCell>
+                  <TableCell>Producer</TableCell>
+                  <TableCell>Shop</TableCell>
                   <TableCell>Initial Price</TableCell>
                   <TableCell>Final Price</TableCell>
                   <TableCell>Initial Quantity</TableCell>
                   <TableCell>Final Quantity</TableCell>
-                  <TableCell>Weight</TableCell>
-                  <TableCell>Missing</TableCell>
-                  <TableCell>Update</TableCell>
+                  <TableCell>Weight (lbs)</TableCell>
                   <TableCell>Initial Total</TableCell>
                   <TableCell>Final Total</TableCell>
                 </TableRow>

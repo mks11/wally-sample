@@ -107,6 +107,18 @@ class CartItem extends Component {
         "price-item-change" : cart_item.product_price !== cart_item.initial_product_price ||
           cart_item.final_quantity !== cart_item.customer_quantity  ?
          "cart-item-change" : "cart-item" }>
+         <TableCell>
+           <Input type="select"
+                  name="missing"
+                  value={cart_item.missing}
+                  disabled={!isEdit}
+                  onChange={this.onSelect}
+                 style={customColumnStyle}
+                  >
+           <option value={true}>True</option>
+           <option value={false}>False</option>
+         </Input>
+         </TableCell>
         <TableCell>
           <InputGroup>
             <Input placeholder="Name" value={cart_item.product_name}
@@ -119,6 +131,9 @@ class CartItem extends Component {
           </InputGroup>
         </TableCell>
         <TableCell>{cart_item.substitute_for_name}</TableCell>
+        <TableCell>{cart_item.substitute_preference}</TableCell>
+        <TableCell>{cart_item.product_producer}</TableCell>
+        <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>${cart_item.initial_product_price / 100} / {cart_item.price_unit}</TableCell>
         <TableCell>
         <InputGroup>
@@ -162,21 +177,9 @@ class CartItem extends Component {
                <Input readOnly /> }
         </InputGroup>
         </TableCell>
-        <TableCell>
-          <Input type="select"
-                 name="missing"
-                 value={cart_item.missing}
-                 disabled={!isEdit}
-                 onChange={this.onSelect}
-                style={customColumnStyle}
-                 >
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </Input>
-        </TableCell>
-        <TableCell><Button variant={"contained"} onClick={this.onClickButton}>{isEdit ? 'Submit' : 'Edit'}</Button></TableCell>
         <TableCell>{initialTotal}</TableCell>
         <TableCell>{finalTotal}</TableCell>
+        <TableCell><Button variant={"contained"} onClick={this.onClickButton}>{isEdit ? 'Submit' : 'Edit'}</Button></TableCell>
       </TableRow>
     );
   }
