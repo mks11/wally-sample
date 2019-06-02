@@ -1,11 +1,12 @@
-import React, { Component } from "react"
-import { Row, Col, Container } from "reactstrap"
-import Title from "../common/page/Title"
-import ManageTabs from "./manage/ManageTabs"
-import ShopperTable from "./manage/ShopperTable"
-import CustomDropdown from "../common/CustomDropdown"
+import React, { Component } from 'react'
+import { Row, Col, Container } from 'reactstrap'
+import Title from '../common/page/Title'
+import ManageTabs from './manage/ManageTabs'
+import ShoppingAppTable from './manage/ShoppingAppTable'
+import CustomDropdown from '../common/CustomDropdown'
+import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging'
 
-import { connect } from "../utils"
+import { connect } from '../utils'
 import moment from 'moment'
 
 class ShoppingApp extends Component {
@@ -13,14 +14,14 @@ class ShoppingApp extends Component {
     super(props)
     this.state = {
       timeframe: null,
-      locations: [],
+			locations: [],
+			location: null,
       isProductView: false,
       selectedProduct: {},
-      selectedIndex: null
+			selectedIndex: null
     }
 
-    // this.userStore = this.props.store.user
-		this.adminStore = this.props.store.admin;
+		this.adminStore = this.props.store.admin
 	}
 
 	componentDidMount = () => {
@@ -28,23 +29,37 @@ class ShoppingApp extends Component {
 	}
 	
   loadShopLocations = async() => {
+		// const timeframe = 'all'
 		const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
 		this.adminStore.getShopLocations(timeframe)
     this.setState({timeframe})
+	}
+	
+  loadShopItems = async(location) => {
+		// const timeframe = 'all'
+		const {timeframe} = this.state
+		const shopItems = await this.adminStore.getShopItems(timeframe, location)
+    this.setState({location})
   }
 
   render() {
-		const { locations } = this.adminStore
+		const { locations, shopitems } = this.adminStore
+		const { timeframe, location } = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />
-        <Title content="Step 1" />
+        <Title content="Shopping App" />
         <section className="page-section pt-1">
           <Container>
             <Row>
-              <Col md="6" sm="12">
+							<Col md="4" sm="6">
+								<h3>Step 1</h3>
+							</Col>
+							<Col md="4" sm="6">
+								<h3>2:00 - 2:15 PM</h3>
+							</Col>
+              <Col md="4" sm="12">
                 <div className="mb-3">
-                  <div className="mb-2 font-weight-bold">Location:</div>
                   <CustomDropdown
                     values={[
                       { id: "all", title: "All Locations" },
@@ -59,6 +74,15 @@ class ShoppingApp extends Component {
             </Row>
           </Container>
         </section>
+				<section>
+					<ModalRequiredPackaging />
+				</section>
+				<section className="page-section pt-1">
+              <Container>
+                {/* <h2>Shop Location View</h2> */}
+                <ShoppingAppTable {...{timeframe}} shopitems={shopitems} />
+              </Container>
+            </section>
       </div>
     );
   }
