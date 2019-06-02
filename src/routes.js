@@ -28,6 +28,7 @@ import ManageShopper from './pages/ManageShopper';
 import ManagePackaging from './pages/ManagePackaging';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
+import ShoppingApp from './pages/ShoppingApp';
 import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
 
@@ -38,6 +39,7 @@ export default (
         <Route exact path="/manage/packaging" component={ManagePackaging} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
         <Route exact path="/manage/blog" component={ManageBlog} />
+        <Route exact path="/manage/shopping-app" component={ShoppingApp} />
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>
