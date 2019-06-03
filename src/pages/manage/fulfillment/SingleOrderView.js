@@ -40,6 +40,22 @@ class SingleOrderView extends Component {
       packagings: props.packagings.map(packaging => {
         return {...packaging, quantity: 0}
       }),
+      packagings: props.packagings.map(packaging => {
+     return { ...packaging };
+   }),
+     packagingUsed: props.selectedOrder.packaging_used.map(item => {
+       return { ...item, type: item.type };
+     }),
+     originalSubTotal: props.selectedOrder.cart_items
+       .map(item => item.initial_product_price * item.final_quantity)
+       .reduce((acc, curr) => {
+         return acc + curr;
+       }, 10),
+     currentSubTotal: props.selectedOrder.cart_items
+       .map(item => item.product_price * item.final_quantity)
+       .reduce((acc, curr) => {
+         return acc + curr;
+       }, 10),
       confirmModalOpen: false
     }
     this.userStore = this.props.store.user
@@ -66,6 +82,25 @@ class SingleOrderView extends Component {
   toggleConfirmModal = () => {
     this.setState({confirmModalOpen: !this.state.confirmModalOpen})
   }
+
+  handleOrderUpdate = () => {
+  let orderId = this.state.selectedOrder._id;
+  let cartItems = this.state.cart_items;
+  let packagings = this.state.packagings;
+  let API_TEST_URL = "http://localhost:4001"
+  fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      cartItems,
+      packagings
+    })
+  })
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+};
 
   handleSubmit = () => {
     const {packagings, cart_items, selectedOrder} = this.state
@@ -96,7 +131,21 @@ class SingleOrderView extends Component {
   }
 
   render() {
-    const {cart_items, selectedOrder, packagings} = this.state
+    const {
+      cart_items,
+      selectedOrder,
+      packagings,
+      packagingUsed,
+      originalSubTotal,
+      currentSubTotal
+    } = this.state
+    const packagingArr = packagings.reduce((acc, packaging) => {
+     const pUsed = packagingUsed.find(e => e.type === packaging.type);
+     if (pUsed)
+       acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
+     else acc[packaging.type] = { ...packaging, quantity: 0 };
+     return acc;
+     }, []);
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -137,18 +186,34 @@ class SingleOrderView extends Component {
           <FormGroup className={"single-order-total"}>
             <Row>
               <Col componentClass={ControlLabel} sm={2}>
-                <strong>Subtotal:</strong>
+                <strong>Current Subtotal:</strong>
               </Col>
-              <Col sm={4}>
-                $ {selectedOrder.subtotal / 100}
-              </Col>
-              <Col componentClass={ControlLabel} sm={2}>
-                <strong>Original Subtotal:</strong>
-              </Col>
-              <Col sm={4}>
-                TODO
-              </Col>
-            </Row>
+              <Col sm={4}>${Math.round(currentSubTotal) / 100}</Col>
+                <Col componentClass={ControlLabel} sm={2}>
+                  <strong>Original Subtotal:</strong>
+                </Col>
+                <Col sm={4}>${Math.round(originalSubTotal) / 100}</Col>
+                  <Col componentClass={ControlLabel} sm={2}>
+                    <strong>Promo Discount</strong>
+                  </Col>
+                  <Col sm={4}>${selectedOrder.promo_discount / 100}</Col>
+                    <Col componentClass={ControlLabel} sm={2}>
+                      <strong>Applied Store Credit</strong>
+                  </Col>
+                  <Col sm={4}>${selectedOrder.applied_store_credit / 100}</Col>
+                    <Col componentClass={ControlLabel} sm={2}>
+                      <strong>Tax Amount</strong>
+                  </Col>
+                  <Col sm={4}>${selectedOrder.tax_amount}</Col>
+                    <Col componentClass={ControlLabel} sm={2}>
+                      <strong>Tip Amount</strong>
+                    </Col>
+                  <Col sm={4}>${selectedOrder.tip_amount / 100}</Col>
+                    <Col componentClass={ControlLabel} sm={2}>
+                      <strong>Total</strong>
+                  </Col>
+                    <Col sm={4}>${selectedOrder.total / 100}</Col>
+                </Row>
           </FormGroup>
           <Table className={"packaging-table"}>
             <TableBody>

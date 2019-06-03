@@ -87,7 +87,6 @@ class CartItem extends Component {
     const {isEdit, cart_item, order_id, weight} = this.state
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
-
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
     let finalTotal = (cart_item.product_price/100 * cart_item.final_quantity).toFixed(2)
     let valuePriceChange = cart_item.initial_product_price - cart_item.product_price
