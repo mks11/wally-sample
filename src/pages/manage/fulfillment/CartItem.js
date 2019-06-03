@@ -28,7 +28,6 @@ class CartItem extends Component {
   }
 
   onClickButton = () => {
-    console.log(this.state.cart_item._id)
     if (this.state.isEdit) {
       this.props.saveCartRow(this.state.cart_item)
       this.handleItemUpdate()
@@ -58,6 +57,7 @@ class CartItem extends Component {
         product_producer: cartItem.product_producer,
         product_price: (cartItem.product_price/ 100),
         final_quantity: cartItem.final_quantity,
+        missing: cartItem.missing,
         weight: weight
       })
     })
@@ -87,13 +87,7 @@ class CartItem extends Component {
     const {isEdit, cart_item, order_id, weight} = this.state
     let unit_type = cart_item.unit_type
     if (!unit_type) unit_type = cart_item.price_unit
-    // let finalPrice = 0;
-  //   if(typeof cart_item.product_price !== Number) {
-  //   finalPrice = (parseFloat(cart_item.product_price) / 100)
-  // } else {
-  //   finalPrice = (cart_item.product_price / 100)
-  // }
-  // parseFloat(cart_item.product_price).toFixed(2)
+
     let initialTotal = (cart_item.initial_product_price/100 * cart_item.final_quantity).toFixed(2)
     let finalTotal = (cart_item.product_price/100 * cart_item.final_quantity).toFixed(2)
     let valuePriceChange = cart_item.initial_product_price - cart_item.product_price
