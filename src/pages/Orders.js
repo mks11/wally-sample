@@ -37,7 +37,7 @@ class Orders extends Component {
   }
 
   countItems(data) {
-    let total = 0 
+    let total = 0
     for (const d of data) {
       total += parseFloat(d.customer_quantity)
     }
@@ -93,7 +93,7 @@ class Orders extends Component {
             </div>
             ))}
 
-            {/* 
+            {/*
             <div className="order-item mt-5">
 
               <table>

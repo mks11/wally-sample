@@ -87,7 +87,6 @@ class ManagePackaging extends Component {
 
     render() {
         if (!this.userStore.user) return null
-
         const {timeframes, packagings} = this.adminStore
         const {singleOrderOpen} = this.state
         const {orders} = this.adminStore

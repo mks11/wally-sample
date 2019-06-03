@@ -1165,7 +1165,7 @@ body {
 }
 
 .packaging-table .delivered, .paid {
-  background: green
+  background: #008400;
 }
 
 .packaging-table .paid:hover {
@@ -1185,6 +1185,19 @@ body {
 
 .packaging-table .delivery_issue:hover {
   background: #c76464;
+}
+
+.order-table .packaged {
+  background: #8bf18b;
+}
+
+.order-table .order-row {
+  background: #908e8e;
+}
+
+.user-header{
+  font-size: 20px;
+  float: right;
 }
 
 .delivery-table .row {
