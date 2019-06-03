@@ -7,6 +7,7 @@ import {
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
   API_ADMIN_SET_SHOP_ITEM_STATUS,
+  API_ADMIN_GET_LOCATION_STATUS,
   API_ADMIN_GET_ROUTES,
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
   API_ADMIN_GET_ORDER,
@@ -24,6 +25,7 @@ class AdminStore {
 
   shopitems = []
   shopitemsFarms = []
+  locationStatus = {}
 
   routes = []
   orders = []
@@ -49,6 +51,11 @@ class AdminStore {
     this.shopitems = res.data.shop_items
   }
 
+  async getLocationStatus(timeframe) {
+    const res = await axios.get(`${API_ADMIN_GET_LOCATION_STATUS}/${timeframe}`)
+    this.locationStatus = res.data.location_status
+  }
+
   async getShopItemsFarms(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOP_ITEMS_FARMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
     this.shopitemsFarms = res.data.farms
@@ -62,10 +69,20 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async setShopItemStatus(status, shopitem_id) {
-    this.loading = true
-    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
-    this.loading = false
+  async setShopItemStatus(status, shopitem_id, updateCurrentStatus) {
+    if (shopitem_id) {
+      this.loading = true
+      const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
+      this.loading = false
+      // guessing this is how data will be returned
+      if (res.data.shopItem) {
+        updateCurrentStatus()
+        this.updateStoreShopItem(shopitem_id, res.data)
+      }
+
+    } else {
+      console.log('Invalid shopitem id');
+    }
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {

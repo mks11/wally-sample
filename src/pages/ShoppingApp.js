@@ -3,6 +3,7 @@ import { Row, Col, Container } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
 import ShoppingAppTable from './manage/ShoppingAppTable'
+import CurrentStatusTable from './manage/shopper/CurrentStatusTable'
 import CustomDropdown from '../common/CustomDropdown'
 import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging'
 
@@ -29,8 +30,8 @@ class ShoppingApp extends Component {
 	}
 	
   loadShopLocations = async() => {
-		// const timeframe = 'all'
-		const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
+		const timeframe = 'all'
+		// const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
 		this.adminStore.getShopLocations(timeframe)
     this.setState({timeframe})
 	}
@@ -78,10 +79,16 @@ class ShoppingApp extends Component {
 					<ModalRequiredPackaging />
 				</section>
 				<section className="page-section pt-1">
-              <Container>
-                <ShoppingAppTable {...{timeframe}} shopitems={shopitems} />
-              </Container>
-            </section>
+          <Container>
+            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} />
+          </Container>
+        </section>
+        <section>
+          <Container>
+            <h4>Current Status</h4>
+            <CurrentStatusTable />
+          </Container>
+        </section>
       </div>
     );
   }

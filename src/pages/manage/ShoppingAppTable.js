@@ -18,7 +18,6 @@ class ShoppingAppTable extends Component {
 
   handleSelectAvailability = async(isAvailable, shopitemId) => {
     if (isAvailable) {
-      console.log('hi', isAvailable, shopitemId);
       const status = 'available'
       await this.adminStore.setShopItemStatus(status, shopitemId)
     } else {
