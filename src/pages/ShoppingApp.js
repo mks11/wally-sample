@@ -53,10 +53,10 @@ class ShoppingApp extends Component {
           <Container>
             <Row>
 							<Col md="4" sm="6">
-								<h3>Step 1</h3>
+								<h2>Step 1</h2>
 							</Col>
 							<Col md="4" sm="6">
-								<h3>2:00 - 2:15 PM</h3>
+								<h2>2:00 - 2:15 PM</h2>
 							</Col>
               <Col md="4" sm="12">
                 <div className="mb-3">
@@ -79,7 +79,6 @@ class ShoppingApp extends Component {
 				</section>
 				<section className="page-section pt-1">
               <Container>
-                {/* <h2>Shop Location View</h2> */}
                 <ShoppingAppTable {...{timeframe}} shopitems={shopitems} />
               </Container>
             </section>

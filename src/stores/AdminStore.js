@@ -6,6 +6,7 @@ import {
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
+  API_ADMIN_SET_SHOP_ITEM_STATUS,
   API_ADMIN_GET_ROUTES,
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
   API_ADMIN_GET_ORDER,
@@ -59,6 +60,12 @@ class AdminStore {
     this.loading = false
     if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
     this.updateStoreShopItem(shopitem_id, res.data)
+  }
+
+  async setShopItemStatus(status, shopitem_id) {
+    this.loading = true
+    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
+    this.loading = false
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {

@@ -16,39 +16,33 @@ class ShoppingAppTable extends Component {
     this.adminStore = this.props.store.admin
   }
 
-  onEditClick = (e) => {
-    const productId = e.target.getAttribute('prod-id')
-    this.adminStore.setEditing(productId, true)
-  }
-
-  onSubmitClick = (productId, updateditem) => {
-    const {timeframe} = this.props
-    const {complete, ...rest} = updateditem
-
-    this.adminStore.setEditing(productId, false)
-    this.adminStore.updateShopItem(timeframe, productId, rest)
+  handleSelectAvailability = async(isAvailable, shopitemId) => {
+    if (isAvailable) {
+      console.log('hi', isAvailable, shopitemId);
+      const status = 'available'
+      await this.adminStore.setShopItemStatus(status, shopitemId)
+    } else {
+      const status = 'missing'
+      await this.adminStore.setShopItemStatus(status, shopitemId)
+      // open step 1 and 2 missing popup
+    }
   }
 
   render() {
-    let {
-      shopitemsFarms,
-    } = this.adminStore
     const {shopitems} = this.props
-    const {timeframe} = this.props
-    const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.estimated_total, 0)
     const renderStatus = (shopitem) => {
       if (shopitem.completed) {
-        return 'Completed'
+        return 'completed'
       } else if (shopitem.missing) {
-        return 'Missing'
+        return 'missing'
       } else {
-        return 'Incomplete'
+        return 'incomplete'
       }
     }
 
     return (
       <Paper elevation={1} className={"scrollable-table"}>
-        <Table className={"shopper-table"} >
+        <Table className={"shopping-app-table"} >
           <TableHead>
             <TableRow>
               <TableCell>Product Name</TableCell>
@@ -61,8 +55,7 @@ class ShoppingAppTable extends Component {
               return (
                 <TableRow
                   key={shopitem.product_id}
-                  className={`row ${renderStatus(shopitem).toLocaleLowerCase()} `}
-                //   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
+                  className={`row ${renderStatus(shopitem).toLocaleLowerCase()}`}
                 >
                   <TableCell>{shopitem.product_name}</TableCell>
                   <TableCell>
@@ -71,11 +64,13 @@ class ShoppingAppTable extends Component {
                     <Form inline>
 											<FormGroup className="mr-sm-2" check inline>
 												<Label className="mr-sm-1" for="yesSelect" check>Yes</Label>
-												<Input type="radio" name="select" id="yesSelect" />
+												<Input type="radio" name="select" id="yesSelect"
+                        onChange={() => this.handleSelectAvailability(true, shopitem._id)} />
 											</FormGroup>
 											<FormGroup className="mr-sm-2" check inline>
 												<Label className="mr-sm-1" for="noSelect" check>No</Label>
-												<Input type="radio" name="select" id="noSelect" />
+												<Input type="radio" name="select" id="noSelect"
+                        onChange={() => this.handleSelectAvailability(false, shopitem._id)} />
 											</FormGroup>
                     </Form>
                   </TableCell>
@@ -86,7 +81,6 @@ class ShoppingAppTable extends Component {
           <TableFooter>
             <TableRow>
               <TableCell align={"center"} colSpan={12}>
-                {/* <b>Total Price:</b> ${totalPrice({shopitems}) / 100} */}
               </TableCell>
             </TableRow>
           </TableFooter>

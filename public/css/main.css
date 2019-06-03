@@ -1142,14 +1142,24 @@ body {
     background: #e8e8e8;
 }
 
-.shopper-table .completed {
+.shopper-table .completed,
+.shopping-app-table .pending {
     background: lightgrey;
 }
 .shopper-table .completed:hover {
     background: #bebebe;
 }
-.shopper-table .missing {
+.shopper-table .missing,
+.shopping-app-table .missing {
     background: lightcoral;
+}
+
+.shopping-app-table .available {
+  background: #78C98D;
+}
+
+.shopping-app-table label, input {
+  cursor: pointer;
 }
 
 .packaging-table .missing:hover {
