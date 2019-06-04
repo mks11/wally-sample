@@ -9,6 +9,7 @@ import {
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
   API_ADMIN_SET_SHOP_ITEM_STATUS,
   API_ADMIN_GET_LOCATION_STATUS,
+  API_ADMIN_GET_SHOPPER_PACKAGING_INFO,
   API_ADMIN_GET_ROUTES,
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
   API_ADMIN_GET_ORDER,
@@ -27,6 +28,7 @@ class AdminStore {
   shopitems = []
   shopitemsFarms = []
   locationStatus = {}
+  packagingCounts = {}
 
   routes = []
   orders = []
@@ -65,6 +67,11 @@ class AdminStore {
   async getLocationStatus(timeframe) {
     const res = await axios.get(`${API_ADMIN_GET_LOCATION_STATUS}/${timeframe}`)
     this.locationStatus = res.data.location_status
+  }
+
+  async getShopperPackagingInfo(timeframe, shop_location) {
+    const res = await axios.get(`${API_ADMIN_GET_SHOPPER_PACKAGING_INFO}?timeframe=${timeframe}&shop_location=${shop_location}`)
+    this.packagingCounts = res.data.packaging_counts
   }
 
   async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {

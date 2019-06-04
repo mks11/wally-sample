@@ -86,7 +86,12 @@ class ShoppingAppStep1 extends Component {
 				<section className="page-section pt-1">
           <Container className="btn-center">
             <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
-            <ModalRequiredPackaging toggleModal={this.toggleModal} showModal={this.state.showModal}/>
+            <ModalRequiredPackaging
+              toggleModal={this.toggleModal}
+              showModal={this.state.showModal}
+              timeframe={timeframe}
+              location={location}
+            />
           </Container>
 				</section>
 				<section className="page-section pt-1">

@@ -18,15 +18,36 @@ import {
 class ModalRequiredPackaging extends Component {
 
   componentDidMount = () => {
+    this.loadShopperPackagingInfo()
+  }
+
+  loadShopperPackagingInfo = () => {
+    const { timeframe, shop_location } = this.props
+    this.adminStore.getShopperPackagingInfo(timeframe, shop_location)
   }
 
   render() {
     const { showModal, toggleModal } = this.props
+    const { packagingCounts } = this.adminStore
+    // const packagingCounts = {
+    //   "Muslin Bag - Large": 2,
+    //   "Mesh Bag": 3,
+    // }
+    const packagingNames = Object.keys(packagingCounts)
 
     return (
       <Modal isOpen={showModal} toggle={toggleModal} className="modal-required-packaging">
         <ModalBody>
-          Hello
+          <Table>
+            <TableBody>
+              {packagingNames.map(packagingName => (
+                <TableRow>
+                  <TableCell>{packagingName}</TableCell>
+                  <TableCell>{packagingCounts[packagingName]}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </ModalBody>
       </Modal>
     )
