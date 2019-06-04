@@ -28,7 +28,9 @@ import ManageShopper from './pages/ManageShopper';
 import ManagePackaging from './pages/ManagePackaging';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
-import ShoppingApp from './pages/ShoppingApp';
+import ShoppingAppStep1 from './pages/ShoppingAppStep1';
+import ShoppingAppStep2 from './pages/ShoppingAppStep2';
+import ShoppingAppStep3 from './pages/ShoppingAppStep3';
 import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
 
@@ -39,7 +41,9 @@ export default (
         <Route exact path="/manage/packaging" component={ManagePackaging} />
         <Route exact path="/manage/delivery" component={ManageDelivery} />
         <Route exact path="/manage/blog" component={ManageBlog} />
-        <Route exact path="/manage/shopping-app" component={ShoppingApp} />
+        <Route exact path="/manage/shopping-app-1" component={ShoppingAppStep1} />
+        <Route exact path="/manage/shopping-app-2" component={ShoppingAppStep2} />
+        <Route exact path="/manage/shopping-app-3" component={ShoppingAppStep3} />
         <Route exact path="/user" component={Account}/>
         <Route exact path="/invitefriends" component={InviteFriends}/>
         <Route exact path="/thankyou" component={OrderConfirmation}/>

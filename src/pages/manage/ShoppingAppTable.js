@@ -13,6 +13,7 @@ class ShoppingAppTable extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.step = this.props.step
     this.adminStore = this.props.store.admin
   }
 
@@ -30,12 +31,21 @@ class ShoppingAppTable extends Component {
   render() {
     const {shopitems} = this.props
     const renderStatus = (shopitem) => {
-      if (shopitem.completed) {
-        return 'completed'
-      } else if (shopitem.missing) {
-        return 'missing'
+      if (this.step === '1') {
+        if (shopitem.completed) {
+          return 'completed'
+        } else if (shopitem.missing) {
+          return 'missing'
+        } else {
+          return 'incomplete'
+        }
+      // } else if (this.step === '2') {
       } else {
-        return 'incomplete'
+        if (shopitem.user_checked) {
+          return 'checked'
+        } else if (shopitem.user_checked === false) {
+          return 'not-checked'
+        }
       }
     }
 
@@ -77,12 +87,6 @@ class ShoppingAppTable extends Component {
               );
             })}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell align={"center"} colSpan={12}>
-              </TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </Paper>
     )

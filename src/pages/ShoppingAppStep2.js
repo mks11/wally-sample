@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { Row, Col, Container } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
 import ShoppingAppTable from './manage/ShoppingAppTable'
 import CurrentStatusTable from './manage/shopper/CurrentStatusTable'
 import CustomDropdown from '../common/CustomDropdown'
-import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging'
-
+import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging';
+import { Button } from 'reactstrap';
 import { connect } from '../utils'
 import moment from 'moment'
 
-class ShoppingApp extends Component {
+class ShoppingAppStep2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,16 +31,17 @@ class ShoppingApp extends Component {
 	}
 	
   loadShopLocations = async() => {
-		const timeframe = 'all'
-		// const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
+    const timeframe = 'all'
+    // const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
 		this.adminStore.getShopLocations(timeframe)
-    this.setState({timeframe})
+		this.setState({timeframe})
+		
 	}
 	
-  loadShopItems = async(location) => {
-		// const timeframe = 'all'
-		const {timeframe} = this.state
-		const shopItems = await this.adminStore.getShopItems(timeframe, location)
+  loadUnavailableShopItems = async(location) => {
+    const timeframe = 'all'
+    // const {timeframe} = this.state
+		await this.adminStore.getShopItems(timeframe, location)
     this.setState({location})
   }
 
@@ -54,7 +56,7 @@ class ShoppingApp extends Component {
           <Container>
             <Row>
 							<Col md="4" sm="6">
-								<h2>Step 1</h2>
+								<h2>Step 2</h2>
 							</Col>
 							<Col md="4" sm="6">
 								<h2>2:00 - 2:15 PM</h2>
@@ -68,7 +70,7 @@ class ShoppingApp extends Component {
                         return { id: item, title: item };
                       })
                     ]}
-                    onItemClick={this.loadShopItems}
+                    onItemClick={this.loadUnavailableShopItems}
                   />
                 </div>
               </Col>
@@ -80,13 +82,23 @@ class ShoppingApp extends Component {
 				</section>
 				<section className="page-section pt-1">
           <Container>
-            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} />
+            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} step="2" />
           </Container>
         </section>
-        <section>
+        <section className="page-section pt-1">
           <Container>
             <h4>Current Status</h4>
             <CurrentStatusTable />
+          </Container>
+        </section>
+        <section className="page-section pt-1">
+          <Container className="btns-space-btw">
+						<Link to="/manage/shopping-app-1">
+							<Button>Step 1</Button>
+						</Link>
+						<Link to="/manage/shopping-app-3">
+							<Button>Step 3</Button>
+						</Link>
           </Container>
         </section>
       </div>
@@ -94,4 +106,4 @@ class ShoppingApp extends Component {
   }
 }
 
-export default connect("store")(ShoppingApp);
+export default connect("store")(ShoppingAppStep2);

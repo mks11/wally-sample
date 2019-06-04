@@ -222,7 +222,7 @@ class TopNav extends Component {
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app" className="dropdown-item">Shopping App</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>
@@ -239,7 +239,7 @@ class TopNav extends Component {
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app" className="dropdown-item">Shopping App</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>
