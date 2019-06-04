@@ -19,7 +19,19 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
+import Switch from "react-switch";
+import MissingModal from "./MissingModal";
 
+const textSwitch = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  fontSize: 15,
+  color: "#fff",
+  paddingRight: 2
+};
+const customColumnStyle = { width: 90, padding: 0 };
 class CartItemOrder extends Component {
   constructor(props) {
     super(props);
@@ -27,25 +39,27 @@ class CartItemOrder extends Component {
       order_id: props.order_id,
       cart_item: props.cart_item,
       weight: "",
-      isEdit: false,
       quantityUnit:
         props.cart_item.price_unit === "packaging"
           ? props.cart_item.packaging_name
-          : props.cart_item.price_unit
+          : props.cart_item.price_unit,
+      missing: props.cart_item.missing,
+      isOpen: false
     };
     this.setWeight = this.setWeight.bind(this);
+    this.onClickButton = this.onClickButton.bind(this)
+    this.toggleMissing = this.toggleMissing.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
-  onClickButton = () => {
-    if (this.state.isEdit) {
-      this.props.saveCartRow(this.state.cart_item);
-      this.handleItemUpdate();
+  onClickButton = e => {
+    this.props.saveCartRow(this.state.cart_item);
+    this.handleItemUpdate();
+    let code = e.keyCode || e.which;
+    if (code === 13) {
       this.setState({
-        isEdit: false,
         weight: this.state.weight
       });
-    } else {
-      this.setState({ isEdit: true });
     }
   };
 
@@ -54,6 +68,7 @@ class CartItemOrder extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
+    let missing = this.state.missing;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -66,7 +81,7 @@ class CartItemOrder extends Component {
         product_producer: cartItem.product_producer,
         product_price: cartItem.product_price / 100,
         final_quantity: cartItem.final_quantity,
-        missing: cartItem.missing,
+        missing: missing,
         weight: weight
       })
     })
@@ -86,6 +101,22 @@ class CartItemOrder extends Component {
     });
   };
 
+  toggleMissing = e => {
+    console.log(e)
+    const { missing } = this.state
+    alert("are you sure?")
+    this.setState({
+      missing: !missing
+        });
+    console.log(missing)
+  };
+
+  toggleModal = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
   onSelect = e => {
     const { cart_item } = this.state;
     cart_item[e.target.name] = e.target.value === "true";
@@ -93,47 +124,40 @@ class CartItemOrder extends Component {
   };
 
   render() {
-    const { isEdit, cart_item, order_id, weight, quantityUnit } = this.state;
+    const {
+      isEdit,
+      cart_item,
+      order_id,
+      weight,
+      quantityUnit,
+      missing
+    } = this.state;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
-    const customColumnStyle = { width: 90, padding: 0 };
-    const customColumnNameStyle = { width: 300 };
-    console.log(unit_type);
     return (
       <TableRow className="cart-item">
-        <TableCell>
-          <InputGroup>
-            <Input
-              placeholder="Name"
-              value={cart_item.product_name}
-              type="text"
-              name="product_name"
-              onChange={this.onInputChange}
-              disabled={!isEdit}
-              style={customColumnNameStyle}
-            />
-          </InputGroup>
-        </TableCell>
+        <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>
           {cart_item.customer_quantity} {quantityUnit}
         </TableCell>
         <TableCell>
-          {cart_item.final_quantity} {quantityUnit}
+          {cart_item.missing ? 0 : cart_item.final_quantity} {quantityUnit}
         </TableCell>
         <TableCell>
-          <Input
-            type="select"
-            name="missing"
-            value={cart_item.missing}
-            disabled={!isEdit}
-            onChange={this.onSelect}
-            style={customColumnStyle}
-          >
-            <option value={true}>True</option>
-            <option value={false}>False</option>
-          </Input>
+          <Switch
+            className="react-switch"
+            value={missing}
+            onChange={this.toggleMissing}
+            onClick={this.toggleModal}
+            checked={missing}
+            checkedIcon={<div style={textSwitch}>Yes</div>}
+            uncheckedIcon={<div style={textSwitch}>No</div>}
+          />
+          <MissingModal show={this.state.isOpen} onClose={this.toggleModal}>
+            Here's some content for the modal
+          </MissingModal>
         </TableCell>
         <TableCell>{cart_item.product_error_reason}</TableCell>
         <TableCell>
@@ -149,7 +173,7 @@ class CartItemOrder extends Component {
                 type="number"
                 name="weight"
                 onChange={this.setWeight}
-                disabled={!isEdit}
+                onKeyPress={this.onClickButton}
                 style={customColumnStyle}
               />
             ) : (

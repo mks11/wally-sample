@@ -134,6 +134,7 @@ class ViewSingleOrder extends Component {
       else acc[packaging.type] = { ...packaging, quantity: 0 };
       return acc;
     }, []);
+    const hideRow = { display: "none" };
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -179,21 +180,37 @@ class ViewSingleOrder extends Component {
 
           <Table className={"packaging-table"}>
             <TableBody>
-              {packagings.map((packaging, i) => (
-                <TableRow key={i}>
-                  <TableCell>
-                    <strong>{packaging.type}</strong>
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      placeholder="Enter Quantity"
-                      value={packaging.quantity}
-                      type={"number"}
-                      onChange={e => this.onChangePackaging(e, i)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {selectedOrder.packaging_used.map((packaging, i) =>
+                packaging.type === "Muslin Bag" ||
+                packaging.type === "Mesh Bag" ||
+                packaging.type === "Tote Bag" ? (
+                  <TableRow key={i}>
+                    <TableCell>
+                      {packaging.type === "Muslin Bag" ||
+                      packaging.type === "Mesh Bag" ||
+                      packaging.type === "Tote Bag" ? (
+                        <strong>{packaging.type}</strong>
+                      ) : (
+                        <strong className="hide" style={hideRow} />
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        placeholder="Enter Quantity"
+                        value={packaging.type}
+                        type={"number"}
+                        onChange={e => this.onChangePackaging(e, i)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Input style={hideRow} />
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
           <div className="nav-buttons">

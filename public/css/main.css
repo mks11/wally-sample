@@ -1337,3 +1337,6 @@ body {
 .input-group{
   flex-wrap: unset;
 }
+.hide{
+  display: none;
+}
