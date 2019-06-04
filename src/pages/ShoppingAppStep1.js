@@ -20,7 +20,8 @@ class ShoppingAppStep1 extends Component {
 			location: null,
       isProductView: false,
       selectedProduct: {},
-			selectedIndex: null
+      selectedIndex: null,
+      showModal: false
     }
 
 		this.adminStore = this.props.store.admin
@@ -44,9 +45,11 @@ class ShoppingAppStep1 extends Component {
     this.setState({location})
   }
 
-  // handleStep2Click = () => {
-  //   <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
-  // }
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }));
+  }
 
   render() {
 		const { locations, shopitems } = this.adminStore
@@ -80,8 +83,11 @@ class ShoppingAppStep1 extends Component {
             </Row>
           </Container>
         </section>
-				<section>
-					<ModalRequiredPackaging />
+				<section className="page-section pt-1">
+          <Container className="btn-center">
+            <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
+            <ModalRequiredPackaging toggleModal={this.toggleModal} showModal={this.state.showModal}/>
+          </Container>
 				</section>
 				<section className="page-section pt-1">
           <Container>
