@@ -97,7 +97,7 @@ class ManageOrders extends Component {
     return (
       <div className="App">
         <ManageTabs page="fulfillment" />
-        <Title content="Packaging Portal" />
+        <Title content="Orders Portal" />
         {!singleOrderOpen ? (
           <React.Fragment>
             <section className="page-section pt-1 fulfillment-page">
@@ -128,12 +128,18 @@ class ManageOrders extends Component {
                           return (
                             <TableRow
                               key={order._id}
-                              className={order.status === "packaged" ? `row ${order.status}` : "order-row"}
+                              className={
+                                order.status === "packaged"
+                                  ? `row ${order.status}`
+                                  : "order-row"
+                              }
                               onClick={() =>
                                 this.toggleSingleOrderView({ order })
                               }
                             >
-                              <TableCell className={order.order_letter}>A</TableCell>
+                              <TableCell className={order.order_letter}>
+                                A
+                              </TableCell>
                               <TableCell>{order._id}</TableCell>
                               <TableCell className={"text-capitalize"}>
                                 {order.status}

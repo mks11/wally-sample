@@ -27,7 +27,11 @@ class CartItemOrder extends Component {
       order_id: props.order_id,
       cart_item: props.cart_item,
       weight: "",
-      isEdit: false
+      isEdit: false,
+      quantityUnit:
+        props.cart_item.price_unit === "packaging"
+          ? props.cart_item.packaging_name
+          : props.cart_item.price_unit
     };
     this.setWeight = this.setWeight.bind(this);
   }
@@ -89,38 +93,14 @@ class CartItemOrder extends Component {
   };
 
   render() {
-    const { isEdit, cart_item, order_id, weight } = this.state;
+    const { isEdit, cart_item, order_id, weight, quantityUnit } = this.state;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
-    let initialTotal = (
-      (cart_item.initial_product_price / 100) *
-      cart_item.final_quantity
-    ).toFixed(2);
-    let finalTotal = (
-      (cart_item.product_price / 100) *
-      cart_item.final_quantity
-    ).toFixed(2);
-    let valuePriceChange =
-      cart_item.initial_product_price - cart_item.product_price;
-    let pricePercentageChange =
-      Math.abs(valuePriceChange / cart_item.product_price) * 100;
-    let valueQuantityChange =
-      cart_item.final_quantity - cart_item.customer_quantity;
-    let quantityPercentageChange =
-      Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100;
     const customColumnStyle = { width: 90, padding: 0 };
     const customColumnNameStyle = { width: 300 };
+    console.log(unit_type);
     return (
-      <TableRow
-        className={
-          pricePercentageChange >= 5 || quantityPercentageChange >= 5
-            ? "price-item-change"
-            : cart_item.product_price !== cart_item.initial_product_price ||
-              cart_item.final_quantity !== cart_item.customer_quantity
-            ? "cart-item-change"
-            : "cart-item"
-        }
-      >
+      <TableRow className="cart-item">
         <TableCell>
           <InputGroup>
             <Input
@@ -136,28 +116,11 @@ class CartItemOrder extends Component {
         </TableCell>
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
-        <TableCell>{cart_item.customer_quantity}</TableCell>
         <TableCell>
-          <InputGroup>
-            <Input
-              placeholder="Final Quantity"
-              value={cart_item.missing ? 0 : cart_item.final_quantity}
-              type="number"
-              name="final_quantity"
-              onChange={this.onInputChange}
-              disabled={!isEdit}
-              style={customColumnStyle}
-            />
-            {
-              <InputGroupAddon addonType="append">
-                <InputGroupText>
-                  {cart_item.unit_type === "packaging"
-                    ? cart_item.packaging_name
-                    : unit_type}
-                </InputGroupText>
-              </InputGroupAddon>
-            }
-          </InputGroup>
+          {cart_item.customer_quantity} {quantityUnit}
+        </TableCell>
+        <TableCell>
+          {cart_item.final_quantity} {quantityUnit}
         </TableCell>
         <TableCell>
           <Input
@@ -172,9 +135,14 @@ class CartItemOrder extends Component {
             <option value={false}>False</option>
           </Input>
         </TableCell>
+        <TableCell>{cart_item.product_error_reason}</TableCell>
         <TableCell>
           <InputGroup>
-            {cart_item.price_unit == "lb" || cart_item.price_unit == "oz" ? (
+            {cart_item.price_unit == "lb" ||
+            cart_item.price_unit == "oz" ||
+            cart_item.unit_type == "lb" ||
+            cart_item.unit_type == "oz" ||
+            cart_item.product_shop === "TWS" ? (
               <Input
                 placeholder="Enter weight..."
                 value={weight}

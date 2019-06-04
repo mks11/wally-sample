@@ -147,7 +147,7 @@ class ViewSingleOrder extends Component {
               <Typography>Close</Typography>
             </Button>
           </div>
-          <h2>View</h2>
+          <h2>{selectedOrder._id}(Placeholder for order letter)</h2>
           <hr />
           <Paper elevation={1} className={"scrollable-table"}>
             <Table className={"packaging-table"} padding={"dense"}>
@@ -160,7 +160,6 @@ class ViewSingleOrder extends Component {
                   <TableCell>Final Quantity</TableCell>
                   <TableCell>Missing</TableCell>
                   <TableCell>Error Code</TableCell>
-                  <TableCell>Producer</TableCell>
                   <TableCell>Weight (lbs)</TableCell>
                 </TableRow>
               </TableHead>
