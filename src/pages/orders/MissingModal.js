@@ -10,8 +10,15 @@ class MissingModal extends Component {
       <div className="backdrop">
         <div className="missing-modal">
           <p>Please confirm if item is missing</p>
-          <button className="modal-button" onClick={this.props.makePatchAPICall}>Yes</button>
-          <button className="modal-button" onClick={this.props.onClose}>No</button>
+          <button
+            className="modal-button"
+            onClick={this.props.makePatchAPICall}
+          >
+            Yes
+          </button>
+          <button className="modal-button" onClick={this.props.onClose}>
+            No
+          </button>
         </div>
       </div>
     );

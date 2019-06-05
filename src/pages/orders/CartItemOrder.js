@@ -21,6 +21,7 @@ import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import Switch from "react-switch";
 import MissingModal from "./MissingModal";
+import OrderErrorModal from "./OrderErrorModal";
 
 const textSwitch = {
   display: "flex",
@@ -44,12 +45,9 @@ class CartItemOrder extends Component {
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
       missing: props.cart_item.missing,
-      isOpen: false
+      isMissingModalOpen: false,
+      isErrorModalOpen: false
     };
-    this.setWeight = this.setWeight.bind(this);
-    this.onClickButton = this.onClickButton.bind(this);
-    this.toggleMissing = this.toggleMissing.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
   }
 
   onClickButton = e => {
@@ -68,7 +66,7 @@ class CartItemOrder extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    //let missing = this.state.missing;
+    // let missing = this.state.missing;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -82,7 +80,7 @@ class CartItemOrder extends Component {
         product_price: cartItem.product_price / 100,
         final_quantity: cartItem.final_quantity,
         missing: missing,
-        weight: weight
+        weight: weight,
       })
     })
       .then(response => console.log(response))
@@ -103,13 +101,13 @@ class CartItemOrder extends Component {
 
   toggleMissing = e => {
     if (e) {
-      this.toggleModal();
+      this.toggleMissingModal();
     }
   };
 
-  toggleModal = () => {
+  toggleMissingModal = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isMissingModalOpen: !this.state.isMissingModalOpen
     });
   };
 
@@ -121,6 +119,22 @@ class CartItemOrder extends Component {
     });
   };
 
+  toggleErrorModal = e => {
+    e.preventDefault();
+    console.log(e);
+    this.setState({
+      isErrorModalOpen: true
+    });
+  };
+
+  toggleErrorOff = e => {
+    e.preventDefault();
+    console.log('toogleOff',e);
+    this.setState({
+      isErrorModalOpen: false
+    });
+  };
+
   render() {
     const {
       isEdit,
@@ -128,8 +142,10 @@ class CartItemOrder extends Component {
       order_id,
       weight,
       quantityUnit,
-      missing
+      missing,
+      error
     } = this.state;
+
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
@@ -148,20 +164,29 @@ class CartItemOrder extends Component {
             className="react-switch"
             value={missing}
             onChange={this.toggleMissing}
-            onClick={this.toggleModal}
+            onClick={this.toggleMissingModal}
             checked={missing}
             checkedIcon={<div style={textSwitch}>Yes</div>}
             uncheckedIcon={<div style={textSwitch}>No</div>}
           />
           <MissingModal
             makePatchAPICall={this.makePatchAPICall}
-            show={this.state.isOpen}
-            onClose={this.toggleModal}
-          >
-            Here's some content for the modal
-          </MissingModal>
+            show={this.state.isMissingModalOpen}
+            onClose={this.toggleMissingModal}
+          />
         </TableCell>
-        <TableCell>{cart_item.product_error_reason}</TableCell>
+        <TableCell className="error-code">
+          <p onClick={this.toggleErrorModal}>123</p>
+          <OrderErrorModal
+            cart_item={cart_item}
+            quantityUnit={quantityUnit}
+            isOpen={this.state.isErrorModalOpen}
+            onClose={this.toggleErrorOff}
+            onSubmit={this.makePatchAPICall}
+
+            // onClick={this.toggleErrorModal}
+          />
+        </TableCell>
         <TableCell>
           <InputGroup>
             {cart_item.price_unit == "lb" ||

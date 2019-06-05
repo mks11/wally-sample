@@ -2606,13 +2606,14 @@ color:#6e8692
 }
 
 .backdrop {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 3rem;
   bottom: 0;
   left: 0;
   right: 0;
   background: rgba(0,0,0,0.3);
   padding: 50px;
+  z-index: 2;
 }
 
 .missing-modal {
@@ -2627,4 +2628,21 @@ color:#6e8692
 .modal-button {
   width: 50%;
   font-size: 18px;
+}
+
+.error-code{
+  cursor: pointer;
+}
+
+.error-modal{
+  max-width: 600px;
+      min-height: 200px;
+      margin: 0 auto;
+}
+
+.error-header {
+  padding: 13px
+}
+.error .error-submit {
+  margin: 2% 50% ;
 }
