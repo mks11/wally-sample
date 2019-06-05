@@ -2,12 +2,11 @@ import React, { Component } from "react";
 
 class MissingModal extends Component {
   render() {
-    if (!this.props.show) {
+    if (!this.props.isOpen) {
       return null;
     }
-
     return (
-      <div className="backdrop">
+      <div className="backdrop-missing">
         <div className="missing-modal">
           <p>Please confirm if item is missing</p>
           <button

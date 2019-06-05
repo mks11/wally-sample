@@ -40,11 +40,13 @@ class CartItemOrder extends Component {
       order_id: props.order_id,
       cart_item: props.cart_item,
       weight: "",
+
       quantityUnit:
         props.cart_item.price_unit === "packaging"
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
       missing: props.cart_item.missing,
+      error: props.cart_item.product_error_reason,
       isMissingModalOpen: false,
       isErrorModalOpen: false
     };
@@ -66,6 +68,8 @@ class CartItemOrder extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
+    let errorReason = cartItem.error_reason;
+
     // let missing = this.state.missing;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
@@ -81,6 +85,7 @@ class CartItemOrder extends Component {
         final_quantity: cartItem.final_quantity,
         missing: missing,
         weight: weight,
+        error_reason: errorReason
       })
     })
       .then(response => console.log(response))
@@ -119,6 +124,23 @@ class CartItemOrder extends Component {
     });
   };
 
+  makePatchAPICallError = async childState => {
+    const error = {
+      error_reason: childState.ugly ? "ugly" : "tooLittle",
+      final_quantity: childState.cart_item.final_quantity
+    };
+
+    this.setState(
+      {
+        cart_item: { ...this.state.cart_item, ...console.error() }
+      },
+      async () => {
+        await this.handleItemUpdate();
+        this.toggleErrorOff();
+      }
+    );
+  };
+
   toggleErrorModal = e => {
     e.preventDefault();
     console.log(e);
@@ -128,8 +150,7 @@ class CartItemOrder extends Component {
   };
 
   toggleErrorOff = e => {
-    e.preventDefault();
-    console.log('toogleOff',e);
+    console.log("toogleOff", e);
     this.setState({
       isErrorModalOpen: false
     });
@@ -171,7 +192,7 @@ class CartItemOrder extends Component {
           />
           <MissingModal
             makePatchAPICall={this.makePatchAPICall}
-            show={this.state.isMissingModalOpen}
+            isOpen={this.state.isMissingModalOpen}
             onClose={this.toggleMissingModal}
           />
         </TableCell>
@@ -182,9 +203,7 @@ class CartItemOrder extends Component {
             quantityUnit={quantityUnit}
             isOpen={this.state.isErrorModalOpen}
             onClose={this.toggleErrorOff}
-            onSubmit={this.makePatchAPICall}
-
-            // onClick={this.toggleErrorModal}
+            makePatchAPICallError={this.makePatchAPICallError}
           />
         </TableCell>
         <TableCell>

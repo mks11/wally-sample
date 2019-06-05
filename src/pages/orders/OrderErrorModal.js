@@ -29,26 +29,42 @@ class OrderErrorModal extends Component {
       ugly: false
     };
   }
-  onCbChange = (e) => {
-    e.preventDefault();
-  this.setState(({
-    [e.target.name]: e.target.value
-  }))
-  }
+  onLittleChange = e => {
+    const { ugly, tooLittle } = this.state;
+    this.setState({
+      ugly: false,
+      tooLittle: true
+    });
+  };
+
+  onUglyChange = e => {
+    const { ugly, tooLittle } = this.state;
+    this.setState({
+      ugly: true,
+      tooLittle: false
+    });
+  };
+
+  onQuantityChange = e => {
+    const { cart_item } = this.state;
+    cart_item.final_quantity = e.target.value;
+    this.setState({ cart_item });
+  };
+
   render() {
     const { cart_item, quantityUnit } = this.state;
-    console.log(this.props);
+
     if (!this.props.isOpen) {
       return null;
     }
+    console.log(this.props);
     return (
-
       <div className="error">
         <div className="backdrop">
           <Paper className="error-modal" elevation={3}>
-          <button className="modal-button" onClick={this.props.onClose}>
-            x
-          </button>
+            <button className="modal-button" onClick={this.props.onClose}>
+              x
+            </button>
             <h2 className="error-header">{cart_item.product_name} Error</h2>
             <p>Reason:</p>
             <Table>
@@ -58,7 +74,12 @@ class OrderErrorModal extends Component {
                     <p>Too lttle:</p>
                   </TableCell>
                   <TableCell>
-                    <Input name="tooLittle" type="checkbox" checked={this.state.tooLittle} onChange={this.onCbChange}  />
+                    <Input
+                      name="tooLittle"
+                      type="checkbox"
+                      checked={this.state.tooLittle}
+                      onChange={this.onLittleChange}
+                    />
                   </TableCell>
                   <TableCell />
                 </TableRow>
@@ -67,7 +88,12 @@ class OrderErrorModal extends Component {
                     <p>Ugly:</p>
                   </TableCell>
                   <TableCell>
-                    <Input type="checkbox" />
+                    <Input
+                      name="ugly"
+                      type="checkbox"
+                      checked={this.state.ugly}
+                      onChange={this.onUglyChange}
+                    />
                   </TableCell>
                   <TableCell />
                 </TableRow>
@@ -76,11 +102,14 @@ class OrderErrorModal extends Component {
                     <p>Quantity Available:</p>
                   </TableCell>
                   <TableCell>
-                    <Input />
+                    <Input
+                      type="number"
+                      max={parseInt(cart_item.customer_quantity)}
+                      onChange={this.onQuantityChange}
+                    />
                   </TableCell>
                   <TableCell>
-                    {cart_item.customer_quantity}
-                    {quantityUnit}
+                    {cart_item.customer_quantity} {quantityUnit}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -91,7 +120,7 @@ class OrderErrorModal extends Component {
               color="primary"
               size={"large"}
               type={"button"}
-              onClick={this.props.onSubmit}
+              onClick={() => this.props.makePatchAPICallError(this.state)}
             >
               Submit
             </Button>
