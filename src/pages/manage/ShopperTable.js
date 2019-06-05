@@ -38,8 +38,11 @@ class ShopperTable extends Component {
   onUpdateClick = (shopitem_id, inventory_id, product_id, e) => {
     e.stopPropagation()
     e.preventDefault()
+    console.log(this.state);
     const { timeframe } = this.props;
     const status = this.state[shopitem_id];
+    console.log(shopitem_id);
+    console.log(status);
     this.adminStore.setShopItemStatus(timeframe, shopitem_id, status);
   }
 
@@ -98,10 +101,10 @@ class ShopperTable extends Component {
                   <TableCell>{shopitem.is_substitute}</TableCell>
                   <TableCell>{shopitem.status}</TableCell>
                   <TableCell>
-                    <StatusDropdown shopitem={shopitem} onSelect={this.onSelect.bind(this, shopitem.inventory_id)} />
+                    <StatusDropdown shopitem={shopitem} onSelect={this.onSelect.bind(this, shopitem._id)} />
                   </TableCell>
                   <TableCell>
-                    <Button onClick={this.onUpdateClick.bind(this, shopitem.id, shopitem.inventory_id, shopitem.product_id)}>Update</Button>
+                    <Button onClick={this.onUpdateClick.bind(this, shopitem._id, shopitem.inventory_id, shopitem.product_id)}>Update</Button>
                   </TableCell>
                 </TableRow>
               );

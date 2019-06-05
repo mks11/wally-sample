@@ -9,7 +9,8 @@ import {
 const statusMap = {
   pending: ["available", "missing", "ugly", "too little"],
   unavailable: ["available", "missing", "ugly", "too little"],
-  available: ["purchased", "missing", "ugly", "too little"]
+  available: ["purchased", "missing", "ugly", "too little"],
+  purchased: ["missing", "ugly", "too little"]
 };
 
 class StatusDropdown extends PureComponent {
@@ -41,7 +42,7 @@ class StatusDropdown extends PureComponent {
 
   render() {
     // includes default option because test db doesn't have status property
-    const statusOptions = statusMap[this.props.shopitem] || ["test value", "purchased", "missing", "ugly", "too little"]
+    const statusOptions = statusMap[this.props.shopitem.status]
     const {open, selectedStatus} = this.state
 
     return (
