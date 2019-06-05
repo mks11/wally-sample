@@ -13,6 +13,7 @@ import {
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
   API_ADMIN_POST_BLOG_POST,
+  API_ADMIN_UPDATE_SHOP_ITEM_STATUS
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -59,6 +60,10 @@ class AdminStore {
     this.loading = false
     if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
     this.updateStoreShopItem(shopitem_id, res.data)
+  }
+
+  async setShopItemStatus(timeframe, shopitem_id, status) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM_STATUS}/${shopitem_id}?timeframe=${timeframe}?status=${status}`)
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {
