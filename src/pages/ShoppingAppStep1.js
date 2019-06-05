@@ -96,7 +96,7 @@ class ShoppingAppStep1 extends Component {
 				</section>
 				<section className="page-section pt-1">
           <Container>
-            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} step="1" />
+            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} location={location} step="1" />
           </Container>
         </section>
         <section className="page-section pt-1">

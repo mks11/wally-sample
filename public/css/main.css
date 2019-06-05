@@ -1166,6 +1166,14 @@ body {
   cursor: pointer;
 }
 
+.modal-missing .modal-header {
+  justify-content: flex-start;
+}
+
+.modal-missing table {
+  padding: 5px;
+}
+
 .btn-center {
   display: flex;
   justify-content: center;

@@ -10,15 +10,14 @@ import TableFooter from '@material-ui/core/TableFooter'
 import {
   Modal,
   ModalBody,
-  ModalFooter,
-  Button,
+  Container
 } from 'reactstrap'
 
 
 class ModalRequiredPackaging extends Component {
 
   componentDidMount = () => {
-    this.loadShopperPackagingInfo()
+    // this.loadShopperPackagingInfo()
   }
 
   loadShopperPackagingInfo = () => {
@@ -28,26 +27,28 @@ class ModalRequiredPackaging extends Component {
 
   render() {
     const { showModal, toggleModal } = this.props
-    const { packagingCounts } = this.adminStore
-    // const packagingCounts = {
-    //   "Muslin Bag - Large": 2,
-    //   "Mesh Bag": 3,
-    // }
+    // const { packagingCounts } = this.adminStore
+    const packagingCounts = {
+      "Muslin Bag - Large": 2,
+      "Mesh Bag": 3,
+    }
     const packagingNames = Object.keys(packagingCounts)
 
     return (
       <Modal isOpen={showModal} toggle={toggleModal} className="modal-required-packaging">
         <ModalBody>
-          <Table>
-            <TableBody>
-              {packagingNames.map(packagingName => (
-                <TableRow>
-                  <TableCell>{packagingName}</TableCell>
-                  <TableCell>{packagingCounts[packagingName]}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <Container>
+            <Table>
+              <TableBody>
+                {packagingNames.map(packagingName => (
+                  <TableRow>
+                    <TableCell>{packagingName}</TableCell>
+                    <TableCell>{packagingCounts[packagingName]}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Container>
         </ModalBody>
       </Modal>
     )

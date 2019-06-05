@@ -5,6 +5,7 @@ import {
   API_ADMIN_GET_SHOP_ITEMS,
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS,
+  API_ADMIN_GET_SUB_INFO,
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
   API_ADMIN_SET_SHOP_ITEM_STATUS,
@@ -29,6 +30,7 @@ class AdminStore {
   shopitemsFarms = []
   locationStatus = {}
   packagingCounts = {}
+  availableSubs = []
 
   routes = []
   orders = []
@@ -62,6 +64,11 @@ class AdminStore {
   async getUnavailableShopItems(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
     this.shopitems = res.data.shop_items
+  }
+  
+  async getSubInfo(shopitem_id, delivery_date, location) {
+    const res = await axios.get(`${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}?location={location}`)
+    this.availableSubs = res.data.available_substitutes
   }
 
   async getLocationStatus(timeframe) {
@@ -197,6 +204,9 @@ decorate(AdminStore, {
   locations: observable,
   shopitems: observable,
   shopitemsFarms: observable,
+  locationStatus: observable,
+  packagingCounts: observable,
+  availableSubstitutes: observable,
   routes: observable,
   orders: observable,
   singleorder: observable,
@@ -207,7 +217,13 @@ decorate(AdminStore, {
   getShopLocations: action,
   getShopItems: action,
   getShopItemsFarms: action,
+  getUnavailableShopItems: action,
+  getSubInfo: action,
+  updateShopItem: action,
   updateShopItemsWarehouseLocations: action,
+  setShopItemStatus: action,
+  getLocationStatus: action,
+  getShopperPackagingInfo: action,
   getRoutes: action,
   getRouteOrders: action,
   updateRoutePlacement: action,
