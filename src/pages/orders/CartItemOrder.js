@@ -47,7 +47,7 @@ class CartItemOrder extends Component {
       isOpen: false
     };
     this.setWeight = this.setWeight.bind(this);
-    this.onClickButton = this.onClickButton.bind(this)
+    this.onClickButton = this.onClickButton.bind(this);
     this.toggleMissing = this.toggleMissing.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -63,12 +63,12 @@ class CartItemOrder extends Component {
     }
   };
 
-  handleItemUpdate = () => {
+  handleItemUpdate = missing => {
     const cartItemId = this.state.cart_item._id;
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    let missing = this.state.missing;
+    //let missing = this.state.missing;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -102,13 +102,9 @@ class CartItemOrder extends Component {
   };
 
   toggleMissing = e => {
-    console.log(e)
-    const { missing } = this.state
-    alert("are you sure?")
-    this.setState({
-      missing: !missing
-        });
-    console.log(missing)
+    if (e) {
+      this.toggleModal();
+    }
   };
 
   toggleModal = () => {
@@ -117,10 +113,12 @@ class CartItemOrder extends Component {
     });
   };
 
-  onSelect = e => {
-    const { cart_item } = this.state;
-    cart_item[e.target.name] = e.target.value === "true";
-    this.setState({ cart_item });
+  makePatchAPICall = async () => {
+    const { missing } = this.state;
+    await this.handleItemUpdate(!missing);
+    this.setState({
+      missing: !missing
+    });
   };
 
   render() {
@@ -155,7 +153,11 @@ class CartItemOrder extends Component {
             checkedIcon={<div style={textSwitch}>Yes</div>}
             uncheckedIcon={<div style={textSwitch}>No</div>}
           />
-          <MissingModal show={this.state.isOpen} onClose={this.toggleModal}>
+          <MissingModal
+            makePatchAPICall={this.makePatchAPICall}
+            show={this.state.isOpen}
+            onClose={this.toggleModal}
+          >
             Here's some content for the modal
           </MissingModal>
         </TableCell>

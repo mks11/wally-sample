@@ -204,9 +204,9 @@ class ViewSingleOrder extends Component {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  <TableRow key={i}>
+                  <TableRow style={hideRow} key={i}>
                     <TableCell>
-                      <Input style={hideRow} />
+                      <Input />
                     </TableCell>
                   </TableRow>
                 )
@@ -221,7 +221,7 @@ class ViewSingleOrder extends Component {
               type={"button"}
               onClick={this.toggleConfirmModal}
             >
-              Package Order
+              Submit
             </Button>
           </div>
         </Container>
@@ -231,9 +231,9 @@ class ViewSingleOrder extends Component {
           className="single-order-modal"
         >
           <ModalHeader toggle={this.toggleConfirmModal}>
-            Confirm Packaging
+            Confirm Order
           </ModalHeader>
-          <ModalBody>Please check and confirm the packaging</ModalBody>
+          <ModalBody>Please check and confirm order</ModalBody>
           <ModalFooter>
             <Button
               variant="contained"

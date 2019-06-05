@@ -2605,6 +2605,26 @@ color:#6e8692
   margin: 0 3px 3px;
 }
 
-.hide{
-  display: none;
+.backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.3);
+  padding: 50px;
+}
+
+.missing-modal {
+  background: #fff;
+  border-radius: 5px;
+  max-width: 200px;
+  min-height: 100px;
+  margin: 50% auto;
+  padding: 30px;
+}
+
+.modal-button {
+  width: 50%;
+  font-size: 18px;
 }
