@@ -107,50 +107,29 @@ class ShoppingAppStep3 extends Component {
         this.adminStore.getShopItems(timeframes, location)
         this.setState({ location })
 
-        // const getShopItems = {
-        //             method: "GET",
-        //             response: {
-        //                 "shop_items": [{
-        //                         product_id: 'prod_123',
-        //                         inventory_id: 'invetory_123',
-        //                         organic: true,
-        //                         product_name: 'Awesome product',
-        //                         product_producer: 'Farm B',
-        //                         product_price: 450,
-        //                         missing: true,
-        //                         box_number: 'ABC213',
-        //                         substitute_for_name: null,
-        //                         product_substitute_reason: '',
-        //                         farm_substitue_reason: '',
-        //                         price_substitute_reason: '',
-        //                         product_missing_reason: '',
-        //                         price_unit: '1 Ct',
-        //                         quantity: 16,
-        //                         warehouse_placement: null
-        //                     },
-        //                     {
-        //                         product_id: 'prod_456',
-        //                         inventory_id: 'invetory_567',
-        //                         organic: true,
-        //                         product_name: 'Awesome product 2',
-        //                         product_producer: 'Farm A',
-        //                         product_price: 345,
-        //                         missing: false,
-        //                         box_number: 'XYZ213',
-        //                         substitute_for_name: null,
-        //                         product_substitute_reason: '',
-        //                         farm_substitue_reason: '',
-        //                         price_substitute_reason: '',
-        //                         product_missing_reason: '',
-        //                         price_unit: '1 Ct',
-        //                         quantity: 9,
-        //                         warehouse_placement: 'Somewhere else'
-        //                     }
-        //                 ]
-        //             }
-        //         }
     }
 
+    handleOnClick = (id) => {
+        // let status = "purchased"
+        // this.adminStore.setShopItemStatus(status, id)
+        console.log(id)
+    }
+
+    togglePopUp = () => {
+        window.alert("HI")
+    }
+
+    backgroundStyle = (status) => {
+        if (status === "pending") {
+            return "#ffb74d" //light orange
+        } else if (status === "available"){
+            return "#eeeeee" //light grey
+        } else if (status === "purchased"){
+            return "#76ff03" // light green
+        } else {
+            return "#e53935" // light red
+        }
+    } 
 
     componentDidMount(){
         this.grabShopLocations()
@@ -195,7 +174,7 @@ class ShoppingAppStep3 extends Component {
                             <TableRow>
                                 <TableCell align = "center">Product Name</TableCell>
                                 <TableCell align = "center">Quantity</TableCell>
-                                <TableCell align = "center">Purchased?</TableCell>
+                                <TableCell align = "center">Purchased? <br/> <span align = "center"> Yes | No </span> </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -203,6 +182,9 @@ class ShoppingAppStep3 extends Component {
                                 return(
                                <TableRow
                                key = { shopitem.product_id }
+                               style= {{
+                                   backgroundColor: `${this.backgroundStyle(shopitem.status)}`
+                               }} 
                                >
                                 <TableCell  align = "center">
                                     { shopitem.product_name}
@@ -212,22 +194,18 @@ class ShoppingAppStep3 extends Component {
                                     { shopitem.quantity } { shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell> 
 
                                 <TableCell>
-                                    <label>Yes</label>    
-                                <Checkbox>Yes</Checkbox>
-
-                                <Checkbox size = "small">No</Checkbox>
-                                <label>No</label>
+                                <Checkbox onClick = { () => this.handleOnClick(shopitem._id) }>Yes</Checkbox>
+                                <Checkbox onClick = { () => this.togglePopUp() }>No</Checkbox>
                                 </TableCell>
 
                                 </TableRow>
                                 
                                 )
                             })}
-                            
+
                     </TableBody>
                     </Table>
                 </Paper>
-
             </Container>
         )
     }
