@@ -41,7 +41,7 @@ class ModalRequiredPackaging extends Component {
             <Table>
               <TableBody>
                 {packagingNames.map(packagingName => (
-                  <TableRow>
+                  <TableRow key={packagingName}>
                     <TableCell>{packagingName}</TableCell>
                     <TableCell>{packagingCounts[packagingName]}</TableCell>
                   </TableRow>

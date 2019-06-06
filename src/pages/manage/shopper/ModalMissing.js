@@ -10,12 +10,13 @@ import TableFooter from '@material-ui/core/TableFooter'
 import {
   Modal,
   ModalHeader,
-  ModalBody,
+	ModalBody,
+	Form,
 	FormGroup,
 	Input,
 	Container,
+	Button
 } from 'reactstrap'
-import { Button } from '@material-ui/core';
 
 
 class ModalMissing extends Component {
@@ -34,13 +35,26 @@ class ModalMissing extends Component {
     const { shopitemId, productName, location, deliveryDate } = this.props
     this.adminStore.getSubInfo(shopitemId, deliveryDate, location)
 	}
+
+	isDuplicate = (sub) => {
+		const productIds = this.state.selectedSubs.map(selectedSub => selectedSub.product_id)
+		console.log('productIds :', productIds);
+		return productIds.includes(sub.product_id)
+	}
 	
-	handleAvailableCheck = (e) => {
-		console.log('e.target.name :', e.target.name);
-		debugger
-		this.setState({
-			selectedSubs: [...this.state.selectedSubs, e.target.name]
-		})
+	handleAvailableCheck = async(sub, e) => {
+		console.log('e.target.value :', e.target.checked, e.target.value);
+		console.log('sub :', sub);
+		if (e.target.checked && !this.isDuplicate(sub)) {
+			await this.setState({
+				selectedSubs: [...this.state.selectedSubs, sub]
+			})
+		} else {
+			const selectedSubs = this.state.selectedSubs.filter(selectedSub => {
+				return selectedSub.product_id !== sub.product_id
+			})
+			await this.setState({ selectedSubs })
+		}
 		console.log('this.state.selectedSubs :', this.state.selectedSubs);
 	}
 
@@ -124,32 +138,34 @@ class ModalMissing extends Component {
 
     return (
       <Modal isOpen={showModal} toggle={toggleModal} className="modal-missing">
-				<ModalHeader>Substitutes for {productName}</ModalHeader>
-        <ModalBody>
+				<ModalHeader className="pt-4">Substitutes for {productName}</ModalHeader>
+        <ModalBody className="pt-0 pb-2">
 					<Container>
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>Product Name</TableCell>
-									<TableCell>Available?</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{availableSubs.map(sub => (
+					<Form>
+							<Table>
+								<TableHead>
 									<TableRow>
-										<TableCell>{sub.product_name}</TableCell>
-										<TableCell>
-											<FormGroup check>
-												<Input className="ml-sm-1 mb-sm-1" name={sub.product_id} type="checkbox"
-													onChange={this.handleAvailableCheck}
-												/>
-											</FormGroup>
-										</TableCell>
+										<TableCell>Product Name</TableCell>
+										<TableCell>Available?</TableCell>
 									</TableRow>
-								))}
-								<Button onClick={this.handleSubmit}>Submit</Button>
-							</TableBody>
-						</Table>
+								</TableHead>
+								<TableBody>
+									{availableSubs.map((sub, i) => (
+										<TableRow key={i}>
+											<TableCell>{sub.product_name}</TableCell>
+											<TableCell>
+													<Input className="ml-sm-3" name={sub.product_id} type="checkbox"
+														onChange={(e) => this.handleAvailableCheck(sub, e)}
+													/>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						<Container className="mt-4 btn-center">
+							<Button color="primary" onClick={this.handleSubmit}>Submit</Button>
+						</Container>
+						</Form>
 					</Container>
         </ModalBody>
       </Modal>

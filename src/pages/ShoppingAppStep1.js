@@ -58,7 +58,7 @@ class ShoppingAppStep1 extends Component {
       <div className="App">
         <ManageTabs page="shopper" />
         <Title content="Shopping App" />
-        <section className="page-section pt-1">
+        <section className="page-section pt-1 pb-1">
           <Container>
             <Row>
 							<Col md="4" sm="6">
@@ -83,7 +83,7 @@ class ShoppingAppStep1 extends Component {
             </Row>
           </Container>
         </section>
-				<section className="page-section pt-1">
+				<section className="page-section pt-1 pb-3">
           <Container className="btn-center">
             <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
             <ModalRequiredPackaging

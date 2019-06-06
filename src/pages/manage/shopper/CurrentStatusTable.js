@@ -50,8 +50,8 @@ class CurrentStatusTable extends Component {
 						{locationNames.map((locationName) => {
 							const shop = locationStatus[locationName]
 							return (
-								<TableRow>
-									<TableCell>{locationName}</TableCell>
+								<TableRow key={locationName}>
+									<TableCell>{locationName}</TableCell>	
 									<TableCell>{shop.num_checked} / {shop.num_total}</TableCell>
 								</TableRow>
 							)

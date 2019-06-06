@@ -86,7 +86,7 @@ class ShoppingAppTable extends Component {
               {shopitems.map((shopitem, i) => {
                 return (
                   <TableRow
-                    key={shopitem.product_id}
+                    key={shopitem._id}
                     className={`row ${renderStatus(shopitem).toLocaleLowerCase()}`}
                   >
                     <TableCell>{shopitem.product_name}</TableCell>
