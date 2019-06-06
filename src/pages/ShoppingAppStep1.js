@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from '../utils'
 import { Link } from 'react-router-dom'
 import { Row, Col, Container } from 'reactstrap'
 import Title from '../common/page/Title'
@@ -6,16 +7,15 @@ import ManageTabs from './manage/ManageTabs'
 import ShoppingAppTable from './manage/ShoppingAppTable'
 import CurrentStatusTable from './manage/shopper/CurrentStatusTable'
 import CustomDropdown from '../common/CustomDropdown'
-import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging';
-import { Button } from 'reactstrap';
-import { connect } from '../utils'
+import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging'
+import { Button } from 'reactstrap'
 import moment from 'moment'
 
 class ShoppingAppStep1 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      timeframe: null,
+      timeframe: `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`,
 			locations: [],
 			location: null,
       isProductView: false,
@@ -23,37 +23,34 @@ class ShoppingAppStep1 extends Component {
       selectedIndex: null,
       showModal: false
     }
-
 		this.adminStore = this.props.store.admin
 	}
 
 	componentDidMount = () => {
-		this.loadShopLocations();
+		this.loadShopLocations()
 	}
 	
-  loadShopLocations = async() => {
-		const timeframe = 'all'
-		// const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
-		this.adminStore.getShopLocations(timeframe)
-    this.setState({timeframe})
+  loadShopLocations = () => {
+    const {timeframe} = this.state
+    this.adminStore.getShopLocations(timeframe)
 	}
 	
-  loadShopItems = async(location) => {
-		// const timeframe = 'all'
-		const {timeframe} = this.state
-		await this.adminStore.getShopItems(timeframe, location)
+  loadShopItems = (location) => {
+    // note that if shop is not selected, location param sent will be null
+    const {timeframe} = this.state
+		this.adminStore.getShopItems(timeframe, location)
     this.setState({location})
   }
 
-  toggleModal = () => {
+  toggleModal = async() => {
     this.setState(prevState => ({
       showModal: !prevState.showModal
-    }));
+    }))
   }
 
   render() {
-		const { locations, shopitems } = this.adminStore
-		const { timeframe, location } = this.state
+		const {locations} = this.adminStore
+    const {timeframe, location, showModal} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -88,7 +85,7 @@ class ShoppingAppStep1 extends Component {
             <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
             <ModalRequiredPackaging
               toggleModal={this.toggleModal}
-              showModal={this.state.showModal}
+              showModal={showModal}
               timeframe={timeframe}
               location={location}
             />
@@ -96,7 +93,10 @@ class ShoppingAppStep1 extends Component {
 				</section>
 				<section className="page-section pt-1">
           <Container>
-            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} location={location} step="1" />
+            <ShoppingAppTable
+              location={location}
+              step="1"
+            />
           </Container>
         </section>
         <section className="page-section pt-1">
@@ -113,7 +113,7 @@ class ShoppingAppStep1 extends Component {
           </Container>
         </section>
       </div>
-    );
+    )
   }
 }
 

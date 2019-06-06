@@ -6,9 +6,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter'
-import {connect} from '../../utils'
-import {Button, Form, FormGroup, Label, Input} from 'reactstrap'
+import { connect } from '../../utils'
+import { Form, FormGroup, Label, Input } from 'reactstrap'
+import moment from 'moment'
 
 class ShoppingAppTable extends Component {
   constructor(props) {
@@ -16,21 +16,20 @@ class ShoppingAppTable extends Component {
     this.state = {
       showModal: false,
       productName: null,
-      deliveryDate: null,
+      shopitemId: null
     }
     this.step = this.props.step
     this.adminStore = this.props.store.admin
   }
 
-  handleSelectAvailability = async(isAvailable, shopitemId, productName, deliveryDate) => {
+  handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
     if (isAvailable) {
       const status = 'available'
-      await this.adminStore.setShopItemStatus(status, shopitemId)
+      this.adminStore.setShopItemStatus(status, shopitemId)
     } else {
+      this.setState({shopitemId, productName})
       const status = 'missing'
       // await this.adminStore.setShopItemStatus(status, shopitemId)
-      this.setState({ productName })
-      // open step 1 and 2 missing popup
       this.toggleModal()
     }
   }
@@ -42,8 +41,10 @@ class ShoppingAppTable extends Component {
   }
 
   render() {
-    const { shopitems, location } = this.props
-    const { showModal, shopitemId, productName, deliveryDate } = this.state
+    const {shopitems} = this.adminStore
+    const {location} = this.props
+    const {showModal, shopitemId, productName} = this.state
+    const deliveryDate = moment().format('YYYY-MM-DD')
     const renderStatus = (shopitem) => {
       if (this.step === '1') {
         if (shopitem.completed) {
@@ -53,7 +54,6 @@ class ShoppingAppTable extends Component {
         } else {
           return 'incomplete'
         }
-      // } else if (this.step === '2') {
       } else {
         if (shopitem.user_checked) {
           return 'checked'
@@ -87,7 +87,7 @@ class ShoppingAppTable extends Component {
                 return (
                   <TableRow
                     key={shopitem._id}
-                    className={`row ${renderStatus(shopitem).toLocaleLowerCase()}`}
+                    className={`row ${renderStatus(shopitem)}`}
                   >
                     <TableCell>{shopitem.product_name}</TableCell>
                     <TableCell>
@@ -113,7 +113,7 @@ class ShoppingAppTable extends Component {
           </Table>
         </Paper>
       </React.Fragment>
-    )
+    );
   }
 }
 

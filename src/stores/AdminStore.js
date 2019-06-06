@@ -6,6 +6,7 @@ import {
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS,
   API_ADMIN_GET_SUB_INFO,
+  API_ADMIN_UPDATE_DAILY_SUBSTITUTE,
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
   API_ADMIN_SET_SHOP_ITEM_STATUS,
@@ -31,6 +32,7 @@ class AdminStore {
   locationStatus = {}
   packagingCounts = {}
   availableSubs = []
+  dailySubstitute = {}
 
   routes = []
   orders = []
@@ -71,13 +73,20 @@ class AdminStore {
     this.availableSubs = res.data.available_substitutes
   }
 
+  async updateDailySubstitute(delivery_date, shopitem_id, data) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?delivery_date=${delivery_date}`, data)
+    // unsure if response data will be in res.data or res.data.daily_substitute
+    this.dailySubstitute = res.data
+  }
+
   async getLocationStatus(timeframe) {
-    const res = await axios.get(`${API_ADMIN_GET_LOCATION_STATUS}/${timeframe}`)
+    const res = await axios.get(`${API_ADMIN_GET_LOCATION_STATUS}?timeframe=${timeframe}`)
     this.locationStatus = res.data.location_status
   }
 
   async getShopperPackagingInfo(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOPPER_PACKAGING_INFO}?timeframe=${timeframe}&shop_location=${shop_location}`)
+
     this.packagingCounts = res.data.packaging_counts
   }
 
@@ -99,15 +108,9 @@ class AdminStore {
     this.updateManyStoreShopItems(res.data)
   }
 
-  async setShopItemStatus(status, shopitem_id, updateCurrentStatus) {
-    this.loading = true
+  async setShopItemStatus(status, shopitem_id) {
     const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
-    this.loading = false
-    // guessing this is how data will be returned
-    if (res.data.shopItem) {
-      updateCurrentStatus()
-      this.updateStoreShopItem(shopitem_id, res.data)
-    }
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async getRoutes(timeframe, options) {
@@ -219,6 +222,7 @@ decorate(AdminStore, {
   getShopItemsFarms: action,
   getUnavailableShopItems: action,
   getSubInfo: action,
+  updateDailySubstitute: action,
   updateShopItem: action,
   updateShopItemsWarehouseLocations: action,
   setShopItemStatus: action,

@@ -6,7 +6,6 @@ import ManageTabs from './manage/ManageTabs'
 import ShoppingAppTable from './manage/ShoppingAppTable'
 import CurrentStatusTable from './manage/shopper/CurrentStatusTable'
 import CustomDropdown from '../common/CustomDropdown'
-import ModalRequiredPackaging from './manage/shopper/ModalRequiredPackaging';
 import { Button } from 'reactstrap';
 import { connect } from '../utils'
 import moment from 'moment'
@@ -15,39 +14,35 @@ class ShoppingAppStep2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      timeframe: null,
+      timeframe: `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`,
 			locations: [],
 			location: null,
       isProductView: false,
       selectedProduct: {},
 			selectedIndex: null
     }
-
 		this.adminStore = this.props.store.admin
 	}
 
 	componentDidMount = () => {
-		this.loadShopLocations();
+		this.loadShopLocations()
 	}
 	
-  loadShopLocations = async() => {
-    const timeframe = 'all'
-    // const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
+  loadShopLocations = () => {
+		const {timeframe} = this.state
 		this.adminStore.getShopLocations(timeframe)
-		this.setState({timeframe})
-		
 	}
 	
-  loadUnavailableShopItems = async(location) => {
-    const timeframe = 'all'
-    // const {timeframe} = this.state
-		await this.adminStore.getShopItems(timeframe, location)
+  loadUnavailableShopItems = (location) => {
+		// note that if shop is not selected, location param sent will be null
     this.setState({location})
+    const {timeframe} = this.state
+		this.adminStore.getUnavailableShopItems(timeframe, location)
   }
 
   render() {
-		const { locations, shopitems } = this.adminStore
-		const { timeframe, location } = this.state
+		const {locations} = this.adminStore
+		const {timeframe, location} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -77,12 +72,9 @@ class ShoppingAppStep2 extends Component {
             </Row>
           </Container>
         </section>
-				<section>
-					<ModalRequiredPackaging />
-				</section>
 				<section className="page-section pt-1">
           <Container>
-            <ShoppingAppTable {...{timeframe}} shopitems={shopitems} location={location} step="2" />
+            <ShoppingAppTable {...{timeframe}} location={location} step="2" />
           </Container>
         </section>
         <section className="page-section pt-1">
