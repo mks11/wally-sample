@@ -40,7 +40,6 @@ class CartItemOrder extends Component {
       order_id: props.order_id,
       cart_item: props.cart_item,
       weight: "",
-
       quantityUnit:
         props.cart_item.price_unit === "packaging"
           ? props.cart_item.packaging_name
@@ -69,8 +68,6 @@ class CartItemOrder extends Component {
     const orderId = this.state.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.error_reason;
-
-    // let missing = this.state.missing;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -143,14 +140,12 @@ class CartItemOrder extends Component {
 
   toggleErrorModal = e => {
     e.preventDefault();
-    console.log(e);
     this.setState({
       isErrorModalOpen: true
     });
   };
 
   toggleErrorOff = e => {
-    console.log("toogleOff", e);
     this.setState({
       isErrorModalOpen: false
     });
