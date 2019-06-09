@@ -10,7 +10,6 @@ import ShopperTable from './manage/ShopperTable'
 import CustomDropdown from '../common/CustomDropdown'
 import SingleProductView from './manage/shopper/SingleProductView'
 
-import ShopperFulfillmentTable from './manage/ShopperFulfillmentTable'
 
 import {connect} from '../utils'
 import {toJS} from 'mobx';
@@ -171,8 +170,6 @@ class ManageShopper extends Component {
           
         }
 
-        <ShopperFulfillmentTable 
-         />
         
       </div>
     );
