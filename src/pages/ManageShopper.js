@@ -3,6 +3,7 @@ import {
   Row,
   Col,
   Container,
+  Button
 } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
@@ -101,6 +102,12 @@ class ManageShopper extends Component {
     this.setState({selectedProduct: shopitems[selectedIndex + 1], selectedIndex: selectedIndex + 1})
   }
 
+  handleReloadClick = (e) => {
+    e.preventDefault()
+    const { timeframe, location } = this.state
+    this.adminStore.getShopItems(timeframe, location)
+  }
+
   render() {
     if (!this.userStore.user) return null
     const {
@@ -149,6 +156,7 @@ class ManageShopper extends Component {
                 <h2>Shop Location View</h2>
                 <ShopperTable {...{timeframe}} shopitems={shopitems}
                               toggleSingleProductView={this.toggleSingleProductView}/>
+                <Button onClick={this.handleReloadClick}>Reload</Button>
               </Container>
             </section>
           </React.Fragment>

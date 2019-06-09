@@ -373,6 +373,9 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: #263a52;
 }
 
+.shopper-table .btn {
+  font-family: 'Circe';
+}
 
 #btn-hero--submit {
   transition: 0.15s background-color;
@@ -1156,6 +1159,12 @@ body {
 .shopping-app-table .missing {
     background: lightcoral;
 }
+.shopper-table .purchased {
+    background: #00800070;
+}
+.shopper-table .purchased:hover {
+  background: #0080008f;
+}
 
 .shopping-app-table .available,
 .shopping-app-table .checked {
@@ -1262,6 +1271,11 @@ body {
 
 .shopper-location:hover {
   background: #ececec;
+}
+
+.scrollable-table ~ .btn {
+  margin-top: 20px;
+  max-width: 120px;
 }
 
 .fulfillment-page .nav-tabs .nav-link {

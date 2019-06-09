@@ -9,7 +9,6 @@ import {
   API_ADMIN_UPDATE_DAILY_SUBSTITUTE,
   API_ADMIN_UPDATE_SHOP_ITEM,
   API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS,
-  API_ADMIN_SET_SHOP_ITEM_STATUS,
   API_ADMIN_GET_LOCATION_STATUS,
   API_ADMIN_GET_SHOPPER_PACKAGING_INFO,
   API_ADMIN_GET_ROUTES,
@@ -19,6 +18,7 @@ import {
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
   API_ADMIN_POST_BLOG_POST,
+  API_ADMIN_SET_SHOP_ITEM_STATUS
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -97,7 +97,12 @@ class AdminStore {
     if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
     this.updateStoreShopItem(shopitem_id, res.data)
   }
-  
+
+  async setShopItemStatus(timeframe, shopitem_id, status) {
+    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?&status=${status}`)
+    this.updateStoreShopItem(shopitem_id, res.data)
+  }
+
   async updateShopItemQuantity(timeframe, shopitem_id, data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data)
     this.updateStoreShopItem(shopitem_id, res.data)
@@ -106,11 +111,6 @@ class AdminStore {
   async updateShopItemsWarehouseLocations(data) {
     const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS}`, data)
     this.updateManyStoreShopItems(res.data)
-  }
-
-  async setShopItemStatus(status, shopitem_id) {
-    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
-    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async getRoutes(timeframe, options) {
