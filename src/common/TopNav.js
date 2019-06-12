@@ -84,7 +84,7 @@ class TopNav extends Component {
       logModalView('/refer')
       this.modalStore.toggleModal('referral')
     } else {
-      this.handleSignup()
+      this.routing.push("/help/detail/5c3d0df2fc84ff404f3b9eca")
     }
     e.preventDefault()
   }
@@ -92,7 +92,7 @@ class TopNav extends Component {
   render() {
     let storeCredit, name
     let isAdmin = false
-    let bannerText = "Get $30 off your first order with code NOPLASTIC."
+    let bannerText = "Hello, Manhattan! Wally now available in select Manhattan zip codes."
     if (this.userStore.user) {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
