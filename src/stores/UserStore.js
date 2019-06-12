@@ -59,12 +59,14 @@ class UserStore {
     let zip = null
     zip = localStorage.getItem('zip')
     if (!zip) {
-      if (user.addresses) {
+      if (user.addresses.length > 0) {
         for (const address of user.addresses) {
           if (address.address_id === user.preferred_address) {
             localStorage.setItem('zip', JSON.stringify(address.zip))
           }
         }
+      } else {
+        if (user.signup_zip) localStorage.setItem('zip', JSON.stringify(user.signup_zip))
       }
     }
   }
