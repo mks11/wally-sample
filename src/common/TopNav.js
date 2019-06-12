@@ -140,7 +140,7 @@ class TopNav extends Component {
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           //
@@ -150,7 +150,7 @@ class TopNav extends Component {
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           :
