@@ -59,6 +59,7 @@ class SignupModal extends Component {
         user.setUserData(data.user)
         user.setToken(data.token)
         checkout.getCurrentCart(user.getHeaderAuth(),  user.getDeliveryParams())
+        checkout.getDeliveryTimes()
         this.setState({ signupRequest: false })
         this.props.switchTo('welcome')
         user.giftCardPromo = null
