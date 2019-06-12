@@ -27,6 +27,7 @@ class ZipModal extends Component {
     zip.selectedZip = zipValue
     logEvent({ category: "Signup", action: "SubmitZip", label: zipValue })
     if(zip.validateZipCode(zipValue)) {
+      zip.setZip(zipValue);
       this.props.switchTo('signup')
     } else {
       this.props.switchTo('invalidzip')

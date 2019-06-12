@@ -84,7 +84,7 @@ class TopNav extends Component {
       logModalView('/refer')
       this.modalStore.toggleModal('referral')
     } else {
-      this.handleSignup()
+      this.routing.push("/help/detail/5c3d0df2fc84ff404f3b9eca")
     }
     e.preventDefault()
   }
@@ -93,7 +93,7 @@ class TopNav extends Component {
     let storeCredit, name
     let isAdmin = false
     let isTwsOps = false
-    let bannerText = "Get $30 off your first order with code NOPLASTIC."
+    let bannerText = "Hello, Manhattan! 🎉 Wally now available in select Manhattan zip codes, click for details."
     if (this.userStore.user) {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
@@ -142,7 +142,7 @@ class TopNav extends Component {
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           //
@@ -152,7 +152,7 @@ class TopNav extends Component {
                             <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
                             <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Get 15% Off</a></li>
+                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
                             <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                           </React.Fragment>
                           :

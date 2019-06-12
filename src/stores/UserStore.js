@@ -53,8 +53,22 @@ class UserStore {
   }
 
   setUserData(user) {
+    console.log("setting user");
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
+    let zip = null
+    zip = localStorage.getItem('zip')
+    if (!zip) {
+      if (user.addresses.length > 0) {
+        for (const address of user.addresses) {
+          if (address.address_id === user.preferred_address) {
+            localStorage.setItem('zip', JSON.stringify(address.zip))
+          }
+        }
+      } else {
+        if (user.signup_zip) localStorage.setItem('zip', JSON.stringify(user.signup_zip))
+      }
+    }
   }
 
   setToken(token) {
@@ -177,6 +191,7 @@ class UserStore {
     
     let diff = addressOldFilter.concat(addressNewFilter)
     this.selectedDeliveryAddress = diff[0]
+    localStorage.setItem('zip', JSON.stringify(this.selectedDeliveryAddress.zip))
   }
 
   readStorage() {
@@ -204,6 +219,7 @@ class UserStore {
       address: this.selectedDeliveryAddress,
       time: this.selectedDeliveryTime
     }
+    if (data.address) localStorage.setItem('zip', JSON.stringify(data.address.zip))
 
     localStorage.setItem('delivery', JSON.stringify(data))
   }
@@ -272,6 +288,7 @@ class UserStore {
     localStorage.removeItem('token')
     localStorage.removeItem('delivery')
     localStorage.removeItem('cart')
+    localStorage.removeItem('zip')
     this.token = ''
     this.status = false
     this.user = null
@@ -318,6 +335,7 @@ class UserStore {
 
   setDeliveryAddress(data) {
     this.selectedDeliveryAddress = data
+    localStorage.setItem('zip', data.zip)
     this.setDeliveryData()
   }
 
