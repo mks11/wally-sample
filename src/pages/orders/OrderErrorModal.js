@@ -62,7 +62,7 @@ class OrderErrorModal extends Component {
       <div className="error">
         <div className="backdrop">
           <Paper className="error-modal" elevation={3}>
-            <button className="modal-button" onClick={this.props.onClose}>
+            <button className="error-modal-button" onClick={this.props.onClose}>
               x
             </button>
             <h2 className="error-header">{cart_item.product_name} Error</h2>

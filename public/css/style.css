@@ -2641,6 +2641,10 @@ color:#6e8692
   font-size: 18px;
 }
 
+.error-modal-button {
+  background: #b7b7b7;
+}
+
 .error-code{
   cursor: pointer;
 }
