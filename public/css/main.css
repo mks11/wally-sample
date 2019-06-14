@@ -1156,7 +1156,7 @@ body {
 }
 
 .shopper-table .missing,
-.shopping-app-table .missing {
+.shopping-app-table .unavailable {
     background: lightcoral;
 }
 .shopper-table .purchased {

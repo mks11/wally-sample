@@ -14,7 +14,7 @@ class ShoppingAppStep2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      timeframe: `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`,
+      timeframe: null,
 			locations: [],
 			location: null,
       isProductView: false,
@@ -26,11 +26,16 @@ class ShoppingAppStep2 extends Component {
 
 	componentDidMount = () => {
 		this.loadShopLocations()
-	}
+  }
+  
+  componentWillUnmount = () => {
+    this.adminStore.shopitems = []
+  }
 	
   loadShopLocations = () => {
-		const {timeframe} = this.state
-		this.adminStore.getShopLocations(timeframe)
+    const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`;
+    this.adminStore.getShopLocations(timeframe)
+    this.setState({timeframe})
 	}
 	
   loadUnavailableShopItems = (location) => {

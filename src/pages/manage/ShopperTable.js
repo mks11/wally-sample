@@ -43,7 +43,7 @@ class ShopperTable extends Component {
     const status = this.state[shopitem_id];
     console.log(shopitem_id);
     console.log(status);
-    this.adminStore.setShopItemStatus(timeframe, shopitem_id, status);
+    this.adminStore.setShopItemStatus(shopitem_id, status);
   }
 
   sortByStatus = (a, b) => {

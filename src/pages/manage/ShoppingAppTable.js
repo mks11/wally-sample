@@ -25,11 +25,11 @@ class ShoppingAppTable extends Component {
   handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
     if (isAvailable) {
       const status = 'available'
-      this.adminStore.setShopItemStatus(status, shopitemId)
+      this.adminStore.setShopItemStatus(shopitemId, status)
     } else {
       this.setState({shopitemId, productName})
       const status = 'missing'
-      // await this.adminStore.setShopItemStatus(status, shopitemId)
+      await this.adminStore.setShopItemStatus(shopitemId, status)
       this.toggleModal()
     }
   }
@@ -45,23 +45,6 @@ class ShoppingAppTable extends Component {
     const {location} = this.props
     const {showModal, shopitemId, productName} = this.state
     const deliveryDate = moment().format('YYYY-MM-DD')
-    const renderStatus = (shopitem) => {
-      if (this.step === '1') {
-        if (shopitem.completed) {
-          return 'completed'
-        } else if (shopitem.missing) {
-          return 'missing'
-        } else {
-          return 'incomplete'
-        }
-      } else {
-        if (shopitem.user_checked) {
-          return 'checked'
-        } else if (shopitem.user_checked === false) {
-          return 'not-checked'
-        }
-      }
-    }
 
     return (
       <React.Fragment>
@@ -84,24 +67,33 @@ class ShoppingAppTable extends Component {
             </TableHead>
             <TableBody>
               {shopitems.map((shopitem, i) => {
+                const {
+                  _id,
+                  status,
+                  product_name,
+                  quantity,
+                  unit_type,
+                  packaging_name,
+                  delivery_date
+                } = shopitem
                 return (
                   <TableRow
-                    key={shopitem._id}
-                    className={`row ${renderStatus(shopitem)}`}
+                    key={_id}
+                    className={`row ${status}`}
                   >
-                    <TableCell>{shopitem.product_name}</TableCell>
+                    <TableCell>{product_name}</TableCell>
                     <TableCell>
-                      {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell>
+                      {quantity} {unit_type === "packaging" ? packaging_name : unit_type }</TableCell>
                     <TableCell>
                       <Form inline>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="yesSelect"
-                          onChange={() => this.handleSelectAvailability(true, shopitem._id)} />
+                          <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
+                          onChange={() => this.handleSelectAvailability(true, _id)} />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
                         </FormGroup>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="noSelect"
-                          onChange={() => this.handleSelectAvailability(false, shopitem._id, shopitem.product_name, shopitem.delivery_date)} />
+                          <Input type="radio" name="select" id="noSelect" checked={status === 'unavailable'}
+                          onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)} />
                           <Label className="ml-sm-1" for="noSelect" check>No</Label>
                         </FormGroup>
                       </Form>
