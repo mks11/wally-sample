@@ -69,7 +69,7 @@ class AdminStore {
   }
   
   async getSubInfo(shopitem_id, delivery_date, location) {
-    const res = await axios.get(`${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}&location={location}`)
+    const res = await axios.get(`${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}&location=${location}`)
     this.availableSubs = res.data.available_substitutes
   }
 
@@ -198,6 +198,18 @@ class AdminStore {
       const id = item.product_id
       this.updateStoreShopItem(id, item)
     }
+  }
+
+  clearStoreShopItems() {
+    this.shopitems = []
+  }
+
+  clearStoreLocations() {
+    this.locations = []
+  }
+
+  clearStoreSubs() {
+    this.availableSubs = []
   }
 }
 
