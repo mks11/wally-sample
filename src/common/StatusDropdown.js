@@ -56,7 +56,7 @@ class StatusDropdown extends PureComponent {
           {selectedStatus}
         </DropdownToggle>
         <DropdownMenu>
-          {statusOptions.map(statusItem => {
+          {statusOptions && statusOptions.map(statusItem => {
             return (
               <DropdownItem
                 key={statusItem}
