@@ -21,29 +21,18 @@ class ModalMissing extends Component {
 
 		this.state = {
 			selectedSubs: [],
-			checked: {}
+			checked: {},
 		}
 
 		this.adminStore = props.store.admin
 		this.modalStore = props.store.modal
 	}
-
-  componentDidMount = () => {
-    this.loadSubInfo()
-  }
-
-  loadSubInfo = () => {
-    const {shopitemId, location, deliveryDate} = this.props
-    this.adminStore.getSubInfo(shopitemId, deliveryDate, location)
-	}
-
-	isDuplicate = (sub) => {
-		const productIds = this.state.selectedSubs.map(selectedSub => selectedSub.product_id)
-		return productIds.includes(sub.product_id)
+	
+	componentWillUnmount = () => {
+		this.adminStore.clearStoreSubs()
 	}
 	
 	handleAvailableCheck = (sub, i) => {
-		const {isDuplicate} = this
 		const newChecked = {
 			...this.state.checked,
 			[i]: !this.state.checked[i]
@@ -51,7 +40,7 @@ class ModalMissing extends Component {
 		this.setState({
 			checked: newChecked
 		})
-		if (newChecked[i] && !isDuplicate(sub)) {
+		if (newChecked[i]) {
 			this.setState({
 				selectedSubs: [...this.state.selectedSubs, sub]
 			})
@@ -63,19 +52,20 @@ class ModalMissing extends Component {
 		}
 	}
 
-	handleSubmit = async() => {
+	handleSubmit = () => {
 		const {deliveryDate, shopitemId} = this.props
 		const {selectedSubs} = this.state
-		await this.adminStore.updateDailySubstitute(deliveryDate, shopitemId, selectedSubs)
+		this.adminStore.updateDailySubstitute(deliveryDate, shopitemId, selectedSubs)
 		this.modalStore.toggleMissing()
 	}
 
   render() {
-		const {productName} = this.props
 		const {missing, toggleMissing} = this.modalStore
-    const {availableSubs} = this.adminStore
+		const {availableSubs} = this.adminStore
+		const {productName} = this.props
+
     return (
-      <Modal isOpen={missing}>
+      <Modal isOpen={missing} className="modal-missing">
 				<button className="btn-icon btn-icon--close" onClick={toggleMissing}></button>
 				<ModalHeader className="pt-4">Substitutes for {productName}</ModalHeader>
         <ModalBody className="pt-0 pb-2">

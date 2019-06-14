@@ -14,21 +14,6 @@ class ModalRequiredPackaging extends Component {
     this.modalStore = props.store.modal
   }
 
-  componentDidMount = () => {
-    this.loadShopperPackagingInfo()
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.location !== this.props.location) {
-      this.loadShopperPackagingInfo()
-    }
-  }
-
-  loadShopperPackagingInfo = () => {
-    const {timeframe, location} = this.props
-    this.adminStore.getShopperPackagingInfo(timeframe, location)
-  }
-
   render() {
     const {packagingCounts} = this.adminStore
     const {packaging, togglePackaging} = this.modalStore

@@ -33,8 +33,8 @@ class ShoppingAppStep1 extends Component {
   }
   
   componentWillUnmount = () => {
-    this.adminStore.shopitems = []
-    this.adminStore.locations = []
+    this.adminStore.clearStoreShopItems()
+    this.adminStore.clearStoreLocations()
   }
 	
   loadShopLocations = () => {
@@ -47,6 +47,7 @@ class ShoppingAppStep1 extends Component {
     // note that if shop is not selected, location param sent will be null
     const {timeframe} = this.state
     this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getShopperPackagingInfo(timeframe, location)
     this.setState({location})
   }
 

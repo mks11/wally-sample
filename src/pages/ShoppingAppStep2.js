@@ -12,6 +12,7 @@ import moment from 'moment'
 class ShoppingAppStep2 extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       timeframe: null,
 			locations: [],
@@ -20,6 +21,7 @@ class ShoppingAppStep2 extends Component {
       selectedProduct: {},
 			selectedIndex: null
     }
+
 		this.adminStore = this.props.store.admin
 	}
 
@@ -28,8 +30,8 @@ class ShoppingAppStep2 extends Component {
   }
   
   componentWillUnmount = () => {
-    this.adminStore.shopitems = []
-    this.adminStore.locations = []
+    this.adminStore.clearStoreShopItems()
+    this.adminStore.clearStoreLocations()
   }
 	
   loadShopLocations = () => {
