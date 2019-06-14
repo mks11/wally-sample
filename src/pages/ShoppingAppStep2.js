@@ -4,7 +4,6 @@ import { Row, Col, Container } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
 import ShoppingAppTable from './manage/ShoppingAppTable'
-import CurrentStatusTable from './manage/shopper/CurrentStatusTable'
 import CustomDropdown from '../common/CustomDropdown'
 import { Button } from 'reactstrap';
 import { connect } from '../utils'
@@ -30,6 +29,7 @@ class ShoppingAppStep2 extends Component {
   
   componentWillUnmount = () => {
     this.adminStore.shopitems = []
+    this.adminStore.locations = []
   }
 	
   loadShopLocations = () => {
@@ -80,12 +80,6 @@ class ShoppingAppStep2 extends Component {
 				<section className="page-section pt-1">
           <Container>
             <ShoppingAppTable {...{timeframe}} location={location} step="2" />
-          </Container>
-        </section>
-        <section className="page-section pt-1">
-          <Container>
-            <h4>Current Status</h4>
-            <CurrentStatusTable />
           </Container>
         </section>
         <section className="page-section pt-1">
