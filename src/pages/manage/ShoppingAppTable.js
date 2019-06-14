@@ -13,13 +13,15 @@ import moment from 'moment'
 class ShoppingAppTable extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      showModal: false,
       productName: null,
-      shopitemId: null
+      shopitemId: null,
     }
+
     this.step = this.props.step
-    this.adminStore = this.props.store.admin
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
   }
 
   handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
@@ -30,27 +32,20 @@ class ShoppingAppTable extends Component {
       this.setState({shopitemId, productName})
       const status = 'missing'
       await this.adminStore.setShopItemStatus(shopitemId, status)
-      this.toggleModal()
-    }
-  }
+      this.modalStore.toggleMissing()
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }));
+    }
   }
 
   render() {
     const {shopitems} = this.adminStore
     const {location} = this.props
-    const {showModal, shopitemId, productName} = this.state
+    const {shopitemId, productName} = this.state
     const deliveryDate = moment().format('YYYY-MM-DD')
 
     return (
       <React.Fragment>
         <ModalMissing
-          toggleModal={this.toggleModal}
-          showModal={showModal}
           shopitemId={shopitemId}
           productName={productName}
           location={location}

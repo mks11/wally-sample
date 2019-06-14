@@ -18,11 +18,14 @@ import { connect } from '../../../utils'
 class ModalMissing extends Component {
 	constructor(props) {
 		super(props)
+
 		this.state = {
 			selectedSubs: [],
 			checked: {}
 		}
-		this.adminStore = this.props.store.admin
+
+		this.adminStore = props.store.admin
+		this.modalStore = props.store.modal
 	}
 
   componentDidMount = () => {
@@ -61,17 +64,19 @@ class ModalMissing extends Component {
 	}
 
 	handleSubmit = async() => {
-		const {deliveryDate, shopitemId, toggleModal} = this.props
+		const {deliveryDate, shopitemId} = this.props
 		const {selectedSubs} = this.state
 		await this.adminStore.updateDailySubstitute(deliveryDate, shopitemId, selectedSubs)
-		toggleModal()
+		this.modalStore.toggleMissing()
 	}
 
   render() {
-    const {showModal, toggleModal, productName} = this.props
+		const {productName} = this.props
+		const {missing, toggleMissing} = this.modalStore
     const {availableSubs} = this.adminStore
     return (
-      <Modal isOpen={showModal} toggle={toggleModal} className="modal-missing">
+      <Modal isOpen={missing}>
+				<button className="btn-icon btn-icon--close" onClick={toggleMissing}></button>
 				<ModalHeader className="pt-4">Substitutes for {productName}</ModalHeader>
         <ModalBody className="pt-0 pb-2">
 					<Container>

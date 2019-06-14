@@ -14,6 +14,7 @@ import moment from 'moment'
 class ShoppingAppStep1 extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       timeframe: null,
 			locations: [],
@@ -21,9 +22,10 @@ class ShoppingAppStep1 extends Component {
       isProductView: false,
       selectedProduct: {},
       selectedIndex: null,
-      showModal: false
     }
-		this.adminStore = this.props.store.admin
+
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
 	}
 
 	componentDidMount = () => {
@@ -32,6 +34,7 @@ class ShoppingAppStep1 extends Component {
   
   componentWillUnmount = () => {
     this.adminStore.shopitems = []
+    this.adminStore.locations = []
   }
 	
   loadShopLocations = () => {
@@ -47,15 +50,10 @@ class ShoppingAppStep1 extends Component {
     this.setState({location})
   }
 
-  toggleModal = async() => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }))
-  }
-
   render() {
-		const {locations} = this.adminStore
-    const {timeframe, location, showModal} = this.state
+    const {locations} = this.adminStore
+    const {togglePackaging} = this.modalStore
+    const {timeframe, location} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -87,10 +85,8 @@ class ShoppingAppStep1 extends Component {
         </section>
 				<section className="page-section pt-1 pb-3">
           <Container className="btn-center">
-            <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
+            <Button color="link" onClick={togglePackaging}>Packaging Info</Button>
             <ModalRequiredPackaging
-              toggleModal={this.toggleModal}
-              showModal={showModal}
               timeframe={timeframe}
               location={location}
             />
