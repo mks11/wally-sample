@@ -33,10 +33,15 @@ class ShoppingAppStep1 extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         const user = this.userStore.user
-        if (!status || user.type !== 'admin' || user.type !== 'tws-ops') {
-          this.props.store.routing.push('/')
-        } else {
+        if (
+          status &&
+          (user.type === 'admin' ||
+          user.type === 'super-admin' ||
+          user.type === 'tws-ops')
+        ) {
           this.loadShopLocations()
+        } else {
+          this.props.store.routing.push('/')
         }
       })
       .catch((error) => {
