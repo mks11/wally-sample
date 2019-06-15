@@ -60,11 +60,13 @@ class ManageOrders extends Component {
 
   loadData() {
     const date = new Date();
+    console.log(date);
     this.adminStore.getTimeFrames(date);
   }
 
   loadOrders = () => {
     const { route, timeframe } = this.state;
+    console.log(timeframe);
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
   };

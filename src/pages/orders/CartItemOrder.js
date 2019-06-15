@@ -41,7 +41,7 @@ class CartItemOrder extends Component {
       cart_item: props.cart_item,
       weight: "",
       quantityUnit:
-        props.cart_item.price_unit === "packaging"
+        props.cart_item.unit_type === "packaging"
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
       missing: props.cart_item.missing,
@@ -162,7 +162,7 @@ class CartItemOrder extends Component {
       missing,
       error
     } = this.state;
-
+    console.log(cart_item);
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
@@ -210,7 +210,7 @@ class CartItemOrder extends Component {
             cart_item.unit_type == "oz" ||
             cart_item.product_shop === "TWS" ? (
               <Input
-                placeholder="Enter weight..."
+                placeholder={cart_item.weight}
                 value={weight}
                 type="number"
                 name="weight"

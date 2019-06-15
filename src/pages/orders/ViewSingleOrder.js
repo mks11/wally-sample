@@ -135,6 +135,7 @@ class ViewSingleOrder extends Component {
       return acc;
     }, []);
     const hideRow = { display: "none" };
+    console.log(selectedOrder.packaging_used);
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -195,19 +196,12 @@ class ViewSingleOrder extends Component {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Input
-                        placeholder="Enter Quantity"
-                        value={packaging.type}
-                        type={"number"}
-                        onChange={e => this.onChangePackaging(e, i)}
-                      />
+                      {packaging.quantity > 0 ? packaging.quantity : 0}
                     </TableCell>
                   </TableRow>
                 ) : (
                   <TableRow style={hideRow} key={i}>
-                    <TableCell>
-                      <Input />
-                    </TableCell>
+                    <TableCell />
                   </TableRow>
                 )
               )}
