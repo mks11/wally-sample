@@ -90,8 +90,8 @@ class TopNav extends Component {
   }
 
   render() {
-    let storeCredit, name
-    let isAdmin = false
+    let storeCredit, name;
+    let isAdmin = false;
     let bannerText = "Get $30 off your first order with code NOPLASTIC."
     if (this.userStore.user) {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
@@ -216,7 +216,7 @@ class TopNav extends Component {
                               <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                 <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
                                     <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopping App</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
+                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/main" className="dropdown-item">Packaging App</Link>
                                     <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                               </div>
                             </div>
@@ -276,15 +276,8 @@ class TopNav extends Component {
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                      <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
-                                      < Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopping App</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/main" className="dropdown-item">Packaging App</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>

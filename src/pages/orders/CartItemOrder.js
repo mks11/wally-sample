@@ -119,6 +119,7 @@ class CartItemOrder extends Component {
     this.setState({
       missing: !missing
     });
+    this.toggleMissingModal();
   };
 
   makePatchAPICallError = async childState => {

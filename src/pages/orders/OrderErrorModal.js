@@ -71,7 +71,7 @@ class OrderErrorModal extends Component {
               <TableBody>
                 <TableRow>
                   <TableCell>
-                    <p>Too lttle:</p>
+                    <p>Too little:</p>
                   </TableCell>
                   <TableCell>
                     <Input
