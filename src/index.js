@@ -30,8 +30,8 @@ const browserHistory = createBrowserHistory()
 
 store.routing = routingStore
 
-// ReactGA.initialize('UA-128193575-1', { debug: true });
-ReactGA.initialize('UA-128193575-1');
+ReactGA.initialize('UA-128193575-1', { debug: true });
+// ReactGA.initialize('UA-128193575-1');
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
 

@@ -783,6 +783,7 @@ module.exports = {
   "/api/admin/shopping/locations": getShopLocations,
   "/api/admin/shopping/shopitems": getShopItems,
   "/api/admin/shopping/shopitems/farms": getShopItemsFarms,
+  "/api/admin/shopping/shopitem/status/:shopitem_id": setShopItemStatus,
   "/api/admin/shopping/shopitem/:id": updateShopItem,
   "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
   "/api/admin/fulfillment/shopitem/warehouse-location": updateShopItemsWarehouseLocations,
