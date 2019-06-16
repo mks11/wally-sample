@@ -207,8 +207,7 @@ class TopNav extends Component {
               <div className="col-auto ml-auto d-none d-md-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
-                    { this.userStore.status ?
-                      isAdmin ? (
+                    { this.userStore.status && isAdmin && (
                         <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
@@ -229,7 +228,9 @@ class TopNav extends Component {
                             </ClickOutside>
                           </div>
                         </li>
-                      ) : isTwsOps ? (
+                      )
+                    }
+                    { this.userStore.status && isTwsOps && (
                         <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
@@ -245,7 +246,9 @@ class TopNav extends Component {
                             </ClickOutside>
                           </div>
                         </li>
-                      ) : (
+                      )
+                    }
+                    { this.userStore.status && !isAdmin && !isTwsOps && (
                         <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                           <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                             <div className="btn-group">
@@ -268,16 +271,17 @@ class TopNav extends Component {
                             </div>
                           </ClickOutside>
                         </div>
-                      ) : (
-                        <React.Fragment>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
-                          <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
-                        </React.Fragment>
                       )
                     }
+                    { !this.userStore.status && (
+                      <React.Fragment>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
+                      </React.Fragment>
+                    )}
                   </ul>
                 </nav>
               </div>
