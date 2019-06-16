@@ -149,7 +149,7 @@ class ViewSingleOrder extends Component {
               <Typography>Close</Typography>
             </Button>
           </div>
-          <h2>{selectedOrder._id}(Placeholder for order letter)</h2>
+          <h2>Order #{selectedOrder.order_letter}</h2>
           <hr />
           <Paper elevation={1} className={"scrollable-table"}>
             <Table className={"packaging-table"} padding={"dense"}>

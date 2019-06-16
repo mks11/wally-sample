@@ -45,7 +45,7 @@ class ManageOrders extends Component {
       .getStatus(true)
       .then(status => {
         const user = this.userStore.user;
-        if (!status || user.type !== "admin") {
+        if (!status || !(["admin", "super-admin", "tws-ops"].includes(user.type))) {
           this.props.store.routing.push("/");
         } else {
           this.loadData();
@@ -139,7 +139,7 @@ class ManageOrders extends Component {
                               }
                             >
                               <TableCell className={order.order_letter}>
-                                A
+                                {order.order_letter ? order.order_letter : ""}
                               </TableCell>
                               <TableCell>{order._id}</TableCell>
                               <TableCell className={"text-capitalize"}>
