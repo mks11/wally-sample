@@ -76,7 +76,7 @@ class ShopperTable extends Component {
       console.log('shopitem :', shopitem);
               return (
                 <TableRow
-                  key={shopitem.inventory_id}
+                  key={shopitem._id}
                   className={`row ${shopitem.status} `}
                   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
