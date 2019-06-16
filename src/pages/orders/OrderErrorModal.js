@@ -113,7 +113,7 @@ class OrderErrorModal extends Component {
                     />
                   </TableCell>
                   <TableCell>
-                    {cart_item.customer_quantity} {quantityUnit}
+                    {cart_item.final_quantity} {quantityUnit}
                   </TableCell>
                 </TableRow>
               </TableBody>
