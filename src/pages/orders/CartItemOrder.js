@@ -67,7 +67,8 @@ class CartItemOrder extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    let errorReason = cartItem.error_reason;
+    let errorReason = cartItem.product_error_reason;
+    console.log();
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -78,11 +79,10 @@ class CartItemOrder extends Component {
         product_name: cartItem.product_name,
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
-        product_price: cartItem.product_price / 100,
         final_quantity: cartItem.final_quantity,
         missing: missing,
         weight: weight,
-        error_reason: errorReason
+        product_error_reason: errorReason
       })
     })
       .then(response => console.log(response))
@@ -123,14 +123,18 @@ class CartItemOrder extends Component {
   };
 
   makePatchAPICallError = async childState => {
+    console.log(childState);
     const error = {
-      error_reason: childState.ugly ? "ugly" : "tooLittle",
+      product_error_reason: childState.ugly ? "ugly" : "tooLittle",
       final_quantity: childState.cart_item.final_quantity
     };
 
     this.setState(
       {
-        cart_item: { ...this.state.cart_item, ...console.error() }
+        cart_item: {
+          ...this.state.cart_item,
+          product_error_reason: error.product_error_reason
+        }
       },
       async () => {
         await this.handleItemUpdate();

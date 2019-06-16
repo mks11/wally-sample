@@ -25,8 +25,12 @@ class OrderErrorModal extends Component {
     this.state = {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
-      tooLittle: true,
-      ugly: false
+      tooLittle:
+        props.cart_item.product_error_reason == undefined ||
+        props.cart_item.product_error_reason == "tooLittle"
+          ? true
+          : false,
+      ugly: props.cart_item.product_error_reason == "ugly" ? true : false
     };
   }
   onLittleChange = e => {
