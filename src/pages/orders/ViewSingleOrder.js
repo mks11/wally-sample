@@ -63,6 +63,7 @@ class ViewSingleOrder extends Component {
 
   onChangePackaging = (e, i) => {
     const packagings = [...this.state.packagings];
+    console.log(e)
     packagings[i] = { ...packagings[i], quantity: e.target.value };
     this.setState({ packagings });
   };
@@ -196,12 +197,21 @@ class ViewSingleOrder extends Component {
                       )}
                     </TableCell>
                     <TableCell>
-                      {packaging.quantity > 0 ? packaging.quantity : 0}
+                      <Input
+                        placeholder={
+                          packaging.quantity > 0 ? packaging.quantity : 0
+                        }
+                        value={packaging.quantity}
+                        type={"number"}
+                        onChange={e => this.onChangePackaging(e, i)}
+                      />
                     </TableCell>
                   </TableRow>
                 ) : (
                   <TableRow style={hideRow} key={i}>
-                    <TableCell />
+                    <TableCell>
+                      <Input />
+                    </TableCell>
                   </TableRow>
                 )
               )}

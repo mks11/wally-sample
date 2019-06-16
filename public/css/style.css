@@ -2651,8 +2651,15 @@ color:#6e8692
 
 .error-modal{
   max-width: 600px;
-      min-height: 200px;
-      margin: 0 auto;
+  min-height: 200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 400px){
+  .error-modal{
+    width: 320px;
+    margin: 0 -20px;
+  }
 }
 
 .error-header {
