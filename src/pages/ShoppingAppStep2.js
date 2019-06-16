@@ -22,11 +22,23 @@ class ShoppingAppStep2 extends Component {
 			selectedIndex: null
     }
 
+    this.userStore = props.store.user
 		this.adminStore = this.props.store.admin
 	}
 
 	componentDidMount = () => {
-		this.loadShopLocations()
+    this.userStore.getStatus(true)
+    .then((status) => {
+      const user = this.userStore.user
+      if (!status || user.type !== 'admin' || user.type !== 'tws-ops') {
+        this.props.store.routing.push('/')
+      } else {
+        this.loadShopLocations()
+      }
+    })
+    .catch((error) => {
+      this.props.store.routing.push('/')
+    })
   }
   
   componentWillUnmount = () => {
