@@ -34,9 +34,9 @@ class ViewSingleOrder extends Component {
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
-      packagings: props.packagings.map(packaging => {
-        return { ...packaging, quantity: 0 };
-      }),
+      // packagings: props.packagings.map(packaging => {
+      //   return { ...packaging, quantity: 0 };
+      // }),
       packagings: props.packagings.map(packaging => {
         return { ...packaging };
       }),
@@ -62,10 +62,14 @@ class ViewSingleOrder extends Component {
   };
 
   onChangePackaging = (e, i) => {
-    const packagings = [...this.state.packagings];
-    console.log(e)
-    packagings[i] = { ...packagings[i], quantity: e.target.value };
-    this.setState({ packagings });
+    let packagings = this.state.selectedOrder.packaging_used.map((data, index)=> {
+      if(index == i){
+        data =  { ...data, quantity: e.target.value };
+      }
+      return data
+    });
+    console.log(e.target.value)
+    this.setState({ selectedOrder: {...this.state.selectedOrder, packaging_used: packagings} });
   };
 
   toggleConfirmModal = () => {
@@ -94,6 +98,7 @@ class ViewSingleOrder extends Component {
   handleSubmit = () => {
     const { packagings, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
+
     const item_quantities = cart_items.map(item => {
       return {
         product_id: item.product_id,
@@ -128,15 +133,16 @@ class ViewSingleOrder extends Component {
       originalSubTotal,
       currentSubTotal
     } = this.state;
-    const packagingArr = packagings.reduce((acc, packaging) => {
-      const pUsed = packagingUsed.find(e => e.type === packaging.type);
-      if (pUsed)
-        acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
-      else acc[packaging.type] = { ...packaging, quantity: 0 };
-      return acc;
-    }, []);
+    // const packagingArr = packagings.reduce((acc, packaging) => {
+    //   const pUsed = packagingUsed.find(e => e.type === packaging.type);
+    //   if (pUsed)
+    //     acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
+    //   else acc[packaging.type] = { ...packaging, quantity: 0 };
+    //   return acc;
+    // }, []);
+    console.log(packagings)
     const hideRow = { display: "none" };
-    console.log(selectedOrder.packaging_used);
+    console.log(selectedOrder);
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -198,10 +204,9 @@ class ViewSingleOrder extends Component {
                     </TableCell>
                     <TableCell>
                       <Input
-                        placeholder={
-                          packaging.quantity > 0 ? packaging.quantity : 0
-                        }
-                        value={packaging.quantity}
+                        placeholder={packaging.quantity || 0}
+                        name="packaging quantity"
+                        value={packaging.quantity || 0}
                         type={"number"}
                         onChange={e => this.onChangePackaging(e, i)}
                       />
