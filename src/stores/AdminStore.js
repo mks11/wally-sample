@@ -120,14 +120,14 @@ class AdminStore {
   }
 
   async getRouteOrders(id, timeframe, options) {
-    timeframe = new Date();
-    let dd = String(timeframe.getDate()).padStart(2, '0');
-    let mm = String(timeframe.getMonth() + 1).padStart(2, '0');
-    let yyyy = timeframe.getFullYear();
-    timeframe = yyyy + "-" +mm + "-" + dd
+    // timeframe = new Date();
+    // let dd = String(timeframe.getDate()).padStart(2, '0');
+    // let mm = String(timeframe.getMonth() + 1).padStart(2, '0');
+    // let yyyy = timeframe.getFullYear();
+    // timeframe = yyyy + "-" +mm + "-" + dd
 
-    console.log(timeframe)
-    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ''}/%2:00-8:00PM`, options)
+
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ''}`, options)
     this.orders = res.data
   }
 
