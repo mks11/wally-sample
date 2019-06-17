@@ -123,7 +123,7 @@ class CartItemOrder extends Component {
 
   makePatchAPICallError = async childState => {
     const error = {
-      product_error_reason: childState.ugly ? "ugly" : "tooLittle",
+      product_error_reason: childState.ugly ? "ugly" : "toolittle",
       final_quantity: childState.cart_item.final_quantity
     };
 

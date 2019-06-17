@@ -25,27 +25,27 @@ class OrderErrorModal extends Component {
     this.state = {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
-      tooLittle:
+      toolittle:
         props.cart_item.product_error_reason == undefined ||
-        props.cart_item.product_error_reason == "tooLittle"
+        props.cart_item.product_error_reason == "toolittle"
           ? true
           : false,
       ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
     };
   }
   onLittleChange = e => {
-    const { ugly, tooLittle } = this.state;
+    const { ugly, toolittle } = this.state;
     this.setState({
       ugly: false,
-      tooLittle: true
+      toolittle: true
     });
   };
 
   onUglyChange = e => {
-    const { ugly, tooLittle } = this.state;
+    const { ugly, toolittle } = this.state;
     this.setState({
       ugly: true,
-      tooLittle: false
+      toolittle: false
     });
   };
 
@@ -80,9 +80,9 @@ class OrderErrorModal extends Component {
                   </TableCell>
                   <TableCell>
                     <Input
-                      name="tooLittle"
+                      name="toolittle"
                       type="checkbox"
-                      checked={this.state.tooLittle}
+                      checked={this.state.toolittle}
                       onChange={this.onLittleChange}
                     />
                   </TableCell>
