@@ -1,0 +1,52 @@
+.receipt-outer {
+  height: 80vh;
+  width: 80vw;
+  background: rgba(0, 0, 255, 0.13);
+  margin: auto;
+  border: 1px solid black;
+}
+
+.table-style {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.head-row-style {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 25px;
+  border-bottom: 1px solid black;
+}
+
+.row-style {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  border-bottom: 1px dotted black;
+}
+
+.table-item {
+  width: 33%;
+  text-align: center;
+}
+
+.add-button {
+  height: 50px;
+  width: 80px;
+  border: none;
+  font-size: 10px;
+  margin: 10px;
+}
+
+.switchButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
