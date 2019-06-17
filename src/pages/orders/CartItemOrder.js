@@ -52,13 +52,13 @@ class CartItemOrder extends Component {
   }
 
   onClickButton = e => {
-    this.props.saveCartRow(this.state.cart_item);
-    this.handleItemUpdate();
     let code = e.keyCode || e.which;
     if (code === 13) {
       this.setState({
         weight: this.state.weight
       });
+      this.props.saveCartRow(this.state.cart_item);
+      this.handleItemUpdate();
     }
   };
 
@@ -67,7 +67,7 @@ class CartItemOrder extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    let errorReason = cartItem.error_reason;
+    let errorReason = cartItem.product_error_reason;
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -78,11 +78,10 @@ class CartItemOrder extends Component {
         product_name: cartItem.product_name,
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
-        product_price: cartItem.product_price / 100,
-        final_quantity: cartItem.final_quantity,
+        final_quantity: Number(cartItem.final_quantity),
         missing: missing,
         weight: weight,
-        error_reason: errorReason
+        product_error_reason: errorReason
       })
     })
       .then(response => console.log(response))
@@ -124,13 +123,16 @@ class CartItemOrder extends Component {
 
   makePatchAPICallError = async childState => {
     const error = {
-      error_reason: childState.ugly ? "ugly" : "tooLittle",
+      product_error_reason: childState.ugly ? "ugly" : "tooLittle",
       final_quantity: childState.cart_item.final_quantity
     };
 
     this.setState(
       {
-        cart_item: { ...this.state.cart_item, ...console.error() }
+        cart_item: {
+          ...this.state.cart_item,
+          product_error_reason: error.product_error_reason
+        }
       },
       async () => {
         await this.handleItemUpdate();
@@ -162,7 +164,8 @@ class CartItemOrder extends Component {
       missing,
       error
     } = this.state;
-    console.log(cart_item);
+    console.log("unit_type>>>>" + cart_item.unit_type);
+    console.log("price_unit>>>>" + cart_item.price_unit);
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
@@ -204,11 +207,12 @@ class CartItemOrder extends Component {
         </TableCell>
         <TableCell>
           <InputGroup>
-            {cart_item.price_unit == "lb" ||
-            cart_item.price_unit == "oz" ||
-            cart_item.unit_type == "lb" ||
-            cart_item.unit_type == "oz" ||
-            cart_item.product_shop === "TWS" ? (
+            {cart_item.unit_type === "lb" ||
+            cart_item.unit_type === "oz" ||
+            (cart_item.product_shop === "TWS" &&
+              cart_item.price_unit === "lb") ||
+            (cart_item.product_shop === "TWS" &&
+              cart_item.price_unit === "oz") ? (
               <Input
                 placeholder={cart_item.weight}
                 value={weight}

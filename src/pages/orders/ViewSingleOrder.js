@@ -34,16 +34,15 @@ class ViewSingleOrder extends Component {
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
-      packagings: props.packagings.map(packaging => {
-        return { ...packaging, quantity: 0 };
-      }),
+      // packagings: props.packagings.map(packaging => {
+      //   return { ...packaging, quantity: 0 };
+      // }),
       packagings: props.packagings.map(packaging => {
         return { ...packaging };
       }),
       packagingUsed: props.selectedOrder.packaging_used.map(item => {
         return { ...item, type: item.type };
       }),
-
       confirmModalOpen: false
     };
     this.userStore = this.props.store.user;
@@ -61,10 +60,21 @@ class ViewSingleOrder extends Component {
     });
   };
 
-  onChangePackaging = (e, i) => {
-    const packagings = [...this.state.packagings];
-    packagings[i] = { ...packagings[i], quantity: e.target.value };
-    this.setState({ packagings });
+  onChangePackaging = (e, id) => {
+    console.log("before");
+    //data
+    console.log(this.state.selectedOrder.packaging_used);
+    const packagings = this.state.selectedOrder.packaging_used.map(data => {
+      if (data._id === id) {
+        return { ...data, quantity: e.target.value };
+      }
+      return data;
+    });
+    console.log("after");
+    console.log(packagings);
+    this.setState({
+      selectedOrder: { ...this.state.selectedOrder, packaging_used: packagings }
+    });
   };
 
   toggleConfirmModal = () => {
@@ -74,7 +84,9 @@ class ViewSingleOrder extends Component {
   handleOrderUpdate = () => {
     let orderId = this.state.selectedOrder._id;
     let cartItems = this.state.cart_items;
-    let packagings = this.state.packagings;
+    let packagingUsed = this.state.packagingUsed;
+    console.log("packaging used");
+    console.log(packagingUsed);
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -83,7 +95,7 @@ class ViewSingleOrder extends Component {
       },
       body: JSON.stringify({
         cartItems,
-        packagings
+        packagingUsed
       })
     })
       .then(response => console.log(response))
@@ -93,6 +105,7 @@ class ViewSingleOrder extends Component {
   handleSubmit = () => {
     const { packagings, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
+
     const item_quantities = cart_items.map(item => {
       return {
         product_id: item.product_id,
@@ -107,14 +120,16 @@ class ViewSingleOrder extends Component {
         quantity: Number(packaging.quantity)
       };
     });
+    // console.log(newPackagings)
     const payload = {
       item_quantities,
       packagings: newPackagings
     };
     const options = this.userStore.getHeaderAuth();
 
-    this.adminStore.packageOrder(selectedOrder._id, payload, options);
+    // this.adminStore.packageOrder(selectedOrder._id, payload, options);
     onSubmit && onSubmit();
+    this.handleOrderUpdate();
     this.props.toggle({});
   };
 
@@ -127,15 +142,15 @@ class ViewSingleOrder extends Component {
       originalSubTotal,
       currentSubTotal
     } = this.state;
-    const packagingArr = packagings.reduce((acc, packaging) => {
-      const pUsed = packagingUsed.find(e => e.type === packaging.type);
-      if (pUsed)
-        acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
-      else acc[packaging.type] = { ...packaging, quantity: 0 };
-      return acc;
-    }, []);
+    // const packagingArr = packagings.reduce((acc, packaging) => {
+    //   const pUsed = packagingUsed.find(e => e.type === packaging.type);
+    //   if (pUsed)
+    //     acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
+    //   else acc[packaging.type] = { ...packaging, quantity: 0 };
+    //   return acc;
+    // }, []);
     const hideRow = { display: "none" };
-    console.log(selectedOrder.packaging_used);
+    console.log(selectedOrder);
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -196,12 +211,20 @@ class ViewSingleOrder extends Component {
                       )}
                     </TableCell>
                     <TableCell>
-                      {packaging.quantity > 0 ? packaging.quantity : 0}
+                      <Input
+                        placeholder={packaging.quantity || 0}
+                        name="packaging quantity"
+                        value={packaging.quantity || 0}
+                        type="number"
+                        onChange={e => this.onChangePackaging(e, packaging._id)}
+                      />
                     </TableCell>
                   </TableRow>
                 ) : (
                   <TableRow style={hideRow} key={i}>
-                    <TableCell />
+                    <TableCell>
+                      <Input />
+                    </TableCell>
                   </TableRow>
                 )
               )}

@@ -25,8 +25,12 @@ class OrderErrorModal extends Component {
     this.state = {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
-      tooLittle: true,
-      ugly: false
+      tooLittle:
+        props.cart_item.product_error_reason == undefined ||
+        props.cart_item.product_error_reason == "tooLittle"
+          ? true
+          : false,
+      ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
     };
   }
   onLittleChange = e => {
@@ -57,6 +61,7 @@ class OrderErrorModal extends Component {
     if (!this.props.isOpen) {
       return null;
     }
+    const isEnabled = cart_item.final_quantity <= cart_item.customer_quantity
     console.log(this.props);
     return (
       <div className="error">
@@ -109,13 +114,14 @@ class OrderErrorModal extends Component {
                     />
                   </TableCell>
                   <TableCell>
-                    {cart_item.customer_quantity} {quantityUnit}
+                    {cart_item.final_quantity} {quantityUnit}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
             <Button
               className="error-submit"
+              disabled={!isEnabled}
               variant="contained"
               color="primary"
               size={"large"}

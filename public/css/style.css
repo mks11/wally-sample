@@ -2655,8 +2655,20 @@ color:#6e8692
 
 .error-modal{
   max-width: 600px;
-      min-height: 200px;
-      margin: 0 auto;
+  min-height: 200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 400px){
+  .error-modal{
+    width: 320px;
+    margin: 0 -20px;
+  }
+  .MuiTableCell-root-35 {
+    padding: 0 !important;
+    font-size: 8px !important;
+  }
+
 }
 
 .error-header {
@@ -2664,4 +2676,8 @@ color:#6e8692
 }
 .error .error-submit {
   margin: 2% 50% ;
+}
+
+.scrollable-table{
+  width: 100%
 }
