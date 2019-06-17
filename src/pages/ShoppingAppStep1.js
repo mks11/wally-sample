@@ -14,43 +14,64 @@ import moment from 'moment'
 class ShoppingAppStep1 extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      timeframe: `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`,
+      timeframe: null,
 			locations: [],
 			location: null,
       isProductView: false,
       selectedProduct: {},
       selectedIndex: null,
-      showModal: false
     }
-		this.adminStore = this.props.store.admin
-	}
 
-	componentDidMount = () => {
-		this.loadShopLocations()
+    this.userStore = props.store.user
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
 	}
+  
+  componentDidMount() {
+    this.userStore.getStatus(true)
+      .then((status) => {
+        const user = this.userStore.user
+        if (
+          status &&
+          (user.type === 'admin' ||
+          user.type === 'super-admin' ||
+          user.type === 'tws-ops')
+        ) {
+          this.loadShopLocations()
+        } else {
+          this.props.store.routing.push('/')
+        }
+      })
+      .catch((error) => {
+        this.props.store.routing.push('/')
+      })
+  }
+  
+  componentWillUnmount = () => {
+    this.adminStore.clearStoreShopItems()
+    this.adminStore.clearStoreLocations()
+  }
 	
   loadShopLocations = () => {
-    const {timeframe} = this.state
+    const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
     this.adminStore.getShopLocations(timeframe)
+    this.setState({timeframe})
 	}
 	
   loadShopItems = (location) => {
     // note that if shop is not selected, location param sent will be null
     const {timeframe} = this.state
-		this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getShopperPackagingInfo(timeframe, location)
     this.setState({location})
   }
 
-  toggleModal = async() => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }))
-  }
-
   render() {
-		const {locations} = this.adminStore
-    const {timeframe, location, showModal} = this.state
+    const {locations} = this.adminStore
+    const {togglePackaging} = this.modalStore
+    const {timeframe, location} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />
@@ -82,10 +103,8 @@ class ShoppingAppStep1 extends Component {
         </section>
 				<section className="page-section pt-1 pb-3">
           <Container className="btn-center">
-            <Button color="link" onClick={this.toggleModal}>Packaging Info</Button>
+            <Button color="link" onClick={togglePackaging}>Packaging Info</Button>
             <ModalRequiredPackaging
-              toggleModal={this.toggleModal}
-              showModal={showModal}
               timeframe={timeframe}
               location={location}
             />

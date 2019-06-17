@@ -9,30 +9,18 @@ import { Modal, ModalBody, Container } from 'reactstrap'
 class ModalRequiredPackaging extends Component {
   constructor(props) {
     super(props)
-    this.adminStore = this.props.store.admin
-  }
 
-  componentDidMount = () => {
-    this.loadShopperPackagingInfo()
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.location !== this.props.location) {
-      this.loadShopperPackagingInfo()
-    }
-  }
-
-  loadShopperPackagingInfo = () => {
-    const {timeframe, location} = this.props
-    this.adminStore.getShopperPackagingInfo(timeframe, location)
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
   }
 
   render() {
-    const {showModal, toggleModal} = this.props
     const {packagingCounts} = this.adminStore
+    const {packaging, togglePackaging} = this.modalStore
     const packagingNames = Object.keys(packagingCounts)
     return (
-      <Modal isOpen={showModal} toggle={toggleModal} className="modal-required-packaging">
+      <Modal isOpen={packaging} className="modal-required-packaging">
+      <button className="btn-icon btn-icon--close" onClick={togglePackaging}></button>
         <ModalBody>
           <Container>
             <Table>

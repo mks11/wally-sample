@@ -13,65 +13,41 @@ import moment from 'moment'
 class ShoppingAppTable extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      showModal: false,
       productName: null,
-      shopitemId: null
+      shopitemId: null,
     }
+
     this.step = this.props.step
-    this.adminStore = this.props.store.admin
+    this.deliveryDate = moment().format('YYYY-MM-DD')
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
   }
 
-  handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
+  handleSelectAvailability = (isAvailable, shopitemId, productName) => {
     if (isAvailable) {
       const status = 'available'
-      this.adminStore.setShopItemStatus(status, shopitemId)
+      this.adminStore.setShopItemStatus(shopitemId, status)
     } else {
       this.setState({shopitemId, productName})
+      const {location} = this.props
       const status = 'missing'
-      // await this.adminStore.setShopItemStatus(status, shopitemId)
-      this.toggleModal()
+      this.adminStore.setShopItemStatus(shopitemId, status)
+      this.adminStore.getSubInfo(shopitemId, this.deliveryDate, location)
+      this.modalStore.toggleMissing()
     }
-  }
-
-  toggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }));
   }
 
   render() {
     const {shopitems} = this.adminStore
-    const {location} = this.props
-    const {showModal, shopitemId, productName} = this.state
-    const deliveryDate = moment().format('YYYY-MM-DD')
-    const renderStatus = (shopitem) => {
-      if (this.step === '1') {
-        if (shopitem.completed) {
-          return 'completed'
-        } else if (shopitem.missing) {
-          return 'missing'
-        } else {
-          return 'incomplete'
-        }
-      } else {
-        if (shopitem.user_checked) {
-          return 'checked'
-        } else if (shopitem.user_checked === false) {
-          return 'not-checked'
-        }
-      }
-    }
-
+    const {shopitemId, productName} = this.state
     return (
       <React.Fragment>
         <ModalMissing
-          toggleModal={this.toggleModal}
-          showModal={showModal}
           shopitemId={shopitemId}
           productName={productName}
-          location={location}
-          deliveryDate={deliveryDate}
+          deliveryDate={this.deliveryDate}
         />
         <Paper elevation={1} className="scrollable-table">
           <Table className="shopping-app-table">
@@ -84,24 +60,33 @@ class ShoppingAppTable extends Component {
             </TableHead>
             <TableBody>
               {shopitems.map((shopitem, i) => {
+                const {
+                  _id,
+                  status,
+                  product_name,
+                  quantity,
+                  unit_type,
+                  packaging_name,
+                  delivery_date
+                } = shopitem
                 return (
                   <TableRow
-                    key={shopitem._id}
-                    className={`row ${renderStatus(shopitem)}`}
+                    key={_id}
+                    className={`row ${status}`}
                   >
-                    <TableCell>{shopitem.product_name}</TableCell>
+                    <TableCell>{product_name}</TableCell>
                     <TableCell>
-                      {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell>
+                      {quantity} {unit_type === "packaging" ? packaging_name : unit_type }</TableCell>
                     <TableCell>
                       <Form inline>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="yesSelect"
-                          onChange={() => this.handleSelectAvailability(true, shopitem._id)} />
+                          <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
+                          onChange={() => this.handleSelectAvailability(true, _id)} />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
                         </FormGroup>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="noSelect"
-                          onChange={() => this.handleSelectAvailability(false, shopitem._id, shopitem.product_name, shopitem.delivery_date)} />
+                          <Input type="radio" name="select" id="noSelect" checked={status === 'unavailable'}
+                          onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)} />
                           <Label className="ml-sm-1" for="noSelect" check>No</Label>
                         </FormGroup>
                       </Form>

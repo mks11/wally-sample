@@ -69,7 +69,7 @@ class AdminStore {
   }
   
   async getSubInfo(shopitem_id, delivery_date, location) {
-    const res = await axios.get(`${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}?location={location}`)
+    const res = await axios.get(`${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}&location=${location}`)
     this.availableSubs = res.data.available_substitutes
   }
 
@@ -86,7 +86,6 @@ class AdminStore {
 
   async getShopperPackagingInfo(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOPPER_PACKAGING_INFO}?timeframe=${timeframe}&shop_location=${shop_location}`)
-
     this.packagingCounts = res.data.packaging_counts
   }
 
@@ -98,8 +97,8 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async setShopItemStatus(timeframe, shopitem_id, status) {
-    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?&status=${status}`)
+  async setShopItemStatus(shopitem_id, status) {
+    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
@@ -199,6 +198,18 @@ class AdminStore {
       const id = item.product_id
       this.updateStoreShopItem(id, item)
     }
+  }
+
+  clearStoreShopItems() {
+    this.shopitems = []
+  }
+
+  clearStoreLocations() {
+    this.locations = []
+  }
+
+  clearStoreSubs() {
+    this.availableSubs = []
   }
 }
 

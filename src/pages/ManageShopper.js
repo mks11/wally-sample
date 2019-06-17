@@ -54,6 +54,7 @@ class ManageShopper extends Component {
 
   loadShopItems = (location) => {
     const {timeframe} = this.state
+    this.adminStore.clearStoreShopItems()
     this.adminStore.getShopItems(timeframe, location)
     this.adminStore.getShopItemsFarms(timeframe, location)
     this.setState({location})
