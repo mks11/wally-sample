@@ -27,28 +27,13 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CartItemOrder from "./CartItemOrder";
-const packagingsMock = [
-  { _id: "111111", type: "Mesh Bag", quantity: 1 },
-  { _id: "2222222", type: "Tote Bag", quantity: 2 },
-  {
-    _id: "333333",
-    type: "Muslin Bag",
-    quantity: 3
-  }
-];
 
 class ViewSingleOrder extends Component {
   constructor(props) {
     super(props);
-
-    // const myNestedThing = JSON.parse(JSON.stringify(this.state.nestedProperty))
-    //
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
-      // packagings: props.packagings.map(packaging => {
-      //   return { ...packaging, quantity: 0 };
-      // }),
       packagings: props.packagings.map(packaging => {
         return { ...packaging };
       }),
@@ -84,7 +69,6 @@ class ViewSingleOrder extends Component {
     console.log(cart_items);
     console.log("payload");
     console.log(payload.packagings);
-
     let packagings = this.state.selectedOrder.packaging_used;
     console.log("APICALL");
     console.log(packagings);
@@ -104,11 +88,9 @@ class ViewSingleOrder extends Component {
   };
 
   onChangePackaging = (e, id) => {
-    console.log("before");
-    console.log(this.state.selectedOrder.packaging_used);
     const packagings = this.state.selectedOrder.packaging_used.map(data => {
       if (data._id === id) {
-        return { ...data, quantity: Number(e.target.value) };
+        return { ...data, quantity: e.target.value };
       }
       return data;
     });
@@ -152,6 +134,13 @@ class ViewSingleOrder extends Component {
     // this.adminStore.packageOrder(selectedOrder._id, payload, options);
     onSubmit && onSubmit();
     this.handleOrderUpdate(payload);
+    this.setState({
+      selectedOrder: {
+        ...this.state.selectedOrder,
+        cart_items: payload.cart_items,
+        packagings: payload.newPackagings
+      }
+    });
     this.props.toggle({});
   };
 
@@ -164,14 +153,6 @@ class ViewSingleOrder extends Component {
       originalSubTotal,
       currentSubTotal
     } = this.state;
-    // const packagingArr = packagings.reduce((acc, packaging) => {
-    //   const pUsed = packagingUsed.find(e => e.type === packaging.type);
-    //   if (pUsed)
-    //     acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
-    //   else acc[packaging.type] = { ...packaging, quantity: 0 };
-    //   return acc;
-    // }, []);
-    console.log(packaging_used);
     const hideRow = { display: "none" };
     return (
       <section className="page-section pt-1 single-order">
