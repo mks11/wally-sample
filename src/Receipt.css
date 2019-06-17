@@ -1,9 +1,11 @@
 .receipt-outer {
-  height: 80vh;
+  height: 60vh;
   width: 80vw;
   background: rgba(0, 0, 255, 0.13);
   margin: auto;
   border: 1px solid black;
+  overflow: scroll;
+  margin-bottom: 2vh;
 }
 
 .table-style {
@@ -14,6 +16,9 @@
 
 .head-row-style {
   display: flex;
+  position: sticky;
+  top: 0;
+  background: rgb(198, 198, 230);
   flex-direction: row;
   height: 50px;
   justify-content: center;
@@ -28,7 +33,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 30px;
+  height: 50px;
   border-bottom: 1px dotted black;
 }
 
@@ -41,12 +46,55 @@
   height: 50px;
   width: 80px;
   border: none;
-  font-size: 10px;
+  font-size: 12px;
   margin: 10px;
+}
+
+.selected {
+  border: 1px solid rgba(0, 217, 255, 0.171);
+  box-shadow: 2px 3px 4px rgba(0, 0, 255, 0.336);
 }
 
 .switchButtons {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.prev-img {
+  max-height: 45px;
+  cursor: pointer;
+  /* width: 80px; */
+}
+
+.prev-img:hover {
+  opacity: 0.8;
+}
+
+.enlargedImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 85%;
+  max-height: 80%;
+  margin: auto;
+}
+
+.bigImgSelf {
+  max-width: 85%;
+  max-height: 80%;
+}
+
+.msg-pop-up {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  background: rgb(8, 8, 58);
+  font-size: 20px;
+
+  border-radius: 30px;
 }

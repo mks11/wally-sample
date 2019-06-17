@@ -22,7 +22,6 @@ import store from "./stores";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faStroopwafel, faSearch } from "@fortawesome/free-solid-svg-icons";
-import ReceiptCapture from "./ReceiptCapture";
 import Receipts from "./Receipts";
 
 library.add(faStroopwafel, faSearch);
@@ -46,7 +45,7 @@ ReactDOM.render(
           <TopNav />
           <main className="aw-main aw-home">
             {/* {routes} */}
-            {/* <ReceiptCapture /> */}
+
             <Receipts />
           </main>
 
