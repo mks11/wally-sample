@@ -14,6 +14,7 @@ import {
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
   API_ADMIN_POST_BLOG_POST,
+  API_ADMIN_UPDATE_SHOP_ITEM_STATUS
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'

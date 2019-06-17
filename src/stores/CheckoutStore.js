@@ -89,8 +89,8 @@ class CheckoutStore {
   }
 
   async getDeliveryTimes(auth) {
-    // const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}&zip=${data.zip}`, auth)
-    const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}`, auth)
+    let zip = localStorage.getItem('zip')
+    const res = await axios.get(`${API_DELIVERY_TIMES}?user_time=${moment().format('YYYY-MM-DD HH:mm:ss')}&zip=${zip}`, auth)
     this.transformDeliveryTimes(res.data)
     return res.data
   }
