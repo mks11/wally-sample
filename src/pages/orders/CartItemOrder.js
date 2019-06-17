@@ -68,7 +68,6 @@ class CartItemOrder extends Component {
     const orderId = this.state.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
-    console.log();
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -125,7 +124,7 @@ class CartItemOrder extends Component {
   makePatchAPICallError = async childState => {
     const error = {
       product_error_reason: childState.ugly ? "ugly" : "tooLittle",
-      final_quantity: Number(childState.cart_item.final_quantity)
+      final_quantity: childState.cart_item.final_quantity
     };
 
     this.setState(
@@ -165,13 +164,13 @@ class CartItemOrder extends Component {
       missing,
       error
     } = this.state;
-    console.log(">>>>" + cart_item.unit_type);
-      console.log(cart_item.price_unit);
+    console.log("unit_type>>>>" + cart_item.unit_type);
+    console.log("price_unit>>>>" + cart_item.price_unit);
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
       <TableRow className="cart-item">
-        <TableCell >{cart_item.product_name}</TableCell>
+        <TableCell>{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>
@@ -208,11 +207,12 @@ class CartItemOrder extends Component {
         </TableCell>
         <TableCell>
           <InputGroup>
-            {cart_item.price_unit === "lb" ||
-            cart_item.price_unit === "oz" ||
-            cart_item.unit_type === "lb" ||
+            {cart_item.unit_type === "lb" ||
             cart_item.unit_type === "oz" ||
-            cart_item.product_shop === "TWS"  ? (
+            (cart_item.product_shop === "TWS" &&
+              cart_item.price_unit === "lb") ||
+            (cart_item.product_shop === "TWS" &&
+              cart_item.price_unit === "oz") ? (
               <Input
                 placeholder={cart_item.weight}
                 value={weight}

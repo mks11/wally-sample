@@ -43,7 +43,6 @@ class ViewSingleOrder extends Component {
       packagingUsed: props.selectedOrder.packaging_used.map(item => {
         return { ...item, type: item.type };
       }),
-
       confirmModalOpen: false
     };
     this.userStore = this.props.store.user;
@@ -61,15 +60,21 @@ class ViewSingleOrder extends Component {
     });
   };
 
-  onChangePackaging = (e, i) => {
-    let packagings = this.state.selectedOrder.packaging_used.map((data, index)=> {
-      if(index == i){
-        data =  { ...data, quantity: e.target.value };
+  onChangePackaging = (e, id) => {
+    console.log("before");
+    //data
+    console.log(this.state.selectedOrder.packaging_used);
+    const packagings = this.state.selectedOrder.packaging_used.map(data => {
+      if (data._id === id) {
+        return { ...data, quantity: e.target.value };
       }
-      return data
+      return data;
     });
-    console.log(e.target.value)
-    this.setState({ selectedOrder: {...this.state.selectedOrder, packaging_used: packagings} });
+    console.log("after");
+    console.log(packagings);
+    this.setState({
+      selectedOrder: { ...this.state.selectedOrder, packaging_used: packagings }
+    });
   };
 
   toggleConfirmModal = () => {
@@ -79,7 +84,9 @@ class ViewSingleOrder extends Component {
   handleOrderUpdate = () => {
     let orderId = this.state.selectedOrder._id;
     let cartItems = this.state.cart_items;
-    let packagings = this.state.packagings;
+    let packagingUsed = this.state.packagingUsed;
+    console.log("packaging used");
+    console.log(packagingUsed);
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -88,7 +95,7 @@ class ViewSingleOrder extends Component {
       },
       body: JSON.stringify({
         cartItems,
-        packagings
+        packagingUsed
       })
     })
       .then(response => console.log(response))
@@ -113,14 +120,16 @@ class ViewSingleOrder extends Component {
         quantity: Number(packaging.quantity)
       };
     });
+    // console.log(newPackagings)
     const payload = {
       item_quantities,
       packagings: newPackagings
     };
     const options = this.userStore.getHeaderAuth();
 
-    this.adminStore.packageOrder(selectedOrder._id, payload, options);
+    // this.adminStore.packageOrder(selectedOrder._id, payload, options);
     onSubmit && onSubmit();
+    this.handleOrderUpdate();
     this.props.toggle({});
   };
 
@@ -140,7 +149,6 @@ class ViewSingleOrder extends Component {
     //   else acc[packaging.type] = { ...packaging, quantity: 0 };
     //   return acc;
     // }, []);
-    console.log(packagings)
     const hideRow = { display: "none" };
     console.log(selectedOrder);
     return (
@@ -207,8 +215,8 @@ class ViewSingleOrder extends Component {
                         placeholder={packaging.quantity || 0}
                         name="packaging quantity"
                         value={packaging.quantity || 0}
-                        type={"number"}
-                        onChange={e => this.onChangePackaging(e, i)}
+                        type="number"
+                        onChange={e => this.onChangePackaging(e, packaging._id)}
                       />
                     </TableCell>
                   </TableRow>
