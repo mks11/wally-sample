@@ -73,8 +73,8 @@ class AdminStore {
     this.availableSubs = res.data.available_substitutes
   }
 
-  async updateDailySubstitute(delivery_date, shopitem_id, data) {
-    const res = await axios.patch(`${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?delivery_date=${delivery_date}`, data)
+  async updateDailySubstitute(timeframe, shopitem_id, data) {
+    const res = await axios.patch(`${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`, data)
     // unsure if response data will be in res.data or res.data.daily_substitute
     this.dailySubstitute = res.data
   }
