@@ -30,7 +30,7 @@ class OrderErrorModal extends Component {
         props.cart_item.product_error_reason == "toolittle"
           ? true
           : false,
-      ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
+      ugly: props.cart_item.product_error_reason == "ugly" ? true : false
     };
   }
   onLittleChange = e => {
@@ -51,7 +51,7 @@ class OrderErrorModal extends Component {
 
   onQuantityChange = e => {
     const { cart_item } = this.state;
-    cart_item.final_quantity = e.target.value;
+    cart_item.final_quantity = Number(e.target.value);
     this.setState({ cart_item });
   };
 
@@ -61,8 +61,8 @@ class OrderErrorModal extends Component {
     if (!this.props.isOpen) {
       return null;
     }
-    const isEnabled = cart_item.final_quantity <= cart_item.customer_quantity
-    console.log(this.props);
+    const isEnabled = cart_item.final_quantity <= cart_item.customer_quantity;
+
     return (
       <div className="error">
         <div className="backdrop">
@@ -109,12 +109,12 @@ class OrderErrorModal extends Component {
                   <TableCell>
                     <Input
                       type="number"
-                      max={parseInt(cart_item.customer_quantity)}
+                      value={cart_item.final_quantity}
                       onChange={this.onQuantityChange}
                     />
                   </TableCell>
                   <TableCell>
-                    {cart_item.final_quantity} {quantityUnit}
+                    {cart_item.customer_quantity} {quantityUnit}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -125,7 +125,7 @@ class OrderErrorModal extends Component {
               variant="contained"
               color="primary"
               size={"large"}
-              type={"button"}
+              type="button"
               onClick={() => this.props.makePatchAPICallError(this.state)}
             >
               Submit

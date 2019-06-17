@@ -28,11 +28,11 @@ const textSwitch = {
   justifyContent: "center",
   alignItems: "center",
   height: "100%",
-  fontSize: 15,
+  fontSize: 12,
   color: "#fff",
   paddingRight: 2
 };
-const customColumnStyle = { width: 90, padding: 0 };
+const customColumnStyle = { width: 60, padding: 0 };
 class CartItemOrder extends Component {
   constructor(props) {
     super(props);
@@ -124,13 +124,14 @@ class CartItemOrder extends Component {
   makePatchAPICallError = async childState => {
     const error = {
       product_error_reason: childState.ugly ? "ugly" : "toolittle",
-      final_quantity: childState.cart_item.final_quantity
+      final_quantity: Number(childState.cart_item.final_quantity)
     };
 
     this.setState(
       {
         cart_item: {
           ...this.state.cart_item,
+          final_quantity: error.final_quantity,
           product_error_reason: error.product_error_reason
         }
       },
@@ -164,8 +165,6 @@ class CartItemOrder extends Component {
       missing,
       error
     } = this.state;
-    console.log("unit_type>>>>" + cart_item.unit_type);
-    console.log("price_unit>>>>" + cart_item.price_unit);
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (

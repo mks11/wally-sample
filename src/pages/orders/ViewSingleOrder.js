@@ -84,9 +84,9 @@ class ViewSingleOrder extends Component {
   handleOrderUpdate = () => {
     let orderId = this.state.selectedOrder._id;
     let cartItems = this.state.cart_items;
-    let packagingUsed = this.state.packagingUsed;
+    let packagings = this.state.packagingUsed;
     console.log("packaging used");
-    console.log(packagingUsed);
+    console.log(packagings);
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -95,7 +95,7 @@ class ViewSingleOrder extends Component {
       },
       body: JSON.stringify({
         cartItems,
-        packagingUsed
+        packagings
       })
     })
       .then(response => console.log(response))

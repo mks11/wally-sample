@@ -2668,6 +2668,18 @@ color:#6e8692
     padding: 0 !important;
     font-size: 8px !important;
   }
+  .form-control{
+    width: 50px;
+  }
+  .react-switch-bg{
+    height: 26px !important;
+    width: 43px !important;
+  }
+
+  .react-switch-handle{
+    height: 23px !important;
+    width: 15px !important;
+  }
 
 }
 
