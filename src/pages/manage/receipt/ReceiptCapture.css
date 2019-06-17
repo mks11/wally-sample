@@ -55,6 +55,7 @@
   border-bottom: 1px solid blue;
   margin-bottom: 4px;
 }
+
 .form-section:hover {
   background: rgba(0, 0, 255, 0.281);
 }
@@ -91,7 +92,7 @@
 }
 
 .submit-btn {
-  width: 100%;
+  width: 80%;
   font-size: 20px;
 }
 
@@ -119,4 +120,20 @@
   height: 30px;
   width: 80px;
   bottom: 0;
+}
+
+@media all and (max-width: 900px) {
+  .upload-form-outer {
+    width: 90%;
+  }
+  input {
+    max-width: 100%;
+  }
+  .form-section {
+    font-size: 12px;
+    padding: 0;
+  }
+  .clear-img-btn {
+    font-size: 10px;
+  }
 }
