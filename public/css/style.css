@@ -2660,6 +2660,11 @@ color:#6e8692
     width: 320px;
     margin: 0 -20px;
   }
+  .MuiTableCell-root-35 {
+    padding: 0 !important;
+    font-size: 8px !important;
+  }
+
 }
 
 .error-header {
@@ -2667,4 +2672,8 @@ color:#6e8692
 }
 .error .error-submit {
   margin: 2% 50% ;
+}
+
+.scrollable-table{
+  width: 100%
 }

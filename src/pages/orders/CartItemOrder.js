@@ -171,7 +171,7 @@ class CartItemOrder extends Component {
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
       <TableRow className="cart-item">
-        <TableCell>{cart_item.product_name}</TableCell>
+        <TableCell >{cart_item.product_name}</TableCell>
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>
