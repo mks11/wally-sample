@@ -14,6 +14,7 @@ import HelpSingleAnswer from './pages/HelpSingleAnswer';
 import HelpAnswer from './pages/HelpAnswer';
 import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
+import ManageOrders from './pages/ManageOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
 import GiftCheckout from './pages/GiftCheckout';
@@ -43,6 +44,8 @@ export default (
         <Route exact path="/thankyou" component={OrderConfirmation}/>
         <Route exact path="/api/user/reset-password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
+        <Route exact path="/manage/orders" component={ManageOrders}/>
+
         <Route exact path="/tnc" component={Tnc}/>
         <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/blog" component={Blog}/>

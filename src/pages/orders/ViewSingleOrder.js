@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from '../../../utils'
+import {connect} from '../../utils'
 import {
   Container,
   FormGroup,
@@ -29,9 +29,9 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import CartItem from "./CartItem";
+import CartItem from "../manage/fulfillment/CartItem";
 
-class SingleOrderView extends Component {
+class ViewSingleOrder extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -155,7 +155,7 @@ class SingleOrderView extends Component {
               <Typography>Close</Typography>
             </Button>
           </div>
-          <h2>Single Order View</h2>
+          <h2>View</h2>
           <hr/>
           <Paper elevation={1} className={"scrollable-table"}>
             <Table className={"packaging-table"} padding={"dense"}>
@@ -255,4 +255,4 @@ class SingleOrderView extends Component {
   }
 }
 
-export default connect("store")(SingleOrderView);
+export default connect("store")(ViewSingleOrder);

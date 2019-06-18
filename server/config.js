@@ -139,9 +139,9 @@ const getProductDisplayed = {
     "sidebar": [
       { cat_id: "123",
         cat_name: "Dairy",
-        sub_cats: [ 
+        sub_cats: [
           { cat_id: "123456",
-            cat_name: "Butter" 
+            cat_name: "Butter"
           } ,
           { cat_id: "123567",
             cat_name: "Creamer"
@@ -183,9 +183,9 @@ const getCategories = {
     "categories": [
       { cat_id: "123",
         cat_name: "Dairy",
-        sub_cats: [ 
+        sub_cats: [
           { cat_id: "123456",
-            cat_name: "Butter" 
+            cat_name: "Butter"
           } ,
           { cat_id: "123567",
             cat_name: "Creamer"
@@ -198,7 +198,7 @@ const getCategories = {
 
 const searchKeyword = {
   method: 'GET',
-  response: 
+  response:
   {
     "products": [
       { product_id: "XYZ123",
@@ -213,9 +213,9 @@ const searchKeyword = {
     "filters": [
       { cat_id: "123",
         cat_name: "Dairy",
-        sub_cats: [ 
+        sub_cats: [
           { cat_id: "123456",
-            cat_name: "Butter" 
+            cat_name: "Butter"
           } ,
           { cat_id: "123567",
             cat_name: "Creamer"
@@ -252,7 +252,7 @@ const getCurrentCart = {
         "customer_quantity": 2,
         "total": 1000
       } ,
-    ] 
+    ]
   }
 }
 
@@ -271,14 +271,14 @@ const editCurrentCart = {
     "customer_quantity": 2,
     "total": 1000
   } ,
-] 
+]
   }
 
 }
 
 const createOrder = {
   method: 'POST',
-  response: 
+  response:
   {
     "id": "123456",
     "user_id": "ABC123",
@@ -311,13 +311,13 @@ const createOrder = {
     "total": 1000
   } ,
 ],
-"applicable_store_credit": 150 
+"applicable_store_credit": 150
   }
 }
 
 const getOrderSummary = {
   method: 'GET',
-  response: 
+  response:
   {
     "id": "123456",
     "user_id": "ABC123",
@@ -350,7 +350,7 @@ const getOrderSummary = {
     "total": 1000
   } ,
 ],
-"applicable_store_credit": 150 
+"applicable_store_credit": 150
   }
 }
 
@@ -513,7 +513,7 @@ const updateShopItemQuantity = {
 const updateShopItemsWarehouseLocations = {
   method: "PATCH",
   response: {
-    
+
   }
 }
 
@@ -582,7 +582,7 @@ const getRouteOrders = {
           "total": 1000
         } ,
       ],
-      "applicable_store_credit": 150 
+      "applicable_store_credit": 150
     },
     {
       "id": "789012",
@@ -616,7 +616,7 @@ const getRouteOrders = {
           "total": 1000
         } ,
       ],
-      "applicable_store_credit": 150 
+      "applicable_store_credit": 150
     }
   ]
 }
@@ -660,7 +660,7 @@ const getOrder = {
         "total": 1000
       } ,
     ],
-    "applicable_store_credit": 150 
+    "applicable_store_credit": 150
   }
 }
 
@@ -735,6 +735,11 @@ const postBlogPost = {
   }
 }
 
+const updateCartItem = {
+  method: "PATCH",
+  response: {}
+}
+
 module.exports = {
   "/api/user": getUser,
   "/api/user/edit": editUser,
@@ -791,4 +796,5 @@ module.exports = {
 
   "/api/blog": getBlogPosts,
   "/api/admin/blog": postBlogPost,
+  "/api/order/:order_id/:cartitem_id":
 }

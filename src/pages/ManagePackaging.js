@@ -87,7 +87,6 @@ class ManagePackaging extends Component {
 
     render() {
         if (!this.userStore.user) return null
-
         const {timeframes, packagings} = this.adminStore
         const {singleOrderOpen} = this.state
         const {orders} = this.adminStore
@@ -120,8 +119,11 @@ class ManagePackaging extends Component {
                                     <Table className={"packaging-table"}>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>Order ID</TableCell>
-                                                <TableCell>Status</TableCell>
+                                              <TableCell>Order Letter</TableCell>
+                                              <TableCell>Order ID</TableCell>
+                                              <TableCell>Status</TableCell>
+                                              <TableCell>Allergy Notes</TableCell>
+                                              <TableCell>Order Notes</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -132,9 +134,15 @@ class ManagePackaging extends Component {
                                                         className={`row ${order.status}`}
                                                         onClick={() => this.toggleSingleOrderView({order})}
                                                     >
+                                                        <TableCell
+                                                         className={order.order_letter}></TableCell>
                                                         <TableCell>{order._id}</TableCell>
                                                         <TableCell
                                                             className={"text-capitalize"}>{order.status.replace('_', ' ')}</TableCell>
+                                                        <TableCell
+                                                          className={"text-capitalize"}>{order.allergy_notes}</TableCell>
+                                                        <TableCell
+                                                          className={"text-capitalize"}>{order.order_notes}</TableCell>
                                                     </TableRow>
                                                 }
                                             )}
