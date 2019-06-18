@@ -49,6 +49,8 @@ class Homepage extends Component {
           const user = this.userStore.user
           if (user.type === 'admin') {
             this.routing.push('/manage/shopper')
+          } else if (user.type === 'tws-ops') {
+            this.routing.push('/manage/shopping-app-1')
           } else {
             this.routing.push('/main')
           }
@@ -75,6 +77,7 @@ class Homepage extends Component {
     this.zipStore.selectedZip = this.state.zip
     logEvent({ category: "Homepage", action: "SubmitZip", label: this.state.zip })
     if (this.zipStore.validateZipCode(this.state.zip)) {
+      this.zipStore.setZip(this.state.zip)
       this.setState({
         heroStatus: 'success',
         heroText: 'Huzzah! It looks like we\'re in your zip code.',

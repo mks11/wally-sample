@@ -9,6 +9,7 @@ import axios from 'axios'
 class ZipStore {
   zipcodes = []
   selectedZip = null
+  zip = null
 
   async loadZipCodes() {
     const res = await axios.get(GET_ZIP_CODES)
@@ -30,6 +31,11 @@ class ZipStore {
     const res = await axios.post(API_SUBSCRIBE_NOTIFICATIONS, data)
     return res.data
   }
+
+  setZip(zip) {
+    this.zip = zip
+    localStorage.setItem('zip', JSON.stringify(zip))
+  }
 }
 
 decorate(ZipStore, {
@@ -37,6 +43,7 @@ decorate(ZipStore, {
   selectedZip: observable,
   loadZipCodes: action,
   subsribe: action,
+  setZip: action
 })
 
 

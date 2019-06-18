@@ -373,6 +373,9 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: #263a52;
 }
 
+.shopper-table .btn {
+  font-family: 'Circe';
+}
 
 #btn-hero--submit {
   transition: 0.15s background-color;
@@ -1142,13 +1145,18 @@ body {
     background: #e8e8e8;
 }
 
-.shopper-table .completed {
+.shopper-table .completed,
+.shopping-app-table .pending,
+.shopping-app-table .not-checked {
     background: lightgrey;
 }
+
 .shopper-table .completed:hover {
     background: #bebebe;
 }
-.shopper-table .missing {
+
+.shopper-table .missing,
+.shopping-app-table .unavailable {
     background: lightcoral;
 }
 /* step 3 view CSS */
@@ -1169,6 +1177,39 @@ body {
   justify-content: center;
 } */
 /* end of step 3 view css */
+.shopper-table .purchased {
+    background: #00800070;
+}
+.shopper-table .purchased:hover {
+  background: #0080008f;
+}
+
+.shopping-app-table .available,
+.shopping-app-table .checked {
+  background: #78C98D;
+}
+
+.shopping-app-table label, input {
+  cursor: pointer;
+}
+
+.modal-missing .modal-header {
+  justify-content: flex-start;
+}
+
+.modal-missing table {
+  padding: 5px;
+}
+
+.btn-center {
+  display: flex;
+  justify-content: center;
+}
+
+.btns-space-btw {
+  display: flex;
+  justify-content: space-between;
+}
 
 .packaging-table .missing:hover {
   background: #c76464;
@@ -1264,6 +1305,11 @@ body {
   background: #ececec;
 }
 
+.scrollable-table ~ .btn {
+  margin-top: 20px;
+  max-width: 120px;
+}
+
 .fulfillment-page .nav-tabs .nav-link {
   font-weight: bold;
 }
@@ -1354,4 +1400,7 @@ body {
 }
 .input-group{
   flex-wrap: unset;
+}
+.hide{
+  display: none;
 }
