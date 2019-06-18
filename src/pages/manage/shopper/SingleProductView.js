@@ -30,6 +30,7 @@ class SingleProductView extends Component {
                 value: props.product.product_producer,
                 id: props.product.product_producer
             },
+            shop: props.product.product_shop,
             local: props.product.local,
             organic: props.product.organic,
             shopPrice: props.product.shop_price / 100 || '',
@@ -93,12 +94,13 @@ class SingleProductView extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        const {id, isEdit, product, shopPrice, completed, organic, local, producer, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
+        const {id, isEdit, product, shopPrice, completed, organic, local, producer, shop, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
         const data = {
             id,
             product_id: product.product_id,
             inventory_id: product.inventory_id,
             product_producer: producer.value,
+            product_shop: shop,
             product_location: producer.value,
             product_name: substitute ? subProductName : product.product_name,
             missing,
@@ -140,7 +142,7 @@ class SingleProductView extends Component {
     }
 
     render() {
-        const {product, producer, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
+        const {product, producer, shop, isEdit, local, organic, shopPrice, substitute, missing, subProductName, finalQuantity, totalPaid, weight, farmValues, completed, missingReason} = this.state
         return (
             <section className="page-section pt-1 single-product">
                 <Container>
@@ -159,7 +161,21 @@ class SingleProductView extends Component {
                                     <strong>Product:</strong>
                                 </Col>
                                 <Col sm={10}>
-                                    {subProductName ? subProductName : product.product_name}
+                                    {product.product_name}
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                        <FormGroup>
+                            <Row>
+                                <Col componentClass={ControlLabel} sm={2}>
+                                    <strong>Quantity:</strong>
+                                </Col>
+                                <Col sm={10}>
+                                    {product.unit_type === 'packaging' ? (
+                                        product.quantity + ' ' + product.packaging_name
+                                    ) : (
+                                        product.quantity + ' ' + (product.unit_type || product.price_unit)
+                                    )}
                                 </Col>
                             </Row>
                         </FormGroup>
@@ -170,7 +186,7 @@ class SingleProductView extends Component {
                                 </Col>
                                 <Col sm={10}>
                                     <Createable isClearable placeholder="Producer" options={farmValues} value={producer}
-                                                isDisabled={!isEdit || (isEdit && !substitute)}
+                                                isDisabled={!isEdit}
                                                 formatCreateLabel={(label) => <div>New producer: {label}</div>}
                                                 onChange={this.handleProducerChange}/>
                                 </Col>
@@ -179,20 +195,11 @@ class SingleProductView extends Component {
                         <FormGroup>
                             <Row>
                                 <Col componentClass={ControlLabel} sm={2}>
-                                    <strong>Quantity:</strong>
+                                    <strong>Shop:</strong>
                                 </Col>
                                 <Col sm={10}>
-                                    {product.quantity} {product.unit_type}
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup>
-                            <Row>
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    <strong>Quantity (if sub.):</strong>
-                                </Col>
-                                <Col sm={10}>
-                                    {product.quantity_for_sub} {product.unit_type}
+                                    <FormControl placeholder="Shop Name" name="shop" value={shop}
+                                    onChange={this.handleInputChange}/>
                                 </Col>
                             </Row>
                         </FormGroup>
@@ -334,7 +341,7 @@ class SingleProductView extends Component {
                                 </Col>
                                 <Col sm={10}>
                                     <FormControl placeholder="Enter Weight" name="weight" value={weight}
-                                                 disabled={!isEdit || isEdit && (product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'pint' && product.unit_type !== 'packaging')}
+                                                 disabled={!isEdit || isEdit && (product.unit_type !== 'ea' && product.unit_type !== 'bunch' && product.unit_type !== 'packaging' && product.shop_price_unit !== 'lb' && product.shop_price_unit !== 'oz')}
                                                  onChange={this.handleInputChange}/>
                                 </Col>
                             </Row>

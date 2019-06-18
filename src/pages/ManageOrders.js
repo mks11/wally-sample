@@ -45,7 +45,7 @@ class ManageOrders extends Component {
       .getStatus(true)
       .then(status => {
         const user = this.userStore.user;
-        if (!status || user.type !== "admin") {
+        if (!status || !(["admin", "super-admin", "tws-ops"].includes(user.type))) {
           this.props.store.routing.push("/");
         } else {
           this.loadData();
@@ -60,11 +60,13 @@ class ManageOrders extends Component {
 
   loadData() {
     const date = new Date();
+    console.log(date);
     this.adminStore.getTimeFrames(date);
   }
 
   loadOrders = () => {
     const { route, timeframe } = this.state;
+    console.log(timeframe);
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
   };
@@ -93,11 +95,10 @@ class ManageOrders extends Component {
     const { singleOrderOpen } = this.state;
     const { orders } = this.adminStore;
     const user = this.userStore.user;
-    console.log(orders);
     return (
       <div className="App">
         <ManageTabs page="fulfillment" />
-        <Title content="Packaging Portal" />
+        <Title content="Orders Portal" />
         {!singleOrderOpen ? (
           <React.Fragment>
             <section className="page-section pt-1 fulfillment-page">
@@ -128,12 +129,18 @@ class ManageOrders extends Component {
                           return (
                             <TableRow
                               key={order._id}
-                              className={order.status === "packaged" ? `row ${order.status}` : "order-row"}
+                              className={
+                                order.status === "packaged"
+                                  ? `row ${order.status}`
+                                  : "order-row"
+                              }
                               onClick={() =>
                                 this.toggleSingleOrderView({ order })
                               }
                             >
-                              <TableCell className={order.order_letter}>A</TableCell>
+                              <TableCell className={order.order_letter}>
+                                {order.order_letter ? order.order_letter : ""}
+                              </TableCell>
                               <TableCell>{order._id}</TableCell>
                               <TableCell className={"text-capitalize"}>
                                 {order.status}

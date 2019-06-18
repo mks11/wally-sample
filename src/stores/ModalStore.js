@@ -20,6 +20,9 @@ class ModalStore {
   deliveryChangeData = null
 
   addonsFirst = false
+  
+  packaging = false
+  missing = false
 
   toggleDelivery() {
     this.delivery = !this.delivery
@@ -77,6 +80,14 @@ class ModalStore {
   toggleAddonsFirst() {
     this.addonsFirst = !this.addonsFirst
   }
+
+  togglePackaging = () => {
+    this.packaging = !this.packaging
+  }
+
+  toggleMissing = () => {
+    this.missing = !this.missing
+  }
 }
 
 decorate(ModalStore, {
@@ -97,6 +108,8 @@ decorate(ModalStore, {
   delivery: observable,
   deliveryChange: observable,
   addonsFirst: observable,
+  packaging: observable,
+  missing: observable,
 
   showDeliveryChange: action,
   hideDeliveryChange: action,
@@ -104,6 +117,8 @@ decorate(ModalStore, {
   toggleChangeFarm: action,
   toggleChangePrice: action,
   toggleDelivery: action,
+  togglePackaging: action,
+  toggleMissing: action,
 })
 
 
