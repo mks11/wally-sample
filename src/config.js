@@ -1,4 +1,4 @@
-export const BASE_URL = "https://evening-bayou-13995.herokuapp.com"
+ export const BASE_URL = "https://evening-bayou-13995.herokuapp.com"
 // export const BASE_URL = "http://localhost:4001"
 
 export const API_GET_USER = BASE_URL + "/api/user"
@@ -47,6 +47,9 @@ export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/loca
 export const API_ADMIN_GET_SHOP_ITEMS = BASE_URL + "/api/admin/shopping/shopitems"
 export const API_ADMIN_GET_SHOP_ITEMS_FARMS = BASE_URL + "/api/admin/shopping/shopitems/farms"
 export const API_ADMIN_UPDATE_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem"
+
+export const API_ADMIN_SET_SHOP_ITEM_STATUS = BASE_URL + "/api/admin/shopping/shopitem/status"
+
 export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location"
 // export const API_ADMIN_UPDATE_SHOP_ITEM_QUANTITY = "http://localhost:4000/api/admin/shopping/shopitem/"
 export const API_ADMIN_GET_ROUTES = BASE_URL + "/api/admin/routes"

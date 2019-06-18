@@ -9,6 +9,8 @@ import ManageTabs from './manage/ManageTabs'
 import ShopperTable from './manage/ShopperTable'
 import CustomDropdown from '../common/CustomDropdown'
 import SingleProductView from './manage/shopper/SingleProductView'
+
+
 import {connect} from '../utils'
 import {toJS} from 'mobx';
 
@@ -164,7 +166,11 @@ class ManageShopper extends Component {
             nextDisabled={!this.nextProductExists()}
             timeframe={timeframe}
           />
+
+          
         }
+
+        
       </div>
     );
   }
