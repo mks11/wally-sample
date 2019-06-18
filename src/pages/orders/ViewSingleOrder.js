@@ -37,9 +37,6 @@ class ViewSingleOrder extends Component {
       packagings: props.packagings.map(packaging => {
         return { ...packaging };
       }),
-      packaging_used: props.selectedOrder.packaging_used.map(item => {
-        return { ...item, type: item.type, quantity: item.quantity };
-      }),
       confirmModalOpen: false
     };
     this.userStore = this.props.store.user;
@@ -65,13 +62,10 @@ class ViewSingleOrder extends Component {
     let orderId = this.state.selectedOrder._id;
     let cart_items = this.state.cart_items;
     let cartItems = payload.cart_items;
-    console.log("cartItems");
-    console.log(cart_items);
-    console.log("payload");
-    console.log(payload.packagings);
-    let packagings = this.state.selectedOrder.packaging_used;
-    console.log("APICALL");
-    console.log(packagings);
+    let selectedOrder = this.state.selectedOrder;
+    console.log("cart_items", cart_items);
+    console.log("payload", cart_items);
+    let packagings = payload.packagings;
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -102,12 +96,13 @@ class ViewSingleOrder extends Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { packaging_used, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
+    // console.log("PUSED", selectedOrder.packaging_used);
     const items = selectedOrder.cart_items.map(item => {
+      console.log("item", item.product_error_reason);
       return {
-        product_id: item.product_id,
         product_name: item.product_name,
         missing: item.missing,
         product_error_reason: item.product_error_reason,
@@ -115,7 +110,7 @@ class ViewSingleOrder extends Component {
         weight: item.weight
       };
     });
-    console.log("PUSED", selectedOrder.packaging_used);
+
     const newPackagings = selectedOrder.packaging_used.map(packaging => {
       return {
         type: packaging.type,
@@ -127,32 +122,28 @@ class ViewSingleOrder extends Component {
       cart_items: items,
       packagings: newPackagings
     };
-    console.log("payload");
-    console.log(payload.packagings);
-    const options = this.userStore.getHeaderAuth();
+    console.log("after");
+    console.log(payload.cart_items);
 
-    // this.adminStore.packageOrder(selectedOrder._id, payload, options);
-    onSubmit && onSubmit();
-    this.handleOrderUpdate(payload);
-    this.setState({
-      selectedOrder: {
-        ...this.state.selectedOrder,
-        cart_items: payload.cart_items,
-        packagings: payload.newPackagings
+    await this.setState(
+      {
+        selectedOrder: {
+          ...this.state.selectedOrder,
+          cart_items: payload.cart_items,
+          packagings: payload.newPackagings
+        }
+      },
+      async () => {
+        await this.handleOrderUpdate(payload);
+        this.props.toggle({});
+        onSubmit && onSubmit();
+        window.location.reload();
       }
-    });
-    this.props.toggle({});
+    );
   };
 
   render() {
-    const {
-      cart_items,
-      selectedOrder,
-      packagings,
-      packaging_used,
-      originalSubTotal,
-      currentSubTotal
-    } = this.state;
+    const { cart_items, selectedOrder, packagings } = this.state;
     const hideRow = { display: "none" };
     return (
       <section className="page-section pt-1 single-order">
