@@ -31,7 +31,7 @@ import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
 import ShoppingAppStep1 from './pages/ShoppingAppStep1';
 import ShoppingAppStep2 from './pages/ShoppingAppStep2';
-import ShoppingAppStep3 from './pages/ShoppingAppStep3';
+import ShoppingAppStep3 from './pages/manage/ShoppingAppStep3';
 import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
 
