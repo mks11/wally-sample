@@ -13,7 +13,8 @@ class Receipts extends Component {
       tableView: true,
       receipts: [],
       enlageImage: false,
-      enlargeImageFile: ""
+      enlargeImageFile: "",
+      currentDate: ""
     };
   }
 
@@ -27,10 +28,12 @@ class Receipts extends Component {
       return n < 10 ? "0" + n : n;
     } // I could easily extract this date into a file with other similar functions.
     var yyyymmdd = year + "-" + pad(month + 1) + "-" + pad(date);
+    let formattedDate = yyyymmdd + "%202:00PM-8:00PM";
+    this.setState({ currentDate: yyyymmdd });
 
     axios
       .get(
-        `http://localhost:4001/api/admin/shopping/receipt?timeframe=${yyyymmdd}%202:00PM-8:00PM`
+        `http://localhost:4001/api/admin/shopping/receipt?timeframe=${formattedDate}`
       )
       .then(response => {
         const sortedReceipts = response.data.receipts.sort(function(a, b) {
@@ -133,6 +136,10 @@ class Receipts extends Component {
                           className="prev-img"
                           src={
                             "https://the-wally-shop-app.s3.us-east-2.amazonaws.com/" +
+                            "daily-receipts" +
+                            "/" +
+                            this.state.currentDate +
+                            "/" +
                             receipt.filename
                           }
                           onClick={this.enlargeImage}

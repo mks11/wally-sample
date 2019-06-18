@@ -59,20 +59,23 @@ class ReceiptCapture extends Component {
       });
     // Also set date
     let date = currentDate() + " 2:00PM-8:00PM";
-    this.setState({ date });
+    this.setState({ dateTime: date });
   }
 
   submitForm = () => {
     // If location & image are chosen by User...
     if (this.state.location != "" && this.state.image != "") {
       // Upload File to S3
-      S3Client.uploadFile(this.state.file, this.state.filename)
+      S3Client.uploadFile(this.state.file)
         .then(data =>
           // If Upload to S3 Successful push to backend
           axios
             .post("http://localhost:4001/api/admin/shopping/receipt", {
               shop_date: this.state.dateTime,
-              filename: data.key,
+              filename: data.key
+                .split("/")
+                .slice(-1)
+                .join("/"),
               location: this.state.chosenLocation
             })
             .then(response => {
