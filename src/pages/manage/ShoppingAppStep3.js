@@ -9,10 +9,11 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-
 import { Checkbox } from '@material-ui/core';
 
 import ModalStep3MissingPopUp from './shopper/ModalStep3MissingPopUp'
+import Title from '../../common/page/Title'
+import ManageTabs from '../manage/ManageTabs'
 
 import { connect } from '../../utils'
 
@@ -33,11 +34,13 @@ class ShoppingAppStep3 extends Component {
             location: null
         }
         this.adminStore = this.props.store.admin
+        this.userStore = this.props.store.user
     }
 
  
     grabShopLocations = () => {
         let { timeframes } = this.state
+
         this.adminStore.getShopLocations(timeframes)
     }
    
@@ -67,6 +70,12 @@ class ShoppingAppStep3 extends Component {
         
     }
 
+    handleReload = (e) => {
+        e.preventDefault()
+        const {timeframes, location} = this.state
+        this.adminStore.getShopItems(timeframes, location)
+    }
+
     toggleModal = () => {
         this.setState(prevState => ({
             showModal: !prevState.showModal
@@ -86,7 +95,18 @@ class ShoppingAppStep3 extends Component {
     } 
 
     componentDidMount(){
-        this.grabShopLocations()
+        this.userStore.getStatus(true)
+        .then( (status) => {
+            const user = this.userStore.user
+            if( status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')){
+                this.grabShopLocations()
+            } else {
+                this.props.store.routing.push('/')
+            }
+        })
+        .catch((error) => {
+            this.props.store.routing.push('/')
+        })
     }
 
 
@@ -100,22 +120,9 @@ class ShoppingAppStep3 extends Component {
     //     }
 
 
-
-        // switch(item.status){
-        //     case "pending":
-        //         newarr.push(item)
-        // }
-
-
-        // return newar
-    // }
-
-
     render(){
         const { locations, shopitems } = this.adminStore
         const { showModal, id, product, status, timeframes } = this.state
-
-
 
         return(
             <React.Fragment>
@@ -128,7 +135,8 @@ class ShoppingAppStep3 extends Component {
                 timeframes = { timeframes }
                 />
                 
-
+            <ManageTabs page="shopper" />
+            <Title content="Shopping App" />
 
             <Container>
                 <Row>
@@ -197,7 +205,7 @@ class ShoppingAppStep3 extends Component {
                     </TableBody>
                     <Col style = {{padding: "10px"}} sm={{size:6, offset: 4}} md={{ size: 6, offset: 4 }}>
                             <Link to="#">
-                                <Button className = "btn-sm" onClick = {this.grabShopItems}> Reload </Button>
+                                <Button className = "btn-sm" onClick = {this.handleReload}> Reload </Button>
                             </Link>
                             </Col>
                     </Table>
@@ -209,8 +217,8 @@ class ShoppingAppStep3 extends Component {
                         <Container style = {{padding: "10px"}} className = "step3-btn-spacing">
                         <Row>
                             <Col lg="4" xs="6" sm={{ size: 'auto', offset: 2 }}>
-                            {/* need to add link to step two route  */}
-                            <Link to="#"> 
+
+                            <Link to="/manage/shopping-app-2"> 
                                 <Button className = "btn-sm"> Step 2 </Button>
                             </Link>
                             </Col>
