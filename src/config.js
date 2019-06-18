@@ -51,7 +51,7 @@ export const API_ADMIN_GET_SUB_INFO = BASE_URL + "/api/admin/shopping/dailysubst
 export const API_ADMIN_UPDATE_DAILY_SUBSTITUTE = BASE_URL + "/api/admin/shopping/dailysubstitutes"
 export const API_ADMIN_UPDATE_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem"
 
-export const API_ADMIN_SET_SHOP_ITEM_STATUS = BASE_URL + "/api/admin/shopping/shopitem/status"
+
 
 export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location"
 export const API_ADMIN_GET_LOCATION_STATUS = BASE_URL + "/api/admin/shopping/location/status"
