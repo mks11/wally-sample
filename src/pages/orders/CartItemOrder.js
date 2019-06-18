@@ -68,6 +68,7 @@ class CartItemOrder extends Component {
     const orderId = this.state.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
+    console.log(errorReason);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -137,6 +138,7 @@ class CartItemOrder extends Component {
       },
       async () => {
         await this.handleItemUpdate();
+        this.props.getChildState(this.state.cart_item);
         this.toggleErrorOff();
       }
     );
@@ -167,6 +169,7 @@ class CartItemOrder extends Component {
     } = this.state;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
+    console.log(this.props);
     return (
       <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>

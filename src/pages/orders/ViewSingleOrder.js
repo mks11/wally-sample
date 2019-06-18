@@ -73,7 +73,7 @@ class ViewSingleOrder extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        cart_items: cartItems,
+        cart_items: cart_items,
         packagings
       })
     })
@@ -99,7 +99,6 @@ class ViewSingleOrder extends Component {
   handleSubmit = async () => {
     const { packaging_used, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
-    // console.log("PUSED", selectedOrder.packaging_used);
     const items = selectedOrder.cart_items.map(item => {
       console.log("item", item.product_error_reason);
       return {
@@ -137,9 +136,20 @@ class ViewSingleOrder extends Component {
         await this.handleOrderUpdate(payload);
         this.props.toggle({});
         onSubmit && onSubmit();
-        window.location.reload();
+        // window.location.reload();
       }
     );
+  };
+
+  getChildState = childState => {
+    const { cart_items, selectedOrder } = this.state;
+    console.log("childState", childState);
+    // this.setState({
+    //   selectedOrder: {
+    //     ...this.state.selectedOrder,
+    //     cart_items: childState
+    //   }
+    // });
   };
 
   render() {
@@ -182,6 +192,7 @@ class ViewSingleOrder extends Component {
                     cart_item={cart_item}
                     index={i}
                     saveCartRow={this.saveCartRow}
+                    getChildState={this.getChildState}
                   />
                 ))}
               </TableBody>

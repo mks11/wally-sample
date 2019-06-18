@@ -70,20 +70,30 @@ class SingleOrderView extends Component {
     });
   };
 
-  onChangePackaging = (e, i) => {
-    const packagings = [...this.state.packagings];
-    packagings[i] = { ...packagings[i], quantity: e.target.value };
-    this.setState({ packagings });
+  onChangePackaging = (e, id) => {
+    const packagings = this.state.selectedOrder.packaging_used.map(data => {
+      if (data._id === id) {
+        return { ...data, quantity: e.target.value };
+      }
+      return data;
+    });
+    this.setState({
+      selectedOrder: {
+        ...this.state.selectedOrder,
+        packaging_used: packagings
+      }
+    });
   };
 
   toggleConfirmModal = () => {
     this.setState({ confirmModalOpen: !this.state.confirmModalOpen });
   };
 
-  handleOrderUpdate = () => {
+  handleOrderUpdate = payload => {
     let orderId = this.state.selectedOrder._id;
-    let cartItems = this.state.cart_items;
-    let packagings = this.state.packagings;
+    let cart_items = this.state.cart_items;
+    let selectedOrder = this.state.selectedOrder;
+    let packagings = payload.packagings;
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -91,7 +101,7 @@ class SingleOrderView extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        cartItems,
+        cart_items: cart_items,
         packagings
       })
     })
@@ -99,7 +109,7 @@ class SingleOrderView extends Component {
       .catch(error => console.log(error));
   };
 
-  handleSubmit = () => {
+  submitPackaging = () => {
     const { packagings, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
     const item_quantities = cart_items.map(item => {
@@ -127,6 +137,46 @@ class SingleOrderView extends Component {
     this.props.toggle({});
   };
 
+  updateOrder = async () => {
+    const { packaging_used, cart_items, selectedOrder } = this.state;
+    const items = selectedOrder.cart_items.map(item => {
+      return {
+        product_name: item.product_name,
+        missing: item.missing,
+        final_quantity: item.missing ? 0 : Number(item.final_quantity),
+        weight: item.weight
+      };
+    });
+
+    const packagings = selectedOrder.packaging_used.map(packaging => {
+      return {
+        type: packaging.type,
+        quantity: Number(packaging.quantity)
+      };
+    });
+
+    const payload = {
+      cart_items: items,
+      packagings: packagings
+    };
+    console.log("after");
+    console.log(payload.cart_items);
+
+    await this.setState(
+      {
+        selectedOrder: {
+          ...this.state.selectedOrder,
+          cart_items: payload.cart_items,
+          packagings: payload.newPackagings
+        }
+      },
+      async () => {
+        await this.handleOrderUpdate(payload);
+        window.location.reload();
+      }
+    );
+  };
+
   render() {
     const {
       cart_items,
@@ -136,6 +186,7 @@ class SingleOrderView extends Component {
       originalSubTotal,
       currentSubTotal
     } = this.state;
+    console.log(selectedOrder);
     const packagingArr = packagings.reduce((acc, packaging) => {
       const pUsed = packagingUsed.find(e => e.type === packaging.type);
       if (pUsed)
@@ -224,17 +275,18 @@ class SingleOrderView extends Component {
           </FormGroup>
           <Table className={"packaging-table"}>
             <TableBody>
-              {packagings.map((packaging, i) => (
+              {selectedOrder.packaging_used.map((packaging, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     <strong>{packaging.type}</strong>
                   </TableCell>
                   <TableCell>
                     <Input
-                      placeholder="Enter Quantity"
+                      className="packaging-quantity"
+                      name="packaging quantity"
                       value={packaging.quantity}
-                      type={"number"}
-                      onChange={e => this.onChangePackaging(e, i)}
+                      type="number"
+                      onChange={e => this.onChangePackaging(e, packaging._id)}
                     />
                   </TableCell>
                 </TableRow>
@@ -245,11 +297,20 @@ class SingleOrderView extends Component {
             <Button
               variant="contained"
               color="primary"
-              size={"large"}
+              size={"medium"}
               type={"button"}
               onClick={this.toggleConfirmModal}
             >
               Package Order
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              size={"medium"}
+              type={"button"}
+              onClick={this.updateOrder}
+            >
+              Update Order
             </Button>
           </div>
         </Container>
@@ -268,7 +329,7 @@ class SingleOrderView extends Component {
               color="primary"
               size={"large"}
               type={"button"}
-              onClick={this.handleSubmit}
+              onClick={this.submitPackaging}
             >
               Confirm
             </Button>
