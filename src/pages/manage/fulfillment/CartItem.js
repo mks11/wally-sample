@@ -60,7 +60,8 @@ class CartItem extends Component {
         product_name: cartItem.product_name,
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
-        product_price: cartItem.product_price / 100,
+        product_shop: cartItem.product_shop,
+        product_price: cartItem.product_price,
         final_quantity: cartItem.final_quantity,
         missing: cartItem.missing,
         weight: weight
@@ -154,7 +155,7 @@ class CartItem extends Component {
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>
-          ${cart_item.initial_product_price / 100} / {cart_item.price_unit}
+          ${cart_item.initial_product_price / 100} / {cart_item.unit_type}
         </TableCell>
         <TableCell>
           <InputGroup>
