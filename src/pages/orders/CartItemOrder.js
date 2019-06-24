@@ -124,7 +124,7 @@ class CartItemOrder extends Component {
 
   makePatchAPICallError = async childState => {
     const error = {
-      product_error_reason: childState.ugly ? "ugly" : "toolittle",
+      product_error_reason: childState.noError ? "no_error" : childState.ugly ? "ugly" : "too_little",
       final_quantity: Number(childState.cart_item.final_quantity)
     };
 
@@ -198,7 +198,7 @@ class CartItemOrder extends Component {
           />
         </TableCell>
         <TableCell className="error-code">
-          <p onClick={this.toggleErrorModal}>123</p>
+          <p onClick={this.toggleErrorModal}>{cart_item.product_error_reason && !cart_item.product_error_reason == "no_error" ? cart_item.product_error_reason : "Ok"}</p>
           <OrderErrorModal
             cart_item={cart_item}
             quantityUnit={quantityUnit}

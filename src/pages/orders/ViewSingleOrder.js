@@ -34,7 +34,7 @@ class ViewSingleOrder extends Component {
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
-      packagings: props.packagings.map(packaging => {
+      packagings: props.selectedOrder.packaging_used.map(packaging => {
         return { ...packaging };
       }),
       confirmModalOpen: false
@@ -61,11 +61,8 @@ class ViewSingleOrder extends Component {
   handleOrderUpdate = payload => {
     let orderId = this.state.selectedOrder._id;
     let cart_items = this.state.cart_items;
-    let cartItems = payload.cart_items;
     let selectedOrder = this.state.selectedOrder;
-    console.log("cart_items", cart_items);
-    console.log("payload", cart_items);
-    let packagings = payload.packagings;
+    let packagings = this.state.selectedOrder.packaging_used;
     let API_TEST_URL = "http://localhost:4001";
     fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
@@ -81,9 +78,9 @@ class ViewSingleOrder extends Component {
       .catch(error => console.log(error));
   };
 
-  onChangePackaging = (e, id) => {
+  onChangePackaging = (e, type) => {
     const packagings = this.state.selectedOrder.packaging_used.map(data => {
-      if (data._id === id) {
+      if (data.type === type) {
         return { ...data, quantity: e.target.value };
       }
       return data;
@@ -121,8 +118,6 @@ class ViewSingleOrder extends Component {
       cart_items: items,
       packagings: newPackagings
     };
-    console.log("after");
-    console.log(payload.cart_items);
 
     await this.setState(
       {
@@ -179,8 +174,8 @@ class ViewSingleOrder extends Component {
                   <TableCell>Store</TableCell>
                   <TableCell>Initial Quantity</TableCell>
                   <TableCell>Final Quantity</TableCell>
-                  <TableCell>Missing</TableCell>
-                  <TableCell>Error Code</TableCell>
+                  <TableCell>Missing?</TableCell>
+                  <TableCell>Error?</TableCell>
                   <TableCell>Weight (lbs)</TableCell>
                 </TableRow>
               </TableHead>
@@ -219,13 +214,10 @@ class ViewSingleOrder extends Component {
                       <Input
                         name="packaging quantity"
                         value={
-                          packaging.quantity === 0 ||
-                          packaging.quantity === null
-                            ? 0
-                            : packaging.quantity
+                          packaging.quantity
                         }
                         type="number"
-                        onChange={e => this.onChangePackaging(e, packaging._id)}
+                        onChange={e => this.onChangePackaging(e, packaging.type)}
                       />
                     </TableCell>
                   </TableRow>
