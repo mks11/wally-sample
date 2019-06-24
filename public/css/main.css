@@ -1159,6 +1159,24 @@ body {
 .shopping-app-table .unavailable {
     background: lightcoral;
 }
+/* step 3 view CSS */
+.btn-sm {
+  padding: .35rem .5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .2rem;
+  width: 100px;
+  color: #fff;
+  background-color: #138496;
+  border-color: #117a8b;
+
+}
+
+/* .step3-btn-spacing{
+  display: flex;
+  justify-content: center;
+} */
+/* end of step 3 view css */
 .shopper-table .purchased {
     background: #00800070;
 }
