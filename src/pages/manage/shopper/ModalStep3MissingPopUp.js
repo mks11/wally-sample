@@ -83,7 +83,11 @@ class ModalStep3MissingPopUp extends Component {
 
     render(){
         const { showModal, toggleModal } = this.props 
-        let renderQuantity 
+
+        
+        let renderQuantity
+        let renderQuantityInput
+
         if( this.props.shopitem ){
             renderQuantity =    <TableCell 
                                  align = "center">
@@ -92,16 +96,36 @@ class ModalStep3MissingPopUp extends Component {
         } else {
             renderQuantity = null
         }
+
+        if ( this.handleChecked() ){
+           renderQuantityInput = <Input
+                disabled
+                onChange = {this.handleOnChange}
+                value = {this.state.quantity}
+                id = "quantity"
+                style = {{
+                    width: "60px"
+                }}/>
+        } else {
+           renderQuantityInput = <Input
+                onChange = {this.handleOnChange}
+                value = {this.state.quantity}
+                id = "quantity"
+                style = {{
+                    width: "60px"
+                }}/>
+        }
         
         return(
             <Modal isOpen = { showModal } toggle = { toggleModal }>
                 <ModalBody>
                     <Container>
-                        
+                            <Button close onClick = {toggleModal}/>
                             <h3>  {this.props.shopitem ? this.props.shopitem.product_name : null} Unavailable</h3>
                             <Table >
 
                                 <TableBody>
+
                                     <h5>Missing Reason (please select one):</h5>
                                     <TableRow>
                                         <TableCell> Missing :</TableCell>
@@ -128,13 +152,7 @@ class ModalStep3MissingPopUp extends Component {
                                         </TableCell>
                                         <TableCell >
                                         
-                                       <Input
-                                            onChange = {this.handleOnChange}
-                                            value = {this.state.quantity}
-                                            id = "quantity"
-                                            style = {{
-                                                width: "60px"
-                                            }}/>
+                                       {renderQuantityInput}
                                         
                                        </TableCell>
                                        {renderQuantity} 
