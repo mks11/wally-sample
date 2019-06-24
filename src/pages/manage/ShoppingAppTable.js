@@ -20,12 +20,12 @@ class ShoppingAppTable extends Component {
     }
 
     this.step = this.props.step
-    this.deliveryDate = moment().format('YYYY-MM-DD')
+    this.timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
     this.adminStore = props.store.admin
     this.modalStore = props.store.modal
   }
 
-  handleSelectAvailability = (isAvailable, shopitemId, productName) => {
+  handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
     if (isAvailable) {
       const status = 'available'
       this.adminStore.setShopItemStatus(shopitemId, status)
@@ -34,7 +34,7 @@ class ShoppingAppTable extends Component {
       const {location} = this.props
       const status = 'missing'
       this.adminStore.setShopItemStatus(shopitemId, status)
-      this.adminStore.getSubInfo(shopitemId, this.deliveryDate, location)
+      await this.adminStore.getSubInfo(shopitemId, this.timeframe, location)
       this.modalStore.toggleMissing()
     }
   }
@@ -46,8 +46,9 @@ class ShoppingAppTable extends Component {
       <React.Fragment>
         <ModalMissing
           shopitemId={shopitemId}
+          location={this.props.location}
           productName={productName}
-          deliveryDate={this.deliveryDate}
+          timeframe={this.timeframe}
         />
         <Paper elevation={1} className="scrollable-table">
           <Table className="shopping-app-table">
