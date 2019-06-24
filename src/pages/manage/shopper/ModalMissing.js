@@ -53,9 +53,12 @@ class ModalMissing extends Component {
 	}
 
 	handleSubmit = () => {
-		const {deliveryDate, shopitemId} = this.props
-		const {selectedSubs} = this.state
-		this.adminStore.updateDailySubstitute(deliveryDate, shopitemId, selectedSubs)
+		const {shopitemId, timeframe, location} = this.props
+		let {selectedSubs} = this.state
+		selectedSubs = selectedSubs && selectedSubs.map(sub => {
+			return { ...sub, product_shop: location }
+		})
+		this.adminStore.updateDailySubstitute(timeframe, shopitemId, selectedSubs)
 		this.modalStore.toggleMissing()
 	}
 
