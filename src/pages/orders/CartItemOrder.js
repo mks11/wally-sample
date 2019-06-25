@@ -80,10 +80,14 @@ class CartItemOrder extends Component {
       .catch(error => console.log(error));
   };
 
-  handleWeightKeyPress = e => {
+  handleWeightKeyPress = async e => {
     let code = e.keyCode || e.which;
     if (code === 13) {
-      this.props.saveCartRow(this.props.cart_item); //ToDO
+      // this.props.saveCartRow(this.props.cart_item); //ToDO
+      await this.props.onCartStateChange({
+        _id: this.props.cart_item._id,
+        weight: this.state.weight
+      });
       this.handleItemUpdate();
       // this.props.onCartStateChange(this.state.cart_item);
     }
