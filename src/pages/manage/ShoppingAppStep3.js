@@ -20,6 +20,8 @@ import { connect } from "../../utils";
 import moment from "moment";
 import { syncHistoryWithStore } from "mobx-react-router";
 
+const axios = require("axios");
+
 class ShoppingAppStep3 extends Component {
   constructor(props) {
     super(props);
