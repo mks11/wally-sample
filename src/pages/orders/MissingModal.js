@@ -8,7 +8,7 @@ class MissingModal extends Component {
     return (
       <div className="backdrop-missing">
         <div className="missing-modal">
-          <p>Please confirm if item is missing</p>
+          <p>Please click yes to confirm if item is missing/not missing</p>
           <button className="modal-button" onClick={this.props.onConfirm}>
             Yes
           </button>

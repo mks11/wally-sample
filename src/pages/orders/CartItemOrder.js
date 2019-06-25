@@ -37,19 +37,13 @@ class CartItemOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // order_id: props.order_id,
-      // cart_item: props.cart_item,
       weight: "",
       quantityUnit:
         props.cart_item.unit_type === "packaging"
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
-      // missing: props.cart_item.missing,
-      // error: props.cart_item.product_error_reason,
       unconfirmedMissingState: null,
-      // isMissingModalOpen: false,
       isErrorModalOpen: false
-      //move cartItem state to live in ViewSingleOrder and pass it in here as props
     };
   }
 
@@ -59,7 +53,6 @@ class CartItemOrder extends Component {
     const orderId = this.props.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
-    // console.log(missing);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     return fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -83,18 +76,15 @@ class CartItemOrder extends Component {
   handleWeightKeyPress = async e => {
     let code = e.keyCode || e.which;
     if (code === 13) {
-      // this.props.saveCartRow(this.props.cart_item); //ToDO
       await this.props.onCartStateChange({
         _id: this.props.cart_item._id,
         weight: this.state.weight
       });
       this.handleItemUpdate();
-      // this.props.onCartStateChange(this.state.cart_item);
     }
   };
 
   setWeight = e => {
-    console.log("setWeight", e);
     this.setState({
       weight: e.target.value
     });
@@ -114,7 +104,6 @@ class CartItemOrder extends Component {
 
   handlePatchMissing = async () => {
     const { unconfirmedMissingState } = this.state;
-    console.log("patchCall", unconfirmedMissingState);
     await this.props.onCartStateChange({
       _id: this.props.cart_item._id,
       missing: unconfirmedMissingState

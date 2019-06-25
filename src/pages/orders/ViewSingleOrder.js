@@ -91,20 +91,9 @@ class ViewSingleOrder extends Component {
     });
   };
 
-  handleSubmit = async () => {
-    const { packaging_used, cart_items, selectedOrder } = this.state;
+  handlePackageSubmit = async () => {
+    const { packaging_used, selectedOrder } = this.state;
     const { onSubmit } = this.props;
-    //delete items
-    const items = selectedOrder.cart_items.map(item => {
-      console.log("item", item.product_error_reason);
-      return {
-        product_name: item.product_name,
-        missing: item.missing,
-        product_error_reason: item.product_error_reason,
-        final_quantity: item.missing ? 0 : Number(item.final_quantity),
-        weight: item.weight
-      };
-    });
 
     const newPackagings = selectedOrder.packaging_used.map(packaging => {
       return {
@@ -113,39 +102,24 @@ class ViewSingleOrder extends Component {
       };
     });
 
-    const payload = {
-      cart_items: items,
-      packagings: newPackagings
-    };
-
     await this.setState(
       {
         selectedOrder: {
           ...this.state.selectedOrder,
-          cart_items: payload.cart_items,
-          packagings: payload.newPackagings
+          packagings: newPackagings
         }
       },
       async () => {
-        await this.handleOrderUpdate(payload);
-        console.log("toggling after handleSubmit");
+        await this.handleOrderUpdate(newPackagings);
         this.props.toggle({});
         onSubmit && onSubmit();
-        // window.location.reload();
       }
     );
   };
 
   handleCartStateChange = update => {
     const { cart_items, selectedOrder } = this.state;
-    // console.log("childState", childState);
-    // const child = {
-    //   product_error_reason: childState.product_error_reason,
-    //   final_quantity: childState.final_quantity
-    // };
-    // console.log("cart_items", cart_items);
     return new Promise(done => {
-      // all the setStates in here
       this.setState(({ cart_items }) => ({
         cart_items: cart_items.map(item =>
           item._id === update._id
@@ -162,8 +136,6 @@ class ViewSingleOrder extends Component {
       });
     });
   };
-
-  // handleSetMissing = () => {};
 
   render() {
     const { cart_items, selectedOrder, packagings } = this.state;
@@ -203,7 +175,6 @@ class ViewSingleOrder extends Component {
                     key={cart_item._id}
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
-                    // index={i}
                     saveCartRow={this.saveCartRow}
                     onCartStateChange={this.handleCartStateChange}
                     onSetMissing={this.handleSetMissing}
@@ -277,7 +248,7 @@ class ViewSingleOrder extends Component {
               color="primary"
               size={"large"}
               type={"button"}
-              onClick={this.handleSubmit}
+              onClick={this.handlePackageSubmit}
             >
               Confirm
             </Button>

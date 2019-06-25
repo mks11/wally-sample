@@ -14,7 +14,6 @@ import ManageTabs from "./manage/ManageTabs";
 import CustomDropdown from "../common/CustomDropdown";
 import FulfillmentPlaceView from "./manage/FulfillmentPlaceView";
 import FulfillmentPackView from "./manage/FulfillmentPackView";
-
 import { connect } from "../utils";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
@@ -25,6 +24,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableFooter from "@material-ui/core/TableFooter/TableFooter";
 import { toJS } from "mobx";
 import ViewSingleOrder from "./orders/ViewSingleOrder";
+import moment from "moment";
 
 class ManageOrders extends Component {
   constructor(props) {
@@ -69,7 +69,7 @@ class ManageOrders extends Component {
 
   // loadOrders = () => {
   //   const { route } = this.state;
-  //   let timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`;
+  //   let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
   //   const options = this.userStore.getHeaderAuth();
   //   this.adminStore.getRouteOrders("all", timeframe, options);
   // };
@@ -93,10 +93,8 @@ class ManageOrders extends Component {
 
   toggleSingleOrderView = ({ order }) => {
     if (order) {
-      console.log("not loading orders");
       this.setState({ singleOrderOpen: true, selectedOrder: order });
     } else {
-      console.log("loading orders...");
       this.setState({ singleOrderOpen: false, selectedOrder: null });
       this.loadOrders();
     }
