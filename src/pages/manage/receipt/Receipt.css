@@ -27,17 +27,3 @@
 .prev-img:hover {
   opacity: 0.8;
 }
-
-.enlargedImg {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 85%;
-  max-height: 80%;
-  margin: auto;
-}
-
-.bigImgSelf {
-  max-width: 80%;
-  max-height: 700px;
-}
