@@ -49,6 +49,8 @@ class Homepage extends Component {
           const user = this.userStore.user
           if (user.type === 'admin') {
             this.routing.push('/manage/shopper')
+          } else if (user.type === 'tws-ops') {
+            this.routing.push('/manage/shopping-app-1')
           } else {
             this.routing.push('/main')
           }

@@ -3,12 +3,15 @@ import {
   Row,
   Col,
   Container,
+  Button
 } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
 import ShopperTable from './manage/ShopperTable'
 import CustomDropdown from '../common/CustomDropdown'
 import SingleProductView from './manage/shopper/SingleProductView'
+
+
 import {connect} from '../utils'
 import {toJS} from 'mobx';
 
@@ -53,6 +56,7 @@ class ManageShopper extends Component {
 
   loadShopItems = (location) => {
     const {timeframe} = this.state
+    this.adminStore.clearStoreShopItems()
     this.adminStore.getShopItems(timeframe, location)
     this.adminStore.getShopItemsFarms(timeframe, location)
     this.setState({location})
@@ -99,6 +103,12 @@ class ManageShopper extends Component {
     shopitems = toJS(shopitems)
     const {selectedIndex} = this.state
     this.setState({selectedProduct: shopitems[selectedIndex + 1], selectedIndex: selectedIndex + 1})
+  }
+
+  handleReloadClick = (e) => {
+    e.preventDefault()
+    const { timeframe, location } = this.state
+    this.adminStore.getShopItems(timeframe, location)
   }
 
   render() {
@@ -149,6 +159,7 @@ class ManageShopper extends Component {
                 <h2>Shop Location View</h2>
                 <ShopperTable {...{timeframe}} shopitems={shopitems}
                               toggleSingleProductView={this.toggleSingleProductView}/>
+                <Button onClick={this.handleReloadClick}>Reload</Button>
               </Container>
             </section>
           </React.Fragment>
@@ -164,7 +175,11 @@ class ManageShopper extends Component {
             nextDisabled={!this.nextProductExists()}
             timeframe={timeframe}
           />
+
+          
         }
+
+        
       </div>
     );
   }

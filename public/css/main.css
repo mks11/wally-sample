@@ -373,6 +373,9 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   background-color: #263a52;
 }
 
+.shopper-table .btn {
+  font-family: 'Circe';
+}
 
 #btn-hero--submit {
   transition: 0.15s background-color;
@@ -603,7 +606,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 @media (min-width: 350px) {
   .aw-nav--mobile li a {
     padding: 15px 10px;
-  }  
+  }
 }
 
 .aw-nav--mobile li a:focus, .aw-nav--mobile li a:active, .aw-nav--mobile li a:hover {
@@ -1142,14 +1145,70 @@ body {
     background: #e8e8e8;
 }
 
-.shopper-table .completed {
+.shopper-table .completed,
+.shopping-app-table .pending,
+.shopping-app-table .not-checked {
     background: lightgrey;
 }
+
 .shopper-table .completed:hover {
     background: #bebebe;
 }
-.shopper-table .missing {
+
+.shopper-table .missing,
+.shopping-app-table .unavailable {
     background: lightcoral;
+}
+/* step 3 view CSS */
+.btn-sm {
+  padding: .35rem .5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .2rem;
+  width: 100px;
+  color: #fff;
+  background-color: #138496;
+  border-color: #117a8b;
+
+}
+
+/* .step3-btn-spacing{
+  display: flex;
+  justify-content: center;
+} */
+/* end of step 3 view css */
+.shopper-table .purchased {
+    background: #00800070;
+}
+.shopper-table .purchased:hover {
+  background: #0080008f;
+}
+
+.shopping-app-table .available,
+.shopping-app-table .checked {
+  background: #78C98D;
+}
+
+.shopping-app-table label, input {
+  cursor: pointer;
+}
+
+.modal-missing .modal-header {
+  justify-content: flex-start;
+}
+
+.modal-missing table {
+  padding: 5px;
+}
+
+.btn-center {
+  display: flex;
+  justify-content: center;
+}
+
+.btns-space-btw {
+  display: flex;
+  justify-content: space-between;
 }
 
 .packaging-table .missing:hover {
@@ -1164,9 +1223,10 @@ body {
   background: #e8e8e8;
 }
 
-.packaging-table .paid {
-  background: lightgrey;
+.packaging-table .delivered, .paid {
+  background: #008400;
 }
+
 .packaging-table .paid:hover {
   background: #bebebe;
 }
@@ -1184,6 +1244,19 @@ body {
 
 .packaging-table .delivery_issue:hover {
   background: #c76464;
+}
+
+.order-table .packaged {
+  background: #8bf18b;
+}
+
+.order-table .order-row {
+  background: #908e8e;
+}
+
+.user-header{
+  font-size: 20px;
+  float: right;
 }
 
 .delivery-table .row {
@@ -1230,6 +1303,11 @@ body {
 
 .shopper-location:hover {
   background: #ececec;
+}
+
+.scrollable-table ~ .btn {
+  margin-top: 20px;
+  max-width: 120px;
 }
 
 .fulfillment-page .nav-tabs .nav-link {
@@ -1312,3 +1390,17 @@ body {
     font-size: 16px;
     margin-top: 10px;
  }
+
+.cart-item-change {
+  background: #f5bc53;
+}
+
+.price-item-change {
+  background: #f76c6c;
+}
+.input-group{
+  flex-wrap: unset;
+}
+.hide{
+  display: none;
+}
