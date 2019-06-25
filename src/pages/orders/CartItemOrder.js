@@ -54,15 +54,9 @@ class CartItemOrder extends Component {
   onClickButton = e => {
     let code = e.keyCode || e.which;
     if (code === 13) {
-      this.setState(
-        {
-          weight: this.state.weight
-        },
-        async () => {
-          this.props.saveCartRow(this.state.cart_item);
-          this.handleItemUpdate();
-        }
-      );
+      this.props.saveCartRow(this.state.cart_item);
+      this.handleItemUpdate();
+      this.props.onCartStateChange(this.state.cart_item);
     }
   };
 
@@ -183,7 +177,6 @@ class CartItemOrder extends Component {
     } = this.state;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
-    console.log(this.props);
     return (
       <TableRow className="cart-item">
         <TableCell>{cart_item.product_name}</TableCell>

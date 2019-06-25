@@ -160,17 +160,6 @@ class ViewSingleOrder extends Component {
   };
   //end
 
-  getChildState = childState => {
-    const { cart_items, selectedOrder } = this.state;
-    console.log("childState", childState);
-    // this.setState({
-    //   selectedOrder: {
-    //     ...this.state.selectedOrder,
-    //     cart_items: childState
-    //   }
-    // });
-  };
-
   render() {
     const { cart_items, selectedOrder, packagings } = this.state;
     const hideRow = { display: "none" };
