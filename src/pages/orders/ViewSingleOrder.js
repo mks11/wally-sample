@@ -41,17 +41,6 @@ class ViewSingleOrder extends Component {
     };
   }
 
-  saveCartRow = (cart_item, index) => {
-    const { cart_items } = this.state;
-    cart_items.map((item, i) => {
-      if (i === index) {
-        return cart_item;
-      } else {
-        return item;
-      }
-    });
-  };
-
   toggleConfirmModal = () => {
     this.setState({ confirmModalOpen: !this.state.confirmModalOpen });
   };
@@ -175,7 +164,6 @@ class ViewSingleOrder extends Component {
                     key={cart_item._id}
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
-                    saveCartRow={this.saveCartRow}
                     onCartStateChange={this.handleCartStateChange}
                     onSetMissing={this.handleSetMissing}
                   />
