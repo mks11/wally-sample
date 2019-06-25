@@ -110,19 +110,30 @@ class ShoppingAppStep3 extends Component {
     }
 
 
-    // sortingStatus = data => {
-    //     const sortByKey = 
-    //     return {
-    //         'pending': data.map(sortByKey),
-    //         'available': [],
-    //         'purchased': [],
-    //         'unavailable': []
-    //     }
+    statusSort = (item) => {
+        let statusLib = ["pending", "available", "purchased", "unavailable"]
+        let indexMap = {}
+
+
+        for (let i = 0; i < statusLib.length; i++) {
+            indexMap[statusLib[i]] = i
+        }
+
+
+        return item.sort((a, b) => {
+            return indexMap[a.status] - indexMap[b.status]
+        })
+    }
+
+
+    
+
 
 
     render(){
         const { locations, shopitems } = this.adminStore
         const { showModal, id, product, status, timeframes } = this.state
+
 
         return(
             <React.Fragment>
@@ -178,7 +189,32 @@ class ShoppingAppStep3 extends Component {
                         </TableHead>
                         <TableBody>
                             {/* Need to sort via status. Pending */}
-                            {shopitems.map((shopitem, i) => {
+                            {/* {shopitems.map((shopitem, i) => {
+                                return(
+                                    <TableRow
+                                    key = { shopitem.product_id }
+                                    style= {{
+                                        backgroundColor: `${this.backgroundStyle(shopitem.status)}`
+                                    }}>
+                                        <TableCell  align = "center">
+                                            { shopitem.product_name}
+                                        </TableCell>
+                                        
+                                        <TableCell  align = "center">
+                                            { shopitem.quantity } { shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell> 
+
+                                        <TableCell>
+                                            <Checkbox onClick = { () => this.handleOnSelectClick(true, shopitem._id, shopitem) }>Yes</Checkbox>
+                                            <Checkbox onClick = { () => this.handleOnSelectClick(false, shopitem._id, shopitem) }>No</Checkbox>
+                                        </TableCell>
+
+                                    </TableRow>
+                                
+                                )
+                            })} */}
+
+                            {/* sorted by status */}
+                            {this.statusSort(shopitems).map((shopitem, i) => {
                                 return(
                                     <TableRow
                                     key = { shopitem.product_id }
@@ -201,6 +237,8 @@ class ShoppingAppStep3 extends Component {
                                 
                                 )
                             })}
+
+                            
 
                     </TableBody>
                     <Col style = {{padding: "10px"}} sm={{size:6, offset: 4}} md={{ size: 6, offset: 4 }}>
