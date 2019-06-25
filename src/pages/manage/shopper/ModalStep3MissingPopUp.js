@@ -42,7 +42,8 @@ class ModalStep3MissingPopUp extends Component {
         this.setState({
             id: id,
             status: status,
-            timeframe: timeframe
+            timeframe: timeframe,
+            selected: "missing"
         })
     }
 
@@ -148,7 +149,7 @@ class ModalStep3MissingPopUp extends Component {
                                             {/* <Checkbox   id = "selected" value = "missing" onClick={ this.handleOnChange }/> */}
                                              
                                                 <Input type="radio" name="selected" id="missingSelect" value = 'missing'
-                                                onClick={ this.handleOnChange } checked/>
+                                                onClick={ this.handleOnChange } defaultChecked/>
                                                 
 
                                          
