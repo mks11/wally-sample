@@ -79,10 +79,10 @@ class ModalStep3MissingPopUp extends Component {
 
 
         // uncomment when ready for testing against API
-        await this.adminStore.setShopItemStatus(status, id)
+        await this.adminStore.setShopItemStatus(status, id, quantity)
         // await this.adminStore.updateShopItemQuantity(timeframe, id, quantity)
 
-        console.log(id, status, quantity)
+
         toggleModal()
     }
 
@@ -108,7 +108,7 @@ class ModalStep3MissingPopUp extends Component {
                 type = "text"
                 onChange = {this.handleOnChange}
                 value = {this.state.quantity}
-                id = "quantity"
+                name = "quantity"
                 style = {{
                     width: "60px"
                 }}
@@ -119,7 +119,7 @@ class ModalStep3MissingPopUp extends Component {
            renderQuantityInput = <Input
                 onChange = {this.handleOnChange}
                 value = {this.state.quantity}
-                id = "quantity"
+                name = "quantity"
                 style = {{
                     width: "60px"
                 }}
@@ -134,77 +134,69 @@ class ModalStep3MissingPopUp extends Component {
                             <Button close onClick = {toggleModal}/>
                             <h3>  {this.props.shopitem ? this.props.shopitem.product_name : null} Unavailable</h3>
                             <Form >
-                                        <FormGroup className="mr-sm-2" check inline>
-                            <Table >
+                                <FormGroup className="mr-sm-2" check inline>
+                                    <Table >
+                                        <TableBody>
+                                            <h5>Missing Reason (please select one):</h5>
+                                            <TableRow>
+                                                <TableCell> Missing:</TableCell>
 
-                                <TableBody>
-
-                                 
-
-                                    <h5>Missing Reason (please select one):</h5>
-                                    <TableRow>
-                                        <TableCell> Missing :</TableCell>
-
-                                        <TableCell align = "center">
-                                            {/* <Checkbox   id = "selected" value = "missing" onClick={ this.handleOnChange }/> */}
-                                             
-                                                <Input type="radio" name="selected" id="missingSelect" value = 'missing'
-                                                onClick={ this.handleOnChange } defaultChecked/>
-                                                
-
-                                         
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow >
-                                        <TableCell > Ugly:</TableCell>
-                                        <TableCell align = "center">
+                                                <TableCell align = "center">
+                                                    
+                                                    <Input type="radio" name="selected" id="missingSelect" value = 'missing'
+                                                    onClick={ this.handleOnChange } defaultChecked/>
+                                                        
+                                                </TableCell>
+                                            </TableRow>
                                             
-                                                <Input type="radio" name="selected" id="uglySelect" value = 'ugly'
-                                                onClick={  this.handleOnChange } />
-                                                
-
-                                           
-                                            {/* <Checkbox value = "ugly" id = "selected" onClick = { this.handleOnChange }/> */}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow >
-                                        <TableCell > Too little:</TableCell>
-                                        <TableCell align = "center">
-                                        
-                                                <Input type="radio" name="selected" id="tooLittleSelect" value = 'too little'
-                                                onClick={  this.handleOnChange } />
-                                                
-
+                                            <TableRow >
+                                                <TableCell> Ugly:</TableCell>
+                                                <TableCell align = "center">
+                                                    
+                                                    <Input type="radio" name="selected" id="uglySelect" value = 'ugly'
+                                                    onClick={  this.handleOnChange } />
+                                                        
+                                                </TableCell>
+                                            </TableRow>
                                             
-                                            {/* <Checkbox value = "too little" id = "selected" onClick = { this.handleOnChange }/> */}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow >
-                                        <TableCell > 
-                                        <strong>Quantity Available:</strong><br/>
-                                        (if ugly or too little. how many available?)
-                                        </TableCell>
-                                        <TableCell >
-                                        
-                                       {renderQuantityInput}
-                                        
-                                       </TableCell>
-                                       {renderQuantity} 
-                                    </TableRow>
-                                    
-                                </TableBody>
-                                        
-                            </Table>
-                            </FormGroup>
+                                            <TableRow>
+                                                <TableCell> Too little:</TableCell>
+                                                <TableCell align = "center">
+                                                
+                                                    <Input type="radio" name="selected" id="tooLittleSelect" value = 'too little'
+                                                    onClick={  this.handleOnChange } />
+                                                        
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow >
+                                                <TableCell> 
+                                                    <strong>Quantity Available:</strong><br/>
+                                                    (if ugly or too little. how many available?)
+                                                </TableCell>
+                                                
+                                                <TableCell >
+                                                
+                                                    {renderQuantityInput}
+                                                
+                                            </TableCell>
+                                            
+                                                {renderQuantity} 
+
+                                            </TableRow>
+                                            
+                                        </TableBody>
+                                                
+                                    </Table>
+                                </FormGroup>
                             </Form>
                          
                          <Row>
-                         <Col  style = {{paddingTop: "20px"}} sm="12" md={{ size: 6, offset: 4 }}>
-                         <Button 
-                            value = {this.props.shopitem ? this.props.shopitem._id : null}
-                            className = "btn-sm"
-                            onClick = {(e) => this.handleSubmit(e)}> Submit </Button>
-                        </Col>
+                            <Col  style = {{paddingTop: "20px"}} sm="12" md={{ size: 6, offset: 4 }}>
+                                <Button 
+                                value = {this.props.shopitem ? this.props.shopitem._id : null}
+                                className = "btn-sm"
+                                onClick = {(e) => this.handleSubmit(e)}> Submit </Button>
+                            </Col>
                         </Row>
                     </Container>
                     
