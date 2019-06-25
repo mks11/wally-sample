@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./ReceiptCapture.css";
 import S3 from "aws-s3";
+import moment from "moment";
 const axios = require("axios");
 
 // S3 Configuration
@@ -58,7 +59,8 @@ class ReceiptCapture extends Component {
         console.log(error);
       });
     // Also set date
-    let date = currentDate() + " 2:00PM-8:00PM";
+    // let date = currentDate() + " 2:00PM-8:00PM";
+    let date = currentDate();
     this.setState({ dateTime: date });
   }
 
