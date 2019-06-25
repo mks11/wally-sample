@@ -39,8 +39,6 @@ class ViewSingleOrder extends Component {
       }),
       confirmModalOpen: false
     };
-    this.userStore = this.props.store.user;
-    this.adminStore = this.props.store.admin;
   }
 
   saveCartRow = (cart_item, index) => {
@@ -64,7 +62,7 @@ class ViewSingleOrder extends Component {
     let selectedOrder = this.state.selectedOrder;
     let packagings = this.state.selectedOrder.packaging_used;
     let API_TEST_URL = "http://localhost:4001";
-    fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    return fetch(`${API_TEST_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -96,6 +94,7 @@ class ViewSingleOrder extends Component {
   handleSubmit = async () => {
     const { packaging_used, cart_items, selectedOrder } = this.state;
     const { onSubmit } = this.props;
+    //delete items
     const items = selectedOrder.cart_items.map(item => {
       console.log("item", item.product_error_reason);
       return {
@@ -129,13 +128,14 @@ class ViewSingleOrder extends Component {
       },
       async () => {
         await this.handleOrderUpdate(payload);
+        console.log("toggling after handleSubmit");
         this.props.toggle({});
         onSubmit && onSubmit();
         // window.location.reload();
       }
     );
   };
-  //made this function to get child and update
+
   handleCartStateChange = update => {
     const { cart_items, selectedOrder } = this.state;
     // console.log("childState", childState);
@@ -144,21 +144,26 @@ class ViewSingleOrder extends Component {
     //   final_quantity: childState.final_quantity
     // };
     // console.log("cart_items", cart_items);
-    this.setState(({ cart_items }) => ({
-      cart_items: cart_items.map(item =>
-        item._id === update._id
-          ? {
-              ...item,
-              ...update
-            }
-          : item
-      )
-    }));
-    this.setState({}, () => {
-      console.log("end of callstate", this.state.cart_items);
+    return new Promise(done => {
+      // all the setStates in here
+      this.setState(({ cart_items }) => ({
+        cart_items: cart_items.map(item =>
+          item._id === update._id
+            ? {
+                ...item,
+                ...update
+              }
+            : item
+        )
+      }));
+      this.setState({}, () => {
+        done();
+        console.log("end of callstate", this.state.cart_items);
+      });
     });
   };
-  //end
+
+  // handleSetMissing = () => {};
 
   render() {
     const { cart_items, selectedOrder, packagings } = this.state;
@@ -198,9 +203,10 @@ class ViewSingleOrder extends Component {
                     key={cart_item._id}
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
-                    index={i}
+                    // index={i}
                     saveCartRow={this.saveCartRow}
                     onCartStateChange={this.handleCartStateChange}
+                    onSetMissing={this.handleSetMissing}
                   />
                 ))}
               </TableBody>
@@ -282,4 +288,4 @@ class ViewSingleOrder extends Component {
   }
 }
 
-export default connect("store")(ViewSingleOrder);
+export default ViewSingleOrder;

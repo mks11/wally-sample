@@ -37,38 +37,30 @@ class CartItemOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      order_id: props.order_id,
-      cart_item: props.cart_item,
+      // order_id: props.order_id,
+      // cart_item: props.cart_item,
       weight: "",
       quantityUnit:
         props.cart_item.unit_type === "packaging"
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
-      missing: props.cart_item.missing,
-      error: props.cart_item.product_error_reason,
+      // missing: props.cart_item.missing,
+      // error: props.cart_item.product_error_reason,
       isMissingModalOpen: false,
       isErrorModalOpen: false
+      //move cartItem state to live in ViewSingleOrder and pass it in here as props
     };
   }
 
-  onClickButton = e => {
-    let code = e.keyCode || e.which;
-    if (code === 13) {
-      this.props.saveCartRow(this.state.cart_item);
-      this.handleItemUpdate();
-      this.props.onCartStateChange(this.state.cart_item);
-    }
-  };
-
-  handleItemUpdate = missing => {
-    const cartItemId = this.state.cart_item._id;
-    const cartItem = this.state.cart_item;
-    const orderId = this.state.order_id;
+  handleItemUpdate = () => {
+    const cartItemId = this.props.cart_item._id;
+    const cartItem = this.props.cart_item;
+    const orderId = this.props.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
-    console.log(errorReason);
+    // console.log(missing);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
-    fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
+    return fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -78,7 +70,7 @@ class CartItemOrder extends Component {
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
         final_quantity: Number(cartItem.final_quantity),
-        missing: missing,
+        missing: this.props.cart_item.missing,
         weight: weight,
         product_error_reason: errorReason
       })
@@ -87,13 +79,17 @@ class CartItemOrder extends Component {
       .catch(error => console.log(error));
   };
 
-  onInputChange = e => {
-    const { cart_item, weight } = this.state;
-    cart_item[e.target.name] = e.target.value;
-    this.setState({ cart_item, weight });
+  handleWeightKeyPress = e => {
+    let code = e.keyCode || e.which;
+    if (code === 13) {
+      this.props.saveCartRow(this.props.cart_item); //ToDO
+      this.handleItemUpdate();
+      // this.props.onCartStateChange(this.state.cart_item);
+    }
   };
 
   setWeight = e => {
+    console.log("setWeight", e);
     this.setState({
       weight: e.target.value
     });
@@ -111,19 +107,17 @@ class CartItemOrder extends Component {
     });
   };
 
-  makePatchAPICall = async () => {
-    const { missing } = this.state;
+  handlePatchMissing = async () => {
+    const { missing } = this.props;
     console.log("patchCall", missing);
-    this.setState(
-      {
-        missing: !missing
-      },
-      async () => {
-        await this.handleItemUpdate(!missing);
-        this.toggleMissingModal();
-        // this.props.onCartStateChange(this.state.cart_item);
-      }
-    );
+    await this.props.onCartStateChange({
+      _id: this.props.cart_item._id,
+      missing: !missing
+    });
+
+    await this.handleItemUpdate();
+    this.toggleMissingModal();
+    // this.props.onCartStateChange(this.state.cart_item);
   };
 
   makePatchAPICallError = async childState => {
@@ -136,20 +130,13 @@ class CartItemOrder extends Component {
       final_quantity: Number(childState.cart_item.final_quantity)
     };
 
-    this.setState(
-      {
-        cart_item: {
-          ...this.state.cart_item,
-          final_quantity: error.final_quantity,
-          product_error_reason: error.product_error_reason
-        }
-      },
-      async () => {
-        await this.handleItemUpdate();
-        this.props.onCartStateChange(this.state.cart_item);
-        this.toggleErrorOff();
-      }
-    );
+    await this.handleItemUpdate();
+    await this.props.onCartStateChange({
+      _id: this.props.cart_item._id,
+      final_quantity: error.final_quantity,
+      product_error_reason: error.product_error_reason
+    });
+    this.toggleErrorOff();
   };
 
   toggleErrorModal = e => {
@@ -166,15 +153,9 @@ class CartItemOrder extends Component {
   };
 
   render() {
-    const {
-      isEdit,
-      cart_item,
-      order_id,
-      weight,
-      quantityUnit,
-      missing,
-      error
-    } = this.state;
+    const { weight, quantityUnit, error } = this.state;
+    const { cart_item, order_id } = this.props;
+    const missing = cart_item.missing;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     return (
@@ -199,7 +180,7 @@ class CartItemOrder extends Component {
             uncheckedIcon={<div style={textSwitch}>No</div>}
           />
           <MissingModal
-            makePatchAPICall={this.makePatchAPICall}
+            patchMissing={this.handlePatchMissing}
             isOpen={this.state.isMissingModalOpen}
             onClose={this.toggleMissingModal}
           />
@@ -233,7 +214,7 @@ class CartItemOrder extends Component {
                 type="number"
                 name="weight"
                 onChange={this.setWeight}
-                onKeyPress={this.onClickButton}
+                onKeyPress={this.handleWeightKeyPress}
                 style={customColumnStyle}
               />
             ) : (
@@ -246,4 +227,4 @@ class CartItemOrder extends Component {
   }
 }
 
-export default connect("store")(CartItemOrder);
+export default CartItemOrder;

@@ -79,6 +79,7 @@ class ManageOrders extends Component {
     console.log(timeframe);
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
+    console.log("got route orders");
   };
 
   onTimeFrameSelect = timeframe => {
@@ -92,8 +93,10 @@ class ManageOrders extends Component {
 
   toggleSingleOrderView = ({ order }) => {
     if (order) {
+      console.log("not loading orders");
       this.setState({ singleOrderOpen: true, selectedOrder: order });
     } else {
+      console.log("loading orders...");
       this.setState({ singleOrderOpen: false, selectedOrder: null });
       this.loadOrders();
     }
