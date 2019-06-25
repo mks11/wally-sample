@@ -211,7 +211,7 @@ class ViewSingleOrder extends Component {
                     cart_item={cart_item}
                     index={i}
                     saveCartRow={this.saveCartRow}
-                    getChildState={this.getChildState}
+                    onCartStateChange={this.handleCartStateChange}
                   />
                 ))}
               </TableBody>
