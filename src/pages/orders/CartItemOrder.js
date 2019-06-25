@@ -46,7 +46,8 @@ class CartItemOrder extends Component {
           : props.cart_item.price_unit,
       // missing: props.cart_item.missing,
       // error: props.cart_item.product_error_reason,
-      isMissingModalOpen: false,
+      unconfirmedMissingState: null,
+      // isMissingModalOpen: false,
       isErrorModalOpen: false
       //move cartItem state to live in ViewSingleOrder and pass it in here as props
     };
@@ -95,29 +96,30 @@ class CartItemOrder extends Component {
     });
   };
 
-  toggleMissing = e => {
-    if (e) {
-      this.toggleMissingModal();
-    }
+  toggleMissing = isMissing => {
+    this.setState({
+      unconfirmedMissingState: isMissing
+    });
   };
 
-  toggleMissingModal = () => {
+  cancelMissing = () => {
     this.setState({
-      isMissingModalOpen: !this.state.isMissingModalOpen
+      unconfirmedMissingState: null
     });
   };
 
   handlePatchMissing = async () => {
-    const { missing } = this.props;
-    console.log("patchCall", missing);
+    const { unconfirmedMissingState } = this.state;
+    console.log("patchCall", unconfirmedMissingState);
     await this.props.onCartStateChange({
       _id: this.props.cart_item._id,
-      missing: !missing
+      missing: unconfirmedMissingState
     });
 
     await this.handleItemUpdate();
-    this.toggleMissingModal();
-    // this.props.onCartStateChange(this.state.cart_item);
+    this.setState({
+      unconfirmedMissingState: null
+    });
   };
 
   makePatchAPICallError = async childState => {
@@ -153,7 +155,7 @@ class CartItemOrder extends Component {
   };
 
   render() {
-    const { weight, quantityUnit, error } = this.state;
+    const { weight, quantityUnit, error, unconfirmedMissingState } = this.state;
     const { cart_item, order_id } = this.props;
     const missing = cart_item.missing;
     let unit_type = cart_item.unit_type;
@@ -174,15 +176,18 @@ class CartItemOrder extends Component {
             className="react-switch"
             value={missing}
             onChange={this.toggleMissing}
-            onClick={this.toggleMissingModal}
-            checked={missing}
+            checked={
+              unconfirmedMissingState === null
+                ? missing
+                : unconfirmedMissingState
+            }
             checkedIcon={<div style={textSwitch}>Yes</div>}
             uncheckedIcon={<div style={textSwitch}>No</div>}
           />
           <MissingModal
-            patchMissing={this.handlePatchMissing}
-            isOpen={this.state.isMissingModalOpen}
-            onClose={this.toggleMissingModal}
+            onConfirm={this.handlePatchMissing}
+            isOpen={this.state.unconfirmedMissingState !== null}
+            onCancel={this.cancelMissing}
           />
         </TableCell>
         <TableCell className="error-code">
