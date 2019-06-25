@@ -1,5 +1,17 @@
 import React, { Component } from 'react'
-import { Container, Col, Row, Button } from "reactstrap"
+
+import {
+Container,
+Col, 
+Row,
+Button,
+Form,
+FormGroup,
+Label,
+Input
+}
+from "reactstrap"
+
 import { Link } from 'react-router-dom'
 
 import CustomDropdown from '../../common/CustomDropdown'
@@ -53,10 +65,9 @@ class ShoppingAppStep3 extends Component {
 
     handleOnSelectClick = async(status, id, product) => {
         if(status){
-        let status = "purchased"
-        console.log(status, id)
-        // uncomment to test against API
-        // this.adminStore.setShopItemStatus(status, id)
+            let status = "purchased"
+
+            this.adminStore.setShopItemStatus(status, id)
         } else {
             let status = "missing"
             this.setState({
@@ -64,7 +75,7 @@ class ShoppingAppStep3 extends Component {
                 product: product,
                 status: status
             })
-            console.log(status, id, product)
+
             this.toggleModal()
         }
         
@@ -98,6 +109,7 @@ class ShoppingAppStep3 extends Component {
         this.userStore.getStatus(true)
         .then( (status) => {
             const user = this.userStore.user
+            
             if( status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')){
                 this.grabShopLocations()
             } else {
@@ -114,11 +126,9 @@ class ShoppingAppStep3 extends Component {
         let statusLib = ["pending", "available", "purchased", "unavailable"]
         let indexMap = {}
 
-
         for (let i = 0; i < statusLib.length; i++) {
             indexMap[statusLib[i]] = i
         }
-
 
         return item.sort((a, b) => {
             return indexMap[a.status] - indexMap[b.status]
@@ -184,35 +194,10 @@ class ShoppingAppStep3 extends Component {
                             <TableRow>
                                 <TableCell align = "center">Product Name</TableCell>
                                 <TableCell align = "center">Quantity</TableCell>
-                                <TableCell >Purchased? <br/> <span align = "center"> Yes | No </span> </TableCell>
+                                <TableCell > Purchased? </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {/* Need to sort via status. Pending */}
-                            {/* {shopitems.map((shopitem, i) => {
-                                return(
-                                    <TableRow
-                                    key = { shopitem.product_id }
-                                    style= {{
-                                        backgroundColor: `${this.backgroundStyle(shopitem.status)}`
-                                    }}>
-                                        <TableCell  align = "center">
-                                            { shopitem.product_name}
-                                        </TableCell>
-                                        
-                                        <TableCell  align = "center">
-                                            { shopitem.quantity } { shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell> 
-
-                                        <TableCell>
-                                            <Checkbox onClick = { () => this.handleOnSelectClick(true, shopitem._id, shopitem) }>Yes</Checkbox>
-                                            <Checkbox onClick = { () => this.handleOnSelectClick(false, shopitem._id, shopitem) }>No</Checkbox>
-                                        </TableCell>
-
-                                    </TableRow>
-                                
-                                )
-                            })} */}
-
                             {/* sorted by status */}
                             {this.statusSort(shopitems).map((shopitem, i) => {
                                 return(
@@ -221,6 +206,7 @@ class ShoppingAppStep3 extends Component {
                                     style= {{
                                         backgroundColor: `${this.backgroundStyle(shopitem.status)}`
                                     }}>
+                                        
                                         <TableCell  align = "center">
                                             { shopitem.product_name}
                                         </TableCell>
@@ -228,9 +214,23 @@ class ShoppingAppStep3 extends Component {
                                         <TableCell  align = "center">
                                             { shopitem.quantity } { shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell> 
 
-                                        <TableCell>
-                                            <Checkbox onClick = { () => this.handleOnSelectClick(true, shopitem._id, shopitem) }>Yes</Checkbox>
-                                            <Checkbox onClick = { () => this.handleOnSelectClick(false, shopitem._id, shopitem) }>No</Checkbox>
+                                        <TableCell align = "center">
+                                        
+                                        <Form inline>
+                                            <FormGroup className="mr-sm-2" check inline>
+                                                <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
+                                                onChange={() => this.handleOnSelectClick(true, shopitem._id, shopitem)} />
+                                                
+                                                <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
+                                            </FormGroup>	                        
+                                                
+                                            <FormGroup className="mr-sm-2" check inline>
+                                                <Input type="radio" name="select" id="noSelect" checked={status === 'unavailable'}
+                                                onChange={() => this.handleOnSelectClick(false, shopitem._id, shopitem)} />
+                                                
+                                                <Label className="ml-sm-1" for="noSelect" check>No</Label>
+                                            </FormGroup>
+                                        </Form>
                                         </TableCell>
 
                                     </TableRow>
@@ -238,9 +238,7 @@ class ShoppingAppStep3 extends Component {
                                 )
                             })}
 
-                            
-
-                    </TableBody>
+                        </TableBody>
                     <Col style = {{padding: "10px"}} sm={{size:6, offset: 4}} md={{ size: 6, offset: 4 }}>
                             <Link to="#">
                                 <Button className = "btn-sm" onClick = {this.handleReload}> Reload </Button>
@@ -248,7 +246,6 @@ class ShoppingAppStep3 extends Component {
                             </Col>
                     </Table>
                            
-
                 </Paper>
             
                         {/* CCS location on Main CSS line 1155 */}
@@ -269,9 +266,9 @@ class ShoppingAppStep3 extends Component {
                             </Col>
                         </Row>
                     </Container>
-            </Container>
+                </Container>
 
-             </React.Fragment>
+            </React.Fragment>
         )
     }
 
