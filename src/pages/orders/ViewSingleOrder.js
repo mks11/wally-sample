@@ -135,6 +135,30 @@ class ViewSingleOrder extends Component {
       }
     );
   };
+  //made this function to get child and update
+  handleCartStateChange = update => {
+    const { cart_items, selectedOrder } = this.state;
+    // console.log("childState", childState);
+    // const child = {
+    //   product_error_reason: childState.product_error_reason,
+    //   final_quantity: childState.final_quantity
+    // };
+    // console.log("cart_items", cart_items);
+    this.setState(({ cart_items }) => ({
+      cart_items: cart_items.map(item =>
+        item._id === update._id
+          ? {
+              ...item,
+              ...update
+            }
+          : item
+      )
+    }));
+    this.setState({}, () => {
+      console.log("end of callstate", this.state.cart_items);
+    });
+  };
+  //end
 
   getChildState = childState => {
     const { cart_items, selectedOrder } = this.state;
@@ -213,11 +237,11 @@ class ViewSingleOrder extends Component {
                     <TableCell>
                       <Input
                         name="packaging quantity"
-                        value={
-                          packaging.quantity
-                        }
+                        value={packaging.quantity}
                         type="number"
-                        onChange={e => this.onChangePackaging(e, packaging.type)}
+                        onChange={e =>
+                          this.onChangePackaging(e, packaging.type)
+                        }
                       />
                     </TableCell>
                   </TableRow>

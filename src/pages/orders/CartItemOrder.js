@@ -54,11 +54,15 @@ class CartItemOrder extends Component {
   onClickButton = e => {
     let code = e.keyCode || e.which;
     if (code === 13) {
-      this.setState({
-        weight: this.state.weight
-      });
-      this.props.saveCartRow(this.state.cart_item);
-      this.handleItemUpdate();
+      this.setState(
+        {
+          weight: this.state.weight
+        },
+        async () => {
+          this.props.saveCartRow(this.state.cart_item);
+          this.handleItemUpdate();
+        }
+      );
     }
   };
 
@@ -115,16 +119,26 @@ class CartItemOrder extends Component {
 
   makePatchAPICall = async () => {
     const { missing } = this.state;
-    await this.handleItemUpdate(!missing);
-    this.setState({
-      missing: !missing
-    });
-    this.toggleMissingModal();
+    console.log("patchCall", missing);
+    this.setState(
+      {
+        missing: !missing
+      },
+      async () => {
+        await this.handleItemUpdate(!missing);
+        this.toggleMissingModal();
+        // this.props.onCartStateChange(this.state.cart_item);
+      }
+    );
   };
 
   makePatchAPICallError = async childState => {
     const error = {
-      product_error_reason: childState.noError ? "no_error" : childState.ugly ? "ugly" : "too_little",
+      product_error_reason: childState.noError
+        ? "no_error"
+        : childState.ugly
+        ? "ugly"
+        : "too_little",
       final_quantity: Number(childState.cart_item.final_quantity)
     };
 
@@ -138,7 +152,7 @@ class CartItemOrder extends Component {
       },
       async () => {
         await this.handleItemUpdate();
-        this.props.getChildState(this.state.cart_item);
+        this.props.onCartStateChange(this.state.cart_item);
         this.toggleErrorOff();
       }
     );
@@ -198,7 +212,12 @@ class CartItemOrder extends Component {
           />
         </TableCell>
         <TableCell className="error-code">
-          <p onClick={this.toggleErrorModal}>{cart_item.product_error_reason && !cart_item.product_error_reason == "no_error" ? cart_item.product_error_reason : "Ok"}</p>
+          <p onClick={this.toggleErrorModal}>
+            {cart_item.product_error_reason &&
+            !cart_item.product_error_reason == "no_error"
+              ? cart_item.product_error_reason
+              : "Ok"}
+          </p>
           <OrderErrorModal
             cart_item={cart_item}
             quantityUnit={quantityUnit}
