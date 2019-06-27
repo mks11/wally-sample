@@ -173,7 +173,7 @@ class TopNav extends Component {
               </div>
               <div className="row aw-nav--action">
                 <div className="col-12 text-center">
-                  {/* 
+                  {/*
                   <a href="#nav-hero" className="btn btn-block mx-auto btn-outline-white btn-get--started d-inline-block d-md-block">Get notified</a>
                       */}
                 </div>
@@ -220,6 +220,7 @@ class TopNav extends Component {
                                       <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/courier-routing" className="dropdown-item">Courier Routing</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
@@ -288,14 +289,14 @@ class TopNav extends Component {
                   </ul>
                 </nav>
               </div>
-              { !this.userStore.status ? 
+              { !this.userStore.status ?
               <div className="col-auto d-none d-md-block btn-top-account">
                 <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Log in</b></button>
                 <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
               </div>
                   : null}
 
-                  { this.userStore.status ? 
+                  { this.userStore.status ?
                       <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" >
                         <span className="navbar-toggler-icon"></span>
                       </button>

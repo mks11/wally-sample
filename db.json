@@ -1,0 +1,30 @@
+[
+  {
+    "delivery_date": "2018-06-20",
+    "order_ids": "50CN3H",
+    "route_number": 1,
+    "route_placement": "test",
+    "status": "complete"
+  },
+  {
+    "delivery_date": "2018-06-21",
+    "order_ids": "0GPVL1",
+    "route_number": 2,
+    "route_placement": "test",
+    "status": "complete"
+  },
+  {
+    "delivery_date": "2018-06-21",
+    "order_ids": "50CN3G",
+    "route_number": 3,
+    "route_placement": "test",
+    "status": "incomplete"
+  },
+  {
+    "delivery_date": "2018-06-21",
+    "order_ids": "TUXI3",
+    "route_number": 4,
+    "route_placement": "test",
+    "status": "incomplete"
+  }
+]

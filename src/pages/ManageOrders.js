@@ -61,18 +61,18 @@ class ManageOrders extends Component {
       });
   }
 
-  loadData() {
-    const date = new Date();
-    console.log(date);
-    this.adminStore.getTimeFrames(date);
-  }
+  // loadData() {
+  //   const date = new Date();
+  //   console.log(date);
+  //   this.adminStore.getTimeFrames(date);
+  // }
 
-  // loadOrders = () => {
-  //   const { route } = this.state;
-  //   let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
-  //   const options = this.userStore.getHeaderAuth();
-  //   this.adminStore.getRouteOrders("all", timeframe, options);
-  // };
+  loadOrders = () => {
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
+    const options = this.userStore.getHeaderAuth();
+    this.adminStore.getRouteOrders("all", timeframe, options);
+  };
 
   loadOrders = () => {
     const { route, timeframe } = this.state;
