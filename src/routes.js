@@ -29,6 +29,7 @@ import ManageShopper from './pages/ManageShopper';
 import ManagePackaging from './pages/ManagePackaging';
 import ManageDelivery from './pages/ManageDelivery';
 import ManageBlog from './pages/ManageBlog';
+import UploadProductSelection from './pages/UploadProductSelection'
 import ShoppingAppStep1 from './pages/ShoppingAppStep1';
 import ShoppingAppStep2 from './pages/ShoppingAppStep2';
 import ShoppingAppStep3 from './pages/manage/ShoppingAppStep3';
@@ -51,6 +52,8 @@ export default (
         <Route exact path="/api/user/reset-password" component={ResetPassword}/>
         <Route exact path="/orders" component={Orders}/>
         <Route exact path="/manage/orders" component={ManageOrders}/>
+        <Route exact path="/manage/uploadproductselection" component={UploadProductSelection} />
+
 
         <Route exact path="/tnc" component={Tnc}/>
         <Route exact path="/privacy" component={Privacy}/>

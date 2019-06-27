@@ -797,5 +797,5 @@ module.exports = {
 
   "/api/blog": getBlogPosts,
   "/api/admin/blog": postBlogPost,
-  "/api/order/:order_id/:cartitem_id":
+  "/api/order/:order_id/:cartitem_id": updateCartItem
 }
