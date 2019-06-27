@@ -4,10 +4,12 @@ import {connect} from '../utils'
 
 class UploadProductSelection extends Component {
   constructor(props) {
+    super(props)
     this.userStore = this.props.store.user
   }
   
   componentDidMount() {
+    console.log('userStore', this.userStore)
     this.userStore.getStatus(true)
       .then(status => {
         const user = this.userStore.user
