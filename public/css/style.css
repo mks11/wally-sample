@@ -2693,3 +2693,16 @@ color:#6e8692
 .scrollable-table{
   width: 100%
 }
+.product-selection-container {
+  background-color: #FAF5EE;
+  padding: 2em;
+  margin: auto;
+  height: 50vh; 
+  width: 50vw;
+}
+.product-selection-button {
+  display: inline-block;
+  width: 40%;
+  padding: 2em;
+  margin-top: -5%;
+}

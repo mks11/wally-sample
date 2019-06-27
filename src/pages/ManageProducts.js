@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Paper';
 import Title from '../common/page/Title'
 import {connect} from '../utils';
-import 'semantic-ui-css';
+
 
 
 
@@ -34,22 +34,38 @@ class ManageProducts extends Component {
     return (
       <div>
         <Title content="Upload Product Selection"/>
-          <Paper style={{ backgroundColor: '#FAF5EE', padding: "2em", margin: 'auto', height: '50vh', width: '50vw'}}>
+          <Paper className="product-selection-container">
           <div style={{ backgroundColor: 'white', height: '100%', width: '100%', borderRadius: '2%'}}>
             <div style={{ width: '100%', textAlign: 'center', height:'30%', padding: "0.5em"}}>
               <h3>Download</h3>
-              <div style={{ display: 'inline-block', width: '40%', marginTop: '-5%', paddingRight: '1em'}}>
+              <div className="product-selection-button">
                 <Button>Download Product Listing</Button>
               </div>
-              <div style={{ display: 'inline-block', width: '40%', marginTop: '-5%', paddingLeft: '1em'}}>
+              <div className="product-selection-button">
                 <Button>Download Categories</Button>
               </div>
             </div>
-            <div style={{ backgroundColor: '#eef', width: '100%', height:'70%', textAlign: 'center', padding: "1em" }}>
+            <div style={{ width: '100%', height:'70%', textAlign: 'center', padding: "1em" }}>
               <h3>Upload</h3>
-
+              <div className="product-selection-button">
+                <Button>Upload New FBW</Button>
+              </div>
+              <div className="product-selection-button">
+                <Button>Upload Existing FBW</Button>
+              </div>
+              <div className="product-selection-button">
+                <Button>Upload New Non-FBW</Button>
+              </div>
+              <div className="product-selection-button">
+                <Button>Upload Existing Non-FBW</Button>
+              </div>
+              <div style={{ margin: 'auto', textAlign: 'center', width: '40%'}}>
+                <Button>Upload Images</Button>
+              </div>
             </div>
+            
           </div>
+
           </Paper>
       </div>
     )
