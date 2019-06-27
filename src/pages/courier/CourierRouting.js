@@ -27,51 +27,30 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import Route from "./Route";
-const data = [
-  {
-    delivery_date: "2018-06-20",
-    order_ids: "50CN3H",
-    route_number: 1,
-    route_placement: "test",
-    status: "complete"
-  },
-  {
-    delivery_date: "2018-06-21",
-    order_ids: "0GPVL1",
-    route_number: 2,
-    route_placement: "test",
-    status: "complete"
-  },
-  {
-    delivery_date: "2018-06-21",
-    order_ids: "50CN3G",
-    route_number: 3,
-    route_placement: "test",
-    status: "incomplete"
-  },
-  {
-    delivery_date: "2018-06-21",
-    order_ids: "TUXI3",
-    route_number: 4,
-    route_placement: "test",
-    status: "incomplete"
-  }
-];
+
 class CourierRouting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      routes: []
+      routes: [],
+      loading: false
     };
   }
 
-  fetchRoutes = () => {
-    let API_TEST_URL = "http://localhost:4001";
+  componentDidMount = () => {
+    fetch(
+      "https://raw.githubusercontent.com/tamlim/the-wally-shop-frontend/packing-combined/db.json?token=AGFWDKPT6TOVFG4CPVR7X6K5DYLE4"
+    )
+      .then(res => res.json())
+      .then(json => this.setState({ routes: json, loading: true }))
+      .catch(error => console.log(error));
   };
   render() {
-    const { routes } = this.state;
+    const { routes, loading } = this.state;
     console.log(routes);
-    return (
+    return !loading ? (
+      <h1>Loading...</h1>
+    ) : (
       <section className="courier-page">
         <Container>
           <div className="mb-4">
@@ -95,12 +74,36 @@ class CourierRouting extends Component {
                   <TableCell>Courier Telephone</TableCell>
                   <TableCell />
                 </TableRow>
+                {routes.map((route, i) => {
+                  return (
+                    <TableRow key={i}>
+                      <TableCell>{route.route_number}</TableCell>
+                      <TableCell>False</TableCell>
+                      <TableCell>{route.text}</TableCell>
+                      <TableCell>
+                        <InputGroup>
+                          <Input />
+                        </InputGroup>
+                      </TableCell>
+                      <TableCell>
+                        {" "}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size={"medium"}
+                          type={"button"}
+                        >
+                          Assign
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableHead>
               <TableBody />
             </Table>
           </Paper>
         </Container>
-        <h1>Test</h1>
       </section>
     );
   }
