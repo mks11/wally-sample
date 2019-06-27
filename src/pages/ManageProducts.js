@@ -35,7 +35,14 @@ class ManageProducts extends Component {
         <Title content="Upload Product Selection"/>
           <Paper style={{ backgroundColor: '#FAF5EE', padding: "2em", margin: 'auto', height: '50vh', width: '50vw'}}>
           <div style={{ backgroundColor: 'white', height: '100%', width: '100%', borderRadius: '2%'}}>
+            <div style={{ backgroundColor: '#eee', width: '100%', height:'50%', textAlign: 'center', padding: "1em" }}>
+              <h3>Download</h3>
 
+            </div>
+            <div style={{ backgroundColor: '#eef', width: '100%', height:'50%', textAlign: 'center', padding: "1em" }}>
+              <h3>Upload</h3>
+
+            </div>
           </div>
           </Paper>
       </div>
