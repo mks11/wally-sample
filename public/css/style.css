@@ -2694,7 +2694,7 @@ color:#6e8692
   width: 100%
 }
 .product-selection-container {
-  background-color: #FAF5EE;
+  background-color: #faf5ee;
   padding: 2em;
   margin: auto;
   height: 50vh; 
@@ -2705,4 +2705,18 @@ color:#6e8692
   width: 40%;
   padding: 2em;
   margin-top: -5%;
+}
+
+.product-selection-download {
+  width: 100%; 
+  text-align:center;
+  height:30%;
+  padding: 0.5em;
+}
+
+.product-selection-upload {
+  width: 100%;
+  height: 70%;
+  text-align: center;
+  padding: 1em;
 }

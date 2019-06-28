@@ -34,9 +34,9 @@ class ManageProducts extends Component {
     return (
       <div>
         <Title content="Upload Product Selection"/>
-          <Paper className="product-selection-container">
+          <Paper className="product-selection-container" style={{ backgroundColor: '#faf5ee'}}>
           <div style={{ backgroundColor: 'white', height: '100%', width: '100%', borderRadius: '2%'}}>
-            <div style={{ width: '100%', textAlign: 'center', height:'30%', padding: "0.5em"}}>
+            <div style="product-selection-download">
               <h3>Download</h3>
               <div className="product-selection-button">
                 <Button>Download Product Listing</Button>
