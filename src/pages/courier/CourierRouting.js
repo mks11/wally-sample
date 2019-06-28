@@ -27,43 +27,57 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import Route from "./Route";
-
+import CourierModal from "./CourierModal";
+const customColumnStyle = { width: 100, padding: 0 };
 class CourierRouting extends Component {
   constructor(props) {
     super(props);
     this.state = {
       routes: [],
-      loading: false
+      users: [],
+      isCourierModalOpen: false,
+      courierPhoneNumber: ""
     };
   }
 
   componentDidMount = () => {
-    fetch(
-      "https://raw.githubusercontent.com/tamlim/the-wally-shop-frontend/packing-combined/db.json?token=AGFWDKPT6TOVFG4CPVR7X6K5DYLE4"
-    )
+    fetch("http://localhost:4001/api/test/get-routes")
       .then(res => res.json())
-      .then(json => this.setState({ routes: json, loading: true }))
+      .then(json => this.setState({ routes: json }))
       .catch(error => console.log(error));
   };
+
+  setPhoneNumber = e => {
+    this.setState({
+      courierPhoneNumber: e.target.value
+    });
+  };
+
+  assignCourierModal = e => {
+    let routeNumber = e.route_number;
+    let routeAssigned = e.route_assigned;
+    fetch(`http://localhost:4001/api/test/assign-routes/${routeNumber}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        if (res === true) {
+          this.setState({
+            isCourierModalOpen: true
+          });
+        } else {
+          this.setState({
+            courierPhoneNumber: this.state.courierPhoneNumber,
+            route_assigned: routeAssigned
+          });
+        }
+      });
+  };
   render() {
-    const { routes, loading } = this.state;
-    console.log(routes);
-    return !loading ? (
-      <h1>Loading...</h1>
-    ) : (
+    const { routes, loading, courierPhoneNumber } = this.state;
+
+    return (
       <section className="courier-page">
         <Container>
-          <div className="mb-4">
-            <Button
-              variant="contained"
-              color="default"
-              onClick={this.props.toggle}
-            >
-              <CloseIcon />
-              <Typography>Close</Typography>
-            </Button>
-          </div>
-          <hr />
           <Paper elevation={1} className={"scrollable-table"}>
             <Table className={"packaging-table"} padding={"dense"}>
               <TableHead>
@@ -82,18 +96,43 @@ class CourierRouting extends Component {
                       <TableCell>{route.text}</TableCell>
                       <TableCell>
                         <InputGroup>
-                          <Input />
+                          {courierPhoneNumber.length === 9 ? (
+                            <Input
+                              value={courierPhoneNumber}
+                              onChange={this.setPhoneNumber}
+                              style={customColumnStyle}
+                            />
+                          ) : (
+                            <Input
+                              placeholder="Enter your number here"
+                              value={courierPhoneNumber}
+                              onChange={this.setPhoneNumber}
+                              onKeyPress={this.handlePhoneNumberKeyPress}
+                              type="number"
+                              name="courierPhoneNumber"
+                              style={customColumnStyle}
+                            />
+                          )}
                         </InputGroup>
                       </TableCell>
                       <TableCell>
-                        {" "}
                         <Button
                           variant="contained"
                           color="primary"
                           size={"medium"}
                           type={"button"}
+                          onClick={() =>
+                            this.assignCourierModal({
+                              route_number: route.route_number,
+                              route_assigned: true
+                            })
+                          }
                         >
                           Assign
+                          <CourierModal
+                            isOpen={this.state.isCourierModalOpen}
+                            onClose={this.t}
+                          />
                         </Button>
                       </TableCell>
                     </TableRow>
