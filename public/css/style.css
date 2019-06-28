@@ -94,8 +94,8 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
 .aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
-.navbar-toggler {
-}
+/* .navbar-toggler {
+} */
 .aw-header.navbar-white .navbar-toggler-icon {
   background-image: url("../images/hamburger.png");
   max-width: 23px;
@@ -1127,9 +1127,9 @@ span.text-disclaimer {
 
 
 
-.list{
-  /* margin-top: 50px; */
-}
+/* .list{
+ 
+} */
 
 .list-header{
   border-bottom: 2px solid #ececec;
@@ -1838,9 +1838,9 @@ input[aria-expanded="true"] + .autocomplete-dropdown-container {
   background-color:#fff;
 }
 
-.carousel-indicators li.active::after {
-  /* background: #fff; */
-}
+/* .carousel-indicators li.active::after {
+  background: #fff;
+} */
 a.nav-link.no-underline:hover{text-decoration:none;}
 li.no-underline a:hover::after{text-decoration:none; border:none!important;}
 
@@ -2257,8 +2257,8 @@ a {
   color: #868686;
 }
 
-.category-mobile-wrap li {
-}
+/* .category-mobile-wrap li {
+} */
 
 .category-mobile-wrap li:hover > div {
   border-left: 3px solid #000;
@@ -2694,7 +2694,6 @@ color:#6e8692
   width: 100%
 }
 .product-selection-container {
-  background-color: #faf5ee;
   padding: 2em;
   margin: auto;
   height: 50vh; 
@@ -2719,4 +2718,17 @@ color:#6e8692
   height: 70%;
   text-align: center;
   padding: 1em;
+}
+
+.product-selection-container-inner {
+  background-color: '#ffffff';
+  height: 100%;
+  width: 100%;
+  border-radius: 2%;
+}
+
+.product-selection-upload-image-button {
+  margin: auto; 
+  text-align: center;
+  width: 40%;
 }

@@ -34,9 +34,9 @@ class ManageProducts extends Component {
     return (
       <div>
         <Title content="Upload Product Selection"/>
-          <Paper className="product-selection-container" style={{ backgroundColor: '#faf5ee'}}>
-          <div style={{ backgroundColor: 'white', height: '100%', width: '100%', borderRadius: '2%'}}>
-            <div style="product-selection-download">
+          <Paper className="product-selection-container" style={{backgroundColor: '#faf5ee'}}>
+          <div className="product-selection-container-inner" style={{backgroundColor: '#ffffff'}}>
+            <div className="product-selection-download">
               <h3>Download</h3>
               <div className="product-selection-button">
                 <Button>Download Product Listing</Button>
@@ -45,7 +45,7 @@ class ManageProducts extends Component {
                 <Button>Download Categories</Button>
               </div>
             </div>
-            <div style={{ width: '100%', height:'70%', textAlign: 'center', padding: "1em" }}>
+            <div className="product-selection-upload">
               <h3>Upload</h3>
               <div className="product-selection-button">
                 <Button>Upload New FBW</Button>
@@ -59,7 +59,7 @@ class ManageProducts extends Component {
               <div className="product-selection-button">
                 <Button>Upload Existing Non-FBW</Button>
               </div>
-              <div style={{ margin: 'auto', textAlign: 'center', width: '40%'}}>
+              <div className="product-selection-upload-image-button">
                 <Button>Upload Images</Button>
               </div>
             </div>
