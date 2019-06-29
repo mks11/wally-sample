@@ -29,17 +29,20 @@ class CartItem extends Component {
       weight: "",
       isEdit: false
     };
-    this.setWeight = this.setWeight.bind(this);
   }
 
-  onClickButton = () => {
+  onClickButton = async () => {
     if (this.state.isEdit) {
-      this.props.saveCartRow(this.state.cart_item);
-      this.handleItemUpdate();
-      this.setState({
-        isEdit: false,
+      // this.setState({
+      //   isEdit: false,
+      //   weight: this.state.weight
+      // });
+      await this.props.onCartStateChange({
+        _id: this.props.cart_item._id,
         weight: this.state.weight
       });
+      this.props.saveCartRow(this.state.cart_item);
+      this.handleItemUpdate();
     } else {
       this.setState({ isEdit: true });
     }
@@ -50,6 +53,7 @@ class CartItem extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
+    console.log("handleItemUpdate", weight);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -62,7 +66,7 @@ class CartItem extends Component {
         product_producer: cartItem.product_producer,
         product_shop: cartItem.product_shop,
         product_price: cartItem.product_price,
-        final_quantity: cartItem.final_quantity,
+        final_quantity: Number(cartItem.final_quantity),
         missing: cartItem.missing,
         weight: weight
       })
@@ -75,6 +79,7 @@ class CartItem extends Component {
     const { cart_item, weight } = this.state;
     cart_item[e.target.name] = e.target.value;
     this.setState({ cart_item, weight });
+    console.log("onInputchange", weight);
   };
 
   setWeight = e => {
@@ -111,8 +116,7 @@ class CartItem extends Component {
       Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100;
     const customColumnStyle = { width: 90, padding: 0 };
     const customColumnNameStyle = { width: 300 };
-    console.log(cart_item);
-    console.log(unit_type);
+
     return (
       <TableRow
         className={

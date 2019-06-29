@@ -61,12 +61,33 @@ class SingleOrderView extends Component {
 
   saveCartRow = (cart_item, index) => {
     const { cart_items } = this.state;
+    console.log("saveCartRow", cart_items);
     cart_items.map((item, i) => {
       if (i === index) {
         return cart_item;
       } else {
         return item;
       }
+    });
+  };
+
+  handleCartStateChange = update => {
+    const { cart_items, selectedOrder } = this.state;
+    return new Promise(done => {
+      this.setState(({ cart_items }) => ({
+        cart_items: cart_items.map(item =>
+          item._id === update._id
+            ? {
+                ...item,
+                ...update
+              }
+            : item
+        )
+      }));
+      this.setState({}, () => {
+        done();
+        console.log("end of callstate", this.state.cart_items);
+      });
     });
   };
 
@@ -139,6 +160,7 @@ class SingleOrderView extends Component {
 
   updateOrder = async () => {
     const { packaging_used, cart_items, selectedOrder } = this.state;
+    console.log("updateOrder", cart_items);
     const items = selectedOrder.cart_items.map(item => {
       return {
         product_name: item.product_name,
@@ -159,8 +181,7 @@ class SingleOrderView extends Component {
       cart_items: items,
       packagings: packagings
     };
-    console.log("after");
-    console.log(payload.cart_items);
+    console.log("payload", payload.cart_items);
 
     await this.setState(
       {
@@ -235,6 +256,7 @@ class SingleOrderView extends Component {
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
                     index={i}
+                    onCartStateChange={this.handleCartStateChange}
                     saveCartRow={this.saveCartRow}
                   />
                 ))}

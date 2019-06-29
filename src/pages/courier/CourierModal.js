@@ -29,14 +29,14 @@ class CourierModal extends Component {
 
   onNameChange = e => {
     const { courier } = this.state;
-    cart_item.name = e.target.value;
-    this.setState({ cart_item });
+    // cart_item.name = e.target.value;
+    // this.setState({ cart_item });
   };
 
   onEmailChange = e => {
     const { courier } = this.state;
-    cart_item.paypal_email = e.target.value;
-    this.setState({ cart_item });
+    // cart_item.paypal_email = e.target.value;
+    // this.setState({ cart_item });
   };
 
   render() {

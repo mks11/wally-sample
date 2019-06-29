@@ -130,7 +130,6 @@ class CourierRouting extends Component {
                         >
                           Assign
                           <CourierModal
-                            courier={courier}
                             isOpen={this.state.isCourierModalOpen}
                             onClose={this.createNewCourier}
                           />
