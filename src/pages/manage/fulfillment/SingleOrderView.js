@@ -71,7 +71,7 @@ class SingleOrderView extends Component {
     });
   };
 
-  handleCartStateChange = update => {
+  handleWeightChange = update => {
     const { cart_items, selectedOrder } = this.state;
     return new Promise(done => {
       this.setState(({ cart_items }) => ({
@@ -256,7 +256,7 @@ class SingleOrderView extends Component {
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
                     index={i}
-                    onCartStateChange={this.handleCartStateChange}
+                    onWeightStateChange={this.handleWeightChange}
                     saveCartRow={this.saveCartRow}
                   />
                 ))}

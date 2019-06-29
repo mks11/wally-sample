@@ -37,7 +37,7 @@ class CartItem extends Component {
       //   isEdit: false,
       //   weight: this.state.weight
       // });
-      await this.props.onCartStateChange({
+      await this.props.onWeightStateChange({
         _id: this.props.cart_item._id,
         weight: this.state.weight
       });
