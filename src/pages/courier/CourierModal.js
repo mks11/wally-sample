@@ -22,20 +22,25 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 class CourierModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      courier: props.courier
+    };
   }
 
-  onLittleChange = e => {
-    const { ugly, toolittle, noError } = this.state;
-    this.setState({
-      ugly: false,
-      toolittle: true,
-      noError: false
-    });
+  onNameChange = e => {
+    const { courier } = this.state;
+    cart_item.name = e.target.value;
+    this.setState({ cart_item });
+  };
+
+  onEmailChange = e => {
+    const { courier } = this.state;
+    cart_item.paypal_email = e.target.value;
+    this.setState({ cart_item });
   };
 
   render() {
-    const { cart_item, quantityUnit } = this.state;
+    const { name } = this.state;
 
     if (!this.props.isOpen) {
       return null;
@@ -50,7 +55,11 @@ class CourierModal extends Component {
                   <TableCell>Name:</TableCell>
                   <TableCell>
                     <InputGroup>
-                      <Input onChange={this.setPhoneNumber} />
+                      <Input
+                        type="string"
+                        placeholder="enter your name here"
+                        onChange={this.onNamelChange}
+                      />
                     </InputGroup>
                   </TableCell>
                 </TableRow>
@@ -63,7 +72,11 @@ class CourierModal extends Component {
                   <TableCell>Paypal Email:</TableCell>
                   <TableCell>
                     <InputGroup>
-                      <Input onChange={this.setPhoneNumber} />
+                      <Input
+                        type="string"
+                        placeholder="enter paypal email"
+                        onChange={this.onEmailChange}
+                      />
                     </InputGroup>
                   </TableCell>
                 </TableRow>
