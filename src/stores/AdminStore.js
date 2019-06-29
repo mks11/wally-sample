@@ -102,7 +102,7 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async setShopItemStatus(status, shopitem_id) {
+  async setShopItemStatus(shopitem_id, status) {
     const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
     this.updateStoreShopItem(shopitem_id, res.data)
   }
