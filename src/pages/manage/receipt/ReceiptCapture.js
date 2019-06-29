@@ -3,7 +3,10 @@ import "./ReceiptCapture.css";
 import S3 from "aws-s3";
 import moment from "moment";
 import { Container, Col, Row, Button, Input } from "reactstrap";
-
+import {
+  API_ADMIN_GET_SHOP_LOCATIONS,
+  API_ADMIN_POST_RECEIPT
+} from '../../../config'
 import CustomDropdown from "../../../common/CustomDropdown";
 const axios = require("axios");
 
@@ -36,7 +39,7 @@ class ReceiptCapture extends Component {
   // When Component Mounts get list of locations
   componentDidMount() {
     axios
-      .get("http://localhost:4001/api/admin/shopping/locations")
+      .get(`${API_ADMIN_GET_SHOP_LOCATIONS}`)
       .then(response => {
         this.setState({
           locations: response.data.locations
@@ -55,7 +58,7 @@ class ReceiptCapture extends Component {
         .then(data =>
           // If Upload to S3 Successful push to backend
           axios
-            .post("http://localhost:4001/api/admin/shopping/receipt", {
+            .post(`${API_ADMIN_POST_RECEIPT}`, {
               shop_date: moment().format("YYYY-MM-DD"),
               filename: data.key
                 .split("/")
