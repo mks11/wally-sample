@@ -53,7 +53,6 @@ class UserStore {
   }
 
   setUserData(user) {
-    console.log("setting user");
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
     let zip = null

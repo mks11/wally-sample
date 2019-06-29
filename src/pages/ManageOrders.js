@@ -51,21 +51,15 @@ class ManageOrders extends Component {
         ) {
           this.props.store.routing.push("/");
         } else {
-          this.loadData();
           this.loadOrders();
           this.adminStore.getPackagings();
         }
       })
       .catch(error => {
+        console.log(error);
         this.props.store.routing.push("/");
       });
   }
-
-  // loadData() {
-  //   const date = new Date();
-  //   console.log(date);
-  //   this.adminStore.getTimeFrames(date);
-  // }
 
   loadOrders = () => {
     const { route } = this.state;
@@ -75,11 +69,10 @@ class ManageOrders extends Component {
   };
 
   loadOrders = () => {
-    const { route, timeframe } = this.state;
-    console.log(timeframe);
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
-    console.log("got route orders");
   };
 
   onTimeFrameSelect = timeframe => {
