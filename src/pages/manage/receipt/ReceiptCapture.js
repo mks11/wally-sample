@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import S3 from "aws-s3";
 import moment from "moment";
-import { connect } from "../../../utils";
 import { Container, Col, Row, Button, Input } from "reactstrap";
 import CustomDropdown from "../../../common/CustomDropdown";
 
@@ -40,7 +39,7 @@ class ReceiptCapture extends Component {
         .then(
           data =>
             // If Upload to S3 Successful push to backend
-            this.adminStore.postReceipt(
+            this.adminStore.uploadReceipt(
               moment().format("YYYY-MM-DD"),
               data.key
                 .split("/")

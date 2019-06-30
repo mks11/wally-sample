@@ -55,7 +55,7 @@ class AdminStore {
     this.receipts = sortedReceipts;
   }
 
-  async postReceipt(date, filename, shop_location) {
+  async uploadReceipt(date, filename, shop_location) {
     const res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
       shop_date: date,
       filename: filename,
@@ -331,7 +331,7 @@ decorate(AdminStore, {
   packageOrder: action,
   completeOrder: action,
   postBlogPost: action,
-  postReceipt: action
+  uploadReceipt: action
 });
 
 export default new AdminStore();
