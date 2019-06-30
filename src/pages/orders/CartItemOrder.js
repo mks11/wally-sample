@@ -37,6 +37,7 @@ class CartItemOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      cart_item: props.cart_item,
       weight: "",
       quantityUnit:
         props.cart_item.unit_type === "packaging"
@@ -84,14 +85,13 @@ class CartItemOrder extends Component {
     }
   };
 
-  setWeight = async e => {
+  setWeight = e => {
+    const { cart_item, weight } = this.state;
+    cart_item[e.target.name] = e.target.value;
     this.setState({
       weight: e.target.value
     });
-    await this.props.onCartStateChange({
-      _id: this.props.cart_item._id,
-      weight: this.state.weight
-    });
+    this.handleItemUpdate();
   };
 
   toggleMissing = isMissing => {

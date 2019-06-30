@@ -219,7 +219,7 @@ class CartItem extends Component {
                 style={customColumnStyle}
               />
             ) : (
-              <Input value={weight} readOnly />
+              <Input readOnly />
             )}
           </InputGroup>
         </TableCell>
