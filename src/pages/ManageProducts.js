@@ -3,13 +3,19 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Paper';
 import Title from '../common/page/Title'
 import {connect} from '../utils';
-
-
+import { CSVLink, CSVDownload } from 'react-csv';
+import axios from 'axios'
 
 
 class ManageProducts extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      productListData: "",
+      categoryListData: ""
+
+    }
     this.userStore = props.store.user
     this.adminStore = this.props.store.admin
   }
@@ -26,19 +32,35 @@ class ManageProducts extends Component {
       .catch( error => {
         this.props.store.routing.push('/')
       })
+    this.onDownloadProductListingClick()
+    this.onDownloadProductCategoriesClick()
   }
 
-  onDownloadProductListingClick() {
-    this.adminStore.getProductSelectionDownload()
+  async onDownloadProductListingClick() {
+     //this.adminStore.getProductSelectionDownload()
+    await axios.get(`http://localhost:4001/api/admin/products/currentselectioncsv`)
+      .then( res => { 
+      this.setState({
+        productListData: res.data
+      })
+    })
   }
 
-  onDownloadProductCategoriesClick() {
-    this.adminStore.getProductCategoriesDownload()
+  async onDownloadProductCategoriesClick() {
+    //this.adminStore.getProductCategoriesDownload()
+    await axios.get(`http://localhost:4001/api/admin/products/currentcategoriescsv`)
+      .then( res => { 
+      this.setState({
+        categoryListData: res.data
+      })
+    })
   }
 
 
   render () {
     if (!this.userStore.user) return null
+    const { productListData, categoryListData } = this.state
+
     return (
       <div>
         <Title content="Upload Product Selection"/>
@@ -47,14 +69,18 @@ class ManageProducts extends Component {
             <div className="product-selection-download">
               <h3>Download</h3>
               <div className="product-selection-button">
-                <Button
-                  onClick={this.onDownloadProductSelectionClick}
-                >Download Product Listing</Button>
+                <Button>
+                  <CSVLink data={productListData} onClick={() => this.onDownloadProductListingClick()}>
+                    Download Product Listing
+                  </CSVLink>
+                </Button>
               </div>
               <div className="product-selection-button">
-                <Button
-                  onClick={this.onDownloadProductCategoriesClick}
-                >Download Categories</Button>
+                <Button>
+                  <CSVLink data={categoryListData} onClick={() => this.onDownloadProductCategoriesClick()}>
+                    Download Categories Listing
+                  </CSVLink>
+                </Button>
               </div>
             </div>
             <div className="product-selection-upload">
