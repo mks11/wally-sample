@@ -193,7 +193,7 @@ class SingleOrderView extends Component {
       },
       async () => {
         await this.handleOrderUpdate(payload);
-        window.location.reload();
+        // window.location.reload();
       }
     );
   };

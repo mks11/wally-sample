@@ -33,13 +33,12 @@ class CartItem extends Component {
 
   onClickButton = async () => {
     if (this.state.isEdit) {
-      // this.setState({
-      //   isEdit: false,
-      //   weight: this.state.weight
-      // });
       await this.props.onWeightStateChange({
         _id: this.props.cart_item._id,
         weight: this.state.weight
+      });
+      this.setState({
+        isEdit: false
       });
       this.props.saveCartRow(this.state.cart_item);
       this.handleItemUpdate();
@@ -220,7 +219,7 @@ class CartItem extends Component {
                 style={customColumnStyle}
               />
             ) : (
-              <Input readOnly />
+              <Input value={weight} readOnly />
             )}
           </InputGroup>
         </TableCell>

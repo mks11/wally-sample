@@ -177,11 +177,13 @@ class ViewSingleOrder extends Component {
               {selectedOrder.packaging_used.map((packaging, i) =>
                 packaging.type === "Muslin Bag" ||
                 packaging.type === "Mesh Bag" ||
+                packaging.type === "Mason Jar" ||
                 packaging.type === "Tote Bag" ? (
                   <TableRow key={i}>
                     <TableCell>
                       {packaging.type === "Muslin Bag" ||
                       packaging.type === "Mesh Bag" ||
+                      packaging.type === "Mason Jar" ||
                       packaging.type === "Tote Bag" ? (
                         <strong>{packaging.type}</strong>
                       ) : (

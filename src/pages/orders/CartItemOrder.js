@@ -84,9 +84,13 @@ class CartItemOrder extends Component {
     }
   };
 
-  setWeight = e => {
+  setWeight = async e => {
     this.setState({
       weight: e.target.value
+    });
+    await this.props.onCartStateChange({
+      _id: this.props.cart_item._id,
+      weight: this.state.weight
     });
   };
 
