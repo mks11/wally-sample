@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Input from 'reactstrap'
 import Title from '../common/page/Title'
 import {connect} from '../utils';
 import { CSVLink, CSVDownload } from 'react-csv';
 import axios from 'axios'
+import { format } from 'url';
 
 
 class ManageProducts extends Component {
@@ -13,8 +15,8 @@ class ManageProducts extends Component {
 
     this.state = {
       productListData: "",
-      categoryListData: ""
-
+      categoryListData: "",
+      file: null
     }
     this.userStore = props.store.user
     this.adminStore = this.props.store.admin
@@ -37,7 +39,7 @@ class ManageProducts extends Component {
   }
 
   async onDownloadProductListingClick() {
-     //this.adminStore.getProductSelectionDownload()
+     //this.adminStore.getProductSelectionDownload() ... when done with testing.
     await axios.get(`http://localhost:4001/api/admin/products/currentselectioncsv`)
       .then( res => { 
       this.setState({
@@ -47,13 +49,29 @@ class ManageProducts extends Component {
   }
 
   async onDownloadProductCategoriesClick() {
-    //this.adminStore.getProductCategoriesDownload()
+    //this.adminStore.getProductCategoriesDownload() ... when done with testing.
     await axios.get(`http://localhost:4001/api/admin/products/currentcategoriescsv`)
       .then( res => { 
       this.setState({
         categoryListData: res.data
       })
     })
+  }
+
+   onUploadNewFBWSubmit = async(event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('file', this.state.file[0])  
+    await axios.post(`http://localhost:4001/api/admin/products/currentcategoriescsv`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+      .then( res => { 
+      console.log(res)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  handleFileUpload = (event) => {
+    this.setState({file: event.target.files});
   }
 
 
@@ -69,14 +87,14 @@ class ManageProducts extends Component {
             <div className="product-selection-download">
               <h3>Download</h3>
               <div className="product-selection-button">
-                <Button>
+                <Button size="small" style={{ textTransform: 'none'}} >
                   <CSVLink data={productListData} onClick={() => this.onDownloadProductListingClick()}>
                     Download Product Listing
                   </CSVLink>
                 </Button>
               </div>
               <div className="product-selection-button">
-                <Button>
+                <Button size="small" style={{ textTransform: 'none'}}>
                   <CSVLink data={categoryListData} onClick={() => this.onDownloadProductCategoriesClick()}>
                     Download Categories Listing
                   </CSVLink>
@@ -86,22 +104,36 @@ class ManageProducts extends Component {
             <div className="product-selection-upload">
               <h3>Upload</h3>
               <div className="product-selection-button">
-                <Button>Upload New FBW</Button>
+                <form onSubmit={this.onUploadNewFBWSubmit} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload New FBW</Button>
+                </form>
               </div>
               <div className="product-selection-button">
-                <Button>Upload Existing FBW</Button>
+                <form onSubmit={this.onUploadNewFBWSubmit} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Existing FBW</Button>
+                </form>
               </div>
               <div className="product-selection-button">
-                <Button>Upload New Non-FBW</Button>
+                <form onSubmit={this.onUploadNewFBWSubmit} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload New Non-FBW</Button>
+                </form>
               </div>
               <div className="product-selection-button">
-                <Button>Upload Existing Non-FBW</Button>
+                <form onSubmit={this.onUploadNewFBWSubmit} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Existing Non-FBW</Button>
+                </form>
               </div>
               <div className="product-selection-upload-image-button">
-                <Button>Upload Images</Button>
+                <form onSubmit={this.onUploadNewFBWSubmit} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Images</Button>
+                </form>
               </div>
             </div>
-            
           </div>
 
           </Paper>

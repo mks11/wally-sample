@@ -2693,20 +2693,26 @@ color:#6e8692
 .scrollable-table{
   width: 100%
 }
+
+.paper-button {
+  text-transform: none;
+}
+
 .product-selection-container {
   padding: 2em;
   margin: auto;
-  height: 50vh; 
+  height: 60vh; 
   width: 50vw;
 }
 .product-selection-button {
   display: inline-block;
   width: 40%;
-  padding: 2em;
+  padding: 1.75em;
   margin-top: -5%;
 }
 
 .product-selection-download {
+  text-transform: none;
   width: 100%; 
   text-align:center;
   height:30%;
@@ -2731,4 +2737,14 @@ color:#6e8692
   margin: auto; 
   text-align: center;
   width: 40%;
+}
+
+.product-selection-input-file {
+  display: block;
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
