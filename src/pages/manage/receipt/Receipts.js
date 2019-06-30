@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReceiptCapture from "./ReceiptCapture";
+import { API_ADMIN_GET_RECEIPTS } from "../../../config";
 import { connect } from "../../../utils";
-import "./Receipt.css";
 import { Container, Col, Row, Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
 import Table from "@material-ui/core/Table";
@@ -20,34 +20,20 @@ class Receipts extends Component {
     this.state = {
       newReceipt: false,
       tableView: true,
-      receipts: [],
       enlageImage: false,
       enlargeImageFile: "",
       currentDate: ""
     };
+    this.adminStore = this.props.store.admin;
   }
 
   // When Mounting Set Receipts array to today's Receipts
   componentDidMount() {
     let momentDate = moment().format("YYYY[-]MM[-]DD");
-    let formattedDate = momentDate + "%202:00PM-8:00PM";
+    let formattedDate = momentDate + "%202:00-8:00PM";
     this.setState({ currentDate: momentDate });
-
-    axios
-      .get(
-        `http://localhost:4001/api/admin/shopping/receipt?timeframe=${formattedDate}`
-      )
-      .then(response => {
-        const sortedReceipts = response.data.receipts.sort(function(a, b) {
-          return a.createdAt - b.createdAt;
-        });
-        // Newest Receipts at top
-        this.setState({ receipts: [...sortedReceipts.reverse()] });
-        console.log(response.data.receipts);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.adminStore.getShopLocations(formattedDate);
+    this.adminStore.getDailyReceipts(formattedDate);
   }
 
   // Show Add new Receipt Form
@@ -80,6 +66,8 @@ class Receipts extends Component {
   };
 
   render() {
+    const { locations } = this.adminStore;
+    const { receipts } = this.adminStore;
     return (
       <div>
         <Container>
@@ -105,7 +93,11 @@ class Receipts extends Component {
           {/* Shows New Receipt Form */}
           <div>
             {this.state.newReceipt && (
-              <ReceiptCapture handleTableView={this.handleTableView} />
+              <ReceiptCapture
+                handleTableView={this.handleTableView}
+                locations={locations}
+                adminStore={this.adminStore}
+              />
             )}
           </div>
           {/* Shows Enlarged Image */}
@@ -145,7 +137,7 @@ class Receipts extends Component {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {this.state.receipts.map(receipt => {
+                    {receipts.map(receipt => {
                       return (
                         <TableRow key={receipt._id}>
                           <TableCell align="center">
@@ -190,4 +182,3 @@ class Receipts extends Component {
 }
 
 export default connect("store")(Receipts);
-//export default Receipts;

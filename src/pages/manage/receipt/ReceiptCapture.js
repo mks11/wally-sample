@@ -1,14 +1,9 @@
 import React, { Component } from "react";
-import "./ReceiptCapture.css";
 import S3 from "aws-s3";
 import moment from "moment";
+import { connect } from "../../../utils";
 import { Container, Col, Row, Button, Input } from "reactstrap";
-import {
-  API_ADMIN_GET_SHOP_LOCATIONS,
-  API_ADMIN_POST_RECEIPT
-} from '../../../config'
 import CustomDropdown from "../../../common/CustomDropdown";
-const axios = require("axios");
 
 // S3 Configuration
 const config = {
@@ -27,27 +22,14 @@ class ReceiptCapture extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      locations: [],
       location: null,
       image: null,
       file: "",
       msgPopUp: false,
       message: ""
     };
-  }
-
-  // When Component Mounts get list of locations
-  componentDidMount() {
-    axios
-      .get(`${API_ADMIN_GET_SHOP_LOCATIONS}`)
-      .then(response => {
-        this.setState({
-          locations: response.data.locations
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.locations = this.props.locations;
+    this.adminStore = this.props.adminStore;
   }
 
   submitForm = () => {
@@ -55,31 +37,23 @@ class ReceiptCapture extends Component {
     if (this.state.location != null && this.state.image != null) {
       // Upload File to S3
       S3Client.uploadFile(this.state.file)
-        .then(data =>
-          // If Upload to S3 Successful push to backend
-          axios
-            .post(`${API_ADMIN_POST_RECEIPT}`, {
-              shop_date: moment().format("YYYY-MM-DD"),
-              filename: data.key
+        .then(
+          data =>
+            // If Upload to S3 Successful push to backend
+            this.adminStore.postReceipt(
+              moment().format("YYYY-MM-DD"),
+              data.key
                 .split("/")
                 .slice(-1)
                 .join("/"),
-              location: this.state.location
-            })
-            .then(response => {
-              this.setState({
-                location: null,
-                image: null,
-                file: "",
-                msgPopUp: true,
-                message: "Successfully Added"
-              });
-              console.log(response.data);
-              setTimeout(this.removePopUp, 1000);
-            })
-            .catch(error => {
-              console.log(error);
-            })
+              this.state.location
+            ),
+          this.setState({
+            msgPopUp: true,
+            message: "Successfully Added"
+          }),
+
+          setTimeout(this.removePopUp, 1000)
         )
         .catch(err => console.error(err));
     } else {
@@ -100,7 +74,7 @@ class ReceiptCapture extends Component {
 
   // setLocation sets the chosen Location to state
   setLocation = location => {
-    this.setState({ location });
+    this.setState({ location: location });
   };
 
   // When Image is selected from file system...
@@ -169,7 +143,7 @@ class ReceiptCapture extends Component {
             <CustomDropdown
               values={[
                 { id: "all", title: "Locations" },
-                ...this.state.locations.map(location => {
+                ...this.locations.map(location => {
                   return { id: location, title: location };
                 })
               ]}
