@@ -18,7 +18,9 @@ import {
   API_ADMIN_GET_PACKAGINGS,
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
-  API_ADMIN_POST_BLOG_POST
+  API_ADMIN_POST_BLOG_POST,
+  API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
+  API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -87,6 +89,14 @@ class AdminStore {
   async getShopperPackagingInfo(timeframe, shop_location) {
     const res = await axios.get(`${API_ADMIN_GET_SHOPPER_PACKAGING_INFO}?timeframe=${timeframe}&shop_location=${shop_location}`)
     this.packagingCounts = res.data.packaging_counts
+  }
+
+  async getProductSelectionDownload() {
+    await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`)
+  }
+
+  async getProductCategoriesDownload() {
+    await axios.get(`${API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD}`)
   }
 
   async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {

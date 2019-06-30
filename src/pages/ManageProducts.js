@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import Container from 'reactstrap'
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Paper';
 import Title from '../common/page/Title'
@@ -13,6 +11,7 @@ class ManageProducts extends Component {
   constructor(props) {
     super(props)
     this.userStore = props.store.user
+    this.adminStore = this.props.store.admin
   }
   
   componentDidMount() {
@@ -29,6 +28,15 @@ class ManageProducts extends Component {
       })
   }
 
+  onDownloadProductListingClick() {
+    this.adminStore.getProductSelectionDownload()
+  }
+
+  onDownloadProductCategoriesClick() {
+    this.adminStore.getProductSelectionDownload()
+  }
+
+
   render () {
     if (!this.userStore.user) return null
     return (
@@ -39,10 +47,14 @@ class ManageProducts extends Component {
             <div className="product-selection-download">
               <h3>Download</h3>
               <div className="product-selection-button">
-                <Button>Download Product Listing</Button>
+                <Button
+                  onClick={this.onDownloadProductSelectionClick}
+                >Download Product Listing</Button>
               </div>
               <div className="product-selection-button">
-                <Button>Download Categories</Button>
+                <Button
+                  onClick={this.onDownloadProductCategoriesClick}
+                >Download Categories</Button>
               </div>
             </div>
             <div className="product-selection-upload">

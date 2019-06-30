@@ -1,5 +1,5 @@
 export const BASE_URL = "https://evening-bayou-13995.herokuapp.com"
-// export const BASE_URL = "http://localhost:4001"
+//export const BASE_URL = "http://localhost:4001"
 
 export const API_GET_USER = BASE_URL + "/api/user"
 export const API_EDIT_USER = BASE_URL + "/api/user"
@@ -22,6 +22,7 @@ export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard"
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/"
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"
+
 
 export const API_GET_CATEGORIES = BASE_URL + "/api/categories"
 export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search"
@@ -51,8 +52,6 @@ export const API_ADMIN_GET_SUB_INFO = BASE_URL + "/api/admin/shopping/dailysubst
 export const API_ADMIN_UPDATE_DAILY_SUBSTITUTE = BASE_URL + "/api/admin/shopping/dailysubstitutes"
 export const API_ADMIN_UPDATE_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem"
 
-
-
 export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location"
 export const API_ADMIN_GET_LOCATION_STATUS = BASE_URL + "/api/admin/shopping/location/status"
 export const API_ADMIN_GET_SHOPPER_PACKAGING_INFO = BASE_URL + "/api/admin/shopping/packaging"
@@ -64,6 +63,8 @@ export const API_ADMIN_GET_PACKAGINGS = BASE_URL + "/api/admin/packagings"
 export const API_ADMIN_PACKAGE_ORDER = BASE_URL + "/api/order"
 export const API_ADMIN_COMPLETE_ORDER =  BASE_URL + "/api/order"
 export const API_ADMIN_POST_BLOG_POST =  BASE_URL + "/api/admin/blog"
+export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD = BASE_URL + "/api/admin/products/currentselectioncsv"
+export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/products/currentcategoriescsv"
 
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display"
