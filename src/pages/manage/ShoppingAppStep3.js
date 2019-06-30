@@ -123,14 +123,18 @@ class ShoppingAppStep3 extends Component {
 
 
     statusSort = (item) => {
-        let statusLib = ["pending", "available", "purchased", "unavailable"]
+
+        let statusLib = ["pending", "available", "purchased", "issue", "unavailable"]
         let indexMap = {}
 
         for (let i = 0; i < statusLib.length; i++) {
             indexMap[statusLib[i]] = i
         }
 
-        return item.sort((a, b) => {
+        
+
+
+        return item.slice().sort((a, b) => {
             return indexMap[a.status] - indexMap[b.status]
         })
     }
