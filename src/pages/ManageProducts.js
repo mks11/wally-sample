@@ -33,7 +33,7 @@ class ManageProducts extends Component {
   }
 
   onDownloadProductCategoriesClick() {
-    this.adminStore.getProductSelectionDownload()
+    this.adminStore.getProductCategoriesDownload()
   }
 
 
