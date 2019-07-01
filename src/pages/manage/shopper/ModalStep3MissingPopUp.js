@@ -72,7 +72,7 @@ class ModalStep3MissingPopUp extends Component {
         let status = ""
 
         if (selected === "ugly" || selected === "too little") {
-            status = "issue"
+            status = selected
         } else {
             status = "missing"
         }
