@@ -70,9 +70,10 @@ class CourierRouting extends Component {
           this.setState({
             isCourierModalOpen: true
           });
-        } else {
+        } else if (res === false) {
           const newRoutes = this.state.routes;
-          newRoutes[i].route_assigned = true;
+          console.log(newRoutes[i]);
+          newRoutes[i].assigned = true;
           this.setState({
             courierPhoneNumber: this.state.courierPhoneNumber,
             routes: newRoutes
@@ -89,7 +90,7 @@ class CourierRouting extends Component {
 
   render() {
     const { routes, courierPhoneNumbers, route_assigned } = this.state;
-    // const isEnabled = courierPhoneNumber.length === 9;
+    // const isEnabled = courierPhoneNumber.length !== null;
 
     return (
       <section className="courier-page">
@@ -140,6 +141,7 @@ class CourierRouting extends Component {
                           size={"medium"}
                           type={"button"}
                           onClick={() => {
+                            console.log(routes);
                             if (!this.state.isCourierModalOpen)
                               this.setState({ currentPhoneNumber: i });
                             this.assignCourierModal(
