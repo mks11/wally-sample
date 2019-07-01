@@ -29,15 +29,13 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import Route from "./Route";
 import CourierModal from "./CourierModal";
 const customColumnStyle = { width: 100, padding: 0 };
+
 class CourierRouting extends Component {
   constructor(props) {
     super(props);
     this.state = {
       routes: [],
-      isCourierModalOpen: false,
-      courierPhoneNumbers: ["", "", "", ""],
-      route_assigned: false,
-      currentPhoneNumber: 0
+      isCourierModalOpen: -1
     };
   }
 
@@ -49,33 +47,38 @@ class CourierRouting extends Component {
   };
 
   setPhoneNumber = (e, i) => {
-    console.log(i, e.target.value);
-    const { courierPhoneNumbers } = this.state;
-    const newCourierPhoneNumbers = courierPhoneNumbers.slice();
-    newCourierPhoneNumbers[i] = e.target.value;
+    const value = e.target.value;
+    const routes = this.state.routes;
+
+    routes[i] = {
+      ...routes[i],
+      courierPhoneNumber: value
+    };
 
     this.setState({
-      courierPhoneNumbers: newCourierPhoneNumbers
+      routes
     });
   };
 
-  assignCourierModal = (e, i) => {
-    let routeNumber = e.route_number;
-    let routeAssigned = e.route_assigned;
-    fetch(`http://localhost:4001/api/test/assign-routes/${routeNumber}`)
+  assignCourierModal = (route, i) => {
+    let routeNumber = route.route_number;
+    let courierNumber = route.courierPhoneNumber;
+    console.log(route);
+    fetch(
+      `http://localhost:4001/api/test/assign-routes/${routeNumber}/${courierNumber}`
+    )
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        if (res === true) {
+        if (res) {
           this.setState({
-            isCourierModalOpen: true
+            isCourierModalOpen: i
           });
-        } else if (res === false) {
+        } else {
           const newRoutes = this.state.routes;
-          console.log(newRoutes[i]);
           newRoutes[i].assigned = true;
+          newRoutes[i].courierPhoneNumber = route.courierPhoneNumber;
           this.setState({
-            courierPhoneNumber: this.state.courierPhoneNumber,
             routes: newRoutes
           });
         }
@@ -84,14 +87,16 @@ class CourierRouting extends Component {
 
   toggleModalOff = e => {
     this.setState({
-      isCourierModalOpen: false
+      isCourierModalOpen: -1
     });
   };
 
   render() {
-    const { routes, courierPhoneNumbers, route_assigned } = this.state;
-    // const isEnabled = courierPhoneNumber.length !== null;
-
+    const { routes, courierPhoneNumber, currentPhoneNumber } = this.state;
+    const phoneNumberEnabled = routes.map(r => {
+      return r.courierPhoneNumber !== null || r.courier_telephone !== null;
+    });
+    console.log(routes);
     return (
       <section className="courier-page">
         <Container>
@@ -112,27 +117,20 @@ class CourierRouting extends Component {
                       <TableCell>{route.assigned.toString()}</TableCell>
                       <TableCell>{route.text}</TableCell>
                       <TableCell>
-                        <InputGroup>
-                          {courierPhoneNumbers[i].length !== null ? (
-                            <Input
-                              value={courierPhoneNumbers[i]}
-                              name="courierPhoneNumber"
-                              type="number"
-                              onChange={e => this.setPhoneNumber(e, i)}
-                              style={customColumnStyle}
-                            />
-                          ) : (
+                        {route.courier_telephone !== null ? (
+                          route.courier_telephone
+                        ) : (
+                          <InputGroup>
                             <Input
                               placeholder="Enter your number here"
-                              value={courierPhoneNumbers[i]}
-                              onChange={this.setPhoneNumber}
-                              onKeyPress={this.handlePhoneNumberKeyPress}
+                              value={route.courierPhoneNumber || ""}
+                              onChange={e => this.setPhoneNumber(e, i)}
                               type="number"
                               name="courierPhoneNumber"
                               style={customColumnStyle}
                             />
-                          )}
-                        </InputGroup>
+                          </InputGroup>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Button
@@ -140,26 +138,17 @@ class CourierRouting extends Component {
                           color="primary"
                           size={"medium"}
                           type={"button"}
+                          disabled={!phoneNumberEnabled}
                           onClick={() => {
-                            console.log(routes);
-                            if (!this.state.isCourierModalOpen)
-                              this.setState({ currentPhoneNumber: i });
-                            this.assignCourierModal(
-                              {
-                                route_number: route.route_number,
-                                route_assigned: true
-                              },
-                              i
-                            );
+                            this.assignCourierModal(route, i);
                           }}
                         >
                           Assign
+                          {console.log(route.courierPhoneNumber, i)}
                           <CourierModal
-                            isOpen={this.state.isCourierModalOpen}
+                            isOpen={this.state.isCourierModalOpen === i}
                             onClose={this.toggleModalOff}
-                            courierPhoneNumber={
-                              courierPhoneNumbers[this.state.currentPhoneNumber]
-                            }
+                            courierPhoneNumber={route.courierPhoneNumber}
                             createNewCourier={this.createNewCourier}
                           />
                         </Button>

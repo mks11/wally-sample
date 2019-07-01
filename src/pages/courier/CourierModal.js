@@ -55,10 +55,11 @@ class CourierModal extends Component {
         name: name,
         telephone_number: this.props.courierPhoneNumber,
         roles: "courier",
-        paypal: this.state.paypal_email
+        paypal: paypal_email
       })
     })
-      .then(() => {})
+      .then(response => console.log(response.data))
+      .then(response => this.setState({}))
       .catch(e => console.error(e));
     this.props.onClose();
     e.stopPropagation();
@@ -66,9 +67,12 @@ class CourierModal extends Component {
 
   render() {
     const { name, paypal_email } = this.state;
+    const { courierPhoneNumber } = this.props;
+    console.log(">>>>>>>>>>>", courierPhoneNumber);
     if (!this.props.isOpen) {
       return null;
     }
+
     const isEnabled = name.length > 0 && paypal_email.length > 0;
     return (
       <div className="courier">
@@ -93,7 +97,7 @@ class CourierModal extends Component {
                 </TableRow>
                 <TableRow>
                   <TableCell>Telephone Number:</TableCell>
-                  <TableCell>{this.props.courierPhoneNumber}</TableCell>
+                  <TableCell>{courierPhoneNumber}</TableCell>
                 </TableRow>
 
                 <TableRow>
