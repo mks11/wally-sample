@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import Input from 'reactstrap'
 import Title from '../common/page/Title'
 import {connect} from '../utils';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import axios from 'axios'
-import { format } from 'url';
 
 
 class ManageProducts extends Component {
@@ -58,11 +56,13 @@ class ManageProducts extends Component {
     })
   }
 
-   onUploadNewFBWSubmit = async(event) => {
+   onUploadNewFBWSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('file', this.state.file[0])  
-    await axios.post(`http://localhost:4001/api/admin/products/currentcategoriescsv`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+    formData.append('file', this.state.file[0])
+    const fbw = false , type="new", fileName = this.state.file[0].name.split(".csv")[0]
+    console.log(this.state.file[0]) 
+    axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
       .then( res => { 
       console.log(res)
     }).catch(error => {
