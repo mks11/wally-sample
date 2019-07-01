@@ -35,8 +35,9 @@ class CourierRouting extends Component {
     this.state = {
       routes: [],
       isCourierModalOpen: false,
-      courierPhoneNumber: "",
-      route_assigned: false
+      courierPhoneNumbers: ["", "", "", ""],
+      route_assigned: false,
+      currentPhoneNumber: 0
     };
   }
 
@@ -47,12 +48,14 @@ class CourierRouting extends Component {
       .catch(error => console.log(error));
   };
 
-  setPhoneNumber = e => {
-    const { courierPhoneNumber } = this.state;
-    debugger;
-    courierPhoneNumber[e.target.name] = e.target.value;
+  setPhoneNumber = (e, i) => {
+    console.log(i, e.target.value);
+    const { courierPhoneNumbers } = this.state;
+    const newCourierPhoneNumbers = courierPhoneNumbers.slice();
+    newCourierPhoneNumbers[i] = e.target.value;
+
     this.setState({
-      courierPhoneNumber: e.target.value
+      courierPhoneNumbers: newCourierPhoneNumbers
     });
   };
 
@@ -70,7 +73,7 @@ class CourierRouting extends Component {
         } else {
           this.setState({
             courierPhoneNumber: this.state.courierPhoneNumber,
-            route_assigned: routeAssigned
+            route_assigned: true
           });
         }
       });
@@ -82,22 +85,9 @@ class CourierRouting extends Component {
   //   });
   // };
 
-  // createNewCourier = e => {
-  //   const { isCourierModalOpen } = this.state;
-  //   console.log("hit");
-  //   return fetch("http://localhost:4001/api/test/get-couriers", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({})
-  //   });
-  //   this.setState({
-  //     isCourierModalOpen: false
-  //   });
-  // };
   render() {
-    const { routes, courierPhoneNumber, route_assigned } = this.state;
+    const { routes, courierPhoneNumbers, route_assigned } = this.state;
+    // const isEnabled = courierPhoneNumber.length === 9;
 
     return (
       <section className="courier-page">
@@ -120,17 +110,18 @@ class CourierRouting extends Component {
                       <TableCell>{route.text}</TableCell>
                       <TableCell>
                         <InputGroup>
-                          {courierPhoneNumber.length !== null ? (
+                          {courierPhoneNumbers[i].length !== null ? (
                             <Input
-                              value={courierPhoneNumber}
+                              value={courierPhoneNumbers[i]}
                               name="courierPhoneNumber"
-                              onChange={this.setPhoneNumber}
+                              type="number"
+                              onChange={e => this.setPhoneNumber(e, i)}
                               style={customColumnStyle}
                             />
                           ) : (
                             <Input
                               placeholder="Enter your number here"
-                              value={courierPhoneNumber}
+                              value={courierPhoneNumbers[i]}
                               onChange={this.setPhoneNumber}
                               onKeyPress={this.handlePhoneNumberKeyPress}
                               type="number"
@@ -146,17 +137,21 @@ class CourierRouting extends Component {
                           color="primary"
                           size={"medium"}
                           type={"button"}
-                          onClick={() =>
+                          onClick={() => {
+                            if (!this.state.isCourierModalOpen)
+                              this.setState({ currentPhoneNumber: i });
                             this.assignCourierModal({
                               route_number: route.route_number,
                               route_assigned: true
-                            })
-                          }
+                            });
+                          }}
                         >
                           Assign
                           <CourierModal
                             isOpen={this.state.isCourierModalOpen}
-                            courierPhoneNumber={this.state.courierPhoneNumber}
+                            courierPhoneNumber={
+                              courierPhoneNumbers[this.state.currentPhoneNumber]
+                            }
                             createNewCourier={this.createNewCourier}
                           />
                         </Button>

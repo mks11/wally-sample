@@ -207,19 +207,15 @@ class CartItem extends Component {
         </TableCell>
         <TableCell>
           <InputGroup>
-            {unit_type == "lb" || unit_type == "oz" ? (
-              <Input
-                placeholder="Enter weight..."
-                value={weight}
-                type="number"
-                name="weight"
-                onChange={this.setWeight}
-                disabled={!isEdit}
-                style={customColumnStyle}
-              />
-            ) : (
-              <Input readOnly />
-            )}
+            <Input
+              placeholder="Enter weight..."
+              value={weight}
+              type="number"
+              name="weight"
+              onChange={this.setWeight}
+              disabled={!isEdit}
+              style={customColumnStyle}
+            />
           </InputGroup>
         </TableCell>
         <TableCell>{initialTotal}</TableCell>
