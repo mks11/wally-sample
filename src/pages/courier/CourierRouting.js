@@ -42,7 +42,7 @@ class CourierRouting extends Component {
   componentDidMount = () => {
     fetch("http://localhost:4001/api/test/get-routes")
       .then(res => res.json())
-      .then(json => this.setState({ routes: json }))
+      .then(json => this.setState({ routes: json, loading: true }))
       .catch(error => console.log(error));
   };
 
@@ -90,13 +90,12 @@ class CourierRouting extends Component {
       isCourierModalOpen: -1
     });
   };
+  test = () => {
+    console.log("hi");
+  };
 
   render() {
-    const { routes, courierPhoneNumber, currentPhoneNumber } = this.state;
-    const phoneNumberEnabled = routes.map(r => {
-      return r.courierPhoneNumber !== null || r.courier_telephone !== null;
-    });
-    console.log(routes);
+    const { routes, currentPhoneNumber } = this.state;
     return (
       <section className="courier-page">
         <Container>
@@ -138,13 +137,14 @@ class CourierRouting extends Component {
                           color="primary"
                           size={"medium"}
                           type={"button"}
-                          disabled={!phoneNumberEnabled}
                           onClick={() => {
-                            this.assignCourierModal(route, i);
+                            route.courierPhoneNumber === undefined &&
+                            route.courier_telephone === null
+                              ? alert("please enter phone number")
+                              : this.assignCourierModal(route, i);
                           }}
                         >
                           Assign
-                          {console.log(route.courierPhoneNumber, i)}
                           <CourierModal
                             isOpen={this.state.isCourierModalOpen === i}
                             onClose={this.toggleModalOff}

@@ -68,7 +68,6 @@ class CourierModal extends Component {
   render() {
     const { name, paypal_email } = this.state;
     const { courierPhoneNumber } = this.props;
-    console.log(">>>>>>>>>>>", courierPhoneNumber);
     if (!this.props.isOpen) {
       return null;
     }
