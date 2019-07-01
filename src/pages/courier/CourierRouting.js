@@ -59,7 +59,7 @@ class CourierRouting extends Component {
     });
   };
 
-  assignCourierModal = e => {
+  assignCourierModal = (e, i) => {
     let routeNumber = e.route_number;
     let routeAssigned = e.route_assigned;
     fetch(`http://localhost:4001/api/test/assign-routes/${routeNumber}`)
@@ -71,19 +71,21 @@ class CourierRouting extends Component {
             isCourierModalOpen: true
           });
         } else {
+          const newRoutes = this.state.routes;
+          newRoutes[i].route_assigned = true;
           this.setState({
             courierPhoneNumber: this.state.courierPhoneNumber,
-            route_assigned: true
+            routes: newRoutes
           });
         }
       });
   };
 
-  // toggleModalOff = e => {
-  //   this.setState({
-  //     isCourierModalOpen: false
-  //   });
-  // };
+  toggleModalOff = e => {
+    this.setState({
+      isCourierModalOpen: false
+    });
+  };
 
   render() {
     const { routes, courierPhoneNumbers, route_assigned } = this.state;
@@ -140,15 +142,19 @@ class CourierRouting extends Component {
                           onClick={() => {
                             if (!this.state.isCourierModalOpen)
                               this.setState({ currentPhoneNumber: i });
-                            this.assignCourierModal({
-                              route_number: route.route_number,
-                              route_assigned: true
-                            });
+                            this.assignCourierModal(
+                              {
+                                route_number: route.route_number,
+                                route_assigned: true
+                              },
+                              i
+                            );
                           }}
                         >
                           Assign
                           <CourierModal
                             isOpen={this.state.isCourierModalOpen}
+                            onClose={this.toggleModalOff}
                             courierPhoneNumber={
                               courierPhoneNumbers[this.state.currentPhoneNumber]
                             }

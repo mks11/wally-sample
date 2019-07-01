@@ -33,7 +33,6 @@ class CourierModal extends Component {
     this.setState({
       name: e.target.value
     });
-    console.log(name);
   };
 
   onEmailChange = e => {
@@ -41,14 +40,13 @@ class CourierModal extends Component {
     this.setState({
       paypal_email: e.target.value
     });
-    console.log(paypal_email);
   };
 
   createNewCourier = e => {
     const name = this.state.name;
     const paypal_email = this.state.paypal_email;
-    console.log("hit");
-    return fetch("http://localhost:4001/api/test/create-courier", {
+    console.log("hit2");
+    fetch("http://localhost:4001/api/test/create-courier", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -57,12 +55,13 @@ class CourierModal extends Component {
         name: name,
         telephone_number: this.props.courierPhoneNumber,
         roles: "courier",
-        paypal_email: paypal_email
+        paypal: this.state.paypal_email
       })
-    });
-    // this.setState({
-    //   this.props.isOpen: false
-    // });
+    })
+      .then(() => {})
+      .catch(e => console.error(e));
+    this.props.onClose();
+    e.stopPropagation();
   };
 
   render() {
@@ -70,7 +69,7 @@ class CourierModal extends Component {
     if (!this.props.isOpen) {
       return null;
     }
-    // const isEnabled = name.length > 0 && paypal_email.length > 0;
+    const isEnabled = name.length > 0 && paypal_email.length > 0;
     return (
       <div className="courier">
         <div className="backdrop">
@@ -115,6 +114,7 @@ class CourierModal extends Component {
             </Table>
             <Button
               className="error-submit"
+              disabled={!isEnabled}
               variant="contained"
               color="primary"
               size={"medium"}
