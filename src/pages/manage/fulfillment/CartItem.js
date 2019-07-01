@@ -78,7 +78,6 @@ class CartItem extends Component {
     const { cart_item, weight } = this.state;
     cart_item[e.target.name] = e.target.value;
     this.setState({ cart_item, weight });
-    console.log("onInputchange", weight);
   };
 
   setWeight = e => {

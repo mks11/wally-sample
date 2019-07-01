@@ -34,9 +34,9 @@ class CourierRouting extends Component {
     super(props);
     this.state = {
       routes: [],
-      users: [],
       isCourierModalOpen: false,
-      courierPhoneNumber: ""
+      courierPhoneNumber: "",
+      route_assigned: false
     };
   }
 
@@ -48,6 +48,9 @@ class CourierRouting extends Component {
   };
 
   setPhoneNumber = e => {
+    const { courierPhoneNumber } = this.state;
+    debugger;
+    courierPhoneNumber[e.target.name] = e.target.value;
     this.setState({
       courierPhoneNumber: e.target.value
     });
@@ -72,8 +75,29 @@ class CourierRouting extends Component {
         }
       });
   };
+
+  // toggleModalOff = e => {
+  //   this.setState({
+  //     isCourierModalOpen: false
+  //   });
+  // };
+
+  // createNewCourier = e => {
+  //   const { isCourierModalOpen } = this.state;
+  //   console.log("hit");
+  //   return fetch("http://localhost:4001/api/test/get-couriers", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({})
+  //   });
+  //   this.setState({
+  //     isCourierModalOpen: false
+  //   });
+  // };
   render() {
-    const { routes, loading, courierPhoneNumber } = this.state;
+    const { routes, courierPhoneNumber, route_assigned } = this.state;
 
     return (
       <section className="courier-page">
@@ -92,13 +116,14 @@ class CourierRouting extends Component {
                   return (
                     <TableRow key={i}>
                       <TableCell>{route.route_number}</TableCell>
-                      <TableCell>False</TableCell>
+                      <TableCell>{route.assigned.toString()}</TableCell>
                       <TableCell>{route.text}</TableCell>
                       <TableCell>
                         <InputGroup>
-                          {courierPhoneNumber.length === 9 ? (
+                          {courierPhoneNumber.length !== null ? (
                             <Input
                               value={courierPhoneNumber}
+                              name="courierPhoneNumber"
                               onChange={this.setPhoneNumber}
                               style={customColumnStyle}
                             />
@@ -131,7 +156,8 @@ class CourierRouting extends Component {
                           Assign
                           <CourierModal
                             isOpen={this.state.isCourierModalOpen}
-                            onClose={this.createNewCourier}
+                            courierPhoneNumber={this.state.courierPhoneNumber}
+                            createNewCourier={this.createNewCourier}
                           />
                         </Button>
                       </TableCell>

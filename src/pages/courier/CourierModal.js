@@ -23,28 +23,54 @@ class CourierModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courier: props.courier
+      name: "",
+      paypal_email: ""
     };
   }
 
   onNameChange = e => {
-    const { courier } = this.state;
-    // cart_item.name = e.target.value;
-    // this.setState({ cart_item });
+    const { name } = this.state;
+    this.setState({
+      name: e.target.value
+    });
+    console.log(name);
   };
 
   onEmailChange = e => {
-    const { courier } = this.state;
-    // cart_item.paypal_email = e.target.value;
-    // this.setState({ cart_item });
+    const { paypal_email } = this.state;
+    this.setState({
+      paypal_email: e.target.value
+    });
+    console.log(paypal_email);
+  };
+
+  createNewCourier = e => {
+    const name = this.state.name;
+    const paypal_email = this.state.paypal_email;
+    console.log("hit");
+    return fetch("http://localhost:4001/api/test/create-courier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        telephone_number: this.props.courierPhoneNumber,
+        roles: "courier",
+        paypal_email: paypal_email
+      })
+    });
+    // this.setState({
+    //   this.props.isOpen: false
+    // });
   };
 
   render() {
-    const { name } = this.state;
-
+    const { name, paypal_email } = this.state;
     if (!this.props.isOpen) {
       return null;
     }
+    // const isEnabled = name.length > 0 && paypal_email.length > 0;
     return (
       <div className="courier">
         <div className="backdrop">
@@ -56,16 +82,19 @@ class CourierModal extends Component {
                   <TableCell>
                     <InputGroup>
                       <Input
+                        placeholder="Enter name..."
+                        value={name}
+                        name="name"
                         type="string"
                         placeholder="enter your name here"
-                        onChange={this.onNamelChange}
+                        onChange={this.onNameChange}
                       />
                     </InputGroup>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Telephone Number:</TableCell>
-                  <TableCell>617-794-8249</TableCell>
+                  <TableCell>{this.props.courierPhoneNumber}</TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -73,6 +102,8 @@ class CourierModal extends Component {
                   <TableCell>
                     <InputGroup>
                       <Input
+                        value={paypal_email}
+                        name="paypal_email"
                         type="string"
                         placeholder="enter paypal email"
                         onChange={this.onEmailChange}
@@ -82,7 +113,16 @@ class CourierModal extends Component {
                 </TableRow>
               </TableBody>
             </Table>
-            <Button>Create</Button>
+            <Button
+              className="error-submit"
+              variant="contained"
+              color="primary"
+              size={"medium"}
+              type="button"
+              onClick={this.createNewCourier}
+            >
+              Create
+            </Button>
           </Paper>
         </div>
       </div>
