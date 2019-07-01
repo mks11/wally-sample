@@ -58,9 +58,9 @@ class ManageProducts extends Component {
 
    onUploadNewFBWSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(); 
     formData.append('file', this.state.file[0])
-    const fbw = false , type="new", fileName = this.state.file[0].name.split(".csv")[0]
+    const fbw = false , type="new", fileName = this.state.file[0].name
     console.log(this.state.file[0]) 
     axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
       .then( res => { 
