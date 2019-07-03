@@ -56,7 +56,50 @@ class ManageProducts extends Component {
     })
   }
 
-  onUploadNewFBWSubmit = (event) => {
+  onUploadNewFBW = (event) => {
+    event.preventDefault();
+    const formData = new FormData(); 
+    formData.append('file', this.state.file[0])
+    let fbw = true, type="new", fileName = this.state.file[0].name
+    console.log(this.state.file[0]) 
+    axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+      .then( res => { 
+      console.log(res)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  onUploadExistingFBW = (event) => {
+    event.preventDefault();
+    const formData = new FormData(); 
+    formData.append('file', this.state.file[0])
+    let fbw = true, type="existing", fileName = this.state.file[0].name
+    console.log(this.state.file[0]) 
+    axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+      .then( res => { 
+      console.log(res)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  onUploadNewNonFBW = (event) => {
+    event.preventDefault();
+    const formData = new FormData(); 
+    formData.append('file', this.state.file[0])
+    let fbw = false, type="new", fileName = this.state.file[0].name
+    console.log(this.state.file[0]) 
+    axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+      .then( res => { 
+      console.log(res)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+
+  onUploadExistingNonFBW = (event) => {
     event.preventDefault();
     const formData = new FormData(); 
     formData.append('file', this.state.file[0])
@@ -69,6 +112,8 @@ class ManageProducts extends Component {
       console.log(error)
     })
   }
+
+
 
   onUploadProductImages = (event) => {
     event.preventDefault();
@@ -118,25 +163,25 @@ class ManageProducts extends Component {
             <div className="product-selection-upload">
               <h3>Upload</h3>
               <div className="product-selection-button">
-                <form onSubmit={this.onUploadNewFBWSubmit} >
+                <form onSubmit={this.onUploadNewFBW} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload New FBW</Button>
                 </form>
               </div>
               <div className="product-selection-button">
-                <form onSubmit={this.onUploadNewFBWSubmit} >
+                <form onSubmit={this.onUploadExistingFBW} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Existing FBW</Button>
                 </form>
               </div>
               <div className="product-selection-button">
-                <form onSubmit={this.onUploadNewFBWSubmit} >
+                <form onSubmit={this.onUploadNewNonFBW} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload New Non-FBW</Button>
                 </form>
               </div>
               <div className="product-selection-button">
-                <form onSubmit={this.onUploadNewFBWSubmit} >
+                <form onSubmit={this.onUploadExistingNonFBW} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Existing Non-FBW</Button>
                 </form>
