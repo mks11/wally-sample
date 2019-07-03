@@ -36,9 +36,9 @@ class ManageProducts extends Component {
     this.onDownloadProductCategoriesClick()
   }
 
-  async onDownloadProductListingClick() {
+  onDownloadProductListingClick() {
      //this.adminStore.getProductSelectionDownload() ... when done with testing.
-    await axios.get(`http://localhost:4001/api/admin/products/currentselectioncsv`)
+    axios.get(`http://localhost:4001/api/admin/products/currentselectioncsv`)
       .then( res => { 
       this.setState({
         productListData: res.data
@@ -46,9 +46,9 @@ class ManageProducts extends Component {
     })
   }
 
-  async onDownloadProductCategoriesClick() {
+  onDownloadProductCategoriesClick() {
     //this.adminStore.getProductCategoriesDownload() ... when done with testing.
-    await axios.get(`http://localhost:4001/api/admin/products/currentcategoriescsv`)
+    axios.get(`http://localhost:4001/api/admin/products/currentcategoriescsv`)
       .then( res => { 
       this.setState({
         categoryListData: res.data
@@ -56,11 +56,11 @@ class ManageProducts extends Component {
     })
   }
 
-   onUploadNewFBWSubmit = (event) => {
+  onUploadNewFBWSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(); 
     formData.append('file', this.state.file[0])
-    const fbw = false , type="new", fileName = this.state.file[0].name
+    let fbw = false, type="existing", fileName = this.state.file[0].name
     console.log(this.state.file[0]) 
     axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
       .then( res => { 
@@ -69,6 +69,20 @@ class ManageProducts extends Component {
       console.log(error)
     })
   }
+
+  onUploadProductImages = (event) => {
+    event.preventDefault();
+    const formData = new FormData(); 
+    formData.append('file', this.state.file[0])
+    console.log(this.state.file[0])
+    axios.post(`http://localhost:4001/api/admin/products/imagesupload`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
+      .then( res => { 
+      console.log(res)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
 
   handleFileUpload = (event) => {
     this.setState({file: event.target.files});
@@ -128,7 +142,7 @@ class ManageProducts extends Component {
                 </form>
               </div>
               <div className="product-selection-upload-image-button">
-                <form onSubmit={this.onUploadNewFBWSubmit} >
+                <form onSubmit={this.onUploadProductImages} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button style={{ textTransform: 'none'}} size="small" type="submit">Upload Images</Button>
                 </form>
