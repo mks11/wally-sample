@@ -67,7 +67,7 @@ class ShoppingAppStep3 extends Component {
         if(status){
             let status = "purchased"
 
-            this.adminStore.setShopItemStatus(status, id)
+            this.adminStore.setShopItemStatus(id, status)
         } else {
             let status = "missing"
             this.setState({

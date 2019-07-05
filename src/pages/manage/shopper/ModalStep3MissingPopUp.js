@@ -79,7 +79,7 @@ class ModalStep3MissingPopUp extends Component {
 
 
         // uncomment when ready for testing against API
-        await this.adminStore.setShopItemStatus(status, id, quantity)
+        await this.adminStore.setShopItemStatus(id, status, quantity)
         // await this.adminStore.updateShopItemQuantity(timeframe, id, quantity)
 
 
