@@ -2659,6 +2659,12 @@ color:#6e8692
   margin: 0 auto;
 }
 
+.courier-modal{
+  max-width: 600px;
+  min-height: 200px;
+  margin: 120px auto;
+}
+
 @media (max-width: 400px){
   .error-modal{
     width: 320px;

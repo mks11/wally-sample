@@ -29,17 +29,19 @@ class CartItem extends Component {
       weight: "",
       isEdit: false
     };
-    this.setWeight = this.setWeight.bind(this);
   }
 
-  onClickButton = () => {
+  onClickButton = async () => {
     if (this.state.isEdit) {
-      this.props.saveCartRow(this.state.cart_item);
-      this.handleItemUpdate();
-      this.setState({
-        isEdit: false,
+      await this.props.onWeightStateChange({
+        _id: this.props.cart_item._id,
         weight: this.state.weight
       });
+      this.setState({
+        isEdit: false
+      });
+      this.props.saveCartRow(this.state.cart_item);
+      this.handleItemUpdate();
     } else {
       this.setState({ isEdit: true });
     }
@@ -50,6 +52,7 @@ class CartItem extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
+    console.log("handleItemUpdate", weight);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -60,8 +63,9 @@ class CartItem extends Component {
         product_name: cartItem.product_name,
         substitute_for_name: cartItem.substitute_for_name,
         product_producer: cartItem.product_producer,
-        product_price: cartItem.product_price / 100,
-        final_quantity: cartItem.final_quantity,
+        product_shop: cartItem.product_shop,
+        product_price: cartItem.product_price,
+        final_quantity: Number(cartItem.final_quantity),
         missing: cartItem.missing,
         weight: weight
       })
@@ -110,8 +114,7 @@ class CartItem extends Component {
       Math.abs(valueQuantityChange / cart_item.customer_quantity) * 100;
     const customColumnStyle = { width: 90, padding: 0 };
     const customColumnNameStyle = { width: 300 };
-    console.log(cart_item);
-    console.log(unit_type);
+
     return (
       <TableRow
         className={
@@ -154,7 +157,7 @@ class CartItem extends Component {
         <TableCell>{cart_item.product_producer}</TableCell>
         <TableCell>{cart_item.product_shop}</TableCell>
         <TableCell>
-          ${cart_item.initial_product_price / 100} / {cart_item.price_unit}
+          ${cart_item.initial_product_price / 100} / {cart_item.unit_type}
         </TableCell>
         <TableCell>
           <InputGroup>
@@ -204,19 +207,15 @@ class CartItem extends Component {
         </TableCell>
         <TableCell>
           <InputGroup>
-            {unit_type == "lb" || unit_type == "oz" ? (
-              <Input
-                placeholder="Enter weight..."
-                value={weight}
-                type="number"
-                name="weight"
-                onChange={this.setWeight}
-                disabled={!isEdit}
-                style={customColumnStyle}
-              />
-            ) : (
-              <Input readOnly />
-            )}
+            <Input
+              placeholder="Enter weight..."
+              value={weight}
+              type="number"
+              name="weight"
+              onChange={this.setWeight}
+              disabled={!isEdit}
+              style={customColumnStyle}
+            />
           </InputGroup>
         </TableCell>
         <TableCell>{initialTotal}</TableCell>

@@ -14,7 +14,6 @@ import ManageTabs from "./manage/ManageTabs";
 import CustomDropdown from "../common/CustomDropdown";
 import FulfillmentPlaceView from "./manage/FulfillmentPlaceView";
 import FulfillmentPackView from "./manage/FulfillmentPackView";
-
 import { connect } from "../utils";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
@@ -25,6 +24,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableFooter from "@material-ui/core/TableFooter/TableFooter";
 import { toJS } from "mobx";
 import ViewSingleOrder from "./orders/ViewSingleOrder";
+import moment from "moment";
 
 class ManageOrders extends Component {
   constructor(props) {
@@ -45,28 +45,32 @@ class ManageOrders extends Component {
       .getStatus(true)
       .then(status => {
         const user = this.userStore.user;
-        if (!status || !(["admin", "super-admin", "tws-ops"].includes(user.type))) {
+        if (
+          !status ||
+          !["admin", "super-admin", "tws-ops"].includes(user.type)
+        ) {
           this.props.store.routing.push("/");
         } else {
-          this.loadData();
           this.loadOrders();
           this.adminStore.getPackagings();
         }
       })
       .catch(error => {
+        console.log(error);
         this.props.store.routing.push("/");
       });
   }
 
-  loadData() {
-    const date = new Date();
-    console.log(date);
-    this.adminStore.getTimeFrames(date);
-  }
+  loadOrders = () => {
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
+    const options = this.userStore.getHeaderAuth();
+    this.adminStore.getRouteOrders("all", timeframe, options);
+  };
 
   loadOrders = () => {
-    const { route, timeframe } = this.state;
-    console.log(timeframe);
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
   };
