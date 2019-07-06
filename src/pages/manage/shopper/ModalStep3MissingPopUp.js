@@ -34,11 +34,12 @@ class ModalStep3MissingPopUp extends Component {
             timeframe: null
         }
         this.adminStore = this.props.store.admin
+        this.userStore = this.props.store.user
     }
 
 
     componentDidMount(){
-        const {id, status, timeframe} = this.props
+        const {id, status, timeframe } = this.props
         this.setState({
             id: id,
             status: status,
@@ -67,7 +68,7 @@ class ModalStep3MissingPopUp extends Component {
 
     handleSubmit = async() =>{
         //debugger
-        const {toggleModal, id} = this.props
+        const {toggleModal, id, location} = this.props
         const {selected, quantity, timeframe} = this.state
         let status = ""
 
@@ -79,7 +80,7 @@ class ModalStep3MissingPopUp extends Component {
 
 
         // uncomment when ready for testing against API
-        await this.adminStore.setShopItemStatus(id, status, quantity)
+        await this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), id, status, location, quantity)
         // await this.adminStore.updateShopItemQuantity(timeframe, id, quantity)
 
 

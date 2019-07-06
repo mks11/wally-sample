@@ -64,10 +64,11 @@ class ShoppingAppStep3 extends Component {
     }
 
     handleOnSelectClick = async(status, id, product) => {
+        const { location } = this.state
         if(status){
             let status = "purchased"
 
-            this.adminStore.setShopItemStatus(id, status)
+            this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), id, status, location)
         } else {
             let status = "missing"
             this.setState({
@@ -131,22 +132,14 @@ class ShoppingAppStep3 extends Component {
             indexMap[statusLib[i]] = i
         }
 
-        
-
-
         return item.slice().sort((a, b) => {
             return indexMap[a.status] - indexMap[b.status]
         })
     }
 
-
-    
-
-
-
     render(){
         const { locations, shopitems } = this.adminStore
-        const { showModal, id, product, status, timeframes } = this.state
+        const { showModal, id, product, status, timeframes, location } = this.state
 
 
         return(
@@ -158,6 +151,7 @@ class ShoppingAppStep3 extends Component {
                 status = { status }
                 shopitem = { product }
                 timeframes = { timeframes }
+                location = { location }
                 />
                 
             <ManageTabs page="shopper" />

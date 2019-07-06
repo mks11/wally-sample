@@ -61,7 +61,7 @@ class ShoppingAppStep2 extends Component {
 		// note that if shop is not selected, location param sent will be null
     this.setState({location})
     const {timeframe} = this.state
-		this.adminStore.getUnavailableShopItems(timeframe, location)
+		this.adminStore.getUnavailableShopItems(this.userStore.getHeaderAuth(), timeframe, location)
   }
 
   render() {
@@ -98,7 +98,10 @@ class ShoppingAppStep2 extends Component {
         </section>
 				<section className="page-section pt-1">
           <Container>
-            <ShoppingAppTable {...{timeframe}} location={location} step="2" />
+            <ShoppingAppTable 
+              location={location} 
+              step="2" 
+            />
           </Container>
         </section>
         <section className="page-section pt-1">
