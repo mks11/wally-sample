@@ -119,10 +119,10 @@ class ViewSingleOrder extends Component {
             : item
         )
       }));
-      this.setState({}, () => {
-        done();
-        console.log("end of callstate", this.state.cart_items);
-      });
+      // this.setState({}, () => {
+      //   done();
+      //   console.log("end of callstate", this.state.cart_items);
+      // });
     });
   };
 
