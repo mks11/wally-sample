@@ -24,6 +24,17 @@ import {
 } from "../config";
 import axios from "axios";
 import moment from "moment";
+import S3 from "aws-s3";
+
+// S3 Configuration
+const config = {
+  bucketName: "the-wally-shop-app",
+  dirName: `daily-receipts/${moment().format("YYYY[-]MM[-]DD")}`,
+  region: "us-east-2",
+  accessKeyId: "AKIAJVL4SVXQNCJJWRMA",
+  secretAccessKey: "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"
+};
+const S3Client = new S3(config);
 
 class AdminStore {
   timeframes = [];
@@ -55,12 +66,27 @@ class AdminStore {
     this.receipts = sortedReceipts;
   }
 
-  async uploadReceipt(date, filename, shop_location) {
-    const res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
-      shop_date: date,
-      filename: filename,
-      location: shop_location
-    });
+  async uploadReceipt(date, file, shop_location) {
+    let uploaded = false;
+    let res;
+    // Upload File to S3
+    await S3Client.uploadFile(file)
+      .then(
+        data =>
+          // If Upload to S3 Successful push to backend
+          (res = axios.post(`${API_ADMIN_POST_RECEIPT}`, {
+            shop_date: date,
+            filename: data.key
+              .split("/")
+              .slice(-1)
+              .join("/"),
+            location: shop_location
+          })),
+        (uploaded = true) // set uploaded to true if succesfully uploaded
+      )
+      .catch(err => console.error(err));
+
+    return uploaded;
   }
 
   async getTimeFrames() {

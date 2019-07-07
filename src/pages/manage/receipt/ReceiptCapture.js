@@ -4,16 +4,6 @@ import moment from "moment";
 import { Container, Col, Row, Button, Input } from "reactstrap";
 import CustomDropdown from "../../../common/CustomDropdown";
 
-// S3 Configuration
-const config = {
-  bucketName: "the-wally-shop-app",
-  dirName: `daily-receipts/${moment().format("YYYY[-]MM[-]DD")}`,
-  region: "us-east-2",
-  accessKeyId: "AKIAJVL4SVXQNCJJWRMA",
-  secretAccessKey: "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"
-};
-const S3Client = new S3(config);
-
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // ::::::::::::::::::: ReceiptCapture CLASS ::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -34,27 +24,19 @@ class ReceiptCapture extends Component {
   submitForm = () => {
     // If location & image are chosen by User...
     if (this.state.location != null && this.state.image != null) {
-      // Upload File to S3
-      S3Client.uploadFile(this.state.file)
-        .then(
-          data =>
-            // If Upload to S3 Successful push to backend
-            this.adminStore.uploadReceipt(
-              moment().format("YYYY-MM-DD"),
-              data.key
-                .split("/")
-                .slice(-1)
-                .join("/"),
-              this.state.location
-            ),
-          this.setState({
-            msgPopUp: true,
-            message: "Successfully Added"
-          }),
+      let res = this.adminStore.uploadReceipt(
+        moment().format("YYYY-MM-DD"),
+        this.state.file,
+        this.state.location
+      );
+      if (res) {
+        this.setState({
+          msgPopUp: true,
+          message: "Successfully Added"
+        });
 
-          setTimeout(this.removePopUp, 1000)
-        )
-        .catch(err => console.error(err));
+        setTimeout(this.removePopUp, 1000);
+      }
     } else {
       // Display Error Pop if Location or image isn't chosen by user
       this.setState({
