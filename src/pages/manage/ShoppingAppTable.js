@@ -69,12 +69,14 @@ class ShoppingAppTable extends Component {
                   quantity,
                   unit_type,
                   packaging_name,
-                  delivery_date
+                  delivery_date,
+                  user_checked
                 } = shopitem
+                const checked = user_checked ? 'checked' : 'not-checked'
                 return (
                   <TableRow
                     key={_id}
-                    className={`row ${status}`}
+                    className={`row ${checked}`}
                   >
                     <TableCell>{product_name}</TableCell>
                     <TableCell>
@@ -82,13 +84,23 @@ class ShoppingAppTable extends Component {
                     <TableCell>
                       <Form inline>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
-                          onChange={() => this.handleSelectAvailability(true, _id)} />
+                          <Input
+                            type="radio"
+                            name="select"
+                            id="yesSelect"
+                            checked={user_checked && status === 'available'}
+                            onChange={() => this.handleSelectAvailability(true, _id)}
+                          />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
                         </FormGroup>
                         <FormGroup className="mr-sm-2" check inline>
-                          <Input type="radio" name="select" id="noSelect" checked={status === 'unavailable'}
-                          onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)} />
+                          <Input
+                            type="radio"
+                            name="select"
+                            id="noSelect"
+                            checked={user_checked && status === 'unavailable'}
+                            onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)}
+                          />
                           <Label className="ml-sm-1" for="noSelect" check>No</Label>
                         </FormGroup>
                       </Form>
