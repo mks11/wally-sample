@@ -27,6 +27,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CartItemOrder from "./CartItemOrder";
+import { BASE_URL } from "../../config";
 
 class ViewSingleOrder extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class ViewSingleOrder extends Component {
       }),
       confirmModalOpen: false
     };
+    console.log("here", BASE_URL);
   }
 
   toggleConfirmModal = () => {
@@ -50,8 +52,7 @@ class ViewSingleOrder extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = this.state.selectedOrder.packaging_used;
-    let API_TEST_URL = "http://localhost:4001";
-    return fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    return fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -119,10 +120,10 @@ class ViewSingleOrder extends Component {
             : item
         )
       }));
-      // this.setState({}, () => {
-      //   done();
-      //   console.log("end of callstate", this.state.cart_items);
-      // });
+      this.setState({}, () => {
+        done();
+        console.log("end of callstate", this.state.cart_items);
+      });
     });
   };
 

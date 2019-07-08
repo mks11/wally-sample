@@ -26,8 +26,8 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import Route from "./Route";
 import CourierModal from "./CourierModal";
+import { BASE_URL } from "../../config";
 const customColumnStyle = { width: 100, padding: 0 };
 
 class CourierRouting extends Component {
@@ -40,7 +40,7 @@ class CourierRouting extends Component {
   }
 
   componentDidMount = () => {
-    fetch("http://localhost:4001/api/test/get-routes")
+    fetch(`${BASE_URL}/api/test/get-routes`)
       .then(res => res.json())
       .then(json => this.setState({ routes: json, loading: true }))
       .catch(error => console.log(error));
@@ -63,10 +63,8 @@ class CourierRouting extends Component {
   assignCourierModal = (route, i) => {
     let routeNumber = route.route_number;
     let courierNumber = route.courierPhoneNumber;
-    console.log(route);
-    fetch(
-      `http://localhost:4001/api/test/assign-routes/${routeNumber}/${courierNumber}`
-    )
+
+    fetch(`${BASE_URL}/api/test/assign-routes/${routeNumber}/${courierNumber}`)
       .then(res => res.json())
       .then(res => {
         console.log(res);

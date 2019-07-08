@@ -18,7 +18,8 @@ import {
   API_ADMIN_GET_PACKAGINGS,
   API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
   API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
-  API_ADMIN_POST_BLOG_POST
+  API_ADMIN_POST_BLOG_POST,
+  API_EDIT_CART_ITEM
 } from '../config'
 import axios from 'axios'
 import moment from 'moment'
@@ -163,6 +164,26 @@ class AdminStore {
     const res = await axios.post(API_ADMIN_POST_BLOG_POST, data)
     console.log(res.data)
   }
+
+  // async editCartItem(orderId, cartItemId, cartItem, weight, errorReason){
+  //   return fetch(`${API_EDIT_CART_ITEM}/${orderId}/${cartItemId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       product_name: cartItem.product_name,
+  //       substitute_for_name: cartItem.substitute_for_name,
+  //       product_producer: cartItem.product_producer,
+  //       final_quantity: Number(cartItem.final_quantity),
+  //       missing: this.props.cart_item.missing,
+  //       weight: weight,
+  //       product_error_reason: errorReason
+  //     })
+  //   })
+  //     .then(response => console.log(response))
+  //     .catch(error => console.log(error));
+  // }
 
   setEditing(id, edit) {
     for (let item of this.shopitems) {

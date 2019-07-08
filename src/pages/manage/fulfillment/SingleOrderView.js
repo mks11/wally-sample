@@ -27,6 +27,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CartItem from "./CartItem";
+import { BASE_URL } from "../../../config";
 
 class SingleOrderView extends Component {
   constructor(props) {
@@ -115,8 +116,7 @@ class SingleOrderView extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = payload.packagings;
-    let API_TEST_URL = "http://localhost:4001";
-    fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"

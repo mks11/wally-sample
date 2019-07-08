@@ -19,6 +19,7 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
+import { BASE_URL } from "../../../config";
 
 class CartItem extends Component {
   constructor(props) {
@@ -52,9 +53,7 @@ class CartItem extends Component {
     const cartItem = this.state.cart_item;
     const orderId = this.state.order_id;
     let weight = this.state.weight;
-    console.log("handleItemUpdate", weight);
-    let TEST_API_SERVER = "http://localhost:4001/api/order";
-    fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
+    fetch(`${BASE_URL}/api/order/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"

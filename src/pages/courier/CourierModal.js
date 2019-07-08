@@ -18,6 +18,7 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
+import { BASE_URL } from "../../config";
 
 class CourierModal extends Component {
   constructor(props) {
@@ -45,8 +46,7 @@ class CourierModal extends Component {
   createNewCourier = e => {
     const name = this.state.name;
     const paypal_email = this.state.paypal_email;
-    console.log("hit2");
-    fetch("http://localhost:4001/api/test/create-courier", {
+    fetch(`${BASE_URL}/api/test/create-courier`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

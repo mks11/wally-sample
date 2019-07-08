@@ -22,6 +22,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import Switch from "react-switch";
 import MissingModal from "./MissingModal";
 import OrderErrorModal from "./OrderErrorModal";
+import { BASE_URL } from "../../config";
 
 const textSwitch = {
   display: "flex",
@@ -54,9 +55,7 @@ class CartItemOrder extends Component {
     const orderId = this.props.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
-    console.log(cartItem.product_error_reason);
-    let TEST_API_SERVER = "http://localhost:4001/api/order";
-    return fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
+    return fetch(`${BASE_URL}/api/order/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
