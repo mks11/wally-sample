@@ -23,17 +23,18 @@ class ShoppingAppTable extends Component {
     this.timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
     this.adminStore = props.store.admin
     this.modalStore = props.store.modal
+    this.userStore = props.store.user
   }
 
   handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
+    const {location} = this.props
     if (isAvailable) {
       const status = 'available'
-      this.adminStore.setShopItemStatus(shopitemId, status)
+      this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
     } else {
       this.setState({shopitemId, productName})
-      const {location} = this.props
       const status = 'missing'
-      this.adminStore.setShopItemStatus(shopitemId, status)
+      this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
       await this.adminStore.getSubInfo(shopitemId, this.timeframe, location)
       this.modalStore.toggleMissing()
     }

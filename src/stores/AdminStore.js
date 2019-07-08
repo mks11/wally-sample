@@ -42,6 +42,7 @@ class AdminStore {
   packagings = []
 
   loading = false
+
   async getTimeFrames() {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     // const time = '2018-11-04 15:30:00'
@@ -64,8 +65,8 @@ class AdminStore {
     this.shopitemsFarms = res.data.farms
   }
 
-  async getUnavailableShopItems(timeframe, shop_location) {
-    const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`)
+  async getUnavailableShopItems(auth, timeframe, shop_location) {
+    const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth)
     this.shopitems = res.data.shop_items
   }
 
@@ -103,8 +104,8 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
-  async setShopItemStatus(shopitem_id, status) {
-    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`)
+  async setShopItemStatus(auth, shopitem_id, status, location, quantity) {
+    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}&shop_location=${location}&quantity=${quantity}`, auth)
     this.updateStoreShopItem(shopitem_id, res.data)
   }
 
