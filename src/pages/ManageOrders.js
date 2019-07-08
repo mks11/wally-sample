@@ -29,15 +29,15 @@ import moment from "moment";
 class ManageOrders extends Component {
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.state = {
       activeTab: "1",
       timeframe: null,
       selectedOrder: null,
       singleOrderOpen: false
     };
-    this.userStore = this.props.store.user;
-    this.adminStore = this.props.store.admin;
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   componentDidMount() {
@@ -163,6 +163,7 @@ class ManageOrders extends Component {
             toggle={this.toggleSingleOrderView}
             selectedOrder={this.state.selectedOrder}
             packagings={packagings}
+
           />
         )}
       </div>

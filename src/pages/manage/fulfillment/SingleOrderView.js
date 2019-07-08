@@ -56,8 +56,8 @@ class SingleOrderView extends Component {
         }, 10),
       confirmModalOpen: false
     };
-    this.userStore = this.props.store.user;
-    this.adminStore = this.props.store.admin;
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   saveCartRow = (cart_item, index) => {
@@ -116,10 +116,12 @@ class SingleOrderView extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = payload.packagings;
+    let auth = this.userStore.getHeaderAuth();
     fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": auth.headers.Authorization
       },
       body: JSON.stringify({
         cart_items: cart_items,
