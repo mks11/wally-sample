@@ -26,16 +26,16 @@ class OrderErrorModal extends Component {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
       toolittle:
-        props.cart_item.product_error_reason == "too_little"
-          ? true
-          : false,
+        props.cart_item.product_error_reason == "too_little" ? true : false,
       ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
-      noError: 
+      noError:
         props.cart_item.product_error_reason == undefined ||
-        props.cart_item.product_error_reason == "no_error" ? true : false,
+        props.cart_item.product_error_reason == "no_error"
+          ? true
+          : false
     };
   }
-  
+
   onLittleChange = e => {
     const { ugly, toolittle, noError } = this.state;
     this.setState({

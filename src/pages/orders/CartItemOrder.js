@@ -54,6 +54,7 @@ class CartItemOrder extends Component {
     const orderId = this.props.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
+    console.log(cartItem.product_error_reason);
     let TEST_API_SERVER = "http://localhost:4001/api/order";
     return fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
       method: "PATCH",
@@ -128,14 +129,23 @@ class CartItemOrder extends Component {
         : "too_little",
       final_quantity: Number(childState.cart_item.final_quantity)
     };
-
-    await this.handleItemUpdate();
+    this.setState(
+      {
+        cart_item: {
+          ...this.state.cart_item,
+          product_error_reason: error.product_error_reason
+        }
+      },
+      async () => {
+        await this.handleItemUpdate();
+      }
+    );
+    this.toggleErrorOff();
     await this.props.onCartStateChange({
       _id: this.props.cart_item._id,
       final_quantity: error.final_quantity,
       product_error_reason: error.product_error_reason
     });
-    this.toggleErrorOff();
   };
 
   toggleErrorModal = e => {
@@ -146,6 +156,7 @@ class CartItemOrder extends Component {
   };
 
   toggleErrorOff = e => {
+    console.log("toggleErrorOff", e);
     this.setState({
       isErrorModalOpen: false
     });
