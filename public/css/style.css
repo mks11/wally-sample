@@ -2724,6 +2724,7 @@ color:#6e8692
   height: 70%;
   text-align: center;
   padding: 1em;
+  margin-top: -2%;
 }
 
 .product-selection-container-inner {
@@ -2737,6 +2738,7 @@ color:#6e8692
   margin: auto; 
   text-align: center;
   width: 40%;
+  margin-top: -2%;
 }
 
 .product-selection-input-file {
