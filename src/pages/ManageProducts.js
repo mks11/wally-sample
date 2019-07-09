@@ -235,14 +235,14 @@ class ManageProducts extends Component {
               <h3>Download</h3>
               <div className="product-selection-button">
                 <Button size="medium" style={{ textTransform: 'none'}} >
-                  <CSVLink data={productListData} onClick={() => this.onDownloadProductListingClick()}>
+                  <CSVLink style={{color:'black', textDecoration: 'none'}} data={productListData} onClick={() => this.onDownloadProductListingClick()}>
                     Download Product Listing
                   </CSVLink>
                 </Button>
               </div>
               <div className="product-selection-button">
                 <Button size="medium" style={{ textTransform: 'none'}}>
-                  <CSVLink data={categoryListData} onClick={() => this.onDownloadProductCategoriesClick()}>
+                  <CSVLink style={{color:'black', textDecoration: 'none'}} data={categoryListData} onClick={() => this.onDownloadProductCategoriesClick()}>
                     Download Categories Listing
                   </CSVLink>
                 </Button>
