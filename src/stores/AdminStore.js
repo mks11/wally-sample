@@ -70,22 +70,21 @@ class AdminStore {
     let uploaded = false;
     let res;
     // Upload File to S3
-    await S3Client.uploadFile(file)
-      .then(
-        data =>
-          // If Upload to S3 Successful push to backend
-          (res = axios.post(`${API_ADMIN_POST_RECEIPT}`, {
-            shop_date: date,
-            filename: data.key
-              .split("/")
-              .slice(-1)
-              .join("/"),
-            location: shop_location
-          })),
-        (uploaded = true) // set uploaded to true if succesfully uploaded
-      )
-      .catch(err => console.error(err));
-
+    try {
+      let data = await S3Client.uploadFile(file)
+      console.log(data.key.split("/").slice(-1).join("/"))
+      let res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
+        shop_date: date,
+        filename: data.key
+          .split("/")
+          .slice(-1)
+          .join("/"),
+        location: shop_location
+      });
+      uploaded = true
+    } catch(error) {
+      console.error(error)
+    }
     return uploaded;
   }
 
