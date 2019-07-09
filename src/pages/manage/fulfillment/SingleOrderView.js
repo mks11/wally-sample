@@ -27,6 +27,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CartItem from "./CartItem";
+import { BASE_URL } from "../../../config";
 
 class SingleOrderView extends Component {
   constructor(props) {
@@ -55,18 +56,39 @@ class SingleOrderView extends Component {
         }, 10),
       confirmModalOpen: false
     };
-    this.userStore = this.props.store.user;
-    this.adminStore = this.props.store.admin;
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   saveCartRow = (cart_item, index) => {
     const { cart_items } = this.state;
+    console.log("saveCartRow", cart_items);
     cart_items.map((item, i) => {
       if (i === index) {
         return cart_item;
       } else {
         return item;
       }
+    });
+  };
+
+  handleWeightChange = update => {
+    const { cart_items, selectedOrder } = this.state;
+    return new Promise(done => {
+      this.setState(({ cart_items }) => ({
+        cart_items: cart_items.map(item =>
+          item._id === update._id
+            ? {
+                ...item,
+                ...update
+              }
+            : item
+        )
+      }));
+      this.setState({}, () => {
+        done();
+        console.log("end of callstate", this.state.cart_items);
+      });
     });
   };
 
@@ -94,11 +116,12 @@ class SingleOrderView extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = payload.packagings;
-    let API_TEST_URL = "http://localhost:4001";
-    fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    let auth = this.userStore.getHeaderAuth();
+    fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": auth.headers.Authorization
       },
       body: JSON.stringify({
         cart_items: cart_items,
@@ -139,6 +162,7 @@ class SingleOrderView extends Component {
 
   updateOrder = async () => {
     const { packaging_used, cart_items, selectedOrder } = this.state;
+    console.log("updateOrder", cart_items);
     const items = selectedOrder.cart_items.map(item => {
       return {
         product_name: item.product_name,
@@ -159,8 +183,7 @@ class SingleOrderView extends Component {
       cart_items: items,
       packagings: packagings
     };
-    console.log("after");
-    console.log(payload.cart_items);
+    console.log("payload", payload.cart_items);
 
     await this.setState(
       {
@@ -172,7 +195,7 @@ class SingleOrderView extends Component {
       },
       async () => {
         await this.handleOrderUpdate(payload);
-        window.location.reload();
+        // window.location.reload();
       }
     );
   };
@@ -235,6 +258,7 @@ class SingleOrderView extends Component {
                     order_id={selectedOrder._id}
                     cart_item={cart_item}
                     index={i}
+                    onWeightStateChange={this.handleWeightChange}
                     saveCartRow={this.saveCartRow}
                   />
                 ))}

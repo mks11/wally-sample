@@ -53,7 +53,6 @@ class UserStore {
   }
 
   setUserData(user) {
-    console.log("setting user");
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
     let zip = null
@@ -178,7 +177,7 @@ class UserStore {
     const oldAddresses = this.user.addresses
     const newAddresses = newUser.addresses
 
-    function comparer(otherArray){
+    function comparer(otherArray) {
       return function(current){
         return otherArray.filter(function(other){
           return other.address_id == current.address_id

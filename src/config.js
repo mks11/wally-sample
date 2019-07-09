@@ -23,7 +23,6 @@ export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard"
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/"
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/"
 
-
 export const API_GET_CATEGORIES = BASE_URL + "/api/categories"
 export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search"
 export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh"
@@ -66,7 +65,6 @@ export const API_ADMIN_POST_BLOG_POST =  BASE_URL + "/api/admin/blog"
 export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD = BASE_URL + "/api/admin/products/currentselectioncsv"
 export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/products/currentcategoriescsv"
 
-
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display"
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes"
 
@@ -79,6 +77,7 @@ export const API_HELP_SEARCH = BASE_URL + "/api/help/search?search_term="
 export const API_SUBSCRIBE_EMAIL = BASE_URL + "/api/email/newsletter/signup"
 export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + "/api/email/signup"
 export const API_BLOG_POST = BASE_URL + "/api/blog"
+export const API_EDIT_CART_ITEM = BASE_URL + "/api/order";
 
 export const INSTAGRAM = "https://www.instagram.com/thewallyshop/"
 export const FACEBOOK = "https://facebook.com/thewallyshop"
@@ -90,5 +89,3 @@ export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4"
 export const FB_KEY = "1634254033370820"
 
 export const PRODUCT_BASE_URL = 'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images/'
-
-

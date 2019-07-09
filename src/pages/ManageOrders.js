@@ -29,15 +29,15 @@ import moment from "moment";
 class ManageOrders extends Component {
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.state = {
       activeTab: "1",
       timeframe: null,
       selectedOrder: null,
       singleOrderOpen: false
     };
-    this.userStore = this.props.store.user;
-    this.adminStore = this.props.store.admin;
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   componentDidMount() {
@@ -51,35 +51,28 @@ class ManageOrders extends Component {
         ) {
           this.props.store.routing.push("/");
         } else {
-          this.loadData();
           this.loadOrders();
           this.adminStore.getPackagings();
         }
       })
       .catch(error => {
+        console.log(error);
         this.props.store.routing.push("/");
       });
   }
 
-  loadData() {
-    const date = new Date();
-    console.log(date);
-    this.adminStore.getTimeFrames(date);
-  }
-
-  // loadOrders = () => {
-  //   const { route } = this.state;
-  //   let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
-  //   const options = this.userStore.getHeaderAuth();
-  //   this.adminStore.getRouteOrders("all", timeframe, options);
-  // };
-
   loadOrders = () => {
-    const { route, timeframe } = this.state;
-    console.log(timeframe);
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
     this.adminStore.getRouteOrders("all", timeframe, options);
-    console.log("got route orders");
+  };
+
+  loadOrders = () => {
+    const { route } = this.state;
+    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
+    const options = this.userStore.getHeaderAuth();
+    this.adminStore.getRouteOrders("all", timeframe, options);
   };
 
   onTimeFrameSelect = timeframe => {
@@ -170,6 +163,7 @@ class ManageOrders extends Component {
             toggle={this.toggleSingleOrderView}
             selectedOrder={this.state.selectedOrder}
             packagings={packagings}
+
           />
         )}
       </div>

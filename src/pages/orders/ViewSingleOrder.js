@@ -27,10 +27,12 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CartItemOrder from "./CartItemOrder";
+import { BASE_URL } from "../../config";
 
 class ViewSingleOrder extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
@@ -39,6 +41,8 @@ class ViewSingleOrder extends Component {
       }),
       confirmModalOpen: false
     };
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   toggleConfirmModal = () => {
@@ -50,11 +54,13 @@ class ViewSingleOrder extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = this.state.selectedOrder.packaging_used;
-    let API_TEST_URL = "http://localhost:4001";
-    return fetch(`${API_TEST_URL}/api/order/${orderId}`, {
+    let auth = this.userStore.getHeaderAuth();
+    console.log("Authorization is", auth.headers);
+    return fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": auth.headers.Authorization
       },
       body: JSON.stringify({
         cart_items: cart_items,
@@ -175,14 +181,23 @@ class ViewSingleOrder extends Component {
           <Table className={"packaging-table"}>
             <TableBody>
               {selectedOrder.packaging_used.map((packaging, i) =>
+                packaging.type === "Milk Bottle" ||
+                packaging.type === "Stasher Bag" ||
+                packaging.type === "FBW Packaging" ||
                 packaging.type === "Muslin Bag" ||
                 packaging.type === "Mesh Bag" ||
+                packaging.type === "Mason Jar" ||
                 packaging.type === "Tote Bag" ? (
                   <TableRow key={i}>
                     <TableCell>
-                      {packaging.type === "Muslin Bag" ||
-                      packaging.type === "Mesh Bag" ||
-                      packaging.type === "Tote Bag" ? (
+                      {
+                        packaging.type === "Milk Bottle" ||
+                        packaging.type === "Stasher Bag" ||
+                        packaging.type === "FBW Packaging" ||
+                        packaging.type === "Muslin Bag" ||
+                        packaging.type === "Mesh Bag" ||
+                        packaging.type === "Mason Jar" ||
+                        packaging.type === "Tote Bag" ? (
                         <strong>{packaging.type}</strong>
                       ) : (
                         <strong className="hide" style={hideRow} />
@@ -247,4 +262,4 @@ class ViewSingleOrder extends Component {
   }
 }
 
-export default ViewSingleOrder;
+export default connect("store")(ViewSingleOrder);

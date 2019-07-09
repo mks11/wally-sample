@@ -22,6 +22,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import Switch from "react-switch";
 import MissingModal from "./MissingModal";
 import OrderErrorModal from "./OrderErrorModal";
+import { BASE_URL } from "../../config";
 
 const textSwitch = {
   display: "flex",
@@ -37,6 +38,7 @@ class CartItemOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      cart_item: props.cart_item,
       weight: "",
       quantityUnit:
         props.cart_item.unit_type === "packaging"
@@ -53,8 +55,7 @@ class CartItemOrder extends Component {
     const orderId = this.props.order_id;
     let weight = this.state.weight;
     let errorReason = cartItem.product_error_reason;
-    let TEST_API_SERVER = "http://localhost:4001/api/order";
-    return fetch(`${TEST_API_SERVER}/${orderId}/${cartItemId}`, {
+    return fetch(`${BASE_URL}/api/order/${orderId}/${cartItemId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -85,9 +86,12 @@ class CartItemOrder extends Component {
   };
 
   setWeight = e => {
+    const { cart_item, weight } = this.state;
+    cart_item[e.target.name] = e.target.value;
     this.setState({
       weight: e.target.value
     });
+    this.handleItemUpdate();
   };
 
   toggleMissing = isMissing => {
@@ -124,14 +128,23 @@ class CartItemOrder extends Component {
         : "too_little",
       final_quantity: Number(childState.cart_item.final_quantity)
     };
-
-    await this.handleItemUpdate();
+    this.setState(
+      {
+        cart_item: {
+          ...this.state.cart_item,
+          product_error_reason: error.product_error_reason
+        }
+      },
+      async () => {
+        await this.handleItemUpdate();
+      }
+    );
+    this.toggleErrorOff();
     await this.props.onCartStateChange({
       _id: this.props.cart_item._id,
       final_quantity: error.final_quantity,
       product_error_reason: error.product_error_reason
     });
-    this.toggleErrorOff();
   };
 
   toggleErrorModal = e => {
@@ -142,6 +155,7 @@ class CartItemOrder extends Component {
   };
 
   toggleErrorOff = e => {
+    console.log("toggleErrorOff", e);
     this.setState({
       isErrorModalOpen: false
     });
