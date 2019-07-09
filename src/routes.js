@@ -9,32 +9,31 @@ import Account from "./pages/Account";
 import Help from "./pages/Help";
 import HelpSingle from "./pages/HelpSingle";
 import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-// import HelpTopics from './pages/HelpTopics';
-<<<<<<< HEAD
-import HelpAnswer from './pages/HelpAnswer';
-import ResetPassword from './pages/ResetPassword';
-import Orders from './pages/Orders';
-import ManageOrders from './pages/ManageOrders';
-import OrderConfirmation from './pages/OrderConfirmation';
-import Checkout from './pages/Checkout';
-import GiftCheckout from './pages/GiftCheckout';
-import InviteFriends from './pages/InviteFriends';
-import Tnc from './pages/Tnc';
-import Privacy from './pages/Privacy';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
-import CartAdd from './pages/CartAdd';
-import ReferFriend from './pages/ReferFriend';
-import ManageShopper from './pages/ManageShopper';
-import ManagePackaging from './pages/ManagePackaging';
-import ManageDelivery from './pages/ManageDelivery';
-import ManageBlog from './pages/ManageBlog';
-import ManageProducts from './pages/ManageProducts'
-import ShoppingAppStep1 from './pages/ShoppingAppStep1';
-import ShoppingAppStep2 from './pages/ShoppingAppStep2';
-import ShoppingAppStep3 from './pages/manage/ShoppingAppStep3';
-import Signup from './pages/Signup';
-import Feedback from './pages/Feedback';
+
+import HelpAnswer from "./pages/HelpAnswer";
+import ResetPassword from "./pages/ResetPassword";
+import Orders from "./pages/Orders";
+import ManageOrders from "./pages/ManageOrders";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import Checkout from "./pages/Checkout";
+import GiftCheckout from "./pages/GiftCheckout";
+import InviteFriends from "./pages/InviteFriends";
+import Tnc from "./pages/Tnc";
+import Privacy from "./pages/Privacy";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import CartAdd from "./pages/CartAdd";
+import ReferFriend from "./pages/ReferFriend";
+import ManageShopper from "./pages/ManageShopper";
+import ManagePackaging from "./pages/ManagePackaging";
+import ManageDelivery from "./pages/ManageDelivery";
+import ManageBlog from "./pages/ManageBlog";
+import ManageProducts from "./pages/ManageProducts";
+import ShoppingAppStep1 from "./pages/ShoppingAppStep1";
+import ShoppingAppStep2 from "./pages/ShoppingAppStep2";
+import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";
+import Signup from "./pages/Signup";
+import Feedback from "./pages/Feedback";
 import CourierRouting from "./pages/courier/CourierRouting";
 
 export default (
@@ -47,12 +46,12 @@ export default (
       <Route exact path="/manage/shopping-app-1" component={ShoppingAppStep1} />
       <Route exact path="/manage/shopping-app-2" component={ShoppingAppStep2} />
       <Route exact path="/manage/shopping-app-3" component={ShoppingAppStep3} />
-      <Route exact path="/user" component={Account}/>
-      <Route exact path="/invitefriends" component={InviteFriends}/>
-      <Route exact path="/thankyou" component={OrderConfirmation}/>
-      <Route exact path="/api/user/reset-password" component={ResetPassword}/>
-      <Route exact path="/orders" component={Orders}/>
-      <Route exact path="/manage/orders" component={ManageOrders}/>
+      <Route exact path="/user" component={Account} />
+      <Route exact path="/invitefriends" component={InviteFriends} />
+      <Route exact path="/thankyou" component={OrderConfirmation} />
+      <Route exact path="/api/user/reset-password" component={ResetPassword} />
+      <Route exact path="/orders" component={Orders} />
+      <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/products" component={ManageProducts} />
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/tnc" component={Tnc} />
