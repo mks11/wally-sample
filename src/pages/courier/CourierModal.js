@@ -46,7 +46,7 @@ class CourierModal extends Component {
   createNewCourier = e => {
     const name = this.state.name;
     const paypal_email = this.state.paypal_email;
-    fetch(`${BASE_URL}/api/test/create-courier`, {
+    fetch(`${BASE_URL}/api/admin/courier`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -54,13 +54,12 @@ class CourierModal extends Component {
       body: JSON.stringify({
         name: name,
         telephone_number: this.props.courierPhoneNumber,
-        roles: "courier",
         paypal: paypal_email
       })
     })
-      .then(response => console.log(response.data))
+      .then(response => console.log(response))
       .then(response => this.setState({}))
-      .catch(e => console.error(e));
+      .catch(e => alert(e));
     this.props.onClose();
     e.stopPropagation();
   };
