@@ -28,6 +28,8 @@ import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CourierModal from "./CourierModal";
 import { BASE_URL } from "../../config";
+import moment from "moment";
+
 const customColumnStyle = { width: 100, padding: 0 };
 
 class CourierRouting extends Component {
@@ -40,7 +42,8 @@ class CourierRouting extends Component {
   }
 
   componentDidMount = () => {
-    fetch(`${BASE_URL}/api/test/get-routes`)
+    const time = moment().format("YYYY-MM-DD HH:mm:ss");
+    fetch(`${BASE_URL}/api/admin/routes/?timeframe=${time}`)
       .then(res => res.json())
       .then(json => this.setState({ routes: json, loading: true }))
       .catch(error => console.log(error));
