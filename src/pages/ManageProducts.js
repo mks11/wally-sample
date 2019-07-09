@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Message } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
 import Title from '../common/page/Title'
 import {connect} from '../utils';
 import { CSVLink } from 'react-csv';
@@ -206,7 +207,7 @@ class ManageProducts extends Component {
 
   isFormValid = ({ file }) => file;
 
-  displayErrors = errors => <p>{errors[errors.length - 1]}</p>
+  displayErrors = errors => <p style={{ fontSize: '1.25em', color: 'red'}}>{errors[errors.length - 1]}</p>
 
   handleInputError = (errors, inputName) => {
     return errors.some(error => error.toLowerCase().includes(inputName)) ?
@@ -227,11 +228,7 @@ class ManageProducts extends Component {
           <Paper className="product-selection-container" style={{backgroundColor: '#faf5ee'}}>
           <div className="product-selection-container-inner" style={{backgroundColor: '#ffffff'}}>
             <div className="product-selection-download">
-            { errors.length > 0 && (
-              <Message error>
-                { this.displayErrors(errors)} 
-              </Message>
-            )}
+              
               <h3>Download</h3>
               <div className="product-selection-button">
                 <Button size="medium" style={{ textTransform: 'none'}} >
@@ -249,7 +246,13 @@ class ManageProducts extends Component {
               </div>
             </div>
             <div className="product-selection-upload">
+              { errors.length > 0 && (
+                <div style={{marginTop: '-2.5%'}}>
+                { this.displayErrors(errors)} 
+                </div>
+              )}
               <h3>Upload</h3>
+              
               <div className="product-selection-button">
                 <form onSubmit={this.onUploadNewFBW} className={this.handleInputError(errors, 'file')} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
