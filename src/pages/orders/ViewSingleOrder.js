@@ -32,6 +32,7 @@ import { BASE_URL } from "../../config";
 class ViewSingleOrder extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       selectedOrder: props.selectedOrder,
       cart_items: props.selectedOrder.cart_items,
@@ -40,7 +41,8 @@ class ViewSingleOrder extends Component {
       }),
       confirmModalOpen: false
     };
-    console.log("here", BASE_URL);
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   toggleConfirmModal = () => {
@@ -52,10 +54,13 @@ class ViewSingleOrder extends Component {
     let cart_items = this.state.cart_items;
     let selectedOrder = this.state.selectedOrder;
     let packagings = this.state.selectedOrder.packaging_used;
+    let auth = this.userStore.getHeaderAuth();
+    console.log("Authorization is", auth.headers);
     return fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": auth.headers.Authorization
       },
       body: JSON.stringify({
         cart_items: cart_items,
@@ -257,4 +262,4 @@ class ViewSingleOrder extends Component {
   }
 }
 
-export default ViewSingleOrder;
+export default connect("store")(ViewSingleOrder);
