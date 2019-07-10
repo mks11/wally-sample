@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Container, Col, Row, Button } from "reactstrap";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { Container, Col, Row, Button, Form, FormGroup, Label, Input } from "reactstrap"
+import { Link } from 'react-router-dom'
 
 import CustomDropdown from "../../common/CustomDropdown";
 import Table from "@material-ui/core/Table";
@@ -49,21 +49,22 @@ class ShoppingAppStep3 extends Component {
     this.setState({ location });
   };
 
+
   handleOnSelectClick = async (status, id, product) => {
-    if (status) {
-      let status = "purchased";
-      console.log(status, id);
-      // uncomment to test against API
-      // this.adminStore.setShopItemStatus(status, id)
-    } else {
-      let status = "missing";
+    const { location } = this.state
+    if(status){
+      let status = "purchased"
+
+      this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), id, status, location)
+      } else {
+      let status = "missing"
       this.setState({
-        id: id,
-        product: product,
-        status: status
-      });
-      console.log(status, id, product);
-      this.toggleModal();
+          id: id,
+          product: product,
+          status: status
+      })
+
+      this.toggleModal()
     }
   };
 
@@ -91,174 +92,167 @@ class ShoppingAppStep3 extends Component {
     }
   };
 
-  componentDidMount() {
-    this.userStore
-      .getStatus(true)
-      .then(status => {
-        const user = this.userStore.user;
-        if (
-          status &&
-          (user.type === "admin" ||
-            user.type === "super-admin" ||
-            user.type === "tws-ops")
-        ) {
-          this.grabShopLocations();
-        } else {
-          this.props.store.routing.push("/");
-        }
+  componentDidMount(){
+      this.userStore.getStatus(true)
+      .then((status) => {
+          const user = this.userStore.user
+          
+          if( status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')){
+              this.grabShopLocations()
+          } else {
+              this.props.store.routing.push('/')
+          }
       })
-      .catch(error => {
-        this.props.store.routing.push("/");
-      });
+      .catch((error) => {
+          this.props.store.routing.push('/')
+      })
   }
 
-  // sortingStatus = data => {
-  //     const sortByKey =
-  //     return {
-  //         'pending': data.map(sortByKey),
-  //         'available': [],
-  //         'purchased': [],
-  //         'unavailable': []
-  //     }
+  statusSort = (item) => {
+
+      let statusLib = ["pending", "available", "purchased", "issue", "unavailable"]
+      let indexMap = {}
+
+      for (let i = 0; i < statusLib.length; i++) {
+          indexMap[statusLib[i]] = i
+      }
+
+      return item.slice().sort((a, b) => {
+          return indexMap[a.status] - indexMap[b.status]
+      })
+  }
 
   render() {
-    const { locations, shopitems } = this.adminStore;
-    const { showModal, id, product, status, timeframes } = this.state;
+    const { locations, shopitems } = this.adminStore
+    const { showModal, id, product, status, timeframes, location } = this.state
 
-    return (
-      <React.Fragment>
+
+    return(
+        <React.Fragment>
         <ModalStep3MissingPopUp
-          toggleModal={this.toggleModal}
-          showModal={showModal}
-          id={id}
-          status={status}
-          shopitem={product}
-          timeframes={timeframes}
-        />
-
+            toggleModal = { this.toggleModal }
+            showModal = { showModal }
+            id = { id }
+            status = { status }
+            shopitem = { product }
+            timeframes = { timeframes }
+            location = { location }
+            />
+            
         <ManageTabs page="shopper" />
         <Title content="Shopping App" />
 
         <Container>
-          <Row>
-            <Col md="4" sm="12" align="center">
-              <h2>Step 3</h2>
-            </Col>
-            <Col md="4" sm="12">
-              <h2>{this.state.timeframes}</h2>
-            </Col>
-            <Col md="4" sm="12" align="center">
-              <div className="mb-3">
-                <CustomDropdown
-                  values={[
-                    { id: "all", title: "All Locations" },
-                    ...locations.map(item => {
-                      return { id: item, title: item };
-                    })
-                  ]}
-                  onItemClick={this.grabShopItems}
-                />
-              </div>
-            </Col>
-          </Row>
-
-          <Paper elevation={1} className={"scrollable-table"}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Product Name</TableCell>
-                  <TableCell align="center">Quantity</TableCell>
-                  <TableCell>
-                    Purchased? <br /> <span align="center"> Yes | No </span>{" "}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* Need to sort via status. Pending */}
-                {shopitems.map((shopitem, i) => {
-                  return (
-                    <TableRow
-                      key={shopitem.product_id}
-                      style={{
-                        backgroundColor: `${this.backgroundStyle(
-                          shopitem.status
-                        )}`
-                      }}
-                    >
-                      <TableCell align="center">
-                        {shopitem.product_name}
-                      </TableCell>
-
-                      <TableCell align="center">
-                        {shopitem.quantity}{" "}
-                        {shopitem.unit_type === "packaging"
-                          ? shopitem.packaging_name
-                          : shopitem.unit_type}
-                      </TableCell>
-
-                      <TableCell>
-                        <Checkbox
-                          onClick={() =>
-                            this.handleOnSelectClick(
-                              true,
-                              shopitem._id,
-                              shopitem
-                            )
-                          }
-                        >
-                          Yes
-                        </Checkbox>
-                        <Checkbox
-                          onClick={() =>
-                            this.handleOnSelectClick(
-                              false,
-                              shopitem._id,
-                              shopitem
-                            )
-                          }
-                        >
-                          No
-                        </Checkbox>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-              <Col
-                style={{ padding: "10px" }}
-                sm={{ size: 6, offset: 4 }}
-                md={{ size: 6, offset: 4 }}
-              >
-                <Link to="#">
-                  <Button className="btn-sm" onClick={this.handleReload}>
-                    {" "}
-                    Reload{" "}
-                  </Button>
-                </Link>
-              </Col>
-            </Table>
-          </Paper>
-
-          {/* CCS location on Main CSS line 1155 */}
-          <Container style={{ padding: "10px" }} className="step3-btn-spacing">
             <Row>
-              <Col lg="4" xs="6" sm={{ size: "auto", offset: 2 }}>
-                <Link to="/manage/shopping-app-2">
-                  <Button className="btn-sm"> Step 2 </Button>
-                </Link>
-              </Col>
-
-              <Col lg="4" xs="6" sm={{ size: "auto", offset: 2 }}>
-                {/* need to add link to capture view */}
-                <Link to="/manage/receipts">
-                  <Button className="btn-sm"> Capture </Button>
-                </Link>
-              </Col>
+                <Col 
+                md="4" sm="12"
+                align = "center">
+                        <h2>Step 3</h2>
+                </Col>
+                    <Col 
+                    md="4" sm="12">
+                        <h2>{ this.state.timeframes }</h2>
+                    </Col>
+                <Col 
+                md="4" sm="12"
+                align = "center">
+                    <div 
+                    className="mb-3">
+                        <CustomDropdown
+                            values={[
+                            { id: "all", title: "All Locations" },
+                            ...locations.map(item => {
+                                return { id: item, title: item };
+                            })
+                            ]}
+                            onItemClick={ this.grabShopItems }
+                        />
+                    </div>
+                </Col>
             </Row>
-          </Container>
-        </Container>
-      </React.Fragment>
-    );
+            
+            <Paper elevation = { 1 } className={"scrollable-table"}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align = "center">Product Name</TableCell>
+                            <TableCell align = "center">Quantity</TableCell>
+                            <TableCell > Purchased? </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {/* sorted by status */}
+                        {this.statusSort(shopitems).map((shopitem, i) => {
+                            return(
+                                <TableRow
+                                key = { shopitem.product_id }
+                                style= {{
+                                    backgroundColor: `${this.backgroundStyle(shopitem.status)}`
+                                }}>
+                                    
+                                    <TableCell  align = "center">
+                                        { shopitem.product_name}
+                                    </TableCell>
+                                    
+                                    <TableCell  align = "center">
+                                        { shopitem.quantity } { shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell> 
+
+                                    <TableCell align = "center">
+                                    
+                                    <Form inline>
+                                        <FormGroup className="mr-sm-2" check inline>
+                                            <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
+                                            onChange={() => this.handleOnSelectClick(true, shopitem._id, shopitem)} />
+                                            
+                                            <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
+                                        </FormGroup>	                        
+                                            
+                                        <FormGroup className="mr-sm-2" check inline>
+                                            <Input type="radio" name="select" id="noSelect" checked={status === 'unavailable'}
+                                            onChange={() => this.handleOnSelectClick(false, shopitem._id, shopitem)} />
+                                            
+                                            <Label className="ml-sm-1" for="noSelect" check>No</Label>
+                                        </FormGroup>
+                                    </Form>
+                                    </TableCell>
+
+                                </TableRow>
+                            
+                            )
+                        })}
+
+                    </TableBody>
+                <Col style = {{padding: "10px"}} sm={{size:6, offset: 4}} md={{ size: 6, offset: 4 }}>
+                        <Link to="#">
+                            <Button className = "btn-sm" onClick = {this.handleReload}> Reload </Button>
+                        </Link>
+                        </Col>
+                </Table>
+                       
+            </Paper>
+        
+                    {/* CCS location on Main CSS line 1155 */}
+                    <Container style = {{padding: "10px"}} className = "step3-btn-spacing">
+                    <Row>
+                        <Col lg="4" xs="6" sm={{ size: 'auto', offset: 2 }}>
+
+                        <Link to="/manage/shopping-app-2"> 
+                            <Button className = "btn-sm"> Step 2 </Button>
+                        </Link>
+                        </Col>
+                        
+                        <Col lg="4" xs="6" sm={{ size: 'auto', offset: 2 }}>
+                        {/* need to add link to capture view */}
+                        <Link to="/manage/receipts">
+                            <Button className = "btn-sm"> Capture </Button>
+                        </Link>
+                        </Col>
+                    </Row>
+                </Container>
+            </Container>
+
+        </React.Fragment>
+    )
   }
 }
 

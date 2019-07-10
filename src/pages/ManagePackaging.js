@@ -134,8 +134,7 @@ class ManagePackaging extends Component {
                                                         className={`row ${order.status}`}
                                                         onClick={() => this.toggleSingleOrderView({order})}
                                                     >
-                                                        <TableCell
-                                                         className={order.order_letter}></TableCell>
+                                                        <TableCell>{order.order_letter}</TableCell>
                                                         <TableCell>{order._id}</TableCell>
                                                         <TableCell
                                                             className={"text-capitalize"}>{order.status.replace('_', ' ')}</TableCell>

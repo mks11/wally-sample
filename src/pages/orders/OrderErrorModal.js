@@ -26,26 +26,40 @@ class OrderErrorModal extends Component {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
       toolittle:
+        props.cart_item.product_error_reason == "too_little" ? true : false,
+      ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
+      noError:
         props.cart_item.product_error_reason == undefined ||
-        props.cart_item.product_error_reason == "toolittle"
+        props.cart_item.product_error_reason == "no_error"
           ? true
-          : false,
-      ugly: props.cart_item.product_error_reason == "ugly" ? true : false
+          : false
     };
   }
+
   onLittleChange = e => {
-    const { ugly, toolittle } = this.state;
+    const { ugly, toolittle, noError } = this.state;
     this.setState({
       ugly: false,
-      toolittle: true
+      toolittle: true,
+      noError: false
     });
   };
 
   onUglyChange = e => {
-    const { ugly, toolittle } = this.state;
+    const { ugly, toolittle, noError } = this.state;
     this.setState({
       ugly: true,
-      toolittle: false
+      toolittle: false,
+      noError: false
+    });
+  };
+
+  onNoErrorChange = e => {
+    const { ugly, toolittle, noError } = this.state;
+    this.setState({
+      ugly: false,
+      toolittle: false,
+      noError: true
     });
   };
 
@@ -74,6 +88,20 @@ class OrderErrorModal extends Component {
             <p>Reason:</p>
             <Table>
               <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <p>No error:</p>
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      name="noError"
+                      type="checkbox"
+                      checked={this.state.noError}
+                      onChange={this.onNoErrorChange}
+                    />
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
                 <TableRow>
                   <TableCell>
                     <p>Too little:</p>
@@ -109,7 +137,7 @@ class OrderErrorModal extends Component {
                   <TableCell>
                     <Input
                       type="number"
-                      value={cart_item.final_quantity}
+                      placeholder={cart_item.final_quantity}
                       onChange={this.onQuantityChange}
                     />
                   </TableCell>

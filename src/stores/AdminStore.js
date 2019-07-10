@@ -15,26 +15,19 @@ import {
   API_ADMIN_UPDATE_ROUTE_PLACEMENT,
   API_ADMIN_GET_ORDER,
   API_ADMIN_GET_PACKAGINGS,
-  API_ADMIN_PACKAGE_ORDER, // API_CREATE_ORDER
-  API_ADMIN_COMPLETE_ORDER, // API_CREATE_ORDER
+  API_ADMIN_PACKAGE_ORDER,
+  API_ADMIN_COMPLETE_ORDER,
   API_ADMIN_POST_BLOG_POST,
   API_ADMIN_GET_SHOP_LOCATIONS,
   API_ADMIN_GET_RECEIPTS,
-  API_ADMIN_POST_RECEIPT
+  API_ADMIN_POST_RECEIPT,
+  API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
+  API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD,
+  API_EDIT_CART_ITEM
 } from "../config";
 import axios from "axios";
 import moment from "moment";
 import S3 from "aws-s3";
-
-// S3 Configuration
-const config = {
-  bucketName: "the-wally-shop-app",
-  dirName: `daily-receipts/${moment().format("YYYY[-]MM[-]DD")}`,
-  region: "us-east-2",
-  accessKeyId: "AKIAJVL4SVXQNCJJWRMA",
-  secretAccessKey: "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"
-};
-const S3Client = new S3(config);
 
 class AdminStore {
   timeframes = [];
@@ -67,6 +60,15 @@ class AdminStore {
   }
 
   async uploadReceipt(date, file, shop_location) {
+    // S3 Configuration
+    const config = {
+      bucketName: "the-wally-shop-app",
+      dirName: `daily-receipts/${moment().format("YYYY[-]MM[-]DD")}`,
+      region: "us-east-2",
+      accessKeyId: "AKIAJVL4SVXQNCJJWRMA",
+      secretAccessKey: "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"
+    };
+    const S3Client = new S3(config);
     let uploaded = false;
     let res;
     // Upload File to S3
@@ -116,10 +118,8 @@ class AdminStore {
     this.shopitemsFarms = res.data.farms;
   }
 
-  async getUnavailableShopItems(timeframe, shop_location) {
-    const res = await axios.get(
-      `${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`
-    );
+  async getUnavailableShopItems(auth, timeframe, shop_location) {
+    const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth)
     this.shopitems = res.data.shop_items;
   }
 
@@ -131,10 +131,7 @@ class AdminStore {
   }
 
   async updateDailySubstitute(timeframe, shopitem_id, data) {
-    const res = await axios.patch(
-      `${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`,
-      data
-    );
+    const res = await axios.patch(`${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`, { substitutes: data })
     // unsure if response data will be in res.data or res.data.daily_substitute
     this.dailySubstitute = res.data;
   }
@@ -153,21 +150,20 @@ class AdminStore {
     this.packagingCounts = res.data.packaging_counts;
   }
 
-  async updateShopItem(
-    timeframe,
-    shopitem_id,
-    data,
-    updateCurrentProduct,
-    index
-  ) {
-    this.loading = true;
-    const res = await axios.patch(
-      `${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
-      data
-    );
-    this.loading = false;
-    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index);
-    this.updateStoreShopItem(shopitem_id, res.data);
+  async getProductSelectionDownload() {
+    await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`)
+  }
+
+  async getProductCategoriesDownload() {
+    await axios.get(`${API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD}`)
+  }
+
+  async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {
+    this.loading = true
+    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
+    this.loading = false
+    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {
@@ -178,11 +174,10 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data);
   }
 
-  async setShopItemStatus(status, shopitem_id) {
-    const res = await axios.patch(
-      `${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}`
-    );
-    this.updateStoreShopItem(shopitem_id, res.data);
+  async setShopItemStatus(auth, shopitem_id, status, location, quantity) {
+    console.log(auth);
+    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}&shop_location=${location}&quantity=${quantity}`, {}, auth)
+    this.updateStoreShopItem(shopitem_id, res.data)
   }
 
   async updateShopItemsWarehouseLocations(data) {
@@ -204,18 +199,9 @@ class AdminStore {
   }
 
   async getRouteOrders(id, timeframe, options) {
-    timeframe = new Date();
-    let dd = String(timeframe.getDate()).padStart(2, "0");
-    let mm = String(timeframe.getMonth() + 1).padStart(2, "0");
-    let yyyy = timeframe.getFullYear();
-    timeframe = yyyy + "-" + mm + "-" + dd;
+    timeframe = moment().format("YYYY-MM-DD")
 
-    const res = await axios.get(
-      `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${
-        timeframe ? timeframe : ""
-      }%202:00-8:00PM`,
-      options
-    );
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
     this.orders = res.data;
   }
 
@@ -263,6 +249,26 @@ class AdminStore {
     const res = await axios.post(API_ADMIN_POST_BLOG_POST, data);
     console.log(res.data);
   }
+
+  // async editCartItem(orderId, cartItemId, cartItem, weight, errorReason){
+  //   return fetch(`${API_EDIT_CART_ITEM}/${orderId}/${cartItemId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       product_name: cartItem.product_name,
+  //       substitute_for_name: cartItem.substitute_for_name,
+  //       product_producer: cartItem.product_producer,
+  //       final_quantity: Number(cartItem.final_quantity),
+  //       missing: this.props.cart_item.missing,
+  //       weight: weight,
+  //       product_error_reason: errorReason
+  //     })
+  //   })
+  //     .then(response => console.log(response))
+  //     .catch(error => console.log(error));
+  // }
 
   setEditing(id, edit) {
     for (let item of this.shopitems) {

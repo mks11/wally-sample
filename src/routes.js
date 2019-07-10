@@ -28,12 +28,14 @@ import ManageShopper from "./pages/ManageShopper";
 import ManagePackaging from "./pages/ManagePackaging";
 import ManageDelivery from "./pages/ManageDelivery";
 import ManageBlog from "./pages/ManageBlog";
+import ManageProducts from './pages/ManageProducts'
 import ShoppingAppStep1 from "./pages/ShoppingAppStep1";
 import ShoppingAppStep2 from "./pages/ShoppingAppStep2";
 import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";
 import Signup from "./pages/Signup";
 import Feedback from "./pages/Feedback";
 import Receipts from "./pages/manage/receipt/Receipts";
+import CourierRouting from "./pages/courier/CourierRouting";
 
 export default (
   <Fragment>
@@ -52,7 +54,8 @@ export default (
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
       <Route exact path="/orders" component={Orders} />
       <Route exact path="/manage/orders" component={ManageOrders} />
-
+      <Route exact path="/manage/products" component={ManageProducts} />
+      <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/tnc" component={Tnc} />
       <Route exact path="/privacy" component={Privacy} />
       <Route exact path="/blog" component={Blog} />

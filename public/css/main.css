@@ -1556,3 +1556,8 @@ input {
 .hide {
   display: none;
 }
+
+.packaging-quantity{
+  font-size: 10px;
+  width: 50%;
+}
