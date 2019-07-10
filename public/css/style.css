@@ -2700,6 +2700,10 @@ color:#6e8692
   width: 100%
 }
 
+<<<<<<< HEAD
+.courier-page {
+  margin-top: 60px;
+=======
 .paper-button {
   text-transform: none;
 }
@@ -2755,4 +2759,5 @@ color:#6e8692
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+>>>>>>> e196892fcc97f71ca7c707acb40f20df682a9a7e
 }

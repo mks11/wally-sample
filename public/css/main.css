@@ -1510,7 +1510,7 @@ input {
 }
 
 .scrollable-table {
-  overflow-x: auto;
+  overflow-x: auto;,
 }
 
 .single-order-total {

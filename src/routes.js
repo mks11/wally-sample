@@ -28,7 +28,7 @@ import ManageShopper from "./pages/ManageShopper";
 import ManagePackaging from "./pages/ManagePackaging";
 import ManageDelivery from "./pages/ManageDelivery";
 import ManageBlog from "./pages/ManageBlog";
-import ManageProducts from './pages/ManageProducts'
+import ManageProducts from "./pages/ManageProducts";
 import ShoppingAppStep1 from "./pages/ShoppingAppStep1";
 import ShoppingAppStep2 from "./pages/ShoppingAppStep2";
 import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";

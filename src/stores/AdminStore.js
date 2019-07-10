@@ -22,7 +22,6 @@ import {
   API_ADMIN_GET_RECEIPTS,
   API_ADMIN_POST_RECEIPT,
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
-  API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD,
   API_EDIT_CART_ITEM
 } from "../config";
 import axios from "axios";
@@ -131,7 +130,10 @@ class AdminStore {
   }
 
   async updateDailySubstitute(timeframe, shopitem_id, data) {
-    const res = await axios.patch(`${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`, { substitutes: data })
+    const res = await axios.patch(
+      `${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`,
+      { substitutes: data }
+    );
     // unsure if response data will be in res.data or res.data.daily_substitute
     this.dailySubstitute = res.data;
   }
@@ -151,19 +153,24 @@ class AdminStore {
   }
 
   async getProductSelectionDownload() {
-    await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`)
+    await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`);
   }
 
-  async getProductCategoriesDownload() {
-    await axios.get(`${API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD}`)
-  }
-
-  async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {
-    this.loading = true
-    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`, data)
-    this.loading = false
-    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index)
-    this.updateStoreShopItem(shopitem_id, res.data)
+  async updateShopItem(
+    timeframe,
+    shopitem_id,
+    data,
+    updateCurrentProduct,
+    index
+  ) {
+    this.loading = true;
+    const res = await axios.patch(
+      `${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
+      data
+    );
+    this.loading = false;
+    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index);
+    this.updateStoreShopItem(shopitem_id, res.data);
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {
@@ -176,8 +183,12 @@ class AdminStore {
 
   async setShopItemStatus(auth, shopitem_id, status, location, quantity) {
     console.log(auth);
-    const res = await axios.patch(`${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}&shop_location=${location}&quantity=${quantity}`, {}, auth)
-    this.updateStoreShopItem(shopitem_id, res.data)
+    const res = await axios.patch(
+      `${API_ADMIN_SET_SHOP_ITEM_STATUS}/${shopitem_id}?status=${status}&shop_location=${location}&quantity=${quantity}`,
+      {},
+      auth
+    );
+    this.updateStoreShopItem(shopitem_id, res.data);
   }
 
   async updateShopItemsWarehouseLocations(data) {
@@ -200,7 +211,6 @@ class AdminStore {
 
   async getRouteOrders(id, timeframe, options) {
     timeframe = moment().format("YYYY-MM-DD")
-
     const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
     this.orders = res.data;
   }
