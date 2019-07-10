@@ -27,6 +27,9 @@ class CourierModal extends Component {
       name: "",
       paypal_email: ""
     };
+
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   onNameChange = e => {
@@ -132,4 +135,4 @@ class CourierModal extends Component {
   }
 }
 
-export default CourierModal;
+export default connect("store")(CourierModal);

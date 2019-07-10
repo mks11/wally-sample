@@ -25,15 +25,29 @@ class Receipts extends Component {
       currentDate: ""
     };
     this.adminStore = this.props.store.admin;
+    this.userStore = this.props.store.user;
   }
 
   // When Mounting Set Receipts array to today's Receipts
   componentDidMount() {
-    let momentDate = moment().format("YYYY[-]MM[-]DD");
-    let formattedDate = momentDate + "%202:00-8:00PM";
-    this.setState({ currentDate: momentDate });
-    this.adminStore.getShopLocations(formattedDate);
-    this.adminStore.getDailyReceipts(formattedDate);
+
+    this.userStore.getStatus(true)
+      .then((status) => {
+          const user = this.userStore.user
+          
+          if( status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')){
+              let momentDate = moment().format("YYYY[-]MM[-]DD");
+              let formattedDate = momentDate + "%202:00-8:00PM";
+              this.setState({ currentDate: momentDate });
+              this.adminStore.getShopLocations(formattedDate);
+              this.adminStore.getDailyReceipts(formattedDate);
+          } else {
+              this.props.store.routing.push('/')
+          }
+      })
+      .catch((error) => {
+          this.props.store.routing.push('/')
+      })
   }
 
   // Show Add new Receipt Form

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "../../../utils";
 import S3 from "aws-s3";
 import moment from "moment";
 import { Container, Col, Row, Button, Input } from "reactstrap";
@@ -138,4 +139,4 @@ class ReceiptCapture extends Component {
   }
 }
 
-export default ReceiptCapture;
+export default connect("store")(ReceiptCapture);
