@@ -1128,7 +1128,7 @@ span.text-disclaimer {
 
 
 /* .list{
- 
+
 } */
 
 .list-header{
@@ -2700,10 +2700,11 @@ color:#6e8692
   width: 100%
 }
 
-<<<<<<< HEAD
+
 .courier-page {
   margin-top: 60px;
-=======
+}
+
 .paper-button {
   text-transform: none;
 }
@@ -2711,7 +2712,7 @@ color:#6e8692
 .product-selection-container {
   padding: 2em;
   margin: auto;
-  height: 60vh; 
+  height: 60vh;
   width: 50vw;
 }
 .product-selection-button {
@@ -2723,7 +2724,7 @@ color:#6e8692
 
 .product-selection-download {
   text-transform: none;
-  width: 100%; 
+  width: 100%;
   text-align:center;
   height:30%;
   padding: 0.5em;
@@ -2745,7 +2746,7 @@ color:#6e8692
 }
 
 .product-selection-upload-image-button {
-  margin: auto; 
+  margin: auto;
   text-align: center;
   width: 40%;
   margin-top: -2%;
