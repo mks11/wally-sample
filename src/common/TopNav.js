@@ -237,7 +237,7 @@ class TopNav extends Component {
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/courier-routing" className="dropdown-item">Courier Routing</Link>
-                                      /* <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link> */
+                                      {/* <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link> */}
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/products" className="dropdown-item">Products App</Link>
