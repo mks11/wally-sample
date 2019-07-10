@@ -39,14 +39,30 @@ class CourierRouting extends Component {
       routes: [],
       isCourierModalOpen: -1
     };
+
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   componentDidMount = () => {
-    const time = moment().format("YYYY-MM-DD HH:mm:ss");
-    fetch(`${BASE_URL}/api/admin/routes/?timeframe=2019-07-08`)
-      .then(res => res.json())
-      .then(json => this.setState({ routes: json }))
-      .catch(error => console.log(error));
+
+    this.userStore.getStatus(true)
+      .then((status) => {
+        const user = this.userStore.user
+        if (!status || user.type !== 'admin') {
+          this.props.store.routing.push('/')
+        } else {
+          const time = moment().format("YYYY-MM-DD");
+          fetch(`${BASE_URL}/api/admin/routes/?timeframe=${time} 2:00-8:00pm`)
+            .then(res => res.json())
+            .then(json => this.setState({ routes: json }))
+            .catch(error => console.log(error));
+          
+        }
+      })
+      .catch((error) => {
+        this.props.store.routing.push('/')
+      })
   };
 
   setPhoneNumber = (e, i) => {
@@ -54,7 +70,7 @@ class CourierRouting extends Component {
     const routes = this.state.routes;
     routes[i] = {
       ...routes[i],
-      courierPhoneNumber: value
+      courier_telephone: value
     };
 
     this.setState({
@@ -64,7 +80,7 @@ class CourierRouting extends Component {
 
   assignCourierModal = (route, i) => {
     let routeId = route._id;
-    let courierPhoneNumber = route.courierPhoneNumber;
+    let courierPhoneNumber = route.courier_telephone;
     return fetch(`${BASE_URL}/api/admin/route/${routeId}/assign`, {
       method: "PATCH",
       headers: {
@@ -119,20 +135,16 @@ class CourierRouting extends Component {
                       <TableCell>{route.assigned.toString()}</TableCell>
                       <TableCell>{route.courier_text}</TableCell>
                       <TableCell>
-                        {route.courier_telephone !== null ? (
-                          route.courier_telephone
-                        ) : (
-                          <InputGroup>
-                            <Input
-                              placeholder="Enter your number here"
-                              value={route.courier_telephone}
-                              onChange={e => this.setPhoneNumber(e, i)}
-                              type="number"
-                              name="courier_telephone"
-                              style={customColumnStyle}
-                            />
-                          </InputGroup>
-                        )}
+                        <InputGroup>
+                          <Input
+                            placeholder="Enter your number here"
+                            value={route.courier_telephone}
+                            onChange={e => this.setPhoneNumber(e, i)}
+                            type="number"
+                            name="courier_telephone"
+                            style={customColumnStyle}
+                          />
+                        </InputGroup>
                       </TableCell>
                       <TableCell>
                         <Button
@@ -141,8 +153,9 @@ class CourierRouting extends Component {
                           size={"medium"}
                           type={"button"}
                           onClick={() => {
-                            route.courierPhoneNumber.length !== 10 ||
-                            route.courierPhoneNumber
+                            !route.courier_telephone ||
+                            route.courier_telephone.length !== 10 ||
+                            route.courier_telephone
                               .split("")
                               .some(elem => !elem.match(/[0-9]/))
                               ? alert("please enter a valid phone number")
@@ -171,4 +184,4 @@ class CourierRouting extends Component {
   }
 }
 
-export default CourierRouting;
+export default connect("store")(CourierRouting);

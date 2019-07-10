@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-export const BASE_URL = "http://localhost:4001";
+export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
+// export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
@@ -43,29 +43,21 @@ export const API_SUBMIT_FEEDBACK = BASE_URL + "/api/order/feedback";
 export const API_SUBMIT_SERVICE_FEEDBACK = BASE_URL + "/api/service/feedback";
 
 export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes";
-export const API_ADMIN_GET_SHOP_LOCATIONS =
-  BASE_URL + "/api/admin/shopping/locations";
-export const API_ADMIN_GET_SHOP_ITEMS =
-  BASE_URL + "/api/admin/shopping/shopitems";
-export const API_ADMIN_GET_SHOP_ITEMS_FARMS =
-  BASE_URL + "/api/admin/shopping/shopitems/farms";
-export const API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS =
-  BASE_URL + "/api/admin/shopping/shopitems/unavailable";
-export const API_ADMIN_GET_SUB_INFO =
-  BASE_URL + "/api/admin/shopping/dailysubstitutes";
-export const API_ADMIN_UPDATE_DAILY_SUBSTITUTE =
-  BASE_URL + "/api/admin/shopping/dailysubstitutes";
-export const API_ADMIN_UPDATE_SHOP_ITEM =
-  BASE_URL + "/api/admin/shopping/shopitem";
+export const API_ADMIN_GET_SHOP_LOCATIONS = BASE_URL + "/api/admin/shopping/locations";
+export const API_ADMIN_GET_SHOP_ITEMS = BASE_URL + "/api/admin/shopping/shopitems";
+export const API_ADMIN_GET_SHOP_ITEMS_FARMS = BASE_URL + "/api/admin/shopping/shopitems/farms";
+export const API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS = BASE_URL + "/api/admin/shopping/shopitems/unavailable";
+export const API_ADMIN_GET_SUB_INFO = BASE_URL + "/api/admin/shopping/dailysubstitutes";
+export const API_ADMIN_UPDATE_DAILY_SUBSTITUTE = BASE_URL + "/api/admin/shopping/dailysubstitutes";
+export const API_ADMIN_UPDATE_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem";
 
-export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS =
-  BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location";
-export const API_ADMIN_GET_LOCATION_STATUS =
-  BASE_URL + "/api/admin/shopping/location/status";
-export const API_ADMIN_GET_SHOPPER_PACKAGING_INFO =
-  BASE_URL + "/api/admin/shopping/packaging";
-export const API_ADMIN_SET_SHOP_ITEM_STATUS =
-  BASE_URL + "/api/admin/shopping/shopitem/status";
+export const API_ADMIN_POST_RECEIPT = BASE_URL + "/api/admin/shopping/receipt";
+export const API_ADMIN_GET_RECEIPTS = BASE_URL + "/api/admin/shopping/receipt";
+
+export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location";
+export const API_ADMIN_GET_LOCATION_STATUS = BASE_URL + "/api/admin/shopping/location/status";
+export const API_ADMIN_GET_SHOPPER_PACKAGING_INFO = BASE_URL + "/api/admin/shopping/packaging";
+export const API_ADMIN_SET_SHOP_ITEM_STATUS = BASE_URL + "/api/admin/shopping/shopitem/status";
 export const API_ADMIN_GET_ROUTES = BASE_URL + "/api/admin/routes";
 export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = BASE_URL + "/api/admin/route";
 export const API_ADMIN_GET_ORDER = BASE_URL + "/api/admin/order";
@@ -73,10 +65,8 @@ export const API_ADMIN_GET_PACKAGINGS = BASE_URL + "/api/admin/packagings";
 export const API_ADMIN_PACKAGE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_COMPLETE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_POST_BLOG_POST = BASE_URL + "/api/admin/blog";
-export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD =
-  BASE_URL + "/api/admin/products/currentselectioncsv";
-export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD =
-  BASE_URL + "/api/admin/products/currentcategoriescsv";
+export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD = BASE_URL + "/api/admin/products/currentselectioncsv";
+export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/products/currentcategoriescsv";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";

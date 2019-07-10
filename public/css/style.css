@@ -2665,18 +2665,17 @@ color:#6e8692
   margin: 120px auto;
 }
 
-@media (max-width: 400px){
+@media (max-width: 400px) {
   .error-modal{
     width: 320px;
     margin: 0 -20px;
   }
+
   .MuiTableCell-root-35 {
     padding: 0 !important;
     font-size: 8px !important;
   }
-  .form-control{
-    width: 50px;
-  }
+
   .react-switch-bg{
     height: 26px !important;
     width: 43px !important;
@@ -2700,7 +2699,10 @@ color:#6e8692
   width: 100%
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6358904ef74a482b0c62f1e628e914522c068634
 .courier-page {
   margin-top: 60px;
 }
@@ -2760,5 +2762,4 @@ color:#6e8692
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
->>>>>>> e196892fcc97f71ca7c707acb40f20df682a9a7e
 }

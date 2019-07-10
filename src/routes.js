@@ -9,7 +9,7 @@ import Account from "./pages/Account";
 import Help from "./pages/Help";
 import HelpSingle from "./pages/HelpSingle";
 import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-
+// import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
 import Orders from "./pages/Orders";
@@ -34,6 +34,7 @@ import ShoppingAppStep2 from "./pages/ShoppingAppStep2";
 import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";
 import Signup from "./pages/Signup";
 import Feedback from "./pages/Feedback";
+import Receipts from "./pages/manage/receipt/Receipts";
 import CourierRouting from "./pages/courier/CourierRouting";
 
 export default (
@@ -46,6 +47,7 @@ export default (
       <Route exact path="/manage/shopping-app-1" component={ShoppingAppStep1} />
       <Route exact path="/manage/shopping-app-2" component={ShoppingAppStep2} />
       <Route exact path="/manage/shopping-app-3" component={ShoppingAppStep3} />
+      <Route exact path="/manage/receipts" component={Receipts} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/invitefriends" component={InviteFriends} />
       <Route exact path="/thankyou" component={OrderConfirmation} />

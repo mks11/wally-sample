@@ -27,6 +27,9 @@ class CourierModal extends Component {
       name: "",
       paypal_email: ""
     };
+
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
   }
 
   onNameChange = e => {
@@ -87,7 +90,7 @@ class CourierModal extends Component {
                         value={name}
                         name="name"
                         type="string"
-                        placeholder="enter your name here"
+                        placeholder="enter courier name here"
                         onChange={this.onNameChange}
                       />
                     </InputGroup>
@@ -106,7 +109,7 @@ class CourierModal extends Component {
                         value={paypal_email}
                         name="paypal_email"
                         type="string"
-                        placeholder="enter paypal email"
+                        placeholder="enter courier paypal info"
                         onChange={this.onEmailChange}
                       />
                     </InputGroup>
@@ -132,4 +135,4 @@ class CourierModal extends Component {
   }
 }
 
-export default CourierModal;
+export default connect("store")(CourierModal);

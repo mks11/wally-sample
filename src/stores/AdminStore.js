@@ -1,7 +1,6 @@
 import { observable, decorate, action } from "mobx";
 import {
   API_ADMIN_GET_TIME_FRAMES,
-  API_ADMIN_GET_SHOP_LOCATIONS,
   API_ADMIN_GET_SHOP_ITEMS,
   API_ADMIN_GET_SHOP_ITEMS_FARMS,
   API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS,
@@ -19,15 +18,20 @@ import {
   API_ADMIN_PACKAGE_ORDER,
   API_ADMIN_COMPLETE_ORDER,
   API_ADMIN_POST_BLOG_POST,
+  API_ADMIN_GET_SHOP_LOCATIONS,
+  API_ADMIN_GET_RECEIPTS,
+  API_ADMIN_POST_RECEIPT,
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
   API_EDIT_CART_ITEM
 } from "../config";
 import axios from "axios";
 import moment from "moment";
+import S3 from "aws-s3";
 
 class AdminStore {
   timeframes = [];
   locations = [];
+  receipts = [];
 
   shopitems = [];
   shopitemsFarms = [];
@@ -43,6 +47,47 @@ class AdminStore {
   packagings = [];
 
   loading = false;
+
+  async getDailyReceipts(timeframe) {
+    const res = await axios.get(
+      `${API_ADMIN_GET_RECEIPTS}?timeframe=${timeframe}`
+    );
+    const sortedReceipts = res.data.receipts.sort(function(a, b) {
+      return a.createdAt - b.createdAt;
+    });
+    this.receipts = sortedReceipts;
+  }
+
+  async uploadReceipt(date, file, shop_location) {
+    // S3 Configuration
+    const config = {
+      bucketName: "the-wally-shop-app",
+      dirName: `daily-receipts/${moment().format("YYYY[-]MM[-]DD")}`,
+      region: "us-east-2",
+      accessKeyId: "AKIAJVL4SVXQNCJJWRMA",
+      secretAccessKey: "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"
+    };
+    const S3Client = new S3(config);
+    let uploaded = false;
+    let res;
+    // Upload File to S3
+    try {
+      let data = await S3Client.uploadFile(file)
+      console.log(data.key.split("/").slice(-1).join("/"))
+      let res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
+        shop_date: date,
+        filename: data.key
+          .split("/")
+          .slice(-1)
+          .join("/"),
+        location: shop_location
+      });
+      uploaded = true
+    } catch(error) {
+      console.error(error)
+    }
+    return uploaded;
+  }
 
   async getTimeFrames() {
     const time = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -73,10 +118,7 @@ class AdminStore {
   }
 
   async getUnavailableShopItems(auth, timeframe, shop_location) {
-    const res = await axios.get(
-      `${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`,
-      auth
-    );
+    const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth)
     this.shopitems = res.data.shop_items;
   }
 
@@ -88,7 +130,6 @@ class AdminStore {
   }
 
   async updateDailySubstitute(timeframe, shopitem_id, data) {
-    console.log(data);
     const res = await axios.patch(
       `${API_ADMIN_UPDATE_DAILY_SUBSTITUTE}/${shopitem_id}?timeframe=${timeframe}`,
       { substitutes: data }
@@ -169,18 +210,8 @@ class AdminStore {
   }
 
   async getRouteOrders(id, timeframe, options) {
-    // timeframe = new Date();
-    // let dd = String(timeframe.getDate()).padStart(2, '0');
-    // let mm = String(timeframe.getMonth() + 1).padStart(2, '0');
-    // let yyyy = timeframe.getFullYear();
-    // timeframe = yyyy + "-" +mm + "-" + dd
-
-    const res = await axios.get(
-      `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${
-        timeframe ? timeframe : ""
-      }`,
-      options
-    );
+    timeframe = moment().format("YYYY-MM-DD")
+    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
     this.orders = res.data;
   }
 
@@ -308,6 +339,7 @@ class AdminStore {
 decorate(AdminStore, {
   timeframes: observable,
   locations: observable,
+  receipts: observable,
   shopitems: observable,
   shopitemsFarms: observable,
   locationStatus: observable,
@@ -323,6 +355,7 @@ decorate(AdminStore, {
   getShopLocations: action,
   getShopItems: action,
   getShopItemsFarms: action,
+  getDailyReceipts: action,
   getUnavailableShopItems: action,
   getSubInfo: action,
   updateDailySubstitute: action,
@@ -338,7 +371,8 @@ decorate(AdminStore, {
   getPackagings: action,
   packageOrder: action,
   completeOrder: action,
-  postBlogPost: action
+  postBlogPost: action,
+  uploadReceipt: action
 });
 
 export default new AdminStore();

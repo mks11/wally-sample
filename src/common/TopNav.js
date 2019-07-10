@@ -105,7 +105,6 @@ class TopNav extends Component {
     } else {
       storeCredit = 0
     }
-    console.log("Admin is", isAdmin);
 
     let dropdownClass = 'dropdown-menu dropdown-menu-right profile-dropdown'
     if (this.uiStore.accountDropdown) {
@@ -135,38 +134,55 @@ class TopNav extends Component {
                     <ul className="aw-nav--menu m-0 p-0 text-center">
 
                       { this.userStore.status ?
-                        isAdmin ?
-                          //
-                          <React.Fragment>
-                            <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                            <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
-                            <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
-                          </React.Fragment>
-                          //
-                          :
-                          <React.Fragment>
-                            <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                            <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                            <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
-                            <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
-                          </React.Fragment>
+                          isAdmin ?
+                            //
+                            <React.Fragment>
+                              <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopper')}>Shopper</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/packaging')}>Packing</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/delivery')}>Delivery</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/courier-routing')}>Courier Routing</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/products')}>Products App</a></li>
+                              <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                            </React.Fragment>
+                            //
+                            :
+                            isTwsOps ?
+                              <React.Fragment>
+                                <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
+                                <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                              </React.Fragment>
+                              :
+                              <React.Fragment>
+                                <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                                <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
+                                <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
+                                <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+
+                                <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
+                                <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
+                              </React.Fragment>
                           :
                           <React.Fragment>
                             <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
                             <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
+
+                            <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
+                            <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                           </React.Fragment>
                       }
-
-                      <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
-                      <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
-                      <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
-                      <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
-                      <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
                     </ul>
                   </nav>
                 </div>
@@ -181,9 +197,9 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
-        <header className={`aw-header navbar-white ${isAdmin ? 'admin-navbar' : ''}`}>
+        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''}`}>
           {
-          ((this.userStore.status && !isAdmin) || !this.userStore.status) ? (
+          ((this.userStore.status && !isAdmin && !isTwsOps) || !this.userStore.status) ? (
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
@@ -221,7 +237,7 @@ class TopNav extends Component {
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/courier-routing" className="dropdown-item">Courier Routing</Link>
-                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link>
+                                      {/* <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/blog" className="dropdown-item">Blog</Link> */}
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/products" className="dropdown-item">Products App</Link>
