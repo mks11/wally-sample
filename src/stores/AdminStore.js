@@ -40,6 +40,9 @@ class AdminStore {
   availableSubs = [];
   dailySubstitute = {};
 
+  selectedSubs = [];
+  checked = {};
+
   routes = [];
   orders = [];
   singleorder = {};
@@ -124,9 +127,11 @@ class AdminStore {
 
   async getSubInfo(shopitem_id, delivery_date, location) {
     const res = await axios.get(
-      `${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}&location=${location}`
+      `${API_ADMIN_GET_SUB_INFO}/${shopitem_id}?delivery_date=${delivery_date}&shop_location=${location}`
     );
     this.availableSubs = res.data.available_substitutes;
+    this.selectedSubs = [];
+    this.checked = {};
   }
 
   async updateDailySubstitute(timeframe, shopitem_id, data) {

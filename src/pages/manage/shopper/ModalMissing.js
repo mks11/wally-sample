@@ -28,33 +28,42 @@ class ModalMissing extends Component {
 		this.modalStore = props.store.modal
 	}
 	
+	componentDidMount() {
+		console.log("Component did mount");
+		this.state = {
+			selectedSubs: [],
+			checked: {},
+		}
+	}
+
 	componentWillUnmount = () => {
+		console.log("Unmounting component");
 		this.adminStore.clearStoreSubs()
 	}
 	
 	handleAvailableCheck = (sub, i) => {
 		const newChecked = {
-			...this.state.checked,
-			[i]: !this.state.checked[i]
+			...this.adminStore.checked,
+			[i]: !this.adminStore.checked[i]
 		}
+		
+		this.adminStore.checked = newChecked;
 		this.setState({
 			checked: newChecked
 		})
 		if (newChecked[i]) {
-			this.setState({
-				selectedSubs: [...this.state.selectedSubs, sub]
-			})
+			this.adminStore.selectedSubs = [...this.adminStore.selectedSubs, sub];
 		} else {
-			const selectedSubs = this.state.selectedSubs.filter(selectedSub => {
+			const selectedSubs = this.adminStore.selectedSubs.filter(selectedSub => {
 				return selectedSub.product_id !== sub.product_id
 			})
-			this.setState({selectedSubs})
+			this.adminStore.selectedSubs = selectedSubs
 		}
 	}
 
 	handleSubmit = () => {
 		const {shopitemId, timeframe, location} = this.props
-		let {selectedSubs} = this.state
+		let selectedSubs = this.adminStore.selectedSubs
 		selectedSubs = selectedSubs && selectedSubs.map(sub => {
 			return { ...sub, product_shop: location }
 		})
@@ -90,7 +99,7 @@ class ModalMissing extends Component {
 													<Input
 														className="ml-sm-3"
 														name={sub.product_id}
-														checked={!!this.state.checked[i]}
+														checked={!!this.adminStore.checked[i]}
 														type="checkbox"
 														onChange={(e) => this.handleAvailableCheck(sub, i)}
 													/>
