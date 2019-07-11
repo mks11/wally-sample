@@ -188,6 +188,7 @@ class AdminStore {
       {},
       auth
     );
+    res.data.user_checked = true;
     this.updateStoreShopItem(shopitem_id, res.data);
   }
 

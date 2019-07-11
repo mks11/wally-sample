@@ -30,6 +30,7 @@ class ShoppingAppTable extends Component {
     const {location} = this.props
     if (isAvailable) {
       const status = 'available'
+      const user_checked = true
       this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
     } else {
       this.setState({shopitemId, productName})
