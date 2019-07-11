@@ -72,11 +72,12 @@ class ShoppingAppTable extends Component {
                   delivery_date,
                   user_checked
                 } = shopitem
-                const checked = user_checked ? 'checked' : 'not-checked'
+                const checked = this.step == '1' ? 'checked' : (user_checked ? 'checked' : 'not-checked')
+                const rowClass = this.step == '1' ? status : (this.step == '2' ? (user_checked ? 'checked' : 'not-checked') : status)
                 return (
                   <TableRow
                     key={_id}
-                    className={`row ${checked}`}
+                    className={`row ${rowClass}`}
                   >
                     <TableCell>{product_name}</TableCell>
                     <TableCell>
@@ -88,7 +89,7 @@ class ShoppingAppTable extends Component {
                             type="radio"
                             name="select"
                             id="yesSelect"
-                            checked={user_checked && status === 'available'}
+                            checked={this.step == '1' ? status === 'available' : (this.step == '2' ? (user_checked && status === 'available') : false)}
                             onChange={() => this.handleSelectAvailability(true, _id)}
                           />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
@@ -98,7 +99,7 @@ class ShoppingAppTable extends Component {
                             type="radio"
                             name="select"
                             id="noSelect"
-                            checked={user_checked && status === 'unavailable'}
+                            checked={this.step == '1' ? status === 'unavailable' : (this.step == '2' ? (user_checked && status === 'unavailable') : false)}
                             onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)}
                           />
                           <Label className="ml-sm-1" for="noSelect" check>No</Label>
