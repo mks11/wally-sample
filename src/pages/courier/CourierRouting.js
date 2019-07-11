@@ -52,9 +52,7 @@ class CourierRouting extends Component {
           this.props.store.routing.push("/");
         } else {
           const time = moment().format("YYYY-MM-DD");
-          fetch(
-            `${BASE_URL}/api/admin/routes/?timeframe=2019-07-08 2:00-8:00pm`
-          )
+          fetch(`${BASE_URL}/api/admin/routes/?timeframe=${time} 2:00-8:00pm`)
             .then(res => res.json())
             .then(json => this.setState({ routes: json }))
             .catch(error => console.log(error));
@@ -136,20 +134,16 @@ class CourierRouting extends Component {
                       <TableCell>{route.assigned.toString()}</TableCell>
                       <TableCell>{route.courier_text}</TableCell>
                       <TableCell>
-                        {route.courier_telephone !== null ? (
-                          route.courier_telephone
-                        ) : (
-                          <InputGroup>
-                            <Input
-                              placeholder="Enter your number here"
-                              value={route.courier_telephone}
-                              onChange={e => this.setPhoneNumber(e, i)}
-                              type="number"
-                              name="courier_telephone"
-                              style={customColumnStyle}
-                            />
-                          </InputGroup>
-                        )}
+                        <InputGroup>
+                          <Input
+                            placeholder="Enter your number here"
+                            value={route.courier_telephone}
+                            onChange={e => this.setPhoneNumber(e, i)}
+                            type="number"
+                            name="courier_telephone"
+                            style={customColumnStyle}
+                          />
+                        </InputGroup>
                       </TableCell>
                       <TableCell>
                         <Button
