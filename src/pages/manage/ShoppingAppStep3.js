@@ -201,7 +201,7 @@ class ShoppingAppStep3 extends Component {
                                     
                                     <Form inline>
                                         <FormGroup className="mr-sm-2" check inline>
-                                            <Input type="radio" name="select" id="yesSelect" checked={status === 'available'}
+                                            <Input type="radio" name="select" id="yesSelect" checked={status === 'purchased'}
                                             onChange={() => this.handleOnSelectClick(true, shopitem._id, shopitem)} />
                                             
                                             <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
