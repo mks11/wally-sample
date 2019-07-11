@@ -39,30 +39,30 @@ class CourierRouting extends Component {
       routes: [],
       isCourierModalOpen: -1
     };
-
     this.userStore = props.store.user;
     this.adminStore = props.store.admin;
   }
 
   componentDidMount = () => {
-
-    this.userStore.getStatus(true)
-      .then((status) => {
-        const user = this.userStore.user
-        if (!status || user.type !== 'admin') {
-          this.props.store.routing.push('/')
+    this.userStore
+      .getStatus(true)
+      .then(status => {
+        const user = this.userStore.user;
+        if (!status || user.type !== "admin") {
+          this.props.store.routing.push("/");
         } else {
           const time = moment().format("YYYY-MM-DD");
-          fetch(`${BASE_URL}/api/admin/routes/?timeframe=${time} 2:00-8:00pm`)
+          fetch(
+            `${BASE_URL}/api/admin/routes/?timeframe=2019-07-08 2:00-8:00pm`
+          )
             .then(res => res.json())
             .then(json => this.setState({ routes: json }))
             .catch(error => console.log(error));
-          
         }
       })
-      .catch((error) => {
-        this.props.store.routing.push('/')
-      })
+      .catch(error => {
+        this.props.store.routing.push("/");
+      });
   };
 
   setPhoneNumber = (e, i) => {
@@ -103,6 +103,7 @@ class CourierRouting extends Component {
           this.setState({
             routes: newRoutes
           });
+          alert("Success");
         }
       });
   };
@@ -135,16 +136,20 @@ class CourierRouting extends Component {
                       <TableCell>{route.assigned.toString()}</TableCell>
                       <TableCell>{route.courier_text}</TableCell>
                       <TableCell>
-                        <InputGroup>
-                          <Input
-                            placeholder="Enter your number here"
-                            value={route.courier_telephone}
-                            onChange={e => this.setPhoneNumber(e, i)}
-                            type="number"
-                            name="courier_telephone"
-                            style={customColumnStyle}
-                          />
-                        </InputGroup>
+                        {route.courier_telephone !== null ? (
+                          route.courier_telephone
+                        ) : (
+                          <InputGroup>
+                            <Input
+                              placeholder="Enter your number here"
+                              value={route.courier_telephone}
+                              onChange={e => this.setPhoneNumber(e, i)}
+                              type="number"
+                              name="courier_telephone"
+                              style={customColumnStyle}
+                            />
+                          </InputGroup>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Button
