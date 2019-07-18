@@ -22,7 +22,9 @@ import {
   API_ADMIN_GET_RECEIPTS,
   API_ADMIN_POST_RECEIPT,
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
-  API_EDIT_CART_ITEM
+  API_EDIT_CART_ITEM,
+  API_ADMIN_GET_PURCHASED_SHOP_ITEMS,
+  API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -113,6 +115,13 @@ class AdminStore {
     this.shopitems = res.data.shop_items;
   }
 
+  async getPurchasedShopItems(auth, timeframe, shop_location) {
+    const res = await axios.get(
+      `${API_ADMIN_GET_PURCHASED_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth
+    );
+    this.shopitems = res.data.shop_items;
+  }
+
   async getShopItemsFarms(timeframe, shop_location) {
     const res = await axios.get(
       `${API_ADMIN_GET_SHOP_ITEMS_FARMS}?timeframe=${timeframe}&shop_location=${shop_location}`
@@ -171,6 +180,23 @@ class AdminStore {
     this.loading = true;
     const res = await axios.patch(
       `${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
+      data
+    );
+    this.loading = false;
+    if (res.data.shopItem) updateCurrentProduct(res.data.shopItem, index);
+    this.updateStoreShopItem(shopitem_id, res.data);
+  }
+
+  async updatePurchasedShopItem(
+    timeframe,
+    shopitem_id,
+    data,
+    updateCurrentProduct,
+    index
+  ) {
+    this.loading = true;
+    const res = await axios.patch(
+      `${API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
       data
     );
     this.loading = false;

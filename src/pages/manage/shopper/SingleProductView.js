@@ -44,7 +44,7 @@ class SingleProductView extends Component {
             completed: Boolean(props.product.completed),
             subProductName: props.product.substitute_for_name ? props.product.product_name : '',
             finalQuantity: props.product.final_quantity || '',
-            totalPaid: props.product.total_paid / 100 || '',
+            totalPaid: props.product.total_paid / 100 || props.product.estimated_total / 100,
             weight: props.product.weight || '',
             missingReason: props.product.product_missing_reason || "Out of season",
         }
@@ -79,7 +79,7 @@ class SingleProductView extends Component {
                     completed: Boolean(props.product.completed),
                     subProductName: props.product.substitute_for_name ? props.product.product_name : '',
                     finalQuantity: props.product.final_quantity || '',
-                    totalPaid: props.product.total_paid / 100 || '',
+                    totalPaid: props.product.total_paid / 100 || props.product.estimated_total / 100,
                     weight: props.product.weight || '',
                     missingReason: props.product.product_missing_reason || "Out of season",
                 }
@@ -256,7 +256,7 @@ class SingleProductView extends Component {
                                     <strong>Wally Shop Price:</strong>
                                 </Col>
                                 <Col sm={10}>
-                                    ${product.shop_price / 100} / {product.unit_type}
+                                    ${(product.estimated_total / product.quantity) / 100} / {product.unit_type}
                                 </Col>
                             </Row>
                         </FormGroup>
