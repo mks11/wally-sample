@@ -51,7 +51,7 @@ export const API_ADMIN_GET_SUB_INFO = BASE_URL + "/api/admin/shopping/dailysubst
 export const API_ADMIN_UPDATE_DAILY_SUBSTITUTE = BASE_URL + "/api/admin/shopping/dailysubstitutes";
 export const API_ADMIN_UPDATE_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem";
 export const API_ADMIN_GET_PURCHASED_SHOP_ITEMS = BASE_URL + "/api/admin/shopping/shopitems/purchased";
-export const API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitems/purchased";
+export const API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM = BASE_URL + "/api/admin/shopping/shopitem/purchased";
 
 export const API_ADMIN_POST_RECEIPT = BASE_URL + "/api/admin/shopping/receipt";
 export const API_ADMIN_GET_RECEIPTS = BASE_URL + "/api/admin/shopping/receipt";
