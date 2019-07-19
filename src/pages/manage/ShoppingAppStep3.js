@@ -9,6 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TableFooter from '@material-ui/core/TableFooter';
 
 import ModalStep3MissingPopUp from "./shopper/ModalStep3MissingPopUp";
 import Title from "../../common/page/Title";
@@ -236,11 +237,17 @@ class ShoppingAppStep3 extends Component {
                 })}
 
               </TableBody>
-              <Col style={{ padding: "10px" }} sm={{ size: 6, offset: 4 }} md={{ size: 6, offset: 4 }}>
-                <Link to="#">
-                  <Button className="btn-sm" onClick={this.handleReload}> Reload </Button>
-                </Link>
-              </Col>
+              <TableFooter>
+                <TableRow>
+                  <TableCell>
+                    <Col style={{ padding: "10px" }} sm={{ size: 6, offset: 4 }} md={{ size: 6, offset: 4 }}>
+                      <Link to="#">
+                        <Button className="btn-sm" onClick={this.handleReload}> Reload </Button>
+                      </Link>
+                    </Col>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
 
           </Paper>

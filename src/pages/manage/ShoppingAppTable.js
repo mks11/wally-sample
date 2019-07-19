@@ -110,8 +110,7 @@ class ShoppingAppTable extends Component {
                             name="select"
                             id="yesSelect"
                             checked={this.step == '1' ? status === 'available' : (this.step == '2' ? (user_checked && status === 'available') : false)}
-                            onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)}
-                            // onChange={() => this.handleSelectAvailability(true, _id)}
+                            onChange={() => this.handleSelectAvailability(true, _id)}
                           />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
                         </FormGroup>
