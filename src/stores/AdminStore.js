@@ -22,7 +22,8 @@ import {
   API_ADMIN_GET_RECEIPTS,
   API_ADMIN_POST_RECEIPT,
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
-  API_EDIT_CART_ITEM
+  API_EDIT_CART_ITEM,
+  API_ADMIN_CREATE_COURIER,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -212,21 +213,42 @@ class AdminStore {
     );
     this.orders = [];
     this.routes = res.data;
+    return res.data;
   }
 
   async getRouteOrders(id, timeframe, options) {
     timeframe = moment().format("YYYY-MM-DD")
-    const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
-    this.orders = res.data;
+    const { data } = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
+    this.orders = data;
+    return data;
   }
 
-  async updateRoutePlacement(id, data, options) {
-    const res = await axios.patch(
+  async updateRoutePlacement(id, params, options) {
+    const { data } = await axios.patch(
       `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`,
-      data,
+      params,
       options
     );
-    this.updateRouteItem(id, res.data);
+    this.updateRouteItem(id, data);
+    return data;
+  }
+
+  async assignCourier(id, params, options) {
+    const { data } = await axios.patch(
+      `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/assign`,
+      params,
+      options
+    );
+    return data;
+  }
+
+  async createNewCourier(params, options) {
+    const { data } = await axios.post(
+      `${API_ADMIN_CREATE_COURIER}`,
+      params,
+      options,
+    );
+    return data;
   }
 
   async getOrder(id, options) {
@@ -264,26 +286,6 @@ class AdminStore {
     const res = await axios.post(API_ADMIN_POST_BLOG_POST, data);
     console.log(res.data);
   }
-
-  // async editCartItem(orderId, cartItemId, cartItem, weight, errorReason){
-  //   return fetch(`${API_EDIT_CART_ITEM}/${orderId}/${cartItemId}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       product_name: cartItem.product_name,
-  //       substitute_for_name: cartItem.substitute_for_name,
-  //       product_producer: cartItem.product_producer,
-  //       final_quantity: Number(cartItem.final_quantity),
-  //       missing: this.props.cart_item.missing,
-  //       weight: weight,
-  //       product_error_reason: errorReason
-  //     })
-  //   })
-  //     .then(response => console.log(response))
-  //     .catch(error => console.log(error));
-  // }
 
   setEditing(id, edit) {
     for (let item of this.shopitems) {

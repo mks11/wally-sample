@@ -1,25 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "../../utils";
+import moment from "moment";
 import {
   Container,
-  FormGroup,
   Input,
   InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter
 } from "reactstrap";
-import { Col, Row, ControlLabel, FormControl, Form } from "react-bootstrap";
 import Button from "@material-ui/core/Button/Button";
-import CloseIcon from "@material-ui/icons/Close";
-import ArrowLeft from "@material-ui/icons/KeyboardArrowLeftOutlined";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRightOutlined";
-import Typography from "@material-ui/core/Typography/Typography";
-import Select from "react-select";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
 import TableHead from "@material-ui/core/TableHead/TableHead";
@@ -27,93 +13,113 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import CourierModal from "./CourierModal";
-import { BASE_URL } from "../../config";
-import moment from "moment";
+import { connect } from "../../utils";
 
 const customColumnStyle = { width: 100, padding: 0 };
 
 class CourierRouting extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      routes: [],
-      isCourierModalOpen: -1
-    };
+
     this.userStore = props.store.user;
     this.adminStore = props.store.admin;
+    this.modalStore = props.store.modal;
+
+    this.state = {
+      routes: [],
+      isCourierModalOpen: false,
+      selectedModalPhoneNumber: null,
+      busy: false,
+    };
   }
 
   componentDidMount = () => {
-    this.userStore
-      .getStatus(true)
+    this.userStore.getStatus(true)
       .then(status => {
         const user = this.userStore.user;
+
         if (!status || user.type !== "admin") {
           this.props.store.routing.push("/");
         } else {
-          const time = moment().format("YYYY-MM-DD");
-          fetch(`${BASE_URL}/api/admin/routes/?timeframe=${time} 2:00-8:00pm`)
-            .then(res => res.json())
-            .then(json => this.setState({ routes: json }))
-            .catch(error => console.log(error));
+          const options = this.userStore.getHeaderAuth()
+          const timeframe = `${moment().format('YYYY-MM-DD')} 2:00-8:00PM`
+
+          this.adminStore.getRoutes(timeframe, options)
+            .then(res => this.setState({ routes: res }))
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.props.store.routing.push("/");
       });
   };
 
   setPhoneNumber = (e, i) => {
+    const { routes } = this.state;
     const value = e.target.value;
-    const routes = this.state.routes;
+    
     routes[i] = {
       ...routes[i],
       courier_telephone: value
     };
 
-    this.setState({
-      routes
-    });
+    this.setState({ routes });
   };
 
   assignCourierModal = (route, i) => {
-    let routeId = route._id;
-    let courierPhoneNumber = route.courier_telephone;
-    return fetch(`${BASE_URL}/api/admin/route/${routeId}/assign`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        courier_telephone: courierPhoneNumber
-      })
-    })
-      .then(res => res.json())
+    const { routes, busy } = this.state
+
+    if (busy) return
+    this.setState({ busy: true })
+
+    const { _id, courier_telephone } = route;
+    const options = this.userStore.getHeaderAuth()
+
+    this.adminStore.assignCourier(_id, { courier_telephone }, options)
       .then(res => {
         if (res.new_user === true) {
           this.setState({
-            isCourierModalOpen: i
+            isCourierModalOpen: true,
+            selectedModalPhoneNumber: routes[i].courier_telephone
           });
         } else {
-          const newRoutes = this.state.routes;
-          newRoutes[i].assigned = true;
-          newRoutes[i].courier_telephone = route.courier_telephone;
-          this.setState({
-            routes: newRoutes
-          });
-          alert("Success");
+          routes[i].assigned = true;
+          routes[i].courier_telephone = route.courier_telephone;
+          this.setState({ routes });
         }
-      });
+      })
+      .catch(() => {
+        this.modalStore.toggleModal('error')
+      })
+      .finally(() => {
+        this.setState({ busy: false })
+      })
   };
 
-  toggleModalOff = e => {
+  handleAssignClick = (route, i) => {
+    if (!route.courier_telephone
+      || route.courier_telephone.length !== 10
+      || route.courier_telephone.split('').some(d => !d.match(/[0-9]/))) {
+        this.modalStore.toggleModal('error', 'Please enter a valid phone number')
+        return
+      }
+    this.assignCourierModal(route, i);
+  }
+
+  toggleModalOff = () => {
     this.setState({
-      isCourierModalOpen: -1
+      isCourierModalOpen: false,
+      selectedModalPhoneNumber: null,
     });
   };
 
   render() {
-    const { routes } = this.state;
+    const {
+      busy,
+      routes,
+      isCourierModalOpen,
+      selectedModalPhoneNumber,
+    } = this.state;
+
     return (
       <section className="courier-page">
         <Container>
@@ -147,27 +153,14 @@ class CourierRouting extends Component {
                       </TableCell>
                       <TableCell>
                         <Button
+                          disabled={busy}
                           variant="contained"
                           color="primary"
                           size={"medium"}
                           type={"button"}
-                          onClick={() => {
-                            !route.courier_telephone ||
-                            route.courier_telephone.length !== 10 ||
-                            route.courier_telephone
-                              .split("")
-                              .some(elem => !elem.match(/[0-9]/))
-                              ? alert("please enter a valid phone number")
-                              : this.assignCourierModal(route, i);
-                          }}
+                          onClick={() => this.handleAssignClick(route, i)}
                         >
                           Assign
-                          <CourierModal
-                            isOpen={this.state.isCourierModalOpen === i}
-                            onClose={this.toggleModalOff}
-                            courierPhoneNumber={route.courier_telephone}
-                            createNewCourier={this.createNewCourier}
-                          />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -178,6 +171,11 @@ class CourierRouting extends Component {
             </Table>
           </Paper>
         </Container>
+        <CourierModal
+          isOpen={isCourierModalOpen}
+          onClose={this.toggleModalOff}
+          courierPhoneNumber={selectedModalPhoneNumber}
+        />
       </section>
     );
   }

@@ -2,24 +2,15 @@ import React, { Component } from "react";
 import { connect } from "../../utils";
 import {
   Container,
-  FormGroup,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
   Modal,
   ModalBody,
   ModalHeader,
   ModalFooter
 } from "reactstrap";
-import { Col, Row, ControlLabel, FormControl, Form } from "react-bootstrap";
 import Button from "@material-ui/core/Button/Button";
 import CloseIcon from "@material-ui/icons/Close";
-import ArrowLeft from "@material-ui/icons/KeyboardArrowLeftOutlined";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRightOutlined";
 import Typography from "@material-ui/core/Typography/Typography";
-import Select from "react-select";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
 import TableHead from "@material-ui/core/TableHead/TableHead";
@@ -32,30 +23,32 @@ import { BASE_URL } from "../../config";
 class ViewSingleOrder extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    this.state = {
-      selectedOrder: props.selectedOrder,
-      cart_items: props.selectedOrder.cart_items,
-      packagings: props.selectedOrder.packaging_used.map(packaging => {
-        return { ...packaging };
-      }),
-      confirmModalOpen: false
-    };
+
     this.userStore = props.store.user;
     this.adminStore = props.store.admin;
+    this.modalStore = props.store.modal;
+
+    const selectedOrder = props.selectedOrder;
+
+    this.state = {
+      selectedOrder,
+      cart_items: selectedOrder.cart_items,
+      packagings: selectedOrder.packaging_used.map(p => ({ ...p })),
+      confirmModalOpen: false,
+    };
   }
 
   toggleConfirmModal = () => {
     this.setState({ confirmModalOpen: !this.state.confirmModalOpen });
   };
 
-  handleOrderUpdate = payload => {
-    let orderId = this.state.selectedOrder._id;
-    let cart_items = this.state.cart_items;
-    let selectedOrder = this.state.selectedOrder;
-    let packagings = this.state.selectedOrder.packaging_used;
-    let auth = this.userStore.getHeaderAuth();
-    console.log("Authorization is", auth.headers);
+  handleOrderUpdate = () => {
+    const { selectedOrder, cart_items } = this.state;
+
+    const orderId = selectedOrder._id;
+    const packagings = selectedOrder.packaging_used;
+    const auth = this.userStore.getHeaderAuth();
+
     return fetch(`${BASE_URL}/api/order/${orderId}`, {
       method: "PATCH",
       headers: {
@@ -67,40 +60,43 @@ class ViewSingleOrder extends Component {
         packagings
       })
     })
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
+      .then(res => console.log(res))
+      .catch(e => console.log(e));
   };
 
   onChangePackaging = (e, type) => {
-    const packagings = this.state.selectedOrder.packaging_used.map(data => {
-      if (data.type === type) {
-        return { ...data, quantity: e.target.value };
+    const { selectedOrder } = this.state;
+
+    const packagings = selectedOrder.packaging_used.map(p => {
+      if (p.type === type) {
+        return { ...p, quantity: e.target.value };
       }
-      return data;
+      return p;
     });
+
     this.setState({
       selectedOrder: {
-        ...this.state.selectedOrder,
+        ...selectedOrder,
         packaging_used: packagings
       }
     });
   };
 
   handlePackageSubmit = async () => {
-    const { packaging_used, selectedOrder } = this.state;
+    const { selectedOrder } = this.state;
     const { onSubmit } = this.props;
 
-    const newPackagings = selectedOrder.packaging_used.map(packaging => {
+    const newPackagings = selectedOrder.packaging_used.map(p => {
       return {
-        type: packaging.type,
-        quantity: Number(packaging.quantity)
+        type: p.type,
+        quantity: Number(p.quantity)
       };
     });
 
     await this.setState(
       {
         selectedOrder: {
-          ...this.state.selectedOrder,
+          ...selectedOrder,
           packagings: newPackagings
         }
       },
@@ -127,13 +123,13 @@ class ViewSingleOrder extends Component {
       }));
       this.setState({}, () => {
         done();
-        console.log("end of callstate", this.state.cart_items);
+        console.log("end of callstate", cart_items);
       });
     });
   };
 
   render() {
-    const { cart_items, selectedOrder, packagings } = this.state;
+    const { cart_items, selectedOrder } = this.state;
     const hideRow = { display: "none" };
     return (
       <section className="page-section pt-1 single-order">
@@ -165,11 +161,11 @@ class ViewSingleOrder extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cart_items.map((cart_item, i, order_id) => (
+                {cart_items.map(item => (
                   <CartItemOrder
-                    key={cart_item._id}
+                    key={item._id}
                     order_id={selectedOrder._id}
-                    cart_item={cart_item}
+                    cart_item={item}
                     onCartStateChange={this.handleCartStateChange}
                     onSetMissing={this.handleSetMissing}
                   />

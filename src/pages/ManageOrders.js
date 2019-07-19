@@ -1,19 +1,7 @@
 import React, { Component } from "react";
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
+import { Container, Col } from "reactstrap";
 import Title from "../common/page/Title";
 import ManageTabs from "./manage/ManageTabs";
-import CustomDropdown from "../common/CustomDropdown";
-import FulfillmentPlaceView from "./manage/FulfillmentPlaceView";
-import FulfillmentPackView from "./manage/FulfillmentPackView";
 import { connect } from "../utils";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
@@ -21,23 +9,23 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import TableFooter from "@material-ui/core/TableFooter/TableFooter";
-import { toJS } from "mobx";
 import ViewSingleOrder from "./orders/ViewSingleOrder";
 import moment from "moment";
 
 class ManageOrders extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
+
     this.state = {
       activeTab: "1",
       timeframe: null,
       selectedOrder: null,
-      singleOrderOpen: false
+      singleOrderOpen: false,
+      busy: false,
     };
-    this.userStore = props.store.user;
-    this.adminStore = props.store.admin;
   }
 
   componentDidMount() {
@@ -62,17 +50,18 @@ class ManageOrders extends Component {
   }
 
   loadOrders = () => {
-    const { route } = this.state;
-    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
-    const options = this.userStore.getHeaderAuth();
-    this.adminStore.getRouteOrders("all", timeframe, options);
-  };
+    const { busy } = this.state;
 
-  loadOrders = () => {
-    const { route } = this.state;
+    if (busy) return
+    this.setState({ busy: true })
+
     let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
-    this.adminStore.getRouteOrders("all", timeframe, options);
+    
+    this.adminStore.getRouteOrders("all", timeframe, options)
+      .finally(() => {
+        this.setState({ busy: false })
+      })
   };
 
   onTimeFrameSelect = timeframe => {
@@ -95,7 +84,7 @@ class ManageOrders extends Component {
 
   render() {
     if (!this.userStore.user) return null;
-    const { timeframes, packagings } = this.adminStore;
+    const { packagings } = this.adminStore;
     const { singleOrderOpen } = this.state;
     const { orders } = this.adminStore;
     const user = this.userStore.user;
