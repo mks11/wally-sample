@@ -11,39 +11,43 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
+const BASE_IMAGE_URL = 'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/daily-receipts'
+
 class Receipts extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
+
+    this.adminStore = props.store.admin;
+    this.userStore = props.store.user;
+    this.modalStore = props.store.modal;
+
     this.state = {
       newReceipt: false,
       tableView: true,
       enlageImage: false,
-      enlargeImageFile: "",
-      currentDate: ""
+      enlargeImageFile: '',
+      currentDate: '',
     };
-    this.adminStore = this.props.store.admin;
-    this.userStore = this.props.store.user;
   }
 
   // When Mounting Set Receipts array to today's Receipts
   componentDidMount() {
-
     this.userStore.getStatus(true)
       .then((status) => {
-          const user = this.userStore.user
-          
-          if( status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')){
-              let momentDate = moment().format("YYYY[-]MM[-]DD");
-              let formattedDate = momentDate + "%202:00-8:00PM";
-              this.setState({ currentDate: momentDate });
-              this.adminStore.getShopLocations(formattedDate);
-              this.adminStore.getDailyReceipts(formattedDate);
-          } else {
-              this.props.store.routing.push('/')
-          }
-      })
-      .catch((error) => {
+        const user = this.userStore.user
+
+        if (status && (user.type === 'admin' || user.type === 'super-admin' || user.type === 'tws-ops')) {
+          const currentDate = moment().format("YYYY[-]MM[-]DD")
+          const formattedDate = `${currentDate} 02:00-8:00PM`;
+          this.setState({ currentDate });
+          this.adminStore.getShopLocations(formattedDate);
+          this.adminStore.getDailyReceipts(formattedDate);
+        } else {
           this.props.store.routing.push('/')
+        }
+      })
+      .catch(() => {
+        this.props.store.routing.push('/')
       })
   }
 
@@ -72,30 +76,28 @@ class Receipts extends Component {
   handleOuterClick = () => {
     this.setState({
       enlargeImage: false,
-      enlargeImageFile: ""
+      enlargeImageFile: ''
     });
   };
 
   render() {
+    const { tableView, newReceipt, currentDate } = this.state
     const { locations } = this.adminStore;
     const { receipts } = this.adminStore;
+
     return (
       <div>
         <Container>
           <div className="switchButtons">
             {/* Buttons For Selecting New Receipt or Table of Daily Receipts View */}
             <button
-              className={
-                "add-button " + (this.state.tableView ? "selected" : "")
-              }
+              className={`add-button ${tableView ?'selected' : ''}`}
               onClick={this.handleTableView}
             >
               Receipt Table View
             </button>
             <button
-              className={
-                "add-button " + (this.state.newReceipt ? "selected" : "")
-              }
+              className={`add-button ${newReceipt ?'selected' : ''}`}
               onClick={this.handleAddForm}
             >
               Add New Receipt
@@ -103,11 +105,12 @@ class Receipts extends Component {
           </div>
           {/* Shows New Receipt Form */}
           <div>
-            {this.state.newReceipt && (
+            {newReceipt && (
               <ReceiptCapture
                 handleTableView={this.handleTableView}
                 locations={locations}
                 adminStore={this.adminStore}
+                modalStore={this.modalStore}
               />
             )}
           </div>
@@ -158,14 +161,7 @@ class Receipts extends Component {
                           <TableCell align="center">
                             <img
                               className="prev-img"
-                              src={
-                                "https://the-wally-shop-app.s3.us-east-2.amazonaws.com/" +
-                                "daily-receipts" +
-                                "/" +
-                                this.state.currentDate +
-                                "/" +
-                                receipt.filename
-                              }
+                              src={`${BASE_IMAGE_URL}/${currentDate}/${receipt.filename}`}
                               onClick={this.enlargeImage}
                               alt={receipt.filename}
                             />

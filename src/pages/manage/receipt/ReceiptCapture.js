@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "../../../utils";
-import S3 from "aws-s3";
 import moment from "moment";
 import { Container, Col, Row, Button, Input } from "reactstrap";
 import CustomDropdown from "../../../common/CustomDropdown";
@@ -9,26 +8,30 @@ import CustomDropdown from "../../../common/CustomDropdown";
 // ::::::::::::::::::: ReceiptCapture CLASS ::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 class ReceiptCapture extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props)
+
+    this.locations = props.locations;
+    this.adminStore = props.adminStore;
+    this.modalStore = props.modalStore;
+
     this.state = {
       location: null,
       image: null,
-      file: "",
+      file: '',
       msgPopUp: false,
-      message: ""
+      message: ''
     };
-    this.locations = this.props.locations;
-    this.adminStore = this.props.adminStore;
   }
 
   submitForm = () => {
+    const { location, image, file } = this.state
     // If location & image are chosen by User...
-    if (this.state.location != null && this.state.image != null) {
+    if (location != null && image != null) {
       let res = this.adminStore.uploadReceipt(
         moment().format("YYYY-MM-DD"),
-        this.state.file,
-        this.state.location
+        file,
+        location
       );
       if (res) {
         this.setState({
@@ -40,10 +43,7 @@ class ReceiptCapture extends Component {
       }
     } else {
       // Display Error Pop if Location or image isn't chosen by user
-      this.setState({
-        msgPopUp: true,
-        message: "Error. Please Select Location & an Image."
-      });
+      this.modalStore.toggleModal('error', 'Please Select Location & an Image.')
       setTimeout(this.removePopUp, 1000);
     }
   };
@@ -79,6 +79,8 @@ class ReceiptCapture extends Component {
   };
 
   render() {
+    const { image, message, msgPopUp } = this.state
+
     return (
       <React.Fragment>
         <Col md="12" sm="12">
@@ -90,7 +92,7 @@ class ReceiptCapture extends Component {
                 style={{ height: "500px", background: "black" }}
                 align="center"
               >
-                {this.state.image === null && !this.state.msgPopUp && (
+                {image === null && !msgPopUp && (
                   <Input
                     type="file"
                     onChange={this.onImageAdd}
@@ -98,20 +100,20 @@ class ReceiptCapture extends Component {
                     className="form-control center"
                   />
                 )}
-                {this.state.image !== null && !this.state.msgPopUp && (
+                {image !== null && !msgPopUp && (
                   <div className="img-preview">
                     <img
                       className="temp-img"
-                      src={this.state.image}
+                      src={image}
                       alt="curr"
                     />
                     <button onClick={this.clearImg}>Clear Image</button>
                   </div>
                 )}
                 {/* Message popUp */}
-                {this.state.msgPopUp && (
+                {msgPopUp && (
                   <div className="msg-pop-up">
-                    <div>{this.state.message}</div>
+                    <div>{message}</div>
                   </div>
                 )}
               </Row>
@@ -124,10 +126,8 @@ class ReceiptCapture extends Component {
           >
             <CustomDropdown
               values={[
-                { id: "all", title: "Locations" },
-                ...this.locations.map(location => {
-                  return { id: location, title: location };
-                })
+                { id: 'all', title: 'Locations' },
+                ...this.locations.map(location => ({ id: location, title: location })),
               ]}
               onItemClick={this.setLocation}
             />
