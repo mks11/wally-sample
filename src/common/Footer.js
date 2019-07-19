@@ -87,11 +87,11 @@ class Footer extends Component {
                     <li>
                       <ul className="aw-social mt-2">
                         <li className="d-inline-block align-middle footer-fb">
-                          <a href={FACEBOOK} target="_blank">
+                          <a href={FACEBOOK} target="_blank" rel="noopener noreferrer">
                           </a>
                         </li>
                         <li className="d-inline-block align-middle footer-ig">
-                          <a href={INSTAGRAM} target="_blank">
+                          <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer">
                           </a>
                         </li>
                       </ul>

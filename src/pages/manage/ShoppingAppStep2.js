@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, Container } from 'reactstrap'
-import Title from '../common/page/Title'
-import ManageTabs from './manage/ManageTabs'
-import ShoppingAppTable from './manage/ShoppingAppTable'
-import CustomDropdown from '../common/CustomDropdown'
+import Title from '../../common/page/Title'
+import ManageTabs from './ManageTabs'
+import ShoppingAppTable from './ShoppingAppTable'
+import CustomDropdown from '../../common/CustomDropdown'
 import { Button } from 'reactstrap';
-import { connect } from '../utils'
+import { connect } from '../../utils'
 import moment from 'moment'
 
 class ShoppingAppStep2 extends Component {
@@ -23,7 +23,8 @@ class ShoppingAppStep2 extends Component {
     }
 
     this.userStore = props.store.user
-		this.adminStore = this.props.store.admin
+    this.adminStore = props.store.admin
+    this.modalStore = props.store.modal
 	}
 
 	componentDidMount = () => {
@@ -61,7 +62,10 @@ class ShoppingAppStep2 extends Component {
 		// note that if shop is not selected, location param sent will be null
     this.setState({location})
     const {timeframe} = this.state
-		this.adminStore.getUnavailableShopItems(this.userStore.getHeaderAuth(), timeframe, location)
+    this.adminStore.getUnavailableShopItems(this.userStore.getHeaderAuth(), timeframe, location)
+      .catch(() => {
+        this.modalStore.toggleModal('error')
+      })
   }
 
   render() {

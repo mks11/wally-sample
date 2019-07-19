@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ReceiptCapture from "./ReceiptCapture";
-import { API_ADMIN_GET_RECEIPTS } from "../../../config";
 import { connect } from "../../../utils";
 import { Container, Col, Row, Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -11,8 +10,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
-
-const axios = require("axios");
 
 class Receipts extends Component {
   constructor(props, context) {

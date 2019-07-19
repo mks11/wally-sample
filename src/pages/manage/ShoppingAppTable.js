@@ -17,6 +17,7 @@ class ShoppingAppTable extends Component {
     this.state = {
       productName: null,
       shopitemId: null,
+      busy: false,
     }
 
     this.step = this.props.step
@@ -27,17 +28,35 @@ class ShoppingAppTable extends Component {
   }
 
   handleSelectAvailability = async(isAvailable, shopitemId, productName) => {
-    const {location} = this.props
-    if (isAvailable) {
-      const status = 'available'
-      const user_checked = true
-      this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
-    } else {
-      this.setState({shopitemId, productName})
-      const status = 'missing'
-      this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
-      await this.adminStore.getSubInfo(shopitemId, this.timeframe, location)
-      this.modalStore.toggleMissing()
+    const { location } = this.props
+    const { busy } = this.state
+
+    if (busy) return
+    this.setState({ busy: true })
+
+
+    const status = isAvailable ? 'available' : 'missing'
+    this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), shopitemId, status, location)
+      .catch(() => {
+        this.modalStore.toggleModal('error')
+      })
+      .finally(() => {
+        this.setState({ busy: false })
+      })
+
+    if (!isAvailable) {
+      this.setState({ shopitemId, productName })
+      
+      this.adminStore.getSubInfo(shopitemId, this.timeframe, location)
+        .then((res) => {
+          res && this.modalStore.toggleMissing()
+        })
+        .catch(() => {
+          this.modalStore.toggleModal('error')
+        })
+        .finally(() => {
+          this.setState({ busy: false })
+        })
     }
   }
 
@@ -91,7 +110,8 @@ class ShoppingAppTable extends Component {
                             name="select"
                             id="yesSelect"
                             checked={this.step == '1' ? status === 'available' : (this.step == '2' ? (user_checked && status === 'available') : false)}
-                            onChange={() => this.handleSelectAvailability(true, _id)}
+                            onChange={() => this.handleSelectAvailability(false, _id, product_name, delivery_date)}
+                            // onChange={() => this.handleSelectAvailability(true, _id)}
                           />
                           <Label className="ml-sm-1" for="yesSelect" check>Yes</Label>
                         </FormGroup>

@@ -67,9 +67,14 @@ class ModalMissing extends Component {
 		selectedSubs = selectedSubs && selectedSubs.map(sub => {
 			return { ...sub, product_shop: location }
 		})
-		console.log(selectedSubs);
+		// console.log(selectedSubs);
 		this.adminStore.updateDailySubstitute(timeframe, shopitemId, selectedSubs)
-		this.modalStore.toggleMissing()
+			.then(() => {
+				this.modalStore.toggleMissing()
+			})
+			.catch(() => {
+				this.modalStore.toggleModal('error')
+			})
 	}
 
   render() {

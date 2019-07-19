@@ -18,6 +18,7 @@ import ProductModal from './ProductModal'
 import DeliveryModal from './DeliveryModal'
 import CheckoutFirstModal from './CheckoutFirstModal'
 import MainFirstModal from './MainFirstModal'
+import ModalError from './ModalError'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -36,6 +37,7 @@ const ModalRoutes = {
   delivery: DeliveryModal,
   checkoutfirst: CheckoutFirstModal,
   mainFirst: MainFirstModal,
+  error: ModalError,
 }
 
 class RootModal extends Component {

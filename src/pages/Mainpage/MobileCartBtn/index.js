@@ -17,9 +17,13 @@ class MobileCartBtn extends Component {
 
   componentDidUpdate(_, prevState) {
     const $ = window.$
-    const footerPos = $('.aw-footer').position().top - $('.aw-footer').outerHeight() - 150
-    if (prevState.footerPos !== footerPos) {
-      this.setState({ footerPos })
+    const awFooter = $('.aw-footer')
+    
+    if (awFooter && awFooter.hasOwnProperty('position')) {
+      const footerPos = awFooter.position().top - awFooter.outerHeight() - 150
+      if (prevState.footerPos !== footerPos) {
+        this.setState({ footerPos })
+      }
     }
   }
 
