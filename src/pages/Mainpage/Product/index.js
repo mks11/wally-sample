@@ -32,7 +32,7 @@ const Product = props => {
 
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
-      <img src={`${PRODUCT_BASE_URL}${product.product_id}/${product.image_refs[0]}`} alt="" />
+      <img src={`${PRODUCT_BASE_URL}${product.image_refs[0]}`} alt="" />
       <div className="row product-detail">
         <div className="col-3 product-price">
           {formatMoney(price)}

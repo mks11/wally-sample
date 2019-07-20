@@ -290,7 +290,7 @@ class ProductModal extends Component {
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
                   {activeProduct.image_refs.map((item, key) => (
-                    <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + activeProduct.product_id + "/" + item} alt="" /></div>
+                    <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
                 </div>
               </div>
@@ -298,7 +298,7 @@ class ProductModal extends Component {
 
             <div id="product-carousel" ref={el => this.prod = el}>
               {activeProduct.image_refs.map((item, key) => (
-                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + activeProduct.product_id + "/" + item} alt="" /></div>
+                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
               ))}
             </div>
           </Col>
