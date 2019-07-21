@@ -225,7 +225,8 @@ class ProductModal extends Component {
 
     if (!activeProduct) return null
 
-    let shipMessage = "Shipped and sold by The Wally Shop."
+    let shipMessage = `Fulfilled by The Wally Shop.`
+    if (activeProduct.available_inventory[0]) shipMessage = `Sold by ${activeProduct.available_inventory[0].shop}, fulfilled by The Wally Shop`;
     if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
