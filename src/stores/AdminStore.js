@@ -260,7 +260,7 @@ class AdminStore {
     return data;
   }
 
-  async updateRoutePlacement(id, data, options) {
+  async updateRoutePlacement(id, params, options) {
     const { data } = await axios.patch(
       `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/${id}/placement`,
       params,
