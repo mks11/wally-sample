@@ -65,14 +65,7 @@ class ManageOrders extends Component {
     const { route } = this.state;
     let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
-    this.adminStore.getRouteOrders("all", timeframe, options);
-  };
-
-  loadOrders = () => {
-    const { route } = this.state;
-    let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
-    const options = this.userStore.getHeaderAuth();
-    this.adminStore.getRouteOrders("all", timeframe, options);
+    this.adminStore.getOrders("all", timeframe, options);
   };
 
   onTimeFrameSelect = timeframe => {

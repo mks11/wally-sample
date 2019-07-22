@@ -24,7 +24,8 @@ import {
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
   API_EDIT_CART_ITEM,
   API_ADMIN_GET_PURCHASED_SHOP_ITEMS,
-  API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM
+  API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM,
+  API_ADMIN_GET_ORDERS
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -244,6 +245,12 @@ class AdminStore {
   async getRouteOrders(id, timeframe, options) {
     timeframe = moment().format("YYYY-MM-DD")
     const res = await axios.get(`${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
+    this.orders = res.data;
+  }
+
+  async getOrders(timeframe, options) {
+    timeframe = moment().format("YYYY-MM-DD")
+    const res = await axios.get(`${API_ADMIN_GET_ORDERS}?timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`, options);
     this.orders = res.data;
   }
 

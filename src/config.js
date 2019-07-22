@@ -63,6 +63,7 @@ export const API_ADMIN_SET_SHOP_ITEM_STATUS = BASE_URL + "/api/admin/shopping/sh
 export const API_ADMIN_GET_ROUTES = BASE_URL + "/api/admin/routes";
 export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = BASE_URL + "/api/admin/route";
 export const API_ADMIN_GET_ORDER = BASE_URL + "/api/admin/order";
+export const API_ADMIN_GET_ORDERS = BASE_URL + "/api/admin/orders";
 export const API_ADMIN_GET_PACKAGINGS = BASE_URL + "/api/admin/packagings";
 export const API_ADMIN_PACKAGE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_COMPLETE_ORDER = BASE_URL + "/api/order";
