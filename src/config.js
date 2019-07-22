@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-export const BASE_URL = "http://localhost:4001";
+export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
+// export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
