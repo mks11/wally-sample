@@ -48,8 +48,8 @@ class ShoppingAppTable extends Component {
       this.setState({ shopitemId, productName })
       
       this.adminStore.getSubInfo(shopitemId, this.timeframe, location)
-        .then((res) => {
-          res && this.modalStore.toggleMissing()
+        .then(() => {
+          this.modalStore.toggleMissing()
         })
         .catch(() => {
           this.modalStore.toggleModal('error')
