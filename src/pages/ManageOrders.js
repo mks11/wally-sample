@@ -57,8 +57,8 @@ class ManageOrders extends Component {
 
     let timeframe = `${moment().format("YYYY-MM-DD")} 2:00-8:00PM`;
     const options = this.userStore.getHeaderAuth();
-    
-    this.adminStore.getRouteOrders("all", timeframe, options)
+
+    this.adminStore.getOrders("all", timeframe, options)
       .finally(() => {
         this.setState({ busy: false })
       })
@@ -112,7 +112,7 @@ class ManageOrders extends Component {
                       <TableRow>
                         <TableCell>Order Letter</TableCell>
                         <TableCell>Order ID</TableCell>
-                        <TableCell>Packer</TableCell>
+                        <TableCell>Status</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

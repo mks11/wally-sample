@@ -16,6 +16,7 @@ class ShopperTable extends Component {
 
     this.state = {}
     this.adminStore = this.props.store.admin
+    this.userStore = this.props.store.user
   }
 
   onEditClick = (e) => {
@@ -65,15 +66,11 @@ class ShopperTable extends Component {
               <TableCell>Location</TableCell>
               <TableCell>Product Name</TableCell>
               <TableCell align={"right"}>Quantity</TableCell>
-              <TableCell>Is Sub?</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Available</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {shopitems.sort(this.sortByStatus).map((shopitem, i) => {
-      console.log('shopitem :', shopitem);
               return (
                 <TableRow
                   key={shopitem._id}
@@ -86,14 +83,6 @@ class ShopperTable extends Component {
                   <TableCell>{shopitem.product_name}</TableCell>
                   <TableCell align="right">
                     {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : (shopitem.unit_type || shopitem.price_unit) }</TableCell>
-                  <TableCell>{shopitem.is_substitute}</TableCell>
-                  <TableCell>{shopitem.status}</TableCell>
-                  <TableCell>
-                    <StatusDropdown shopitem={shopitem} onSelect={this.onSelect.bind(this, shopitem._id)} />
-                  </TableCell>
-                  <TableCell>
-                    <Button onClick={this.onUpdateClick.bind(this, shopitem._id, shopitem.inventory_id, shopitem.product_id)}>Update</Button>
-                  </TableCell>
                 </TableRow>
               );
             })}

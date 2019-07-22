@@ -117,7 +117,7 @@ class SingleProductView extends Component {
             product_missing_reason: missingReason,
         }
         if (isEdit) {
-            this.adminStore.updatePurchasedShopItem(this.props.timeframe, id, data, this.props.toggle, this.props.selectedIndex)
+            this.adminStore.updateShopItem(this.props.timeframe, id, data, this.props.toggle, this.props.selectedIndex)
             if (substitute) this.setState({subProductName: product.product_name})
             this.setState({isEdit: false})
         } else {
@@ -385,4 +385,4 @@ class SingleProductView extends Component {
     }
 }
 
-export default connect("store")(SingleProductView);
+export default connect("store")(SingleProductViewReceipt);

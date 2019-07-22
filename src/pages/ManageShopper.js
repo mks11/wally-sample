@@ -57,7 +57,7 @@ class ManageShopper extends Component {
   loadShopItems = (location) => {
     const {timeframe} = this.state
     this.adminStore.clearStoreShopItems()
-    this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getPurchasedShopItems(this.userStore.getHeaderAuth(), timeframe, location)
     this.adminStore.getShopItemsFarms(timeframe, location)
     this.setState({location})
   }
@@ -68,7 +68,7 @@ class ManageShopper extends Component {
     } else {
       const {timeframe, location} = this.state
       this.setState({isProductView: false, selectedProduct: {}, selectedIndex: null})
-      this.adminStore.getShopItems(timeframe, location)
+      this.adminStore.getPurchasedShopItems(this.userStore.getHeaderAuth(), timeframe, location)
       this.adminStore.getShopItemsFarms(timeframe, location)
       this.adminStore.getShopLocations(timeframe)
       this.adminStore.loading = false
@@ -108,7 +108,7 @@ class ManageShopper extends Component {
   handleReloadClick = (e) => {
     e.preventDefault()
     const { timeframe, location } = this.state
-    this.adminStore.getShopItems(timeframe, location)
+    this.adminStore.getPurchasedShopItems(this.userStore.getHeaderAuth(), timeframe, location)
   }
 
   render() {
