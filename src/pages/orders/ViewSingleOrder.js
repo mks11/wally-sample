@@ -181,26 +181,11 @@ class ViewSingleOrder extends Component {
           <Table className={"packaging-table"}>
             <TableBody>
               {selectedOrder.packaging_used.map((packaging, i) =>
-                packaging.type === "Milk Bottle" ||
-                packaging.type === "Stasher Bag" ||
-                packaging.type === "FBW Packaging" ||
-                packaging.type === "Muslin Bag" ||
-                packaging.type === "Mesh Bag" ||
-                packaging.type === "Mason Jar" ||
-                packaging.type === "Tote Bag" ? (
+                (
                   <TableRow key={i}>
                     <TableCell>
-                      {
-                        packaging.type === "Milk Bottle" ||
-                        packaging.type === "Stasher Bag" ||
-                        packaging.type === "FBW Packaging" ||
-                        packaging.type === "Muslin Bag" ||
-                        packaging.type === "Mesh Bag" ||
-                        packaging.type === "Mason Jar" ||
-                        packaging.type === "Tote Bag" ? (
+                      {(
                         <strong>{packaging.type}</strong>
-                      ) : (
-                        <strong className="hide" style={hideRow} />
                       )}
                     </TableCell>
                     <TableCell>
@@ -212,12 +197,6 @@ class ViewSingleOrder extends Component {
                           this.onChangePackaging(e, packaging.type)
                         }
                       />
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  <TableRow style={hideRow} key={i}>
-                    <TableCell>
-                      <Input />
                     </TableCell>
                   </TableRow>
                 )

@@ -116,7 +116,7 @@ class ManageOrders extends Component {
                       <TableRow>
                         <TableCell>Order Letter</TableCell>
                         <TableCell>Order ID</TableCell>
-                        <TableCell>Packer</TableCell>
+                        <TableCell>Status</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
