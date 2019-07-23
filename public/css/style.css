@@ -1533,7 +1533,7 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   margin-top:20px;
 }
 
-.product-price{
+.product-price {
   color: #6060a8
 }
 .product-packaged {
@@ -1542,9 +1542,15 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 .product-packaged.out-of-stock {
   color: red;
 }
-.product-weight{text-align: right;}
+.product-packaged.unavailable {
+  color: #6060a8
+}
 
-.product-modal-left{
+.product-weight {
+  text-align: right;
+}
+
+.product-modal-left {
   border-right: 1px solid #ececec
 }
 
@@ -1565,7 +1571,10 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 
 /* New Style */
-.header-wrap{/*position: relative;*/z-index:1030;}
+.header-wrap {
+  /*position: relative;*/
+  z-index:1030;
+}
 
 .card1{border: 1px solid #ececec;margin-bottom: 30px;}
 .card1.error{border: 2px solid red;}

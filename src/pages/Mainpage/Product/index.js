@@ -47,7 +47,7 @@ const Product = props => {
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
       {
       }
-      <div className={`product-packaged ${(outOfStock || unavailable) ? 'out-of-stock' : ''}`}>
+      <div className={`product-packaged ${(outOfStock) ? 'out-of-stock' : (unavailable ? 'unavailable' : '')}`}>
         {
           outOfStock
             ? 'Out of stock'
