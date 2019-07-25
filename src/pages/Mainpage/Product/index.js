@@ -32,7 +32,7 @@ const Product = props => {
 
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
-      <img src={`${PRODUCT_BASE_URL}${product.product_id}/${product.image_refs[0]}`} alt="" />
+      <img src={`${PRODUCT_BASE_URL}${product.image_refs[0]}`} alt="" />
       <div className="row product-detail">
         <div className="col-3 product-price">
           {formatMoney(price)}
@@ -47,7 +47,7 @@ const Product = props => {
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
       {
       }
-      <div className={`product-packaged ${(outOfStock || unavailable) ? 'out-of-stock' : ''}`}>
+      <div className={`product-packaged ${(outOfStock) ? 'out-of-stock' : (unavailable ? 'unavailable' : '')}`}>
         {
           outOfStock
             ? 'Out of stock'

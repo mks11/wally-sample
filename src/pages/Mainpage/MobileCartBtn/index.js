@@ -12,7 +12,7 @@ class MobileCartBtn extends Component {
 
   componentDidMount() {
     const $ = window.$
-    $(window).bind('scroll', this.handleHideBtn)
+    // $(window).bind('scroll', this.handleHideBtn)
   }
 
   componentDidUpdate(_, prevState) {

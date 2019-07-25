@@ -225,7 +225,8 @@ class ProductModal extends Component {
 
     if (!activeProduct) return null
 
-    let shipMessage = "Shipped and sold by The Wally Shop."
+    let shipMessage = `Fulfilled by The Wally Shop.`
+    if (activeProduct.available_inventory[0]) shipMessage = `Sold by ${activeProduct.available_inventory[0].shop}, fulfilled by The Wally Shop`;
     if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
@@ -290,7 +291,7 @@ class ProductModal extends Component {
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
                   {activeProduct.image_refs.map((item, key) => (
-                    <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + activeProduct.product_id + "/" + item} alt="" /></div>
+                    <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
                 </div>
               </div>
@@ -298,7 +299,7 @@ class ProductModal extends Component {
 
             <div id="product-carousel" ref={el => this.prod = el}>
               {activeProduct.image_refs.map((item, key) => (
-                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + activeProduct.product_id + "/" + item} alt="" /></div>
+                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
               ))}
             </div>
           </Col>

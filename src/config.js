@@ -1,4 +1,4 @@
-export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
+export const BASE_URL = "https://the-wally-shop.herokuapp.com";
 // export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
@@ -56,7 +56,6 @@ export const API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM = BASE_URL + "/api/admin/shopp
 export const API_ADMIN_POST_RECEIPT = BASE_URL + "/api/admin/shopping/receipt";
 export const API_ADMIN_GET_RECEIPTS = BASE_URL + "/api/admin/shopping/receipt";
 
-
 export const API_ADMIN_CREATE_COURIER = BASE_URL + "/api/admin/courier";
 export const API_ADMIN_UPDATE_SHOP_ITEMS_WAREHOUSE_LOCATIONS = BASE_URL + "/api/admin/fulfillment/shopitem/warehouse-location";
 export const API_ADMIN_GET_LOCATION_STATUS = BASE_URL + "/api/admin/shopping/location/status";
@@ -96,4 +95,4 @@ export const APP_URL = "https://thewallyshop.co";
 export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4";
 export const FB_KEY = "1634254033370820";
 
-export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images/";
+export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-flat/";
