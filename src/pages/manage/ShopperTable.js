@@ -74,7 +74,7 @@ class ShopperTable extends Component {
               return (
                 <TableRow
                   key={shopitem._id}
-                  className={`row ${shopitem.status} `}
+                  className={`row ${shopitem.completed ? 'purchased' : 'available'} `}
                   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
                   <TableCell component="th" scope="row" padding={"dense"}>
