@@ -21,23 +21,28 @@ class ManageProducts extends Component {
       loading: false
     }
     this.userStore = props.store.user
-    this.adminStore = this.props.store.admin
+    this.adminStore = props.store.admin
   }
   
   componentDidMount() {
-    console.log('user type', this.userStore.user.type)
     this.userStore.getStatus(true)
-      .then(status => {
+      .then((status) => {
         const user = this.userStore.user
-          if (!status || !['admin', 'super-admin'].includes(user.type) ) {
-            this.props.store.routing.push('/')
-          } 
+        if (
+          status &&
+          (user.type === 'admin' ||
+          user.type === 'super-admin' ||
+          user.type === 'tws-ops')
+        ) {
+          this.onDownloadProductListingClick()
+          this.onDownloadProductCategoriesClick()
+        } else {
+          this.props.store.routing.push('/')
+        }
       })
-      .catch( error => {
+      .catch((error) => {
         this.props.store.routing.push('/')
       })
-    this.onDownloadProductListingClick()
-    this.onDownloadProductCategoriesClick()
   }
 
   onDownloadProductListingClick() {
@@ -220,7 +225,6 @@ class ManageProducts extends Component {
   render () {
     if (!this.userStore.user) return null
     const { productListData, categoryListData, errors, loading } = this.state
-    console.log(this.state.file)
 
     return (
       <div>
