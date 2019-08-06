@@ -1,6 +1,7 @@
 import React from 'react'
 import { PRODUCT_BASE_URL } from 'config'
 import { formatMoney } from 'utils'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const Product = props => {
   const { product, onProductClick, deliveryTimes } = props
@@ -32,7 +33,12 @@ const Product = props => {
 
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
-      <img src={`${PRODUCT_BASE_URL}${product.image_refs[0]}`} alt="" />
+      <LazyLoadImage
+        alt={product.product_name || product.name}
+        height={180}
+        src={`${PRODUCT_BASE_URL}${product.image_refs[0]}`}
+        width={200}
+      />
       <div className="row product-detail">
         <div className="col-3 product-price">
           {formatMoney(price)}
