@@ -59,6 +59,7 @@ class ProductStore {
   }
 
   async getProductDisplayed(id, delivery) {
+    this.main_display = []
     this.fetch = true
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED
