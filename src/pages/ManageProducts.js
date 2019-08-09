@@ -22,6 +22,7 @@ class ManageProducts extends Component {
     }
     this.userStore = props.store.user
     this.adminStore = props.store.admin
+    this.modalStore = props.store.modal;
   }
   
   componentDidMount() {
@@ -71,109 +72,22 @@ class ManageProducts extends Component {
       this.setState({ errors: [], loading: true})
       const formData = new FormData();
       formData.append('file', this.state.file[0])
-      let fbw = true, type="new", fileName = this.state.file[0].name
-      axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
-        .then( res => { 
-        this.setState({
-          loading: false,
-          file: null
-         })
-      }).catch(error => {
-        this.setState({
-          errors: this.state.errors.concat(error.response.data),
-          file: null
+      let fileName = this.state.file[0].name
+      this.adminStore.uploadSelection(fileName, formData)
+        .catch(() => {
+          this.modalStore.toggleModal('error')
         })
-      })
+        .finally(() => {
+          this.setState({
+            loading: false,
+            file: null
+          })
+        })
     } else {
         this.setState({
           errors: this.state.errors.concat("Please add a CSV file."),
           loading: false,
         })
-    }
-  }
-
-  onUploadExistingFBW = (event) => {
-    event.preventDefault();
-    if(this.isFormValid(this.state)) {
-      this.setState({ errors: [], loading: true})
-      const formData = new FormData(); 
-      formData.append('file', this.state.file[0])
-      let fbw = true, type="existing", fileName = this.state.file[0].name
-      console.log(this.state.file[0]) 
-      axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
-        .then( res => { 
-        console.log(res)
-        this.setState({
-          loading: false,
-          file: null
-         })
-      }).catch(error => {
-        this.setState({
-          errors: this.state.errors.concat(error.response.data),
-          loading: false,
-         })
-      })
-    } else {
-      this.setState({
-        errors: this.state.errors.concat("Please add a CSV file."),
-      })
-    }
-  }
-
-  onUploadNewNonFBW = (event) => {
-    event.preventDefault();
-    if(this.isFormValid(this.state)) {
-      this.setState({ errors: [], loading: true})
-      const formData = new FormData(); 
-      formData.append('file', this.state.file[0])
-      let fbw = false, type="new", fileName = this.state.file[0].name
-      console.log(this.state.file[0]) 
-      axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
-        .then( res => { 
-        console.log(res)
-        this.setState({
-          loading: false,
-          file: null
-         })
-      }).catch(error => {
-        this.setState({
-          errors: this.state.errors.concat(error.response.data),
-          loading: false,
-          file: null
-         })
-      })
-    } else {
-      this.setState({
-        errors: this.state.errors.concat("Please add a CSV file.")
-      })
-    }
-  }
-
-  onUploadExistingNonFBW = (event) => {
-    event.preventDefault();
-    if(this.isFormValid(this.state)) {
-      const formData = new FormData(); 
-      formData.append('file', this.state.file[0])
-      let fbw = false, type="existing", fileName = this.state.file[0].name
-      console.log(this.state.file[0]) 
-      axios.post(`http://localhost:4001/api/admin/products/selectionupload?fbw=${fbw}&type=${type}&filename=${fileName}`, formData, { headers : { 'Content-Type': 'multipart/form-data'}})
-        .then( res => { 
-        console.log(res)
-        this.setState({
-          loading: false,
-          file: null
-         })
-      }).catch(error => {
-        this.setState({
-          errors: this.state.errors.concat(error.response.data),
-          loading: false,
-          file: null
-         })
-      })
-    } else {
-      this.setState({
-        errors: this.state.errors.concat("Please add a CSV file.")
-      })
     }
   }
 
@@ -260,27 +174,10 @@ class ManageProducts extends Component {
               <div className="product-selection-button">
                 <form onSubmit={this.onUploadNewFBW} className={this.handleInputError(errors, 'file')} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload New FBW</Button>
+                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Products</Button>
                 </form>
               </div>
-              <div className="product-selection-button">
-                <form onSubmit={this.onUploadExistingFBW} className={this.handleInputError(errors, 'file')} >
-                  <input type="file" id="file" onChange={this.handleFileUpload} />
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Existing FBW</Button>
-                </form>
-              </div>
-              <div className="product-selection-button">
-                <form onSubmit={this.onUploadNewNonFBW} >
-                  <input type="file" id="file" onChange={this.handleFileUpload}  className={this.handleInputError(errors, 'file')}/>
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload New Non-FBW</Button>
-                </form>
-              </div>
-              <div className="product-selection-button">
-                <form onSubmit={this.onUploadExistingNonFBW} >
-                  <input type="file" id="file" onChange={this.handleFileUpload} className={this.handleInputError(errors, 'file')}/>
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Existing Non-FBW</Button>
-                </form>
-              </div>
+              
               <div className="product-selection-upload-image-button">
                 <form onSubmit={this.onUploadProductImages} >
                   <input type="file" id="file" onChange={this.handleFileUpload} className={this.handleInputError(errors, 'file')} />

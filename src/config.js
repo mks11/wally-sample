@@ -71,6 +71,7 @@ export const API_ADMIN_COMPLETE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_POST_BLOG_POST = BASE_URL + "/api/admin/blog";
 export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD = BASE_URL + "/api/admin/products/currentselectioncsv";
 export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/products/currentcategoriescsv";
+export const API_ADMIN_UPLOAD_SELECTION = BASE_URL + "/api/admin/products/selectionupload";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";

@@ -26,7 +26,8 @@ import {
   API_ADMIN_CREATE_COURIER,
   API_ADMIN_GET_PURCHASED_SHOP_ITEMS,
   API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM,
-  API_ADMIN_GET_ORDERS
+  API_ADMIN_GET_ORDERS,
+  API_ADMIN_UPLOAD_SELECTION
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -170,6 +171,13 @@ class AdminStore {
 
   async getProductSelectionDownload() {
     await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`);
+  }
+
+  async uploadSelection(filename, formData) {
+    const res = await axios.post(`${API_ADMIN_UPLOAD_SELECTION}?filename=${filename}`,
+      formData,
+      { headers : { 'Content-Type': 'multipart/form-data' } }
+    );
   }
 
   async updateShopItem(
