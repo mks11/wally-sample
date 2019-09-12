@@ -145,6 +145,7 @@ class TopNav extends Component {
                               <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
                               <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
                               <li><a onClick={this.handleNavMobile.bind(this, '/manage/products')}>Products App</a></li>
+                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shipping')}>Shipping</a></li>
                               <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                             </React.Fragment>
                             //
@@ -241,6 +242,7 @@ class TopNav extends Component {
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/products" className="dropdown-item">Products App</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shipping" className="dropdown-item">Shipping</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>

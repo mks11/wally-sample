@@ -32,6 +32,11 @@ const manageTabsRouter = [
     id: 'customerservice',
     title: 'Customer Service',
   },
+  {
+    id: 'shipping',
+    title: 'Shipping',
+    linkTo: '/manage/shipping'
+  },
 ]
 
 const Tab = ({ item, page }) => {
