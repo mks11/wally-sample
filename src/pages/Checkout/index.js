@@ -27,6 +27,7 @@ import PackagingSummary from "./PackagingSummary";
 import TippingSummary from "./TippingSummary";
 import PromoSummary from "./PromoSummary";
 import Returns from "./Returns";
+import ShippingOption from "../../common/ShippingOption";
 
 class Checkout extends Component {
   constructor(props) {
@@ -587,8 +588,18 @@ class Checkout extends Component {
                   />
                 )}
 
-                {this.userStore.user && (
+                {this.userStore.user && !is_ecomm && (
                   <DeliveryTimeOptions
+                    lock={false}
+                    data={this.state.deliveryTimes}
+                    selected={this.userStore.selectedDeliveryTime}
+                    onSelectTime={this.handleSelectTime}
+                    title={true}
+                    user={this.userStore}
+                  />
+                )}
+                {this.userStore.user && is_ecomm && (
+                  <ShippingOption
                     lock={false}
                     data={this.state.deliveryTimes}
                     selected={this.userStore.selectedDeliveryTime}

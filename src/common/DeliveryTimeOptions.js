@@ -9,16 +9,6 @@ class DeliveryTimeOptions extends Component {
     data: []
   };
 
-  componentDidMount() {
-    if (this.props.user.is_ecomm) {
-      this.setState({
-        confirmHome: true,
-        selected: "UPS Ground (1-5 Days)"
-      });
-      //this.props.onSelectTime(null, null, null);
-    }
-  }
-
   toggleTimeDropdown(e) {
     if (this.props.lock) {
       return;
@@ -30,7 +20,6 @@ class DeliveryTimeOptions extends Component {
     if (!this.state.timeDropdown) {
       return;
     }
-
     this.setState({ timeDropdown: false });
   }
 
@@ -43,7 +32,6 @@ class DeliveryTimeOptions extends Component {
       lock: true,
       timeDropdown: false
     });
-
     this.props.onSelectTime({ day, date, time });
   }
 
@@ -65,7 +53,6 @@ class DeliveryTimeOptions extends Component {
     const selected = this.props.selected
       ? this.props.selected
       : this.state.selected;
-    const is_ecomm = this.props.user.is_ecomm;
     const showTitle = this.props.title !== null ? this.props.title : true;
     let dropdownButtonClass = "btn btn-dropdown-outline dropdown-toggle";
     if (!dropdown) {
@@ -76,7 +63,7 @@ class DeliveryTimeOptions extends Component {
       <React.Fragment>
         {showTitle && (
           <h3 className="m-0 mb-3 p-r">
-            {is_ecomm ? "Shipping Option" : "Time"}
+            {showTitle}
             {lock && editable && (
               <a onClick={this.unlock} className="address-rbtn link-blue">
                 CHANGE
@@ -93,76 +80,53 @@ class DeliveryTimeOptions extends Component {
               data-toggle="dropdown"
               aria-expanded="true"
             >
-              {!is_ecomm &&
-                (selected ? (
-                  <React.Fragment>
-                    {selected.day}, {selected.time}
-                  </React.Fragment>
-                ) : (
-                  "Choose delivery date and time"
-                ))}
-              {is_ecomm && (
-                <React.Fragment>UPS Ground (1-5 Days)</React.Fragment>
+              {selected ? (
+                <React.Fragment>
+                  {selected.day}, {selected.time}
+                </React.Fragment>
+              ) : (
+                "Choose delivery date and time"
               )}
             </button>
             <div className={timeDropdownClass}>
-              {is_ecomm && (
-                <div
-                  className="dropdown-item"
-                  onClick={e => this.toggleTimeDropdown()}
-                >
-                  <div className="custom-control custom-radio">
-                    <input
-                      type="radio"
-                      name="timeRadio"
-                      checked={this.state.selected === "UPS Ground (1-5 Days)"}
-                      className="custom-control-input"
-                    />
-                    <label className="custom-control-label">
-                      {this.state.selected}
-                    </label>
-                  </div>
-                </div>
-              )}
-              {!is_ecomm &&
-                data.map((items, key) => (
-                  <React.Fragment key={key}>
-                    <h6 className="dropdown-header">{items.day}</h6>
-                    {items.data.map((item, key2) => (
-                      <div
-                        className="dropdown-item"
-                        key={key2}
-                        onClick={e =>
-                          this.handleChangeTime(
-                            items.day,
-                            item.time,
-                            item.date,
-                            item.availability
-                          )
-                        }
-                      >
-                        <div className="custom-control custom-radio">
-                          <input
-                            checked={
-                              this.state.selected &&
-                              this.state.selected.date === item.date &&
-                              this.state.selected.time === item.time
-                            }
-                            type="radio"
-                            name="timeRadio"
-                            className="custom-control-input"
-                          />
-                          <label className="custom-control-label">
-                            {item.time}{" "}
-                            {item.availability && (
-                              <span className="text-muted">Not Available</span>
-                            )}
-                          </label>
-                        </div>
+              {data.map((items, key) => (
+                <React.Fragment key={key}>
+                  <h6 className="dropdown-header">{items.day}</h6>
+                  {items.data.map((item, key2) => (
+                    <div
+                      className="dropdown-item"
+                      key={key2}
+                      onClick={e =>
+                        this.handleChangeTime(
+                          items.day,
+                          item.time,
+                          item.date,
+                          item.availability
+                        )
+                      }
+                    >
+                      <div className="custom-control custom-radio">
+                        <input
+                          checked={
+                            this.state.selected &&
+                            this.state.selected.date === item.date &&
+                            this.state.selected.time === item.time
+                          }
+                          type="radio"
+                          name="timeRadio"
+                          className="custom-control-input"
+                        />
+                        <label className="custom-control-label">
+                          {item.time}{" "}
+                          {item.availability && (
+                            <span className="text-muted">Not Available</span>
+                          )}
+                        </label>
                       </div>
-                    ))}
-                  </React.Fragment>
-                ))}
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
             </div>
           </ClickOutside>
         </div>
