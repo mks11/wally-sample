@@ -8,11 +8,13 @@ import ZipStore from './ZipStore'
 import ContentStore from './ContentStore'
 import HelpStore from './HelpStore'
 import AdminStore from './AdminStore'
+import PackagingUnitStore from "./PackagingUnitStore";
 
 const store =  {
   ui: UiStore,
   content: ContentStore,
   product: ProductStore,
+  packagingUnit: PackagingUnitStore,
   modal: ModalStore,
   user: UserStore,
   zip: ZipStore,

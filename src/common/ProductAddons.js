@@ -35,7 +35,7 @@ class Addons extends PureComponent {
   toggleInfoAddon = () => {
     this.setState({ popup: !this.state.popup })
   }
-  
+
   render () {
     const {
       addons,
@@ -70,7 +70,7 @@ class Addons extends PureComponent {
             </Input>
           </Col>
           <Col style={{maxWidth: '140px'}} xs="5">
-          <div><strong>Choose your quantity</strong></div>
+            <div><strong>Choose your quantity</strong></div>
             <Input type="select" value={quantityAddon} onChange={this.handleQuantityAddon}>
               {
                 [...Array(6).keys()].map(i =>
