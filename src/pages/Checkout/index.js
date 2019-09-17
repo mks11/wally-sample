@@ -586,7 +586,7 @@ class Checkout extends Component {
                     onUnlock={this.handleUnlockAddress}
                   />
                 )}
-                {/* Also Here */}
+
                 {this.userStore.user && (
                   <DeliveryTimeOptions
                     lock={false}
@@ -638,11 +638,13 @@ class Checkout extends Component {
                   placeholder="Any allergies you want us to know about?"
                   onSubmit={this.handleAllergyNotesSubmit}
                 />
-                <Returns
-                  title="Returns"
-                  default={this.userStore.pickup_notes || null}
-                  onReturnChange={this.handleReturnSet}
-                />
+                {is_ecomm && (
+                  <Returns
+                    title="Returns"
+                    default={this.userStore.pickup_notes || null}
+                    onReturnChange={this.handleReturnSet}
+                  />
+                )}
               </div>
             </div>
             <div className="">
