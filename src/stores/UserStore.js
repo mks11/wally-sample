@@ -31,7 +31,7 @@ class UserStore {
   addressModal = false;
   addressModalOpen = false;
   activeAddress = null;
-  is_ecomm = false;
+  is_ecomm = true;
   pickup_notes = "Leave on Back Steps";
 
   paymentModal = false;

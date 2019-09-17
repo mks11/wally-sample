@@ -13,7 +13,6 @@ class Returns extends Component {
   }
 
   componentDidMount() {
-    const { onSubmit } = this.props;
     if (this.props.default) {
       this.setState({
         confirmReturn: true,

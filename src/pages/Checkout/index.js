@@ -731,7 +731,7 @@ class Checkout extends Component {
                           value={formatMoney(order.service_amount / 100)}
                         />
                       )}
-                      {/* This is Milestone 1.a section */}
+
                       {order.delivery_amount === 0 ? null : (
                         <div className="summary">
                           <span>Delivery fee</span>
