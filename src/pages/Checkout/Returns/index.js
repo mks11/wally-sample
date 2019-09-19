@@ -64,8 +64,7 @@ class Returns extends Component {
       "Downstairs",
       "Guard House",
       "Third party",
-      "Warehouse",
-      "No Preference"
+      "Warehouse"
     ];
     if (this.props.default) {
       pickupLocations.unshift(this.props.default);

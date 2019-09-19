@@ -32,7 +32,7 @@ class UserStore {
   addressModalOpen = false;
   activeAddress = null;
   is_ecomm = true;
-  pickup_notes = "Leave on Back Steps";
+  pickup_notes = "Front Door";
 
   paymentModal = false;
   paymentModalOpen = false;
