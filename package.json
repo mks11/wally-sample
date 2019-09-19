@@ -61,6 +61,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "cross-env": "^5.2.0"
   },
   "browserslist": [
