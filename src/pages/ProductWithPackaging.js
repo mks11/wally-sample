@@ -220,10 +220,10 @@ class ProductWithPackaging extends Component {
   }
 
   handlePackagingChange = value => {
-    const { product } = this.props.store
+    const product = this.state.product
     this.setState({ packagingType: value.type })
-    let idx = product.product.packaging_id.map(function(i) { return i.toString(); }).indexOf(value._id);
-    let vol = product.product.packaging_vol[idx];
+    let idx = product.packaging_id.map(function(i) { return i.toString(); }).indexOf(value._id);
+    let vol = product.packaging_vol[idx];
     this.setState({ priceMultiplier: vol })
   }
 
