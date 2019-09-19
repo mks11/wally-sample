@@ -22,3 +22,6 @@ yarn-error.log*
 
 build.zip
 .idea
+
+package-lock.json
+yarn.lock
