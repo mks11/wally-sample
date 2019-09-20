@@ -143,7 +143,7 @@ class Checkout extends Component {
   loadData() {
     let dataOrder;
     const deliveryData = this.userStore.getDeliveryParams();
-    const address_id = this.userStore.selectedDeliveryAddress.address_id;
+    const address_id = this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : "";
     const tip = this.parseAppliedTip();
     this.checkoutStore
       .getOrderSummary(
@@ -186,7 +186,7 @@ class Checkout extends Component {
   updateData() {
     const deliveryData = this.userStore.getDeliveryParams();
     const tip = this.parseAppliedTip();
-    const address_id = this.userStore.selectedDeliveryAddress.address_id;
+    const address_id = this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : "";
     this.checkoutStore
       .getOrderSummary(
         this.userStore.getHeaderAuth(),
@@ -331,7 +331,7 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.userStore.selectedDeliveryTime && !this.userStore.is_ecomm) {
+    if (!this.userStore.selectedDeliveryTime && !this.userStore.user.is_ecomm) {
       this.setState({
         invalidText: "Please select delivery time",
         placeOrderRequest: false
@@ -339,7 +339,7 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.state.confirmHome && !this.userStore.is_ecomm) {
+    if (!this.state.confirmHome && !this.userStore.user.is_ecomm) {
       this.setState({
         invalidText: "Please confirm that you will be home",
         placeOrderRequest: false,
@@ -347,7 +347,7 @@ class Checkout extends Component {
       });
       return;
     }
-    if (!this.state.lockPayment && !this.userStore.is_ecomm) {
+    if (!this.state.lockPayment && !this.userStore.user.is_ecomm) {
       this.setState({
         invalidText: "Please select payment",
         placeOrderRequest: false
@@ -356,7 +356,7 @@ class Checkout extends Component {
     }
     logEvent({ category: "Checkout", action: "ConfirmCheckout" });
     let deliveryTime;
-    if (!this.userStore.is_ecomm) {
+    if (!this.userStore.user.is_ecomm) {
       deliveryTime =
         this.userStore.selectedDeliveryTime.date +
         " " +
@@ -546,7 +546,7 @@ class Checkout extends Component {
       : 0;
 
     let buttonPlaceOrderClass = "btn btn-main";
-    const is_ecomm = this.userStore.is_ecomm;
+    const is_ecomm = this.userStore.user.is_ecomm;
     if (
       this.userStore.selectedDeliveryAddress &&
       this.state.lockPayment &&
@@ -736,8 +736,8 @@ class Checkout extends Component {
                         <div className="summary">
                           <span>Delivery fee</span>
                           <span>
-                            {!isNaN(order.delivery_amount) &&
-                            order.delivery === null
+                            {isNaN(order.delivery_amount) ||
+                            order.delivery_amount === null
                               ? "TBD"
                               : formatMoney(order.delivery_amount / 100)}
                           </span>

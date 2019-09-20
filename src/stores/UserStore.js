@@ -31,8 +31,6 @@ class UserStore {
   addressModal = false;
   addressModalOpen = false;
   activeAddress = null;
-  is_ecomm = true;
-  pickup_notes = "Front Door";
 
   paymentModal = false;
   paymentModalOpen = false;
