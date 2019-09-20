@@ -28,6 +28,8 @@ import ManageShopper from "./pages/ManageShopper";
 import ManagePackaging from "./pages/ManagePackaging";
 import ManageDelivery from "./pages/ManageDelivery";
 import ManageBlog from "./pages/ManageBlog";
+import ManageShipping from "./pages/ManageShipping";
+import ManagePrinting from "./pages/ManagePrinting";
 import ManageProducts from "./pages/ManageProducts";
 import ShoppingAppStep1 from "./pages/manage/ShoppingAppStep1";
 import ShoppingAppStep2 from "./pages/manage/ShoppingAppStep2";
@@ -40,6 +42,8 @@ import CourierRouting from "./pages/courier/CourierRouting";
 export default (
   <Fragment>
     <Switch>
+      <Route exact path="/manage/printing" component={ManagePrinting} />
+      <Route exact path="/manage/shipping" component={ManageShipping} />
       <Route exact path="/manage/shopper" component={ManageShopper} />
       <Route exact path="/manage/packaging" component={ManagePackaging} />
       <Route exact path="/manage/delivery" component={ManageDelivery} />
