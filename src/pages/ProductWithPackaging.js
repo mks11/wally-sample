@@ -14,6 +14,7 @@ import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelect from '../common/QuantitySelect';
 import Addons from '../common/ProductAddons';
+import Main from "../pages/Mainpage";
 
 class ProductWithPackaging extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class ProductWithPackaging extends Component {
     }]
 
     const { product: productStore, user: userStore, packagingUnit: packagingStore, modal: modalStore } = this.props.store
-    const packagingUnitId = this.props.match.params.id
+    const packagingUnitId = this.props.packagingId
     const packagingUnit = await packagingStore.getPackagingUnit(packagingUnitId)
     const deliveryParams  = userStore.getDeliveryParams()
     const product = await productStore.getProductDetails(packagingUnit.product_id, deliveryParams)
@@ -220,10 +221,10 @@ class ProductWithPackaging extends Component {
   }
 
   handlePackagingChange = value => {
-    const { product } = this.props.store
+    const { product: productStore } = this.props.store
     this.setState({ packagingType: value.type })
-    let idx = product.product.packaging_id.map(function(i) { return i.toString(); }).indexOf(value._id);
-    let vol = product.product.packaging_vol[idx];
+    let idx = this.state.product.packaging_id.map(function(i) { return i.toString(); }).indexOf(value._id);
+    let vol = this.state.product.packaging_vol[idx];
     this.setState({ priceMultiplier: vol })
   }
 
@@ -292,8 +293,7 @@ class ProductWithPackaging extends Component {
     const packaging_description = packaging ? packaging.description : null 
 
     return (
-      <div>
-        <div className="product-modal-wrap">
+        <div className={"container"}>
           <Row>
             <Col sm="6">
               <div className="row mb-3">
@@ -463,7 +463,6 @@ class ProductWithPackaging extends Component {
             </Col>
           </Row>
         </div>
-      </div>
     )
   }
 }

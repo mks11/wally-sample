@@ -15,6 +15,7 @@ import ProductTop from './ProductTop'
 import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
+import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
 
@@ -340,8 +341,12 @@ class Mainpage extends Component {
                         </div>
                       </div>
                   ) : (
-                    <div className="col-md-10 col-sm-8">
+
+                      <div className="col-md-10 col-sm-8">
                       <div className="product-content-right">
+                        { this.props.location.pathname.split('/')[1] === 'packaging' ?
+                          <ProductWithPackaging packagingId={this.props.match.params.id}/>
+                          : <React.Fragment>
                         {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
 
                         <div className="product-breadcrumb">
@@ -381,7 +386,7 @@ class Mainpage extends Component {
                                 ))
                             )
                         }
-                        
+                        </React.Fragment>}
                       </div>
                     </div>
                   )
