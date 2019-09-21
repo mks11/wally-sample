@@ -95,7 +95,8 @@ class Checkout extends Component {
       order_notes: "",
       allergy_notes: "",
       hasReturns: false,
-      pickupNotes: ""
+      pickupNotes: "",
+      isEcomm: false
     };
   }
 
@@ -137,13 +138,18 @@ class Checkout extends Component {
       } else {
         this.routing.push("/main");
       }
+      if (this.userStore.user.is_ecomm) {
+        this.setState({ isEcomm: true });
+      }
     });
   }
 
   loadData() {
     let dataOrder;
     const deliveryData = this.userStore.getDeliveryParams();
-    const address_id = this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : "";
+    const address_id = this.userStore.selectedDeliveryAddress
+      ? this.userStore.selectedDeliveryAddress.address_id
+      : "";
     const tip = this.parseAppliedTip();
     this.checkoutStore
       .getOrderSummary(
@@ -186,7 +192,9 @@ class Checkout extends Component {
   updateData() {
     const deliveryData = this.userStore.getDeliveryParams();
     const tip = this.parseAppliedTip();
-    const address_id = this.userStore.selectedDeliveryAddress ? this.userStore.selectedDeliveryAddress.address_id : "";
+    const address_id = this.userStore.selectedDeliveryAddress
+      ? this.userStore.selectedDeliveryAddress.address_id
+      : "";
     this.checkoutStore
       .getOrderSummary(
         this.userStore.getHeaderAuth(),
@@ -331,7 +339,7 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.userStore.selectedDeliveryTime && !this.userStore.user.is_ecomm) {
+    if (!this.userStore.selectedDeliveryTime && !this.state.isEcomm) {
       this.setState({
         invalidText: "Please select delivery time",
         placeOrderRequest: false
@@ -339,7 +347,7 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.state.confirmHome && !this.userStore.user.is_ecomm) {
+    if (!this.state.confirmHome && !this.state.isEcomm) {
       this.setState({
         invalidText: "Please confirm that you will be home",
         placeOrderRequest: false,
@@ -347,7 +355,7 @@ class Checkout extends Component {
       });
       return;
     }
-    if (!this.state.lockPayment && !this.userStore.user.is_ecomm) {
+    if (!this.state.lockPayment && !this.state.isEcomm) {
       this.setState({
         invalidText: "Please select payment",
         placeOrderRequest: false
@@ -356,7 +364,7 @@ class Checkout extends Component {
     }
     logEvent({ category: "Checkout", action: "ConfirmCheckout" });
     let deliveryTime;
-    if (!this.userStore.user.is_ecomm) {
+    if (!this.state.isEcomm) {
       deliveryTime =
         this.userStore.selectedDeliveryTime.date +
         " " +
@@ -546,17 +554,17 @@ class Checkout extends Component {
       : 0;
 
     let buttonPlaceOrderClass = "btn btn-main";
-    const is_ecomm = this.userStore.user.is_ecomm;
+    //const is_ecomm = this.state.isEcomm;
     if (
       this.userStore.selectedDeliveryAddress &&
       this.state.lockPayment &&
       this.userStore.selectedDeliveryTime &&
       !this.state.placeOrderRequest &&
-      !is_ecomm
+      !this.state.isEcomm
     ) {
       buttonPlaceOrderClass += " active";
     }
-    if (this.userStore.selectedDeliveryAddress && is_ecomm) {
+    if (this.userStore.selectedDeliveryAddress && this.state.isEcomm) {
       buttonPlaceOrderClass += " active";
     }
 
@@ -588,28 +596,28 @@ class Checkout extends Component {
                   />
                 )}
 
-                {this.userStore.user && !is_ecomm && (
+                {this.userStore.user && !this.state.isEcomm && (
                   <DeliveryTimeOptions
                     lock={false}
                     data={this.state.deliveryTimes}
                     selected={this.userStore.selectedDeliveryTime}
                     onSelectTime={this.handleSelectTime}
-                    title={true}
+                    title="Time"
                     user={this.userStore}
                   />
                 )}
-                {this.userStore.user && is_ecomm && (
+                {this.userStore.user && this.state.isEcomm && (
                   <ShippingOption
                     lock={false}
                     data={this.state.deliveryTimes}
                     selected={this.userStore.selectedDeliveryTime}
                     onSelectTime={this.handleSelectTime}
-                    title={true}
-                    user={this.userStore}
+                    title="Shipping Option"
+                    user={this.userStore.user}
                   />
                 )}
 
-                {!is_ecomm && (
+                {!this.state.isEcomm && (
                   <React.Fragment>
                     <h3 className="m-0 mb-3 p-r mt-5">
                       Payment
@@ -636,7 +644,7 @@ class Checkout extends Component {
                     />
                   </React.Fragment>
                 )}
-                {is_ecomm && <hr className="mt-4" />}
+                {this.state.isEcomm && <hr className="mt-4" />}
 
                 <Notes
                   title="Order Notes"
@@ -649,10 +657,10 @@ class Checkout extends Component {
                   placeholder="Any allergies you want us to know about?"
                   onSubmit={this.handleAllergyNotesSubmit}
                 />
-                {is_ecomm && (
+                {this.state.isEcomm && (
                   <Returns
                     title="Returns"
-                    default={this.userStore.pickup_notes || null}
+                    default={this.userStore.user.pickup_notes || null}
                     onReturnChange={this.handleReturnSet}
                   />
                 )}
@@ -804,7 +812,7 @@ class Checkout extends Component {
                       {!this.state.appliedPromo ? (
                         <PromoSummary onApply={this.handleCheckPromo} />
                       ) : null}
-                      {!is_ecomm && (
+                      {!this.state.isEcomm && (
                         <div className="form-group">
                           <span className="text-blue">Want to tip</span>
                           <AmountGroup
@@ -848,7 +856,7 @@ class Checkout extends Component {
                       <span>Total</span>
                       <span>{formatMoney(orderTotal)}</span>
                     </div>
-                    {!is_ecomm && (
+                    {!this.state.isEcomm && (
                       <div className="custom-control custom-checkbox mt-2 mb-3">
                         <input
                           type="checkbox"
