@@ -74,6 +74,14 @@ class ProductStore {
     return res.data
   }
 
+  async getProductDetails(id, delivery){
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    this.fetch = true
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    this.fetch = false
+    return res.data
+  }
+
   getCategories() {
     axios.get(API_GET_CATEGORIES)
       .then(resp => {
@@ -179,6 +187,7 @@ decorate(ProductStore, {
   searchCategory: action,
   searchAll: action,
   resetSearch: action,
+  getProductDetails: action
 })
 
 

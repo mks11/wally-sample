@@ -11,8 +11,8 @@ import {
 import { PRODUCT_BASE_URL } from 'config'
 import AmountGroup from 'common/AmountGroup'
 
-import QuantitySelect from './QuantitySelect'
-import Addons from './Addons'
+import QuantitySelect from '../../common/QuantitySelect'
+import Addons from './../../common/ProductAddons';
 
 class ProductModal extends Component {
   constructor(props) {

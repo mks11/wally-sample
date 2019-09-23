@@ -173,7 +173,42 @@ const getProductDetails= {
     "final_adj": false,
     "packaging_id": "XYZ123",
     "packaging_vol": 100,
-    "in_stock": true
+    "in_stock": true,
+    "std_packaging":"Mason Jar",
+    "image_refs":['/images/img-01.jpg','/images/home2_hd.jpg'],
+    "available_days":[1],
+    "farms": ["Lancaster"],
+    "available_inventory": [
+      {
+        "producer": "Wally Farm",
+        "shop": "Wally Farm Market",
+        "price": "1299",
+        "price_unit": "unit",
+        "available_times": [
+          {
+            "days_of_weeks": 0,
+            "start": "10:00:00",
+            "end": "17:00:00"
+          }
+        ]
+      }
+    ],
+    "addons":[
+      {
+        "name" :"Wally Farm",
+        "description": "Wally Farm Market"
+      }
+    ],
+    "delivery_date": "2018-09-15"
+  }
+}
+
+const getPackagingUnit = {
+  method: 'GET',
+  response: {
+    "id": "123",
+    "product_id":"1234534",
+    "packaging_type_id": "package1"
   }
 }
 
@@ -261,17 +296,17 @@ const editCurrentCart = {
   reponse: {
     "id": "123456",
     "user_id": "ABC123",
-"subtotal": 5000,
-"packaging_deposit": 120,
-"status": "open",
-"cart_items": [
-  { "product_id": "ABC123",
-    "product_name": "Milk",
-    "product_price": 500,
-    "customer_quantity": 2,
-    "total": 1000
-  } ,
-]
+    "subtotal": 5000,
+    "packaging_deposit": 120,
+    "status": "open",
+    "cart_items": [
+      { "product_id": "ABC123",
+        "product_name": "Milk",
+        "product_price": 500,
+        "customer_quantity": 2,
+        "total": 1000
+      } ,
+    ]
   }
 
 }
@@ -321,36 +356,36 @@ const getOrderSummary = {
   {
     "id": "123456",
     "user_id": "ABC123",
-"cart_id": "ABC123",
-"subtotal": 1560,
-"promo": "",
-"promo_discount": 0,
-"service_amount": 399,
-"tax_amount": 0,
-"packaging_deposit": 120,
-"applied_store_credit": 200,
-"total": 1879,
-"user_name": "Test User",
-"telephone": "3457658900",
-"street_address": "1 Test St",
-"unit": "",
-"zip": "10016",
-"city": "New York",
-"state": "NY",
-"country": "USA",
-"delivery_notes": "Leave with doorman",
-"delivery_time": "2018-07-31 18:00-19:00",
-"payment_method": "XYZABC",
-"status": "open",
-"cart_items": [
-  { "product_id": "ABC123",
-    "product_name": "Milk",
-    "product_price": 500,
-    "customer_quantity": 2,
-    "total": 1000
-  } ,
-],
-"applicable_store_credit": 150
+    "cart_id": "ABC123",
+    "subtotal": 1560,
+    "promo": "",
+    "promo_discount": 0,
+    "service_amount": 399,
+    "tax_amount": 0,
+    "packaging_deposit": 120,
+    "applied_store_credit": 200,
+    "total": 1879,
+    "user_name": "Test User",
+    "telephone": "3457658900",
+    "street_address": "1 Test St",
+    "unit": "",
+    "zip": "10016",
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "delivery_notes": "Leave with doorman",
+    "delivery_time": "2018-07-31 18:00-19:00",
+    "payment_method": "XYZABC",
+    "status": "open",
+    "cart_items": [
+      { "product_id": "ABC123",
+        "product_name": "Milk",
+        "product_price": 500,
+        "customer_quantity": 2,
+        "total": 1000
+      } ,
+    ],
+    "applicable_store_credit": 150
   }
 }
 
@@ -762,6 +797,8 @@ module.exports = {
   "/api/products/:id": getProductDisplayed,
   "/api/product/:id": getProductDetails,
 
+  "/api/packaging/:id": getPackagingUnit,
+
   "/api/cart/": getCurrentCart,
   "/api/cart/edit": editCurrentCart,
 
@@ -783,7 +820,7 @@ module.exports = {
   "/api/admin/shopping/locations": getShopLocations,
   "/api/admin/shopping/shopitems": getShopItems,
   "/api/admin/shopping/shopitems/farms": getShopItemsFarms,
-  "/api/admin/shopping/shopitem/status/:shopitem_id": setShopItemStatus,
+  // "/api/admin/shopping/shopitem/status/:shopitem_id": setShopItemStatus,
   "/api/admin/shopping/shopitem/:id": updateShopItem,
   "/api/admin/shopping/shopitem/:id/quantity": updateShopItemQuantity,
   "/api/admin/fulfillment/shopitem/warehouse-location": updateShopItemsWarehouseLocations,
