@@ -76,18 +76,27 @@ class Mainpage extends Component {
     this.checkoutStore.getCurrentCart(this.userStore.getHeaderAuth(), deliveryData).then((data) => {
       if (!datesEqual(data.delivery_date, deliveryData.date) && deliveryData.date !== null) {
         this.checkoutStore.getDeliveryTimes().then(() => {
-          this.modalStore.toggleDelivery()
+          if (!this.userStore.status || (this.userStore.status && !this.userStore.user.is_ecomm)) {
+            this.modalStore.toggleDelivery()  
+          }
         })
       }
+      
       data && this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
+      
+
 
       if (this.userStore.cameFromCartUrl) {
-        const delivery = this.userStore.getDeliveryParams()
-        if (delivery.zip && delivery.date) {
-          this.checkoutStore.updateCartItems(delivery)
-          this.userStore.cameFromCartUrl = false
-        } else {
-          this.modalStore.toggleDelivery()
+        if (!this.userStore.status || (this.userStore.status && !this.userStore.user.is_ecomm)) {
+          const delivery = this.userStore.getDeliveryParams()
+          if (delivery.zip && delivery.date) {
+            this.checkoutStore.updateCartItems(delivery)
+            this.userStore.cameFromCartUrl = false
+          } else {
+            if (!this.userStore.status || (this.userStore.status && !this.userStore.user.is_ecomm)) {
+              this.modalStore.toggleDelivery()  
+            }
+          }
         }
       }
     }).catch((e) => {
@@ -131,7 +140,7 @@ class Mainpage extends Component {
   handleCheckoutMobile() {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryTime) {
+      if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
         this.modalStore.toggleDelivery()
       } else {
         this.uiStore.toggleCartMobile(false)
@@ -180,16 +189,24 @@ class Mainpage extends Component {
   }
 
   handleProductModal = (product_id, deliveryTimes) => {
-    if (/*!this.userStore.selectedDeliveryAddress ||*/ !this.userStore.selectedDeliveryTime) {
-      logModalView('/delivery-options-window')
-      this.modalStore.toggleDelivery()
-      this.productStore.activeProductId = product_id
+    if (!this.userStore.status || (this.userStore.status && !this.userStore.user.is_ecomm)) {
+      if (!this.userStore.selectedDeliveryTime) {
+        logModalView('/delivery-options-window')
+        this.modalStore.toggleDelivery()
+        this.productStore.activeProductId = product_id
+      } else {
+        this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
+          .then((data) => {
+            this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
+            this.modalStore.toggleModal('product')
+        })
+      }
     } else {
       this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
         .then((data) => {
           this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
           this.modalStore.toggleModal('product')
-        })
+      })
     }
   }
 
