@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import {
   Input,
   InputGroup,
@@ -8,7 +8,9 @@ import TableCell from "@material-ui/core/TableCell/TableCell";
 import Switch from "react-switch";
 import MissingModal from "./MissingModal";
 import OrderErrorModal from "./OrderErrorModal";
+import QrCodeScanner from "../packaging/QRCodeScanner"
 import { BASE_URL } from "../../config";
+import {connect} from "../../utils";
 
 const textSwitch = {
   display: "flex",
@@ -23,6 +25,7 @@ const customColumnStyle = { width: 60, padding: 0 };
 class CartItemOrder extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       cart_item: props.cart_item,
       weight: "",
@@ -31,8 +34,13 @@ class CartItemOrder extends Component {
           ? props.cart_item.packaging_name
           : props.cart_item.price_unit,
       unconfirmedMissingState: null,
-      isErrorModalOpen: false
+        isErrorModalOpen: false,
+        isQRModalOpen: false
     };
+
+      this.userStore = props.store.user;
+      this.modalStore = props.store.modal;
+      this.adminStore = props.store.admin;
   }
 
   handleItemUpdate = () => {
@@ -133,6 +141,29 @@ class CartItemOrder extends Component {
     });
   };
 
+    makePatchAPICallLinkPackaging = async packagingUnitId => {
+
+      console.log('packaging unit id ', packagingUnitId);
+
+        const cartItem = this.props.cart_item;
+
+        const payload = {
+            packaging_id: packagingUnitId,
+            product_id:cartItem.product_id,
+            packaging_name: cartItem.packaging_name,
+        };
+
+        const options = this.userStore.getHeaderAuth();
+
+        this.adminStore.linkPackaging(payload, options)
+            .then(response => {
+                this.modalStore.toggleModal(response.success?'Success':'Failed')
+            })
+            .catch(() => {
+                this.modalStore.toggleModal('Error')
+            })
+    };
+
   toggleErrorModal = e => {
     e.preventDefault();
     this.setState({
@@ -147,9 +178,28 @@ class CartItemOrder extends Component {
     });
   };
 
+    toggleQRModal = e => {
+        e.preventDefault();
+        this.setState({
+            isQRModalOpen: true
+        });
+    };
+
+    toggleQROff = e => {
+        console.log("QR close", e);
+        this.setState({
+            isQRModalOpen: false
+        });
+
+
+
+
+    };
+
   render() {
     const { weight, quantityUnit, error, unconfirmedMissingState } = this.state;
     const { cart_item, order_id } = this.props;
+    console.log('cart_item ', cart_item)
     const missing = cart_item.missing;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
@@ -169,6 +219,8 @@ class CartItemOrder extends Component {
             className="react-switch"
             value={missing}
             onChange={this.toggleMissing}
+            elevation={5}
+
             checked={
               unconfirmedMissingState === null
                 ? missing
@@ -220,9 +272,23 @@ class CartItemOrder extends Component {
             )}
           </InputGroup>
         </TableCell>
+          <TableCell className="error-code">
+              <p onClick={this.toggleQRModal}>
+                  {cart_item.product_error_reason &&
+                  !cart_item.product_error_reason == "no_error"
+                      ? cart_item.product_error_reason
+                      : "Link"}
+              </p>
+              <QrCodeScanner
+                  order_id={order_id}
+                  isOpen={this.state.isQRModalOpen}
+                  onClose={this.toggleQROff}
+                  makePatchAPICallLinkPackaging={this.makePatchAPICallLinkPackaging}
+              />
+          </TableCell>
       </TableRow>
     );
   }
 }
 
-export default CartItemOrder;
+export default connect("store") (CartItemOrder);

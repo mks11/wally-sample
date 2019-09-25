@@ -209,7 +209,7 @@ class SingleOrderView extends Component {
       originalSubTotal,
       currentSubTotal
     } = this.state;
-    console.log(selectedOrder);
+    console.log('selected order', selectedOrder);
     const packagingArr = packagings.reduce((acc, packaging) => {
       const pUsed = packagingUsed.find(e => e.type === packaging.type);
       if (pUsed)
