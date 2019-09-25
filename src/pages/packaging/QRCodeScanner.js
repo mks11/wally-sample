@@ -82,24 +82,25 @@ class QRCodeScanner extends Component {
         if (data) {
 
             console.log('qr data ', data);
-            //www.thewallyshop.co/packaging/?packagingUnitId = {PackagingUnitId}
-            var parser = document.createElement('a');
-            parser.href = data;
+            //www.thewallyshop.co/packaging/{PackagingUnit.id} encode in QR url format
 
+            var domain = data.split('/');
             try {
-                var packagingUnitId = parser.search.split("=")[1];
+                var packagingUnitId = domain[domain.length - 1]
             } catch (e) {
                 console.log('link format error');
                 this.setState({result: "link format error"})
             }
 
-
-            console.log('qr packagingUnitId ', packagingUnitId);
             this.setState({
                 result: 'packaging Unit Id = ' + packagingUnitId
             });
-            this.props.onClose();
+
+            //callback to cartItemOrder with packagingUnitId
             this.props.makePatchAPICallLinkPackaging(packagingUnitId);
+
+            //auto close QR popup after request is done
+            this.props.onClose();
         }
     };
     handleError = err => {
