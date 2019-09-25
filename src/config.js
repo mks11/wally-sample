@@ -67,6 +67,7 @@ export const API_ADMIN_UPDATE_ROUTE_PLACEMENT = BASE_URL + "/api/admin/route";
 export const API_ADMIN_GET_ORDER = BASE_URL + "/api/admin/order";
 export const API_ADMIN_GET_ORDERS = BASE_URL + "/api/admin/orders";
 export const API_ADMIN_GET_PACKAGINGS = BASE_URL + "/api/admin/packagings";
+export const API_ADMIN_LINK_PACKAGING = BASE_URL + "/api/admin/packaging/link-packaging";
 export const API_ADMIN_PACKAGE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_COMPLETE_ORDER = BASE_URL + "/api/order";
 export const API_ADMIN_POST_BLOG_POST = BASE_URL + "/api/admin/blog";

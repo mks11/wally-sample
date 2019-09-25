@@ -829,6 +829,8 @@ module.exports = {
   "/api/admin/route/:id/placement": updateRoutePlacement,
   "/api/admin/order/:id": getOrder,
   "/api/admin/packagings": getPackagings,
+
+    //Todo:link packaging
   "/api/order/:id/package": packageOrder,
   "/api/order/:id/complete": completeOrder,
 
