@@ -68,7 +68,7 @@ class Mainpage extends Component {
 
     this.productStore.getAdvertisements()
     this.productStore.getCategories()
-    this.productStore.getProductDisplayed(id, deliveryData).then((data) => {
+    this.productStore.getProductDisplayed(id, deliveryData, this.userStore.getHeaderAuth()).then((data) => {
       this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       this.setState({sidebar: this.productStore.sidebar})
     }).catch((e) => console.error('Failed to load product displayed: ', e))
@@ -218,7 +218,7 @@ class Mainpage extends Component {
       return
     }
     logEvent({ category: "Search", action: "SearchKeyword", label: keyword })
-    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams())
+    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams(), this.userStore.getHeaderAuth())
   }
 
   handleMobileSearchClose = () => {
