@@ -198,8 +198,8 @@ class TopNav extends Component {
             <div className="row align-items-center mobile-top-nav top-nav">
               <div className="col-auto">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
-                  <img className="logo-text-desktop" src='/images/text-logo.svg' alt="" />
-                  <img className="logo-text-mobile" src='/images/text-logo.svg' alt="" />
+                  <img className="logo-text-desktop" src='/images/text-logo-new.svg' alt="" />
+                  <img className="logo-text-mobile" src='/images/text-logo-new.svg' alt="" />
                 </a>
               </div>
               <div className="col-auto ml-auto d-none d-md-block">

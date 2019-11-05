@@ -93,7 +93,7 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
-.aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
+.aw-header, .aw-header.navbar-white{background-color: #fff;}
 .navbar-toggler {
 }
 .aw-header.navbar-white .navbar-toggler-icon {
@@ -148,12 +148,14 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
-.logo-text-desktop{height:35px;padding-top:12px;}
+.logo-text-desktop{height:60px;padding-top:0px;}
 .logo-text-mobile{display:none;padding-top:12px;}
 
 /* Homepage */
 .landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
-.landing-section-construct{color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+.landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
+.landing-section-construct.mobile{background-image:url("../images/under-construction-mobile.jpg");}
+.landing-section-construct.mobile-horiz{background-image:url("../images/under-construction.jpg");}
 .landing-section.mobile{background-image:url("../images/wally-home-banner-wood-mobile.jpg");}
 .landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");}
 .landing-section h1{color:#fff;font-size:45px;}
@@ -1973,7 +1975,7 @@ a {
     bottom: 28%;
   }
   .btn-login{
-    border: 0.5px solid #989898;
+    border: 0.5px solid #4940db;
     padding: 5px 10px;
   }
   .header-wrap.top-bar-open + .aw-main .product-top.fixed {

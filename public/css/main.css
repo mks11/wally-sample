@@ -112,6 +112,10 @@
   font-style: normal;
 }
 
+.pink {
+  color: #fc1aff;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -305,17 +309,17 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .btn-outline-black {
-  color: #263a52;
+  color: #4940db;
   background-color: transparent;
   background-image: none;
-  border-color: #263a52;
+  border-color: #4940db;
   border-width: 2px;
 }
 
 .btn-outline-black:hover {
   color: #faf5ee;
-  background-color: #263a52;
-  border-color: #263a52;
+  background-color: #4940db;
+  border-color: #4940db;
 }
 
 .btn-outline-black:focus, .btn-outline-black.focus {
@@ -342,14 +346,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
 .btn-inline-black {
   color: #fff;
-  background-color: #263a52;
-  border-color: #263a52;
+  background-color: #4940db;
+  border-color: #4940db;
   border-width: 2px;
 }
 
 .btn-inline-black:hover {
-  color: #263a52;
-  border-color: #263a52;
+  color: #4940db;
+  border-color: #4940db;
 }
 
 .btn-inline-black:focus, .btn-inline-black.focus {
@@ -363,14 +367,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
 .btn-inline-black:active, .btn-inline-black.active,
 .show > .btn-inline-black.dropdown-toggle {
-  color: #263a52;
-  background-color: #263a52;
-  border-color: #263a52;
+  color: #4940db;
+  background-color: #4940db;
+  border-color: #4940db;
 }
 
 .btn-inline-black:focus, .btn-inline-black:active, .btn-inline-black:hover {
   color: #faf5ee;
-  background-color: #263a52;
+  background-color: #4940db;
 }
 
 
@@ -715,7 +719,7 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .aw-nav a {
-  color: #263a52;
+  color: #4940db;
 }
 
 .aw-nav a:focus, .aw-nav a:active, .aw-nav a:hover {
@@ -914,8 +918,12 @@ body {
 }
 
 .aw-hero h1 {
-  color: #39393B;
+  color: #4940db;
   margin-bottom: 25px;
+}
+
+.aw-hero a {
+  color: #fc1aff;
 }
 
 .aw-hero-construct h1 {
