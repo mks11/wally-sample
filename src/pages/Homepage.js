@@ -180,6 +180,7 @@ class Homepage extends Component {
     const isMobile = this.state.width <= 500;
     const isMobileHoriz = (this.state.width > 500 && this.state.width <= 800);
     let heroClass = "landing-section aw-hero"
+    let tempClass = "landing-section-construct aw-hero"
     if (isMobile) {
       heroClass += ' mobile'
     }
@@ -189,6 +190,17 @@ class Homepage extends Component {
 
     return (
       <div className="homepage">
+        <section id="nav-hero" className={tempClass}>
+          <div className="container-fluid">
+            <div className="row justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+                <h1 className="aw-hero--heading mb-4 aw-hero-construct">Brb, currently crowdfunding OUR FUTURE</h1>
+                <h2 className={this.state.heroDescriptionAlign}>👉 back us on kickstarter 👈</h2>
+                <h2 className={this.state.heroDescriptionAlign}>for regular programming ⬇️⬇️⬇️</h2>
+              </div>
+            </div>
+          </div>
+        </section>
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">

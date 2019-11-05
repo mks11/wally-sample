@@ -918,6 +918,11 @@ body {
   margin-bottom: 25px;
 }
 
+.aw-hero-construct h1 {
+  color: #4940DB;
+  margin-bottom: 25px;
+}
+
 @media (min-width: 768px) {
   .aw-hero h1 {
     margin-bottom: 35px;
@@ -1102,7 +1107,7 @@ body {
 }
 
 .header-wrap.top-bar-open + .aw-main  {
-  padding-top: 111px;
+  padding-top: 10px;
 }
 
 .admin-tabs .active-tab {
