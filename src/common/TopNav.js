@@ -180,20 +180,6 @@ class TopNav extends Component {
           </div>
         </div>
         <header className={`aw-header navbar-white ${isAdmin ? 'admin-navbar' : ''}`}>
-          {
-          ((this.userStore.status && !isAdmin) || !this.userStore.status) ? (
-            <div className={topBarClass}>
-              <div className="container">
-                <div onClick={this.handleReferralModal}>
-                  {bannerText}
-                </div>
-                <button className="close-top-bar" onClick={this.handleCloseTopBar}>
-                  <i className="fa fa-times-circle" aria-hidden="true" ></i>
-                </button>
-              </div>
-            </div>
-            ) : null
-          }
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
               <div className="col-auto">

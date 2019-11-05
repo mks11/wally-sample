@@ -196,6 +196,9 @@ class Homepage extends Component {
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
               <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+                <br></br>
+                <br></br>
+                <br></br>
                 <h1 className="aw-hero--heading mb-4 aw-hero-construct">Brb, currently crowdfunding OUR FUTURE</h1>
                 <h2 className={this.state.heroDescriptionAlign + ' pink'}>👉 back us on <a href="https://www.kickstarter.com/projects/the-wally-shop/the-wally-shop-the-everything-in-reusables-store"><u>kickstarter</u></a> 👈</h2>
                 <h2 className={this.state.heroDescriptionAlign}>for regular programming ⬇️⬇️⬇️</h2>
