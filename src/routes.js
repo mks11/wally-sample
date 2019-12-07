@@ -38,6 +38,8 @@ import Signup from "./pages/Signup";
 import Feedback from "./pages/Feedback";
 import Receipts from "./pages/manage/receipt/Receipts";
 import CourierRouting from "./pages/courier/CourierRouting";
+import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
+import InboundShipments from "./pages/manage/shipments/InboundShipments";
 
 export default (
   <Fragment>
@@ -51,9 +53,19 @@ export default (
       <Route exact path="/manage/shopping-app-1" component={ShoppingAppStep1} />
       <Route exact path="/manage/shopping-app-2" component={ShoppingAppStep2} />
       <Route exact path="/manage/shopping-app-3" component={ShoppingAppStep3} />
+      <Route
+        exact
+        path="/manage/co-packing/outbound"
+        component={OutboundShipments}
+      />
+      <Route
+        exact
+        path="/manage/co-packing/inbound"
+        component={InboundShipments}
+      />
       <Route exact path="/manage/receipts" component={Receipts} />
       <Route exact path="/user" component={Account} />
-      <Route exact path="/packaging/:id" component={Mainpage}/>
+      <Route exact path="/packaging/:id" component={Mainpage} />
       <Route exact path="/invitefriends" component={InviteFriends} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
