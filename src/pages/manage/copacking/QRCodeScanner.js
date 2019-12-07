@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
-import LazyLoad from 'react-lazyload';
-import { isMobile } from 'react-device-detect';
-import { Paper } from '@material-ui/core';
+import LazyLoad from 'react-lazyload'
+import { isMobile } from 'react-device-detect'
+import { Paper } from '@material-ui/core'
 
 const styles = {
   desktop: {
@@ -28,20 +28,20 @@ const styles = {
     height: '40vw',
     transform: 'translate(-50%, -50%)'
   }
-};
+}
 
 const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/
 
 class QRCodeScanner extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       packagingIds: [],
       isPortrait: true,
       result: '',
       isError: false,
-    };
+    }
   }
 
   componentDidMount() {
@@ -54,13 +54,13 @@ class QRCodeScanner extends Component {
 
   setScreenOrientation = () => {
     if (window.matchMedia('(orientation: portrait)').matches) {
-      this.setState({ isPortrait: false });
+      this.setState({ isPortrait: false })
     }
 
     if (window.matchMedia('(orientation: landscape)').matches) {
-      this.setState({ isPortrait: true });
+      this.setState({ isPortrait: true })
     }
-  };
+  }
 
   handleScan = scannedData => {
     if (scannedData) {
@@ -78,18 +78,18 @@ class QRCodeScanner extends Component {
           result: 'The link was scanned!',
           isError: false,
           packagingIds,
-        });
+        })
 
       } else {
         this.setState({
           result: 'Wrong link format!',
           isError: true,
-        });
+        })
       }
     }
-  };
+  }
 
-  handleError = err => { /* console.error(err) */ };
+  handleError = err => { /* console.error(err) */ }
 
   handleCloseModal = () => {
     const { onClose } = this.props
@@ -102,26 +102,26 @@ class QRCodeScanner extends Component {
     const { isOpen } = this.props
 
     if (!isOpen) {
-      return null;
+      return null
     }
 
     return (
       <div className="qr-modal">
         <div className='backdrop qr-modal-backdrop'>
-            <Paper style={isMobile ? (isPortrait ? styles.mobile : styles.mobileLandscape) : styles.desktop}>
-              <div className="qr-modal-control">
-                <button className="btn-icon btn-icon--close" onClick={this.handleCloseModal} />
-              </div>
-              <LazyLoad>
-                <QrReader
-                  delay={300}
-                  onError={this.handleError}
-                  onScan={this.handleScan}
-                  props
-                />
-                <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>{result}</p>
-              </LazyLoad>
-            </Paper>
+          <Paper style={isMobile ? (isPortrait ? styles.mobile : styles.mobileLandscape) : styles.desktop}>
+            <div className="qr-modal-control">
+              <button className="btn-icon btn-icon--close" onClick={this.handleCloseModal} />
+            </div>
+            <LazyLoad>
+              <QrReader
+                delay={300}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                props
+              />
+              <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>{result}</p>
+            </LazyLoad>
+          </Paper>
         </div>
       </div>
     )
@@ -129,4 +129,4 @@ class QRCodeScanner extends Component {
 }
 
 
-export default QRCodeScanner;
+export default QRCodeScanner

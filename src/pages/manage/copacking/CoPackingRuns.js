@@ -14,8 +14,9 @@ import {
 } from '@material-ui/core'
 
 import Title from 'common/page/Title'
-import { BASE_URL } from 'config'
 import { connect } from 'utils'
+
+import BarcodeScanner from './BarcodeScanner'
 
 class ManageCoPackingRuns extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class ManageCoPackingRuns extends Component {
 
     this.state = {
       copackingruns: [],
+      isBarScanOpen: false,
     }
   }
 
@@ -60,9 +62,25 @@ class ManageCoPackingRuns extends Component {
     this.routing.push(`/manage/co-packing/${id}`)
   }
 
+  toggleBarScan = () => {
+    this.setState({ isBarScanOpen: !this.state.isBarScanOpen })
+  }
+
+  handleDetectedValue = code => {
+    console.log(code)
+    this.adminStore.getUPCInfo({ code })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
   render() {
     const {
-      copackingruns
+      copackingruns,
+      isBarScanOpen,
     } = this.state
 
     return (
@@ -97,10 +115,15 @@ class ManageCoPackingRuns extends Component {
           </Paper>
           <Row>
             <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-              <button className="btn btn-main active">Scan Inbound UPC</button>
+              <button className="btn btn-main active" onClick={this.toggleBarScan}>Scan Inbound UPC</button>
             </Col>
           </Row>
         </Container>
+        <BarcodeScanner
+          isOpen={isBarScanOpen}
+          onClose={this.toggleBarScan}
+          onDetect={this.handleDetectedValue}
+        />
       </div>
     )
   }

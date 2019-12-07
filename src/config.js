@@ -79,6 +79,7 @@ export const API_ADMIN_GET_CO_PACKING_RUNS = BASE_URL + "/api/admin/copacking";
 export const API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS = BASE_URL + "/api/admin/copacking/products";
 export const API_UPDATE_SKU_UNIT_WEIGHT = BASE_URL + "/api/admin/sku/update";
 export const API_UPLOAD_COPACKING_QR_CODES = BASE_URL + "/api/admin/qr/upload";
+export const API_GET_UPC_INFO = BASE_URL + "/api/admin/upcinfo";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
