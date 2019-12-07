@@ -41,33 +41,38 @@ class InboundShipments extends Component {
   componentDidMount() {
     this.userStore.getStatus(true).then(status => {
       const user = this.userStore.user;
-      let isAdmin = user.type === "admin" ? true : false;
-      if (!status || !isAdmin) {
+      if (!user) {
         this.props.store.routing.push("/");
       } else {
-        this.adminStore
-          .getInboundProductShipments()
-          .then(res => {
-            if (res) {
-              this.setState({
-                results: res
-              });
-            } else {
+        let isAdmin = user.type === "admin" ? true : false;
+        if (!status || !isAdmin) {
+          this.props.store.routing.push("/");
+        } else {
+          this.adminStore
+            .getInboundProductShipments()
+            .then(res => {
+              if (res) {
+                this.setState({
+                  results: res
+                });
+              } else {
+                this.setState({
+                  apiError: true,
+                  openModal: true
+                });
+              }
+            })
+            .catch(err => {
               this.setState({
                 apiError: true,
                 openModal: true
               });
-            }
-          })
-          .catch(err => {
-            this.setState({
-              apiError: true,
-              openModal: true
             });
-          });
+        }  
       }
     });
   }
+
   setRowChoice = i => {
     this.setState({
       selectedRow: i,
