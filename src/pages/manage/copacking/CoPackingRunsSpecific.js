@@ -15,8 +15,8 @@ import {
 } from '@material-ui/core'
 
 import Title from 'common/page/Title'
-import { BASE_URL } from 'config';
 import { connect } from 'utils'
+import ModalSKUDetails from './ModalSKUDetails'
 
 class ManageCoPackingRunsSpecific extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ class ManageCoPackingRunsSpecific extends Component {
     this.state = {
       products: [],
       copackingrun: null,
+      skuModal: false,
     }
   }
 
@@ -66,8 +67,13 @@ class ManageCoPackingRunsSpecific extends Component {
     this.setState({ copackingrun })
   }
 
+  toggleModal = () => {
+    this.setState({ skuModal: !this.state.skuModal })
+  }
+
   render() {
     const {
+      skuModal,
       products,
       copackingrun,
     } = this.state
@@ -92,7 +98,11 @@ class ManageCoPackingRunsSpecific extends Component {
               </TableHead>
               <TableBody>
                 {products.map(p => (
-                  <TableRow key={p.name}>
+                  <TableRow
+                    key={p.name}
+                    className="clickable-row"
+                    onClick={() => this.toggleModal()}
+                  >
                     <TableCell align="left">{p.name}</TableCell>
                     <TableCell>{p.packagingType}</TableCell>
                     <TableCell>{p.packaging}</TableCell>
@@ -114,6 +124,11 @@ class ManageCoPackingRunsSpecific extends Component {
             </Row>
           ) : null}
         </Container>
+
+        <ModalSKUDetails
+          showModal={skuModal}
+          toggleModal={this.toggleModal}
+        />
       </div>
     )
   }
