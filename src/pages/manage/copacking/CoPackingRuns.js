@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { Container } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Container,
+} from 'reactstrap'
 import {
   Paper,
   Table,
@@ -7,7 +11,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TableFooter,
 } from '@material-ui/core'
 
 import Title from 'common/page/Title'
@@ -92,6 +95,11 @@ class ManageCoPackingRuns extends Component {
               </TableBody>
             </Table>
           </Paper>
+          <Row>
+            <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+              <button className="btn btn-main active">Scan Inbound UPC</button>
+            </Col>
+          </Row>
         </Container>
       </div>
     )

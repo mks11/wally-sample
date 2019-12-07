@@ -11,7 +11,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TableFooter,
 } from '@material-ui/core'
 
 import Title from 'common/page/Title'
