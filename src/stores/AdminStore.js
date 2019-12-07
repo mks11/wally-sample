@@ -32,6 +32,7 @@ import {
   API_ADMIN_GET_CO_PACKING_RUNS,
   API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS,
   API_UPDATE_SKU_UNIT_WEIGHT,
+  API_UPLOAD_COPACKING_QR_CODES,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -445,6 +446,12 @@ class AdminStore {
     return data
   }
 
+  async uploadCopackingQRCodes(data) {
+    // const res = await axios.post(API_UPLOAD_COPACKING_QR_CODES, data);
+    // return res.data;
+    return data
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -543,6 +550,7 @@ decorate(AdminStore, {
   getCopackingRuns: action,
   getCopackingRunProducts: action,
   updateSKUUnitWeight: action,
+  uploadCopackingQRCodes: action,
 });
 
 export default new AdminStore();

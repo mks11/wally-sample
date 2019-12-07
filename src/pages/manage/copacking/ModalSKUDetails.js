@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core'
 
 import { connect } from 'utils'
+import QrCodeScanner from './QRCodeScanner'
 
 const DEFAULT_ERROR = 'Error: Calibrate Unit Weight'
 
@@ -34,6 +35,8 @@ class ModalSKUDetails extends Component {
       unitWeight: props.product.unit_weight || '',
       editUnitWeight: false,
       isUpdating: false,
+
+      isQROpen: false,
     }
   }
 
@@ -47,7 +50,13 @@ class ModalSKUDetails extends Component {
           showError: !product.unit_weight,
           unitWeight: product.unit_weight || '',
           editUnitWeight: !product.unit_weight,
+          errorMsg: DEFAULT_ERROR,
         })
+      } else {
+        // for reopening the same product
+        if (!product.unit_weight && !prevState.showError) {
+          this.setState({ showError: true })
+        }
       }
     }
   }
@@ -121,9 +130,17 @@ class ModalSKUDetails extends Component {
     const { product } = this.state
 
     if (product.unit_weight) {
-      // scan process here
+      this.setState({ isQROpen: true })
     } else {
       this.setModalError('Enter Unit Weight')
+    }
+  }
+
+  handleQRClose = packagingIds => {
+    this.setState({ isQROpen: false })
+
+    if (packagingIds.length) {
+      this.adminStore.uploadCopackingQRCodes({ packagingIds })
     }
   }
 
@@ -141,18 +158,19 @@ class ModalSKUDetails extends Component {
       product,
       unitWeight,
       editUnitWeight,
+      isQROpen,
     } = this.state
 
     return (
-      <Modal isOpen={showModal}>
+      <Modal isOpen={showModal} className="sku-modal">
         <ModalBody>
           <Container>
-            <button className="btn-icon btn-icon--close" onClick={this.handleModalClose}></button>
+            <button className="btn-icon btn-icon--close" onClick={this.handleModalClose} />
             <h2 className="text-center text-error">{showError && errorMsg}</h2>
             <Table >
               <TableBody>
                 <TableRow>
-                  <TableCell align="left" style={{ width: '135px' }}><b>Product Name:</b></TableCell>
+                  <TableCell align="left" className="sku-modal-first-col"><b>Product Name:</b></TableCell>
                   <TableCell align="left">{product.name}</TableCell>
                 </TableRow>
 
@@ -252,6 +270,10 @@ class ModalSKUDetails extends Component {
               </TableBody>
             </Table>
           </Container>
+          <QrCodeScanner
+            isOpen={isQROpen}
+            onClose={this.handleQRClose}
+          />
         </ModalBody>
       </Modal>
     )

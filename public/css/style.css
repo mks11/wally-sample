@@ -2826,3 +2826,35 @@ span.category-card-img {
     background-color: #eee;
   }
 }
+
+
+.sku-modal {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.qr-modal-control {
+  background: #fff;
+  position: absolute;
+  width: 100%;
+  top: -39px;
+  text-align: right;
+}
+.qr-modal-control .btn-icon--close {
+  top: 0;
+  right: 0;
+  position: relative;
+}
+.qr-modal-backdrop {
+  background: rgba(0,0,0,0.95);
+  top: 0;
+  z-index: 9999;
+}
+.qr-modal-result {
+  word-break: break-all;
+}
+
+@media (max-width: 600px) {
+  .sku-modal-first-col {
+    width: 135px;
+  }
+}
