@@ -31,6 +31,7 @@ import {
   API_ADMIN_UPLOAD_SELECTION,
   API_ADMIN_GET_CO_PACKING_RUNS,
   API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS,
+  API_UPDATE_SKU_UNIT_WEIGHT,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -398,10 +399,21 @@ class AdminStore {
         shipment_type: 'pallet',
         tracking_number: 'ABC123',
         shipmentEDD: '2019-11-28',
+        unit_weight: null,
+        product_labels_url: '/link/product_labels_url',
+        upc_case_labels_url: '/link/upc_case_labels_url',
+        actual_quantity: 10,
+        case_quantity: 1,
+        jar_quantity: 5,
+        outbound_shipments: [
+          { id: 'AVD123'},
+          { id: 'FHD123'},
+          { id: 'POW123'},
+        ],
       },
       {
         id: 1,
-        name: 'White Vinegar,',
+        name: 'White Vinegar',
         packagingType: 'Medium Mason Jar - Vinegar (16 oz)',
         packaging: 5,
         units: 100,
@@ -410,8 +422,27 @@ class AdminStore {
         shipment_type: 'other',
         tracking_number: 'XYZ956',
         shipmentEDD: '2019-11-28',
+        unit_weight: '3.65',
+        product_labels_url: '/link/product_labels_url',
+        upc_case_labels_url: '/link/upc_case_labels_url',
+        actual_quantity: null,
+        case_quantity: 4,
+        jar_quantity: 33,
+        outbound_shipments: [
+          { id: 'AVD123'},
+          { id: 'FHD123'},
+          { id: 'POW123'},
+        ]
       },
     ]
+  }
+
+  async updateSKUUnitWeight(data) {
+    // const res = await axios.post(API_UPDATE_SKU_UNIT_WEIGHT, data);
+    // return res.data;
+
+    // MOCK data
+    return data
   }
 
   setEditing(id, edit) {
@@ -510,6 +541,8 @@ decorate(AdminStore, {
   uploadReceipt: action,
 
   getCopackingRuns: action,
+  getCopackingRunProducts: action,
+  updateSKUUnitWeight: action,
 });
 
 export default new AdminStore();

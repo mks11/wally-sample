@@ -31,6 +31,7 @@ class ManageCoPackingRunsSpecific extends Component {
       products: [],
       copackingrun: null,
       skuModal: false,
+      selectedProduct: {},
     }
   }
 
@@ -71,11 +72,22 @@ class ManageCoPackingRunsSpecific extends Component {
     this.setState({ skuModal: !this.state.skuModal })
   }
 
+  openProductSKUDetails = productId => {
+    const { products } = this.state
+
+    this.setState({
+      selectedProduct: products.find(p => p.id === productId)
+    }, () => {
+      this.toggleModal()
+    })
+  }
+
   render() {
     const {
       skuModal,
       products,
       copackingrun,
+      selectedProduct,
     } = this.state
 
     return (
@@ -101,7 +113,7 @@ class ManageCoPackingRunsSpecific extends Component {
                   <TableRow
                     key={p.name}
                     className="clickable-row"
-                    onClick={() => this.toggleModal()}
+                    onClick={() => this.openProductSKUDetails(p.id)}
                   >
                     <TableCell align="left">{p.name}</TableCell>
                     <TableCell>{p.packagingType}</TableCell>
@@ -128,6 +140,7 @@ class ManageCoPackingRunsSpecific extends Component {
         <ModalSKUDetails
           showModal={skuModal}
           toggleModal={this.toggleModal}
+          product={selectedProduct}
         />
       </div>
     )

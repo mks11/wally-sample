@@ -2,12 +2,9 @@ import React, { Component } from 'react'
 import {
   Modal,
   ModalBody,
-  Button,
   Container,
   Row,
   Col,
-  Form,
-  FormGroup,
   Input
 } from 'reactstrap'
 import {
@@ -19,6 +16,8 @@ import {
 
 import { connect } from 'utils'
 
+const DEFAULT_ERROR = 'Error: Calibrate Unit Weight'
+
 class ModalSKUDetails extends Component {
   constructor(props) {
     super(props)
@@ -26,203 +25,232 @@ class ModalSKUDetails extends Component {
     this.adminStore = props.store.admin
     this.userStore = props.store.user
     this.modalStore = props.store.modal
+    this.routing = props.store.routing
 
     this.state = {
-      id: null,
-      status: null,
-      quantity: null,
-      selected: null,
-      shopitem: null,
-      timeframe: null,
-      busy: false,
+      showError: false,
+      errorMsg: DEFAULT_ERROR,
+      product: props.product || {},
+      unitWeight: props.product.unit_weight || '',
+      editUnitWeight: false,
+      isUpdating: false,
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { product } = this.props
 
-  componentDidMount() {
-    // const { id, status, timeframe } = this.props
-    // this.setState({
-    //   id: id,
-    //   status: status,
-    //   timeframe: timeframe,
-    //   selected: "missing"
-    // })
+    if (!prevState.showModal) {
+      if (product.id !== prevProps.product.id) {
+        this.setState({
+          product,
+          showError: !product.unit_weight,
+          unitWeight: product.unit_weight || '',
+          editUnitWeight: !product.unit_weight,
+        })
+      }
+    }
   }
 
+  handleOnUnitWeightChange = (e) => {
+    this.setState({
+      unitWeight: e.target.value
+    })
+  }
 
-  // handleOnChange = (e) => {
-  //   this.setState({
-  //     [e.target.name]: e.target.value
-  //   })
-  //   console.log(this.state)
-  // }
+  handleSubmit = async () => {
+    const {
+      unitWeight,
+      editUnitWeight,
+      isUpdating,
+      product,
+    } = this.state
 
-  // handleChecked = () => {
-  //   const { selected } = this.state
+    if (!editUnitWeight) {
+      this.setState({ editUnitWeight: true })
+    } else {
+      if (!isUpdating) {
+        if (isNaN(unitWeight)) {
+          this.setModalError('Unit weight is not a number')
+        } else {
+          this.setModalError('', false)
+          this.setState({ isUpdating: true })
 
-  //   if (selected === "missing") {
-  //     return true
-  //   } else {
-  //     return false
-  //   }
-  // }
+          this.adminStore.updateSKUUnitWeight({ unit_weight: unitWeight })
+            .then(data => {
+              this.setState({
+                product: {
+                  ...product,
+                  ...data,
+                },
+                unitWeight: data.unit_weight,
+              })
+            })
+            .catch(() => {
+              this.modalStore.toggleModal('error')
+            })
+            .finally(() => {
+              this.setState({
+                isUpdating: false,
+                editUnitWeight: false,
+              })
+            })
+        }
+      }
+    }
+  }
 
-  // handleSubmit = async () => {
-  //   //debugger
-  //   const { toggleModal, id, location } = this.props
-  //   const { selected, quantity, timeframe, busy } = this.state
-  //   let status = ""
+  setModalError = (errorMsg, display = true) => {
+    this.setState({
+      showError: display,
+      errorMsg: errorMsg
+    })
+  }
 
-  //   if (busy) return
-  //   this.setState({ busy: true })
+  handlePrintLabel = () => {
+    const { product } = this.state
 
-  //   if (selected === "ugly" || selected === "too little") {
-  //     status = selected
-  //   } else {
-  //     status = "missing"
-  //   }
+    if (product.unit_weight) {
+      this.routing.push(product.product_labels_url)
+    } else {
+      this.setModalError('Enter Unit Weight')
+    }
+  }
 
-  //   // uncomment when ready for testing against API
-  //   Promise.all([
-  //     this.adminStore.setShopItemStatus(this.userStore.getHeaderAuth(), id, status, location, quantity),
-  //     // this.adminStore.updateShopItemQuantity(timeframe, id, quantity)
-  //   ]).then(() => {
-  //       toggleModal()
-  //     })
-  //     .catch(() => {
-  //       this.modalStore.toggleModal('error')
-  //     })
-  //     .finally(() => {
-  //       this.setState({ busy: false })
-  //     })
-  // }
+  handleScanQRCode = () => {
+    const { product } = this.state
+
+    if (product.unit_weight) {
+      // scan process here
+    } else {
+      this.setModalError('Enter Unit Weight')
+    }
+  }
+
+  handleModalClose = () => {
+    this.setState({ showError: false })
+    this.props.toggleModal()
+  }
 
   render() {
-    const { showModal, toggleModal } = this.props
+    const { showModal } = this.props
 
-    let renderQuantity
-    let renderQuantityInput
-
-    // handles when prop is empty
-    // if (this.props.shopitem) {
-    //   renderQuantity = <TableCell
-    //     align="center">
-    //     {this.props.shopitem.quantity} {this.props.shopitem.unit_type === "packaging" ? this.props.shopitem.packaging_name : this.props.shopitem.unit_type}
-    //   </TableCell>
-    // } else {
-    //   renderQuantity = null
-    // }
-
-    //handles input enabled or disabled
-    // if (this.handleChecked()) {
-    //   renderQuantityInput = <Input
-    //     type="text"
-    //     onChange={this.handleOnChange}
-    //     value={this.state.quantity}
-    //     name="quantity"
-    //     style={{
-    //       width: "60px"
-    //     }}
-    //     disabled
-    //     bsSize="sm"
-    //   />
-    // } else {
-    //   renderQuantityInput = <Input
-    //     onChange={this.handleOnChange}
-    //     value={this.state.quantity}
-    //     name="quantity"
-    //     style={{
-    //       width: "60px"
-    //     }}
-    //     bsSize="sm"
-    //   />
-    // }
+    const {
+      showError,
+      errorMsg,
+      product,
+      unitWeight,
+      editUnitWeight,
+    } = this.state
 
     return (
-      <Modal
-        isOpen={showModal}
-        toggle={toggleModal}
-      >
+      <Modal isOpen={showModal}>
         <ModalBody>
           <Container>
-            <Button close onClick={toggleModal} />
-            <h3>{this.props.shopitem ? this.props.shopitem.product_name : null} Unavailable</h3>
-            <Form >
-              <FormGroup>
-                <Table >
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="left"><b>Product Name:</b></TableCell>
-                      <TableCell align="left">Green Lentils</TableCell>
-                    </TableRow>
+            <button className="btn-icon btn-icon--close" onClick={this.handleModalClose}></button>
+            <h2 className="text-center text-error">{showError && errorMsg}</h2>
+            <Table >
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left" style={{ width: '135px' }}><b>Product Name:</b></TableCell>
+                  <TableCell align="left">{product.name}</TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell align="left"><b>Unit Weight:</b></TableCell>
-                      <TableCell align="left">
-                        <Input type="text" name="selected" onClick={this.handleOnChange} />
-                      </TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell align="left"><b>Unit Weight:</b></TableCell>
+                  <TableCell align="left">
+                    <Row noGutters>
+                      <Col style={{ width: '50%' }}>
+                        <Input
+                          type="text"
+                          name="selected"
+                          invalid={!product.unit_weight}
+                          value={unitWeight}
+                          onChange={this.handleOnUnitWeightChange}
+                          readOnly={!editUnitWeight}
+                        />
+                      </Col>
+                      <Col className="pl-2" style={{ width: '50%' }}>
+                        <button
+                          type="button"
+                          className="btn btn-sm active"
+                          onClick={this.handleSubmit}
+                        >
+                          {editUnitWeight ? 'Submit' : 'Edit'}
+                        </button>
+                      </Col>
+                    </Row>
+                  </TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell align="left"><b>Estimated Quantity:</b></TableCell>
-                      <TableCell align="left">50</TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell align="left"><b>Estimated Quantity:</b></TableCell>
+                  <TableCell align="left">50</TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell colSpan={2}>
-                        <Row>
-                          <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                            <button type="button" className="btn btn-main active">Print Product Labels</button>
-                          </Col>
-                        </Row>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell colSpan={2}>
-                        <Row>
-                          <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                            <button type="button" className="btn btn-main active">Scan QR Code</button>
-                          </Col>
-                        </Row>
-                      </TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <Row>
+                      <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+                        <button
+                          type="button"
+                          className="btn btn-main active"
+                          onClick={this.handlePrintLabel}
+                        >
+                          Print Product Labels
+                        </button>
+                      </Col>
+                    </Row>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <Row>
+                      <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+                        <button
+                          type="button"
+                          className="btn btn-main active"
+                          onClick={this.handleScanQRCode}
+                        >
+                          Scan QR Code
+                        </button>
+                      </Col>
+                    </Row>
+                  </TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell align="left"><b>Actual Quantity:</b></TableCell>
-                      <TableCell align="left">TBD</TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell align="left"><b>Actual Quantity:</b></TableCell>
+                  <TableCell align="left">{product.actual_quantity || 'TBD'}</TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell colSpan={2}>
-                        <Row>
-                          <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                            <button type="button" className="btn btn-main active">Print UPC Code</button>
-                          </Col>
-                        </Row>
-                      </TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <Row>
+                      <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+                        {product.actual_quantity && product.unit_weight ? (
+                          <a className="btn btn-main active" href={product.upc_case_labels_url}>Print UPC Code</a>
+                        ) : (
+                          <button className="btn btn-main" disabled>Print UPC Code</button>
+                        )}
 
-                    <TableRow>
-                      <TableCell align="left" colSpan={2}><b>Outbound Shipments:</b></TableCell>
-                    </TableRow>
+                      </Col>
+                    </Row>
+                  </TableCell>
+                </TableRow>
 
-                    <TableRow>
-                      <TableCell align="left">&nbsp;&nbsp;Shipment A:</TableCell>
-                      <TableCell align="left">TBD</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left">&nbsp;&nbsp;Shipment B:</TableCell>
-                      <TableCell align="left">TBD</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left">&nbsp;&nbsp;Shipment C:</TableCell>
-                      <TableCell align="left">TBD</TableCell>
-                    </TableRow>
+                <TableRow>
+                  <TableCell align="left" colSpan={2}><b>Outbound Shipments:</b></TableCell>
+                </TableRow>
+                {product.outbound_shipments && product.outbound_shipments.map(s => (
+                  <TableRow key={s.id}>
+                    <TableCell align="left">{`  Shipment ${s.id}:`}</TableCell>
+                    <TableCell align="left">{(product.case_quantity / product.jar_quantity).toFixed(2)}</TableCell>
+                  </TableRow>
+                ))}
 
-                  </TableBody>
-                </Table>
-              </FormGroup>
-            </Form>
+              </TableBody>
+            </Table>
           </Container>
         </ModalBody>
       </Modal>
