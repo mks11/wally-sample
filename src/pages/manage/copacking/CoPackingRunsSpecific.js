@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { Container } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Container,
+} from 'reactstrap'
 import {
   Paper,
   Table,
@@ -21,6 +25,12 @@ class ManageCoPackingRunsSpecific extends Component {
     this.userStore = props.store.user
     this.adminStore = props.store.admin
     this.contentStore = props.store.content
+    this.modalStore = props.store.modal
+
+    this.state = {
+      products: [],
+      copackingrun: null,
+    }
   }
 
   componentDidMount() {
@@ -29,6 +39,8 @@ class ManageCoPackingRunsSpecific extends Component {
         const user = this.userStore.user
         if (!status || user.type !== 'admin') {
           this.props.store.routing.push('/')
+        } else {
+          this.loadCoPackingRunsProducts()
         }
       })
       .catch((error) => {
@@ -36,10 +48,72 @@ class ManageCoPackingRunsSpecific extends Component {
       })
   }
 
+  loadCoPackingRunsProducts() {
+    const runId = this.props.match.params.runId
+
+    // TODO remove this method
+    this.adminStore.getCopackingRuns()
+
+    this.adminStore.getCopackingRunProducts(runId)
+      .then(data => {
+        this.setState({ products: data })
+      })
+      .catch(error => {
+        this.modalStore.toggleModal('error', 'Can\'t get co-packing runs products')
+      })
+
+    const copackingrun = this.adminStore.copackingruns.find(r => r.id == runId)
+    this.setState({ copackingrun })
+  }
+
   render() {
+    const {
+      products,
+      copackingrun,
+    } = this.state
+
     return (
       <div className="App">
         <Title content="Co-Packing Run - Specific" />
+        <Container>
+          <Paper elevation={1} className="scrollable-table">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Product Name</TableCell>
+                  <TableCell>Packaging Type</TableCell>
+                  <TableCell>Est. # Packaging</TableCell>
+                  <TableCell>Est. Units</TableCell>
+                  <TableCell>Est. Time (mins)</TableCell>
+                  <TableCell>Volume (lbs)</TableCell>
+                  <TableCell>Tracking #</TableCell>
+                  <TableCell>Shipment EDD</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products.map(p => (
+                  <TableRow key={p.name}>
+                    <TableCell align="left">{p.name}</TableCell>
+                    <TableCell>{p.packagingType}</TableCell>
+                    <TableCell>{p.packaging}</TableCell>
+                    <TableCell>{p.units}</TableCell>
+                    <TableCell>{p.time}</TableCell>
+                    <TableCell>{p.volume}</TableCell>
+                    <TableCell>{p.shipment_type === 'pallet' ? 'Pallet' : p.tracking_number}</TableCell>
+                    <TableCell>{p.shipmentEDD}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+          {copackingrun ? (
+            <Row>
+              <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+                <a className="btn btn-main active" href={copackingrun.print_url}>Print</a>
+              </Col>
+            </Row>
+          ) : null}
+        </Container>
       </div>
     )
   }

@@ -2716,10 +2716,10 @@ span.category-card-img {
   }
 
   th[class^='MuiTableCell-root'],
-  th[class*=' MuiTableCell-root'], 
+  th[class*=' MuiTableCell-root'],
   td[class^='MuiTableCell-root'],
   td[class*=' MuiTableCell-root'] {
-    padding: 0 !important;
+    padding: 10px 15px !important;
     font-size: 10px !important;
     text-align: center !important;
   }

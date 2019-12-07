@@ -30,6 +30,7 @@ import {
   API_ADMIN_GET_ORDERS,
   API_ADMIN_UPLOAD_SELECTION,
   API_ADMIN_GET_CO_PACKING_RUNS,
+  API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -55,6 +56,8 @@ class AdminStore {
   singleorder = {};
 
   packagings = [];
+
+  copackingruns = [];
 
   loading = false;
 
@@ -348,13 +351,14 @@ class AdminStore {
     // return res.data;
 
     // MOCK data
-    return [
+    this.copackingruns = [
       {
         id: 0,
         process: 'Dry Bulk',
         skus: 50,
         jars: 200,
         time: 60,
+        print_url: '/some/link'
       },
       {
         id: 1,
@@ -362,6 +366,7 @@ class AdminStore {
         skus: 50,
         jars: 200,
         time: 60,
+        print_url: '/some/link'
       },
       {
         id: 2,
@@ -369,7 +374,43 @@ class AdminStore {
         skus: 50,
         jars: 200,
         time: 60,
+        print_url: '/some/link'
       }
+    ]
+
+    return this.copackingruns
+  }
+
+  async getCopackingRunProducts(id) {
+    // const res = await axios.get(`API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS?runId=${id}`);
+    // return res.data;
+
+    // MOCK data
+    return [
+      {
+        id: 0,
+        name: 'Green Lentils',
+        packagingType: 'Medium Mason Jar (16 oz)',
+        packaging: 5,
+        units: 100,
+        time: 5,
+        volume: 10,
+        shipment_type: 'pallet',
+        tracking_number: 'ABC123',
+        shipmentEDD: '2019-11-28',
+      },
+      {
+        id: 1,
+        name: 'White Vinegar,',
+        packagingType: 'Medium Mason Jar - Vinegar (16 oz)',
+        packaging: 5,
+        units: 100,
+        time: 5,
+        volume: 10,
+        shipment_type: 'other',
+        tracking_number: 'XYZ956',
+        shipmentEDD: '2019-11-28',
+      },
     ]
   }
 
@@ -443,6 +484,7 @@ decorate(AdminStore, {
   singleorder: observable,
   packagings: observable,
   blogposts: observable,
+  copackingruns: observable,
 
   getTimeFrames: action,
   getShopLocations: action,

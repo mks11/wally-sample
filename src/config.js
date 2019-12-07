@@ -76,6 +76,7 @@ export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/
 export const API_ADMIN_UPLOAD_SELECTION = BASE_URL + "/api/admin/products/selectionupload";
 
 export const API_ADMIN_GET_CO_PACKING_RUNS = BASE_URL + "/api/admin/copacking";
+export const API_ADMIN_GET_CO_PACKING_RUNS_PRODUCTS = BASE_URL + "/api/admin/copacking/products";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
