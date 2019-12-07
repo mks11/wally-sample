@@ -2705,12 +2705,6 @@ span.category-card-img {
     margin: 0 -20px;
   }
 
-  .MuiTableCell-root-35 {
-    padding: 0 !important;
-    font-size: 10px !important;
-    text-align: center !important;
-  }
-
   .react-switch-bg{
     height: 26px !important;
     width: 43px !important;
@@ -2721,12 +2715,29 @@ span.category-card-img {
     width: 15px !important;
   }
 
-  .MuiTableCell-root-35 .form-inline {
+  th[class^='MuiTableCell-root'],
+  th[class*=' MuiTableCell-root'], 
+  td[class^='MuiTableCell-root'],
+  td[class*=' MuiTableCell-root'] {
+    padding: 0 !important;
+    font-size: 10px !important;
+    text-align: center !important;
+  }
+
+  td[class^='MuiTableCell-root'] .form-inline,
+  td[class*=' MuiTableCell-root'] .form-inline {
     justify-content: center;
   }
 
-  .MuiTableCell-root-35 .form-inline .form-check {
+  td[class^='MuiTableCell-root'] .form-inline .form-check,
+  td[class*=' MuiTableCell-root'] .form-inline .form-check {
     width: auto;
+  }
+
+  td[class^='MuiTableCell-alignLeft'],
+  td[class*=' MuiTableCell-alignLeft'] {
+    padding-left: 12px !important;
+    text-align: left !important;
   }
 }
 
@@ -2800,4 +2811,18 @@ span.category-card-img {
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+}
+
+
+
+
+.clickable-row:active {
+  background-color: #eee;
+}
+
+@media (min-width: 1200px) {
+  .clickable-row:hover,
+  .clickable-row:active {
+    background-color: #eee;
+  }
 }

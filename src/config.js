@@ -1,5 +1,5 @@
-export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-// export const BASE_URL = "http://localhost:4000";
+// export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
+export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
@@ -74,6 +74,8 @@ export const API_ADMIN_POST_BLOG_POST = BASE_URL + "/api/admin/blog";
 export const API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD = BASE_URL + "/api/admin/products/currentselectioncsv";
 export const API_ADMIN_GET_PRODUCT_CATEGORIES_DOWNLOAD = BASE_URL + "/api/admin/products/currentcategoriescsv";
 export const API_ADMIN_UPLOAD_SELECTION = BASE_URL + "/api/admin/products/selectionupload";
+
+export const API_ADMIN_GET_CO_PACKING_RUNS = BASE_URL + "/api/admin/copacking";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
