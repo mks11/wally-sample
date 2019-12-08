@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Container,
-  Row,
-  Col,
-  ModalBody,
-  Button
-} from "reactstrap";
+import { TabContent, TabPane, Nav, NavItem, NavLink, Container, Row, Col, ModalBody, Button } from "reactstrap";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
 import TableHead from "@material-ui/core/TableHead/TableHead";
@@ -75,7 +64,7 @@ class OutboundShipments extends Component {
     if (res.carrier) {
       carrierFix = res.carrier;
     } else {
-      carrierFix = "UPS";
+      carrierFix = "ups";
     }
     this.setState({
       modal: res,
@@ -115,7 +104,7 @@ class OutboundShipments extends Component {
   };
 
   handleSubmit = () => {
-    if (this.state.trackingEdit && this.state.trackingEdit.length > 2) {
+    if ((this.state.trackingEdit && this.state.trackingEdit.length > 2) || this.state.carrier === "other") {
       let newItem;
       // Update Locally - since no api return yet
       let updatedResults = this.state.results.map(item => {
@@ -184,16 +173,11 @@ class OutboundShipments extends Component {
                   {results.length > 0 &&
                     results.map((res, i) => {
                       return (
-                        <TableRow
-                          key={res.tracking_number + i}
-                          onClick={() => this.setOutboundModal(res)}
-                        >
+                        <TableRow key={res.tracking_number + i} onClick={() => this.setOutboundModal(res)}>
                           <TableCell align="left">{res.shipmentId}</TableCell>
                           <TableCell align="left">{res.address}</TableCell>
-                          <TableCell align="right">{res.carrier ? res.carrier : "N/A"}</TableCell>
-                          <TableCell align="right">
-                            {res.tracking_number ? res.tracking_number : "N/A"}
-                          </TableCell>
+                          <TableCell align="right">{res.carrier ? res.carrier : ""}</TableCell>
+                          <TableCell align="right">{res.tracking_number ? res.tracking_number : ""}</TableCell>
                         </TableRow>
                       );
                     })}
@@ -219,14 +203,9 @@ class OutboundShipments extends Component {
         </Modal>
         <Modal open={this.state.openModal} onClose={this.handleModalClose}>
           <Container>
-            <button
-              className="btn-icon btn-icon--close"
-              onClick={() => this.handleModalClose()}
-            ></button>
+            <button className="btn-icon btn-icon--close" onClick={() => this.handleModalClose()}></button>
             <Paper style={{ height: "auto", marginTop: "30px" }} elevation={2}>
-              {chosenShipment !== null && (
-                <Title content={"Shipment " + chosenShipment.shipmentId} />
-              )}
+              {chosenShipment !== null && <Title content={"Shipment " + chosenShipment.shipmentId} />}
 
               <Table className={"packaging-table"}>
                 <TableBody>
@@ -237,23 +216,23 @@ class OutboundShipments extends Component {
 
                         <Select
                           style={{ minWidth: "180px" }}
-                          // Value checks for a chosenShipment, otherwise "UPS default"
-                          // If carrier happens to be null it also defaults to UPS
-                          value={chosenShipment ? (carrier ? carrier : "UPS") : "UPS"}
+                          // Value checks for a chosenShipment, otherwise "ups default"
+                          // If carrier happens to be null it also defaults to ups
+                          value={chosenShipment ? (carrier ? carrier : "ups") : "ups"}
                           onChange={e => this.handleCarrierSelection(e)}
                         >
-                          <MenuItem name={"UPS"} value={"UPS"}>
-                            UPS
+                          <MenuItem name={"ups"} value={"ups"}>
+                            ups
                           </MenuItem>
-                          <MenuItem name={"USPS"} value={"USPS"}>
-                            USPS
+                          <MenuItem name={"usps"} value={"usps"}>
+                            usps
                           </MenuItem>
-                          <MenuItem name={"FEDEX"} value={"FEDEX"}>
-                            FEDEX
+                          <MenuItem name={"fedex"} value={"fedex"}>
+                            fedex
                           </MenuItem>
 
-                          <MenuItem value={"OTHER"}>
-                            <em>OTHER</em>
+                          <MenuItem value={"other"}>
+                            <em>other</em>
                           </MenuItem>
                         </Select>
                       </FormControl>
@@ -306,12 +285,7 @@ class OutboundShipments extends Component {
                       >
                         {chosenShipment !== null && (
                           <a href={chosenShipment.packing_list_url}>
-                            <Button
-                              outline
-                              color="success"
-                              size="sm"
-                              style={{ fontSize: "16px", minWidth: "180px" }}
-                            >
+                            <Button outline color="success" size="sm" style={{ fontSize: "16px", minWidth: "180px" }}>
                               Print Packing List
                             </Button>
                           </a>
@@ -321,26 +295,29 @@ class OutboundShipments extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
-              <ModalBody className="modal-body-bordertop">
+              <ModalBody className="modal-body-bordertop" style={{ paddingTop: "4%" }}>
                 <Container
                   style={{
-                    width: "90%",
+                    width: "93%",
                     margin: "auto"
                   }}
                 >
                   <h3>Packing List:</h3>
                   <Table>
-                    <TableHead style={{ backgroundColor: "rgb(191, 191, 191)" }}>
-                      <TableRow>
-                        <TableCell style={{ fontSize: "24px" }} align="left">
-                          <h5>Name</h5>
+                    <TableHead style={{ marginTop: "10px" }}>
+                      <TableRow
+                        className="col-form-label-lg"
+                        style={{ backgroundColor: "rgb(191, 191, 191)", padding: "2%", height: "2rem" }}
+                      >
+                        <TableCell align="left">
+                          <h6 style={{ margin: "auto" }}>Name</h6>
                         </TableCell>
-                        <TableCell style={{ fontSize: "24px" }} align="left">
-                          <h5>Quantity</h5>
+                        <TableCell align="left">
+                          <h6 style={{ margin: "auto" }}>Quantity</h6>
                         </TableCell>
                       </TableRow>
                     </TableHead>
-                    <TableBody style={{ minHeight: "200px" }}>
+                    <TableBody style={{ minHeight: "100px" }}>
                       {chosenShipment !== null &&
                         chosenShipment.Products.map((product, i) => (
                           <TableRow key={i}>
