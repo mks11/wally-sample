@@ -91,7 +91,7 @@ class ManageCoPackingRunsSpecific extends Component {
 
     return (
       <div className="App">
-        <Title content="Co-Packing Run - Specific" />
+        <Title content={copackingrun && copackingrun.process} />
         <Container>
           <Paper elevation={1} className="scrollable-table">
             <Table>
@@ -99,7 +99,7 @@ class ManageCoPackingRunsSpecific extends Component {
                 <TableRow>
                   <TableCell align="left">Product Name</TableCell>
                   <TableCell>Packaging Type</TableCell>
-                  <TableCell>Est. # Packaging</TableCell>
+                  <TableCell># Packaging (Cases)</TableCell>
                   <TableCell>Est. Units</TableCell>
                   <TableCell>Est. Time (mins)</TableCell>
                   <TableCell>Volume (lbs)</TableCell>
