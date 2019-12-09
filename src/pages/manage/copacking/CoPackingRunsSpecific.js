@@ -27,10 +27,10 @@ class ManageCoPackingRunsSpecific extends Component {
     this.modalStore = props.store.modal
 
     this.state = {
-      products: [],
       copackingrun: null,
       skuModal: false,
       selectedProduct: {},
+      selectedCopackingRun: null,
     }
   }
 
@@ -52,19 +52,13 @@ class ManageCoPackingRunsSpecific extends Component {
   loadCoPackingRunsProducts() {
     const runId = this.props.match.params.runId
 
-    // TODO remove this method
-    this.adminStore.getCopackingRuns()
-
     this.adminStore.getCopackingRunProducts(runId)
       .then(data => {
-        this.setState({ products: data })
+        this.setState({ copackingrun: data })
       })
       .catch(error => {
         this.modalStore.toggleModal('error', 'Can\'t get co-packing runs products')
       })
-
-    const copackingrun = this.adminStore.copackingruns.find(r => r.id == runId)
-    this.setState({ copackingrun })
   }
 
   toggleModal = () => {
@@ -72,26 +66,29 @@ class ManageCoPackingRunsSpecific extends Component {
   }
 
   openProductSKUDetails = productId => {
-    const { products } = this.state
+    const { copackingrun } = this.state
 
-    this.setState({
-      selectedProduct: products.find(p => p.id === productId)
-    }, () => {
-      this.toggleModal()
-    })
+    if (copackingrun && copackingrun.products) {
+      this.setState({
+        selectedProduct: copackingrun.products.find(p => p.id === productId) || {},
+        selectedCopackingRun: copackingrun.id,
+      }, () => {
+        this.toggleModal()
+      })
+    }
   }
 
   render() {
     const {
       skuModal,
-      products,
       copackingrun,
       selectedProduct,
+      selectedCopackingRun,
     } = this.state
 
     return (
       <div className="App">
-        <Title content={copackingrun && copackingrun.process} />
+        <Title content={copackingrun && copackingrun.copacking_process} />
         <Container>
           <Paper elevation={1} className="scrollable-table">
             <Table>
@@ -108,22 +105,22 @@ class ManageCoPackingRunsSpecific extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map(p => (
+                {(copackingrun && copackingrun.products) ? copackingrun.products.map(p => (
                   <TableRow
                     key={p.name}
                     className="clickable-row"
                     onClick={() => this.openProductSKUDetails(p.id)}
                   >
-                    <TableCell align="left">{p.name}</TableCell>
-                    <TableCell>{p.packagingType}</TableCell>
-                    <TableCell>{p.packaging}</TableCell>
-                    <TableCell>{p.units}</TableCell>
-                    <TableCell>{p.time}</TableCell>
-                    <TableCell>{p.volume}</TableCell>
-                    <TableCell>{p.shipment_type === 'pallet' ? 'Pallet' : p.tracking_number}</TableCell>
-                    <TableCell>{p.shipmentEDD}</TableCell>
+                    <TableCell align="left">{p.product_name}</TableCell>
+                    <TableCell>{p.packaging_type}</TableCell>
+                    <TableCell>{p.packaging_quantity}</TableCell>
+                    <TableCell>{p.estimated_units}</TableCell>
+                    <TableCell>{p.estimated_time}</TableCell>
+                    <TableCell>{p.shipment_volume}</TableCell>
+                    <TableCell>{p.inbound_shipment_type === 'pallet' ? 'Pallet' : p.inbound_shipment_tracking}</TableCell>
+                    <TableCell>{p.inbound_shipment_edd}</TableCell>
                   </TableRow>
-                ))}
+                )) : null}
               </TableBody>
             </Table>
           </Paper>
@@ -140,6 +137,7 @@ class ManageCoPackingRunsSpecific extends Component {
           showModal={skuModal}
           toggleModal={this.toggleModal}
           product={selectedProduct}
+          copackingRun={selectedCopackingRun}
         />
       </div>
     )

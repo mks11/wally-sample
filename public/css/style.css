@@ -2053,7 +2053,7 @@ a {
     padding-top: 88px;
   }
   .btn-icon--close {
-    position: fixed;
+    /* position: fixed; */
   }
 }
 

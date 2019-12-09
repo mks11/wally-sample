@@ -68,12 +68,13 @@ class ManageCoPackingRuns extends Component {
 
   handleDetectedValue = code => {
     console.log(code)
-    this.adminStore.getUPCInfo({ code })
-      .then(res => {
+    this.adminStore.getUPCInfo({
+      upc_code: code,
+    }).then(res => {
         console.log(res)
       })
       .catch(error => {
-        console.log(error)
+        this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
       })
   }
 
@@ -100,14 +101,14 @@ class ManageCoPackingRuns extends Component {
               <TableBody>
                 {copackingruns.map(run => (
                   <TableRow
-                    key={run.process}
+                    key={run.id}
                     className="clickable-row"
                     onClick={() => this.handleRowClick(run.id)}
                   >
-                    <TableCell align="left">{run.process}</TableCell>
-                    <TableCell>{run.skus}</TableCell>
-                    <TableCell>{run.jars}</TableCell>
-                    <TableCell>{run.time}</TableCell>
+                    <TableCell align="left">{run.copacking_process}</TableCell>
+                    <TableCell>{run.products.length}</TableCell>
+                    <TableCell>{run.estimated_units}</TableCell>
+                    <TableCell>{run.estimated_time}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

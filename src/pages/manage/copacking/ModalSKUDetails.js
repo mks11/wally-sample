@@ -74,6 +74,7 @@ class ModalSKUDetails extends Component {
       isUpdating,
       product,
     } = this.state
+    const { copackingRun } = this.props
 
     if (!editUnitWeight) {
       this.setState({ editUnitWeight: true })
@@ -85,8 +86,10 @@ class ModalSKUDetails extends Component {
           this.setModalError('', false)
           this.setState({ isUpdating: true })
 
-          this.adminStore.updateSKUUnitWeight({ unit_weight: unitWeight })
-            .then(data => {
+          this.adminStore.updateSKUUnitWeight(product.sku_id, {
+            unit_weight: unitWeight,
+            copacking_run_id: copackingRun,
+          }).then(data => {
               this.setState({
                 product: {
                   ...product,
@@ -138,9 +141,19 @@ class ModalSKUDetails extends Component {
 
   handleQRClose = packagingIds => {
     this.setState({ isQROpen: false })
+    const { product } = this.state
 
     if (packagingIds.length) {
-      this.adminStore.uploadCopackingQRCodes({ packagingIds })
+      this.adminStore.uploadCopackingQRCodes({
+        packaging_ids: packagingIds,
+        product_id: product.id,
+        sku_id: product.sku_id,
+        // copacking_product_id: ?
+        expiration_date: product.expiration_date,
+      })
+      .catch(() => {
+        this.modalStore.toggleModal('error', 'There was an error during uploading QR codes')
+      })
     }
   }
 
@@ -171,7 +184,7 @@ class ModalSKUDetails extends Component {
               <TableBody>
                 <TableRow>
                   <TableCell align="left" className="sku-modal-first-col"><b>Product Name:</b></TableCell>
-                  <TableCell align="left">{product.name}</TableCell>
+                  <TableCell align="left">{product.product_name}</TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -203,7 +216,7 @@ class ModalSKUDetails extends Component {
 
                 <TableRow>
                   <TableCell align="left"><b>Estimated Quantity:</b></TableCell>
-                  <TableCell align="left">50</TableCell>
+                  <TableCell align="left">{product.packaging_quantity}</TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -239,14 +252,14 @@ class ModalSKUDetails extends Component {
 
                 <TableRow>
                   <TableCell align="left"><b>Actual Quantity:</b></TableCell>
-                  <TableCell align="left">{product.actual_quantity || 'TBD'}</TableCell>
+                  <TableCell align="left">{product.packaging_quantity || 'TBD'}</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell colSpan={2}>
                     <Row>
                       <Col className="p-2 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                        {product.actual_quantity && product.unit_weight ? (
+                        {product.packaging_quantity && product.unit_weight ? (
                           <a className="btn btn-main active" href={product.upc_case_labels_url}>Print UPC Code</a>
                         ) : (
                           <button className="btn btn-main" disabled>Print UPC Code</button>
@@ -261,9 +274,9 @@ class ModalSKUDetails extends Component {
                   <TableCell align="left" colSpan={2}><b>Outbound Shipments:</b></TableCell>
                 </TableRow>
                 {product.outbound_shipments && product.outbound_shipments.map(s => (
-                  <TableRow key={s.id}>
-                    <TableCell align="left">{`  Shipment ${s.id}:`}</TableCell>
-                    <TableCell align="left">{(product.case_quantity / product.jar_quantity).toFixed(2)}</TableCell>
+                  <TableRow key={s.shipment_id}>
+                    <TableCell align="left">{`  Shipment ${s.shipment_id}:`}</TableCell>
+                    <TableCell align="left">{s.units}</TableCell>
                   </TableRow>
                 ))}
 
