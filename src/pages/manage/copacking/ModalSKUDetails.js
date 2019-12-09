@@ -146,9 +146,9 @@ class ModalSKUDetails extends Component {
     if (packagingIds.length) {
       this.adminStore.uploadCopackingQRCodes({
         packaging_ids: packagingIds,
-        product_id: product.id,
+        product_id: product.product_id,
         sku_id: product.sku_id,
-        // copacking_product_id: ?
+        copacking_product_id: product.id,
         expiration_date: product.expiration_date,
       })
       .catch(() => {
