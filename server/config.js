@@ -829,8 +829,7 @@ const getBlogPosts = {
       id: "blog2",
       author: "Anonymous Wolf",
       title: "Check this out!",
-      body:
-        "<h1>HI</h1> This is another blog poset text with <strong>strong</strong> text included",
+      body: "<h1>HI</h1> This is another blog poset text with <strong>strong</strong> text included",
       image_ref: "full/listnk/address2",
       live: true,
       post_date: "2018-10-18"
@@ -911,9 +910,9 @@ module.exports = {
   "/api/admin/order/:id": getOrder,
   "/api/admin/packagings": getPackagings,
 
-  "/api/manage/co-packing/inbound": getInboundProductShipments,
-  "/api/manage/co-packing/outbound": getOutboundProductShipments,
-  "/api/manage/co-packing/update-shipment": updateProductShipment,
+  "/api/admin/co-packing/shipments/inbound": getInboundProductShipments,
+  "/api/admin/co-packing/shipments/outbound": getOutboundProductShipments,
+  "/api/admin/shipments/:id": updateProductShipment,
 
   //Todo:link packaging
   "/api/order/:id/package": packageOrder,

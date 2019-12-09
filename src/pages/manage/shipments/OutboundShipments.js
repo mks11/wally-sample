@@ -39,6 +39,7 @@ class OutboundShipments extends Component {
           this.adminStore
             .getOutboundProductShipments()
             .then(res => {
+              console.log(res);
               if (res) {
                 this.setState({
                   results: res
@@ -116,8 +117,7 @@ class OutboundShipments extends Component {
         }
         return item;
       });
-      // Sending all shipping details - could send newItem if only updating that
-      this.adminStore.updateProductShipment(updatedResults);
+      this.adminStore.updateProductShipment(newItem);
       this.setState({
         results: updatedResults,
         openModal: false,
