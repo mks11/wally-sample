@@ -101,7 +101,7 @@ class ManageCoPackingRuns extends Component {
               <TableBody>
                 {copackingruns.map(run => (
                   <TableRow
-                    key={run.id}
+                    key={run._id}
                     className="clickable-row"
                     onClick={() => this.handleRowClick(run._id)}
                   >
