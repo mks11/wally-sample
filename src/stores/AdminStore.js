@@ -227,9 +227,9 @@ class AdminStore {
     return res;
   }
 
-  async updateProductShipment(newItem) {
+  async updateProductShipment(id, newItem) {
     const data = { ...newItem };
-    const res = axios.patch(`${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}`, data);
+    const res = axios.patch(`${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}${id}`, data);
 
     return res;
   }

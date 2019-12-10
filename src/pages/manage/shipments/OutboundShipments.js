@@ -42,7 +42,7 @@ class OutboundShipments extends Component {
               console.log(res);
               if (res) {
                 this.setState({
-                  results: res
+                  results: res.data
                 });
               } else {
                 this.setState({
@@ -109,7 +109,7 @@ class OutboundShipments extends Component {
       let newItem;
       // Update Locally - since no api return yet
       let updatedResults = this.state.results.map(item => {
-        if (this.state.modal.shipmentId === item.shipmentId) {
+        if (this.state.modal._id === item._id) {
           newItem = item;
           newItem.tracking_number = this.state.trackingEdit;
           newItem.carrier = this.state.carrier;
@@ -117,7 +117,7 @@ class OutboundShipments extends Component {
         }
         return item;
       });
-      this.adminStore.updateProductShipment(newItem);
+      this.adminStore.updateProductShipment(newItem._id, { tracking_number: this.state.trackingEdit, carrer: this.state.carrier });
       this.setState({
         results: updatedResults,
         openModal: false,
@@ -174,8 +174,8 @@ class OutboundShipments extends Component {
                     results.map((res, i) => {
                       return (
                         <TableRow key={res.tracking_number + i} onClick={() => this.setOutboundModal(res)}>
-                          <TableCell align="left">{res.shipmentId}</TableCell>
-                          <TableCell align="left">{res.address}</TableCell>
+                          <TableCell align="left">{res._id}</TableCell>
+                          <TableCell align="left">{res.destination.address.name} {res.destination.address.street1} {res.destination.address.street2} {res.destination.address.city}, {res.destination.address.state} {res.destination.address.zip}</TableCell>
                           <TableCell align="right">{res.carrier ? res.carrier : ""}</TableCell>
                           <TableCell align="right">{res.tracking_number ? res.tracking_number : ""}</TableCell>
                         </TableRow>
@@ -205,7 +205,7 @@ class OutboundShipments extends Component {
           <Container>
             <button className="btn-icon btn-icon--close" onClick={() => this.handleModalClose()}></button>
             <Paper style={{ height: "auto", marginTop: "30px" }} elevation={2}>
-              {chosenShipment !== null && <Title content={"Shipment " + chosenShipment.shipmentId} />}
+              {chosenShipment !== null && <Title content={"Shipment " + chosenShipment._id} />}
 
               <Table className={"packaging-table"}>
                 <TableBody>
@@ -319,12 +319,12 @@ class OutboundShipments extends Component {
                     </TableHead>
                     <TableBody style={{ minHeight: "100px" }}>
                       {chosenShipment !== null &&
-                        chosenShipment.Products.map((product, i) => (
+                        chosenShipment.packing_list.map((product, i) => (
                           <TableRow key={i}>
                             <TableCell align="left">{product.name}</TableCell>
                             <TableCell align="left">
-                              {product.jar_quantity} Jars / {product.case_quantity} Case
-                              {product.case_quantity === 1 ? null : "s"}
+                              {product.units} Jars / {product.cases} Case
+                              {product.cases === 1 ? null : "s"}
                             </TableCell>
                           </TableRow>
                         ))}

@@ -54,7 +54,7 @@ class InboundShipments extends Component {
               console.log(res);
               if (res) {
                 this.setState({
-                  results: res
+                  results: res.data
                 });
               } else {
                 this.setState({
@@ -122,7 +122,7 @@ class InboundShipments extends Component {
                 <TableBody>
                   {results.map((shipment, i) => (
                     <TableRow
-                      key={shipment.from_address.name + i}
+                      key={shipment.origin.partner_name + i}
                       id={"toggler" + i}
                       onClick={() => this.setRowChoice(i)}
                       style={{
@@ -137,11 +137,11 @@ class InboundShipments extends Component {
                       <TableCell style={{ padding: "5px 10px" }}>
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <div style={{ width: "98%" }}>
-                            {shipment.from_address.name}
+                            {shipment.origin.partner_name}
                             {" - "}
                             {shipment.edd}
                             {" - "}
-                            {shipment.type}
+                            {shipment.shipment_type}
                             {" - "}
                             {shipment.delivery_window}
                           </div>
@@ -170,7 +170,7 @@ class InboundShipments extends Component {
                               </TableRow>
                             </TableHead>
                             <TableBody style={{ minHeight: "200px", maxWidth: "100%" }}>
-                              {shipment.packingList.map(product => (
+                              {shipment.packing_list.map(product => (
                                 <TableRow key={product.name + i}>
                                   <TableCell style={{ padding: "1em" }} align="left">
                                     {product.name}
