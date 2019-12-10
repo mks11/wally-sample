@@ -70,8 +70,8 @@ class ManageCoPackingRunsSpecific extends Component {
 
     if (copackingrun && copackingrun.products) {
       this.setState({
-        selectedProduct: copackingrun.products.find(p => p.id === productId) || {},
-        selectedCopackingRun: copackingrun.id,
+        selectedProduct: copackingrun.products.find(p => p.product_id === productId) || {},
+        selectedCopackingRun: copackingrun.copacking_process_id,
       }, () => {
         this.toggleModal()
       })
@@ -109,7 +109,7 @@ class ManageCoPackingRunsSpecific extends Component {
                   <TableRow
                     key={p.name}
                     className="clickable-row"
-                    onClick={() => this.openProductSKUDetails(p.id)}
+                    onClick={() => this.openProductSKUDetails(p.product_id)}
                   >
                     <TableCell align="left">{p.product_name}</TableCell>
                     <TableCell>{p.packaging_type}</TableCell>
