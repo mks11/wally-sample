@@ -71,7 +71,7 @@ class ManageCoPackingRunsSpecific extends Component {
     if (copackingrun && copackingrun.products) {
       this.setState({
         selectedProduct: copackingrun.products.find(p => p.product_id === productId) || {},
-        selectedCopackingRun: copackingrun.copacking_process_id,
+        selectedCopackingRun: copackingrun._id,
       }, () => {
         this.toggleModal()
       })

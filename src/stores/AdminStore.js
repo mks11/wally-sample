@@ -453,12 +453,12 @@ class AdminStore {
   }
 
   async updateSKUUnitWeight(skuId, data) {
-    const res = await axios.post(`${API_UPDATE_SKU_UNIT_WEIGHT}/${skuId}/weight`, data);
+    const res = await axios.patch(`${API_UPDATE_SKU_UNIT_WEIGHT}/${skuId}/weight`, data);
     return res.data;
   }
 
   async uploadCopackingQRCodes(data) {
-    const res = await axios.post(API_UPLOAD_COPACKING_QR_CODES, data);
+    const res = await axios.patch(API_UPLOAD_COPACKING_QR_CODES, data);
     return res.data;
   }
 
