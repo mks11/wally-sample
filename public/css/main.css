@@ -1252,6 +1252,12 @@ body {
   border-color: #117a8b;
 }
 
+.btn-sm.active {
+  background-color: #78C98D;
+  border-color: #78C98D;
+  border: none;
+}
+
 .add-button {
   height: 50px;
   width: 80px;

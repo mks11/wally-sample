@@ -2015,7 +2015,7 @@ a {
   }
 
   .modal-content {
-    height: auto;
+    height: inherit;
     min-height: 100%;
     border-radius: 0;
   }
@@ -2053,7 +2053,7 @@ a {
     padding-top: 88px;
   }
   .btn-icon--close {
-    position: fixed;
+    /* position: fixed; */
   }
 }
 
@@ -2705,12 +2705,6 @@ span.category-card-img {
     margin: 0 -20px;
   }
 
-  .MuiTableCell-root-35 {
-    padding: 0 !important;
-    font-size: 10px !important;
-    text-align: center !important;
-  }
-
   .react-switch-bg{
     height: 26px !important;
     width: 43px !important;
@@ -2721,12 +2715,29 @@ span.category-card-img {
     width: 15px !important;
   }
 
-  .MuiTableCell-root-35 .form-inline {
+  th[class^='MuiTableCell-root'],
+  th[class*=' MuiTableCell-root'],
+  td[class^='MuiTableCell-root'],
+  td[class*=' MuiTableCell-root'] {
+    padding: 10px 15px !important;
+    font-size: 10px !important;
+    text-align: center !important;
+  }
+
+  td[class^='MuiTableCell-root'] .form-inline,
+  td[class*=' MuiTableCell-root'] .form-inline {
     justify-content: center;
   }
 
-  .MuiTableCell-root-35 .form-inline .form-check {
+  td[class^='MuiTableCell-root'] .form-inline .form-check,
+  td[class*=' MuiTableCell-root'] .form-inline .form-check {
     width: auto;
+  }
+
+  td[class^='MuiTableCell-alignLeft'],
+  td[class*=' MuiTableCell-alignLeft'] {
+    padding-left: 12px !important;
+    text-align: left !important;
   }
 }
 
@@ -2800,4 +2811,50 @@ span.category-card-img {
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+}
+
+
+
+
+.clickable-row:active {
+  background-color: #eee;
+}
+
+@media (min-width: 1200px) {
+  .clickable-row:hover,
+  .clickable-row:active {
+    background-color: #eee;
+  }
+}
+
+
+.sku-modal {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.qr-modal-control {
+  background: #fff;
+  position: absolute;
+  width: 100%;
+  top: -39px;
+  text-align: right;
+}
+.qr-modal-control .btn-icon--close {
+  top: 0;
+  right: 0;
+  position: relative;
+}
+.qr-modal-backdrop {
+  background: rgba(0,0,0,0.95);
+  top: 0;
+  z-index: 9999;
+}
+.qr-modal-result {
+  word-break: break-all;
+}
+
+@media (max-width: 600px) {
+  .sku-modal-first-col {
+    width: 135px;
+  }
 }
