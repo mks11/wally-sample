@@ -51,6 +51,7 @@ class InboundShipments extends Component {
           this.adminStore
             .getInboundProductShipments()
             .then(res => {
+              console.log(res);
               if (res) {
                 this.setState({
                   results: res

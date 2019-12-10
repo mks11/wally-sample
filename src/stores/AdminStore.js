@@ -181,7 +181,6 @@ class AdminStore {
     await axios.get(`${API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD}`);
   }
 
-<<<<<<< HEAD
   async getOutboundProductShipments() {
     const res = axios.get(`${API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS}`);
     console.log(res);
