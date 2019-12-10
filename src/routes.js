@@ -58,7 +58,7 @@ export default (
       <Route exact path="/manage/co-packing/outbound" component={OutboundShipments} />
       <Route exact path="/manage/co-packing/inbound" component={InboundShipments} />
       <Route exact path="/manage/co-packing/runs" component={ManageCoPackingRuns} />
-      <Route exact path="/manage/co-packing/:runId" component={ManageCoPackingRunsSpecific} />
+      <Route exact path="/manage/co-packing/runs/:runId" component={ManageCoPackingRunsSpecific} />
       <Route exact path="/manage/receipts" component={Receipts} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/packaging/:id" component={Mainpage} />

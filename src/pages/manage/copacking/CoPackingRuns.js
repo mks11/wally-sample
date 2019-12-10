@@ -59,7 +59,7 @@ class ManageCoPackingRuns extends Component {
   }
 
   handleRowClick = id => {
-    this.routing.push(`/manage/co-packing/${id}`)
+    this.routing.push(`/manage/co-packing/runs/${id}`)
   }
 
   toggleBarScan = () => {
@@ -101,9 +101,9 @@ class ManageCoPackingRuns extends Component {
               <TableBody>
                 {copackingruns.map(run => (
                   <TableRow
-                    key={run.id}
+                    key={run.copacking_process_id}
                     className="clickable-row"
-                    onClick={() => this.handleRowClick(run._id)}
+                    onClick={() => this.handleRowClick(run.copacking_process_id)}
                   >
                     <TableCell align="left">{run.copacking_process}</TableCell>
                     <TableCell>{run.products.length}</TableCell>
