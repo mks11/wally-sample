@@ -44,7 +44,7 @@ class ModalSKUDetails extends Component {
     const { product } = this.props
 
     if (!prevState.showModal) {
-      if (product.id !== prevProps.product.id) {
+      if (product.product_id !== prevProps.product.product_id) {
         this.setState({
           product,
           showError: !product.unit_weight,
@@ -148,7 +148,7 @@ class ModalSKUDetails extends Component {
         packaging_ids: packagingIds,
         product_id: product.product_id,
         sku_id: product.sku_id,
-        copacking_product_id: product.id,
+        copacking_product_id: product.product_id,
         expiration_date: product.expiration_date,
       })
       .catch(() => {
