@@ -101,9 +101,9 @@ class ManageCoPackingRuns extends Component {
               <TableBody>
                 {copackingruns.map(run => (
                   <TableRow
-                    key={run.copacking_process_id}
+                    key={run.id}
                     className="clickable-row"
-                    onClick={() => this.handleRowClick(run.copacking_process_id)}
+                    onClick={() => this.handleRowClick(run._id)}
                   >
                     <TableCell align="left">{run.copacking_process}</TableCell>
                     <TableCell>{run.products.length}</TableCell>
