@@ -164,7 +164,7 @@ class OutboundShipments extends Component {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Shipment ID</TableCell>
-                    <TableCell align="left">Adress</TableCell>
+                    <TableCell align="left">Address</TableCell>
                     <TableCell align="right">Carrier</TableCell>
                     <TableCell align="right">Tracking #</TableCell>
                   </TableRow>
