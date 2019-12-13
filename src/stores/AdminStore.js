@@ -35,7 +35,7 @@ import {
   API_ADMIN_GET_CO_PACKING_RUNS,
   API_UPDATE_SKU_UNIT_WEIGHT,
   API_UPLOAD_COPACKING_QR_CODES,
-  API_GET_UPC_INFO,
+  API_GET_UPC_INFO
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -68,7 +68,7 @@ class AdminStore {
     const res = await axios.get(
       `${API_ADMIN_GET_RECEIPTS}?timeframe=${timeframe}`
     );
-    const sortedReceipts = res.data.receipts.sort(function (a, b) {
+    const sortedReceipts = res.data.receipts.sort(function(a, b) {
       return a.createdAt - b.createdAt;
     });
     this.receipts = sortedReceipts;
@@ -88,8 +88,13 @@ class AdminStore {
     let res;
     // Upload File to S3
     try {
-      let data = await S3Client.uploadFile(file)
-      console.log(data.key.split("/").slice(-1).join("/"))
+      let data = await S3Client.uploadFile(file);
+      console.log(
+        data.key
+          .split("/")
+          .slice(-1)
+          .join("/")
+      );
       let res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
         shop_date: date,
         filename: data.key
@@ -98,9 +103,9 @@ class AdminStore {
           .join("/"),
         location: shop_location
       });
-      uploaded = true
+      uploaded = true;
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
     return uploaded;
   }
@@ -128,7 +133,8 @@ class AdminStore {
 
   async getPurchasedShopItems(auth, timeframe, shop_location) {
     const res = await axios.get(
-      `${API_ADMIN_GET_PURCHASED_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth
+      `${API_ADMIN_GET_PURCHASED_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`,
+      auth
     );
     this.shopitems = res.data.shop_items;
   }
@@ -141,7 +147,10 @@ class AdminStore {
   }
 
   async getUnavailableShopItems(auth, timeframe, shop_location) {
-    const res = await axios.get(`${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`, auth)
+    const res = await axios.get(
+      `${API_ADMIN_GET_UNAVAILABLE_SHOP_ITEMS}?timeframe=${timeframe}&shop_location=${shop_location}`,
+      auth
+    );
     this.shopitems = res.data.shop_items;
   }
 
@@ -182,8 +191,7 @@ class AdminStore {
   }
 
   async getOutboundProductShipments() {
-    const res = axios.get(`${API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS}`);
-    console.log(res);
+    const res = await axios.get(`${API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS}`);
     // let response = [
     //   {
     //     shipmentId: "ABCD123",
@@ -234,8 +242,13 @@ class AdminStore {
     return res;
   }
 
+  async getPrintEmail(url) {
+    const res = axios.get(`${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}${url}`);
+  }
+
   async getInboundProductShipments() {
     const res = await axios.get(`${API_ADMIN_GET_INBOUND_PROD_SHIPMENTS}`);
+    console.log(res, "resresres");
     //:::: remove this test data after api implemented ::::
     // let shipment = [
     //   {
@@ -283,13 +296,20 @@ class AdminStore {
   }
 
   async uploadSelection(filename, formData) {
-    const res = await axios.post(`${API_ADMIN_UPLOAD_SELECTION}?filename=${filename}`,
+    const res = await axios.post(
+      `${API_ADMIN_UPLOAD_SELECTION}?filename=${filename}`,
       formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
+      { headers: { "Content-Type": "multipart/form-data" } }
     );
   }
 
-  async updateShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {
+  async updateShopItem(
+    timeframe,
+    shopitem_id,
+    data,
+    updateCurrentProduct,
+    index
+  ) {
     this.loading = true;
     const res = await axios.patch(
       `${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
@@ -299,7 +319,13 @@ class AdminStore {
     this.updateStoreShopItem(shopitem_id, res.data);
   }
 
-  async updatePurchasedShopItem(timeframe, shopitem_id, data, updateCurrentProduct, index) {
+  async updatePurchasedShopItem(
+    timeframe,
+    shopitem_id,
+    data,
+    updateCurrentProduct,
+    index
+  ) {
     this.loading = true;
     const res = await axios.patch(
       `${API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM}/${shopitem_id}?timeframe=${timeframe}`,
@@ -311,7 +337,10 @@ class AdminStore {
   }
 
   async updateShopItemQuantity(timeframe, shopitem_id, data) {
-    const res = await axios.patch(`${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`, data);
+    const res = await axios.patch(
+      `${API_ADMIN_UPDATE_SHOP_ITEM}/${shopitem_id}/quantity?timeframe=${timeframe}`,
+      data
+    );
     this.updateStoreShopItem(shopitem_id, res.data);
   }
 
@@ -347,7 +376,9 @@ class AdminStore {
   async getRouteOrders(id, timeframe, options) {
     timeframe = moment().format("YYYY-MM-DD");
     const { data } = await axios.get(
-      `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`,
+      `${API_ADMIN_UPDATE_ROUTE_PLACEMENT}/orders?route_id=${id}&timeframe=${
+        timeframe ? timeframe : ""
+      }%202:00-8:00PM`,
       options
     );
 
@@ -359,7 +390,9 @@ class AdminStore {
     timeframe = moment().format("YYYY-MM-DD");
 
     const { data } = await axios.get(
-      `${API_ADMIN_GET_ORDERS}?timeframe=${timeframe ? timeframe : ""}%202:00-8:00PM`,
+      `${API_ADMIN_GET_ORDERS}?timeframe=${
+        timeframe ? timeframe : ""
+      }%202:00-8:00PM`,
       options
     );
     this.orders = data;
@@ -389,7 +422,7 @@ class AdminStore {
     const { data } = await axios.post(
       `${API_ADMIN_CREATE_COURIER}`,
       params,
-      options,
+      options
     );
     return data;
   }
@@ -408,15 +441,12 @@ class AdminStore {
 
   async linkPackaging(data, options) {
     this.packagings = [];
-    const res = await axios.patch(`${API_ADMIN_LINK_PACKAGING}`,
-      data,
-      options);
+    const res = await axios.patch(`${API_ADMIN_LINK_PACKAGING}`, data, options);
     console.log(res.data);
     return res.data;
   }
 
   async packageOrder(id, data, options) {
-
     const res = await axios.patch(
       `${API_ADMIN_PACKAGE_ORDER}/${id}/package`,
       data,
@@ -427,7 +457,6 @@ class AdminStore {
   }
 
   async completeOrder(id, data, options) {
-
     const res = await axios.patch(
       `${API_ADMIN_COMPLETE_ORDER}/${id}/complete`,
       data,
@@ -441,7 +470,6 @@ class AdminStore {
     console.log(res.data);
   }
 
-
   async getCopackingRuns() {
     const res = await axios.get(API_ADMIN_GET_CO_PACKING_RUNS);
     return res.data;
@@ -453,7 +481,10 @@ class AdminStore {
   }
 
   async updateSKUUnitWeight(skuId, data) {
-    const res = await axios.patch(`${API_UPDATE_SKU_UNIT_WEIGHT}/${skuId}/weight`, data);
+    const res = await axios.patch(
+      `${API_UPDATE_SKU_UNIT_WEIGHT}/${skuId}/weight`,
+      data
+    );
     return res.data;
   }
 
@@ -566,7 +597,7 @@ decorate(AdminStore, {
   getCopackingRunProducts: action,
   updateSKUUnitWeight: action,
   uploadCopackingQRCodes: action,
-  getUPCInfo: action,
+  getUPCInfo: action
 });
 
 export default new AdminStore();

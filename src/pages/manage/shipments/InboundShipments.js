@@ -20,9 +20,17 @@ import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import { connect } from "utils";
 import Title from "./../../../common/page/Title";
-import { Modal, TextField, FormControl, MenuItem, Select, InputLabel } from "@material-ui/core";
+import {
+  Modal,
+  TextField,
+  FormControl,
+  MenuItem,
+  Select,
+  InputLabel
+} from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import moment from "moment";
 
 class InboundShipments extends Component {
   constructor(props) {
@@ -53,6 +61,13 @@ class InboundShipments extends Component {
             .then(res => {
               console.log(res);
               if (res) {
+                // Uncomment below to test long lists
+                // let extra = [...res.data, ...res.data, ...res.data];
+                // this.setState({
+                //   results: extra
+                // });
+
+                // Comment below out to test the above
                 this.setState({
                   results: res.data
                 });
@@ -69,7 +84,7 @@ class InboundShipments extends Component {
                 openModal: true
               });
             });
-        }  
+        }
       }
     });
   }
@@ -123,8 +138,6 @@ class InboundShipments extends Component {
                   {results.map((shipment, i) => (
                     <TableRow
                       key={shipment.origin.partner_name + i}
-                      id={"toggler" + i}
-                      onClick={() => this.setRowChoice(i)}
                       style={{
                         border: "1px solid rgb(153, 152, 155, 0.44)",
                         borderTop: "none",
@@ -135,51 +148,73 @@ class InboundShipments extends Component {
                       }}
                     >
                       <TableCell style={{ padding: "5px 10px" }}>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                          <div style={{ width: "98%" }}>
-                            {shipment.origin.partner_name}
-                            {" - "}
-                            {shipment.edd}
-                            {" - "}
-                            {shipment.shipment_type}
-                            {" - "}
-                            {shipment.delivery_window}
+                        <span
+                          id={"toggler" + i}
+                          onClick={() => this.setRowChoice(i)}
+                        >
+                          <div
+                            style={{ display: "flex", flexDirection: "row" }}
+                          >
+                            <div style={{ width: "98%" }}>
+                              {shipment.shipment_type.toUpperCase()}
+
+                              {" - "}
+                              {shipment.origin.partner_name}
+                              {" - "}
+
+                              {moment(shipment.edd.substring(0, 10)).format(
+                                "YYYY-MM-DD"
+                              )}
+                            </div>
+                            <div>
+                              {this.state.selectedRow === i &&
+                              !this.state.collapse ? (
+                                <ArrowDropUpIcon />
+                              ) : (
+                                <ArrowDropDownIcon />
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            {this.state.selectedRow === i && !this.state.collapse ? (
-                              <ArrowDropUpIcon />
-                            ) : (
-                              <ArrowDropDownIcon />
-                            )}
-                          </div>
-                        </div>
+                        </span>
                         <UncontrolledCollapse toggler={"#toggler" + i}>
                           <h3 style={{ margin: "15px 0" }}>Packing List:</h3>
                           <Table>
-                            <TableHead style={{ backgroundColor: "rgb(153, 152, 155, 0.44)" }}>
+                            <TableHead
+                              style={{
+                                backgroundColor: "rgb(153, 152, 155, 0.44)"
+                              }}
+                            >
                               <TableRow>
-                                <TableCell style={{ padding: "1em" }} align="left">
+                                <TableCell
+                                  style={{ padding: "1em" }}
+                                  align="left"
+                                >
                                   Name
                                 </TableCell>
-                                <TableCell style={{ padding: "1em" }} align="right">
+                                <TableCell
+                                  style={{ padding: "1em" }}
+                                  align="right"
+                                >
                                   Volume (lbs)
-                                </TableCell>
-                                <TableCell style={{ padding: "1em" }} align="center">
-                                  Co-Packing Process
                                 </TableCell>
                               </TableRow>
                             </TableHead>
-                            <TableBody style={{ minHeight: "200px", maxWidth: "100%" }}>
+                            <TableBody
+                              style={{ minHeight: "200px", maxWidth: "100%" }}
+                            >
                               {shipment.packing_list.map(product => (
                                 <TableRow key={product.name + i}>
-                                  <TableCell style={{ padding: "1em" }} align="left">
+                                  <TableCell
+                                    style={{ padding: "1em" }}
+                                    align="left"
+                                  >
                                     {product.name}
                                   </TableCell>
-                                  <TableCell style={{ padding: "1em" }} align="right">
+                                  <TableCell
+                                    style={{ padding: "1em" }}
+                                    align="right"
+                                  >
                                     {product.volume}
-                                  </TableCell>
-                                  <TableCell style={{ padding: "1em" }} align="center">
-                                    {product.process}
                                   </TableCell>
                                 </TableRow>
                               ))}
