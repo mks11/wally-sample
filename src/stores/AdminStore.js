@@ -493,8 +493,8 @@ class AdminStore {
     return res.data;
   }
 
-  async getUPCInfo(data) {
-    const res = await axios.post(API_GET_UPC_INFO, data);
+  async getUPCInfo(upc_code) {
+    const res = await axios.get(`${API_GET_UPC_INFO}?upc_code=${upc_code}`);
     return res.data;
   }
 

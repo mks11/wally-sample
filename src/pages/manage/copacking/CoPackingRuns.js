@@ -68,9 +68,8 @@ class ManageCoPackingRuns extends Component {
 
   handleDetectedValue = code => {
     console.log(code)
-    this.adminStore.getUPCInfo({
-      upc_code: code,
-    }).then(res => {
+    this.adminStore.getUPCInfo(code)
+      .then(res => {
         console.log(res)
       })
       .catch(error => {
