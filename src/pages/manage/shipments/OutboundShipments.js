@@ -187,68 +187,55 @@ class OutboundShipments extends Component {
       <>
         <section className="page-section pt-1 fulfillment-page">
           <Title content="Outbound Shipments" />
-          <Container style={{ width: "95%", margin: "auto" }}>
+          <Container
+            style={{
+              width: "97%",
+              margin: "auto",
+              paddingRight: 4,
+              paddingLeft: 4
+            }}
+          >
             <Paper
               style={{ minHeight: "600px" }}
               elevation={1}
               className={"scrollable-table"}
             >
-              <Table className={"packaging-table"}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      style={{ paddingRight: 0, maxWidth: "100px" }}
-                      align="left"
-                    >
-                      Shipment ID
-                    </TableCell>
-                    <TableCell
-                      style={{ paddingRight: 0, paddingLeft: 0 }}
-                      align="left"
-                    >
-                      Address
-                    </TableCell>
-                    <TableCell style={{ paddingRight: 0 }} align="right">
-                      Carrier
-                    </TableCell>
-                    <TableCell style={{ paddingRight: 5 }} align="right">
-                      Tracking #
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody style={{ minHeight: "500px" }}>
+              <table style={{ width: "98%", margin: "auto" }}>
+                <tr style={{ whiteSpace: "nowrap" }}>
+                  <td style={{ padding: "5px 3px" }}>Shipment ID</td>
+                  <td style={{ padding: "5px 3px" }}>Address</td>
+                  <td style={{ padding: "5px 3px" }}>Carrier</td>
+                  <td style={{ padding: "5px 3px" }}>Tracking #</td>
+                </tr>
+                <tbody>
                   {results.length > 0 &&
                     results.map((res, i) => {
                       return (
-                        <TableRow
-                          key={i}
+                        <tr
+                          style={{ cursor: "pointer", padding: "5px 3px" }}
                           onClick={() => this.setOutboundModal(res)}
                         >
-                          <TableCell align="left" style={{ maxWidth: "100px" }}>
-                            {res._id}
-                          </TableCell>
-                          <TableCell
-                            style={{ paddingRight: 0, paddingLeft: 0 }}
-                            align="left"
-                          >
+                          <td style={{ padding: "5px 3px" }}>{res._id}</td>
+                          <td style={{ padding: "5px 3px" }}>
                             {res.destination.address.name}{" "}
                             {res.destination.address.street1}{" "}
                             {res.destination.address.street2}{" "}
                             {res.destination.address.city},{" "}
                             {res.destination.address.state}{" "}
                             {res.destination.address.zip}
-                          </TableCell>
-                          <TableCell style={{ paddingRight: 0 }} align="right">
+                          </td>
+                          <td style={{ padding: "5px 3px" }}>
+                            {" "}
                             {res.carrier ? res.carrier : ""}
-                          </TableCell>
-                          <TableCell style={{ paddingRight: 5 }} align="right">
+                          </td>
+                          <td style={{ padding: "5px 3px" }}>
                             {res.tracking_number ? res.tracking_number : ""}
-                          </TableCell>
-                        </TableRow>
+                          </td>
+                        </tr>
                       );
                     })}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
             </Paper>
           </Container>
         </section>
@@ -285,7 +272,6 @@ class OutboundShipments extends Component {
                       <label style={{ marginRight: 15 }}>Carrier</label>
                       <input
                         type="text"
-                        style={{ height: "100%" }}
                         value={
                           chosenShipment ? (carrier ? carrier : "ups") : "ups"
                         }
@@ -329,7 +315,7 @@ class OutboundShipments extends Component {
                           outline
                           color="success"
                           size="sm"
-                          style={{ fontSize: "16px", minWidth: "180px" }}
+                          style={{ fontSize: "14px", minWidth: "190px" }}
                           onClick={() => {
                             this.handleSubmit();
                             this.handlePrintEmail(
@@ -360,7 +346,7 @@ class OutboundShipments extends Component {
                               outline
                               color="success"
                               size="sm"
-                              style={{ fontSize: "16px", minWidth: "180px" }}
+                              style={{ fontSize: "14px", minWidth: "180px" }}
                               onClick={() =>
                                 this.handlePrintEmail(
                                   chosenShipment.packing_list_url
@@ -382,7 +368,7 @@ class OutboundShipments extends Component {
               >
                 <Container
                   style={{
-                    width: "93%",
+                    width: "96%",
                     margin: "auto"
                   }}
                 >
@@ -398,10 +384,10 @@ class OutboundShipments extends Component {
                         }}
                       >
                         <TableCell align="left">
-                          <h6 style={{ margin: "auto" }}>Name</h6>
+                          <div style={{ fontSize: "15px" }}>Name</div>
                         </TableCell>
                         <TableCell align="left">
-                          <h6 style={{ margin: "auto" }}>Quantity</h6>
+                          <div style={{ fontSize: "15px" }}>Quantity</div>
                         </TableCell>
                       </TableRow>
                     </TableHead>
