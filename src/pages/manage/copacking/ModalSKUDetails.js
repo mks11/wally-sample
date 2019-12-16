@@ -148,7 +148,7 @@ class ModalSKUDetails extends Component {
         packaging_ids: packagingIds,
         product_id: product.product_id,
         sku_id: product.sku_id,
-        copacking_product_id: product.product_id,
+        copacking_product_id: product._id,
         expiration_date: product.expiration_date,
       })
       .catch(() => {
