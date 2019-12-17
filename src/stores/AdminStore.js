@@ -35,7 +35,12 @@ import {
   API_ADMIN_GET_CO_PACKING_RUNS,
   API_UPDATE_SKU_UNIT_WEIGHT,
   API_UPLOAD_COPACKING_QR_CODES,
-  API_GET_UPC_INFO
+  API_GET_UPC_INFO,
+  API_RETAIL_UPLOAD_PRODUCTS,
+  API_RETAIL_UPLOAD_VENDORS,
+  API_RETAIL_UPLOAD_CATEGORIES,
+  API_RETAIL_UPLOAD_SHIPMENTS,
+  API_RETAIL_UPLOAD_PRODUCT_RETIREMENTS
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -192,46 +197,6 @@ class AdminStore {
 
   async getOutboundProductShipments() {
     const res = await axios.get(`${API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS}`);
-    // let response = [
-    //   {
-    //     shipmentId: "ABCD123",
-    //     address: "101 New York Drive, NY NY 12345",
-    //     carrier: "UPS",
-    //     tracking_number: "12j03cd",
-    //     Products: [
-    //       { name: "Brown Lentils", jar_quantity: 5, case_quantity: 3 },
-    //       { name: "Grey Lentils", jar_quantity: 3, case_quantity: 1 },
-    //       { name: "Jemima Lentils", jar_quantity: 4, case_quantity: 9 }
-    //     ],
-    //     packing_list_url: "https://ups.com"
-    //   },
-    //   {
-    //     shipmentId: "ABCD456",
-    //     address: "211 Brooklyn Drive, NY NY 12345",
-
-    //     carrier: "Fed Ex",
-    //     tracking_number: "zz82hnodo",
-    //     Products: [
-    //       { name: "Green Lentils", jar_quantity: 5, case_quantity: 3 },
-    //       { name: "Red Lentils", jar_quantity: 3, case_quantity: 1 },
-    //       { name: "Blue Lentils", jar_quantity: 6, case_quantity: 9 }
-    //     ],
-    //     packing_list_url: "https://ups.com"
-    //   },
-    //   {
-    //     shipmentId: "ABCD789",
-    //     address: "211 Brooklyn Drive, NY NY 12345",
-
-    //     carrier: null,
-    //     tracking_number: null,
-    //     Products: [
-    //       { name: "Green Lentils", jar_quantity: 5, case_quantity: 3 },
-    //       { name: "Red Lentils", jar_quantity: 3, case_quantity: 1 },
-    //       { name: "Blue Lentils", jar_quantity: 6, case_quantity: 9 }
-    //     ],
-    //     packing_list_url: "https://ups.com"
-    //   }
-    // ];
     return res;
   }
 
@@ -249,49 +214,6 @@ class AdminStore {
   async getInboundProductShipments() {
     const res = await axios.get(`${API_ADMIN_GET_INBOUND_PROD_SHIPMENTS}`);
     console.log(res, "resresres");
-    //:::: remove this test data after api implemented ::::
-    // let shipment = [
-    //   {
-    //     from_address: {
-    //       name: "Vendor A"
-    //     },
-    //     edd: "2019-12-06",
-    //     type: "Pallet",
-    //     delivery_window: "10:00-12:00",
-    //     packingList: [
-    //       { name: "Brown Lentils", volume: 5, process: "Dried Bulk" },
-    //       { name: "Grey Lentils", volume: 3, process: "Dried Bulk (Allergen)" },
-    //       { name: "Maple Syrup", volume: 4, process: "Liquid" }
-    //     ]
-    //   },
-    //   {
-    //     from_address: {
-    //       name: "Vendor B"
-    //     },
-    //     edd: "2019-12-03",
-    //     type: "Package",
-    //     delivery_window: "11:00-1:00",
-    //     packingList: [
-    //       { name: "Blue Lentils", volume: 5, process: "Dried Bulk" },
-    //       { name: "Grey Beans", volume: 1, process: "Dried Bulk (Non GMO)" },
-    //       { name: "Agave Syrup", volume: 2, process: "Liquid" }
-    //     ]
-    //   },
-    //   {
-    //     from_address: {
-    //       name: "Vendor C"
-    //     },
-    //     edd: "2019-12-07",
-    //     type: "Freight",
-    //     delivery_window: "9:00-1:00",
-    //     packingList: [
-    //       { name: "Purple Lentils", volume: 15, process: "Dried Bulk" },
-    //       { name: "Rainbow Beans", volume: 3, process: "Dried Bulk" },
-    //       { name: "Honey", volume: 8, process: "Liquid" }
-    //     ]
-    //   }
-    // ];
-    // const res = shipment;
     return res;
   }
 
@@ -498,6 +420,46 @@ class AdminStore {
     return res.data;
   }
 
+  async uploadProducts(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_PRODUCTS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async uploadVendors(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_VENDORS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async uploadCategories(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_CATEGORIES}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async uploadShipments(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_SHIPMENTS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async uploadProductRetirements(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_PRODUCT_RETIREMENTS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
   setEditing(id, edit) {
     for (let item of this.shopitems) {
       if (item.product_id === id) {
@@ -597,7 +559,12 @@ decorate(AdminStore, {
   getCopackingRunProducts: action,
   updateSKUUnitWeight: action,
   uploadCopackingQRCodes: action,
-  getUPCInfo: action
+  getUPCInfo: action,
+  uploadProducts: action,
+  uploadVendors: action,
+  uploadCategories: action,
+  uploadShipments: action,
+  uploadProductRetirements: action
 });
 
 export default new AdminStore();

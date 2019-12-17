@@ -42,10 +42,12 @@ import Receipts from "./pages/manage/receipt/Receipts";
 import CourierRouting from "./pages/courier/CourierRouting";
 import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
 import InboundShipments from "./pages/manage/shipments/InboundShipments";
+import ManageRetail from "./pages/manage/retail/ManageRetail";
 
 export default (
   <Fragment>
     <Switch>
+      <Route exact path="/manage/retail" component={ManageRetail} />
       <Route exact path="/manage/printing" component={ManagePrinting} />
       <Route exact path="/manage/shipping" component={ManageShipping} />
       <Route exact path="/manage/shopper" component={ManageShopper} />
