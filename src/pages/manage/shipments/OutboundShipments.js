@@ -8,8 +8,7 @@ import {
   Container,
   Row,
   Col,
-  ModalBody,
-  Button
+  ModalBody
 } from "reactstrap";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
@@ -20,6 +19,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import { connect } from "utils";
 import Title from "./../../../common/page/Title";
 import {
+  Button,
   Modal,
   TextField,
   FormControl,
@@ -100,80 +100,11 @@ class OutboundShipments extends Component {
     });
   };
 
-  handleCarrierSelection = e => {
-    this.setState({
-      carrier: e.target.value
-    });
-  };
-  handleBlankCarrier = carr => {
-    this.setState({
-      carrier: carr
-    });
-  };
-
-  handleTrackingEdit = e => {
-    if (this.state.errors && this.state.trackingEdit >= 2) {
-      this.setState({
-        errors: null
-      });
-    }
-    this.setState({
-      trackingEdit: e.target.value
-    });
-  };
-
-  handleSubmit = () => {
-    if (
-      (this.state.trackingEdit && this.state.trackingEdit.length > 2) ||
-      this.state.carrier === "other"
-    ) {
-      let newItem;
-      // Update Locally - since no api return yet
-      let updatedResults = this.state.results.map(item => {
-        if (this.state.modal._id === item._id) {
-          newItem = item;
-          newItem.tracking_number = this.state.trackingEdit;
-          newItem.carrier = this.state.carrier;
-          return newItem;
-        }
-        return item;
-      });
-      this.adminStore.updateProductShipment(newItem._id, {
-        tracking_number: this.state.trackingEdit,
-        carrer: this.state.carrier
-      });
-      this.setState({
-        results: updatedResults,
-        openModal: false,
-        modal: null
-      });
-      // ::: Uncomment Below for api call and api error checking :::
-      //      this.adminStore
-      //   .updateProductShipment()
-      //   .then(res => {
-      //     if (res) {
-      //       this.setState({
-      //         results: res.data,
-      //         openModal: false,
-      //         modal: null
-      //       });
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.setState({
-      //       apiError: true
-      //     });
-      //   });
-    } else {
-      this.setState({
-        errors: "Please Enter Valid Tracking #"
-      });
-    }
-  };
-
   handlePrintEmail = url => {
     // currently sends undefined since the backend gives no packinglist_url
-    this.adminStore.getPrintEmail(url);
+    this.adminStore.getPrintEmail(url).then(res => {
+      console.log(res);
+    });
   };
 
   render() {
@@ -269,36 +200,20 @@ class OutboundShipments extends Component {
                 <TableBody>
                   <TableRow>
                     <TableCell align="center">
-                      <label style={{ marginRight: 15 }}>Carrier</label>
-                      <input
-                        type="text"
-                        value={
-                          chosenShipment ? (carrier ? carrier : "ups") : "ups"
-                        }
-                        onChange={e => this.handleCarrierSelection(e)}
-                      ></input>
+                      <label style={{ marginRight: 15 }}>Carrier: </label>
+
+                      <span>
+                        {chosenShipment ? (carrier ? carrier : "ups") : "ups"}
+                      </span>
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell align="center">
-                      <label style={{ marginRight: 15 }}>Tracking #</label>
-                      <input
-                        type="text"
-                        style={{ height: "100%" }}
-                        value={
-                          chosenShipment ? (trackingNum ? trackingNum : "") : ""
-                        }
-                        onChange={e => this.handleTrackingEdit(e)}
-                      ></input>
-                      <label
-                        style={{
-                          marginLeft: 15,
-                          color: "red",
-                          position: "absolute"
-                        }}
-                      >
-                        {!!errors ? errors : null}
-                      </label>
+                      <label style={{ marginRight: 15 }}>Tracking #: </label>
+
+                      <span>
+                        {chosenShipment ? (trackingNum ? trackingNum : "") : ""}
+                      </span>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -312,16 +227,16 @@ class OutboundShipments extends Component {
                         }}
                       >
                         <Button
-                          outline
-                          color="success"
-                          size="sm"
-                          style={{ fontSize: "14px", minWidth: "190px" }}
-                          onClick={() => {
-                            this.handleSubmit();
-                            this.handlePrintEmail(
-                              chosenShipment.packing_list_url
-                            );
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          style={{
+                            fontSize: "14px",
+                            minWidth: "190px"
                           }}
+                          onClick={() =>
+                            this.handlePrintEmail(chosenShipment.label_url)
+                          }
                         >
                           Print Shipping Label
                         </Button>
@@ -343,10 +258,13 @@ class OutboundShipments extends Component {
                         {chosenShipment !== null && (
                           <a href={chosenShipment.packing_list_url}>
                             <Button
-                              outline
-                              color="success"
-                              size="sm"
-                              style={{ fontSize: "14px", minWidth: "180px" }}
+                              variant="contained"
+                              color="primary"
+                              size="small"
+                              style={{
+                                fontSize: "14px",
+                                minWidth: "180px"
+                              }}
                               onClick={() =>
                                 this.handlePrintEmail(
                                   chosenShipment.packing_list_url

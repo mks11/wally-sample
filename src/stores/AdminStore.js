@@ -208,7 +208,10 @@ class AdminStore {
   }
 
   async getPrintEmail(url) {
-    const res = axios.get(`${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}${url}`);
+    const res = axios.get(
+      `${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}?doc_url=${url}`
+    );
+    return res;
   }
 
   async getInboundProductShipments() {
