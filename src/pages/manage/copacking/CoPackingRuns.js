@@ -5,6 +5,7 @@ import {
   Row,
   Col,
   Container,
+  Input,
 } from 'reactstrap'
 import {
   Paper,
@@ -33,6 +34,7 @@ class ManageCoPackingRuns extends Component {
       copackingruns: [],
       isBarScanOpen: false,
       isBarResultOpen: false,
+      userBarcodeValue: '',
 
       name: '',
       copacking_process: '',
@@ -90,7 +92,27 @@ class ManageCoPackingRuns extends Component {
     }
   }
 
+  handleUserBarcodeChange = e => {
+    this.setState({ userBarcodeValue: e.target.value })
+  }
+
+  handleSubmitUserBarcode = () => {
+    if (this.state.userBarcodeValue.length) {
+      this.getCodeInfo(this.state.userBarcodeValue)
+    }
+  }
+
+  handleEnter = e => {
+    if (e.keyCode === 13) {
+      this.handleSubmitUserBarcode()
+    }
+  }
+
   handleDetectedValue = code => {
+    this.getCodeInfo(code)
+  }
+
+  getCodeInfo = code => {
     this.adminStore.getUPCInfo(code)
       .then(res => {
         this.setState({
@@ -116,11 +138,10 @@ class ManageCoPackingRuns extends Component {
       copackingruns,
       isBarScanOpen,
       isBarResultOpen,
+      userBarcodeValue,
 
       name,
       copacking_process,
-      product_id,
-      sku_id,
     } = this.state
 
     return (
@@ -131,7 +152,7 @@ class ManageCoPackingRuns extends Component {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Co-Packing Process</TableCell>
+                  <TableCell align="left" style={{ width: '60%' }}>Co-Packing Process</TableCell>
                   <TableCell># SKUs</TableCell>
                   <TableCell>Est. # Jars</TableCell>
                   <TableCell>Est. Time (mins)</TableCell>
@@ -147,15 +168,32 @@ class ManageCoPackingRuns extends Component {
                     <TableCell align="left">{run.copacking_process}</TableCell>
                     <TableCell>{run.products.length}</TableCell>
                     <TableCell>{run.estimated_units}</TableCell>
-                    <TableCell>{run.estimated_time}</TableCell>
+                    <TableCell>{Math.round(run.estimated_time / 60)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
           <Row>
-            <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
               <button className="btn btn-main active" onClick={this.toggleBarScan}>Scan Inbound UPC</button>
+            </Col>
+            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    value={userBarcodeValue}
+                    onKeyDown={this.handleEnter}
+                    onChange={this.handleUserBarcodeChange}
+                    placeholder="Enter UPC"
+                    style={{ height: '100%' }}
+                  />
+                </Col>
+                <Col>
+                  <button className="btn btn-main active" onClick={this.handleSubmitUserBarcode}>Submit</button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
@@ -175,16 +213,10 @@ class ManageCoPackingRuns extends Component {
             <button className="btn-icon btn-icon--close" onClick={this.toggleBarResult}></button>
             <div className="login-wrap">
               <p className="info-popup">
-                {`Name: ${name}`}
+                {`Product Name: ${name}`}
               </p>
               <p className="info-popup">
-                {`Co packing process: ${copacking_process}`}
-              </p>
-              <p className="info-popup">
-                {`Product ID: ${product_id}`}
-              </p>
-              <p className="info-popup">
-                {`SKU ID: ${sku_id}`}
+                {`Co-packing Process: ${copacking_process}`}
               </p>
             </div>
           </ModalBody>

@@ -194,7 +194,6 @@ class ModalSKUDetails extends Component {
                       <Col style={{ width: '50%' }}>
                         <Input
                           type="text"
-                          name="selected"
                           invalid={!product.unit_weight}
                           value={unitWeight}
                           onChange={this.handleOnUnitWeightChange}
