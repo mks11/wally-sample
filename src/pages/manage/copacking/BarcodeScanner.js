@@ -93,9 +93,7 @@ class BarcodeScanner extends Component {
           numOfWorkers: 2,
           decoder: {
             readers : [
-              'code_128_reader',
               'upc_reader',
-              'upc_e_reader',
             ],
           },
           locate: true,

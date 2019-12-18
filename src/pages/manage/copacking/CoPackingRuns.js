@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import {
+  Modal,
+  ModalBody,
   Row,
   Col,
   Container,
@@ -30,6 +32,12 @@ class ManageCoPackingRuns extends Component {
     this.state = {
       copackingruns: [],
       isBarScanOpen: false,
+      isBarResultOpen: false,
+
+      name: '',
+      copacking_process: '',
+      product_id: '',
+      sku_id: '',
     }
   }
 
@@ -66,14 +74,40 @@ class ManageCoPackingRuns extends Component {
     this.setState({ isBarScanOpen: !this.state.isBarScanOpen })
   }
 
+  toggleBarResult = () => {
+    if (this.state.isBarResultOpen) {
+      this.setState({
+        isBarResultOpen: false,
+        name: '',
+        copacking_process: '',
+        product_id: '',
+        sku_id: '',
+      })
+    } else {
+      this.setState({
+        isBarResultOpen: true,
+      })
+    }
+  }
+
   handleDetectedValue = code => {
-    console.log(code)
     this.adminStore.getUPCInfo(code)
       .then(res => {
-        console.log(res)
+        this.setState({
+          name: res.name,
+          copacking_process: res.copacking_process,
+          product_id: res.product_id,
+          sku_id: res.sku_id,
+        })
       })
       .catch(error => {
-        this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
+        if (error.response.data &&
+          error.response.data.error &&
+          error.response.data.error.message) {
+          this.modalStore.toggleModal('error', error.response.data.error.message)
+        } else {
+          this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
+        }
       })
   }
 
@@ -81,6 +115,12 @@ class ManageCoPackingRuns extends Component {
     const {
       copackingruns,
       isBarScanOpen,
+      isBarResultOpen,
+
+      name,
+      copacking_process,
+      product_id,
+      sku_id,
     } = this.state
 
     return (
@@ -119,11 +159,36 @@ class ManageCoPackingRuns extends Component {
             </Col>
           </Row>
         </Container>
+
         <BarcodeScanner
           isOpen={isBarScanOpen}
           onClose={this.toggleBarScan}
           onDetect={this.handleDetectedValue}
         />
+
+        <Modal
+          autoFocus={false}
+          isOpen={isBarResultOpen}
+          centered
+        >
+          <ModalBody>
+            <button className="btn-icon btn-icon--close" onClick={this.toggleBarResult}></button>
+            <div className="login-wrap">
+              <p className="info-popup">
+                {`Name: ${name}`}
+              </p>
+              <p className="info-popup">
+                {`Co packing process: ${copacking_process}`}
+              </p>
+              <p className="info-popup">
+                {`Product ID: ${product_id}`}
+              </p>
+              <p className="info-popup">
+                {`SKU ID: ${sku_id}`}
+              </p>
+            </div>
+          </ModalBody>
+        </Modal>
       </div>
     )
   }
