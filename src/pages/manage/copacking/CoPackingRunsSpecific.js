@@ -78,6 +78,13 @@ class ManageCoPackingRunsSpecific extends Component {
     }
   }
 
+  handlePrintEmail = () => {
+    this.adminStore.getPrintEmail(this.state.copackingrun.print_url)
+      .then(res => {
+        console.log(res);
+      });
+  };
+
   render() {
     const {
       skuModal,
@@ -127,7 +134,7 @@ class ManageCoPackingRunsSpecific extends Component {
           {copackingrun ? (
             <Row>
               <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                <a className="btn btn-main active" href={copackingrun.print_url}>Print</a>
+                <button className="btn btn-main active" onClick={this.handlePrintEmail}>Print</button>
               </Col>
             </Row>
           ) : null}
