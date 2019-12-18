@@ -38,7 +38,7 @@ class ManageCoPackingRunsSpecific extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         const user = this.userStore.user
-        if (!status || user.type !== 'admin') {
+        if (!status || !['admin', 'co-packer'].includes(user.type)) {
           this.props.store.routing.push('/')
         } else {
           this.loadCoPackingRunsProducts()
@@ -78,6 +78,13 @@ class ManageCoPackingRunsSpecific extends Component {
     }
   }
 
+  handlePrintEmail = () => {
+    this.adminStore.getPrintEmail(this.state.copackingrun.print_url)
+      .then(res => {
+        console.log(res);
+      });
+  };
+
   render() {
     const {
       skuModal,
@@ -87,7 +94,7 @@ class ManageCoPackingRunsSpecific extends Component {
     } = this.state
 
     return (
-      <div className="App">
+      <div className="App co-packing-page">
         <Title content={copackingrun && copackingrun.copacking_process} />
         <Container>
           <Paper elevation={1} className="scrollable-table">
@@ -107,7 +114,7 @@ class ManageCoPackingRunsSpecific extends Component {
               <TableBody>
                 {(copackingrun && copackingrun.products) ? copackingrun.products.map(p => (
                   <TableRow
-                    key={p.name}
+                    key={p.product_name}
                     className="clickable-row"
                     onClick={() => this.openProductSKUDetails(p.product_id)}
                   >
@@ -127,7 +134,7 @@ class ManageCoPackingRunsSpecific extends Component {
           {copackingrun ? (
             <Row>
               <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
-                <a className="btn btn-main active" href={copackingrun.print_url}>Print</a>
+                <button className="btn btn-main active" onClick={this.handlePrintEmail}>Print</button>
               </Col>
             </Row>
           ) : null}

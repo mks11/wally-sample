@@ -52,7 +52,7 @@ class InboundShipments extends Component {
       if (!user) {
         this.props.store.routing.push("/");
       } else {
-        let isAdmin = user.type === "admin" ? true : false;
+        let isAdmin = ['admin', 'co-packer'].includes(user.type) ? true : false;
         if (!status || !isAdmin) {
           this.props.store.routing.push("/");
         } else {
@@ -110,7 +110,7 @@ class InboundShipments extends Component {
 
     return (
       <>
-        <section className="page-section pt-1 fulfillment-page">
+        <section className="page-section pt-1 fulfillment-page co-packing-page">
           <Title content="Inbound Shipments" />
           <Container>
             <Modal open={this.state.apiError} onClose={this.handleModalClose}>

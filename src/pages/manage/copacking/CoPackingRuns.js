@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import {
+  Modal,
+  ModalBody,
   Row,
   Col,
   Container,
+  Input,
 } from 'reactstrap'
 import {
   Paper,
@@ -30,6 +33,13 @@ class ManageCoPackingRuns extends Component {
     this.state = {
       copackingruns: [],
       isBarScanOpen: false,
+      isBarResultOpen: false,
+      userBarcodeValue: '',
+
+      name: '',
+      copacking_process: '',
+      product_id: '',
+      sku_id: '',
     }
   }
 
@@ -37,7 +47,7 @@ class ManageCoPackingRuns extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         const user = this.userStore.user
-        if (!status || user.type !== 'admin') {
+        if (!status || !['admin', 'co-packer'].includes(user.type)) {
           this.props.store.routing.push('/')
         } else {
           this.loadCoPackingRunsData()
@@ -66,14 +76,60 @@ class ManageCoPackingRuns extends Component {
     this.setState({ isBarScanOpen: !this.state.isBarScanOpen })
   }
 
+  toggleBarResult = () => {
+    if (this.state.isBarResultOpen) {
+      this.setState({
+        isBarResultOpen: false,
+        name: '',
+        copacking_process: '',
+        product_id: '',
+        sku_id: '',
+      })
+    } else {
+      this.setState({
+        isBarResultOpen: true,
+      })
+    }
+  }
+
+  handleUserBarcodeChange = e => {
+    this.setState({ userBarcodeValue: e.target.value })
+  }
+
+  handleSubmitUserBarcode = () => {
+    if (this.state.userBarcodeValue.length) {
+      this.getCodeInfo(this.state.userBarcodeValue)
+    }
+  }
+
+  handleEnter = e => {
+    if (e.keyCode === 13) {
+      this.handleSubmitUserBarcode()
+    }
+  }
+
   handleDetectedValue = code => {
-    console.log(code)
+    this.getCodeInfo(code)
+  }
+
+  getCodeInfo = code => {
     this.adminStore.getUPCInfo(code)
       .then(res => {
-        console.log(res)
+        this.setState({
+          name: res.name,
+          copacking_process: res.copacking_process,
+          product_id: res.product_id,
+          sku_id: res.sku_id,
+        })
       })
       .catch(error => {
-        this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
+        if (error.response.data &&
+          error.response.data.error &&
+          error.response.data.error.message) {
+          this.modalStore.toggleModal('error', error.response.data.error.message)
+        } else {
+          this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
+        }
       })
   }
 
@@ -81,17 +137,22 @@ class ManageCoPackingRuns extends Component {
     const {
       copackingruns,
       isBarScanOpen,
+      isBarResultOpen,
+      userBarcodeValue,
+
+      name,
+      copacking_process,
     } = this.state
 
     return (
-      <div className="App">
+      <div className="App co-packing-page">
         <Title content="Co-Packing Runs" />
         <Container>
           <Paper elevation={1}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Co-Packing Process</TableCell>
+                  <TableCell align="left" style={{ width: '60%' }}>Co-Packing Process</TableCell>
                   <TableCell># SKUs</TableCell>
                   <TableCell>Est. # Jars</TableCell>
                   <TableCell>Est. Time (mins)</TableCell>
@@ -107,23 +168,59 @@ class ManageCoPackingRuns extends Component {
                     <TableCell align="left">{run.copacking_process}</TableCell>
                     <TableCell>{run.products.length}</TableCell>
                     <TableCell>{run.estimated_units}</TableCell>
-                    <TableCell>{run.estimated_time}</TableCell>
+                    <TableCell>{Math.round(run.estimated_time / 60)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
           <Row>
-            <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
               <button className="btn btn-main active" onClick={this.toggleBarScan}>Scan Inbound UPC</button>
+            </Col>
+            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    value={userBarcodeValue}
+                    onKeyDown={this.handleEnter}
+                    onChange={this.handleUserBarcodeChange}
+                    placeholder="Enter UPC"
+                    style={{ height: '100%' }}
+                  />
+                </Col>
+                <Col>
+                  <button className="btn btn-main active" onClick={this.handleSubmitUserBarcode}>Submit</button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
+
         <BarcodeScanner
           isOpen={isBarScanOpen}
           onClose={this.toggleBarScan}
           onDetect={this.handleDetectedValue}
         />
+
+        <Modal
+          autoFocus={false}
+          isOpen={isBarResultOpen}
+          centered
+        >
+          <ModalBody>
+            <button className="btn-icon btn-icon--close" onClick={this.toggleBarResult}></button>
+            <div className="login-wrap">
+              <p className="info-popup">
+                {`Product Name: ${name}`}
+              </p>
+              <p className="info-popup">
+                {`Co-packing Process: ${copacking_process}`}
+              </p>
+            </div>
+          </ModalBody>
+        </Modal>
       </div>
     )
   }

@@ -50,7 +50,7 @@ class OutboundShipments extends Component {
       if (!user) {
         this.props.store.routing.push("/");
       } else {
-        let isAdmin = user.type === "admin" ? true : false;
+        let isAdmin = ['admin', 'co-packer'].includes(user.type) ? true : false;
         if (!status || !isAdmin) {
           this.props.store.routing.push("/");
         } else {
@@ -116,7 +116,7 @@ class OutboundShipments extends Component {
     let buttonClass = "btn btn-main my-3";
     return (
       <>
-        <section className="page-section pt-1 fulfillment-page">
+        <section className="page-section pt-1 fulfillment-page co-packing-page">
           <Title content="Outbound Shipments" />
           <Container
             style={{
@@ -132,17 +132,20 @@ class OutboundShipments extends Component {
               className={"scrollable-table"}
             >
               <table style={{ width: "98%", margin: "auto" }}>
-                <tr style={{ whiteSpace: "nowrap" }}>
-                  <td style={{ padding: "5px 3px" }}>Shipment ID</td>
-                  <td style={{ padding: "5px 3px" }}>Address</td>
-                  <td style={{ padding: "5px 3px" }}>Carrier</td>
-                  <td style={{ padding: "5px 3px" }}>Tracking #</td>
-                </tr>
+                <thead>
+                  <tr style={{ whiteSpace: "nowrap" }}>
+                    <th style={{ padding: "5px 3px" }}>Shipment ID</th>
+                    <th style={{ padding: "5px 3px" }}>Address</th>
+                    <th style={{ padding: "5px 3px" }}>Carrier</th>
+                    <th style={{ padding: "5px 3px" }}>Tracking #</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {results.length > 0 &&
                     results.map((res, i) => {
                       return (
                         <tr
+                          key={i}
                           style={{ cursor: "pointer", padding: "5px 3px" }}
                           onClick={() => this.setOutboundModal(res)}
                         >
