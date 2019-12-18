@@ -145,7 +145,7 @@ class ManageCoPackingRuns extends Component {
     } = this.state
 
     return (
-      <div className="App">
+      <div className="App co-packing-page">
         <Title content="Co-Packing Runs" />
         <Container>
           <Paper elevation={1}>

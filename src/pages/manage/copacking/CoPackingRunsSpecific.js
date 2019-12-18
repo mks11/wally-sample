@@ -87,7 +87,7 @@ class ManageCoPackingRunsSpecific extends Component {
     } = this.state
 
     return (
-      <div className="App">
+      <div className="App co-packing-page">
         <Title content={copackingrun && copackingrun.copacking_process} />
         <Container>
           <Paper elevation={1} className="scrollable-table">

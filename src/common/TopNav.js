@@ -164,7 +164,7 @@ class TopNav extends Component {
                         <React.Fragment>
                           <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
                           <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/inbound')}>Inbound Shipment</a></li>
-                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/outbounds')}>Outbound Shipment</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/outbound')}>Outbound Shipment</a></li>
                           <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/runs')}>Co-packing</a></li>
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                         </React.Fragment>

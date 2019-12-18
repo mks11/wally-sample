@@ -116,7 +116,7 @@ class OutboundShipments extends Component {
     let buttonClass = "btn btn-main my-3";
     return (
       <>
-        <section className="page-section pt-1 fulfillment-page">
+        <section className="page-section pt-1 fulfillment-page co-packing-page">
           <Title content="Outbound Shipments" />
           <Container
             style={{

@@ -110,7 +110,7 @@ class InboundShipments extends Component {
 
     return (
       <>
-        <section className="page-section pt-1 fulfillment-page">
+        <section className="page-section pt-1 fulfillment-page co-packing-page">
           <Title content="Inbound Shipments" />
           <Container>
             <Modal open={this.state.apiError} onClose={this.handleModalClose}>
