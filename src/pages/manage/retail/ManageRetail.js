@@ -219,7 +219,7 @@ class ManageRetail extends Component {
               <div className="product-selection-button">
                 <form onSubmit={this.onUploadCategories} className={this.handleInputError(errors, 'file')} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Categories</Button>
+                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Internal Cats</Button>
                 </form>
               </div>
 
@@ -233,10 +233,13 @@ class ManageRetail extends Component {
               <div className="product-selection-button">
                 <form onSubmit={this.onUploadProductRetirements} className={this.handleInputError(errors, 'file')} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
-                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Product Retirements</Button>
+                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Product Actions</Button>
                 </form>
               </div>
               
+              <div>
+                Remember: Refresh page after each upload. Delete any extra header rows from the CSV - there should only be 1 row of headers
+              </div>
             </div>
           </div>
           </Paper>

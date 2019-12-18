@@ -40,7 +40,7 @@ import {
   API_RETAIL_UPLOAD_VENDORS,
   API_RETAIL_UPLOAD_CATEGORIES,
   API_RETAIL_UPLOAD_SHIPMENTS,
-  API_RETAIL_UPLOAD_PRODUCT_RETIREMENTS
+  API_RETAIL_UPLOAD_PRODUCT_ACTIONS
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -457,7 +457,7 @@ class AdminStore {
 
   async uploadProductRetirements(filename, formData) {
     const res = await axios.post(
-      `${API_RETAIL_UPLOAD_PRODUCT_RETIREMENTS}?filename=${filename}`,
+      `${API_RETAIL_UPLOAD_PRODUCT_ACTIONS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
