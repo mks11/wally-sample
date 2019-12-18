@@ -114,7 +114,7 @@ class ManageCoPackingRunsSpecific extends Component {
               <TableBody>
                 {(copackingrun && copackingrun.products) ? copackingrun.products.map(p => (
                   <TableRow
-                    key={p.name}
+                    key={p.product_name}
                     className="clickable-row"
                     onClick={() => this.openProductSKUDetails(p.product_id)}
                   >

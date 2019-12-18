@@ -151,6 +151,12 @@ class ModalSKUDetails extends Component {
         copacking_product_id: product._id,
         expiration_date: product.expiration_date,
       })
+      .then(res => {
+        const updatedProduct = res.products.find(p => p.product_id === product.product_id)
+        this.setState({
+          product: updatedProduct,
+        })
+      })
       .catch(() => {
         this.modalStore.toggleModal('error', 'There was an error during uploading QR codes')
       })
@@ -251,7 +257,7 @@ class ModalSKUDetails extends Component {
 
                 <TableRow>
                   <TableCell align="left"><b>Actual Quantity:</b></TableCell>
-                  <TableCell align="left">{product.packaging_quantity || 'TBD'}</TableCell>
+                  <TableCell align="left">{product.actual_units || '-'}</TableCell>
                 </TableRow>
 
                 <TableRow>

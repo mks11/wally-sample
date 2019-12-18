@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
 import LazyLoad from 'react-lazyload'
 import { isMobile } from 'react-device-detect'
-import { Paper } from '@material-ui/core'
+import { Paper, Snackbar, SnackbarContent } from '@material-ui/core'
 
 const styles = {
   desktop: {
@@ -41,6 +41,9 @@ class QRCodeScanner extends Component {
       isPortrait: true,
       result: '',
       isError: false,
+
+      snackBarOpen: false,
+      snackBarText: '',
     }
   }
 
@@ -70,21 +73,27 @@ class QRCodeScanner extends Component {
       if (matchedData && packagingId) {
         const { packagingIds } = this.state
 
-        if (!packagingIds.includes(packagingId)) {
-          packagingIds.push(packagingId)
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate(500)
         }
 
-        this.setState({
-          result: 'The link was scanned!',
-          isError: false,
-          packagingIds,
-        })
+        if (!packagingIds.includes(packagingId)) {
+          this.setState({
+            snackBarText: 'QR Scanned',
+            snackBarOpen: true,
+            isError: false,
+            packagingIds,
+          })
 
-      } else {
-        this.setState({
-          result: 'Wrong link format!',
-          isError: true,
-        })
+          packagingIds.push(packagingId)
+        } else {
+          this.setState({
+            snackBarText: 'QR Already Scanned',
+            snackBarOpen: true,
+            isError: true,
+            packagingIds,
+          })
+        }
       }
     }
   }
@@ -97,8 +106,17 @@ class QRCodeScanner extends Component {
     onClose(packagingIds)
   }
 
+  handleToggleSnackbar = () => {
+    this.setState({ snackBarOpen: !this.state.snackBarOpen })
+  }
+
   render() {
-    const { isPortrait, result, isError } = this.state
+    const {
+      isPortrait,
+      isError,
+      snackBarOpen,
+      snackBarText,
+      } = this.state
     const { isOpen } = this.props
 
     if (!isOpen) {
@@ -119,9 +137,21 @@ class QRCodeScanner extends Component {
                 onScan={this.handleScan}
                 props
               />
-              <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>{result}</p>
             </LazyLoad>
           </Paper>
+
+          <Snackbar
+            autoHideDuration={1000}
+            onClose={this.handleToggleSnackbar}
+            open={snackBarOpen}
+          >
+            <SnackbarContent
+              style={{
+                backgroundColor: isError ? '#ffa000' : '#43a047'
+              }}
+              message={snackBarText}
+            />
+          </Snackbar>
         </div>
       </div>
     )
