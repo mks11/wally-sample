@@ -93,6 +93,7 @@ class TopNav extends Component {
     let storeCredit, name
     let isAdmin = false
     let isTwsOps = false
+    let isCopacker = false
     let bannerText = "Hello, Manhattan! 🎉 Wally now available in select Manhattan zip codes, click for details."
     if (this.userStore.user) {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
@@ -102,6 +103,7 @@ class TopNav extends Component {
       name = user.name.split(' ')[0]
       isAdmin = user.type === 'admin' || user.type === 'super-admin'
       isTwsOps = user.type === 'tws-ops'
+      isCopacker = user.type === 'co-packer'
     } else {
       storeCredit = 0
     }
@@ -133,58 +135,70 @@ class TopNav extends Component {
                   <nav className="navbar d-block">
                     <ul className="aw-nav--menu m-0 p-0 text-center">
 
-                      { this.userStore.status ?
-                          isAdmin ?
-                            //
-                            <React.Fragment>
-                              <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopper')}>Shopper</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/packaging')}>Packing</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/delivery')}>Delivery</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/courier-routing')}>Courier Routing</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/products')}>Products App</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/shipping')}>Shipping</a></li>
-                              <li><a onClick={this.handleNavMobile.bind(this, '/manage/printing')}>Printing</a></li>
-                              <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
-                            </React.Fragment>
-                            //
-                            :
-                            isTwsOps ?
-                              <React.Fragment>
-                                <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
-                                <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
-                              </React.Fragment>
-                              :
-                              <React.Fragment>
-                                <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                                <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
-                                <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
-                                <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                      { this.userStore.status && isAdmin && (
+                        <React.Fragment>
+                          <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopper')}>Shopper</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/packaging')}>Packing</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/delivery')}>Delivery</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/courier-routing')}>Courier Routing</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/products')}>Products App</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/shipping')}>Shipping</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/printing')}>Printing</a></li>
+                          <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                        </React.Fragment>
+                      )}
 
-                                <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
-                                <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
-                              </React.Fragment>
-                          :
-                          <React.Fragment>
-                            <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
-                            <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
+                      { this.userStore.status && isTwsOps && (
+                        <React.Fragment>
+                          <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/shopping-app-1')}>Shopping App</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/orders')}>Packing App</a></li>
+                          <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                        </React.Fragment>
+                      )}
 
-                            <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
-                            <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
-                          </React.Fragment>
-                      }
+                      { this.userStore.status && isCopacker && (
+                        <React.Fragment>
+                          <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/inbound')}>Inbound Shipment</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/outbounds')}>Outbound Shipment</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/manage/co-packing/runs')}>Co-packing</a></li>
+                          <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+                        </React.Fragment>
+                      )}
+
+                      { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
+                        <React.Fragment>
+                          <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
+                          <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/orders')}>Order History</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/user')}>Account Settings</a></li>
+                          <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
+                          <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
+
+                          <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
+                        </React.Fragment>
+                      )}
+
+                      {!this.userStore.status && (
+                        <React.Fragment>
+                          <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
+                          <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
+
+                          <li className="mt-5"><a onClick={this.handleNavMobile.bind(this, '/about')}>About</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/howitworks')}>How It Works</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/blog')}>Blog</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/help')}>Help</a></li>
+                          <li><a onClick={this.handleNavMobile.bind(this, '/giftcard')}>Gift Card</a></li>
+                        </React.Fragment>
+                      )}
                     </ul>
                   </nav>
                 </div>
@@ -201,7 +215,7 @@ class TopNav extends Component {
         </div>
         <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''}`}>
           {
-          ((this.userStore.status && !isAdmin && !isTwsOps) || !this.userStore.status) ? (
+          ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleReferralModal}>
@@ -273,7 +287,27 @@ class TopNav extends Component {
                         </li>
                       )
                     }
-                    { this.userStore.status && !isAdmin && !isTwsOps && (
+                    { this.userStore.status && isCopacker && (
+                      <li>
+                        <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                          <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
+                            <div className="btn-group">
+                              <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                                <span className="navbar-toggler-icon account-icon"></span>
+                              </button>
+                              <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
+                                <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/inbound" className="dropdown-item">Inbound Shipment</Link>
+                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/outbound" className="dropdown-item">Outbound Shipment</Link>
+                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/runs" className="dropdown-item">Co-packing</Link>
+                                    <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                              </div>
+                            </div>
+                          </ClickOutside>
+                        </div>
+                      </li>
+                    )}
+                    { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
                         <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                           <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                             <div className="btn-group">

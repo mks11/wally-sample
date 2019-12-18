@@ -45,7 +45,7 @@ class ManageCoPackingRuns extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         const user = this.userStore.user
-        if (!status || user.type !== 'admin') {
+        if (!status || !['admin', 'co-packer'].includes(user.type)) {
           this.props.store.routing.push('/')
         } else {
           this.loadCoPackingRunsData()

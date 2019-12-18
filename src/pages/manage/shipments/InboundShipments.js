@@ -52,7 +52,7 @@ class InboundShipments extends Component {
       if (!user) {
         this.props.store.routing.push("/");
       } else {
-        let isAdmin = user.type === "admin" ? true : false;
+        let isAdmin = ['admin', 'co-packer'].includes(user.type) ? true : false;
         if (!status || !isAdmin) {
           this.props.store.routing.push("/");
         } else {
