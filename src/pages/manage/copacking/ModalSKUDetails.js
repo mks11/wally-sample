@@ -152,12 +152,10 @@ class ModalSKUDetails extends Component {
         expiration_date: product.expiration_date,
       })
       .then(res => {
-        const updatedProduct = res.products.find(p => p.product_id === product.product_id)
-        this.setState({
-          product: updatedProduct,
-        })
+        this.setState({ product: res })
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('WYY? ', e)
         this.modalStore.toggleModal('error', 'There was an error during uploading QR codes')
       })
     }
