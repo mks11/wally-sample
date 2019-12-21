@@ -155,7 +155,6 @@ class ModalSKUDetails extends Component {
         this.setState({ product: res })
       })
       .catch((e) => {
-        console.log('WYY? ', e)
         this.modalStore.toggleModal('error', 'There was an error during uploading QR codes')
       })
     }
