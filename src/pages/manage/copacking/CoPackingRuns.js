@@ -2,10 +2,7 @@ import React, { Component } from 'react'
 import {
   Modal,
   ModalBody,
-  Row,
-  Col,
   Container,
-  Input,
 } from 'reactstrap'
 import {
   Paper,
@@ -19,7 +16,7 @@ import {
 import Title from 'common/page/Title'
 import { connect } from 'utils'
 
-import BarcodeScanner from './BarcodeScanner'
+import ScanUPCFooter from './ScanUPCFooter'
 
 class ManageCoPackingRuns extends Component {
   constructor(props) {
@@ -32,9 +29,7 @@ class ManageCoPackingRuns extends Component {
 
     this.state = {
       copackingruns: [],
-      isBarScanOpen: false,
       isBarResultOpen: false,
-      userBarcodeValue: '',
 
       name: '',
       copacking_process: '',
@@ -72,10 +67,6 @@ class ManageCoPackingRuns extends Component {
     this.routing.push(`/manage/co-packing/runs/${id}`)
   }
 
-  toggleBarScan = () => {
-    this.setState({ isBarScanOpen: !this.state.isBarScanOpen })
-  }
-
   toggleBarResult = () => {
     if (this.state.isBarResultOpen) {
       this.setState({
@@ -92,53 +83,19 @@ class ManageCoPackingRuns extends Component {
     }
   }
 
-  handleUserBarcodeChange = e => {
-    this.setState({ userBarcodeValue: e.target.value })
-  }
-
-  handleSubmitUserBarcode = () => {
-    if (this.state.userBarcodeValue.length) {
-      this.getCodeInfo(this.state.userBarcodeValue)
-    }
-  }
-
-  handleEnter = e => {
-    if (e.keyCode === 13) {
-      this.handleSubmitUserBarcode()
-    }
-  }
-
-  handleDetectedValue = code => {
-    this.getCodeInfo(code)
-  }
-
-  getCodeInfo = code => {
-    this.adminStore.getUPCInfo(code)
-      .then(res => {
-        this.setState({
-          name: res.name,
-          copacking_process: res.copacking_process,
-          product_id: res.product_id,
-          sku_id: res.sku_id,
-        })
-      })
-      .catch(error => {
-        if (error.response.data &&
-          error.response.data.error &&
-          error.response.data.error.message) {
-          this.modalStore.toggleModal('error', error.response.data.error.message)
-        } else {
-          this.modalStore.toggleModal('error', 'Wasn\'t able to get UPC info')
-        }
-      })
+  handleUPCGet = res => {
+    this.setState({
+      name: res.name,
+      copacking_process: res.copacking_process,
+      product_id: res.product_id,
+      sku_id: res.sku_id,
+    })
   }
 
   render() {
     const {
       copackingruns,
-      isBarScanOpen,
       isBarResultOpen,
-      userBarcodeValue,
 
       name,
       copacking_process,
@@ -174,35 +131,9 @@ class ManageCoPackingRuns extends Component {
               </TableBody>
             </Table>
           </Paper>
-          <Row>
-            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
-              <button className="btn btn-main active" onClick={this.toggleBarScan}>Scan Inbound UPC</button>
-            </Col>
-            <Col className="p-4 text-center" sm={{ size: 6 }} md={{ size: 6 }}>
-              <Row>
-                <Col>
-                  <Input
-                    type="text"
-                    value={userBarcodeValue}
-                    onKeyDown={this.handleEnter}
-                    onChange={this.handleUserBarcodeChange}
-                    placeholder="Enter UPC"
-                    style={{ height: '100%' }}
-                  />
-                </Col>
-                <Col>
-                  <button className="btn btn-main active" onClick={this.handleSubmitUserBarcode}>Submit</button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
 
-        <BarcodeScanner
-          isOpen={isBarScanOpen}
-          onClose={this.toggleBarScan}
-          onDetect={this.handleDetectedValue}
-        />
+          <ScanUPCFooter onUPCGet={this.handleUPCGet} />
+        </Container>
 
         <Modal
           autoFocus={false}
