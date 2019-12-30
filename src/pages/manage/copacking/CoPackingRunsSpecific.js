@@ -15,7 +15,9 @@ import {
 
 import Title from 'common/page/Title'
 import { connect } from 'utils'
+
 import ModalSKUDetails from './ModalSKUDetails'
+import ScanUPCFooter from './ScanUPCFooter'
 
 class ManageCoPackingRunsSpecific extends Component {
   constructor(props) {
@@ -31,6 +33,8 @@ class ManageCoPackingRunsSpecific extends Component {
       skuModal: false,
       selectedProduct: {},
       selectedCopackingRun: null,
+
+      filteredProduct: null,
     }
   }
 
@@ -85,6 +89,27 @@ class ManageCoPackingRunsSpecific extends Component {
       });
   };
 
+  handleResetFilter = () => {
+    this.setState({ filteredProduct: null })
+  }
+
+  handleUPCGet = res => {
+    this.setState({ filteredProduct: res.product_id })
+  }
+
+  prepareProducts = () => {
+    const { filteredProduct, copackingrun } = this.state
+
+    if (filteredProduct) {
+      return copackingrun.products
+        .filter(p => p.product_id === filteredProduct)
+        .sort((a, b) => a.product_name.localeCompare(b.product_name))
+    }
+
+    return copackingrun.products
+      .sort((a, b) => a.product_name.localeCompare(b.product_name))
+  }
+
   render() {
     const {
       skuModal,
@@ -103,7 +128,7 @@ class ManageCoPackingRunsSpecific extends Component {
                 <TableRow>
                   <TableCell align="left">Product Name</TableCell>
                   <TableCell>Packaging Type</TableCell>
-                  <TableCell># Packaging (Cases)</TableCell>
+                  <TableCell># Pkg (Cases)</TableCell>
                   <TableCell>Est. Units</TableCell>
                   <TableCell>Est. Time (mins)</TableCell>
                   <TableCell>Volume (lbs)</TableCell>
@@ -112,7 +137,7 @@ class ManageCoPackingRunsSpecific extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(copackingrun && copackingrun.products) ? copackingrun.products.map(p => (
+                {(copackingrun && copackingrun.products) ? this.prepareProducts().map(p => (
                   <TableRow
                     key={p.product_name}
                     className="clickable-row"
@@ -122,7 +147,7 @@ class ManageCoPackingRunsSpecific extends Component {
                     <TableCell>{p.packaging_type}</TableCell>
                     <TableCell>{p.packaging_quantity}</TableCell>
                     <TableCell>{p.estimated_units}</TableCell>
-                    <TableCell>{p.estimated_time}</TableCell>
+                    <TableCell>{Math.round(p.estimated_time / 60)}</TableCell>
                     <TableCell>{p.shipment_volume}</TableCell>
                     <TableCell>{p.inbound_shipment_type === 'pallet' ? 'Pallet' : p.inbound_shipment_tracking}</TableCell>
                     <TableCell>{p.inbound_shipment_edd}</TableCell>
@@ -138,6 +163,14 @@ class ManageCoPackingRunsSpecific extends Component {
               </Col>
             </Row>
           ) : null}
+
+          <ScanUPCFooter onUPCGet={this.handleUPCGet} />
+
+          <Row>
+            <Col className="p-4 text-center" sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+              <button className="btn btn-main active" onClick={this.handleResetFilter}>Reset</button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalSKUDetails
