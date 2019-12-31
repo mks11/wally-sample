@@ -40,7 +40,8 @@ import {
   API_RETAIL_UPLOAD_VENDORS,
   API_RETAIL_UPLOAD_CATEGORIES,
   API_RETAIL_UPLOAD_SHIPMENTS,
-  API_RETAIL_UPLOAD_PRODUCT_ACTIONS
+  API_RETAIL_UPLOAD_PRODUCT_ACTIONS,
+  API_ADMIN_GET_PRINT_EMAIL
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -200,16 +201,9 @@ class AdminStore {
     return res;
   }
 
-  async updateProductShipment(id, newItem) {
-    const data = { ...newItem };
-    const res = axios.patch(`${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}${id}`, data);
-
-    return res;
-  }
-
   async getPrintEmail(url) {
     const res = axios.get(
-      `${API_ADMIN_UPDATE_PRODUCT_SHIPMENT}?doc_url=${url}`
+      `${API_ADMIN_GET_PRINT_EMAIL}?doc_url=${url}`
     );
     return res;
   }

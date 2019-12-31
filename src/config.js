@@ -70,8 +70,6 @@ export const API_ADMIN_GET_INBOUND_PROD_SHIPMENTS =
 export const API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS =
   BASE_URL + "/api/admin/co-packing/shipments/outbound";
 export const API_ADMIN_GET_PRINT_EMAIL =
-  BASE_URL + "/api/admin/co-packing/print?doc_url";
-export const API_ADMIN_UPDATE_PRODUCT_SHIPMENT =
   BASE_URL + "/api/admin/co-packing/print";
 
 export const API_ADMIN_CREATE_COURIER = BASE_URL + "/api/admin/courier";
