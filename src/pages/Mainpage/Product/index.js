@@ -21,7 +21,7 @@ const Product = props => {
     price_unit += unit_type
   }
 
-  const outOfStock = product.out_of_stock && product.fbw
+  const outOfStock = product.out_of_stock
   const unavailable = !product.available_for_delivery
   let availableDays = [];
   let availableDOW = [];
