@@ -18,6 +18,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import Checkout from "./pages/Checkout";
 import GiftCheckout from "./pages/GiftCheckout";
 import InviteFriends from "./pages/InviteFriends";
+import Backers from "./pages/Backers";
 import Tnc from "./pages/Tnc";
 import Privacy from "./pages/Privacy";
 import Blog from "./pages/Blog";
@@ -34,8 +35,8 @@ import ManageProducts from "./pages/ManageProducts";
 import ShoppingAppStep1 from "./pages/manage/ShoppingAppStep1";
 import ShoppingAppStep2 from "./pages/manage/ShoppingAppStep2";
 import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";
-import ManageCoPackingRuns from './pages/manage/copacking/CoPackingRuns';
-import ManageCoPackingRunsSpecific from './pages/manage/copacking/CoPackingRunsSpecific';
+import ManageCoPackingRuns from "./pages/manage/copacking/CoPackingRuns";
+import ManageCoPackingRunsSpecific from "./pages/manage/copacking/CoPackingRunsSpecific";
 import Signup from "./pages/Signup";
 import Feedback from "./pages/Feedback";
 import Receipts from "./pages/manage/receipt/Receipts";
@@ -57,14 +58,31 @@ export default (
       <Route exact path="/manage/shopping-app-1" component={ShoppingAppStep1} />
       <Route exact path="/manage/shopping-app-2" component={ShoppingAppStep2} />
       <Route exact path="/manage/shopping-app-3" component={ShoppingAppStep3} />
-      <Route exact path="/manage/co-packing/outbound" component={OutboundShipments} />
-      <Route exact path="/manage/co-packing/inbound" component={InboundShipments} />
-      <Route exact path="/manage/co-packing/runs" component={ManageCoPackingRuns} />
-      <Route exact path="/manage/co-packing/runs/:runId" component={ManageCoPackingRunsSpecific} />
+      <Route
+        exact
+        path="/manage/co-packing/outbound"
+        component={OutboundShipments}
+      />
+      <Route
+        exact
+        path="/manage/co-packing/inbound"
+        component={InboundShipments}
+      />
+      <Route
+        exact
+        path="/manage/co-packing/runs"
+        component={ManageCoPackingRuns}
+      />
+      <Route
+        exact
+        path="/manage/co-packing/runs/:runId"
+        component={ManageCoPackingRunsSpecific}
+      />
       <Route exact path="/manage/receipts" component={Receipts} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/packaging/:id" component={Mainpage} />
       <Route exact path="/invitefriends" component={InviteFriends} />
+      <Route exact path="/backers" component={Backers} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
       <Route exact path="/orders" component={Orders} />
