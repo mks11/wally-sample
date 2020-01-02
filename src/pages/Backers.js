@@ -3,8 +3,8 @@ import ReactGA from "react-ga";
 import { connect } from "../utils";
 
 class Backers extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.backerStore = this.props.store.backer;
     this.modalStore = this.props.store.modal;
