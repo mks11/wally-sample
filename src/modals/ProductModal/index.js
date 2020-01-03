@@ -17,12 +17,12 @@ import {
 import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelect from '../../common/QuantitySelect'
-import Addons from './../../common/ProductAddons';
+import Product from '../../pages/Mainpage/Product/index'
 
 class ProductModal extends Component {
   constructor(props) {
     super(props)
-
+    console.log('props', props)
     this.state = {
       qty: 1,
       infoPackage: false,
@@ -232,6 +232,7 @@ class ProductModal extends Component {
 
     // HERE! UPDATE WHEN SCHEMA IS UPDATED
     const {
+      a_plus_url,
       allergens,
       available,
       available_inventory,
@@ -250,6 +251,9 @@ class ProductModal extends Component {
       out_of_stock,
       packaging_vol,
       packagings,
+      product_id,
+      rating,
+      similar_products,
       std_packaging,
       subcat_name,
       tags,
@@ -425,14 +429,23 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
-        {/* {activeProdu
+        {/* {similar_products && similar_products.length > 0 && ( */}
           <Row>
             <Col>
               <hr />
-              <h3>More Products Like This</h3>
+              <h3 className="mb-4">More Products Like This</h3>
+              <Row>
+                {/* {similar_products.map((product, key) => (
+                  <Product product={product} onProductClick={modal.toggleProduct} />
+                ))} */}
+                <Product product={activeProduct} onProductClick={modal.toggleProduct} />
+                <Product product={activeProduct} />
+                <Product product={activeProduct} />
+                <Product product={activeProduct} />
+              </Row>
             </Col>
           </Row>
-        } */}
+        {/* )} */}
         <Row>
           <Col>
             <hr />
@@ -466,6 +479,16 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
+        {a_plus_url && (
+          <Row>
+            <Col>
+              <hr />
+              <div className="a-plus-image">
+                <img src={a_plus_url} alt="A+ image" />
+              </div>
+            </Col>
+          </Row>
+        )}
       </div>
     )
   }
