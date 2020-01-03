@@ -133,7 +133,12 @@ class DeliveryAddressOptions extends Component {
     const country = address.country
     const zip = address.postal_code
 
-    this.setState({newCity: city, newState: state, newCountry: country, newZip: zip})
+    const streetAddress = [address.street_number, address.route].join(' ')
+
+    this.setState({
+      newStreetAddress: streetAddress,
+      newCity: city, newState: state, newCountry: country, newZip: zip
+    })
   }
 
   handleNewAddressChange = (newStreetAddress) => {
@@ -278,6 +283,22 @@ class DeliveryAddressOptions extends Component {
                           value={this.state.newAptNo}
                           onChange={e=>this.setState({newAptNo: e.target.value})}
                           type="text" className="form-control input1" placeholder="Apt number" />
+                      </div>
+                    </div>
+                    <div className="col-md-7">
+                      <div className="form-group">
+                        <input
+                          value={this.state.newCity}
+                          onChange={e=>this.setState({newCity: e.target.value})}
+                          type="text" className="form-control input1" placeholder="City" />
+                      </div>
+                    </div>
+                    <div className="col-md-7">
+                      <div className="form-group">
+                        <input
+                          value={this.state.newState}
+                          onChange={e=>this.setState({newState: e.target.value})}
+                          type="text" className="form-control input1" placeholder="State" />
                       </div>
                     </div>
                     <div className="col-md-5">
