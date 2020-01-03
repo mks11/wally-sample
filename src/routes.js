@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import Homepage from "./pages/Homepage";
 import Mainpage from "./pages/Mainpage";
@@ -41,6 +41,7 @@ import Signup from "./pages/Signup";
 import Feedback from "./pages/Feedback";
 import Receipts from "./pages/manage/receipt/Receipts";
 import CourierRouting from "./pages/courier/CourierRouting";
+import VendorProfile from "./pages/vendor/VendorProfile";
 import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
 import InboundShipments from "./pages/manage/shipments/InboundShipments";
 import ManageRetail from "./pages/manage/retail/ManageRetail";
@@ -89,8 +90,12 @@ export default (
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/products" component={ManageProducts} />
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
+      <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
       <Route exact path="/tnc" component={Tnc} />
       <Route exact path="/privacy" component={Privacy} />
+      <Route exact path="/sell-through-wally">
+        <Redirect to="#!" />
+      </Route>
       <Route exact path="/blog" component={Blog} />
       <Route exact path="/blog/:id" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
