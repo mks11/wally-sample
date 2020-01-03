@@ -574,7 +574,32 @@ class Checkout extends Component {
                     user={this.userStore.user}
                   />}
 
-                <hr className="mt-4" />
+
+                <React.Fragment>
+                  <h3 className="m-0 mb-3 p-r mt-5">
+                    Payment
+                    {this.state.lockPayment
+                      ? <a
+                          onClick={e => this.setState ({lockPayment: false})}
+                          className="address-rbtn link-blue pointer"
+                        >
+                          CHANGE
+                        </a>
+                      : null}
+                  </h3>
+                  <PaymentSelect
+                    {...{
+                      lockPayment: this.state.lockPayment,
+                      userPayment: this.userStore.user.payment,
+                      userPreferredPayment: this.userStore.user
+                        .preferred_payment,
+                      onAddPayment: this.handleAddPayment,
+                      onSubmitPayment: this.handleSubmitPayment,
+                      userGuest: !this.userStore.status,
+                      preselect: true,
+                    }}
+                  />
+                </React.Fragment>
 
                 <Notes
                   title="Order Notes"
