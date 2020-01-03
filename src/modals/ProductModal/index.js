@@ -8,7 +8,11 @@ import {
   logModalView,
   logEvent
 } from 'utils'
-import { PRODUCT_BASE_URL } from 'config'
+import {
+  PRODUCT_BASE_URL,
+  NUTRITIONAL_INFO_BASE_URL,
+  PACKAGING_BASE_URL,
+} from 'config'
 import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelect from '../../common/QuantitySelect'
@@ -279,7 +283,10 @@ class ProductModal extends Component {
         : null
     const packaging_type = activeProduct.std_packaging
     const packaging_description = packaging ? packaging.description : null 
-
+    const nutritional_info_url = activeProduct.nutritional_info_url
+    const packaging_size = activeProduct.inventory && activeProduct.inventory.packaging && activeProduct.inventory.packaging.size
+    const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")    
+    console.log('activeProduct', activeProduct)
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -293,6 +300,16 @@ class ProductModal extends Component {
                   {activeProduct.image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
+                  {nutritional_info_url && (
+                    <div className="slick-item">
+                      <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                    </div>
+                  )}
+                  {packaging_size && (
+                    <div className="slick-item">
+                      <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -301,6 +318,16 @@ class ProductModal extends Component {
               {activeProduct.image_refs.map((item, key) => (
                 <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
               ))}
+              {nutritional_info_url && (
+                <div className="slick-item">
+                  <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                </div>
+              )}
+              {packaging_size && (
+                <div className="slick-item">
+                  <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                </div>
+              )}
             </div>
           </Col>
           <Col sm="6">

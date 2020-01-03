@@ -4,8 +4,6 @@ import { formatMoney, connect, logEvent, logModalView, datesEqual } from 'utils'
 import { Link } from 'react-router-dom'
 import { APP_URL } from 'config'
 
-import DeliveryModal from 'common/DeliveryModal'
-import DeliveryChangeModal from 'common/DeliveryChangeModal'
 import AddonFirstModal from 'common/AddonFirstModal'
 
 import Hero from './Hero'
@@ -189,25 +187,11 @@ class Mainpage extends Component {
   }
 
   handleProductModal = (product_id, deliveryTimes) => {
-    if (!this.userStore.status || (this.userStore.status && !this.userStore.user.is_ecomm)) {
-      if (!this.userStore.selectedDeliveryTime) {
-        logModalView('/delivery-options-window')
-        this.modalStore.toggleDelivery()
-        this.productStore.activeProductId = product_id
-      } else {
-        this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
-          .then((data) => {
-            this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
-            this.modalStore.toggleModal('product')
-        })
-      }
-    } else {
-      this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
-        .then((data) => {
-          this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
-          this.modalStore.toggleModal('product')
-      })
-    }
+    this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
+      .then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
+        this.modalStore.toggleModal('product')
+    })
   }
 
   handleSearch = keyword => {
@@ -411,8 +395,8 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                <DeliveryModal onChangeSubmit={this.handleChangeDelivery} />
-                <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/>
+                {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
+                {/* <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/> */}
                 <MobileCartBtn
                   onClick={this.handleOpenCartMobile}
                   items={cartItems.length}
