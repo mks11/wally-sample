@@ -334,22 +334,6 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.userStore.selectedDeliveryTime) {
-      this.setState ({
-        invalidText: 'Please select delivery time',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-
-    if (!this.state.confirmHome) {
-      this.setState ({
-        invalidText: 'Please confirm that you will be home',
-        placeOrderRequest: false,
-        confirmHomeError: true,
-      });
-      return;
-    }
     if (!this.state.lockPayment) {
       this.setState ({
         invalidText: 'Please select payment',
