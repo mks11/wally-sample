@@ -381,50 +381,6 @@ class ProductModal extends Component {
               price_unit={activeProduct.buy_by_packaging ? "" : price_unit}
             />
             <hr/>
-            <div><strong>If item is unavailable:</strong></div>
-            {this.state.subtitutes.map((sub, key) => (
-              <div 
-                className={"custom-control red custom-radio " + (sub.id === this.state.selectedSubtitute ? " active" : "")}
-                key={key}>
-                <input 
-                  type="radio"
-                  name="customRadio" 
-                  checked={this.state.selectedSubtitute === sub.id}
-                  className="custom-control-input" 
-                  value={sub.id} 
-                  onChange={() => this.handleSelectSubtitute(sub.id)} />
-
-                <label className="custom-control-label small" onClick={() => this.handleSelectSubtitute(sub.id)}>
-                  {sub.text}&nbsp;
-                </label>
-                {
-                  key === 1 ? (
-                    <React.Fragment>
-                      <i onClick={this.toggleSubstituteRecommendation} className="fa fa-info-circle"></i>
-                      <div className={`${this.state.substituteRecommendation ? 'open' : ''}`}>
-                        <div className="package-info-popover substitue-popover">
-                          <p>We'll do our best to get a near perfect substitute for you, like spring onions for scallions. If we're unsure about it, we'll contact you to make sure the substitution works for you.</p>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  ) : null
-                }
-              </div>
-            ))}
-            <hr/>
-            {
-              activeProduct.add_ons && activeProduct.add_ons.length
-                ? (
-                  <Addons
-                    addons={activeProduct.add_ons}
-                    packagingAddon={this.state.packagingAddon}
-                    quantityAddon={this.state.quantityAddon}
-                    onPackagingAddon={this.handlePackagingAddon}
-                    onQuantityAddon={this.handleQuantityAddon}
-                  />
-                )
-                : null
-            }
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button
               onClick={this.handleAddToCart}
@@ -436,13 +392,6 @@ class ProductModal extends Component {
                   : (this.state.available ? 'Add to cart' : 'Unavailable')
               }
             </button><br />
-            <div 
-              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
-            > 
-              {
-                this.state.available ? 'Final total subject to measured weights and at-location prices' : `Available days for delivery: ${this.state.availableDays.join(', ')}.`
-              }
-            </div>
 
             <div 
               className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
