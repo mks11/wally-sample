@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Row,
   Col,
@@ -224,7 +225,7 @@ class ProductModal extends Component {
 
   render() {
     const { packagingType } = this.state
-    const { product } = this.props.stores
+    const { product, modal } = this.props.stores
     const activeProduct = product.activeProduct
 
     if (!activeProduct) return null
@@ -405,24 +406,38 @@ class ProductModal extends Component {
         <Row>
           <Col>
             <hr />
+            <h3>More Products Like This</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <hr />
             <h3>Product Info</h3>
             <div className="media media-xs">
               <div className="media-body">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div><span className="font-weight-bold">Local:</span> {activeProduct.local ? 'Yes' : 'No'}</div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div><span className="font-weight-bold">Organic:</span> {activeProduct.organic ? 'Yes' : 'No'}</div>
-                  </div>
+              {activeProduct.manufacturer && (
+                <div>
+                  <span className="font-weight-bold">Producer: </span>
+                  <Link
+                    onClick={modal.toggleModal}
+                    to={"/vendor/" + activeProduct.manufacturer_url_name}
+                  >
+                    {activeProduct.manufacturer}
+                  </Link>
                 </div>
-                <div><span className="font-weight-bold">Farms:</span> {activeProduct.farms && activeProduct.farms.join(', ')}</div>
-                {
-                  activeProduct.fbw && activeProduct.description && <div><span className="font-weight-bold">Description:</span> {activeProduct.description}</div>
-                }
-                {
-                  activeProduct.fbw && activeProduct.instruction && <div><span className="font-weight-bold">Instructions:</span> {activeProduct.instruction}</div>
-                }
+                )}
+                {activeProduct.description && (
+                  <div><span className="font-weight-bold">Description: </span>{activeProduct.description}</div>
+                )}
+                {activeProduct.ingredients && activeProduct.ingredients.length > 0 && (
+                  <div><span className="font-weight-bold">Ingredients: </span>{activeProduct.ingredients.join(', ')}</div>
+                )}
+                {activeProduct.allergens && activeProduct.allergens.length > 0 && (
+                  <div><span className="font-weight-bold">Allergens: </span>{activeProduct.allergens.join(', ')}</div>
+                )}
+                {activeProduct.tags && activeProduct.tags.length > 0 && (
+                  <div><span className="font-weight-bold">Tags: </span>{activeProduct.tags.join(', ')}</div>
+                )}
               </div>
             </div>
           </Col>
