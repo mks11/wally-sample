@@ -230,22 +230,50 @@ class ProductModal extends Component {
 
     if (!activeProduct) return null
 
+    // HERE! UPDATE WHEN SCHEMA IS UPDATED
+    const {
+      allergens,
+      available,
+      available_inventory,
+      buy_by_packaging,
+      description,
+      fbw,
+      image_refs,
+      increment_size,
+      ingredients,
+      manufacturer,
+      manufacturer_url_name,
+      max_qty,
+      min_size,
+      name,
+      nutritional_info_url,
+      out_of_stock,
+      packaging_vol,
+      packagings,
+      std_packaging,
+      subcat_name,
+      tags,
+      unit_type,
+      unit_weight,
+      vendor,
+    } = activeProduct
+
     let shipMessage = `Fulfilled by The Wally Shop.`
-    if (activeProduct.available_inventory[0]) shipMessage = `Sold by ${activeProduct.available_inventory[0].shop}, fulfilled by The Wally Shop`;
-    if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
+    if (available_inventory[0]) shipMessage = `Sold by ${available_inventory[0].shop}, fulfilled by The Wally Shop`;
+    if (fbw) shipMessage = "Sold by " + vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
     if (this.state.infoPackage) {
       infoPackageClass += ' open'
     }
 
-    const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
-    const limitOptions = activeProduct.fbw && !activeProduct.out_of_stock && activeProduct.available
+    const inventory = available_inventory[0] ? available_inventory[0] : null
+    const limitOptions = fbw && !out_of_stock && available
     let qtyOptions = []
 
-    const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
-    const minSize = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.min_size
-    const maxQty = limitOptions ? Math.min(activeProduct.max_qty, 10) : 10
+    const incrementValue = (buy_by_packaging && packagingType) ? 1 : increment_size
+    const minSize = (buy_by_packaging && packagingType) ? 1 : min_size
+    const maxQty = limitOptions ? Math.min(max_qty, 10) : 10
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
@@ -255,11 +283,10 @@ class ProductModal extends Component {
     
     let totalPrice = price * this.state.qty * this.state.priceMultiplier
 
-    const unit_type = activeProduct.unit_type
     var price_unit = ""
     if (['ea'].includes(unit_type)) {
-        if (activeProduct.subcat_name) {
-          price_unit = activeProduct.subcat_name;
+        if (subcat_name) {
+          price_unit = subcat_name;
         } else {
           price_unit = 'unit';
         }
@@ -268,8 +295,7 @@ class ProductModal extends Component {
     }
 
     var weight_unit = "lbs"
-    var unit_weight = activeProduct.unit_weight;
-    if (unit_weight && activeProduct.unit_weight && unit_weight < 0.05) {
+    if (unit_weight && unit_weight && unit_weight < 0.05) {
       weight_unit = "oz"
       unit_weight = unit_weight * 16
     }
@@ -278,14 +304,10 @@ class ProductModal extends Component {
       unit_weight.toFixed(1)
     }
 
-    const packaging = 
-      (activeProduct.packagings && activeProduct.packagings[0])
-        ? activeProduct.packagings[0]
-        : null
-    const packaging_type = activeProduct.std_packaging
+    const packaging = packagings && packagings[0] ? packagings[0] : null
+    const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null 
-    const nutritional_info_url = activeProduct.nutritional_info_url
-    const packaging_size = activeProduct.inventory && activeProduct.inventory.packaging && activeProduct.inventory.packaging.size
+    const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")    
     console.log('activeProduct', activeProduct)
     return (
@@ -294,11 +316,11 @@ class ProductModal extends Component {
           <Col sm="6">
             <div className="row mb-3">
               <div className="col-sm-6">
-                <h3 className="mb-0">{activeProduct.name}</h3>
+                <h3 className="mb-0">{name}</h3>
               </div>
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
-                  {activeProduct.image_refs.map((item, key) => (
+                  {image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
                   {nutritional_info_url && (
@@ -316,7 +338,7 @@ class ProductModal extends Component {
             </div>
 
             <div id="product-carousel" ref={el => this.prod = el}>
-              {activeProduct.image_refs.map((item, key) => (
+              {image_refs.map((item, key) => (
                 <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
               ))}
               {nutritional_info_url && (
@@ -335,7 +357,7 @@ class ProductModal extends Component {
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
             <div>{shipMessage}</div>
             <div>Sold by the {price_unit}.</div>
-            { (['ea', 'bunch', 'pint'].includes(unit_type) && activeProduct.unit_weight) && <div>Average weight is {activeProduct.unit_weight} {weight_unit}.</div> }
+            { (['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight) && <div>Average weight is {unit_weight} {weight_unit}.</div> }
             <hr />
 
             <div className={infoPackageClass}>
@@ -348,13 +370,13 @@ class ProductModal extends Component {
             </div>
             <div className="mb-3">
               { 
-                !activeProduct.buy_by_packaging 
+                !buy_by_packaging 
                   ? packaging_type
-                  : activeProduct.std_packaging
+                  : std_packaging
               }
             </div>
             {
-              activeProduct.buy_by_packaging &&
+              buy_by_packaging &&
               (
                 <React.Fragment>
                   <div><strong>Size:</strong></div>
@@ -363,10 +385,10 @@ class ProductModal extends Component {
                     className="package-type-group"
                     amountClick={this.handlePackagingChange}
                     customClick={this.handlePackagingCustomClick}
-                    values={activeProduct.packagings ? activeProduct.packagings : []}
-                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
-                    weights={activeProduct.packagings ? activeProduct.packaging_vol : []}
-                    unit_type={activeProduct.unit_type}
+                    values={packagings ? packagings : []}
+                    selected={packagings ? packagings[0].type : null}
+                    weights={packagings ? packaging_vol : []}
+                    unit_type={unit_type}
                     custom={false}
                     product={true}
                   />
@@ -379,7 +401,7 @@ class ProductModal extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={activeProduct.buy_by_packaging ? "" : price_unit}
+              price_unit={buy_by_packaging ? "" : price_unit}
             />
             <hr/>
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
@@ -403,40 +425,42 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <hr />
-            <h3>More Products Like This</h3>
-          </Col>
-        </Row>
+        {/* {activeProdu
+          <Row>
+            <Col>
+              <hr />
+              <h3>More Products Like This</h3>
+            </Col>
+          </Row>
+        } */}
         <Row>
           <Col>
             <hr />
             <h3>Product Info</h3>
             <div className="media media-xs">
               <div className="media-body">
-              {activeProduct.manufacturer && (
+              {manufacturer && (
                 <div>
                   <span className="font-weight-bold">Producer: </span>
                   <Link
                     onClick={modal.toggleModal}
-                    to={"/vendor/" + activeProduct.manufacturer_url_name}
+                    to={"/vendor/" + manufacturer_url_name}
                   >
-                    {activeProduct.manufacturer}
+                    {manufacturer}
                   </Link>
                 </div>
                 )}
-                {activeProduct.description && (
-                  <div><span className="font-weight-bold">Description: </span>{activeProduct.description}</div>
+                {description && (
+                  <div><span className="font-weight-bold">Description: </span>{description}</div>
                 )}
-                {activeProduct.ingredients && activeProduct.ingredients.length > 0 && (
-                  <div><span className="font-weight-bold">Ingredients: </span>{activeProduct.ingredients.join(', ')}</div>
+                {ingredients && ingredients.length > 0 && (
+                  <div><span className="font-weight-bold">Ingredients: </span>{ingredients.join(', ')}</div>
                 )}
-                {activeProduct.allergens && activeProduct.allergens.length > 0 && (
-                  <div><span className="font-weight-bold">Allergens: </span>{activeProduct.allergens.join(', ')}</div>
+                {allergens && allergens.length > 0 && (
+                  <div><span className="font-weight-bold">Allergens: </span>{allergens.join(', ')}</div>
                 )}
-                {activeProduct.tags && activeProduct.tags.length > 0 && (
-                  <div><span className="font-weight-bold">Tags: </span>{activeProduct.tags.join(', ')}</div>
+                {tags && tags.length > 0 && (
+                  <div><span className="font-weight-bold">Tags: </span>{tags.join(', ')}</div>
                 )}
               </div>
             </div>
