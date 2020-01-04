@@ -680,29 +680,35 @@ class Checkout extends Component {
                       return (
                         <div className="item mt-3 pb-2" key={i}>
                           <div className="item-left">
-                            <h4 className="item-name">{c.product_name}</h4>
+                            <h4 className="item-name">
+                              {c.product_id !== 'prod_pckging'
+                                ? c.product_name
+                                : <PackagingSummary title={c.product_name} />}
+                            </h4>
                             {unit_type !== 'packaging' &&
+                              c.product_id !== 'prod_pckging' &&
                               <span className="item-detail mt-2 mb-1">
                                 {c.packaging_name}
                               </span>}
-                            <div className="item-link">
-                              <a
-                                onClick={e =>
-                                  this.handleEdit (
-                                    c.product_id,
-                                    c.customer_quantity
-                                  )}
-                                className="text-blue mr-2"
-                              >
-                                EDIT
-                              </a>
-                              <a
-                                onClick={e => this.handleDelete (c)}
-                                className="text-dark-grey"
-                              >
-                                DELETE
-                              </a>
-                            </div>
+                            {c.product_id !== 'prod_pckging' &&
+                              <div className="item-link">
+                                <a
+                                  onClick={e =>
+                                    this.handleEdit (
+                                      c.product_id,
+                                      c.customer_quantity
+                                    )}
+                                  className="text-blue mr-2"
+                                >
+                                  EDIT
+                                </a>
+                                <a
+                                  onClick={e => this.handleDelete (c)}
+                                  className="text-dark-grey"
+                                >
+                                  DELETE
+                                </a>
+                              </div>}
                           </div>
                           <div className="item-right">
                             <h4>
@@ -763,7 +769,6 @@ class Checkout extends Component {
                           </div>}
 
                       <TippingSummary value={this.updateTipAmount ()} />
-                      <PackagingSummary value={'TBD'} />
 
                       {this.state.appliedStoreCredit
                         ? <div className="summary">
