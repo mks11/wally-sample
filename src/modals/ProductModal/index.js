@@ -223,10 +223,19 @@ class ProductModal extends Component {
     this.setState({ packagingType: null })
   }
 
+  truncate = (text, length) => {
+    if (text.length <= length) {
+      return text
+    }
+    // const disallowedLastChars = ['.', ',', ':', '!', '(', ')', ' ']
+    return text.slice(0, length) + '...'
+  }
+
   render() {
     const { packagingType } = this.state
     const { product, modal } = this.props.stores
     const activeProduct = product.activeProduct
+    const topThreeComments = product.activeProductComments.slice(0, 3)
 
     if (!activeProduct) return null
 
@@ -312,7 +321,7 @@ class ProductModal extends Component {
     const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null 
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
-    const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")    
+    const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
     console.log('activeProduct', activeProduct)
     return (
       <div className="product-modal-wrap">
@@ -324,6 +333,12 @@ class ProductModal extends Component {
               </div>
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
+                  <div className="slick-item">
+                    <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+                  </div>
+                  <div className="slick-item">
+                    <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+                  </div>
                   {image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
@@ -342,6 +357,12 @@ class ProductModal extends Component {
             </div>
 
             <div id="product-carousel" ref={el => this.prod = el}>
+              <div className="slick-item">
+                <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+              </div>
+              <div className="slick-item">
+                <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+              </div>
               {image_refs.map((item, key) => (
                 <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
               ))}
@@ -489,6 +510,19 @@ class ProductModal extends Component {
             </Col>
           </Row>
         )}
+        <Row>
+          <Col>
+            <hr />
+            <h3 className="mb-4">Product Ratings</h3>
+            <div><span className="font-weight-bold">Product Rating: </span>{rating || "No Ratings Yet"}</div>
+            <div className="font-weight-bold">Comments:</div>
+            <div className="comments-container">
+              {topThreeComments.map((comment, key) => (
+                <div key={key} className="comment">"{this.truncate(comment.text, 200)}" - {comment.user}</div>
+              ))}
+            </div>
+          </Col>
+        </Row>
       </div>
     )
   }

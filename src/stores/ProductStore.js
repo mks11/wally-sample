@@ -11,6 +11,7 @@ class ProductStore {
   sidebar = []
   activeProductId = null
   activeProduct = null
+  activeProductComments = []
   categories = []
   fetch = false
 
@@ -45,6 +46,9 @@ class ProductStore {
     var min_size = this.activeProduct.buy_by_packaging ? 1 : this.activeProduct.min_size
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
+
+    // this.activeProductComments = await this.getComments(product_id)
+    this.activeProductComments = [{text: 'Great stuff. I only wish it would fulfill all of my needs as a human, as only cocoa powder can. My wish is for cocoa powder to bring about world peace through the sharing of delicious chocolate and also love! I want to give the world a cocoa powder.', user: "Joe"}, {text: 'Love this product', user: "Fred"}, {text: 'Steven Schoichet (Brody) is browbeaten at every turn, by his family, his dead-end job, the faceless suburb where he still lives at home. That is until he decides to make a change. Ventriloquism. Hey, a dream\'s a dream. (Artisan Entertainment)', user: "Molly"}, {text: 'yo', user: "Farmer Dan"}]
     return res.data
   }
 
@@ -84,6 +88,17 @@ class ProductStore {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     this.fetch = true
     const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    this.fetch = false
+    return res.data
+  }
+
+  async getComments(id) {
+    if (!id) return null
+    this.fetch = true
+    const url = API_GET_PRODUCT_DISPLAYED + id + '/comments'
+    await axios.get(url)
+      .then(res => this.activeProductComments = res.data)
+      .catch(err => console.error('Problem getting comments: ', err))
     this.fetch = false
     return res.data
   }
@@ -199,7 +214,8 @@ decorate(ProductStore, {
   searchCategory: action,
   searchAll: action,
   resetSearch: action,
-  getProductDetails: action
+  getProductDetails: action,
+  getProductComments: action,
 })
 
 
