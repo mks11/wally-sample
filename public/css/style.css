@@ -1530,7 +1530,7 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   margin-bottom: 0;
 }
 
-.product-thumbnail{margin-bottom: 40px;}
+.product-thumbnail{margin-bottom: 40px;cursor:pointer}
 .product-thumbnail img{display:block;max-width:100%;width:100%;width: 200px;height: 180px;}
 
 .product-detail{
@@ -1695,6 +1695,53 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
 .addon-popover {
   left: 50%;
   top: 18px;
+}
+
+.comments-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.comment {
+  margin: 15px 0;
+}
+
+.product-rating-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.clickable-stars-container {
+  display: flex;
+  margin: 5px 0;
+}
+
+.clickable-star {
+  cursor: pointer;
+  margin: 0 0.2em;
+  font-size: 1.5em;
+}
+
+.product-comment-input {
+  min-height: 50px;
+  max-width: 75%;
+}
+
+button.rate-btn {
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.rating-error {
+  display: none;
+}
+
+.rating-error.error {
+  display: block;
+  margin: 12px 0;
+  color: red;
 }
 
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;
@@ -2026,6 +2073,10 @@ a {
 
   .btn-icon--close {
     position: fixed;
+  }
+
+  .product-comment-input {
+    max-width: 100%;
   }
 }
 
