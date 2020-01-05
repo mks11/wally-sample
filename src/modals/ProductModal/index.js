@@ -19,6 +19,7 @@ import AmountGroup from 'common/AmountGroup'
 import QuantitySelect from '../../common/QuantitySelect'
 import Product from '../../pages/Mainpage/Product/index'
 import ProductRatingForm from '../../common/ProductRatingForm'
+import StarsRating from '../../common/StarsRating'
 
 class ProductModal extends Component {
   constructor(props) {
@@ -515,13 +516,18 @@ class ProductModal extends Component {
           <Col>
             <hr />
             <h3 className="mb-3">Product Ratings</h3>
-            <div><span className="font-weight-bold">Product Rating: </span>{rating || "No Ratings Yet"}</div>
+            <div className="product-ratings-container">
+              <span className="product-rating-label font-weight-bold">Product Rating: </span>
+              {rating ? <StarsRating rating={rating}/> : "No Ratings Yet"}
+            </div>
             {topThreeComments && topThreeComments.length > 0 && (
               <React.Fragment>
                 <div className="font-weight-bold">Comments:</div>
                 <div className="comments-container">
                   {topThreeComments.map((comment, key) => (
-                    <div key={key} className="comment">"{this.truncate(comment.text, 200)}" - {comment.user}</div>
+                    <div key={"comment-" + key} className="comment">
+                      "{this.truncate(comment.text, 200)}" - {comment.user}
+                    </div>
                   ))}
                 </div>
               </React.Fragment>
