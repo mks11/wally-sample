@@ -1,7 +1,12 @@
 import {observable, decorate, action} from 'mobx'
 import { 
-  API_GET_PRODUCT_DETAIL, API_GET_ADVERTISEMENTS, 
-  API_GET_PRODUCT_DISPLAYED, API_GET_CATEGORIES, API_SEARCH_KEYWORD } from '../config'
+  API_GET_PRODUCT_DETAIL,
+  API_GET_ADVERTISEMENTS,
+  API_GET_PRODUCT_DISPLAYED,
+  API_GET_CATEGORIES,
+  API_SEARCH_KEYWORD,
+  API_RATE_PRODUCT,
+} from '../config'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -47,7 +52,8 @@ class ProductStore {
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
 
-    // this.activeProductComments = await this.getComments(product_id)
+    await this.getComments(product_id)
+    // HERE! remove test data below
     this.activeProductComments = [{text: 'Great stuff. I only wish it would fulfill all of my needs as a human, as only cocoa powder can. My wish is for cocoa powder to bring about world peace through the sharing of delicious chocolate and also love! I want to give the world a cocoa powder.', user: "Joe"}, {text: 'Love this product', user: "Fred"}, {text: 'Steven Schoichet (Brody) is browbeaten at every turn, by his family, his dead-end job, the faceless suburb where he still lives at home. That is until he decides to make a change. Ventriloquism. Hey, a dream\'s a dream. (Artisan Entertainment)', user: "Molly"}, {text: 'yo', user: "Farmer Dan"}]
     return res.data
   }
@@ -96,11 +102,22 @@ class ProductStore {
     if (!id) return null
     this.fetch = true
     const url = API_GET_PRODUCT_DISPLAYED + id + '/comments'
-    await axios.get(url)
-      .then(res => this.activeProductComments = res.data)
-      .catch(err => console.error('Problem getting comments: ', err))
+    try {
+      const res = await axios.get(url)
+      this.activeProductComments = res.data
+    } catch(err) {
+      console.error(err)
+    }
     this.fetch = false
-    return res.data
+  }
+
+  async rateProduct(id, rating) {
+    const url = API_RATE_PRODUCT + id + '/rating'
+    try {
+      const res = await axios.post(url, { product_id: id, product_rating: rating })
+    } catch(err) {
+      console.error(err)
+    }
   }
 
   getCategories() {

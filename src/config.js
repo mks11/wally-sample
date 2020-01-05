@@ -24,6 +24,7 @@ export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard";
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/";
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/";
 export const API_GET_PACKAGING_UNIT = BASE_URL + "/api/packaging/";
+export const API_RATE_PRODUCT = BASE_URL + "/api/products/";
 
 export const API_GET_CATEGORIES = BASE_URL + "/api/categories";
 export const API_SEARCH_KEYWORD = BASE_URL + "/api/products/search";
@@ -139,4 +140,4 @@ export const FB_KEY = "1634254033370820";
 export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-ecomm/";
 // export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-flat/";
 export const NUTRITIONAL_INFO_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
-export const PACKAGING_BASE_URL = "1. https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";
+export const PACKAGING_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";
