@@ -18,6 +18,7 @@ import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelect from '../../common/QuantitySelect'
 import Product from '../../pages/Mainpage/Product/index'
+import ProductRatingForm from '../../common/ProductRatingForm'
 
 class ProductModal extends Component {
   constructor(props) {
@@ -454,7 +455,7 @@ class ProductModal extends Component {
           <Row>
             <Col>
               <hr />
-              <h3 className="mb-4">More Products Like This</h3>
+              <h3 className="mb-3">More Products Like This</h3>
               <Row>
                 {/* {similar_products.map((product, key) => (
                   <Product product={product} onProductClick={modal.toggleProduct} />
@@ -470,7 +471,7 @@ class ProductModal extends Component {
         <Row>
           <Col>
             <hr />
-            <h3>Product Info</h3>
+            <h3 className="mb-3">Product Info</h3>
             <div className="media media-xs">
               <div className="media-body">
               {manufacturer && (
@@ -513,16 +514,21 @@ class ProductModal extends Component {
         <Row>
           <Col>
             <hr />
-            <h3 className="mb-4">Product Ratings</h3>
+            <h3 className="mb-3">Product Ratings</h3>
             <div><span className="font-weight-bold">Product Rating: </span>{rating || "No Ratings Yet"}</div>
-            <div className="font-weight-bold">Comments:</div>
-            <div className="comments-container">
-              {topThreeComments.map((comment, key) => (
-                <div key={key} className="comment">"{this.truncate(comment.text, 200)}" - {comment.user}</div>
-              ))}
-            </div>
+            {topThreeComments && topThreeComments.length > 0 && (
+              <React.Fragment>
+                <div className="font-weight-bold">Comments:</div>
+                <div className="comments-container">
+                  {topThreeComments.map((comment, key) => (
+                    <div key={key} className="comment">"{this.truncate(comment.text, 200)}" - {comment.user}</div>
+                  ))}
+                </div>
+              </React.Fragment>
+            )}
           </Col>
         </Row>
+        <ProductRatingForm />
       </div>
     )
   }
