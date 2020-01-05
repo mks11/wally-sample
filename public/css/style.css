@@ -1713,15 +1713,29 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
   margin: 20px auto;
 }
 
-.clickable-stars-container {
+.star {
+  margin: 0 0.2em;
+  font-size: 1.5em;
+  cursor: default;
+}
+
+.product-rating-label {
+  margin-right: 10px;
+}
+
+.star.clickable {
+  cursor: pointer;
+}
+
+.stars-container {
   display: flex;
   margin: 5px 0;
 }
 
-.clickable-star {
-  cursor: pointer;
-  margin: 0 0.2em;
-  font-size: 1.5em;
+.product-ratings-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .product-comment-input {

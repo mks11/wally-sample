@@ -28,7 +28,7 @@ class ProductRatingForm extends Component {
 
   emptyStar = rating => (
 		<div
-			className="clickable-star"
+			className="clickable star"
 			key={rating.toString() + "-star"}
 			onClick={() => this.onStarClick(rating)}
 		>
@@ -38,7 +38,7 @@ class ProductRatingForm extends Component {
 
   solidStar = rating => (
 		<div
-			className="clickable-star"
+			className="clickable star"
 			key={rating + "-star"}
 			onClick={() => this.onStarClick(rating)}
 		>
@@ -51,7 +51,7 @@ class ProductRatingForm extends Component {
 		const errorClass = error ? " error" : ""
     return (
       <div className="product-rating-form">
-        <div className="clickable-stars-container">
+        <div className="clickable stars-container">
           {[1, 2, 3, 4, 5].map(thisStar =>
 						rating >= thisStar
               ? this.solidStar(thisStar)
