@@ -21,6 +21,7 @@ export const API_PAYMENT_REMOVE = BASE_URL + "/api/user/payment/";
 export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard";
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/";
+export const API_GET_HISTORICAL_PRODUCTS = BASE_URL + "/api/products/historical";
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/";
 export const API_GET_PACKAGING_UNIT = BASE_URL + "/api/packaging/";
 

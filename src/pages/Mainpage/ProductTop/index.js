@@ -11,6 +11,7 @@ import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 
 import SearchBar from './SearchBar'
 import CartDropdown from './CartDropdown'
+import Filters from './Filters'
 
 class ProductTop extends Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class ProductTop extends Component {
     const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
 
     const dataMap = {
-      name: newContactName, 
+      name: newContactName,
       state: newState,
       delivery_notes: newDeliveryNotes,
       zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
@@ -157,7 +158,7 @@ class ProductTop extends Component {
     this.checkoutStore.getDeliveryTimes().then(() => {
       this.modalStore.showDeliveryChange('address', {
         address: this.state.selectedAddress,
-        times: this.checkoutStore.deliveryTimes 
+        times: this.checkoutStore.deliveryTimes
       })
     })
   }
@@ -190,6 +191,10 @@ class ProductTop extends Component {
     this.uiStore.hideBackdrop()
   }
 
+  handleFiltersSelect = values => {
+    this.props.onFilterUpdate(values)
+  }
+
   render() {
     const {
       selectedAddressChanged,
@@ -203,6 +208,11 @@ class ProductTop extends Component {
       <div className="product-top">
         <Container>
           <Row>
+            <Col>
+              <Filters onSelect={this.handleFiltersSelect} />
+            </Col>
+          </Row>
+          <Row>
             <Col xs="auto" className="d-none d-md-block bdr-right">
               <div
                 className="dropdown-address d-flex"
@@ -210,7 +220,7 @@ class ProductTop extends Component {
                 onMouseLeave={this.handleMouseLeave}
               >
                 <i className="fa fa-map-marker bar-icon" />
-                { 
+                {
                   this.userStore.selectedDeliveryAddress &&
                   <span className="dropdown-details align-self-center">{this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}</span>
                 }
@@ -229,7 +239,7 @@ class ProductTop extends Component {
                       button={false}
                       lock={false}
                       selected={
-                        this.userStore.selectedDeliveryAddress 
+                        this.userStore.selectedDeliveryAddress
                           ? this.userStore.selectedDeliveryAddress.address_id
                           : this.userStore.user
                             ? this.userStore.user.preferred_address
