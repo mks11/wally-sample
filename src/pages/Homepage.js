@@ -210,11 +210,11 @@ class Homepage extends Component {
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
 
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
                 <img src="images/home5_hd.png" alt=""/>
               </div>
 
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
                 <div className="mt-5">

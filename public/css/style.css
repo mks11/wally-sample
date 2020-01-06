@@ -159,7 +159,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 .landing-section.mobile{background-image:url("../images/wally-home-banner-wood-mobile.jpg");}
 .landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");} */
 
-.landing-section{background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 200px 0 100px 0;}
+.landing-section{background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 100px 0 0 0;}
 .landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
 .landing-section-construct.mobile{background-image:url("../images/under-construction-mobile.jpg");}
 .landing-section-construct.mobile-horiz{background-image:url("../images/under-construction-mobile-horiz.jpg");}
