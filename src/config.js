@@ -1,5 +1,4 @@
 export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-// export const BASE_URL = "https://the-wally-shop.herokuapp.com";
 // export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
@@ -138,6 +137,5 @@ export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4";
 export const FB_KEY = "1634254033370820";
 
 export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-ecomm/";
-// export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-flat/";
 export const NUTRITIONAL_INFO_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
 export const PACKAGING_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";
