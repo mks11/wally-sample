@@ -235,6 +235,16 @@ class ProductModal extends Component {
     this.setState({ packagingType: null })
   }
 
+  handleProductClick = (product_id) => {
+    const { product } = this.props.stores
+    // HERE! check parameters when API is updated
+    const delivery = {zip: null, date: null}
+    product.showModal(product_id, null, delivery)
+      .then((data) => {
+        this.modalStore.toggleModal('product')
+    })
+  }
+
   truncate = (text, length) => {
     if (text.length <= length) {
       return text
@@ -252,7 +262,7 @@ class ProductModal extends Component {
     if (!activeProduct) return null
 
     // HERE! UPDATE WHEN SCHEMA IS UPDATED
-    const {
+    let {
       a_plus_url,
       allergens,
       available,
@@ -334,7 +344,10 @@ class ProductModal extends Component {
     const packaging_description = packaging ? packaging.description : null 
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
-    
+
+    // HERE! remove test data
+    rating = 4
+
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -476,12 +489,13 @@ class ProductModal extends Component {
               <h3 className="mb-3">More Products Like This</h3>
               <Row className="similar-products-container">
                 {/* {similar_products.map((product, key) => (
-                  <Product product={product} onProductClick={modal.toggleProduct} />
+                  <Product key={key} product={product} onProductClick={() => this.handleProductClick(product.prod_id)} />
                 ))} */}
-                {/* <Product product={activeProduct} onProductClick={() => product.showModal('prod_2', null, {zip: null, date: null})} /> */}
-                <Product product={activeProduct} />
-                <Product product={activeProduct} />
-                <Product product={activeProduct} />
+                {/* HERE! remove test data below */}
+                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
+                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
+                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
+                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
               </Row>
             </Col>
           </Row>
@@ -551,7 +565,7 @@ class ProductModal extends Component {
             )}
           </Col>
         </Row>
-        <ProductRatingForm id={product_id} />
+        <ProductRatingForm product_id={product_id} />
       </div>
     )
   }
