@@ -19,12 +19,11 @@ import AmountGroup from 'common/AmountGroup'
 import QuantitySelect from '../../common/QuantitySelect'
 import Product from '../../pages/Mainpage/Product/index'
 import ProductRatingForm from '../../common/ProductRatingForm'
-import StarsRating from '../../common/StarsRating'
+import ProductRatingStars from '../../common/ProductRatingStars'
 
 class ProductModal extends Component {
   constructor(props) {
     super(props)
-    console.log('props', props)
     this.state = {
       qty: 1,
       infoPackage: false,
@@ -97,7 +96,18 @@ class ProductModal extends Component {
         dots: false,
         infinite: false,
         arrows: false,
-
+        responsive: [
+          {
+            breakpoint: 576,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: false,
+              infinite: false,
+              arrows: true,
+            }
+          },
+        ],
       });
       $thumb.slick({
         slidesToShow: 3,
@@ -236,8 +246,8 @@ class ProductModal extends Component {
   render() {
     const { packagingType } = this.state
     const { product, modal } = this.props.stores
-    const activeProduct = product.activeProduct
-    const topThreeComments = product.activeProductComments.slice(0, 3)
+    const { activeProduct, activeProductComments } = product
+    const recentThreeComments = activeProductComments.slice(0).reverse().slice(0, 3)
 
     if (!activeProduct) return null
 
@@ -324,7 +334,7 @@ class ProductModal extends Component {
     const packaging_description = packaging ? packaging.description : null 
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
-    console.log('activeProduct', activeProduct)
+    
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -336,10 +346,13 @@ class ProductModal extends Component {
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
                   <div className="slick-item">
-                    <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+                    <img src="https://picsum.photos/id/1080/300/200"/>
                   </div>
                   <div className="slick-item">
-                    <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
+                    <img src="https://picsum.photos/id/110/300/200"/>
+                  </div>
+                  <div className="slick-item">
+                    <img src="https://picsum.photos/id/1069/300/200"/>
                   </div>
                   {image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
@@ -357,27 +370,31 @@ class ProductModal extends Component {
                 </div>
               </div>
             </div>
-
-            <div id="product-carousel" ref={el => this.prod = el}>
-              <div className="slick-item">
-                <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
-              </div>
-              <div className="slick-item">
-                <img src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png"/>
-              </div>
-              {image_refs.map((item, key) => (
-                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
-              ))}
-              {nutritional_info_url && (
+            <div className="carousel-mobile-flex">
+              <div id="product-carousel" ref={el => this.prod = el}>
                 <div className="slick-item">
-                  <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                  <img src="https://picsum.photos/id/1080/300/200"/>
                 </div>
-              )}
-              {packaging_size && (
                 <div className="slick-item">
-                  <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                  <img src="https://picsum.photos/id/110/300/200"/>
                 </div>
-              )}
+                <div className="slick-item">
+                  <img src="https://picsum.photos/id/1069/300/200"/>
+                </div>
+                {image_refs.map((item, key) => (
+                  <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
+                ))}
+                {nutritional_info_url && (
+                  <div className="slick-item">
+                    <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                  </div>
+                )}
+                {packaging_size && (
+                  <div className="slick-item">
+                    <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                  </div>
+                )}
+              </div>
             </div>
           </Col>
           <Col sm="6">
@@ -457,11 +474,11 @@ class ProductModal extends Component {
             <Col>
               <hr />
               <h3 className="mb-3">More Products Like This</h3>
-              <Row>
+              <Row className="similar-products-container">
                 {/* {similar_products.map((product, key) => (
                   <Product product={product} onProductClick={modal.toggleProduct} />
                 ))} */}
-                <Product product={activeProduct} onProductClick={modal.toggleProduct} />
+                {/* <Product product={activeProduct} onProductClick={() => product.showModal('prod_2', null, {zip: null, date: null})} /> */}
                 <Product product={activeProduct} />
                 <Product product={activeProduct} />
                 <Product product={activeProduct} />
@@ -518,13 +535,13 @@ class ProductModal extends Component {
             <h3 className="mb-3">Product Ratings</h3>
             <div className="product-ratings-container">
               <span className="product-rating-label font-weight-bold">Product Rating: </span>
-              {rating ? <StarsRating rating={rating}/> : "No Ratings Yet"}
+              {rating ? <ProductRatingStars rating={rating}/> : "No Ratings Yet"}
             </div>
-            {topThreeComments && topThreeComments.length > 0 && (
+            {recentThreeComments && recentThreeComments.length > 0 && (
               <React.Fragment>
                 <div className="font-weight-bold">Comments:</div>
                 <div className="comments-container">
-                  {topThreeComments.map((comment, key) => (
+                  {recentThreeComments.map((comment, key) => (
                     <div key={"comment-" + key} className="comment">
                       "{this.truncate(comment.text, 200)}" - {comment.user}
                     </div>
@@ -534,7 +551,7 @@ class ProductModal extends Component {
             )}
           </Col>
         </Row>
-        <ProductRatingForm />
+        <ProductRatingForm id={product_id} />
       </div>
     )
   }
