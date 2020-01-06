@@ -54,7 +54,7 @@ class ProductStore {
 
     await this.getComments(product_id)
     // HERE! remove test data below
-    this.activeProductComments = [{text: 'Great stuff. I only wish it would fulfill all of my needs as a human, as only cocoa powder can. My wish is for cocoa powder to bring about world peace through the sharing of delicious chocolate and also love! I want to give the world a cocoa powder.', user: "Joe"}, {text: 'Love this product', user: "Fred"}, {text: 'Steven Schoichet (Brody) is browbeaten at every turn, by his family, his dead-end job, the faceless suburb where he still lives at home. That is until he decides to make a change. Ventriloquism. Hey, a dream\'s a dream. (Artisan Entertainment)', user: "Molly"}, {text: 'yo', user: "Farmer Dan"}]
+    this.activeProductComments = [{text: 'Great stuff. I only wish it would fulfill all of my needs as a human, as only cocoa powder can. My wish is for cocoa powder to bring about world peace through the sharing of delicious chocolate and also love! I want to give the world a cocoa powder.', user: "Joe"}, {text: 'One of the best powdered cocoas you can get. It rivals speciality high end products such as Valrhona that cost 3 times as much. Slightly cheaper here than at my local grocery so I use it as an add on to reach my 5 Subscribe and Save items and get maximum discount on all. Makes a great Chocolate sugar cookie. Blend 1c unsalted butter 1.5c sugar 1 egg 2 tsp vanilla, then sift together and add 1.5c flour, a generous half cup Cocoa, 1 tsp baking powder, 1 tsp baking soda, half tsp salt. Mix until combined, do not over mix.', user: "Fred"}, {text: 'The deep and full-bodied taste of this very rich cocoa powder combined with attractive pricing has made it a pantry staple. I love that it comes unsweetened, so not only am I not buying sugar, but it leaves all options open. When making hot cocoa, I have found that I prefer to sweeten with a small amount of liquid agave. The flavor is great and the sugar shock is avoided. I also bake with this cocoa with rich results. Try making truffles with this - quick, and the bomb!', user: "Molly"}, {text: 'This stuff has a great flavor and makes smooth and delicious chocolates, chocolate sauce, hot fudge, frosting, cookies, hot chocolate, brownies, truffles, chocolate cake, chocolate pudding...you name it! I\'ll never go back to that other stuff I used to use.', user: "Dan"}]
     return res.data
   }
 
@@ -111,10 +111,12 @@ class ProductStore {
     this.fetch = false
   }
 
-  async rateProduct(id, rating) {
+  async rateProduct(id, rating, comment) {
     const url = API_RATE_PRODUCT + id + '/rating'
     try {
-      const res = await axios.post(url, { product_id: id, product_rating: rating })
+      const res = await axios.post(url, { product_id: id, product_rating: rating, comment: comment })
+      this.activeProduct.rating = res.data.product_rating
+      this.activeProductComments = res.data.comments
     } catch(err) {
       console.error(err)
     }
