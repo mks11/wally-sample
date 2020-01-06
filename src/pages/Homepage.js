@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Delivered in reusable packaging, picked back up again for reuse.',
+      heroDescription: 'Small producer-made bulk foods & products conveniently delivered in our reusable, returnable packaging for a completely waste-free experience.',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -167,7 +167,7 @@ class Homepage extends Component {
 
     const ButtonNotify = () => (
       <button onClick={this.handleSubscribe} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        GET NOTIFIED
+        SIGN UP NOW
       </button>
     )
 
@@ -192,7 +192,7 @@ class Homepage extends Component {
 
     return (
       <div className="homepage">
-        <section id="nav-hero" className={tempClass}>
+        {/* <section id="nav-hero" className={tempClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
               <div className="col-12 col-sm-10 col-md-8 col-lg-6">
@@ -205,42 +205,30 @@ class Homepage extends Component {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
+
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+                <img src="images/home5_hd.png" alt=""/>
+              </div>
+
               <div className="col-12 col-sm-10 col-md-8 col-lg-6">
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
-
-                {this.state.heroStatus === 'start' && 
-                    <div>
-                      <Input
-                        className="zip"
-                        type="number"
-                        value={this.state.zip}
-                        placeholder="Enter zip code..."
-                        onKeyDown={this.handleZipEnter}
-                        onChange={this.handleZip}/>
-                      {this.state.invalidZip && <div className="text-error">Invalid zip codes</div>}
-                      <ButtonStart/>
-                    </div>
-                }
-
-                {this.state.heroStatus === 'invalid_zip' &&
-                    <div>
-                      <Input
-                        className="zip"
-                        type="text"
-                        value={this.state.email}
-                        placeholder="Enter your email..."
-                        onKeyDown={this.handleEmailEnter}
-                        onChange={this.handleEmail}
-                      />
-                      {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
-                      <ButtonNotify/>
-                    </div>
-                }
+                <div className="mt-5">
+                  <Input
+                    className="zip"
+                    type="text"
+                    value={this.state.email}
+                    placeholder="Enter your email"
+                    onKeyDown={this.handleEmailEnter}
+                    onChange={this.handleEmail}
+                  />
+                  {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
+                  <ButtonNotify/>
+                </div>
 
                 {this.state.heroStatus === 'success' && <ButtonStartShopping/>}
 
@@ -250,8 +238,8 @@ class Homepage extends Component {
           </div>
         </section>
 
-        <section className="page-section aw-our--story">
-          <div className="container">
+        <section className="page-section aw-our--story align-items-center">
+          <div className="container h-75 w-75">
             <div className="tagline">
               <h2>It's what's on the inside that counts.</h2>
               <p></p>
@@ -259,28 +247,45 @@ class Homepage extends Component {
               <p>You take care of the earth - we'll take care of the groceries.</p>
             </div>
 
-            <div className="row">
-              <div className="col-md-12 mb-md-4">
-                <div className="row">
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home1_hd.jpg" alt=""/>
-                      <h4>Shop produce from local, organic farmers markets & shops</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home2_hd.jpg" alt=""/>
-                      <h4>Get it delivered in all reusable packaging</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home3_hd.jpg" alt=""/>
-                      <h4>Return packaging at a future delivery for reuse</h4>
-                    </div>
-                  </div>
+            <div className="row d-flex justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Order</h1>
+                  <p>Shop produce from local, organic farmers markets & shops</p>
                 </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                <img src="images/home6_hd.png" alt=""/>
+              </div>
+            </div>
+
+
+            <div className="row d-flex justify-content-center align-items-center mt-5">
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+                <img src="images/home7_hd.png" alt=""/>
+              </div>
+              <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
+                <div className="receive-item w-75 pull-right">
+                  <h1>Receive</h1>
+                  <p className="receive-item">Get it delivered in all reusable packaging</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="row d-flex mt-5 justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Return</h1>
+                  <p>Return packaging at a future delivery for reuse</p>
+                </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                <img src="images/home8_hd.png" alt=""/>
+              </div>
+            </div>
+
+            <div className="row mt-5">
+              <div className="col-md-12 mb-md-4">
                 <Row>
                   <Col>
                     <div className="text-center">
@@ -295,17 +300,6 @@ class Homepage extends Component {
           </div>
 
           <br /><br />
-          <div className="container">
-            <h3>All available zip codes</h3>
-            <hr />
-            <div className="mb-5">
-              <div className="row ">
-                { this.zipStore.zipcodes.map((z,key) => (
-                  <div className="col-sm-1" key={key}>{z}</div>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
       </div>
     );

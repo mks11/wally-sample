@@ -309,17 +309,17 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .btn-outline-black {
-  color: #4940db;
+  color: #000;
   background-color: transparent;
   background-image: none;
-  border-color: #4940db;
-  border-width: 2px;
+  border-color: #000;
+  border-width: 1px;
 }
 
 .btn-outline-black:hover {
   color: #faf5ee;
-  background-color: #4940db;
-  border-color: #4940db;
+  background-color: #000;
+  border-color: #000;
 }
 
 .btn-outline-black:focus, .btn-outline-black.focus {
@@ -346,14 +346,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
 .btn-inline-black {
   color: #fff;
-  background-color: #4940db;
-  border-color: #4940db;
-  border-width: 2px;
+  background-color: #000;
+  border-color: #000;
+  border-width: 1px;
 }
 
 .btn-inline-black:hover {
-  color: #4940db;
-  border-color: #4940db;
+  color: #000;
+  border-color: #000;
 }
 
 .btn-inline-black:focus, .btn-inline-black.focus {
@@ -367,14 +367,14 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 
 .btn-inline-black:active, .btn-inline-black.active,
 .show > .btn-inline-black.dropdown-toggle {
-  color: #4940db;
-  background-color: #4940db;
-  border-color: #4940db;
+  color: #000;
+  background-color: #000;
+  border-color: #000;
 }
 
 .btn-inline-black:focus, .btn-inline-black:active, .btn-inline-black:hover {
   color: #faf5ee;
-  background-color: #4940db;
+  background-color: #000;
 }
 
 
@@ -382,8 +382,10 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   transition: 0.15s background-color;
   width: 250px;
   text-align: center;
-  background-color:#78C98D;
-  border-radius: 12px;
+  background-color:#8ca3ff;
+  -webkit-border-radius: 500px;
+  -moz-border-radius: 500px;
+  border-radius: 500px;
 }
 
 
@@ -719,7 +721,8 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
 }
 
 .aw-nav a {
-  color: #4940db;
+  font-weight: bold;
+  color: #000;
 }
 
 .aw-nav a:focus, .aw-nav a:active, .aw-nav a:hover {
