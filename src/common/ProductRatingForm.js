@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import { Input, Button } from "reactstrap"
 
+import { connect } from '../utils'
+
 class ProductRatingForm extends Component {
   constructor(props) {
     super(props)
@@ -8,12 +10,14 @@ class ProductRatingForm extends Component {
     this.state = {
       rating: null,
       comment: "",
-      error: null,
-    }
+			errorMessage: null,
+		}
+
+		this.productStore = this.props.store.product
   }
 
   onStarClick = rating => {
-    this.setState({ rating, error: false })
+    this.setState({ rating, errorMessage: null })
   }
 
   onInputChange = event => {
@@ -21,9 +25,14 @@ class ProductRatingForm extends Component {
   }
 
   onRateProductClick = () => {
-    if (!this.state.rating) {
-      this.setState({ error: true })
-    }
+		const { rating, comment } = this.state
+
+		if (!rating) {
+			const errorMessage = 'Please select a rating'
+			this.setState({ errorMessage: errorMessage })
+		} else {
+			this.productStore.rateProduct(this.props.id, rating, comment)
+		}
   }
 
   emptyStar = rating => (
@@ -47,8 +56,8 @@ class ProductRatingForm extends Component {
 	)
 
   render() {
-		const { rating, comment, error } = this.state
-		const errorClass = error ? " error" : ""
+		const { rating, comment, errorMessage } = this.state
+		const errorClass = errorMessage ? " text-error" : ""
     return (
       <div className="product-rating-form">
         <div className="clickable stars-container">
@@ -63,15 +72,16 @@ class ProductRatingForm extends Component {
           type="textarea"
           value={comment}
           onChange={this.onInputChange}
+					maxLength="300"
           placeholder="Add comment here (optional) ..."
         />
         <Button className="rate-btn" onClick={this.onRateProductClick}>
           Rate Product
         </Button>
-        <div className={"rating-error" + errorClass}>Please select a rating</div>
+        <div className={"rating-error" + errorClass}>{errorMessage}</div>
       </div>
     )
   }
 }
 
-export default ProductRatingForm
+export default connect("store")(ProductRatingForm)
