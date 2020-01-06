@@ -15,6 +15,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Orders from "./pages/Orders";
 import ManageOrders from "./pages/ManageOrders";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import SimilarProducts from "./pages/Mainpage/SimilarProducts";
 import Checkout from "./pages/Checkout";
 import GiftCheckout from "./pages/GiftCheckout";
 import InviteFriends from "./pages/InviteFriends";
@@ -107,6 +108,7 @@ export default (
       <Route exact path="/about" component={About} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
+      <Route exact path="/similar-products" component={SimilarProducts} />
       <Route exact path="/checkout" component={Checkout} />
       <Route exact path="/giftcard" component={GiftCheckout} />
       <Route exact path="/main" component={Mainpage} />
