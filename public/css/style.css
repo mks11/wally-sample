@@ -1754,7 +1754,8 @@ button.rate-btn {
 
 .rating-error.text-error {
   display: block;
-  margin: 10px 0;
+  margin-top: 16px;
+  font-size: 16px;
 }
 
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;

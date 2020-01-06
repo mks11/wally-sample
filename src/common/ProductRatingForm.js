@@ -24,32 +24,35 @@ class ProductRatingForm extends Component {
     this.setState({ comment: event.target.value })
   }
 
-  onRateProductClick = () => {
+	onRateProductClick = async() => {
 		const { rating, comment } = this.state
-
 		if (!rating) {
-			const errorMessage = 'Please select a rating'
-			this.setState({ errorMessage: errorMessage })
+			const errorMessage = 'Please select a star rating'
+			this.setState({ errorMessage })
 		} else {
-			this.productStore.rateProduct(this.props.id, rating, comment)
+			try {
+				const res = await this.productStore.rateProduct(this.props.product_id, rating, comment)
+			} catch(err) {
+				this.setState({ errorMessage: 'Oops, there was a problem saving your rating. Please try again later.'})
+			}
 		}
   }
 
-  emptyStar = rating => (
+	makeEmptyStar = star => (
 		<div
 			className="clickable star"
-			key={rating.toString() + "-star"}
-			onClick={() => this.onStarClick(rating)}
+			key={star.toString() + "-star"}
+			onClick={() => this.onStarClick(star)}
 		>
 			&#9734;
 		</div>
 	)
 
-  solidStar = rating => (
+  makeFullStar = star => (
 		<div
 			className="clickable star"
-			key={rating + "-star"}
-			onClick={() => this.onStarClick(rating)}
+			key={star + "-star"}
+			onClick={() => this.onStarClick(star)}
 		>
 			&#9733;
 		</div>
@@ -63,8 +66,8 @@ class ProductRatingForm extends Component {
         <div className="clickable stars-container">
           {[1, 2, 3, 4, 5].map(thisStar =>
 						rating >= thisStar
-              ? this.solidStar(thisStar)
-              : this.emptyStar(thisStar)
+              ? this.makeFullStar(thisStar)
+              : this.makeEmptyStar(thisStar)
           )}
         </div>
         <Input

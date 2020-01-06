@@ -37,7 +37,7 @@ class ProductStore {
   currentSearchFilter = []
   currentSearchCategory = 'All Categories'
 
-  async showModal(product_id, customer_quantity, delivery) {
+  async showModal(product_id, customer_quantity, delivery) {    
     this.activeProductId = product_id
 
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -120,6 +120,7 @@ class ProductStore {
     } catch(err) {
       console.error(err)
     }
+    return res.data;
   }
 
   getCategories() {
