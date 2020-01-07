@@ -1199,11 +1199,11 @@ body {
 }
 
 .header-wrap.top-bar-open + .aw-main .product-top.fixed {
-  top:82px;
+  top: 110px;
 }
 
-.header-wrap.top-bar-open + .aw-main  {
-  padding-top: 10px;
+.header-wrap.top-bar-open + .aw-main {
+  padding-top: 111px;
 }
 
 .admin-tabs .active-tab {
