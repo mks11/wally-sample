@@ -109,6 +109,7 @@ class DeliveryAddressOptions extends Component {
       street_number: 'short_name',
       route: 'long_name',
       locality: 'long_name',
+      sublocality_level_1: 'long_name',
       administrative_area_level_1: 'short_name',
       country: 'long_name',
       postal_code: 'short_name'
@@ -118,6 +119,14 @@ class DeliveryAddressOptions extends Component {
 
     for (var i = 0; i < place.address_components.length; i++) {
       var addressType = place.address_components[i].types[0];
+
+      // Brooklyn and other parts of New York City do not include the city as part of the address.
+      // Instead, they use sublocality_level_1.
+      var addressTypes = place.address_components[i].types
+      if (addressTypes.includes('sublocality_level_1')) {
+        addressType = 'sublocality_level_1'
+      }
+
       if (componentForm[addressType]) {
         var val = place.address_components[i][componentForm[addressType]];
         address[addressType] = val;
@@ -126,8 +135,8 @@ class DeliveryAddressOptions extends Component {
     // console.log('adddres', address)
 
     let city = address.locality
-    if (!city && address.administrative_area_level_1) {
-      city = address.administrative_area_level_1
+    if (!city && address.sublocality_level_1) {
+      city = address.sublocality_level_1
     }
     const state = address.administrative_area_level_1
     const country = address.country
@@ -149,7 +158,7 @@ class DeliveryAddressOptions extends Component {
     this.setState({ newStreetAddress })
     geocodeByAddress(newStreetAddress)
       .then(results => {
-        // console.log(results[0])
+        // console.log('first result', results[0])
         this.fillInAddress(results[0])
       })
       .catch(error => console.error('Error', error));
