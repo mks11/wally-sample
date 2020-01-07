@@ -28,8 +28,7 @@ class VendorProfile extends Component {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
       categoryTypeMode: "limit",
-      showMobileSearch: false,
-      vendor: "Ace Natural"
+      showMobileSearch: false
     };
 
     this.id = this.props.match.params.id;
@@ -49,7 +48,17 @@ class VendorProfile extends Component {
 
   loadData() {
     const id = this.props.match.params.id;
-    this.id = id;
+    const name = this.props.match.params.vendor_name;
+
+    this.vendorProfileStore
+      .loadVendorProfile(name)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(e => {
+        console.error("Failed to load vendor profile", e);
+        this.modalStore.toggleModal("error");
+      });
 
     let categoryTypeMode = "all";
     if (!this.id) {
@@ -63,15 +72,12 @@ class VendorProfile extends Component {
     this.productStore.getAdvertisements();
     this.productStore.getCategories();
     this.productStore
-      .getProductDisplayed(id, deliveryData, this.userStore.getHeaderAuth())
+      .getVendorProducts(name)
       .then(data => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          this.state.deliveryTimes
-        );
+        console.log(data);
         this.setState({ sidebar: this.productStore.sidebar });
       })
-      .catch(e => console.error("Failed to load product displayed: ", e));
+      .catch(e => console.error("Failed to load vendor products: ", e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -191,36 +197,33 @@ class VendorProfile extends Component {
   };
 
   render() {
+    const vendor = this.vendorProfileStore.vendor;
+
     return (
       <div className="App">
         <div className="container">
           <div className="row justify-content-between">
             <div className="col-md-6 col-xs-12">
-              <img
-                src="https://www.co2logic.com/sites/default/files/styles/services_image/public/LOGO-Ace-2014-on-Green_0.jpg"
-                alt=""
-              />
+              <img src={vendor.logo_url} alt="" />
             </div>
 
             <div className="col-md-6 col-xs-12 text-left">
-              <h1>Ace Natural</h1>
-              <h2>New York City | New York</h2>
+              <h1>{vendor.name}</h1>
+              <h2>
+                {vendor.city} | {vendor.state}
+              </h2>
               <hr />
-              <p>
-                Ace Natural is New York City's premier foodservice distributor
-                for natural and organic ingredients. Our commitment to customer
-                satisfaction is second to none.
-              </p>
+              <p>{vendor.description}</p>
             </div>
           </div>
         </div>
 
         <div className="col-md-10 col-sm-8">
           <div className="product-content-right">
-            {this.productStore.main_display.map((id, index) => (
+            {this.productStore.vendor_products.map((product, index) => (
               <ProductList
                 key={index}
-                display={id}
+                display={product}
                 mode={this.state.categoryTypeMode}
                 deliveryTimes={this.state.deliveryTimes}
                 onProductClick={this.handleProductModal}
