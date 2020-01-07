@@ -326,18 +326,20 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col>
-            <Col className="d-none d-md-block">
+            <Col>
               <div className="d-flex align-items-start">
                 <SearchBar
                   onSearch={onSearch}
                 />
-                <CartDropdown
-                  ui ={this.uiStore}
-                  cart={this.checkoutStore.cart}
-                  onCheckout={this.handleCheckout}
-                  onEdit={this.handleEdit}
-                  onDelete={this.handleDelete}
-                />
+                <span className="d-none d-md-block">
+                  <CartDropdown
+                    ui ={this.uiStore}
+                    cart={this.checkoutStore.cart}
+                    onCheckout={this.handleCheckout}
+                    onEdit={this.handleEdit}
+                    onDelete={this.handleDelete}
+                  />
+                </span>
               </div>
             </Col>
             <Col xs="auto" className="d-block d-md-none">

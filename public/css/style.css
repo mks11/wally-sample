@@ -148,8 +148,8 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
-.logo-text-desktop{height:35px;}
-.logo-text-mobile{display:none;}
+.logo-text-desktop{height:35px;transition: 300ms all;}
+.logo-text-mobile{display:none;transition: 300ms all;}
 
 /* Homepage */
 .landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
@@ -1379,13 +1379,13 @@ span.dropdown-item.lg {
   font-size: 20px;
 }
 
-.search-product .form-control{border: 1px solid #ececec;border-left:0;padding:6px 10px;border-radius: 10px;height:auto;line-height:26px;font-size:16px;}
+.search-product .form-control{border: 1px solid #979797;border-left:0;padding:6px 10px;border-radius: 0;height:auto;line-height:26px;font-size:16px;}
 .search-product .form-control:focus{box-shadow:none;}
-.search-product .input-group-text{padding:3px 5px 3px 15px;background-color:#fff;border-color:#ececec;border-radius:10px 0 0 10px; border-right:none;}
+.search-product .input-group-text{padding:3px 5px 3px 15px;background-color:#fff;border-color:#979797;border-radius:0; border-right:none;}
 .product-top .dropdown-cart-wrapper{margin-left: 50px;}
 .search-wrapper { -webkit-box-flex: 1;-ms-flex: 1;flex: 1; }
 .product-cart-counter{cursor: pointer;border:1px solid #ececec;border-radius: 10px;padding:7px 10px;line-height:24px;font-size:16px;}
-.product-cart-counter.active{background: #78C98D; color: #fff; border:none;}
+.product-cart-counter.active{background: #97ADFF; color: #fff; border:none;}
 .product-cart-counter.active span{border-left: 1px solid #fff}
 .product-cart-counter i {margin-right: 10px;}
 .product-cart-counter span{border-left:1px solid #ececec;padding-left: 10px;}
@@ -2874,6 +2874,9 @@ span.category-card-img {
   font-size: 13px;
   font-family: 'Sofia Pro';
   margin-bottom: 15px;
+  transition: 300ms all;
+  max-height: 300px;
+  overflow: hidden;
 }
 .filters-title {
   text-transform: uppercase;
@@ -2905,6 +2908,18 @@ span.category-card-img {
 }
 .filters-values ul li.filters-selected:before {
   background-color: #97ADFF;
+}
+.body-scroll .filters {
+  max-height: 0;
+}
+.body-scroll .logo-text-desktop {
+  height: 25px;
+}
+.body-scroll .logo-text-mobile {
+  left: 10px;
+  top: -87%;
+  position: absolute;
+  width: 140px;
 }
 
 @media (max-width: 765px) {
