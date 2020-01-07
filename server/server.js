@@ -26,6 +26,8 @@ app.all("*", function(req, res) {
   res.json({error: 'Invalid api url'})
 })
 
-app.listen(4000,function() {
-  console.log("Starting fake server")
+const PORT = 4000
+
+app.listen(PORT,function() {
+  console.log("Starting fake server at port: ",PORT)
 })

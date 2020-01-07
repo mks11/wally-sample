@@ -94,7 +94,7 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
             >
-              <img src="images/smile.svg" />
+              <img src="images/smile.svg" alt="smile icon" />
             </Button>
           </Col>
           <Col xs={4}>
@@ -102,7 +102,7 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
             >
-              <img src="images/meh.svg" />
+              <img src="images/meh.svg" alt="meh icon" />
             </Button>
           </Col>
           <Col xs={4}>
@@ -110,7 +110,7 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
             >
-              <img src="images/sad.svg" />
+              <img src="images/sad.svg" alt="sad icon" />
             </Button>
           </Col>
         </FormGroup>

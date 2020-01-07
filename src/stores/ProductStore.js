@@ -58,12 +58,18 @@ class ProductStore {
       })
   }
 
-  async getProductDisplayed(id, delivery) {
+  async getProductDisplayed(id, delivery, auth) {
+    let res;
     this.main_display = []
     this.fetch = true
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED
-    const res = await axios.get(`${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(`${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, auth)
+    } else {
+      res = await axios.get(`${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    }
     const data = res.data
 
     this.main_display = data.main_products
@@ -71,6 +77,14 @@ class ProductStore {
     this.sidebar = data.sidebar
     this.fetch = false
 
+    return res.data
+  }
+
+  async getProductDetails(id, delivery){
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    this.fetch = true
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    this.fetch = false
     return res.data
   }
 
@@ -82,11 +96,17 @@ class ProductStore {
       }).catch((e) => console.error('Failed to load categories: ', e))
   }
 
-  async searchKeyword(keyword, delivery) {
+  async searchKeyword(keyword, delivery, auth) {
+    let res;
     const term = keyword
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     keyword = encodeURIComponent(keyword)
-    const res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`, auth)
+    } else {
+      res = await axios.get(`${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    }
 
 
     this.search = {
@@ -179,6 +199,7 @@ decorate(ProductStore, {
   searchCategory: action,
   searchAll: action,
   resetSearch: action,
+  getProductDetails: action
 })
 
 

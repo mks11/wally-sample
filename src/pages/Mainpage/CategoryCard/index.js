@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const CategoryCard = ({ category }) => {
   return (
@@ -9,12 +10,15 @@ const CategoryCard = ({ category }) => {
         className="category-card-link"
       >
         <div className="category-card">
-          <div
-            className="category-card-img"
-            style={{ 
-              backgroundImage: `url(${category.image_ref || ''})`
-            }}
-          />
+          <div className="category-card-img-block">
+            <LazyLoadImage
+              className="category-card-img"
+              alt={category.cat_name}
+              height="100%"
+              src={category.image_ref}
+              width="100%"
+            />
+          </div>
           <div className="category-card-name">
             {category.cat_name}
           </div>

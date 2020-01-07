@@ -11,8 +11,8 @@ import {
 import { PRODUCT_BASE_URL } from 'config'
 import AmountGroup from 'common/AmountGroup'
 
-import QuantitySelect from './QuantitySelect'
-import Addons from './Addons'
+import QuantitySelect from '../../common/QuantitySelect'
+import Addons from './../../common/ProductAddons';
 
 class ProductModal extends Component {
   constructor(props) {
@@ -140,6 +140,7 @@ class ProductModal extends Component {
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
+    console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
     const unit_type = activeProduct.unit_type || activeProduct.price_unit

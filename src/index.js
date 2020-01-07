@@ -1,57 +1,56 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactGA from 'react-ga';
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactGA from "react-ga";
 // import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
-import routes from './routes';
+import routes from "./routes";
 
-import TopNav from './common/TopNav'
-import Footer from './common/Footer'
-import ScrollToTop from './common/ScrollToTop'
-import RootModal from './modals/RootModal'
-import Backdrop from './common/Backdrop'
+import TopNav from "./common/TopNav";
+import Footer from "./common/Footer";
+import ScrollToTop from "./common/ScrollToTop";
+import RootModal from "./modals/RootModal";
+import Backdrop from "./common/Backdrop";
 
 //router
-import { Router } from 'react-router-dom'
-import { Provider } from 'mobx-react'
-import createBrowserHistory from 'history/createBrowserHistory';
-import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
+import { Router } from "react-router-dom";
+import { Provider } from "mobx-react";
+import createBrowserHistory from "history/createBrowserHistory";
+import { RouterStore, syncHistoryWithStore } from "mobx-react-router";
 
 //mobx
-import store  from './stores'
+import store from "./stores";
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faStroopwafel, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faStroopwafel, faSearch)
+library.add(faStroopwafel, faSearch);
 
-const routingStore = new RouterStore()
-const browserHistory = createBrowserHistory()
+const routingStore = new RouterStore();
+const browserHistory = createBrowserHistory();
 
-store.routing = routingStore
+store.routing = routingStore;
 
-// ReactGA.initialize('UA-128193575-1', { debug: true });
-ReactGA.initialize('UA-128193575-1');
+ReactGA.initialize('UA-128193575-1', { debug: true });
+// ReactGA.initialize('UA-128193575-1');
 
-const history = syncHistoryWithStore(browserHistory, routingStore)
-
+const history = syncHistoryWithStore(browserHistory, routingStore);
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <ScrollToTop>
         <div className="app">
-          <Backdrop/>
-          <TopNav/>
-          <main className="aw-main aw-home">
-            {routes}
-          </main>
-          <Footer/>
+          <Backdrop />
+          <TopNav />
+          <main className="aw-main aw-home">{routes}</main>
+
+          <Footer />
           <RootModal />
-        </div> 
+        </div>
       </ScrollToTop>
     </Router>
-  </Provider>
-  , document.getElementById('root'));
+  </Provider>,
+  document.getElementById("root")
+);
 
 // registerServiceWorker();

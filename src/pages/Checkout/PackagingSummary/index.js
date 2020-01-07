@@ -22,7 +22,7 @@ class PackagingSummary extends Component {
 
   render() {
     const { packagingdeposit } = this.state
-    const { value } = this.props
+    const { title  } = this.props
 
     return (
       <div className={`summary ${packagingdeposit ? 'open' : ''}`}>
@@ -31,7 +31,7 @@ class PackagingSummary extends Component {
             className="popover bs-popover-right"
             role="tooltip"
             x-placement="right"
-            style={{ left: '142px' }}
+            style={{ left: '162px', minWidth: '175px' }}
           >
             <div className="arrow"></div>
             <h3 className="popover-header"></h3>
@@ -40,8 +40,7 @@ class PackagingSummary extends Component {
             </div>
           </div>
         </ClickOutside>
-        <span onClick={this.showPackagingPopup}>Packaging deposit  <FontAwesome name='info-circle' /></span>
-        <span>{value}</span>
+        <span onClick={this.showPackagingPopup}>{title}  <FontAwesome name='info-circle' /></span>
       </div>
     )
   }
