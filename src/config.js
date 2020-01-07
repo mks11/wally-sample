@@ -31,6 +31,8 @@ export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh";
 export const API_GET_CURRENT_CART = BASE_URL + "/api/cart";
 export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/";
 
+export const API_GET_IMPULSE_PRODUCTS = BASE_URL + "/api/products/associated";
+
 export const API_CREATE_ORDER = BASE_URL + "/api/order";
 export const API_GET_ORDER_SUMMARY = BASE_URL + "/api/order/summary";
 export const API_UPDATE_ORDER = BASE_URL + "/api/order/update";
@@ -120,6 +122,8 @@ export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
 
 export const GET_FAKE_BACKERS = "https://jsonplaceholder.typicode.com/users";
+
+export const API_GET_VENDOR_PROFILE = BASE_URL + "/api/vendor";
 
 export const API_HELP_GET_QUESTION = BASE_URL + "/api/help/questions/";
 export const API_HELP_GET_QUESTION_SINGLE = BASE_URL + "/api/help/questions/";
