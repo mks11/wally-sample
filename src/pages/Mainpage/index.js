@@ -16,6 +16,7 @@ import ProductTop from './ProductTop'
 import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
+import Filters from './ProductTop/Filters'
 import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
@@ -306,6 +307,10 @@ class Mainpage extends Component {
                   <div className="mb-4">
                     <h4>The Wally Shop</h4>
                   </div>
+                  <Filters
+                    onSelect={this.handleFilterUpdate}
+                    vertical
+                  />
                     {
                       sidebar.map((s,i) => {
                         return (
@@ -333,14 +338,12 @@ class Mainpage extends Component {
                 </div>
 
               {
-                this.id === 'buyagain' && !this.productStore.search.state ? (
-                      <div className="col-md-10 col-sm-8">
+                id === 'buyagain' && !this.productStore.search.state ? (
+                      <div className="col-md-10 col-sm-12">
                         <div className="product-content-right">
 
                           <div className="product-breadcrumb">
-                            <CarbonBar
-                              value={cartItems.length % 10 === 0 ? (!cartItems.length ? 0 : 10) : cartItems.length % 10}
-                            />
+                            <CarbonBar value={cartItems.length % 10} />
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
                               <div className="filters-values as-sort">
@@ -379,14 +382,12 @@ class Mainpage extends Component {
               {
                 this.productStore.search.state
                   ? (
-                      <div className="col-md-10 col-sm-8">
+                      <div className="col-md-10 col-sm-12">
                         <div className="product-content-right">
                           {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar
-                              value={cartItems.length % 10 === 0 ? (!cartItems.length ? 0 : 10) : cartItems.length % 10}
-                            />
+                            <CarbonBar value={cartItems.length % 10} />
                             <hr/>
                           </div>
 
@@ -412,8 +413,8 @@ class Mainpage extends Component {
                         </div>
                       </div>
                   ) : (
-                    this.id !== 'buyagain' && (
-                      <div className="col-md-10 col-sm-8">
+                    id !== 'buyagain' && (
+                      <div className="col-md-10 col-sm-12">
                         <div className="product-content-right">
                           { this.props.location.pathname.split('/')[1] === 'packaging' ?
                             <ProductWithPackaging packagingId={this.props.match.params.id}/>
@@ -421,9 +422,7 @@ class Mainpage extends Component {
                           {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar
-                              value={cartItems.length % 10 === 0 ? (!cartItems.length ? 0 : 10) : cartItems.length % 10}
-                            />
+                            <CarbonBar value={cartItems.length % 10} />
                           </div>
 
                           {
@@ -471,6 +470,9 @@ class Mainpage extends Component {
                 />
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button>
+                    <div className="px-3">
+                      <CarbonBar value={cartItems.length % 10} />
+                    </div>
                   {cartItems.length>0 ?
                       <React.Fragment>
                         <h2 className="ml-4 mb-2">Order</h2>
@@ -506,6 +508,7 @@ class Mainpage extends Component {
                   onCategoryClick={this.handleCategoryClick}
                   sidebar={sidebar}
                   id={id}
+                  onFilterUpdate={this.handleFilterUpdate}
                 />
 
                 <AddonFirstModal />

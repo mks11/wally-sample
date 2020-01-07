@@ -86,9 +86,7 @@ class CartDropdown extends Component {
           >
             <div className="dropdown-menu dropdown-menu-right">
               <div className="px-3">
-                <CarbonBar
-                  value={count % 10 === 0 ? (!count ? 0 : 10) : count % 10}
-                />
+                <CarbonBar value={count % 10} />
               </div>
 
               { (items && count > 0) ?

@@ -11,7 +11,6 @@ import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 
 import SearchBar from './SearchBar'
 import CartDropdown from './CartDropdown'
-import Filters from './Filters'
 
 class ProductTop extends Component {
   constructor(props) {
@@ -208,12 +207,15 @@ class ProductTop extends Component {
       <div className="product-top">
         <Container>
           <Row>
-            <Col>
-              <Filters onSelect={this.handleFiltersSelect} />
+            <Col
+              xs="auto"
+              className="pr-0 d-md-none d-block small-logo"
+            >
+              <Link to="/main">
+                <img src="/images/logo.png" height="40" />
+              </Link>
             </Col>
-          </Row>
-          <Row>
-            <Col xs="auto" className="d-none d-md-block bdr-right">
+            {/* <Col xs="auto" className="d-none d-md-block bdr-right">
               <div
                 className="dropdown-address d-flex"
                 onMouseEnter={this.handleMouseEnter}
@@ -291,7 +293,7 @@ class ProductTop extends Component {
                   <button className={`btn btn-main ${selectedTimeChanged ? 'active' : ''}`} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                 </div>
               </div>
-            </Col>
+            </Col> */}
             <Col xs={2} className="d-none d-md-block bdr-right">
               <h3
                 className="dropdown-categories"
@@ -331,6 +333,12 @@ class ProductTop extends Component {
                 <SearchBar
                   onSearch={onSearch}
                 />
+                <Link
+                  className="d-none d-md-block ml-3"
+                  to="/main/buyagain"
+                >
+                  <img src="/images/logo.png" height="40" />
+                </Link>
                 <span className="d-none d-md-block">
                   <CartDropdown
                     ui ={this.uiStore}
@@ -342,7 +350,7 @@ class ProductTop extends Component {
                 </span>
               </div>
             </Col>
-            <Col xs="auto" className="d-block d-md-none">
+            {/* <Col xs="auto" className="d-block d-md-none">
               <div
                 className="dropdown-time d-flex"
                 onClick={() => this.modalStore.toggleDelivery()}
@@ -356,7 +364,7 @@ class ProductTop extends Component {
                   }
                 </span>
               </div>
-            </Col>
+            </Col> */}
             <Col xs="auto" className="d-block d-md-none ml-auto">
               <button
                 className="btn btn-transparent"
