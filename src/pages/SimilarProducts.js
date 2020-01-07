@@ -55,15 +55,12 @@ class SimilarProducts extends Component {
     this.productStore.getAdvertisements();
     this.productStore.getCategories();
     this.productStore
-      .getProductDisplayed(id, deliveryData, this.userStore.getHeaderAuth())
+      .getImpulseProducts(id, this.userStore.getHeaderAuth())
       .then(data => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          this.state.deliveryTimes
-        );
+        console.log(data);
         this.setState({ sidebar: this.productStore.sidebar });
       })
-      .catch(e => console.error("Failed to load product displayed: ", e));
+      .catch(e => console.error("Failed to load similar products: ", e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -211,7 +208,7 @@ class SimilarProducts extends Component {
             <hr />
             <div className="col col-lg-3">
               <h3>
-                <Link to="#!">Continue Checkout</Link>
+                <Link to="/checkout">Continue Checkout</Link>
               </h3>
             </div>
             <br />
@@ -232,10 +229,10 @@ class SimilarProducts extends Component {
 
         <div className="col-md-10 col-sm-8">
           <div className="product-content-right">
-            {this.productStore.main_display.map((category, index) => (
+            {this.productStore.impulse_products.map((product, index) => (
               <ProductList
                 key={index}
-                display={category}
+                display={product}
                 mode={this.state.categoryTypeMode}
                 deliveryTimes={this.state.deliveryTimes}
                 onProductClick={this.handleProductModal}

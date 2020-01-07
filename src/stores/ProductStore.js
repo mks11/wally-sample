@@ -4,6 +4,7 @@ import {
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
   API_GET_VENDOR_PROFILE,
+  API_GET_IMPULSE_PRODUCTS,
   API_GET_CATEGORIES,
   API_SEARCH_KEYWORD
 } from "../config";
@@ -13,6 +14,7 @@ import moment from "moment";
 class ProductStore {
   main_display = [];
   vendor_products = [];
+  impulse_products = [];
   path = [];
   sidebar = [];
   activeProductId = null;
@@ -113,6 +115,30 @@ class ProductStore {
     this.path = data.path;
     this.sidebar = data.sidebar;
     this.fetch = false;
+  }
+
+  async getImpulseProducts(id, auth) {
+    let res;
+    this.impulse_products = [];
+
+    this.fetch = true;
+
+    const url = id ? API_GET_IMPULSE_PRODUCTS + id : API_GET_IMPULSE_PRODUCTS;
+
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(`${url}`, auth);
+    } else {
+      res = await axios.get(`${url}`);
+    }
+    const data = res.data;
+
+    this.impulse_products = data;
+
+    this.path = data.path;
+    this.sidebar = data.sidebar;
+    this.fetch = false;
+
+    return res.data;
   }
 
   async getProductDetails(id, delivery) {
@@ -227,6 +253,7 @@ class ProductStore {
 decorate(ProductStore, {
   main_display: observable,
   vendor_products: observable,
+  impulse_products: observable,
   path: observable,
   sidebar: observable,
   customer_quantity: observable,
