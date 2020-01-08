@@ -2883,3 +2883,50 @@ span.category-card-img {
 .co-packing-page {
   margin-top: -25px;
 }
+
+.waitinglist-modal {
+  background: rgb(215,232,245);
+  background: linear-gradient(180deg, rgba(215,232,245,1) 0%, rgba(249,251,253,1) 100%);
+  padding: 30px;
+}
+.waitinglist-content {
+  text-align: center;
+}
+.waitinglist-content .dcc {
+  height: 140px !important;
+  width: 80px !important;
+  font-size: 140px !important;
+}
+.waitinglist-content .dcc .tile {
+  height: 70px !important;
+  width: 80px !important;
+}
+.waitinglist-content .dcc .tile.front {
+  background-color: #3c2dbf !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.waitinglist-content .dcc .tile.back {
+  background: rgb(108,85,246)!important;
+  background: linear-gradient(180deg, rgba(108,85,246,1) 0%, rgba(75,57,244,1) 28%)!important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+.waitinglist-content .dcc .hinge {
+  width: 80px !important;
+  top: 70px !important;
+  border-bottom: none!important;
+  box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.7)!important;
+}
+.waitinglist-content .dcc .digit {
+  height: 70px !important;
+}
+.waitinglist-content .dcc .back .digit {
+  padding-bottom: 70px !important;
+}
+#waitingListCounter {
+  display: inline-block;
+}
+#waitingListCounter * {
+  box-sizing: content-box;
+}

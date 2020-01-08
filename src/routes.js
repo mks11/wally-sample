@@ -12,6 +12,7 @@ import HelpSingleAnswer from "./pages/HelpSingleAnswer";
 // import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
+import EmailVerification from './pages/EmailVerification';
 import Orders from "./pages/Orders";
 import ManageOrders from "./pages/ManageOrders";
 import OrderConfirmation from "./pages/OrderConfirmation";
@@ -71,6 +72,7 @@ export default (
       <Route exact path="/backers" component={Backers} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
+      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/orders" component={Orders} />
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/products" component={ManageProducts} />

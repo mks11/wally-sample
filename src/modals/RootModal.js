@@ -19,6 +19,8 @@ import DeliveryModal from './DeliveryModal'
 import CheckoutFirstModal from './CheckoutFirstModal'
 import MainFirstModal from './MainFirstModal'
 import ModalError from './ModalError'
+import WaitingListModal from './WaitingListModal'
+import EmailVerification from './EmailVerification'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -38,6 +40,8 @@ const ModalRoutes = {
   checkoutfirst: CheckoutFirstModal,
   mainFirst: MainFirstModal,
   error: ModalError,
+  waitinglist: WaitingListModal,
+  emailverification: EmailVerification,
 }
 
 class RootModal extends Component {
@@ -48,7 +52,7 @@ class RootModal extends Component {
 
   toggleModal = e => {
     this.modalStore.modalPull.shift()
-    
+
     if (this.modalStore.modalPull.length) {
       const modalId = this.modalStore.modalPull[0]
       this.switchModal(modalId)
@@ -72,9 +76,10 @@ class RootModal extends Component {
     } = this.modalStore
 
     const ModalToRender = ModalRoutes[modalId] || this.renderEmpty
-    
-    // temporary hack 
+
+    // temporary hack
     const isLarge = modalId === 'product'
+    const withGradient = modalId === 'waitinglist'
 
     return (
       <Modal
@@ -82,8 +87,9 @@ class RootModal extends Component {
         isOpen={isOpen}
         centered
         size={isLarge ? 'lg' : ''}
+
       >
-        <ModalBody>
+        <ModalBody className={`${withGradient ? 'waitinglist-modal' : ''}`}>
           <button className="btn-icon btn-icon--close" onClick={this.toggleModal}></button>
           <ModalToRender
             stores={this.props.store}

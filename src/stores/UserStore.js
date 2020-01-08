@@ -16,7 +16,8 @@ import {
   API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
-  API_PURCHASE_GIFTCARD
+  API_PURCHASE_GIFTCARD,
+  API_EMAIL_VERIFICATION,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -459,6 +460,11 @@ class UserStore {
 
     localStorage.setItem("flags", JSON.stringify(flags));
   }
+
+  async verifyWaitlistEmail(email, token) {
+    const res = await axios.get(`${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`)
+    return res.data
+  }
 }
 
 decorate(UserStore, {
@@ -532,7 +538,8 @@ decorate(UserStore, {
   adjustDeliveryTimes: action,
 
   getAddressById: action,
-  updateFlags: action
+  updateFlags: action,
+  verifyWaitlistEmail: action,
 });
 
 export default new UserStore();
