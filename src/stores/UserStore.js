@@ -18,6 +18,7 @@ import {
   API_FORGOT_PASSWORD,
   API_PURCHASE_GIFTCARD,
   API_EMAIL_VERIFICATION,
+  API_WAITLIST_INFO,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -326,7 +327,6 @@ class UserStore {
   async loginFacebook(data) {
     const res = await axios.post(API_LOGIN_FACEBOOK, {
       access_token: data.accessToken,
-      signup_zip: data.signup_zip,
       reference_promo: data.reference_promo
     });
     this.setUserData(res.data.user);
@@ -465,6 +465,12 @@ class UserStore {
     const res = await axios.get(`${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`)
     return res.data
   }
+
+  async getWaitlistInfo(email, ref) {
+    const reqUrl = ref ? `${API_WAITLIST_INFO}?user_email=${email}&reference=${ref}` : `${API_WAITLIST_INFO}?user_email=${email}`
+    const res = await axios.get(reqUrl)
+    return res.data
+  }
 }
 
 decorate(UserStore, {
@@ -540,6 +546,7 @@ decorate(UserStore, {
   getAddressById: action,
   updateFlags: action,
   verifyWaitlistEmail: action,
+  getWaitlistInfo: action,
 });
 
 export default new UserStore();

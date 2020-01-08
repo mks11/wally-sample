@@ -100,17 +100,11 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
     logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
-    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
-      .then(() => {
-        this.setState({
-          heroStatus: 'invalid_zip_success',
-          heroText: 'We\’ll notify you when we launch in your area.',
-          heroDescription: 'Find #zerowastetips, Wally hauls, and sustainable inspiration with the Wally Shop community via @thewallyshop.',
-        })
-      }).catch((e) => {
-        console.error('Failed to subscribe', e)
-        const msg = e.response.data.error.message
-        this.setState({invalidEmail: msg})
+    this.userStore.getWaitlistInfo(this.state.email)
+      .then(res => {
+        this.modalStore.toggleModal('waitinglist', null, res)
+      }).catch(() => {
+        this.modalStore.toggleModal('error', 'Something went wrong during your request')
       })
 
   }
@@ -154,13 +148,13 @@ class Homepage extends Component {
 
   render() {
     if (this.state.fetching) return null
-      
+
     const ButtonStart = () => (
       <button onClick={this.handleValidateZip} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         START SHOPPING
       </button>
     )
-    
+
     const ButtonStartShopping = () => (
       <button onClick={this.handleStart} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         START SHOPPING

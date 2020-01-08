@@ -6,6 +6,7 @@ class ModalStore {
   isOpen = false
   modalId = null
   msg = null
+  modalData = null
 
   product = false
   productId = null
@@ -20,7 +21,7 @@ class ModalStore {
   deliveryChangeData = null
 
   addonsFirst = false
-  
+
   packaging = false
   missing = false
 
@@ -40,16 +41,17 @@ class ModalStore {
     this.deliveryChangeData = null
   }
 
-  toggleModal(modalId, msg = null) {
+  toggleModal(modalId, msg = null, data = null) {
     if (!this.modalPull.length) {
       this.switchModal(modalId)
       this.isOpen = !this.isOpen
     }
-    
+
     if(modalId && !this.modalPull.includes(modalId)) {
       this.modalPull.push(modalId)
     }
     this.msg = msg
+    this.modalData = data
   }
 
   switchModal(modalId) {
@@ -95,6 +97,7 @@ decorate(ModalStore, {
   isOpen: observable,
   modalId: observable,
   msg: observable,
+  modalData: observable,
   toggleModal: action,
   switchModal: action,
 
