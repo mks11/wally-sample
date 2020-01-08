@@ -1026,7 +1026,7 @@ ul.list-payments li{
 }
 
 .login-wrap, .signup-wrap {
-  width: 62%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -2929,4 +2929,15 @@ span.category-card-img {
 }
 #waitingListCounter * {
   box-sizing: content-box;
+}
+
+
+.pin-input {
+  position: relative;
+}
+.pin-input-ok {
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  font-size: 20px!important;
 }

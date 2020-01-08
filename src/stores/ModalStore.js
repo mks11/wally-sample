@@ -54,8 +54,15 @@ class ModalStore {
     this.modalData = data
   }
 
-  switchModal(modalId) {
+  switchModal(modalId, msg, data) {
     this.modalId = modalId || null
+
+    if (msg) {
+      this.msg = msg
+    }
+    if (data) {
+      this.modalData = data
+    }
   }
 
   toggleProduct(id) {

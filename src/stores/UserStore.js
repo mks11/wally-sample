@@ -19,6 +19,7 @@ import {
   API_PURCHASE_GIFTCARD,
   API_EMAIL_VERIFICATION,
   API_WAITLIST_INFO,
+  API_PIN_VERIFICATION,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -471,6 +472,11 @@ class UserStore {
     const res = await axios.get(reqUrl)
     return res.data
   }
+
+  async verifyPin(pin, email) {
+    const res = await axios.get(`${API_PIN_VERIFICATION}?pin=${pin}&email=${email}`)
+    return res.data
+  }
 }
 
 decorate(UserStore, {
@@ -547,6 +553,7 @@ decorate(UserStore, {
   updateFlags: action,
   verifyWaitlistEmail: action,
   getWaitlistInfo: action,
+  verifyPin: action,
 });
 
 export default new UserStore();

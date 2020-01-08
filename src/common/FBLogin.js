@@ -12,7 +12,7 @@ class FBLogin extends Component {
   }
 
   responseFacebook = responseData => {
-    const { onSubmit, userStore }= this.props
+    const { onSubmit, userStore } = this.props
 
     if (!this.state.facebookRequest) {
       this.setState({ facebookRequest: true })
@@ -32,6 +32,7 @@ class FBLogin extends Component {
 
   render() {
     const { facebookRequest } = this.state
+    const { canSubmit = true } = this.props
 
     return (
       <FacebookLogin
@@ -43,6 +44,7 @@ class FBLogin extends Component {
         scope="public_profile,email"
         callback={this.responseFacebook}
         disableMobileRedirect={true}
+        isDisabled={!canSubmit}
       />
     )
   }
