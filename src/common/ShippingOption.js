@@ -8,11 +8,9 @@ class ShippingOption extends Component {
   };
 
   componentDidMount() {
-    if (this.props.user.is_ecomm) {
-      this.setState({
-        selected: "UPS Ground (1-5 Days)"
-      });
-    }
+    this.setState({
+      selected: "UPS Ground (1-5 Days)"
+    });
   }
 
   toggleTimeDropdown(e) {
