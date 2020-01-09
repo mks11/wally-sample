@@ -92,8 +92,6 @@ class Checkout extends Component {
 
       placeOrderRequest: false,
 
-      order_notes: '',
-      allergy_notes: '',
       hasReturns: false,
       pickupNotes: '',
       isEcomm: false,
@@ -323,7 +321,7 @@ class Checkout extends Component {
   }
 
   handlePlaceOrder () {
-    const {placeOrderRequest, order_notes, allergy_notes} = this.state;
+    const { placeOrderRequest } = this.state;
 
     if (placeOrderRequest) {
       return;
@@ -381,8 +379,6 @@ class Checkout extends Component {
           payment_id: this.state.selectedPayment,
           delivery_time: deliveryTime,
           tip_amount: this.parseAppliedTip (),
-          order_notes,
-          allergy_notes,
           has_returns: this.state.hasReturns,
           pickup_notes: this.state.pickupNotes,
         },
@@ -533,14 +529,6 @@ class Checkout extends Component {
     return tipAmount;
   }
 
-  handleDeliveryNotesSubmit = notes => {
-    this.setState ({order_notes: notes});
-  };
-
-  handleAllergyNotesSubmit = notes => {
-    this.setState ({allergy_notes: notes});
-  };
-
   render () {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null;
@@ -643,17 +631,6 @@ class Checkout extends Component {
                   </React.Fragment>}
                 {this.state.isEcomm && <hr className="mt-4" />}
 
-                <Notes
-                  title="Order Notes"
-                  placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
-                  onSubmit={this.handleDeliveryNotesSubmit}
-                />
-                <Notes
-                  default={this.userStore.user.allergy_notes || null}
-                  title="Any Allergens?"
-                  placeholder="Any allergies you want us to know about?"
-                  onSubmit={this.handleAllergyNotesSubmit}
-                />
                 {this.state.isEcomm &&
                   <Returns
                     title="Returns"
