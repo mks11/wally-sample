@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import ClickOutside from 'react-click-outside'
 import FontAwesome from 'react-fontawesome'
 
+const titleStyle = { color: '#39393b', fontWeight: 'bold' }
+
 class PackagingSummary extends Component {
   constructor(props) {
     super(props)
@@ -40,7 +42,7 @@ class PackagingSummary extends Component {
             </div>
           </div>
         </ClickOutside>
-        <span onClick={this.showPackagingPopup}>{title}  <FontAwesome name='info-circle' /></span>
+        <span onClick={this.showPackagingPopup} style={titleStyle}>{title}  <FontAwesome name='info-circle' /></span>
       </div>
     )
   }
