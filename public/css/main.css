@@ -560,6 +560,10 @@ button:hover,
   position: absolute;
 }
 
+.aw-align-self-center {
+  align-self: center;
+}
+
 @media (min-width: 768px) {
   .aw-header .btn-get--started {
     font-size: 17px;

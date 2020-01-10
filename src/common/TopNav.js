@@ -310,28 +310,31 @@ class TopNav extends Component {
                       </li>
                     )}
                     { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
-                        <div className="col-auto ml-auto d-none d-md-block account-dropdown">
-                          <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
-                            <div className="btn-group">
-                              <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
-                                <span className="navbar-toggler-icon account-icon"></span>
-                              </button>
-                              <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                    <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
-                                    <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                    <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
-                                    <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                      <React.Fragment>
+                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                            <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
+                              <div className="btn-group">
+                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                                  <span> <strong>Hi {name}</strong> <i class="fa fa-caret-down" aria-hidden="true"> </i></span>
+                                </button>
+                                <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
+                                  <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                      <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
+                                      <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
+                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
+                                      <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                                </div>
                               </div>
-                            </div>
-                          </ClickOutside>
-                        </div>
+                            </ClickOutside>
+                          </div>
+                        </React.Fragment>
                       )
                     }
                     { !this.userStore.status && (
