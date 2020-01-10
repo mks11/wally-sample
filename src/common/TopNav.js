@@ -338,9 +338,8 @@ class TopNav extends Component {
                       <React.Fragment>
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li>
                       </React.Fragment>
                     )}
                   </ul>
