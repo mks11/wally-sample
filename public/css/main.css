@@ -556,6 +556,10 @@ button:hover,
   transition: 0.27s all;
 }
 
+.aw-absolute {
+  position: absolute;
+}
+
 @media (min-width: 768px) {
   .aw-header .btn-get--started {
     font-size: 17px;
@@ -1253,8 +1257,8 @@ body {
 }
 
 .btn-sm.active {
-  background-color: #78C98D;
-  border-color: #78C98D;
+  background-color: #78c98d;
+  border-color: #78c98d;
   border: none;
 }
 
@@ -1563,7 +1567,7 @@ input {
   display: none;
 }
 
-.packaging-quantity{
+.packaging-quantity {
   font-size: 10px;
   width: 50%;
 }
