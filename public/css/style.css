@@ -93,7 +93,7 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
-.aw-header, .aw-header.navbar-white{background-color: #faf5ee;}
+.aw-header, .aw-header.navbar-white{background-color: #fff;}
 /* .navbar-toggler {
 } */
 .aw-header.navbar-white .navbar-toggler-icon {
