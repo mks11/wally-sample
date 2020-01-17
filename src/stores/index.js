@@ -10,7 +10,7 @@ import HelpStore from "./HelpStore";
 import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
-import VendorProfileStore from "./VendorProfileStore";
+// import VendorProfileStore from "./VendorProfileStore";
 
 const store = {
   ui: UiStore,
@@ -25,7 +25,7 @@ const store = {
   order: OrderStore,
   admin: AdminStore,
   backer: BackerStore,
-  vendor: VendorProfileStore
+  // vendor: VendorProfileStore
 };
 
 export default store;
