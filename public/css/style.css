@@ -448,9 +448,9 @@ color:#39393B!important;}
 box-shadow:0 0 4px rgba(0,0,0,.5);}
 .slick-next{left:auto;right:5px;}
 .slick-prev::before, .slick-next::before{position: absolute;font-family: 'icomoon';color:#39393B;font-size: 30px;
-left:50%;top:3px;margin-left: -14px;text-align: center;}
-.slick-prev::before{content:'\e903';margin-left: -16px;}
-.slick-next::before{content:'\e905'}
+left:50%;top:3px;margin-left: -6px;text-align: center;}
+.slick-prev::before{content:'\0276E';margin-left: -10px}
+.slick-next::before{content:'\0276F';}
 .slick-arrow.slick-disabled{display:none!important;}
 
 .shop-search{border-bottom:1px solid #d1d1d1;margin-bottom: 40px;}
@@ -1532,7 +1532,7 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
   margin-bottom: 0;
 }
 
-.product-thumbnail{margin-bottom: 40px;}
+.product-thumbnail{margin-bottom: 40px;cursor:pointer}
 .product-thumbnail img{display:block;max-width:100%;width:100%;width: 200px;height: 180px;}
 
 .product-detail{
@@ -1697,6 +1697,66 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
 .addon-popover {
   left: 50%;
   top: 18px;
+}
+
+.comments-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.comment {
+  margin: 15px 0;
+}
+
+.product-rating-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.star {
+  margin: 0 0.2em;
+  font-size: 1.5em;
+  cursor: default;
+}
+
+.product-rating-label {
+  margin-right: 10px;
+}
+
+.star.clickable {
+  cursor: pointer;
+}
+
+.stars-container {
+  display: flex;
+  margin: 5px 0;
+}
+
+.product-ratings-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.product-comment-input {
+  min-height: 100px;
+  max-width: 75%;
+}
+
+button.rate-btn {
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.rating-error {
+  display: none;
+}
+
+.rating-error.text-error {
+  display: block;
+  margin: 10px 0;
 }
 
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;
@@ -2030,6 +2090,10 @@ a {
   .btn-icon--close {
     position: fixed;
   }
+
+  .product-comment-input {
+    max-width: 100%;
+  }
 }
 
 /* mobile landscape */
@@ -2057,6 +2121,19 @@ a {
   }
   .btn-icon--close {
     /* position: fixed; */
+  }
+}
+
+/* non-mobile */
+@media (min-width:577px){
+  .similar-products-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .similar-products-container .product-thumbnail {
+    flex: 0 0 auto;
   }
 }
 
