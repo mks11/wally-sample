@@ -96,7 +96,6 @@ class Checkout extends Component {
       allergy_notes: '',
       hasReturns: false,
       pickupNotes: '',
-      isEcomm: false,
     };
   }
 
@@ -137,9 +136,6 @@ class Checkout extends Component {
         !checkoutFirst && this.modalStore.toggleModal ('checkoutfirst');
       } else {
         this.routing.push ('/main');
-      }
-      if (this.userStore.user.is_ecomm) {
-        this.setState ({isEcomm: true});
       }
     });
   }
@@ -338,23 +334,7 @@ class Checkout extends Component {
       return;
     }
 
-    if (!this.userStore.selectedDeliveryTime && !this.state.isEcomm) {
-      this.setState ({
-        invalidText: 'Please select delivery time',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-
-    if (!this.state.confirmHome && !this.state.isEcomm) {
-      this.setState ({
-        invalidText: 'Please confirm that you will be home',
-        placeOrderRequest: false,
-        confirmHomeError: true,
-      });
-      return;
-    }
-    if (!this.state.lockPayment && !this.state.isEcomm) {
+    if (!this.state.lockPayment) {
       this.setState ({
         invalidText: 'Please select payment',
         placeOrderRequest: false,
@@ -362,15 +342,7 @@ class Checkout extends Component {
       return;
     }
     logEvent ({category: 'Checkout', action: 'ConfirmCheckout'});
-    let deliveryTime;
-    if (!this.state.isEcomm) {
-      deliveryTime =
-        this.userStore.selectedDeliveryTime.date +
-        ' ' +
-        this.userStore.selectedDeliveryTime.time;
-    } else {
-      deliveryTime = 'UPS Ground (1-5 Days)';
-    }
+    const deliveryTime = 'UPS Ground (1-5 Days)';
 
     this.checkoutStore
       .submitOrder (
@@ -553,17 +525,15 @@ class Checkout extends Component {
       : 0;
 
     let buttonPlaceOrderClass = 'btn btn-main';
-    //const is_ecomm = this.state.isEcomm;
     if (
       this.userStore.selectedDeliveryAddress &&
       this.state.lockPayment &&
       this.userStore.selectedDeliveryTime &&
-      !this.state.placeOrderRequest &&
-      !this.state.isEcomm
+      !this.state.placeOrderRequest
     ) {
       buttonPlaceOrderClass += ' active';
     }
-    if (this.userStore.selectedDeliveryAddress && this.state.isEcomm) {
+    if (this.userStore.selectedDeliveryAddress) {
       buttonPlaceOrderClass += ' active';
     }
 
@@ -595,17 +565,6 @@ class Checkout extends Component {
                   />}
 
                 {this.userStore.user &&
-                  !this.state.isEcomm &&
-                  <DeliveryTimeOptions
-                    lock={false}
-                    data={this.state.deliveryTimes}
-                    selected={this.userStore.selectedDeliveryTime}
-                    onSelectTime={this.handleSelectTime}
-                    title="Time"
-                    user={this.userStore}
-                  />}
-                {this.userStore.user &&
-                  this.state.isEcomm &&
                   <ShippingOption
                     lock={false}
                     data={this.state.deliveryTimes}
@@ -615,33 +574,32 @@ class Checkout extends Component {
                     user={this.userStore.user}
                   />}
 
-                {!this.state.isEcomm &&
-                  <React.Fragment>
-                    <h3 className="m-0 mb-3 p-r mt-5">
-                      Payment
-                      {this.state.lockPayment
-                        ? <a
-                            onClick={e => this.setState ({lockPayment: false})}
-                            className="address-rbtn link-blue pointer"
-                          >
-                            CHANGE
-                          </a>
-                        : null}
-                    </h3>
-                    <PaymentSelect
-                      {...{
-                        lockPayment: this.state.lockPayment,
-                        userPayment: this.userStore.user.payment,
-                        userPreferredPayment: this.userStore.user
-                          .preferred_payment,
-                        onAddPayment: this.handleAddPayment,
-                        onSubmitPayment: this.handleSubmitPayment,
-                        userGuest: !this.userStore.status,
-                        preselect: true,
-                      }}
-                    />
-                  </React.Fragment>}
-                {this.state.isEcomm && <hr className="mt-4" />}
+
+                <React.Fragment>
+                  <h3 className="m-0 mb-3 p-r mt-5">
+                    Payment
+                    {this.state.lockPayment
+                      ? <a
+                          onClick={e => this.setState ({lockPayment: false})}
+                          className="address-rbtn link-blue pointer"
+                        >
+                          CHANGE
+                        </a>
+                      : null}
+                  </h3>
+                  <PaymentSelect
+                    {...{
+                      lockPayment: this.state.lockPayment,
+                      userPayment: this.userStore.user.payment,
+                      userPreferredPayment: this.userStore.user
+                        .preferred_payment,
+                      onAddPayment: this.handleAddPayment,
+                      onSubmitPayment: this.handleSubmitPayment,
+                      userGuest: !this.userStore.status,
+                      preselect: true,
+                    }}
+                  />
+                </React.Fragment>
 
                 <Notes
                   title="Order Notes"
@@ -654,12 +612,11 @@ class Checkout extends Component {
                   placeholder="Any allergies you want us to know about?"
                   onSubmit={this.handleAllergyNotesSubmit}
                 />
-                {this.state.isEcomm &&
-                  <Returns
-                    title="Returns"
-                    default={this.userStore.user.pickup_notes || null}
-                    onReturnChange={this.handleReturnSet}
-                  />}
+                <Returns
+                  title="Returns"
+                  default={this.userStore.user.pickup_notes || null}
+                  onReturnChange={this.handleReturnSet}
+                />
               </div>
             </div>
             <div className="">
@@ -680,29 +637,35 @@ class Checkout extends Component {
                       return (
                         <div className="item mt-3 pb-2" key={i}>
                           <div className="item-left">
-                            <h4 className="item-name">{c.product_name}</h4>
+                            <h4 className="item-name">
+                              {c.product_id !== 'prod_pckging'
+                                ? c.product_name
+                                : <PackagingSummary title={c.product_name} />}
+                            </h4>
                             {unit_type !== 'packaging' &&
+                              c.product_id !== 'prod_pckging' &&
                               <span className="item-detail mt-2 mb-1">
                                 {c.packaging_name}
                               </span>}
-                            <div className="item-link">
-                              <a
-                                onClick={e =>
-                                  this.handleEdit (
-                                    c.product_id,
-                                    c.customer_quantity
-                                  )}
-                                className="text-blue mr-2"
-                              >
-                                EDIT
-                              </a>
-                              <a
-                                onClick={e => this.handleDelete (c)}
-                                className="text-dark-grey"
-                              >
-                                DELETE
-                              </a>
-                            </div>
+                            {c.product_id !== 'prod_pckging' &&
+                              <div className="item-link">
+                                <a
+                                  onClick={e =>
+                                    this.handleEdit (
+                                      c.product_id,
+                                      c.customer_quantity
+                                    )}
+                                  className="text-blue mr-2"
+                                >
+                                  EDIT
+                                </a>
+                                <a
+                                  onClick={e => this.handleDelete (c)}
+                                  className="text-dark-grey"
+                                >
+                                  DELETE
+                                </a>
+                              </div>}
                           </div>
                           <div className="item-right">
                             <h4>
@@ -763,7 +726,6 @@ class Checkout extends Component {
                           </div>}
 
                       <TippingSummary value={this.updateTipAmount ()} />
-                      <PackagingSummary value={'TBD'} />
 
                       {this.state.appliedStoreCredit
                         ? <div className="summary">
@@ -807,61 +769,12 @@ class Checkout extends Component {
                       {!this.state.appliedPromo
                         ? <PromoSummary onApply={this.handleCheckPromo} />
                         : null}
-                      {!this.state.isEcomm &&
-                        <div className="form-group">
-                          <span className="text-blue">Want to tip</span>
-                          <AmountGroup
-                            className="checkout-tips"
-                            amountClick={this.handleTipAmountChange}
-                            customClick={this.handleTipCustomAmounClick}
-                            values={[0, 15, 20, 25]}
-                            selected={15}
-                            suffix="%"
-                            custom={true}
-                            product={false}
-                          />
-                          <div className="aw-input--group aw-input--group-sm">
-                            <CurrencyInput
-                              readOnly={this.state.tipReadOnly}
-                              prefix="$"
-                              className={`aw-input--control aw-input--left aw-input--bordered form-control ${!this.state.tipReadOnly ? 'focus-input' : ''}`}
-                              value={this.state.appliedTipAmount}
-                              onChangeEvent={this.handleChangeTip}
-                            />
-                            {!this.state.tipReadOnly
-                              ? <button
-                                  onClick={this.handleAddTip}
-                                  type="button"
-                                  className={`btn btn-transparent purple-apply-btn ${this.state.tipApplyEdited ? 'grey-btn' : ''}`}
-                                >
-                                  APPLY
-                                </button>
-                              : null}
-                          </div>{' '}
-                          <hr className="mt-4" />
-                        </div>}
                     </div>
 
                     <div className="item-total">
                       <span>Total</span>
                       <span>{formatMoney (orderTotal)}</span>
                     </div>
-                    {!this.state.isEcomm &&
-                      <div className="custom-control custom-checkbox mt-2 mb-3">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="homeCheck"
-                          checked={this.state.confirmHome}
-                          onChange={this.handleConfirmHome}
-                        />
-                        <label
-                          className={`custom-control-label ${this.state.confirmHomeError ? 'text-error' : ''}`}
-                          onClick={this.handleConfirmHome}
-                        >
-                          I confirm that I will be at home or have a doorman
-                        </label>
-                      </div>}
 
                     <button
                       onClick={e => this.handlePlaceOrder ()}

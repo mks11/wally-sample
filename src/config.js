@@ -21,6 +21,7 @@ export const API_PAYMENT_REMOVE = BASE_URL + "/api/user/payment/";
 export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard";
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/";
+export const API_GET_HISTORICAL_PRODUCTS = BASE_URL + "/api/products/historical";
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/";
 export const API_GET_PACKAGING_UNIT = BASE_URL + "/api/packaging/";
 export const API_RATE_PRODUCT = BASE_URL + "/api/products/";
@@ -31,6 +32,8 @@ export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh";
 
 export const API_GET_CURRENT_CART = BASE_URL + "/api/cart";
 export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/";
+
+export const API_GET_IMPULSE_PRODUCTS = BASE_URL + "/api/products/associated";
 
 export const API_CREATE_ORDER = BASE_URL + "/api/order";
 export const API_GET_ORDER_SUMMARY = BASE_URL + "/api/order/summary";
@@ -107,14 +110,22 @@ export const API_UPLOAD_COPACKING_QR_CODES =
   BASE_URL + "/api/admin/co-packing/qr-codes";
 export const API_GET_UPC_INFO = BASE_URL + "/api/admin/co-packing/vendor-upc";
 
-export const API_RETAIL_UPLOAD_PRODUCTS = BASE_URL + "/api/admin/retail/products";
+export const API_RETAIL_UPLOAD_PRODUCTS =
+  BASE_URL + "/api/admin/retail/products";
 export const API_RETAIL_UPLOAD_VENDORS = BASE_URL + "/api/admin/retail/vendors";
-export const API_RETAIL_UPLOAD_CATEGORIES = BASE_URL + "/api/admin/retail/internal";
-export const API_RETAIL_UPLOAD_SHIPMENTS = BASE_URL + "/api/admin/retail/shipments";
-export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS = BASE_URL + "/api/admin/retail/product-actions";
+export const API_RETAIL_UPLOAD_CATEGORIES =
+  BASE_URL + "/api/admin/retail/internal";
+export const API_RETAIL_UPLOAD_SHIPMENTS =
+  BASE_URL + "/api/admin/retail/shipments";
+export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
+  BASE_URL + "/api/admin/retail/product-actions";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
+
+export const GET_FAKE_BACKERS = "https://jsonplaceholder.typicode.com/users";
+
+export const API_GET_VENDOR_PROFILE = BASE_URL + "/api/vendor";
 
 export const API_HELP_GET_QUESTION = BASE_URL + "/api/help/questions/";
 export const API_HELP_GET_QUESTION_SINGLE = BASE_URL + "/api/help/questions/";

@@ -22,12 +22,12 @@ const Product = props => {
   }
 
   const outOfStock = product.out_of_stock
-  const unavailable = !product.available_for_delivery
+  const unavailable = false
   let availableDays = [];
   let availableDOW = [];
   const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
   if (unavailable) {
-    availableDays = product.available_days.sort()
+    availableDays = [0, 1, 2, 3, 4, 5, 6]
     availableDOW = availableDays.map(d => daysOfWeek[d]);
   }
 

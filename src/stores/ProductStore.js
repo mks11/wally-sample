@@ -5,6 +5,7 @@ import {
   API_GET_PRODUCT_DISPLAYED,
   API_GET_CATEGORIES,
   API_SEARCH_KEYWORD,
+  API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
 } from '../config'
 import axios from 'axios'
@@ -12,6 +13,7 @@ import moment from 'moment'
 
 class ProductStore {
   main_display = []
+  historical_products = []
   path = []
   sidebar = []
   activeProductId = null
@@ -90,6 +92,13 @@ class ProductStore {
     return res.data
   }
 
+  async getHistoricalProducts() {
+    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+    this.historical_products = res.data.products
+
+    return res.data.products
+  }
+
   async getProductDetails(id, delivery){
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     this.fetch = true
@@ -160,11 +169,11 @@ class ProductStore {
 
   searchCategory(id) {
     const index = this.currentSearchFilter.indexOf(id)
-    
+
     index === -1
       ? this.currentSearchFilter.push(id)
       : this.currentSearchFilter.splice(index, 1)
-    
+
     const filteredSearchResult = this.search.result.filter((d) => {
       return this.currentSearchFilter.indexOf(d.cat_id) !== -1
     })
@@ -208,7 +217,7 @@ class ProductStore {
       term: '',
       filters: []
     }
-    
+
     this.currentSearchFilter = []
     this.currentSearchCategory = 'All Categories'
   }
@@ -216,6 +225,7 @@ class ProductStore {
 
 decorate(ProductStore, {
   main_display: observable,
+  historical_products: observable,
   path: observable,
   sidebar: observable,
   customer_quantity: observable,
@@ -235,6 +245,7 @@ decorate(ProductStore, {
   searchAll: action,
   resetSearch: action,
   getProductDetails: action,
+  getHistoricalProducts: action,
   getProductComments: action,
 })
 

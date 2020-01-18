@@ -65,13 +65,13 @@ class ProductModal extends Component {
     }
 
     const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
-    let availableDays = product.activeProduct.available_days.sort()
+    let availableDays = [0,1,2,3,4,5,6]
     availableDays = availableDays.map(d => daysOfWeek[d]);
 
     this.setState({
       subtitutes,
-      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock,
-      available: product.activeProduct.available_for_delivery,
+      outOfStock: product.activeProduct.out_of_stock,
+      available: true,
       availableDays: availableDays
     })
     logModalView('/product/' + product.activeProductId)
@@ -157,6 +157,7 @@ class ProductModal extends Component {
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
+    console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
     const unit_type = activeProduct.unit_type || activeProduct.price_unit
