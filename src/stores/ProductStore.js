@@ -45,6 +45,7 @@ class ProductStore {
 
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    this.activeProductComments = await this.getComments(product_id)
     this.activeProduct = res.data
     if (this.activeProduct.available_inventory.length === 0) {
       alert('Item not available in inventory')
@@ -55,7 +56,6 @@ class ProductStore {
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
 
-    this.activeProductComments = await this.getComments(product_id)
     return res.data
   }
 
