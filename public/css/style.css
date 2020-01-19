@@ -1750,14 +1750,19 @@ button.rate-btn {
   margin-top: 10px;
 }
 
-.rating-error {
+.rating-message {
   display: none;
-}
-
-.rating-error.text-error {
-  display: block;
   margin-top: 16px;
   font-size: 16px;
+}
+
+.rating-message.text-error {
+  display: block;
+}
+
+.rating-message.text-success {
+  display: block;
+  color: green;
 }
 
 .modal-header--sm{margin: 40px 40px 0;display: -webkit-box;display: -ms-flexbox;display: flex;
