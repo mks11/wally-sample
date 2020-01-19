@@ -299,12 +299,12 @@ class Mainpage extends Component {
                       sidebar.map((s,i) => {
                         return (
                           <div className="mb-0" key={i}>
-                            <h4><Link to={`/main/${s.cat_id}`} className={`${id === s.cat_id ? '' : ''}`} replace>{s.cat_name}</Link></h4>
+                            <h4><Link to={`/main/${s.category_id}`} className={`${id === s.category_id ? '' : ''}`} replace>{s.name}</Link></h4>
                             <ul>
-                              {s.subcats && s.subcats.map((sc, idx) => (
-                                <li key={idx}><Link to={`/main/${sc.cat_id || ''}`}
-                                    className={id === sc.cat_id ? "text-violet": ""}
-                                  >{sc.cat_name}</Link></li>
+                              {s.categories && s.categories.map((sc, idx) => (
+                                <li key={idx}><Link to={`/main/${sc.category_id || ''}`}
+                                    className={id === sc.category_id ? "text-violet": ""}
+                                  >{sc.name}</Link></li>
                               ) )}
                             </ul>
                           </div>
