@@ -5,7 +5,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const Product = props => {
   const { product, onProductClick, deliveryTimes } = props
-
   const producer = product.producer || null
   const price = product.product_price / 100
   const unit_type = product.price_unit
@@ -27,10 +26,9 @@ const Product = props => {
   let availableDOW = [];
   const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
   if (unavailable) {
-    availableDays = [0, 1, 2, 3, 4, 5, 6]
-    availableDOW = availableDays.map(d => daysOfWeek[d]);
+    availableDays = product?.available_days?.sort()
+    availableDOW = availableDays?.map(d => daysOfWeek[d]);
   }
-
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
       <LazyLoadImage
@@ -57,7 +55,7 @@ const Product = props => {
         {
           outOfStock
             ? 'Out of stock'
-            : (unavailable ? `Delivery days: ${availableDOW.join(', ')}` : `packed in ${product.std_packaging}`)
+            : (unavailable ? `Delivery days: ${availableDOW?.join(', ')}` : `packed in ${product.std_packaging}`)
         }
       </div>
     </div>

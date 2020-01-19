@@ -7,7 +7,8 @@ import {
 import {
   formatMoney,
   logModalView,
-  logEvent
+  logEvent,
+  connect
 } from 'utils'
 import {
   PRODUCT_BASE_URL,
@@ -38,6 +39,10 @@ class ProductModal extends Component {
       packagingType: null,
       priceMultiplier: 1
     }
+
+    this.productStore = props.store.product
+    this.modalStore = props.store.modal
+    this.userStore = props.store.user
   }
 
   componentDidMount() {
@@ -49,13 +54,18 @@ class ProductModal extends Component {
       text: "Remove item"
     }]
 
-    const { product, modal, user } = this.props.stores
+    const product = this.productStore
+    const modal = this.modalStore
+    const user = this.userStore
+
     this.state.qty = product.activeProduct.min_size
     let priceMultiplier = product.activeProduct.buy_by_packaging ? product.activeProduct.packaging_vol[0] : 1
     this.setState({ priceMultiplier: priceMultiplier });
 
     let packagingType = product.activeProduct.buy_by_packaging ? product.activeProduct.packagings[0].type : null
     this.setState({ packagingType: packagingType });
+
+    if (!product.activeProduct) return null
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
@@ -65,8 +75,8 @@ class ProductModal extends Component {
     }
 
     const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
-    let availableDays = [0,1,2,3,4,5,6]
-    availableDays = availableDays.map(d => daysOfWeek[d]);
+    let availableDays = product.activeProduct.available_days?.sort()
+    availableDays = availableDays?.map(d => daysOfWeek[d]);
 
     this.setState({
       subtitutes,
@@ -236,38 +246,32 @@ class ProductModal extends Component {
     this.setState({ packagingType: null })
   }
 
-  handleProductClick = (product_id) => {
-    const { product } = this.props.stores
-    // HERE! check parameters when API is updated
-    const delivery = {zip: null, date: null}
-    product.showModal(product_id, null, delivery)
-      .then((data) => {
-        this.modalStore.toggleModal('product')
-    })
+  handleProductClick = (product_id, deliveryTimes) => {
+    this.productStore.showModal(product_id)
+    this.modalStore.toggleModal('product')
   }
 
   truncate = (text, length) => {
-    if (text.length <= length) {
+    if (text.length <= length) {  
       return text
     }
-    // const disallowedLastChars = ['.', ',', ':', '!', '(', ')', ' ']
     return text.slice(0, length) + '...'
   }
 
   render() {
     const { packagingType } = this.state
-    const { product, modal } = this.props.stores
-    const { activeProduct, activeProductComments } = product
-    const recentThreeComments = activeProductComments.slice(0).reverse().slice(0, 3)
 
+    const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
 
-    // HERE! UPDATE WHEN SCHEMA IS UPDATED
-    let {
+    const recentThreeComments = activeProductComments?.filter(comment => comment.comment).slice(0, 3) 
+  
+    const {
       a_plus_url,
       allergens,
       available,
       available_inventory,
+      avg_rating,
       buy_by_packaging,
       description,
       fbw,
@@ -284,7 +288,6 @@ class ProductModal extends Component {
       packaging_vol,
       packagings,
       product_id,
-      rating,
       similar_products,
       std_packaging,
       subcat_name,
@@ -346,9 +349,6 @@ class ProductModal extends Component {
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
-    // HERE! remove test data
-    rating = 4
-
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -359,15 +359,6 @@ class ProductModal extends Component {
               </div>
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
-                  <div className="slick-item">
-                    <img src="https://picsum.photos/id/1080/300/200"/>
-                  </div>
-                  <div className="slick-item">
-                    <img src="https://picsum.photos/id/110/300/200"/>
-                  </div>
-                  <div className="slick-item">
-                    <img src="https://picsum.photos/id/1069/300/200"/>
-                  </div>
                   {image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
@@ -386,15 +377,6 @@ class ProductModal extends Component {
             </div>
             <div className="carousel-mobile-flex">
               <div id="product-carousel" ref={el => this.prod = el}>
-                <div className="slick-item">
-                  <img src="https://picsum.photos/id/1080/300/200"/>
-                </div>
-                <div className="slick-item">
-                  <img src="https://picsum.photos/id/110/300/200"/>
-                </div>
-                <div className="slick-item">
-                  <img src="https://picsum.photos/id/1069/300/200"/>
-                </div>
                 {image_refs.map((item, key) => (
                   <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                 ))}
@@ -483,24 +465,19 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
-        {/* {similar_products && similar_products.length > 0 && ( */}
+        {similar_products?.length > 0 && (
           <Row>
             <Col>
               <hr />
               <h3 className="mb-3">More Products Like This</h3>
               <Row className="similar-products-container">
-                {/* {similar_products.map((product, key) => (
-                  <Product key={key} product={product} onProductClick={() => this.handleProductClick(product.prod_id)} />
-                ))} */}
-                {/* HERE! remove test data below */}
-                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
-                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
-                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
-                <Product product={activeProduct} onProductClick={() => this.handleProductClick(activeProduct.prod_id)} />
+                {similar_products.map((product, key) => {
+                  return <Product key={key} product={product} onProductClick={() => this.handleProductClick(product.product_id)} />
+                })}
               </Row>
             </Col>
           </Row>
-        {/* )} */}
+        )}
         <Row>
           <Col>
             <hr />
@@ -511,7 +488,7 @@ class ProductModal extends Component {
                 <div>
                   <span className="font-weight-bold">Producer: </span>
                   <Link
-                    onClick={modal.toggleModal}
+                    onClick={this.modalStore.toggleModal}
                     to={"/vendor/" + manufacturer_url_name}
                   >
                     {manufacturer}
@@ -550,7 +527,7 @@ class ProductModal extends Component {
             <h3 className="mb-3">Product Ratings</h3>
             <div className="product-ratings-container">
               <span className="product-rating-label font-weight-bold">Product Rating: </span>
-              {rating ? <ProductRatingStars rating={rating}/> : "No Ratings Yet"}
+              {avg_rating ? <ProductRatingStars rating={avg_rating}/> : "No Ratings Yet"}
             </div>
             {recentThreeComments && recentThreeComments.length > 0 && (
               <React.Fragment>
@@ -558,7 +535,7 @@ class ProductModal extends Component {
                 <div className="comments-container">
                   {recentThreeComments.map((comment, key) => (
                     <div key={"comment-" + key} className="comment">
-                      "{this.truncate(comment.text, 200)}" - {comment.user}
+                      "{this.truncate(comment.comment, 200)}" - {comment.user_name}
                     </div>
                   ))}
                 </div>
@@ -572,4 +549,4 @@ class ProductModal extends Component {
   }
 }
 
-export default ProductModal
+export default connect("store")(ProductModal)
