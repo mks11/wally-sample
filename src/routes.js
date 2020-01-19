@@ -68,7 +68,7 @@ export default (
       <Route exact path="/manage/receipts" component={Receipts} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/packaging/:id" component={Mainpage} />
-      <Route exact path="/invitefriends" component={InviteFriends} />
+      <Route exact path="/waitlist-signup" component={InviteFriends} />
       <Route exact path="/backers" component={Backers} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />

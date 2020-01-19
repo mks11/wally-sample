@@ -22,7 +22,7 @@ class InviteFriends extends Component {
 
     const isMobile = window.innerWidth <= 500;
     const isMobileHoriz = (window.innerWidth > 500 && window.innerWidth <= 800);
-    let heroClass = "landing-section aw-hero"
+    let heroClass = "landing-section aw-hero homepage"
     if (isMobile) {
       heroClass += ' mobile'
     }
