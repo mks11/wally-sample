@@ -246,7 +246,7 @@ class ProductModal extends Component {
     this.setState({ packagingType: null })
   }
 
-  handleProductClick = (product_id, deliveryTimes) => {
+  handleProductClick = (product_id) => {
     this.productStore.showModal(product_id)
     this.modalStore.toggleModal('product')
   }
@@ -260,10 +260,8 @@ class ProductModal extends Component {
 
   render() {
     const { packagingType } = this.state
-
     const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
-
     const recentThreeComments = activeProductComments?.filter(comment => comment.comment).slice(0, 3) 
   
     const {
@@ -346,9 +344,24 @@ class ProductModal extends Component {
     const packaging = packagings && packagings[0] ? packagings[0] : null
     const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null 
-    const packaging_size = inventory && inventory.packaging && inventory.packaging.size
+    // const packaging_size = inventory && inventory.packaging && inventory.packaging.size
+    // REMOVE TEST DATA BELOW
+    const packaging_size = 32
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
+    // display non-greyed-out icon for applicable icon
+    let eight = packaging_size === 8 ? '' : 'grey_'
+    let sixteen = packaging_size === 16 ? '' : 'grey_'
+    let thirtyTwo = packaging_size === 32 ? '' : 'grey_'
+
+    let jarIcons = (
+      <div className="jar-icons">
+        <img src={`images/jar8_${eight}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`images/jar16_${sixteen}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`images/jar32_${thirtyTwo}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+      </div>
+    )
+  
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -402,6 +415,7 @@ class ProductModal extends Component {
 
             <div className={infoPackageClass}>
               <strong>Packaged in:</strong> <i onClick={this.toggleInfoPackage} className="fa fa-info-circle"></i>
+              {jarIcons}
               <div className="package-info-popover">
                 <h4>{packaging_type}</h4>
                 <p>{packaging_description}</p>

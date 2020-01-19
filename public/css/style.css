@@ -1699,6 +1699,14 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
   top: 18px;
 }
 
+.jar-icons img {
+  width: 25px;
+}
+
+.a-plus-image img {
+  max-width: 100%;
+}
+
 .comments-container {
   width: 90%;
   margin: 0 auto;
