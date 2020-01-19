@@ -46,7 +46,7 @@ class Backers extends Component {
           <div className="row">
             {this.backerStore.backers.map((b, key) => (
               <span className="col-sm-4" key={key}>
-                <p className="text-center">{b.name}</p>
+                <p className="text-center">{b}</p>
               </span>
             ))}
             <br />

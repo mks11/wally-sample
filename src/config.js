@@ -121,7 +121,7 @@ export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
 
-export const GET_FAKE_BACKERS = "https://jsonplaceholder.typicode.com/users/";
+export const API_GET_KICKSTARTER_BACKERS = BASE_URL + "/api/web/backers";
 
 export const API_GET_VENDOR_PROFILE = BASE_URL + "/api/vendor/";
 

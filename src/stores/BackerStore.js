@@ -1,13 +1,13 @@
 import { observable, decorate, action } from "mobx";
-import { GET_FAKE_BACKERS } from "../config";
+import { API_GET_KICKSTARTER_BACKERS } from "../config";
 import axios from "axios";
 
 class BackerStore {
   backers = [];
 
   async loadBackers() {
-    const res = await axios.get(GET_FAKE_BACKERS);
-    this.backers = res.data;
+    const res = await axios.get(API_GET_KICKSTARTER_BACKERS);
+    this.backers = res.data.backers;
   }
 }
 
