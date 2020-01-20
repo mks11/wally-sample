@@ -25,7 +25,8 @@ const store = {
   order: OrderStore,
   admin: AdminStore,
   backer: BackerStore,
-  vendor: VendorProfileStore
+  vendor: VendorProfileStore,
+  products: VendorProfileStore
 };
 
 export default store;

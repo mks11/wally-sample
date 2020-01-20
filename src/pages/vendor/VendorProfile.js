@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import ReactGA from "react-ga";
 import {
   formatMoney,
@@ -15,6 +16,7 @@ class VendorProfile extends Component {
     super(props);
 
     this.vendorProfileStore = this.props.store.vendor;
+    this.vendorProfileStore = this.props.store.products;
 
     this.userStore = this.props.store.user;
     this.uiStore = this.props.store.ui;
@@ -60,6 +62,17 @@ class VendorProfile extends Component {
         this.modalStore.toggleModal("error");
       });
 
+    this.vendorProfileStore
+      .loadVendorProducts(name)
+      .then(data => {
+        console.log(data);
+        this.setState({ sidebar: this.productStore.sidebar });
+      })
+      .catch(e => {
+        console.error("Failed to load vendor products", e);
+        this.modalStore.toggleModal("error");
+      });
+
     let categoryTypeMode = "all";
     if (!this.id) {
       categoryTypeMode = "limit";
@@ -71,13 +84,6 @@ class VendorProfile extends Component {
 
     this.productStore.getAdvertisements();
     this.productStore.getCategories();
-    this.productStore
-      .getVendorProducts(name)
-      .then(data => {
-        console.log(data);
-        this.setState({ sidebar: this.productStore.sidebar });
-      })
-      .catch(e => console.error("Failed to load vendor products: ", e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -198,6 +204,7 @@ class VendorProfile extends Component {
 
   render() {
     const vendor = this.vendorProfileStore.vendor;
+    const vendor_products = this.vendorProfileStore.products;
 
     return (
       <div className="App">
@@ -209,28 +216,41 @@ class VendorProfile extends Component {
 
             <div className="col-md-6 col-xs-12 text-left">
               <h1>{vendor.name}</h1>
-              <h2>
-                {vendor.city} | {vendor.state}
-              </h2>
+              {vendor.city === null && (
+                <h2>
+                  {vendor.city} | {vendor.state}
+                </h2>
+              )}
               <hr />
               <p>{vendor.description}</p>
             </div>
           </div>
         </div>
 
-        <div className="col-md-10 col-sm-8">
-          <div className="product-content-right">
-            {this.productStore.vendor_products.map((product, index) => (
-              <ProductList
-                key={index}
-                display={product}
-                mode={this.state.categoryTypeMode}
-                deliveryTimes={this.state.deliveryTimes}
-                onProductClick={this.handleProductModal}
-              />
+        <div className="container">
+          <div className="row">
+            {this.vendorProfileStore.products.map((p, key) => (
+              <span className="col-sm-4" key={key}>
+                <p className="text-center">{p.product_name}</p>
+              </span>
             ))}
+            <br />
           </div>
         </div>
+
+        {/* <div className="col-md-10 col-sm-8">
+            <div className="product-content-right">
+              {this.vendorProfileStore.products.map((product, index) => (
+                <ProductList
+                  key={index}
+                  display={product}
+                  mode={this.state.categoryTypeMode}
+                  deliveryTimes={this.state.deliveryTimes}
+                  onProductClick={this.handleProductModal}
+                />
+              ))}
+            </div>
+          </div> */}
       </div>
     );
   }

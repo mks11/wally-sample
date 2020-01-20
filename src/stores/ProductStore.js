@@ -3,7 +3,6 @@ import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
-  API_GET_VENDOR_PROFILE,
   API_GET_IMPULSE_PRODUCTS,
   API_GET_CATEGORIES,
   API_SEARCH_KEYWORD
@@ -13,7 +12,6 @@ import moment from "moment";
 
 class ProductStore {
   main_display = [];
-  vendor_products = [];
   impulse_products = [];
   path = [];
   sidebar = [];
@@ -100,21 +98,6 @@ class ProductStore {
     this.fetch = false;
 
     return res.data;
-  }
-
-  async getVendorProducts(vendor_name) {
-    this.fetch = true;
-    const url = API_GET_VENDOR_PROFILE;
-
-    const res = await axios.get(`${url}${vendor_name}`);
-
-    const data = res.data;
-
-    this.vendor_products = data.products;
-
-    this.path = data.path;
-    this.sidebar = data.sidebar;
-    this.fetch = false;
   }
 
   async getImpulseProducts(id, auth) {
@@ -267,7 +250,6 @@ decorate(ProductStore, {
   showModal: action,
   getAdvertisements: action,
   getProductDisplayed: action,
-  getVendorProducts: action,
   getCategories: action,
   searchKeyword: action,
   searchCategory: action,
