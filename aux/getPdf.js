@@ -16,12 +16,12 @@ const getPdf = async () => {
 		// create blank pdf
     let pdf = new jsPDF({
       orientation: "landscape",
-      unit: "pt",
+      unit: "in",
       format: "letter"
     });
 
 		// embed image in pdf
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 976, 617);
+    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 11, 8.5);
 
     // save locally
     const filename = `${names[i]}.pdf`;
