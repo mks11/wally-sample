@@ -313,12 +313,13 @@ class TopNav extends Component {
                     )}
                     { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
                       <React.Fragment>
-                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
+                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14 util-offset-top-1" to="/help">Help</Link></li>
+                          <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                               <div className="btn-group">
-                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
-                                  <span> <strong>Hi {name}</strong> <i class="fa fa-caret-down" aria-hidden="true"> </i></span>
+                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold util-font-size-14" type="button" data-toggle="dropdown" aria-expanded="true">
+                                  <span> Hi {name} <i class="fa fa-caret-down" aria-hidden="true"> </i></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
@@ -336,6 +337,7 @@ class TopNav extends Component {
                               </div>
                             </ClickOutside>
                           </div>
+                          </li>
                         </React.Fragment>
                       )
                     }
@@ -369,7 +371,7 @@ class TopNav extends Component {
             <div className="row d-md-none  d-sm-block">
               <div className="col-sm-12">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
-                  <img className="logo-text-mobile" src='/images/main_logo.png' alt="The Wally Shop" />
+                  <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/main_logo.png' alt="The Wally Shop" />
                 </a>
               </div>
             </div>
