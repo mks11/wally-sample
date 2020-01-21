@@ -17,9 +17,12 @@ class MobileCartBtn extends Component {
 
   componentDidUpdate(_, prevState) {
     const $ = window.$
-    const footerPos = $('.aw-footer').position().top - $('.aw-footer').outerHeight() - 150
-    if (prevState.footerPos !== footerPos) {
-      this.setState({ footerPos })
+    const footer = $('.aw-footer')
+    if (footer.length) {
+      const footerPos = $('.aw-footer').position().top - $('.aw-footer').outerHeight() - 150
+      if (prevState.footerPos !== footerPos) {
+        this.setState({ footerPos })
+      }
     }
   }
 
@@ -41,7 +44,7 @@ class MobileCartBtn extends Component {
   render() {
     const { hide } = this.state
     const { onClick, items } = this.props
-    
+
     return (
       hide
         ? null
@@ -52,7 +55,7 @@ class MobileCartBtn extends Component {
             onClick={onClick}
           >
             <span>{items}</span>View Order
-          </button> 
+          </button>
         )
     )
   }

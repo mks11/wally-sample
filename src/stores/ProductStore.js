@@ -5,19 +5,23 @@ import {
   API_GET_PRODUCT_DISPLAYED,
   API_GET_IMPULSE_PRODUCTS,
   API_GET_CATEGORIES,
-  API_SEARCH_KEYWORD
+  API_SEARCH_KEYWORD,
+  API_GET_HISTORICAL_PRODUCTS,
+  API_RATE_PRODUCT
 } from "../config";
 import axios from "axios";
 import moment from "moment";
 
 class ProductStore {
   main_display = [];
-  impulse_products = [];
+  historical_products = [];
   path = [];
   sidebar = [];
   activeProductId = null;
   activeProduct = null;
+  activeProductComments = [];
   categories = [];
+  fetch = false;
 
   fetch = false;
 
@@ -124,6 +128,13 @@ class ProductStore {
     return res.data;
   }
 
+  async getHistoricalProducts() {
+    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS);
+    this.historical_products = res.data.products;
+
+    return res.data.products;
+  }
+
   async getProductDetails(id, delivery) {
     const time = moment().format("YYYY-MM-DD HH:mm:ss");
     this.fetch = true;
@@ -132,6 +143,34 @@ class ProductStore {
     );
     this.fetch = false;
     return res.data;
+  }
+
+  async getComments(id) {
+    if (!id) return null;
+    this.fetch = true;
+    const url = API_GET_PRODUCT_DISPLAYED + id + "/comments";
+    try {
+      const res = await axios.get(url);
+      this.activeProductComments = res.data;
+    } catch (err) {
+      console.error(err);
+    }
+    this.fetch = false;
+  }
+
+  async rateProduct(id, rating, comment) {
+    const url = API_RATE_PRODUCT + id + "/rating";
+    try {
+      const res = await axios.post(url, {
+        product_id: id,
+        product_rating: rating,
+        comment: comment
+      });
+      this.activeProduct.rating = res.data.product_rating;
+      this.activeProductComments = res.data.comments;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   getCategories() {
@@ -235,8 +274,7 @@ class ProductStore {
 
 decorate(ProductStore, {
   main_display: observable,
-  vendor_products: observable,
-  impulse_products: observable,
+  historical_products: observable,
   path: observable,
   sidebar: observable,
   customer_quantity: observable,
@@ -255,7 +293,9 @@ decorate(ProductStore, {
   searchCategory: action,
   searchAll: action,
   resetSearch: action,
-  getProductDetails: action
+  getProductDetails: action,
+  getHistoricalProducts: action,
+  getProductComments: action
 });
 
 export default new ProductStore();

@@ -9,10 +9,6 @@ class VendorProfileStore {
   async loadVendorProfile(vendor_name) {
     const res = await axios.get(`${API_GET_VENDOR_PROFILE}${vendor_name}`);
     this.vendor = res.data.vendor;
-  }
-
-  async loadVendorProducts(vendor_name) {
-    const res = await axios.get(`${API_GET_VENDOR_PROFILE}${vendor_name}`);
     this.products = res.data.products;
   }
 }

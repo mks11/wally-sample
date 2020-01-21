@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 
+import Filters from '../ProductTop/Filters'
+
 const MobileSearch = props => {
   const {
     show,
@@ -10,6 +12,7 @@ const MobileSearch = props => {
     onClose,
     onSearch,
     onCategoryClick,
+    onFilterUpdate,
   } = props
 
   return (
@@ -22,7 +25,7 @@ const MobileSearch = props => {
             onClick={onClose}
           >
             <span className="navbar-toggler-icon close-icon"></span>
-          </button> 
+          </button>
         </Col>
         <Col xs={10}>
           <div className="input-group search-product" style={{width: '90%', marginTop: 15}}>
@@ -35,6 +38,16 @@ const MobileSearch = props => {
               className="rbt-input-main form-control rbt-input"
               style={{ backgroundColor: '#ececec' }}
               onKeyDown={onSearch}
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="px-3">
+            <Filters
+              onSelect={onFilterUpdate}
+              vertical
             />
           </div>
         </Col>
@@ -57,11 +70,11 @@ const MobileSearch = props => {
                         replace
                       >{s.cat_name}</Link>
                     </div>
-                    <ul>  
+                    <ul>
                       {s.sub_cats && s.sub_cats.map((sc, idx) => (
                         <li key={idx}>
                         <Link
-                          to={`/main/${sc.cat_id || ''}`} 
+                          to={`/main/${sc.cat_id || ''}`}
                           className={id === sc.cat_id ? "text-violet": ""}
                           onClick={onCategoryClick}
                         >{sc.cat_name}</Link></li>

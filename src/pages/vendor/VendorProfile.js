@@ -62,16 +62,16 @@ class VendorProfile extends Component {
         this.modalStore.toggleModal("error");
       });
 
-    this.vendorProfileStore
-      .loadVendorProducts(name)
-      .then(data => {
-        console.log(data);
-        this.setState({ sidebar: this.productStore.sidebar });
-      })
-      .catch(e => {
-        console.error("Failed to load vendor products", e);
-        this.modalStore.toggleModal("error");
-      });
+    // this.vendorProfileStore
+    //   .loadVendorProducts(name)
+    //   .then(data => {
+    //     console.log(data);
+    //     // this.setState({ sidebar: this.productStore.sidebar });
+    //   })
+    //   .catch(e => {
+    //     console.error("Failed to load vendor products", e);
+    //     this.modalStore.toggleModal("error");
+    //   });
 
     let categoryTypeMode = "all";
     if (!this.id) {
@@ -204,7 +204,6 @@ class VendorProfile extends Component {
 
   render() {
     const vendor = this.vendorProfileStore.vendor;
-    const vendor_products = this.vendorProfileStore.products;
 
     return (
       <div className="App">
@@ -227,7 +226,7 @@ class VendorProfile extends Component {
           </div>
         </div>
 
-        <div className="container">
+        {/* <div className="container">
           <div className="row">
             {this.vendorProfileStore.products.map((p, key) => (
               <span className="col-sm-4" key={key}>
@@ -236,21 +235,21 @@ class VendorProfile extends Component {
             ))}
             <br />
           </div>
-        </div>
+        </div> */}
 
-        {/* <div className="col-md-10 col-sm-8">
-            <div className="product-content-right">
-              {this.vendorProfileStore.products.map((product, index) => (
-                <ProductList
-                  key={index}
-                  display={product}
-                  mode={this.state.categoryTypeMode}
-                  deliveryTimes={this.state.deliveryTimes}
-                  onProductClick={this.handleProductModal}
-                />
-              ))}
-            </div>
-          </div> */}
+        <div className="col-md-10 col-sm-8">
+          <div className="product-content-right">
+            {this.vendorProfileStore.products.map((product, key) => (
+              <ProductList
+                key={key}
+                display={product}
+                mode={this.state.categoryTypeMode}
+                deliveryTimes={this.state.deliveryTimes}
+                onProductClick={this.handleProductModal}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
