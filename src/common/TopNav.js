@@ -313,7 +313,7 @@ class TopNav extends Component {
                     )}
                     { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
                       <React.Fragment>
-                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14 util-offset-top-1" to="/help">Help</Link></li>
+                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14" to="/help">Help</Link></li>
                           <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
