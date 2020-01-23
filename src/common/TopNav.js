@@ -11,6 +11,7 @@ class TopNav extends Component {
     this.checkoutStore= this.props.store.checkout
     this.uiStore= this.props.store.ui
     this.routing = this.props.store.routing
+    this.productStore = this.props.store.product
   }
 
   handleLogin() {
@@ -27,6 +28,7 @@ class TopNav extends Component {
 
   handleLogo() {
     this.props.store.routing.push('/main')
+    this.productStore.resetSearch()
   }
 
   handleInvite() {
@@ -230,10 +232,10 @@ class TopNav extends Component {
           }
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
-              <div className="col-auto">
+              <div className="d-none col-auto d-md-block">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
-                  <img className="logo-text-desktop" src='/images/text-logo.svg' alt="" />
-                  <img className="logo-text-mobile" src='/images/text-logo.svg' alt="" />
+                  <img className="logo-text-desktop" src='/images/main_logo.png' alt="The Wally Shop" />
+                  <img className="logo-text-mobile" src='/images/main_logo.png' alt="The Wally Shop" />
                 </a>
               </div>
               <div className="col-auto ml-auto d-none d-md-block">
@@ -346,8 +348,8 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ?
               <div className="col-auto d-none d-md-block btn-top-account">
-                <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps"><b>Log in</b></button>
-                <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps"><b>Sign up</b></button>
+                <button onClick={e => this.handleLogin()} className="btn btn-outline-black btn-login text-caps">Log in</button>
+                <button onClick={e => this.handleSignup()} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
               </div>
                   : null}
 
@@ -356,9 +358,16 @@ class TopNav extends Component {
                         <span className="navbar-toggler-icon"></span>
                       </button>
                     :
-                      <button onClick={e=>this.handleLogin()} className="btn btn-outline-black btn-login text-caps d-md-none d-lg-none"><b>Login</b></button>
+                      <button onClick={e=>this.handleLogin()} className="btn btn-outline-black btn-login text-caps d-md-none d-lg-none">Log in</button>
                     }
+            </div>
 
+            <div className="row d-md-none  d-sm-block">
+              <div className="col-sm-12">
+                <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
+                  <img className="logo-text-mobile" src='/images/main_logo.png' alt="The Wally Shop" />
+                </a>
+              </div>
             </div>
           </div>
         </header>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import ReactGA from "react-ga";
 // import App from './App';
@@ -8,6 +8,7 @@ import routes from "./routes";
 import TopNav from "./common/TopNav";
 import Footer from "./common/Footer";
 import ScrollToTop from "./common/ScrollToTop";
+import ScrollSpy from 'common/ScrollSpy'
 import RootModal from "./modals/RootModal";
 import Backdrop from "./common/Backdrop";
 
@@ -38,16 +39,18 @@ const history = syncHistoryWithStore(browserHistory, routingStore);
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <ScrollToTop>
-        <div className="app">
-          <Backdrop />
-          <TopNav />
-          <main className="aw-main aw-home">{routes}</main>
+      <ScrollSpy>
+        <ScrollToTop>
+          <div className="app">
+            <Backdrop />
+            <TopNav />
+            <main className="aw-main aw-home">{routes}</main>
 
-          <Footer />
-          <RootModal />
-        </div>
-      </ScrollToTop>
+            <Footer />
+            <RootModal />
+          </div>
+        </ScrollToTop>
+      </ScrollSpy>
     </Router>
   </Provider>,
   document.getElementById("root")
