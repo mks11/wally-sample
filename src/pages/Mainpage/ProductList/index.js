@@ -44,8 +44,8 @@ class ProductList extends Component {
             {
               display.products
                 .filter(p => filters.length ? filters.some(f => {
-                  if (p.allergens && p.tags) {
-                    return !p.allergens.includes(f) && !p.tags.includes(f)
+                  if (/*p.allergens && */p.tags) {
+                    return /*p.allergens.includes(f) && */p.tags.includes(f)
                   }
                   return true
                 }) : true)
