@@ -21,14 +21,6 @@ const Product = props => {
   }
 
   const outOfStock = product.out_of_stock
-  const unavailable = false
-  let availableDays = [];
-  let availableDOW = [];
-  const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
-  if (unavailable) {
-    availableDays = product?.available_days?.sort()
-    availableDOW = availableDays?.map(d => daysOfWeek[d]);
-  }
   return ( 
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
       <LazyLoadImage
@@ -51,11 +43,11 @@ const Product = props => {
       { product.name && <span className="product-desc"><strong>{product.name}</strong></span>}
       {
       }
-      <div className={`product-packaged ${(outOfStock) ? 'out-of-stock' : (unavailable ? 'unavailable' : '')}`}>
+      <div className={`product-packaged ${(outOfStock) ? 'out-of-stock' : ''}`}>
         {
           outOfStock
             ? 'Out of stock'
-            : (unavailable ? `Delivery days: ${availableDOW?.join(', ')}` : `packed in ${product.std_packaging}`)
+            : `packed in ${product.std_packaging}`
         }
       </div>
     </div>

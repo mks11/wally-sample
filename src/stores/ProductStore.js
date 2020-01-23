@@ -40,19 +40,16 @@ class ProductStore {
   currentSearchFilter = []
   currentSearchCategory = 'All Categories'
 
-  async showModal(product_id, customer_quantity, delivery = {}) {
+  async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id
 
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`)
     this.activeProductComments = await this.getComments(product_id)
     this.activeProduct = res.data
-    if (this.activeProduct.available_inventory.length === 0) {
-      alert('Item not available in inventory')
-      return
-    }
-    const inventory = this.activeProduct.available_inventory[0]
-    var min_size = this.activeProduct.buy_by_packaging ? 1 : this.activeProduct.min_size
+    let inventory = null
+    if (this.activeProduct.available_inventory && this.activeProduct.available_inventory.length > 0) inventory = this.activeProduct.available_inventory[0]
+    var min_size = 1
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
 

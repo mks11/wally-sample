@@ -197,10 +197,9 @@ class Mainpage extends Component {
     this.uiStore.toggleCartMobile(true)
   }
 
-  handleProductModal = (product_id, deliveryTimes) => {
-    this.productStore.showModal(product_id, null, this.userStore.getDeliveryParams())
+  handleProductModal = (product_id) => {
+    this.productStore.showModal(product_id, null)
       .then((data) => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes)
         this.modalStore.toggleModal('product')
     })
   }

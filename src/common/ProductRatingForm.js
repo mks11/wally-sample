@@ -36,8 +36,8 @@ class ProductRatingForm extends Component {
         const res = await this.productStore.rateProduct(this.props.product_id, rating, comment)
         this.productStore.updateRatingComments(res.product_rating, res.comments)
         this.clearFormSuccess()
-			} catch(err) {
-				this.setState({ errorMessage: 'Oops, there was a problem saving your rating. Please try again later.'})
+			} catch (err) {
+				this.setState({ errorMessage: 'Oops, there was a problem saving your rating. Please make sure to login and try again later.'})
 			}
 		}
   }

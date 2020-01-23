@@ -35,7 +35,6 @@ class ProductModal extends Component {
       quantityAddon: 0,
       outOfStock: false,
       available: true,
-      availableDays: [],
       packagingType: null,
       priceMultiplier: 1
     }
@@ -74,15 +73,10 @@ class ProductModal extends Component {
       })
     }
 
-    const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
-    let availableDays = product.activeProduct.available_days?.sort()
-    availableDays = availableDays?.map(d => daysOfWeek[d]);
-
     this.setState({
       subtitutes,
       outOfStock: product.activeProduct.out_of_stock,
       available: true,
-      availableDays: availableDays
     })
     logModalView('/product/' + product.activeProductId)
 
@@ -253,7 +247,8 @@ class ProductModal extends Component {
     const { packagingType } = this.state
     const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
-    const recentThreeComments = activeProductComments?.filter(comment => comment.comment).slice(0, 3) 
+    let recentThreeComments = []
+    if (activeProductComments) recentThreeComments = activeProductComments.filter(comment => comment.comment).slice(0, 3) 
   
     const {
       a_plus_url,
@@ -335,9 +330,8 @@ class ProductModal extends Component {
     const packaging = packagings && packagings[0] ? packagings[0] : null
     const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null 
-    // const packaging_size = inventory && inventory.packaging && inventory.packaging.size
-    // REMOVE TEST DATA BELOW
-    const packaging_size = 32
+    const packaging_size = inventory && inventory.packaging && inventory.packaging.size
+    console.log("packaging size is", packaging_size)
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
     // display non-greyed-out icon for applicable icon
@@ -347,9 +341,9 @@ class ProductModal extends Component {
 
     let jarIcons = (
       <div className="jar-icons">
-        <img src={`images/jar8_${eight}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
-        <img src={`images/jar16_${sixteen}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
-        <img src={`images/jar32_${thirtyTwo}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`/images/jar8_${eight}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`/images/jar16_${sixteen}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`/images/jar32_${thirtyTwo}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
       </div>
     )
   
@@ -400,7 +394,7 @@ class ProductModal extends Component {
           <Col sm="6">
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
             <div>{shipMessage}</div>
-            <div>Sold by the {price_unit}.</div>
+            <div>Sold by the {unit_type}.</div>
             { (['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight) && <div>Average weight is {unit_weight} {weight_unit}.</div> }
             <hr />
 
@@ -415,9 +409,7 @@ class ProductModal extends Component {
             </div>
             <div className="mb-3">
               { 
-                !buy_by_packaging 
-                  ? packaging_type
-                  : std_packaging
+                packaging_type
               }
             </div>
             {
@@ -470,7 +462,7 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
-        {similar_products?.length > 0 && (
+        {similar_products && similar_products.length > 0 && (
           <Row>
             <Col>
               <hr />
