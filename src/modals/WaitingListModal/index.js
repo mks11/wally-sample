@@ -38,7 +38,7 @@ class WaitingListModal extends Component {
         <p className="m-4">We will reach out as soon as we are ready for you to start ordering.</p>
 
         <p>
-          To get earlier access, share this link: {user_link}.
+          To get earlier access, share this link: <strong>{user_link}</strong>.
           <br />
           Plus, more people shopping package free means a 🌱planet
         </p>

@@ -73,7 +73,9 @@ class SignupModal extends Component {
         checkout.getDeliveryTimes()
         this.setState({ signupRequest: false })
         this.props.switchTo('welcome')
+
         user.giftCardPromo = null
+        user.refPromo = null
       }).catch(e => {
         console.error('Failed to signup', e)
         const msg = e.response.data.error.message
@@ -111,7 +113,8 @@ class SignupModal extends Component {
     user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
       .then(res => {
         modal.switchModal('waitinglist', null, res)
-      }).catch((e) => {
+      })
+      .catch((e) => {
         const msg =  e.response.data.error ? e.response.data.error.message : null
         modal.switchModal('error', msg)
       })
