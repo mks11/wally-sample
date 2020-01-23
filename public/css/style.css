@@ -93,11 +93,7 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
-<<<<<<< HEAD
 .aw-header, .aw-header.navbar-white{background-color: #fae1ff;}
-=======
-.aw-header, .aw-header.navbar-white{background-color: #fff;}
->>>>>>> packing-combined-mk
 /* .navbar-toggler {
 } */
 
