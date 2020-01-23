@@ -93,7 +93,12 @@ class ProductStore {
   }
 
   async getHistoricalProducts(auth) {
-    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    let res;
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    } else {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+    }
     this.historical_products = res.data.products
 
     return res.data.products

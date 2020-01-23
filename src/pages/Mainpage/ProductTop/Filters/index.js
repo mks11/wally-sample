@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'utils'
 
 const FILTERS_DATA = [
-  // { title: 'Dairy Free', value: 'dairy' },
-  // { title: 'Gluten Free', value: 'gluten' },
-  // { title: 'Peanut Free', value: 'peanuts' },
-  // { title: 'Tree Nuts Free', value: 'tree nuts' },
-  { title: 'Organic', value: 'organic' },
-  { title: 'Non GMO', value: 'non gmo' },
-  { title: 'Fair Trade', value: 'fair trade' },
-  { title: 'Kosher', value: 'kosher' },
+  { title: 'Dairy Free', value: 'allergen,dairy' },
+  { title: 'Gluten Free', value: 'allergen,gluten' },
+  { title: 'Peanut Free', value: 'allergen,peanuts' },
+  { title: 'Tree Nuts Free', value: 'allergen,tree nuts' },
+  { title: 'Organic', value: 'tag,organic' },
+  { title: 'Non GMO', value: 'tag,non gmo' },
+  { title: 'Fair Trade', value: 'tag,fair trade' },
+  { title: 'Kosher', value: 'tag,kosher' },
 ]
 
 class Filters extends Component {

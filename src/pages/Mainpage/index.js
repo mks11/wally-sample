@@ -247,11 +247,11 @@ class Mainpage extends Component {
   sortByType = (a, b) => {
     switch(this.state.sortType) {
       case 'times_bought':
-        return a.times_bought - b.times_bought
+        return b.times_bought - a.times_bought
       case 'last_ordered':
-        return a.last_ordered - b.last_ordered
+        return Date(a.last_ordered) <= Date(b.last_ordered)
       case 'by_name':
-        return a.name.localeCompare(b.name)
+        return a.product_name.localeCompare(b.product_name)
       default:
         return 0
     }
@@ -368,12 +368,14 @@ class Mainpage extends Component {
                           <div className="row">
                             {
                               this.productStore.search.display
-                                .filter(p => filters.length ? filters.some(f => {
-                                  if (/*p.allergens && */p.tags) {
-                                    return /*p.allergens.includes(f) && */p.tags.includes(f)
+                                .filter(p => filters.length ? !(filters.some(f => {
+                                  if (p.allergens && p.tags) {
+                                    let [t, v] = f.split(",");
+                                    if (t == "allergen") return p.allergens.includes(v);
+                                    if (t == "tag") return !p.tags.includes(v);
                                   }
                                   return true
-                                }) : true)
+                                })) : true)
                                 .map((product, index) => (
                                 <Product
                                   key={index}
