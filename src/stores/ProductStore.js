@@ -104,19 +104,16 @@ class ProductStore {
     return res.data;
   }
 
-  async getImpulseProducts(id, auth) {
+  async getImpulseProducts(auth) {
     let res;
     this.impulse_products = [];
 
     this.fetch = true;
 
-    // const url = id ? API_GET_IMPULSE_PRODUCTS + id : API_GET_IMPULSE_PRODUCTS;
-    const url = API_GET_IMPULSE_PRODUCTS;
-
     if (auth && auth.headers.Authorization != "Bearer undefined") {
-      res = await axios.get(`${url}`, auth);
+      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth);
     } else {
-      res = await axios.get(`${url}`);
+      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`);
     }
     const data = res.data;
 

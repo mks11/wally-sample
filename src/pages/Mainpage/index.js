@@ -152,7 +152,7 @@ class Mainpage extends Component {
         this.modalStore.toggleDelivery()
       } else {
         this.uiStore.toggleCartMobile(false)
-        this.routing.push('/checkout')
+        this.routing.push('/main/similar-products')
       }
     } else {
       this.uiStore.toggleCartMobile(false)

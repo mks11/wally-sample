@@ -136,13 +136,6 @@ class VendorProfile extends Component {
     }
   }
 
-  componentDidUpdate() {
-    const id = this.props.match.params.id;
-    if (this.id !== id) {
-      this.loadData();
-    }
-  }
-
   handleProductModal = (product_id, deliveryTimes) => {
     this.productStore
       .showModal(product_id, null, this.userStore.getDeliveryParams())
@@ -185,11 +178,11 @@ class VendorProfile extends Component {
           <div className="col-md-10 col-sm-8">
             <div className="row">
             {
-              this.vendorProfileStore.products.length
+              this.vendorProfileStore.products
                 ? this.vendorProfileStore.products
-                    .map((product, index) => (
+                    .map(product => (
                       <Product
-                        key={index}
+                        key={product.product_id}
                         product={product}
                         deliveryTimes={this.state.deliveryTimes}
                         onProductClick={this.handleProductModal}

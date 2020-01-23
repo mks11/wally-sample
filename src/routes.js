@@ -108,12 +108,12 @@ export default (
       <Route exact path="/about" component={About} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
-      {/* <Route exact path="/main/similar-products" component={SimilarProducts} /> */}
       <Route exact path="/checkout" component={Checkout} />
       <Route exact path="/giftcard" component={GiftCheckout} />
       <Route exact path="/main" component={Mainpage} />
-      <Route exact path="/main/:id" component={Mainpage} />
+      <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route exact path="/main/buyagain" component={Mainpage} />
+      <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/signup" component={Signup} />
       <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
