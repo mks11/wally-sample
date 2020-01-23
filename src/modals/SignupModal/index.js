@@ -176,9 +176,10 @@ class SignupModal extends Component {
             className={`btn btn-main mb-2 ${signupEmail ? 'active' : ''}`}
             onClick={this.handleSignUp}
           >
-            SIGN UP
+            JOIN WAITLIST
           </button>
-
+          <br></br>
+          <span className="mb-3">Received your confirmation email? Enter your unique pin below and complete the sign up process.</span>
           <div className="pin-input">
             <Input
               className="aw-input--control"
@@ -199,14 +200,6 @@ class SignupModal extends Component {
           </div>
 
           <Input
-            className="aw-input--control"
-            type="text"
-            name="name"
-            placeholder="Enter your name"
-            onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}
-          />
-          <Input
             className="aw-input--control mb-2"
             type="text"
             name="email"
@@ -214,6 +207,14 @@ class SignupModal extends Component {
             onKeyDown={this.handleKeySubmit}
             onChange={this.onValueChange}
             onBlur={this.handlePinVerification}
+          />
+          <Input
+            className="aw-input--control"
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            onKeyDown={this.handleKeySubmit}
+            onChange={this.onValueChange}
           />
           <Input
             className="aw-input--control"
@@ -238,7 +239,7 @@ class SignupModal extends Component {
             className={`btn btn-main ${(pin && name && email && password && !signupRequest && !pinError) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
-            SUBMIT
+            SIGN UP
           </button>
 
           <div className="fancy-spacing my-4">

@@ -474,7 +474,7 @@ class UserStore {
   }
 
   async verifyPin(pin, email) {
-    const res = await axios.get(`${API_PIN_VERIFICATION}?pin=${pin}&email=${email}`)
+    const res = await axios.get(`${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`)
     return res.data
   }
 }
