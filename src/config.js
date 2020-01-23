@@ -22,7 +22,8 @@ export const API_PAYMENT_REMOVE = BASE_URL + "/api/user/payment/";
 export const API_PURCHASE_GIFTCARD = BASE_URL + "/api/user/giftcard";
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + "/api/products/";
-export const API_GET_HISTORICAL_PRODUCTS = BASE_URL + "/api/products/historical";
+export const API_GET_HISTORICAL_PRODUCTS =
+  BASE_URL + "/api/products/historical";
 export const API_GET_PRODUCT_DETAIL = BASE_URL + "/api/product/";
 export const API_GET_PACKAGING_UNIT = BASE_URL + "/api/packaging/";
 export const API_RATE_PRODUCT = BASE_URL + "/api/products/";
@@ -34,7 +35,7 @@ export const API_REFRESH_INVENTORY = BASE_URL + "/api/products/refresh";
 export const API_GET_CURRENT_CART = BASE_URL + "/api/cart";
 export const API_EDIT_CURRENT_CART = BASE_URL + "/api/cart/";
 
-export const API_GET_IMPULSE_PRODUCTS = BASE_URL + "/api/products/associated";
+export const API_GET_IMPULSE_PRODUCTS = BASE_URL + "/api/products/associated/";
 
 export const API_CREATE_ORDER = BASE_URL + "/api/order";
 export const API_GET_ORDER_SUMMARY = BASE_URL + "/api/order/summary";
@@ -148,6 +149,9 @@ export const APP_URL = "https://thewallyshop.co";
 export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4";
 export const FB_KEY = "1634254033370820";
 
-export const PRODUCT_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-ecomm/";
-export const NUTRITIONAL_INFO_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
-export const PACKAGING_BASE_URL = "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";
+export const PRODUCT_BASE_URL =
+  "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-ecomm/";
+export const NUTRITIONAL_INFO_BASE_URL =
+  "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
+export const PACKAGING_BASE_URL =
+  "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";

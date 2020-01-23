@@ -16,6 +16,7 @@ const store = {
   ui: UiStore,
   content: ContentStore,
   product: ProductStore,
+  impulse_products: ProductStore,
   packagingUnit: PackagingUnitStore,
   modal: ModalStore,
   user: UserStore,

@@ -110,7 +110,8 @@ class ProductStore {
 
     this.fetch = true;
 
-    const url = id ? API_GET_IMPULSE_PRODUCTS + id : API_GET_IMPULSE_PRODUCTS;
+    // const url = id ? API_GET_IMPULSE_PRODUCTS + id : API_GET_IMPULSE_PRODUCTS;
+    const url = API_GET_IMPULSE_PRODUCTS;
 
     if (auth && auth.headers.Authorization != "Bearer undefined") {
       res = await axios.get(`${url}`, auth);
@@ -119,7 +120,7 @@ class ProductStore {
     }
     const data = res.data;
 
-    this.impulse_products = data;
+    this.impulse_products = data.products;
 
     this.path = data.path;
     this.sidebar = data.sidebar;
