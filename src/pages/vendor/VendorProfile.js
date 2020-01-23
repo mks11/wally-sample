@@ -1,15 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import ReactGA from "react-ga";
 import {
-  formatMoney,
   connect,
-  logEvent,
   logModalView,
   datesEqual
 } from "utils";
 
-import ProductList from "../Mainpage/ProductList";
+import Product from "../Mainpage/Product";
 
 class VendorProfile extends Component {
   constructor(props) {
@@ -28,9 +25,6 @@ class VendorProfile extends Component {
 
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
-      sidebar: [],
-      categoryTypeMode: "limit",
-      showMobileSearch: false
     };
 
     this.id = this.props.match.params.id;
@@ -49,36 +43,13 @@ class VendorProfile extends Component {
   }
 
   loadData() {
-    const id = this.props.match.params.id;
     const name = this.props.match.params.vendor_name;
 
-    this.vendorProfileStore
-      .loadVendorProfile(name)
-      .then(data => {
-        console.log(data);
-      })
+    this.vendorProfileStore.loadVendorProfile(name)
       .catch(e => {
         console.error("Failed to load vendor profile", e);
         this.modalStore.toggleModal("error");
       });
-
-    // this.vendorProfileStore
-    //   .loadVendorProducts(name)
-    //   .then(data => {
-    //     console.log(data);
-    //     // this.setState({ sidebar: this.productStore.sidebar });
-    //   })
-    //   .catch(e => {
-    //     console.error("Failed to load vendor products", e);
-    //     this.modalStore.toggleModal("error");
-    //   });
-
-    let categoryTypeMode = "all";
-    if (!this.id) {
-      categoryTypeMode = "limit";
-    }
-
-    this.setState({ categoryTypeMode });
 
     const deliveryData = this.userStore.getDeliveryParams();
 
@@ -173,33 +144,15 @@ class VendorProfile extends Component {
   }
 
   handleProductModal = (product_id, deliveryTimes) => {
-    if (
-      !this.userStore.status ||
-      (this.userStore.status && !this.userStore.user.is_ecomm)
-    ) {
-      if (!this.userStore.selectedDeliveryTime) {
-        logModalView("/delivery-options-window");
-        this.modalStore.toggleDelivery();
-        this.productStore.activeProductId = product_id;
-      } else {
-        this.productStore
-          .showModal(product_id, null, this.userStore.getDeliveryParams())
-          .then(data => {
-            this.userStore.adjustDeliveryTimes(
-              data.delivery_date,
-              deliveryTimes
-            );
-            this.modalStore.toggleModal("product");
-          });
-      }
-    } else {
-      this.productStore
-        .showModal(product_id, null, this.userStore.getDeliveryParams())
-        .then(data => {
-          this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
-          this.modalStore.toggleModal("product");
-        });
-    }
+    this.productStore
+      .showModal(product_id, null, this.userStore.getDeliveryParams())
+      .then(data => {
+        this.userStore.adjustDeliveryTimes(
+          data.delivery_date,
+          deliveryTimes
+        );
+        this.modalStore.toggleModal("product");
+      })
   };
 
   render() {
@@ -207,47 +160,44 @@ class VendorProfile extends Component {
 
     return (
       <div className="App">
+        {vendor ? (
+          <div className="container">
+            <div className="row justify-content-between">
+              <div className="col-md-6 col-xs-12">
+                <img src={vendor.logo_url} alt="" />
+              </div>
+
+              <div className="col-md-6 col-xs-12 text-left">
+                <h1>{vendor.name}</h1>
+                {vendor.city === null && (
+                  <h2>
+                    {vendor.city} | {vendor.state}
+                  </h2>
+                )}
+                <hr />
+                <p>{vendor.description}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="container">
-          <div className="row justify-content-between">
-            <div className="col-md-6 col-xs-12">
-              <img src={vendor.logo_url} alt="" />
+          <div className="col-md-10 col-sm-8">
+            <div className="row">
+            {
+              this.vendorProfileStore.products.length
+                ? this.vendorProfileStore.products
+                    .map((product, index) => (
+                      <Product
+                        key={index}
+                        product={product}
+                        deliveryTimes={this.state.deliveryTimes}
+                        onProductClick={this.handleProductModal}
+                      />
+                    ))
+                : null
+            }
             </div>
-
-            <div className="col-md-6 col-xs-12 text-left">
-              <h1>{vendor.name}</h1>
-              {vendor.city === null && (
-                <h2>
-                  {vendor.city} | {vendor.state}
-                </h2>
-              )}
-              <hr />
-              <p>{vendor.description}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="container">
-          <div className="row">
-            {this.vendorProfileStore.products.map((p, key) => (
-              <span className="col-sm-4" key={key}>
-                <p className="text-center">{p.product_name}</p>
-              </span>
-            ))}
-            <br />
-          </div>
-        </div> */}
-
-        <div className="col-md-10 col-sm-8">
-          <div className="product-content-right">
-            {this.vendorProfileStore.products.map((product, key) => (
-              <ProductList
-                key={key}
-                display={product}
-                mode={this.state.categoryTypeMode}
-                deliveryTimes={this.state.deliveryTimes}
-                onProductClick={this.handleProductModal}
-              />
-            ))}
           </div>
         </div>
       </div>
