@@ -589,12 +589,11 @@ class Checkout extends Component {
                   />
                 </React.Fragment>
 
-                {this.state.isEcomm &&
-                  <Returns
-                    title="Returns"
-                    default={this.userStore.user.pickup_notes || null}
-                    onReturnChange={this.handleReturnSet}
-                  />}
+                <Returns
+                  title="Returns"
+                  default={this.userStore.user.pickup_notes || null}
+                  onReturnChange={this.handleReturnSet}
+                />
               </div>
             </div>
             <div className="">
@@ -662,17 +661,10 @@ class Checkout extends Component {
                         <span>Subtotal</span>
                         <span>{formatMoney (order.subtotal / 100)}</span>
                       </div>
-                      {order.tax_amount === 0
-                        ? null
-                        : <div className="summary">
-                            <span>Taxes</span>
-                            <span>{formatMoney (order.tax_amount / 100)}</span>
-                          </div>}
-                      {order.service_amount === 0
-                        ? null
-                        : <ServiceSummary
-                            value={formatMoney (order.service_amount / 100)}
-                          />}
+                      <div className="summary">
+                        <span>Taxes</span>
+                        <span>{formatMoney (order.tax_amount / 100)}</span>
+                      </div>
 
                       {order.delivery_amount === 0
                         ? null
@@ -694,27 +686,21 @@ class Checkout extends Component {
                               -{formatMoney (order.promo_discount / 100)}
                             </span>
                           </div>}
+
+                      <div className="summary">
+                        <span>Packaging Deposit</span>
+                        <span>{formatMoney (order.packaging_deposit / 100)}</span>
+                      </div>
+
                       {order.applied_store_credit === 0
                         ? null
                         : <div className="summary">
-                            <span>Applied store credit</span>
+                            <span>Applied Packaging Deposit</span>
                             <span>
                               -{formatMoney (order.applied_store_credit / 100)}
                             </span>
                           </div>}
 
-                      <TippingSummary value={this.updateTipAmount ()} />
-
-                      {this.state.appliedStoreCredit
-                        ? <div className="summary">
-                            <span>Store credit applied</span>
-                            <span>
-                              {formatMoney (
-                                this.state.appliedStoreCreditAmount / 100
-                              )}
-                            </span>
-                          </div>
-                        : null}
                     </div>
 
                     <div className="item-extras">
