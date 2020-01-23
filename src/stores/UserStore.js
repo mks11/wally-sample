@@ -468,7 +468,7 @@ class UserStore {
   }
 
   async getWaitlistInfo(email, ref) {
-    const reqUrl = ref ? `${API_WAITLIST_INFO}?user_email=${email}&reference=${ref}` : `${API_WAITLIST_INFO}?user_email=${email}`
+    const reqUrl = ref ? `${API_WAITLIST_INFO}?user_email=${email}&referral_code=${ref}` : `${API_WAITLIST_INFO}?user_email=${email}`
     const res = await axios.get(reqUrl)
     return res.data
   }
