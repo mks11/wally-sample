@@ -15,6 +15,7 @@ import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
 import Filters from './ProductTop/Filters'
+import CategoriesList from './CategoriesList'
 import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
@@ -60,7 +61,7 @@ class Mainpage extends Component {
     this.id = id
 
     if (this.id === 'buyagain') {
-      this.productStore.getHistoricalProducts()
+      this.productStore.getHistoricalProducts(this.userStore.getHeaderAuth())
         .catch((e) => console.error('Failed to load historical products: ', e))
     } else {
       let categoryTypeMode = 'all'
@@ -288,38 +289,27 @@ class Mainpage extends Component {
           <div className="row ">
             <div className="col-md-2 col-sm-4">
                 <div className="product-content-left">
-                  <div className="mb-4">
-                    <h4>The Wally Shop</h4>
-                  </div>
-                  <Filters
-                    onSelect={this.handleFilterUpdate}
-                    vertical
-                  />
-                    {
-                      sidebar.map((s,i) => {
-                        return (
-                          <div className="mb-0" key={i}>
-                            <h4><Link to={`/main/${s.category_id}`} className={`${id === s.category_id ? '' : ''}`} replace>{s.name}</Link></h4>
-                            <ul>
-                              {s.categories && s.categories.map((sc, idx) => (
-                                <li key={idx}><Link to={`/main/${sc.category_id || ''}`}
-                                    className={id === sc.category_id ? "text-violet": ""}
-                                  >{sc.name}</Link></li>
-                              ) )}
-                            </ul>
-                          </div>
-                        )
-                      })
-                    }
-
+                  <div className="product-content-left-scroll">
+                    <div className="mb-4">
+                      <h4>The Wally Shop</h4>
+                    </div>
+                    <Filters
+                      onSelect={this.handleFilterUpdate}
+                      vertical
+                    />
+                    <CategoriesList
+                      selectedId={id}
+                      list={sidebar}
+                    />
                     <br/>
                     <div>
                       {ads1 && <img src={APP_URL + ads1.image} alt="" />}
                     </div>
                     <br/>
                   </div>
-
                 </div>
+
+              </div>
 
               {
                 id === 'buyagain' && !this.productStore.search.state ? (

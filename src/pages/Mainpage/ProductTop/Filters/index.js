@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'utils'
 
 const FILTERS_DATA = [
-  { title: 'Dairy Free', value: 'dairy' },
-  { title: 'Gluten Free', value: 'gluten' },
-  { title: 'Peanut Free', value: 'peanuts' },
-  { title: 'Tree Nuts Free', value: 'tree nuts' },
+  // { title: 'Dairy Free', value: 'dairy' },
+  // { title: 'Gluten Free', value: 'gluten' },
+  // { title: 'Peanut Free', value: 'peanuts' },
+  // { title: 'Tree Nuts Free', value: 'tree nuts' },
   { title: 'Organic', value: 'organic' },
   { title: 'Non GMO', value: 'non gmo' },
   { title: 'Fair Trade', value: 'fair trade' },
