@@ -145,6 +145,10 @@
   font-style: normal;
 }
 
+.pink {
+  color: #fc1aff;
+}
+
 /* SofiaPro Font */
 @font-face {
   font-family: 'Sofia Pro';
@@ -216,7 +220,6 @@
   font-weight: normal;
   font-style: normal;
 }
-
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -466,7 +469,7 @@ button:hover,
   color: #fff;
   background-color: #000;
   border-color: #000;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .btn-inline-black:hover {
@@ -488,9 +491,9 @@ button:hover,
 .btn-inline-black:active,
 .btn-inline-black.active,
 .show > .btn-inline-black.dropdown-toggle {
-  color: #263a52;
-  background-color: #263a52;
-  border-color: #263a52;
+  color: #000;
+  background-color: #000;
+  border-color: #000;
 }
 
 .btn-inline-black:focus,
@@ -508,8 +511,10 @@ button:hover,
   transition: 0.15s background-color;
   width: 250px;
   text-align: center;
-  background-color: #78c98d;
-  border-radius: 12px;
+  background-color:#8ca3ff;
+  -webkit-border-radius: 500px;
+  -moz-border-radius: 500px;
+  border-radius: 500px;
 }
 
 .zip-open #btn-hero--submit:after {
@@ -627,6 +632,30 @@ button:hover,
   z-index: 999;
   background-color: rgba(255, 255, 255, 1);
   transition: 0.27s all;
+}
+
+.aw-absolute {
+  position: absolute;
+}
+
+.aw-align-self-center {
+  align-self: center;
+}
+
+.util-font-size-13 {
+  font-size: 13px;
+}
+
+.util-font-size-14 {
+  font-size: 14px;
+}
+
+.util-relative {
+  position: relative;
+}
+
+.util-offset-top--30 {
+  top: -30px;
 }
 
 .aw-header .btn-login,
@@ -872,6 +901,7 @@ button:hover,
 }
 
 .aw-nav a {
+  font-weight: bold;
   color: #000;
 }
 
@@ -1073,7 +1103,17 @@ body {
 }
 
 .aw-hero h1 {
-  color: #39393b;
+  color: #4940db;
+  margin-bottom: 25px;
+}
+
+.aw-hero a {
+  color: #fc1aff;
+}
+
+.aw-hero-construct h1 {
+  color: #4940DB;
+
   margin-bottom: 25px;
 }
 
@@ -1328,8 +1368,8 @@ body {
 }
 
 .btn-sm.active {
-  background-color: #78C98D;
-  border-color: #78C98D;
+  background-color: #78c98d;
+  border-color: #78c98d;
   border: none;
 }
 
@@ -1638,7 +1678,7 @@ input {
   display: none;
 }
 
-.packaging-quantity{
+.packaging-quantity {
   font-size: 10px;
   width: 50%;
 }

@@ -92,8 +92,6 @@ class Checkout extends Component {
 
       placeOrderRequest: false,
 
-      order_notes: '',
-      allergy_notes: '',
       hasReturns: false,
       pickupNotes: '',
     };
@@ -319,7 +317,7 @@ class Checkout extends Component {
   }
 
   handlePlaceOrder () {
-    const {placeOrderRequest, order_notes, allergy_notes} = this.state;
+    const { placeOrderRequest } = this.state;
 
     if (placeOrderRequest) {
       return;
@@ -353,8 +351,6 @@ class Checkout extends Component {
           payment_id: this.state.selectedPayment,
           delivery_time: deliveryTime,
           tip_amount: this.parseAppliedTip (),
-          order_notes,
-          allergy_notes,
           has_returns: this.state.hasReturns,
           pickup_notes: this.state.pickupNotes,
         },
@@ -505,14 +501,6 @@ class Checkout extends Component {
     return tipAmount;
   }
 
-  handleDeliveryNotesSubmit = notes => {
-    this.setState ({order_notes: notes});
-  };
-
-  handleAllergyNotesSubmit = notes => {
-    this.setState ({allergy_notes: notes});
-  };
-
   render () {
     if (!this.checkoutStore.order || !this.userStore.user) {
       return null;
@@ -601,17 +589,6 @@ class Checkout extends Component {
                   />
                 </React.Fragment>
 
-                <Notes
-                  title="Order Notes"
-                  placeholder="Any comments regarding your order, e.g., prefer ripe avocados? Leave them here!"
-                  onSubmit={this.handleDeliveryNotesSubmit}
-                />
-                <Notes
-                  default={this.userStore.user.allergy_notes || null}
-                  title="Any Allergens?"
-                  placeholder="Any allergies you want us to know about?"
-                  onSubmit={this.handleAllergyNotesSubmit}
-                />
                 <Returns
                   title="Returns"
                   default={this.userStore.user.pickup_notes || null}
@@ -684,17 +661,10 @@ class Checkout extends Component {
                         <span>Subtotal</span>
                         <span>{formatMoney (order.subtotal / 100)}</span>
                       </div>
-                      {order.tax_amount === 0
-                        ? null
-                        : <div className="summary">
-                            <span>Taxes</span>
-                            <span>{formatMoney (order.tax_amount / 100)}</span>
-                          </div>}
-                      {order.service_amount === 0
-                        ? null
-                        : <ServiceSummary
-                            value={formatMoney (order.service_amount / 100)}
-                          />}
+                      <div className="summary">
+                        <span>Taxes</span>
+                        <span>{formatMoney (order.tax_amount / 100)}</span>
+                      </div>
 
                       {order.delivery_amount === 0
                         ? null
@@ -716,27 +686,21 @@ class Checkout extends Component {
                               -{formatMoney (order.promo_discount / 100)}
                             </span>
                           </div>}
+
+                      <div className="summary">
+                        <span>Packaging Deposit</span>
+                        <span>{formatMoney (order.packaging_deposit / 100)}</span>
+                      </div>
+
                       {order.applied_store_credit === 0
                         ? null
                         : <div className="summary">
-                            <span>Applied store credit</span>
+                            <span>Applied Packaging Deposit</span>
                             <span>
                               -{formatMoney (order.applied_store_credit / 100)}
                             </span>
                           </div>}
 
-                      <TippingSummary value={this.updateTipAmount ()} />
-
-                      {this.state.appliedStoreCredit
-                        ? <div className="summary">
-                            <span>Store credit applied</span>
-                            <span>
-                              {formatMoney (
-                                this.state.appliedStoreCreditAmount / 100
-                              )}
-                            </span>
-                          </div>
-                        : null}
                     </div>
 
                     <div className="item-extras">

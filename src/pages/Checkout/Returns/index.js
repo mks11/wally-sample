@@ -65,9 +65,10 @@ class Returns extends Component {
       'Guard House',
       'Third party',
       'Warehouse',
+      'None'
     ];
     if (this.props.default) {
-      pickupLocations.unshift (this.props.default);
+      pickupLocations = pickupLocations.filter(p => p != this.props.default);
     }
 
     let returnDropdownClass = 'dropdown-menu';

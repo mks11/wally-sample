@@ -13,8 +13,6 @@ class Title extends Component {
                                                 </div>
                                         </div>
                                 </div>
-
-                                <hr className="line"  />
                         </Fragment>
                 )
         }
