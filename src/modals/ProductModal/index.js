@@ -170,16 +170,8 @@ class ProductModal extends Component {
     console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
-    const unit_type = activeProduct.unit_type || activeProduct.price_unit
     
-    const finalUnitType =
-      (activeProduct.buy_by_packaging && packagingType)
-        ? 'packaging'
-        : unit_type
-    const packaging = activeProduct.packagings[0] ? activeProduct.packagings[0] : null
-    const defaultPackagingId = packaging ? packaging.id : null
-    const customPackaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType)._id : null
-    const packagingId = customPackaging || defaultPackagingId
+    const finalUnitType = activeProduct.unit_type
 
     const items = [
       {
@@ -188,7 +180,6 @@ class ProductModal extends Component {
         inventory_id: inventory._id,
         sub_pref: this.state.selectedSubtitute,
         unit_type: finalUnitType,
-        packaging_id: packagingId,
       }
     ]
 

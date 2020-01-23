@@ -57,8 +57,8 @@ const MobileSearch = props => {
           <ul className="category-mobile-wrap">
             {
               sidebar.map((s,i) => {
-                const parentSidebarClass = id === s.cat_id ? 'text-violet' : ''
-                const link = `/main/${s.cat_id}`
+                const parentSidebarClass = id === s.category_id ? 'text-violet' : ''
+                const link = `/main/${s.category_id}`
 
                 return (
                   <li key={i}>
@@ -68,16 +68,16 @@ const MobileSearch = props => {
                         className={parentSidebarClass}
                         onClick={onCategoryClick}
                         replace
-                      >{s.cat_name}</Link>
+                      >{s.name}</Link>
                     </div>
                     <ul>
-                      {s.sub_cats && s.sub_cats.map((sc, idx) => (
+                      {s.categories && s.categories.map((sc, idx) => (
                         <li key={idx}>
                         <Link
-                          to={`/main/${sc.cat_id || ''}`}
-                          className={id === sc.cat_id ? "text-violet": ""}
+                          to={`/main/${sc.category_id || ''}`}
+                          className={id === sc.category_id ? "text-violet": ""}
                           onClick={onCategoryClick}
-                        >{sc.cat_name}</Link></li>
+                        >{sc.name}</Link></li>
                       ) )}
                     </ul>
                   </li>

@@ -15,6 +15,7 @@ import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
 import Filters from './ProductTop/Filters'
+import CategoriesList from './CategoriesList'
 import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
@@ -60,7 +61,7 @@ class Mainpage extends Component {
     this.id = id
 
     if (this.id === 'buyagain') {
-      this.productStore.getHistoricalProducts()
+      this.productStore.getHistoricalProducts(this.userStore.getHeaderAuth())
         .catch((e) => console.error('Failed to load historical products: ', e))
     } else {
       let categoryTypeMode = 'all'
@@ -246,11 +247,11 @@ class Mainpage extends Component {
   sortByType = (a, b) => {
     switch(this.state.sortType) {
       case 'times_bought':
-        return a.times_bought - b.times_bought
+        return b.times_bought - a.times_bought
       case 'last_ordered':
-        return a.last_ordered - b.last_ordered
+        return Date(a.last_ordered) <= Date(b.last_ordered)
       case 'by_name':
-        return a.name.localeCompare(b.name)
+        return a.product_name.localeCompare(b.product_name)
       default:
         return 0
     }
@@ -288,38 +289,27 @@ class Mainpage extends Component {
           <div className="row ">
             <div className="col-md-2 col-sm-4">
                 <div className="product-content-left">
-                  <div className="mb-4">
-                    <h4>The Wally Shop</h4>
-                  </div>
-                  <Filters
-                    onSelect={this.handleFilterUpdate}
-                    vertical
-                  />
-                    {
-                      sidebar.map((s,i) => {
-                        return (
-                          <div className="mb-0" key={i}>
-                            <h4><Link to={`/main/${s.cat_id}`} className={`${id === s.cat_id ? '' : ''}`} replace>{s.cat_name}</Link></h4>
-                            <ul>
-                              {s.subcats && s.subcats.map((sc, idx) => (
-                                <li key={idx}><Link to={`/main/${sc.cat_id || ''}`}
-                                    className={id === sc.cat_id ? "text-violet": ""}
-                                  >{sc.cat_name}</Link></li>
-                              ) )}
-                            </ul>
-                          </div>
-                        )
-                      })
-                    }
-
+                  <div className="product-content-left-scroll">
+                    <div className="mb-4">
+                      <h4>The Wally Shop</h4>
+                    </div>
+                    <Filters
+                      onSelect={this.handleFilterUpdate}
+                      vertical
+                    />
+                    <CategoriesList
+                      selectedId={id}
+                      list={sidebar}
+                    />
                     <br/>
                     <div>
                       {ads1 && <img src={APP_URL + ads1.image} alt="" />}
                     </div>
                     <br/>
                   </div>
-
                 </div>
+
+              </div>
 
               {
                 id === 'buyagain' && !this.productStore.search.state ? (
@@ -378,12 +368,14 @@ class Mainpage extends Component {
                           <div className="row">
                             {
                               this.productStore.search.display
-                                .filter(p => filters.length ? filters.some(f => {
+                                .filter(p => filters.length ? !(filters.some(f => {
                                   if (p.allergens && p.tags) {
-                                    return !p.allergens.includes(f) && !p.tags.includes(f)
+                                    let [t, v] = f.split(",");
+                                    if (t == "allergen") return p.allergens.includes(v);
+                                    if (t == "tag") return !p.tags.includes(v);
                                   }
                                   return true
-                                }) : true)
+                                })) : true)
                                 .map((product, index) => (
                                 <Product
                                   key={index}

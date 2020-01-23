@@ -75,7 +75,7 @@ class LoginModal extends Component {
 
   handleLogin = e => {
     logModalView('/signup-zip')
-    this.props.switchTo('zip')
+    this.props.switchTo('signup')
   }
 
   handleInputChange = e => {

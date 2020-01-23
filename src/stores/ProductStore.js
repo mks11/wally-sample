@@ -1,5 +1,5 @@
 import {observable, decorate, action} from 'mobx'
-import { 
+import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
@@ -91,8 +91,13 @@ class ProductStore {
     return res.data
   }
 
-  async getHistoricalProducts() {
-    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+  async getHistoricalProducts(auth) {
+    let res;
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    } else {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+    }
     this.historical_products = res.data.products
 
     return res.data.products
