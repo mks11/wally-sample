@@ -23,7 +23,7 @@ class TopNav extends Component {
   handleSignup() {
     logModalView('/signup-zip')
     this.routing.push('/main')
-    this.modalStore.toggleModal('zip')
+    this.modalStore.toggleModal('signup')
   }
 
   handleLogo() {

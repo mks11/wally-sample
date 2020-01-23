@@ -86,16 +86,21 @@ border-radius:0;}
 .aw-header .container{padding-top: 10px;}
 .aw-logo{height:50px;}
 .aw-logo svg{width:auto;height:50px;}
-.aw-header:not(.navbar-white) .cls-1{fill:#fff;}
+.aw-header:not(.navbar-white) .cls-1{fill:#fae1ff;}
 .aw-header:not(.navbar-white) nav.aw-nav a{color:#fff;}
 .aw-header:not(.navbar-white) .aw-logo--shape{fill: #323f93}
 .aw-header:not(.navbar-white) .btn-outline-black{border-color:#fff;color:#fff;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
 /* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
+<<<<<<< HEAD
+.aw-header, .aw-header.navbar-white{background-color: #fae1ff;}
+=======
 .aw-header, .aw-header.navbar-white{background-color: #fff;}
+>>>>>>> packing-combined-mk
 /* .navbar-toggler {
 } */
+
 .aw-header.navbar-white .navbar-toggler-icon {
   background-image: url("../images/hamburger.png");
   max-width: 23px;
@@ -148,21 +153,37 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
+/* <<<<<<HEAD
+.logo-text-desktop{height:60px;padding-top:0px;}
+.logo-text-mobile{display:none;padding-top:12px;}
+=======*/
 .logo-text-desktop{height:35px;transition: 300ms all;}
 .logo-text-mobile{display:none;transition: 300ms all;}
+/*>>>>>>> packing-combined-mk*/
 
 /* Homepage */
-.landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+/* .landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
+.landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
+.landing-section-construct.mobile{background-image:url("../images/under-construction-mobile.jpg");}
+.landing-section-construct.mobile-horiz{background-image:url("../images/under-construction-mobile-horiz.jpg");}
 .landing-section.mobile{background-image:url("../images/wally-home-banner-wood-mobile.jpg");}
-.landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");}
-.landing-section h1{color:#fff;font-size:45px;}
+.landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");} */
+
+.landing-section{background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 100px 0 0 0;}
+.landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
+.landing-section-construct.mobile{background-image:url("../images/under-construction-mobile.jpg");}
+.landing-section-construct.mobile-horiz{background-image:url("../images/under-construction-mobile-horiz.jpg");}
+.landing-section.mobile{}
+.landing-section.mobile-horiz{}
+.landing-section h1, h2{font-family: 'Aleo';}
+.landing-section h1{color:rgb(0, 0, 0);font-size:45px;}
 .landing-section h2{
   font-size: 20px;
   line-height: 32px;
-  color: #fff;
+  color: rgb(0, 0, 0);
 }
 .landing-section h2.left{text-align: left;}
-.landing-section h5{font-size:16px;color:#fff;}
+.landing-section h5{font-size:16px;color:rgb(0, 0, 0);}
 .aw-hero input.zip {    border: none;
   text-align: left;
   margin: 15px auto;
@@ -173,7 +194,9 @@ nav.aw-nav a.dropdown-item:hover::after {
   border: 1px solid #000;
 border-radius: 0;}
 
-.aw-hero .container-fluid > .row{height:calc(60vh - 70px);}
+.landing-section img{height:135px;display:block;margin-right:auto;margin-left:auto;margin-bottom: 30px;}
+
+.aw-hero .container-fluid > .row{height:calc(60% - 70px);}
 .aw-header .btn-top-account {
   padding-left: 0;
 }
@@ -192,6 +215,9 @@ border-radius: 0;}
   top: 50%;
   transform: translateY(-50%);
   font-size: 2.2rem;
+}
+.homepage {
+  background-image: linear-gradient(#fae1ff, #fff, #fae1ff);
 }
 .homepage-info-section {
   background-color: #bbb0a6;
@@ -249,6 +275,13 @@ border-radius: 0;}
   font-size: 20px;
   color:white;
   margin-bottom: 10px;
+}
+
+@media (max-width: 991px) {
+  .receive-item {
+    float: right;
+    text-align: right;
+  }
 }
 
 .howto-item{text-align: center;margin-bottom: 30px;padding-left:5px;padding-right:5px;}
@@ -1005,7 +1038,7 @@ ul.list-payments li{
 }
 
 .login-wrap, .signup-wrap {
-  width: 62%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -1034,7 +1067,7 @@ ul.list-payments li{
 }
 .login-wrap span, .signup-wrap span {
   display: block;
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .login-wrap a.forgot-text {
@@ -2037,6 +2070,7 @@ a {
     top: unset;
     bottom: 28%;
   }
+
   .btn-login {
     border: 0;
     float: right;
@@ -2944,6 +2978,63 @@ span.category-card-img {
   margin-top: -25px;
 }
 
+.waitinglist-modal {
+  background: rgb(215,232,245);
+  background: linear-gradient(180deg, rgba(215,232,245,1) 0%, rgba(249,251,253,1) 100%);
+  padding: 30px;
+}
+.waitinglist-content {
+  text-align: center;
+}
+.waitinglist-content .dcc {
+  height: 140px !important;
+  width: 80px !important;
+  font-size: 140px !important;
+}
+.waitinglist-content .dcc .tile {
+  height: 70px !important;
+  width: 80px !important;
+}
+.waitinglist-content .dcc .tile.front {
+  background-color: #3c2dbf !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.waitinglist-content .dcc .tile.back {
+  background: rgb(108,85,246)!important;
+  background: linear-gradient(180deg, rgba(108,85,246,1) 0%, rgba(75,57,244,1) 28%)!important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+.waitinglist-content .dcc .hinge {
+  width: 80px !important;
+  top: 70px !important;
+  border-bottom: none!important;
+  box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.7)!important;
+}
+.waitinglist-content .dcc .digit {
+  height: 70px !important;
+}
+.waitinglist-content .dcc .back .digit {
+  padding-bottom: 70px !important;
+}
+#waitingListCounter {
+  display: inline-block;
+}
+#waitingListCounter * {
+  box-sizing: content-box;
+}
+
+
+.pin-input {
+  position: relative;
+}
+.pin-input-ok {
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  font-size: 20px!important;
+}
 
 
 .filters {
