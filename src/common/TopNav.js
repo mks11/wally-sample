@@ -127,7 +127,7 @@ class TopNav extends Component {
       headerWrapClass += ' top-bar-open'
     }
 
-    const isLandingPage = this.routing.location.pathname === '/'
+    const isLandingPage = this.routing.location.pathname === '/main'
 
     return (
       <div className={headerWrapClass}>

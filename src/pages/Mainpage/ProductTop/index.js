@@ -51,7 +51,7 @@ class ProductTop extends Component {
   }
 
   calculateSticyPosition = () => {
-    const element =  document.getElementsByClassName('carousel')[0]
+    const element = document.getElementsByClassName("aw-header")[0]
     const newSticky = element ? element.offsetHeight : 0
     this.setState({
       sticky: newSticky
@@ -61,8 +61,7 @@ class ProductTop extends Component {
   handleFixedTop = () => {
     const $ = window.$
     const { sticky } = this.state
-    const isMobile = window.innerWidth <= 576 || (window.innerWidth <= 767 && window.innerWidth > 576)
-    const stickyPos = isMobile ? 0 : sticky
+    const stickyPos = sticky
     if (window.pageYOffset >= stickyPos) {
       $('.product-top').addClass('fixed');
     } else {
