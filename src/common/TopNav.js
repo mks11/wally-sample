@@ -127,7 +127,7 @@ class TopNav extends Component {
       headerWrapClass += ' top-bar-open'
     }
 
-    const isLandingPage = this.routing.location.pathname === '/main'
+    const isMainPage = this.routing.location.pathname === '/main'
 
     return (
       <div className={headerWrapClass}>
@@ -217,7 +217,7 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
-        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isLandingPage ? 'aw-absolute' : ''}`}>
+        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isMainPage ? 'aw-absolute util-bg-color-white' : ''}`}>
           {
           ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
             <div className={topBarClass}>

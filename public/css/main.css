@@ -658,6 +658,9 @@ button:hover,
   top: -30px;
 }
 
+.util-bg-color-white {
+  background-color: #fff !important;
+}
 .aw-header .btn-login,
 .aw-header .btn-sign-up {
   font-weight: bold;
