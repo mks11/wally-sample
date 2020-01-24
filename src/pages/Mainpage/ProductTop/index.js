@@ -76,10 +76,10 @@ class ProductTop extends Component {
 
   handleCheckout = () => {
     if (this.userStore.status) {
-      if (!this.userStore.selectedDeliveryTime) {
+      if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
         this.modalStore.toggleDelivery()
       } else {
-        this.routing.push('/checkout')
+        this.routing.push('/main/similar-products')
       }
     } else {
       this.modalStore.toggleModal('login')
@@ -107,7 +107,7 @@ class ProductTop extends Component {
     const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
 
     const dataMap = {
-      name: newContactName, 
+      name: newContactName,
       state: newState,
       delivery_notes: newDeliveryNotes,
       zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
@@ -157,7 +157,7 @@ class ProductTop extends Component {
     this.checkoutStore.getDeliveryTimes().then(() => {
       this.modalStore.showDeliveryChange('address', {
         address: this.state.selectedAddress,
-        times: this.checkoutStore.deliveryTimes 
+        times: this.checkoutStore.deliveryTimes
       })
     })
   }
@@ -190,6 +190,10 @@ class ProductTop extends Component {
     this.uiStore.hideBackdrop()
   }
 
+  handleFiltersSelect = values => {
+    this.props.onFilterUpdate(values)
+  }
+
   render() {
     const {
       selectedAddressChanged,
@@ -203,14 +207,22 @@ class ProductTop extends Component {
       <div className="product-top">
         <Container>
           <Row>
-            <Col xs="auto" className="d-none d-md-block bdr-right">
+            <Col
+              xs="auto"
+              className="pr-0 d-md-none d-block small-logo"
+            >
+              <Link to="/main">
+                <img src="/images/logo.png" height="40" />
+              </Link>
+            </Col>
+            {/* <Col xs="auto" className="d-none d-md-block bdr-right">
               <div
                 className="dropdown-address d-flex"
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
               >
                 <i className="fa fa-map-marker bar-icon" />
-                { 
+                {
                   this.userStore.selectedDeliveryAddress &&
                   <span className="dropdown-details align-self-center">{this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}</span>
                 }
@@ -229,7 +241,7 @@ class ProductTop extends Component {
                       button={false}
                       lock={false}
                       selected={
-                        this.userStore.selectedDeliveryAddress 
+                        this.userStore.selectedDeliveryAddress
                           ? this.userStore.selectedDeliveryAddress.address_id
                           : this.userStore.user
                             ? this.userStore.user.preferred_address
@@ -281,7 +293,7 @@ class ProductTop extends Component {
                   <button className={`btn btn-main ${selectedTimeChanged ? 'active' : ''}`} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
                 </div>
               </div>
-            </Col>
+            </Col> */}
             <Col xs={2} className="d-none d-md-block bdr-right">
               <h3
                 className="dropdown-categories"
@@ -303,34 +315,41 @@ class ProductTop extends Component {
                     onClick={onCategoryClick}
                   >All Categories</Link>
                   {
-                    this.productStore.categories.map((s,i) => (
-                      (!s.parent_id && s.cat_id.length <= 3) &&
-                        <Link
-                          to={"/main/"+ (s.cat_id ? s.cat_id:'')}
-                          className="dropdown-item"
-                          key={i}
-                          onClick={onCategoryClick}
-                        >{s.cat_name}</Link>
+                    this.productStore.categories.map(s => (
+                      <Link
+                        to={`/main/${s.cat_id ? s.cat_id : ''}`}
+                        className="dropdown-item"
+                        key={s.cat_id}
+                        onClick={onCategoryClick}
+                      >{s.cat_name}</Link>
                     ))
                   }
                 </div>
               </div>
             </Col>
-            <Col className="d-none d-md-block">
+            <Col>
               <div className="d-flex align-items-start">
                 <SearchBar
                   onSearch={onSearch}
                 />
-                <CartDropdown
-                  ui ={this.uiStore}
-                  cart={this.checkoutStore.cart}
-                  onCheckout={this.handleCheckout}
-                  onEdit={this.handleEdit}
-                  onDelete={this.handleDelete}
-                />
+                <Link
+                  className="d-none d-md-block ml-3"
+                  to="/main/buyagain"
+                >
+                  <img src="/images/logo.png" height="40" />
+                </Link>
+                <span className="d-none d-md-block">
+                  <CartDropdown
+                    ui ={this.uiStore}
+                    cart={this.checkoutStore.cart}
+                    onCheckout={this.handleCheckout}
+                    onEdit={this.handleEdit}
+                    onDelete={this.handleDelete}
+                  />
+                </span>
               </div>
             </Col>
-            <Col xs="auto" className="d-block d-md-none">
+            {/* <Col xs="auto" className="d-block d-md-none">
               <div
                 className="dropdown-time d-flex"
                 onClick={() => this.modalStore.toggleDelivery()}
@@ -344,7 +363,7 @@ class ProductTop extends Component {
                   }
                 </span>
               </div>
-            </Col>
+            </Col> */}
             <Col xs="auto" className="d-block d-md-none ml-auto">
               <button
                 className="btn btn-transparent"

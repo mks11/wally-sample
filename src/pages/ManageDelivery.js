@@ -55,7 +55,7 @@ class ManageDelivery extends Component {
     const options = this.userStore.getHeaderAuth()
     this.setState({timeframe})
     this.adminStore.getRoutes(timeframe, options)
-  }
+  };
 
   loadOrders = (routeId) => {
     const options = this.userStore.getHeaderAuth()

@@ -6,6 +6,7 @@ class ModalStore {
   isOpen = false
   modalId = null
   msg = null
+  modalData = null
 
   product = false
   productId = null
@@ -20,6 +21,9 @@ class ModalStore {
   deliveryChangeData = null
 
   addonsFirst = false
+
+  packaging = false
+  missing = false
 
   toggleDelivery() {
     this.delivery = !this.delivery
@@ -37,20 +41,28 @@ class ModalStore {
     this.deliveryChangeData = null
   }
 
-  toggleModal(modalId, msg = null) {
+  toggleModal(modalId, msg = null, data = null) {
     if (!this.modalPull.length) {
       this.switchModal(modalId)
       this.isOpen = !this.isOpen
     }
-    
+
     if(modalId && !this.modalPull.includes(modalId)) {
       this.modalPull.push(modalId)
     }
     this.msg = msg
+    this.modalData = data
   }
 
-  switchModal(modalId) {
+  switchModal(modalId, msg, data) {
     this.modalId = modalId || null
+
+    if (msg) {
+      this.msg = msg
+    }
+    if (data) {
+      this.modalData = data
+    }
   }
 
   toggleProduct(id) {
@@ -77,6 +89,14 @@ class ModalStore {
   toggleAddonsFirst() {
     this.addonsFirst = !this.addonsFirst
   }
+
+  togglePackaging = () => {
+    this.packaging = !this.packaging
+  }
+
+  toggleMissing = () => {
+    this.missing = !this.missing
+  }
 }
 
 decorate(ModalStore, {
@@ -84,6 +104,7 @@ decorate(ModalStore, {
   isOpen: observable,
   modalId: observable,
   msg: observable,
+  modalData: observable,
   toggleModal: action,
   switchModal: action,
 
@@ -97,6 +118,8 @@ decorate(ModalStore, {
   delivery: observable,
   deliveryChange: observable,
   addonsFirst: observable,
+  packaging: observable,
+  missing: observable,
 
   showDeliveryChange: action,
   hideDeliveryChange: action,
@@ -104,6 +127,8 @@ decorate(ModalStore, {
   toggleChangeFarm: action,
   toggleChangePrice: action,
   toggleDelivery: action,
+  togglePackaging: action,
+  toggleMissing: action,
 })
 
 

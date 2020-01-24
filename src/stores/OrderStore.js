@@ -1,5 +1,5 @@
 import {observable, decorate, action} from 'mobx'
-import { 
+import {
   API_GET_ORDERS,
   API_SUBMIT_ISSUE,
   API_SUBMIT_FEEDBACK,

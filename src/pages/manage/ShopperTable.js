@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import StatusDropdown from '../../common/StatusDropdown';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,8 +13,10 @@ import {Button} from "reactstrap"
 class ShopperTable extends Component {
   constructor(props) {
     super(props)
+
     this.state = {}
     this.adminStore = this.props.store.admin
+    this.userStore = this.props.store.user
   }
 
   onEditClick = (e) => {
@@ -29,23 +32,32 @@ class ShopperTable extends Component {
     this.adminStore.updateShopItem(timeframe, productId, rest)
   }
 
+  onSelect = (id, selectedStatus) => {
+    this.setState({ [id]: selectedStatus })
+  }
+
+  onUpdateClick = (shopitem_id, inventory_id, product_id, e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log(this.state);
+    const { timeframe } = this.props;
+    const status = this.state[shopitem_id];
+    console.log(shopitem_id);
+    console.log(status);
+    this.adminStore.setShopItemStatus(shopitem_id, status);
+  }
+
+  sortByStatus = (a, b) => {
+    const sortOrder = ['pending', 'available', 'unavailable', 'purchased']
+    return sortOrder.indexOf(a.status) - sortOrder.indexOf(b.status)
+  }
+
   render() {
-    let {
-      shopitemsFarms,
-    } = this.adminStore
+    let {shopitemsFarms} = this.adminStore
     const {shopitems} = this.props
     const {timeframe} = this.props
     const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.estimated_total, 0)
-    const renderStatus = (shopitem) => {
-      if (shopitem.completed) {
-        return 'Completed'
-      } else if (shopitem.missing) {
-        return 'Missing'
-      } else {
-        return 'Incomplete'
-      }
-    }
-
+    
     return (
       <Paper elevation={1} className={"scrollable-table"}>
         <Table className={"shopper-table"}>
@@ -54,15 +66,15 @@ class ShopperTable extends Component {
               <TableCell>Location</TableCell>
               <TableCell>Product Name</TableCell>
               <TableCell align={"right"}>Quantity</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {shopitems.map((shopitem, i) => {
+            {shopitems.sort(this.sortByStatus).map((shopitem, i) => {
               return (
                 <TableRow
-                  key={shopitem.product_id}
-                  className={`row ${renderStatus(shopitem).toLocaleLowerCase()} `}
+                  key={shopitem._id}
+                  className={`row ${shopitem.completed ? 'purchased' : 'available'} `}
                   onClick={() => this.props.toggleSingleProductView(shopitem, i)}
                 >
                   <TableCell component="th" scope="row" padding={"dense"}>
@@ -70,8 +82,7 @@ class ShopperTable extends Component {
                   </TableCell>
                   <TableCell>{shopitem.product_name}</TableCell>
                   <TableCell align="right">
-                    {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : shopitem.unit_type }</TableCell>
-                  <TableCell>{renderStatus(shopitem)}</TableCell>
+                    {shopitem.quantity} {shopitem.unit_type === "packaging" ? shopitem.packaging_name : (shopitem.unit_type || shopitem.price_unit) }</TableCell>
                 </TableRow>
               );
             })}

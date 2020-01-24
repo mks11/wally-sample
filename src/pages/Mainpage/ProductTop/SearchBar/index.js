@@ -19,7 +19,7 @@ class SearchBar extends Component {
 
   handleSearch = keyword => {
     this.setState({ searchAheadLoading: true })
-    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams())
+    this.productStore.searchKeyword(keyword, this.userStore.getDeliveryParams(), this.userStore.getHeaderAuth())
       .then(data => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
         this.setState({

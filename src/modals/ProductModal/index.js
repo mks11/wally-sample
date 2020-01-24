@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Row,
   Col,
@@ -6,18 +7,24 @@ import {
 import {
   formatMoney,
   logModalView,
-  logEvent
+  logEvent,
+  connect
 } from 'utils'
-import { PRODUCT_BASE_URL } from 'config'
+import {
+  PRODUCT_BASE_URL,
+  NUTRITIONAL_INFO_BASE_URL,
+  PACKAGING_BASE_URL,
+} from 'config'
 import AmountGroup from 'common/AmountGroup'
 
-import QuantitySelect from './QuantitySelect'
-import Addons from './Addons'
+import QuantitySelect from '../../common/QuantitySelect'
+import Product from '../../pages/Mainpage/Product/index'
+import ProductRatingForm from '../../common/ProductRatingForm'
+import ProductRatingStars from '../../common/ProductRatingStars'
 
 class ProductModal extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       qty: 1,
       infoPackage: false,
@@ -28,10 +35,13 @@ class ProductModal extends Component {
       quantityAddon: 0,
       outOfStock: false,
       available: true,
-      availableDays: [],
       packagingType: null,
       priceMultiplier: 1
     }
+
+    this.productStore = props.store.product
+    this.modalStore = props.store.modal
+    this.userStore = props.store.user
   }
 
   componentDidMount() {
@@ -43,13 +53,18 @@ class ProductModal extends Component {
       text: "Remove item"
     }]
 
-    const { product, modal, user } = this.props.stores
+    const product = this.productStore
+    const modal = this.modalStore
+    const user = this.userStore
+
     this.state.qty = product.activeProduct.min_size
     let priceMultiplier = product.activeProduct.buy_by_packaging ? product.activeProduct.packaging_vol[0] : 1
     this.setState({ priceMultiplier: priceMultiplier });
 
     let packagingType = product.activeProduct.buy_by_packaging ? product.activeProduct.packagings[0].type : null
     this.setState({ packagingType: packagingType });
+
+    if (!product.activeProduct) return null
 
     if (product.activeProduct.organic) {
       subtitutes.unshift({
@@ -58,15 +73,10 @@ class ProductModal extends Component {
       })
     }
 
-    const daysOfWeek = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
-    let availableDays = product.activeProduct.available_days.sort()
-    availableDays = availableDays.map(d => daysOfWeek[d]);
-
     this.setState({
       subtitutes,
-      outOfStock: product.activeProduct.fbw && product.activeProduct.out_of_stock,
-      available: product.activeProduct.available_for_delivery,
-      availableDays: availableDays
+      outOfStock: product.activeProduct.out_of_stock,
+      available: true,
     })
     logModalView('/product/' + product.activeProductId)
 
@@ -90,7 +100,18 @@ class ProductModal extends Component {
         dots: false,
         infinite: false,
         arrows: false,
-
+        responsive: [
+          {
+            breakpoint: 576,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: false,
+              infinite: false,
+              arrows: true,
+            }
+          },
+        ],
       });
       $thumb.slick({
         slidesToShow: 3,
@@ -140,18 +161,11 @@ class ProductModal extends Component {
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
+    console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
-    const unit_type = activeProduct.unit_type || activeProduct.price_unit
     
-    const finalUnitType =
-      (activeProduct.buy_by_packaging && packagingType)
-        ? 'packaging'
-        : unit_type
-    const packaging = activeProduct.packagings[0] ? activeProduct.packagings[0] : null
-    const defaultPackagingId = packaging ? packaging.id : null
-    const customPackaging = packagingType ? activeProduct.packagings.find(p => p.type === packagingType)._id : null
-    const packagingId = customPackaging || defaultPackagingId
+    const finalUnitType = activeProduct.unit_type
 
     const items = [
       {
@@ -160,7 +174,6 @@ class ProductModal extends Component {
         inventory_id: inventory._id,
         sub_pref: this.state.selectedSubtitute,
         unit_type: finalUnitType,
-        packaging_id: packagingId,
       }
     ]
 
@@ -218,29 +231,72 @@ class ProductModal extends Component {
     this.setState({ packagingType: null })
   }
 
+  handleProductClick = (product_id) => {
+    this.productStore.showModal(product_id)
+    this.modalStore.toggleModal('product')
+  }
+
+  truncate = (text, length) => {
+    if (text.length <= length) {  
+      return text
+    }
+    return text.slice(0, length) + '...'
+  }
+
   render() {
     const { packagingType } = this.state
-    const { product } = this.props.stores
-    const activeProduct = product.activeProduct
-
+    const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
+    let recentThreeComments = []
+    if (activeProductComments) recentThreeComments = activeProductComments.filter(comment => comment.comment).slice(0, 3) 
+  
+    const {
+      a_plus_url,
+      allergens,
+      available,
+      available_inventory,
+      avg_rating,
+      buy_by_packaging,
+      description,
+      fbw,
+      image_refs,
+      increment_size,
+      ingredients,
+      manufacturer,
+      manufacturer_url_name,
+      max_qty,
+      min_size,
+      name,
+      nutritional_info_url,
+      out_of_stock,
+      packaging_vol,
+      packagings,
+      product_id,
+      similar_products,
+      std_packaging,
+      subcat_name,
+      tags,
+      unit_type,
+      unit_weight,
+      vendor,
+    } = activeProduct
 
     let shipMessage = `Fulfilled by The Wally Shop.`
-    if (activeProduct.available_inventory[0]) shipMessage = `Sold by ${activeProduct.available_inventory[0].shop}, fulfilled by The Wally Shop`;
-    if (activeProduct.fbw) shipMessage = "Sold by " + activeProduct.vendor + ", fulfilled by The Wally Shop."
+    if (available_inventory[0]) shipMessage = `Sold by ${available_inventory[0].shop}, fulfilled by The Wally Shop`;
+    if (fbw) shipMessage = "Sold by " + vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
     if (this.state.infoPackage) {
       infoPackageClass += ' open'
     }
 
-    const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
-    const limitOptions = activeProduct.fbw && !activeProduct.out_of_stock && activeProduct.available
+    const inventory = available_inventory[0] ? available_inventory[0] : null
+    const limitOptions = fbw && !out_of_stock && available
     let qtyOptions = []
 
-    const incrementValue = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.increment_size
-    const minSize = (activeProduct.buy_by_packaging && packagingType) ? 1 : activeProduct.min_size
-    const maxQty = limitOptions ? Math.min(activeProduct.max_qty, 10) : 10
+    const incrementValue = (buy_by_packaging && packagingType) ? 1 : increment_size
+    const minSize = (buy_by_packaging && packagingType) ? 1 : min_size
+    const maxQty = limitOptions ? Math.min(max_qty, 10) : 10
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
@@ -250,11 +306,10 @@ class ProductModal extends Component {
     
     let totalPrice = price * this.state.qty * this.state.priceMultiplier
 
-    const unit_type = activeProduct.unit_type
     var price_unit = ""
     if (['ea'].includes(unit_type)) {
-        if (activeProduct.subcat_name) {
-          price_unit = activeProduct.subcat_name;
+        if (subcat_name) {
+          price_unit = subcat_name;
         } else {
           price_unit = 'unit';
         }
@@ -263,8 +318,7 @@ class ProductModal extends Component {
     }
 
     var weight_unit = "lbs"
-    var unit_weight = activeProduct.unit_weight;
-    if (unit_weight && activeProduct.unit_weight && unit_weight < 0.05) {
+    if (unit_weight && unit_weight && unit_weight < 0.05) {
       weight_unit = "oz"
       unit_weight = unit_weight * 16
     }
@@ -273,45 +327,80 @@ class ProductModal extends Component {
       unit_weight.toFixed(1)
     }
 
-    const packaging = 
-      (activeProduct.packagings && activeProduct.packagings[0])
-        ? activeProduct.packagings[0]
-        : null
-    const packaging_type = activeProduct.std_packaging
+    const packaging = packagings && packagings[0] ? packagings[0] : null
+    const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null 
+    const packaging_size = inventory && inventory.packaging && inventory.packaging.size
+    console.log("packaging size is", packaging_size)
+    const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
+    // display non-greyed-out icon for applicable icon
+    let eight = packaging_size === 8 ? '' : 'grey_'
+    let sixteen = packaging_size === 16 ? '' : 'grey_'
+    let thirtyTwo = packaging_size === 32 ? '' : 'grey_'
+
+    let jarIcons = (
+      <div className="jar-icons">
+        <img src={`/images/jar8_${eight}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`/images/jar16_${sixteen}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <img src={`/images/jar32_${thirtyTwo}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+      </div>
+    )
+  
     return (
       <div className="product-modal-wrap">
         <Row>
           <Col sm="6">
             <div className="row mb-3">
               <div className="col-sm-6">
-                <h3 className="mb-0">{activeProduct.name}</h3>
+                <h3 className="mb-0">{name}</h3>
               </div>
               <div className="col-sm-6">
                 <div id="thumbnailproduct-carousel" ref={el => this.thumb = el}>
-                  {activeProduct.image_refs.map((item, key) => (
+                  {image_refs.map((item, key) => (
                     <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
                   ))}
+                  {nutritional_info_url && (
+                    <div className="slick-item">
+                      <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                    </div>
+                  )}
+                  {packaging_size && (
+                    <div className="slick-item">
+                      <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-
-            <div id="product-carousel" ref={el => this.prod = el}>
-              {activeProduct.image_refs.map((item, key) => (
-                <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
-              ))}
+            <div className="carousel-mobile-flex">
+              <div id="product-carousel" ref={el => this.prod = el}>
+                {image_refs.map((item, key) => (
+                  <div key={key} className="slick-item"><img src={PRODUCT_BASE_URL + item} alt="" /></div>
+                ))}
+                {nutritional_info_url && (
+                  <div className="slick-item">
+                    <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
+                  </div>
+                )}
+                {packaging_size && (
+                  <div className="slick-item">
+                    <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
+                  </div>
+                )}
+              </div>
             </div>
           </Col>
           <Col sm="6">
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
             <div>{shipMessage}</div>
-            <div>Sold by the {price_unit}.</div>
-            { (['ea', 'bunch', 'pint'].includes(unit_type) && activeProduct.unit_weight) && <div>Average weight is {activeProduct.unit_weight} {weight_unit}.</div> }
+            <div>Sold by the {unit_type}.</div>
+            { (['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight) && <div>Average weight is {unit_weight} {weight_unit}.</div> }
             <hr />
 
             <div className={infoPackageClass}>
               <strong>Packaged in:</strong> <i onClick={this.toggleInfoPackage} className="fa fa-info-circle"></i>
+              {jarIcons}
               <div className="package-info-popover">
                 <h4>{packaging_type}</h4>
                 <p>{packaging_description}</p>
@@ -320,13 +409,11 @@ class ProductModal extends Component {
             </div>
             <div className="mb-3">
               { 
-                !activeProduct.buy_by_packaging 
-                  ? packaging_type
-                  : activeProduct.std_packaging
+                packaging_type
               }
             </div>
             {
-              activeProduct.buy_by_packaging &&
+              buy_by_packaging &&
               (
                 <React.Fragment>
                   <div><strong>Size:</strong></div>
@@ -335,10 +422,10 @@ class ProductModal extends Component {
                     className="package-type-group"
                     amountClick={this.handlePackagingChange}
                     customClick={this.handlePackagingCustomClick}
-                    values={activeProduct.packagings ? activeProduct.packagings : []}
-                    selected={activeProduct.packagings ? activeProduct.packagings[0].type : null}
-                    weights={activeProduct.packagings ? activeProduct.packaging_vol : []}
-                    unit_type={activeProduct.unit_type}
+                    values={packagings ? packagings : []}
+                    selected={packagings ? packagings[0].type : null}
+                    weights={packagings ? packaging_vol : []}
+                    unit_type={unit_type}
                     custom={false}
                     product={true}
                   />
@@ -351,53 +438,9 @@ class ProductModal extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={activeProduct.buy_by_packaging ? "" : price_unit}
+              price_unit={buy_by_packaging ? "" : price_unit}
             />
             <hr/>
-            <div><strong>If item is unavailable:</strong></div>
-            {this.state.subtitutes.map((sub, key) => (
-              <div 
-                className={"custom-control red custom-radio " + (sub.id === this.state.selectedSubtitute ? " active" : "")}
-                key={key}>
-                <input 
-                  type="radio"
-                  name="customRadio" 
-                  checked={this.state.selectedSubtitute === sub.id}
-                  className="custom-control-input" 
-                  value={sub.id} 
-                  onChange={() => this.handleSelectSubtitute(sub.id)} />
-
-                <label className="custom-control-label small" onClick={() => this.handleSelectSubtitute(sub.id)}>
-                  {sub.text}&nbsp;
-                </label>
-                {
-                  key === 1 ? (
-                    <React.Fragment>
-                      <i onClick={this.toggleSubstituteRecommendation} className="fa fa-info-circle"></i>
-                      <div className={`${this.state.substituteRecommendation ? 'open' : ''}`}>
-                        <div className="package-info-popover substitue-popover">
-                          <p>We'll do our best to get a near perfect substitute for you, like spring onions for scallions. If we're unsure about it, we'll contact you to make sure the substitution works for you.</p>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  ) : null
-                }
-              </div>
-            ))}
-            <hr/>
-            {
-              activeProduct.add_ons && activeProduct.add_ons.length
-                ? (
-                  <Addons
-                    addons={activeProduct.add_ons}
-                    packagingAddon={this.state.packagingAddon}
-                    quantityAddon={this.state.quantityAddon}
-                    onPackagingAddon={this.handlePackagingAddon}
-                    onQuantityAddon={this.handleQuantityAddon}
-                  />
-                )
-                : null
-            }
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button
               onClick={this.handleAddToCart}
@@ -409,13 +452,6 @@ class ProductModal extends Component {
                   : (this.state.available ? 'Add to cart' : 'Unavailable')
               }
             </button><br />
-            <div 
-              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
-            > 
-              {
-                this.state.available ? 'Final total subject to measured weights and at-location prices' : `Available days for delivery: ${this.state.availableDays.join(', ')}.`
-              }
-            </div>
 
             <div 
               className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
@@ -426,34 +462,88 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
+        {similar_products && similar_products.length > 0 && (
+          <Row>
+            <Col>
+              <hr />
+              <h3 className="mb-3">More Products Like This</h3>
+              <Row className="similar-products-container">
+                {similar_products.map((product, key) => {
+                  return <Product key={key} product={product} onProductClick={() => this.handleProductClick(product.product_id)} />
+                })}
+              </Row>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <hr />
-            <h3>Product Info</h3>
+            <h3 className="mb-3">Product Info</h3>
             <div className="media media-xs">
               <div className="media-body">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div><span className="font-weight-bold">Local:</span> {activeProduct.local ? 'Yes' : 'No'}</div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div><span className="font-weight-bold">Organic:</span> {activeProduct.organic ? 'Yes' : 'No'}</div>
-                  </div>
+              {manufacturer && (
+                <div>
+                  <span className="font-weight-bold">Producer: </span>
+                  <Link
+                    onClick={this.modalStore.toggleModal}
+                    to={"/vendor/" + manufacturer_url_name}
+                  >
+                    {manufacturer}
+                  </Link>
                 </div>
-                <div><span className="font-weight-bold">Farms:</span> {activeProduct.farms && activeProduct.farms.join(', ')}</div>
-                {
-                  activeProduct.fbw && activeProduct.description && <div><span className="font-weight-bold">Description:</span> {activeProduct.description}</div>
-                }
-                {
-                  activeProduct.fbw && activeProduct.instruction && <div><span className="font-weight-bold">Instructions:</span> {activeProduct.instruction}</div>
-                }
+                )}
+                {description && (
+                  <div><span className="font-weight-bold">Description: </span>{description}</div>
+                )}
+                {ingredients && ingredients.length > 0 && (
+                  <div><span className="font-weight-bold">Ingredients: </span>{ingredients.join(', ')}</div>
+                )}
+                {allergens && allergens.length > 0 && (
+                  <div><span className="font-weight-bold">Allergens: </span>{allergens.join(', ')}</div>
+                )}
+                {tags && tags.length > 0 && (
+                  <div><span className="font-weight-bold">Tags: </span>{tags.join(', ')}</div>
+                )}
               </div>
             </div>
           </Col>
         </Row>
+        {a_plus_url && (
+          <Row>
+            <Col>
+              <hr />
+              <div className="a-plus-image">
+                <img src={a_plus_url} alt="A+ image" />
+              </div>
+            </Col>
+          </Row>
+        )}
+        <Row>
+          <Col>
+            <hr />
+            <h3 className="mb-3">Product Ratings</h3>
+            <div className="product-ratings-container">
+              <span className="product-rating-label font-weight-bold">Product Rating: </span>
+              {avg_rating ? <ProductRatingStars rating={avg_rating}/> : "No Ratings Yet"}
+            </div>
+            {recentThreeComments && recentThreeComments.length > 0 && (
+              <React.Fragment>
+                <div className="font-weight-bold">Comments:</div>
+                <div className="comments-container">
+                  {recentThreeComments.map((comment, key) => (
+                    <div key={"comment-" + key} className="comment">
+                      "{this.truncate(comment.comment, 200)}" - {comment.user_name}
+                    </div>
+                  ))}
+                </div>
+              </React.Fragment>
+            )}
+          </Col>
+        </Row>
+        <ProductRatingForm product_id={product_id} />
       </div>
     )
   }
 }
 
-export default ProductModal
+export default connect("store")(ProductModal)
