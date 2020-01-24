@@ -7,18 +7,9 @@ const Product = props => {
   const { product, onProductClick, deliveryTimes } = props
   const producer = product.producer || null
   const price = product.product_price / 100
-  const unit_type = product.price_unit
+  const unit_type = product.unit_type
   
-  let price_unit = 'per '
-  if (['ea'].includes(unit_type)) {
-    if (product.subcat_name) {
-      price_unit += product.subcat_name  
-    } else {
-      price_unit += 'unit'
-    }
-  } else {
-    price_unit += unit_type
-  }
+  let price_unit = 'per jar'
 
   const outOfStock = product.out_of_stock
   return ( 
@@ -47,7 +38,7 @@ const Product = props => {
         {
           outOfStock
             ? 'Out of stock'
-            : `packed in ${product.std_packaging}`
+            : `packed in ${product.packaging_type}`
         }
       </div>
     </div>
