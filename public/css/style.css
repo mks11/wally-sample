@@ -630,7 +630,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 }
 @media (max-width:576px){
   .header-wrap + .aw-main {
-    padding-top: 65px;
+    padding-top: 80px;
   }
   p{font-size: 14px;}
   .page-title{font-size: 22px;}
