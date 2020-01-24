@@ -1,5 +1,5 @@
 import {observable, decorate, action} from 'mobx'
-import { 
+import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
@@ -8,6 +8,7 @@ import {
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
 } from '../config'
+import UserStore from './UserStore'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -39,24 +40,19 @@ class ProductStore {
   currentSearchFilter = []
   currentSearchCategory = 'All Categories'
 
-  async showModal(product_id, customer_quantity, delivery) {
+  async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id
 
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`)
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`)
+    this.activeProductComments = await this.getComments(product_id)
     this.activeProduct = res.data
-    if (this.activeProduct.available_inventory.length === 0) {
-      alert('Item not available in inventory')
-      return
-    }
-    const inventory = this.activeProduct.available_inventory[0]
-    var min_size = this.activeProduct.buy_by_packaging ? 1 : this.activeProduct.min_size
+    let inventory = null
+    if (this.activeProduct.available_inventory && this.activeProduct.available_inventory.length > 0) inventory = this.activeProduct.available_inventory[0]
+    var min_size = 1
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
 
-    await this.getComments(product_id)
-    // HERE! remove test data below
-    this.activeProductComments = [{text: 'Great stuff. I only wish it would fulfill all of my needs as a human, as only cocoa powder can. My wish is for cocoa powder to bring about world peace through the sharing of delicious chocolate and also love! I want to give the world a cocoa powder.', user: "Joe"}, {text: 'One of the best powdered cocoas you can get. It rivals speciality high end products such as Valrhona that cost 3 times as much. Slightly cheaper here than at my local grocery so I use it as an add on to reach my 5 Subscribe and Save items and get maximum discount on all. Makes a great Chocolate sugar cookie. Blend 1c unsalted butter 1.5c sugar 1 egg 2 tsp vanilla, then sift together and add 1.5c flour, a generous half cup Cocoa, 1 tsp baking powder, 1 tsp baking soda, half tsp salt. Mix until combined, do not over mix.', user: "Fred"}, {text: 'The deep and full-bodied taste of this very rich cocoa powder combined with attractive pricing has made it a pantry staple. I love that it comes unsweetened, so not only am I not buying sugar, but it leaves all options open. When making hot cocoa, I have found that I prefer to sweeten with a small amount of liquid agave. The flavor is great and the sugar shock is avoided. I also bake with this cocoa with rich results. Try making truffles with this - quick, and the bomb!', user: "Molly"}, {text: 'This stuff has a great flavor and makes smooth and delicious chocolates, chocolate sauce, hot fudge, frosting, cookies, hot chocolate, brownies, truffles, chocolate cake, chocolate pudding...you name it! I\'ll never go back to that other stuff I used to use.', user: "Dan"}]
     return res.data
   }
 
@@ -92,8 +88,13 @@ class ProductStore {
     return res.data
   }
 
-  async getHistoricalProducts() {
-    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+  async getHistoricalProducts(auth) {
+    let res;
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    } else {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+    }
     this.historical_products = res.data.products
 
     return res.data.products
@@ -111,24 +112,23 @@ class ProductStore {
     if (!id) return null
     this.fetch = true
     const url = API_GET_PRODUCT_DISPLAYED + id + '/comments'
-    try {
-      const res = await axios.get(url)
-      this.activeProductComments = res.data
-    } catch(err) {
-      console.error(err)
-    }
+    const res = await axios.get(url)
     this.fetch = false
+    return res.data.comments
   }
 
-  async rateProduct(id, rating, comment) {
-    const url = API_RATE_PRODUCT + id + '/rating'
-    try {
-      const res = await axios.post(url, { product_id: id, product_rating: rating, comment: comment })
-      this.activeProduct.rating = res.data.product_rating
-      this.activeProductComments = res.data.comments
-    } catch(err) {
-      console.error(err)
-    }
+  async rateProduct(product_id, rating, comment) {
+    const url = API_RATE_PRODUCT + product_id + '/rating'
+    const payload = { rating, comment }
+    const auth = {headers: {Authorization: "Bearer " + UserStore.token.accessToken}}
+
+    const res = await axios.post(url, payload, auth)
+    return res.data;
+  }
+
+  updateRatingComments(rating, comments) {
+    this.activeProduct = { ...this.activeProduct, avg_rating: rating }
+    this.activeProductComments = comments
   }
 
   getCategories() {
@@ -244,6 +244,8 @@ decorate(ProductStore, {
   searchAll: action,
   resetSearch: action,
   getProductDetails: action,
+  rateProduct: action,
+  updateRatingComments: action,
   getHistoricalProducts: action,
   getProductComments: action,
 })

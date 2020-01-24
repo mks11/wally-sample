@@ -127,6 +127,8 @@ class TopNav extends Component {
       headerWrapClass += ' top-bar-open'
     }
 
+    const isLandingPage = this.routing.location.pathname === '/'
+
     return (
       <div className={headerWrapClass}>
         <div className="aw-nav--mobile d-md-none">
@@ -215,7 +217,7 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
-        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''}`}>
+        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isLandingPage ? 'aw-absolute' : ''}`}>
           {
           ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
             <div className={topBarClass}>
@@ -310,37 +312,41 @@ class TopNav extends Component {
                       </li>
                     )}
                     { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
-                        <div className="col-auto ml-auto d-none d-md-block account-dropdown">
-                          <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
-                            <div className="btn-group">
-                              <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
-                                <span className="navbar-toggler-icon account-icon"></span>
-                              </button>
-                              <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                    <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
-                                    <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
-                                    <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
-                                    <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
-                                    <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                      <React.Fragment>
+                          <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14" to="/help">Help</Link></li>
+                          <li>
+                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                            <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
+                              <div className="btn-group">
+                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold util-font-size-14" type="button" data-toggle="dropdown" aria-expanded="true">
+                                  <span> Hi {name} <i class="fa fa-caret-down" aria-hidden="true"> </i></span>
+                                </button>
+                                <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
+                                  <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                      <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
+                                      <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/orders" className="dropdown-item">Order History</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/user" className="dropdown-item">Account Settings</Link>
+                                      <a onClick={e => this.handleInvite(e)} className="dropdown-item">Give $10, get $10</a>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/about" className="dropdown-item">About</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/howitworks" className="dropdown-item">How It Works</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/blog" className="dropdown-item">Blog</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/help" className="dropdown-item">Help</Link>
+                                      <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/giftcard" className="dropdown-item">Gift Card</Link>
+                                      <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
+                                </div>
                               </div>
-                            </div>
-                          </ClickOutside>
-                        </div>
+                            </ClickOutside>
+                          </div>
+                          </li>
+                        </React.Fragment>
                       )
                     }
                     { !this.userStore.status && (
                       <React.Fragment>
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/help">Help</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/giftcard">Gift Card</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li>
                       </React.Fragment>
                     )}
                   </ul>
@@ -365,7 +371,7 @@ class TopNav extends Component {
             <div className="row d-md-none  d-sm-block">
               <div className="col-sm-12">
                 <a className="aw-logo d-block text-center" onClick={e => this.handleLogo(e)}>
-                  <img className="logo-text-mobile" src='/images/main_logo.png' alt="The Wally Shop" />
+                  <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/main_logo.png' alt="The Wally Shop" />
                 </a>
               </div>
             </div>

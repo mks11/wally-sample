@@ -6,7 +6,7 @@ class UiStore {
   backdropTop = 0
   backdropZindex = 100
   navMobile = false;
-  topBar = true;
+  topBar = false;
   cartMobile = false;
 
   closeTopBar() {

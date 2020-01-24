@@ -634,6 +634,30 @@ button:hover,
   transition: 0.27s all;
 }
 
+.aw-absolute {
+  position: absolute;
+}
+
+.aw-align-self-center {
+  align-self: center;
+}
+
+.util-font-size-13 {
+  font-size: 13px;
+}
+
+.util-font-size-14 {
+  font-size: 14px;
+}
+
+.util-relative {
+  position: relative;
+}
+
+.util-offset-top--30 {
+  top: -30px;
+}
+
 .aw-header .btn-login,
 .aw-header .btn-sign-up {
   font-weight: bold;
@@ -1269,7 +1293,7 @@ body {
 }
 
 .header-wrap + .aw-main {
-  padding-top: 75px;
+  padding-top: 152px;
 }
 
 .header-wrap.top-bar-open + .aw-main .product-top.fixed {
@@ -1277,7 +1301,7 @@ body {
 }
 
 .header-wrap.top-bar-open + .aw-main {
-  padding-top: 111px;
+  padding-top: 181px;
 }
 
 .admin-tabs .active-tab {
@@ -1344,8 +1368,8 @@ body {
 }
 
 .btn-sm.active {
-  background-color: #78C98D;
-  border-color: #78C98D;
+  background-color: #78c98d;
+  border-color: #78c98d;
   border: none;
 }
 
@@ -1654,7 +1678,7 @@ input {
   display: none;
 }
 
-.packaging-quantity{
+.packaging-quantity {
   font-size: 10px;
   width: 50%;
 }
