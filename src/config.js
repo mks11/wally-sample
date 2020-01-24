@@ -1,5 +1,4 @@
 export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-// export const BASE_URL = "https://the-wally-shop.herokuapp.com";
 // export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
@@ -11,6 +10,10 @@ export const API_FORGOT_PASSWORD = BASE_URL + "/api/user/reset-password";
 export const API_RESET_PASSWORD = BASE_URL + "/api/user/reset-password/";
 export const API_GET_LOGIN_STATUS = BASE_URL + "/api/login/status";
 export const API_REFER_FRIEND = BASE_URL + "/api/user/refer";
+
+export const API_EMAIL_VERIFICATION = BASE_URL + "/api/waitlist/email/verify";
+export const API_PIN_VERIFICATION = BASE_URL + "/api/waitlist/verify-pin";
+export const API_WAITLIST_INFO = BASE_URL + "/api/waitlist";
 
 export const API_ADDRESS_NEW = BASE_URL + "/api/user/address";
 export const API_ADDRESS_EDIT = BASE_URL + "/api/user/address";

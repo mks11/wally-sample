@@ -10,61 +10,77 @@ class ProductRatingForm extends Component {
     this.state = {
       rating: null,
       comment: "",
-			errorMessage: null,
+      errorMessage: null,
+      successMessage: null,
 		}
 
-		this.productStore = this.props.store.product
+    this.productStore = props.store.product
+    this.userStore = props.store.user
   }
 
   onStarClick = rating => {
-    this.setState({ rating, errorMessage: null })
+    this.setState({ rating, errorMessage: null, successMessage: null })
   }
 
   onInputChange = event => {
-    this.setState({ comment: event.target.value })
+    this.setState({ comment: event.target.value, errorMessage: null, successMessage: null })
   }
 
-  onRateProductClick = () => {
+	onRateProductClick = async() => {
 		const { rating, comment } = this.state
-
 		if (!rating) {
-			const errorMessage = 'Please select a rating'
-			this.setState({ errorMessage: errorMessage })
+			const errorMessage = 'Please select a star rating'
+			this.setState({ errorMessage })
 		} else {
-			this.productStore.rateProduct(this.props.id, rating, comment)
+			try {
+        const res = await this.productStore.rateProduct(this.props.product_id, rating, comment)
+        this.productStore.updateRatingComments(res.product_rating, res.comments)
+        this.clearFormSuccess()
+			} catch (err) {
+				this.setState({ errorMessage: 'Oops, there was a problem saving your rating. Please make sure to login and try again later.'})
+			}
 		}
   }
 
-  emptyStar = rating => (
+	makeEmptyStar = star => (
 		<div
 			className="clickable star"
-			key={rating.toString() + "-star"}
-			onClick={() => this.onStarClick(rating)}
+			key={star.toString() + "-star"}
+			onClick={() => this.onStarClick(star)}
 		>
 			&#9734;
 		</div>
 	)
 
-  solidStar = rating => (
+  makeFullStar = star => (
 		<div
 			className="clickable star"
-			key={rating + "-star"}
-			onClick={() => this.onStarClick(rating)}
+			key={star + "-star"}
+			onClick={() => this.onStarClick(star)}
 		>
 			&#9733;
 		</div>
-	)
+  )
+  
+  clearFormSuccess() {
+    this.setState({
+      rating: null,
+      comment: "",
+      successMessage: 'Your rating has been saved!',
+    })
+  }
 
   render() {
-		const { rating, comment, errorMessage } = this.state
-		const errorClass = errorMessage ? " text-error" : ""
+    const { rating, comment, errorMessage, successMessage } = this.state
+    const errorClass = errorMessage ? " text-error" : ""
+    const successClass = successMessage ? " text-success" : ""
     return (
       <div className="product-rating-form">
         <div className="clickable stars-container">
           {[1, 2, 3, 4, 5].map(thisStar =>
 						rating >= thisStar
-              ? this.solidStar(thisStar)
-              : this.emptyStar(thisStar)
+              ? this.makeFullStar(thisStar)
+              : this.makeEmptyStar(thisStar)
           )}
         </div>
         <Input
@@ -78,7 +94,8 @@ class ProductRatingForm extends Component {
         <Button className="rate-btn" onClick={this.onRateProductClick}>
           Rate Product
         </Button>
-        <div className={"rating-error" + errorClass}>{errorMessage}</div>
+        <div className={"rating-message" + errorClass}>{errorMessage}</div>
+        <div className={"rating-message" + successClass}>{successMessage}</div>
       </div>
     )
   }

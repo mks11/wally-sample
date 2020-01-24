@@ -315,14 +315,13 @@ class ProductTop extends Component {
                     onClick={onCategoryClick}
                   >All Categories</Link>
                   {
-                    this.productStore.categories.map((s,i) => (
-                      (!s.parent_id && s.cat_id.length <= 3) &&
-                        <Link
-                          to={"/main/"+ (s.cat_id ? s.cat_id:'')}
-                          className="dropdown-item"
-                          key={i}
-                          onClick={onCategoryClick}
-                        >{s.cat_name}</Link>
+                    this.productStore.categories.map(s => (
+                      <Link
+                        to={`/main/${s.cat_id ? s.cat_id : ''}`}
+                        className="dropdown-item"
+                        key={s.cat_id}
+                        onClick={onCategoryClick}
+                      >{s.cat_name}</Link>
                     ))
                   }
                 </div>

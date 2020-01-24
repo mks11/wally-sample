@@ -3,7 +3,7 @@ import { API_GET_VENDOR_PROFILE } from "../config";
 import axios from "axios";
 
 class VendorProfileStore {
-  vendor = [];
+  vendor = {};
   products = [];
 
   async loadVendorProfile(vendor_name) {
@@ -11,6 +11,8 @@ class VendorProfileStore {
 
     if (res.data) {
       this.vendor = res.data.vendor;
+      console.log("vendor from API is");
+      console.log(this.vendor)
       this.products = res.data.products;
     }
 

@@ -8,32 +8,43 @@ class SignupModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      pin: '',
       name: '',
       email: '',
       password: '',
+      signupEmail: '',
 
       invalidText: '',
       signupRequest: false,
+      pinError: false,
+      displayPinErrorInfo: false,
     }
   }
 
   handleSubmit = e => {
     const {
+      pin,
       name,
       email,
       password,
       signupRequest,
+      pinError,
     } = this.state
 
     if (!signupRequest) {
       this.setState({ invalidText: '', signupRequest: true })
-      if(!validateEmail(email)) {
-        this.setState({ invalidText: 'Email not valid', signupRequest: false })
+      if (pin && pinError) {
+        this.setState({ invalidText: 'Pin is incorrect', signupRequest: false })
         return
       }
 
       if (!name) {
         this.setState({ invalidText: 'Name cannot be empty', signupRequest: false })
+        return
+      }
+
+      if(!validateEmail(email)) {
+        this.setState({ invalidText: 'Email not valid', signupRequest: false })
         return
       }
 
@@ -62,7 +73,9 @@ class SignupModal extends Component {
         checkout.getDeliveryTimes()
         this.setState({ signupRequest: false })
         this.props.switchTo('welcome')
+
         user.giftCardPromo = null
+        user.refPromo = null
       }).catch(e => {
         console.error('Failed to signup', e)
         const msg = e.response.data.error.message
@@ -86,49 +99,137 @@ class SignupModal extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handleSignUp = e => {
+    if(!validateEmail(this.state.signupEmail)) {
+      this.setState({ invalidText: 'Email not valid' })
+      return
+    }
+
+    const {
+      user,
+      modal,
+    } = this.props.stores
+
+    user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
+      .then(res => {
+        modal.switchModal('waitinglist', null, res)
+      })
+      .catch((e) => {
+        const msg =  e.response.data.error ? e.response.data.error.message : null
+        modal.switchModal('error', msg)
+      })
+    e.preventDefault()
+  }
+
+  handleEmailKeySubmit = e => {
+    if (e.keyCode === 13) {
+      this.handleSignUp(e)
+    }
+  }
+
+  handlePinVerification = e => {
+    const { user } = this.props.stores
+    const {
+      pin,
+      email,
+    } = this.state
+
+    user.verifyPin(pin, email)
+      .then(res => {
+        this.setState({ pinError: !res.verified })
+      }).catch(() => {
+        this.setState({ pinError: true })
+      })
+      .finally(() => {
+        this.setState({ displayPinErrorInfo: true })
+      })
+  }
+
   render() {
     const {
+      pin,
       name,
       email,
       password,
+      signupEmail,
       invalidText,
       signupRequest,
+      pinError,
+      displayPinErrorInfo,
     } = this.state
-    const { zip, user } = this.props.stores
+    const { user } = this.props.stores
     const additionalFBdata = {
-      signup_zip: zip.selectedZip,
       reference_promo: user.refPromo
     }
 
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
-        <span className="mb-5">Shop package-free groceries</span>
+        <span className="mb-3">TWS is still in limited release. If you haven't already, enter your email below to join the waitlist and we'll email you when we get to your batch so you can start shopping waste-free.</span>
         <div className="form-wrapper">
+          <Input
+            className="aw-input--control mb-2"
+            type="text"
+            name="signupEmail"
+            placeholder="Enter your email"
+            onKeyDown={this.handleEmailKeySubmit}
+            onChange={this.onValueChange}
+          />
+          <button
+            className={`btn btn-main mb-2 ${signupEmail ? 'active' : ''}`}
+            onClick={this.handleSignUp}
+          >
+            JOIN WAITLIST
+          </button>
+          <br></br>
+          <span className="mb-3">Received your confirmation email? Enter your unique pin below and complete the sign up process.</span>
+          <div className="pin-input">
+            <Input
+              className="aw-input--control"
+              type="text"
+              name="pin"
+              placeholder="Enter pin"
+              onKeyDown={this.handleKeySubmit}
+              onChange={this.onValueChange}
+              onBlur={this.handlePinVerification}
+            />
+            {displayPinErrorInfo ? (
+              !pinError ? (
+                <i className="fa fa-check pin-input-ok" />
+              ) : (
+                <i className="fa fa-times pin-input-ok" />
+              )
+            ) : null}
+          </div>
+
+          <Input
+            className="aw-input--control mb-2"
+            type="text"
+            name="email"
+            placeholder="Enter your email"
+            onKeyDown={this.handleKeySubmit}
+            onChange={this.onValueChange}
+            onBlur={this.handlePinVerification}
+          />
           <Input
             className="aw-input--control"
             type="text"
             name="name"
             placeholder="Enter your name"
             onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
-          <Input
-            className="aw-input--control"
-            type="text"
-            name="email"
-            placeholder="Enter your email"
-            onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
+            onChange={this.onValueChange}
+          />
           <Input
             className="aw-input--control"
             type="password"
             name="password"
             placeholder="Enter your password"
             onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
+            onChange={this.onValueChange}
+          />
 
           <span className="tnc mt-3 mb-2">
-            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><strong>Terms of Service</strong></Link> &nbsp;and 
+            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><strong>Terms of Service</strong></Link> &nbsp;and
             &nbsp;<Link target="_blank" to={"/privacy"}><strong>Privacy Policy.</strong></Link>
           </span>
           {
@@ -138,10 +239,10 @@ class SignupModal extends Component {
           }
 
           <button
-            className={`btn btn-main ${(name && email && password && !signupRequest) ? 'active' : ''}`}
+            className={`btn btn-main ${(pin && name && email && password && !signupRequest && !pinError) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
-            SUBMIT
+            SIGN UP
           </button>
 
           <div className="fancy-spacing my-4">
@@ -154,6 +255,7 @@ class SignupModal extends Component {
             userStore={user}
             additionalData={additionalFBdata}
             onSubmit={this.props.toggle}
+            canSubmit={pin && !pinError}
           />
         </div>
         <div className="login-wrap">

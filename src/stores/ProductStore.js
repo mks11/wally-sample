@@ -7,8 +7,9 @@ import {
   API_GET_CATEGORIES,
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
-  API_RATE_PRODUCT
+  API_RATE_PRODUCT,
 } from "../config";
+import UserStore from './UserStore';
 import axios from "axios";
 import moment from "moment";
 
@@ -42,25 +43,20 @@ class ProductStore {
   currentSearchFilter = [];
   currentSearchCategory = "All Categories";
 
-  async showModal(product_id, customer_quantity, delivery) {
-    this.activeProductId = product_id;
+  async showModal(product_id, customer_quantity) {
+    this.activeProductId = product_id
 
-    const time = moment().format("YYYY-MM-DD HH:mm:ss");
-    const res = await axios.get(
-      `${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
-    );
-    this.activeProduct = res.data;
-    if (this.activeProduct.available_inventory.length === 0) {
-      alert("Item not available in inventory");
-      return;
-    }
-    const inventory = this.activeProduct.available_inventory[0];
-    var min_size = this.activeProduct.buy_by_packaging
-      ? 1
-      : this.activeProduct.min_size;
+    const time = moment().format('YYYY-MM-DD HH:mm:ss')
+    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`)
+    this.activeProductComments = await this.getComments(product_id)
+    this.activeProduct = res.data
+    let inventory = null
+    if (this.activeProduct.available_inventory && this.activeProduct.available_inventory.length > 0) inventory = this.activeProduct.available_inventory[0]
+    var min_size = 1
 
-    this.customer_quantity = customer_quantity ? customer_quantity : min_size;
-    return res.data;
+    this.customer_quantity = customer_quantity ? customer_quantity : min_size
+
+    return res.data
   }
 
   getAdvertisements() {
@@ -126,10 +122,14 @@ class ProductStore {
     return res.data;
   }
 
-  async getHistoricalProducts() {
-    const res = await axios.get(API_GET_HISTORICAL_PRODUCTS);
+  async getHistoricalProducts(auth) {
+    let res;
+    if (auth && auth.headers.Authorization != "Bearer undefined") {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    } else {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+    }
     this.historical_products = res.data.products;
-
     return res.data.products;
   }
 
@@ -144,31 +144,26 @@ class ProductStore {
   }
 
   async getComments(id) {
-    if (!id) return null;
-    this.fetch = true;
-    const url = API_GET_PRODUCT_DISPLAYED + id + "/comments";
-    try {
-      const res = await axios.get(url);
-      this.activeProductComments = res.data;
-    } catch (err) {
-      console.error(err);
-    }
-    this.fetch = false;
+    if (!id) return null
+    this.fetch = true
+    const url = API_GET_PRODUCT_DISPLAYED + id + '/comments'
+    const res = await axios.get(url)
+    this.fetch = false
+    return res.data.comments
   }
 
-  async rateProduct(id, rating, comment) {
-    const url = API_RATE_PRODUCT + id + "/rating";
-    try {
-      const res = await axios.post(url, {
-        product_id: id,
-        product_rating: rating,
-        comment: comment
-      });
-      this.activeProduct.rating = res.data.product_rating;
-      this.activeProductComments = res.data.comments;
-    } catch (err) {
-      console.error(err);
-    }
+  async rateProduct(product_id, rating, comment) {
+    const url = API_RATE_PRODUCT + product_id + '/rating'
+    const payload = { rating, comment }
+    const auth = {headers: {Authorization: "Bearer " + UserStore.token.accessToken}}
+
+    const res = await axios.post(url, payload, auth)
+    return res.data;
+  }
+
+  updateRatingComments(rating, comments) {
+    this.activeProduct = { ...this.activeProduct, avg_rating: rating }
+    this.activeProductComments = comments
   }
 
   getCategories() {
@@ -292,6 +287,8 @@ decorate(ProductStore, {
   searchAll: action,
   resetSearch: action,
   getProductDetails: action,
+  rateProduct: action,
+  updateRatingComments: action,
   getHistoricalProducts: action,
   getProductComments: action
 });

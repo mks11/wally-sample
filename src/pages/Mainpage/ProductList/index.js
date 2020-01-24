@@ -43,12 +43,14 @@ class ProductList extends Component {
           <div className={`row flex-row ${mode === 'limit' ? 'flex-nowrap' : ''}`} >
             {
               display.products
-                .filter(p => filters.length ? filters.some(f => {
+                .filter(p => filters.length ? !(filters.some(f => {
                   if (p.allergens && p.tags) {
-                    return !p.allergens.includes(f) && !p.tags.includes(f)
+                    let [t, v] = f.split(",");
+                    if (t == "allergen") return p.allergens.includes(v);
+                    if (t == "tag") return !p.tags.includes(v);
                   }
                   return true
-                }) : true)
+                })) : true)
                 .map((product, index) => (
                 <Product
                   key={index}

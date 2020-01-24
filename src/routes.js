@@ -12,6 +12,7 @@ import HelpSingleAnswer from "./pages/HelpSingleAnswer";
 // import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
+import EmailVerification from './pages/EmailVerification';
 import Orders from "./pages/Orders";
 import ManageOrders from "./pages/ManageOrders";
 import OrderConfirmation from "./pages/OrderConfirmation";
@@ -87,6 +88,7 @@ export default (
       <Route exact path="/backers" component={Backers} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
+      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/orders" component={Orders} />
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/products" component={ManageProducts} />
@@ -113,8 +115,7 @@ export default (
       <Route exact path="/main" component={Mainpage} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route exact path="/main/buyagain" component={Mainpage} />
-      <Route path="/main/:id" component={Mainpage} />
-      <Route exact path="/signup" component={Signup} />
+      <Route exact path="/waitlist-signup" component={Signup} />
       <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
