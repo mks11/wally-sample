@@ -10,12 +10,13 @@ import HelpStore from "./HelpStore";
 import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
-// import VendorProfileStore from "./VendorProfileStore";
+import VendorProfileStore from "./VendorProfileStore";
 
 const store = {
   ui: UiStore,
   content: ContentStore,
   product: ProductStore,
+  impulse_products: ProductStore,
   packagingUnit: PackagingUnitStore,
   modal: ModalStore,
   user: UserStore,
@@ -25,7 +26,8 @@ const store = {
   order: OrderStore,
   admin: AdminStore,
   backer: BackerStore,
-  // vendor: VendorProfileStore
+  vendor: VendorProfileStore,
+  products: VendorProfileStore
 };
 
 export default store;

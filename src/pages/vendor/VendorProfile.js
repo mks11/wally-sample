@@ -1,20 +1,19 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
 import {
-  formatMoney,
   connect,
-  logEvent,
   logModalView,
   datesEqual
 } from "utils";
 
-import ProductList from "../Mainpage/ProductList";
+import Product from "../Mainpage/Product";
 
 class VendorProfile extends Component {
   constructor(props) {
     super(props);
 
     this.vendorProfileStore = this.props.store.vendor;
+    this.vendorProfileStore = this.props.store.products;
 
     this.userStore = this.props.store.user;
     this.uiStore = this.props.store.ui;
@@ -26,10 +25,6 @@ class VendorProfile extends Component {
 
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
-      sidebar: [],
-      categoryTypeMode: "limit",
-      showMobileSearch: false,
-      vendor: "Ace Natural"
     };
 
     this.id = this.props.match.params.id;
@@ -48,30 +43,18 @@ class VendorProfile extends Component {
   }
 
   loadData() {
-    const id = this.props.match.params.id;
-    this.id = id;
+    const name = this.props.match.params.vendor_name;
 
-    let categoryTypeMode = "all";
-    if (!this.id) {
-      categoryTypeMode = "limit";
-    }
-
-    this.setState({ categoryTypeMode });
+    this.vendorProfileStore.loadVendorProfile(name)
+      .catch(e => {
+        console.error("Failed to load vendor profile", e);
+        this.modalStore.toggleModal("error");
+      });
 
     const deliveryData = this.userStore.getDeliveryParams();
 
     this.productStore.getAdvertisements();
     this.productStore.getCategories();
-    this.productStore
-      .getProductDisplayed(id, deliveryData, this.userStore.getHeaderAuth())
-      .then(data => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          this.state.deliveryTimes
-        );
-        this.setState({ sidebar: this.productStore.sidebar });
-      })
-      .catch(e => console.error("Failed to load product displayed: ", e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -153,79 +136,63 @@ class VendorProfile extends Component {
     }
   }
 
-  componentDidUpdate() {
-    const id = this.props.match.params.id;
-    if (this.id !== id) {
-      this.loadData();
-    }
-  }
-
   handleProductModal = (product_id, deliveryTimes) => {
-    if (
-      !this.userStore.status ||
-      (this.userStore.status && !this.userStore.user.is_ecomm)
-    ) {
-      if (!this.userStore.selectedDeliveryTime) {
-        logModalView("/delivery-options-window");
-        this.modalStore.toggleDelivery();
-        this.productStore.activeProductId = product_id;
-      } else {
-        this.productStore
-          .showModal(product_id, null, this.userStore.getDeliveryParams())
-          .then(data => {
-            this.userStore.adjustDeliveryTimes(
-              data.delivery_date,
-              deliveryTimes
-            );
-            this.modalStore.toggleModal("product");
-          });
-      }
-    } else {
-      this.productStore
-        .showModal(product_id, null, this.userStore.getDeliveryParams())
-        .then(data => {
-          this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
-          this.modalStore.toggleModal("product");
-        });
-    }
+    this.productStore
+      .showModal(product_id, null, this.userStore.getDeliveryParams())
+      .then(data => {
+        this.userStore.adjustDeliveryTimes(
+          data.delivery_date,
+          deliveryTimes
+        );
+        this.modalStore.toggleModal("product");
+      })
   };
 
   render() {
+    const vendor = this.vendorProfileStore.vendor;
+    console.log("vendor is");
+    console.log(vendor.shipping_address);
+
     return (
       <div className="App">
-        <div className="container">
-          <div className="row justify-content-between">
-            <div className="col-md-6 col-xs-12">
-              <img
-                src="https://www.co2logic.com/sites/default/files/styles/services_image/public/LOGO-Ace-2014-on-Green_0.jpg"
-                alt=""
-              />
-            </div>
+        {vendor ? (
+          <div className="container">
+            <div className="row justify-content-between">
+              <div className="col-md-6 col-xs-12">
+                <img src={vendor.logo_url} alt="" />
+              </div>
 
-            <div className="col-md-6 col-xs-12 text-left">
-              <h1>Ace Natural</h1>
-              <h2>New York City | New York</h2>
-              <hr />
-              <p>
-                Ace Natural is New York City's premier foodservice distributor
-                for natural and organic ingredients. Our commitment to customer
-                satisfaction is second to none.
-              </p>
+              <div className="col-md-6 col-xs-12 text-left">
+                <h1>{vendor.name}</h1>
+                {vendor.shipping_address === null && (
+                  <h2>
+                    {vendor.shipping_address.city} | {vendor.shipping_address.state}
+                  </h2>
+                )}
+                <hr />
+                <p>{vendor.description}</p>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
-        <div className="col-md-10 col-sm-8">
-          <div className="product-content-right">
-            {this.productStore.main_display.map((id, index) => (
-              <ProductList
-                key={index}
-                display={id}
-                mode={this.state.categoryTypeMode}
-                deliveryTimes={this.state.deliveryTimes}
-                onProductClick={this.handleProductModal}
-              />
-            ))}
+        <div className="container">
+          <div className="col-md-10 col-sm-8">
+            <div className="row">
+            {
+              this.vendorProfileStore.products
+                ? this.vendorProfileStore.products
+                    .map(product => (
+                      <Product
+                        key={product.product_id}
+                        product={product}
+                        deliveryTimes={this.state.deliveryTimes}
+                        onProductClick={this.handleProductModal}
+                      />
+                    ))
+                : null
+            }
+            </div>
           </div>
         </div>
       </div>

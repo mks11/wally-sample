@@ -78,7 +78,7 @@ class ProductTop extends Component {
       if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
         this.modalStore.toggleDelivery()
       } else {
-        this.routing.push('/checkout')
+        this.routing.push('/main/similar-products')
       }
     } else {
       this.modalStore.toggleModal('login')
@@ -314,14 +314,13 @@ class ProductTop extends Component {
                     onClick={onCategoryClick}
                   >All Categories</Link>
                   {
-                    this.productStore.categories.map((s,i) => (
-                      (!s.parent_id && s.cat_id.length <= 3) &&
-                        <Link
-                          to={"/main/"+ (s.cat_id ? s.cat_id:'')}
-                          className="dropdown-item"
-                          key={i}
-                          onClick={onCategoryClick}
-                        >{s.cat_name}</Link>
+                    this.productStore.categories.map(s => (
+                      <Link
+                        to={`/main/${s.cat_id ? s.cat_id : ''}`}
+                        className="dropdown-item"
+                        key={s.cat_id}
+                        onClick={onCategoryClick}
+                      >{s.cat_name}</Link>
                     ))
                   }
                 </div>

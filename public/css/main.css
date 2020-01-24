@@ -1293,7 +1293,7 @@ body {
 }
 
 .header-wrap + .aw-main {
-  padding-top: 75px;
+  padding-top: 152px;
 }
 
 .header-wrap.top-bar-open + .aw-main .product-top.fixed {
@@ -1301,7 +1301,7 @@ body {
 }
 
 .header-wrap.top-bar-open + .aw-main {
-  padding-top: 111px;
+  padding-top: 181px;
 }
 
 .admin-tabs .active-tab {
