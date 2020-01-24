@@ -1373,7 +1373,7 @@ section.page-section.bg-fruitfull {
   background: #fff;
   z-index: 100;
 }
-.product-top.fixed{position:fixed;top:82px;}
+.product-top.fixed{position:fixed;top:0px;}
 .product-top h3{font-weight: 400;font-size: 18px;margin-bottom: 0;padding-top: 10px;}
 .product-top h3 i{font-size: 14px;float: right;margin-top: 2px;}
 .left-column{display:inline-block;position:relative;visibility: visible;opacity:1; cursor:pointer;}
@@ -2028,7 +2028,7 @@ a {
   }
   .product-top.fixed {
     position: fixed;
-    top: 76px;
+    top: 0px;
   }
 
   .search-form{
@@ -2073,7 +2073,7 @@ a {
     padding: 5px 10px;
   }
   .header-wrap.top-bar-open + .aw-main .product-top.fixed {
-    top: 124px;
+    top: 0px;
   }
   .header-wrap.top-bar-open + .aw-main {
     padding-top: 115px;
@@ -2141,10 +2141,10 @@ a {
   }
   .product-top.fixed {
     position: fixed;
-    top: 86px;
+    top: 0px;
   }
   .header-wrap.top-bar-open + .aw-main .product-top.fixed {
-    top: 115px;
+    top: 0px;
   }
   .header-wrap.top-bar-open + .aw-main {
     padding-top: 105px;
