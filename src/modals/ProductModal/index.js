@@ -29,8 +29,6 @@ class ProductModal extends Component {
       qty: 1,
       infoPackage: false,
       slick: false,
-      subtitutes: [],
-      selectedSubtitute: 0,
       packagingAddon: '',
       quantityAddon: 0,
       outOfStock: false,
@@ -45,36 +43,21 @@ class ProductModal extends Component {
   }
 
   componentDidMount() {
-    const subtitutes = [{
-      id: 0,
-      text: "Substitute with Wally Shop recommendation"
-    }, {
-      id: 1,
-      text: "Remove item"
-    }]
 
     const product = this.productStore
     const modal = this.modalStore
     const user = this.userStore
 
     this.state.qty = product.activeProduct.min_size
-    let priceMultiplier = product.activeProduct.buy_by_packaging ? product.activeProduct.packaging_vol[0] : 1
+    let priceMultiplier = 1
     this.setState({ priceMultiplier: priceMultiplier });
 
-    let packagingType = product.activeProduct.buy_by_packaging ? product.activeProduct.packagings[0].type : null
+    let packagingType = product.activeProduct.available_inventory[0].packaging_type;
     this.setState({ packagingType: packagingType });
 
     if (!product.activeProduct) return null
 
-    if (product.activeProduct.organic) {
-      subtitutes.unshift({
-        id: 2,
-        text: "Substitute for organic only"
-      })
-    }
-
     this.setState({
-      subtitutes,
       outOfStock: product.activeProduct.out_of_stock,
       available: true,
     })
@@ -132,15 +115,6 @@ class ProductModal extends Component {
     this.setState({ infoPackage: !this.state.infoPackage })
   }
 
-  toggleSubstituteRecommendation = () => {
-    this.setState({ substituteRecommendation: !this.state.substituteRecommendation })
-  }
-
-  handleSelectSubtitute(id) {
-    logEvent({category:"Product", action:"ChooseSubstitute"})
-    this.setState({ selectedSubtitute: id })
-  }
-
   // handleCloseModal(e) {
   //   logEvent({category:"Product", action:"ClickClosed", label:this.productStore.activeProductId})
   //   this.props.toggle()
@@ -172,7 +146,6 @@ class ProductModal extends Component {
         quantity: this.state.qty, 
         product_id: inventory.product_id,
         inventory_id: inventory._id,
-        sub_pref: this.state.selectedSubtitute,
         unit_type: finalUnitType,
       }
     ]
@@ -282,7 +255,7 @@ class ProductModal extends Component {
     } = activeProduct
 
     let shipMessage = `Fulfilled by The Wally Shop.`
-    if (available_inventory[0]) shipMessage = `Sold by ${available_inventory[0].shop}, fulfilled by The Wally Shop`;
+    if (available_inventory[0]) shipMessage = `Sold and fulfilled by The Wally Shop`;
     if (fbw) shipMessage = "Sold by " + vendor + ", fulfilled by The Wally Shop."
 
     let infoPackageClass = 'package-info'
@@ -294,8 +267,8 @@ class ProductModal extends Component {
     const limitOptions = fbw && !out_of_stock && available
     let qtyOptions = []
 
-    const incrementValue = (buy_by_packaging && packagingType) ? 1 : increment_size
-    const minSize = (buy_by_packaging && packagingType) ? 1 : min_size
+    const incrementValue = 1
+    const minSize = 1
     const maxQty = limitOptions ? Math.min(max_qty, 10) : 10
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
@@ -394,8 +367,8 @@ class ProductModal extends Component {
           <Col sm="6">
             <div className="modal-product-price">Price: <span>{formatMoney(price)}</span> / {price_unit}</div>
             <div>{shipMessage}</div>
-            <div>Sold by the {unit_type}.</div>
-            { (['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight) && <div>Average weight is {unit_weight} {weight_unit}.</div> }
+            <div>Sold by the jar.</div>
+            { (['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight) && <div>Unit weight is {unit_weight} {weight_unit}.</div> }
             <hr />
 
             <div className={infoPackageClass}>
