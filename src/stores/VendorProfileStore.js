@@ -3,7 +3,7 @@ import { API_GET_VENDOR_PROFILE } from "../config";
 import axios from "axios";
 
 class VendorProfileStore {
-  vendor = [];
+  vendor = {};
   products = [];
 
   async loadVendorProfile(vendor_name) {
@@ -16,13 +16,18 @@ class VendorProfileStore {
 
     return res.data
   }
+
+  hasVendorProfile() {
+    return Object.entries(this.vendor).length !== 0
+  }
 }
 
 decorate(VendorProfileStore, {
   vendor: observable,
   products: observable,
   loadVendorProfile: action,
-  loadVendorProducts: action
+  loadVendorProducts: action,
+  hasVendorProfile: action,
 });
 
 export default new VendorProfileStore();

@@ -154,6 +154,9 @@ class SimilarProducts extends Component {
   };
 
   render() {
+    const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
+    const carbonBarValue = cartItems.length % 10;
+
     return (
       <div className="App">
         <div className="container">
@@ -171,13 +174,13 @@ class SimilarProducts extends Component {
           </div>
           <div className="text-center">
             <h3>
-              You are XX items from fully minimizing your carbon footprint
+              You are {carbonBarValue ? (10 - (carbonBarValue % 10)) : 10} items from fully minimizing your carbon footprint
             </h3>
             <div className="progress">
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: 50 }}
+                style={{ width: `${carbonBarValue * 10}%` }}
               ></div>
             </div>
           </div>
