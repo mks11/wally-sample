@@ -152,10 +152,11 @@ class VendorProfile extends Component {
     const vendor = this.vendorProfileStore.vendor;
     console.log("vendor is");
     console.log(vendor.shipping_address);
+    const hasVendorProfile = this.vendorProfileStore.hasVendorProfile();
 
     return (
       <div className="App">
-        {vendor ? (
+        {hasVendorProfile ? (
           <div className="container">
             <div className="row justify-content-between">
               <div className="col-md-6 col-xs-12">
@@ -164,7 +165,7 @@ class VendorProfile extends Component {
 
               <div className="col-md-6 col-xs-12 text-left">
                 <h1>{vendor.name}</h1>
-                {vendor.shipping_address === null && (
+                {vendor.city && (
                   <h2>
                     {vendor.shipping_address.city} | {vendor.shipping_address.state}
                   </h2>
