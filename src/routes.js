@@ -114,7 +114,7 @@ export default (
       <Route exact path="/giftcard" component={GiftCheckout} />
       <Route exact path="/main" component={Mainpage} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
-      <Route exact path="/main/buyagain" component={Mainpage} />
+      <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/waitlist-signup" component={Signup} />
       <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
