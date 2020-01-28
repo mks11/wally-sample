@@ -335,7 +335,7 @@ class ProductTop extends Component {
                   className="d-none d-md-block ml-3"
                   to="/main/buyagain"
                 >
-                  <img src="/images/logo.png" height="40" />
+                  <img src="/images/reorder.png" height="40" />
                 </Link>
                 <span className="d-none d-md-block">
                   <CartDropdown

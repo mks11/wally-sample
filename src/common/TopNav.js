@@ -127,7 +127,8 @@ class TopNav extends Component {
       headerWrapClass += ' top-bar-open'
     }
 
-    const isMainPage = this.routing.location.pathname === '/main'
+    const isHomePage = this.routing.location.pathname === '/'
+    const isProductPage = this.routing.location.pathname.includes('/main')
 
     return (
       <div className={headerWrapClass}>
@@ -217,7 +218,7 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
-        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isMainPage ? 'aw-absolute util-bg-color-white' : ''}`}>
+        <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isHomePage ? '' : 'util-bg-color-white' } ${ isProductPage ? ' aw-absolute' : '' }`}>
           {
           ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
             <div className={topBarClass}>
@@ -248,11 +249,11 @@ class TopNav extends Component {
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                               <div className="btn-group">
-                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                                <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
                                   <span className="navbar-toggler-icon account-icon"></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                  <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                  <span className="dropdown-item lg">Hi {name}</span>
                                       <Link onClick = {e=>this.uiStore.hideAccountDropdown()} to="/manage/shopper" className="dropdown-item">Shopper</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                       <Link onClick={e=>this.uiStore.hideAccountDropdown()} to="/manage/delivery" className="dropdown-item">Delivery</Link>
@@ -276,11 +277,11 @@ class TopNav extends Component {
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                               <div className="btn-group">
-                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                                <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
                                   <span className="navbar-toggler-icon account-icon"></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                  <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                  <span className="dropdown-item lg">Hi {name}</span>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                       <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/orders" className="dropdown-item">Packaging App</Link>
                                       <a onClick={e => this.handleLogout(e)} className="dropdown-item">Sign Out</a>
@@ -296,11 +297,11 @@ class TopNav extends Component {
                         <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                           <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                             <div className="btn-group">
-                              <button onClick={this.handleToggle} className="btn btn-transparent text-bold" type="button" data-toggle="dropdown" aria-expanded="true">
+                              <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
                                 <span className="navbar-toggler-icon account-icon"></span>
                               </button>
                               <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
-                                <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
+                                <span className="dropdown-item lg">Hi {name}</span>
                                     <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/inbound" className="dropdown-item">Inbound Shipment</Link>
                                     <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/outbound" className="dropdown-item">Outbound Shipment</Link>
                                     <Link onClick={e => this.uiStore.hideAccountDropdown()} to="/manage/co-packing/runs" className="dropdown-item">Co-packing</Link>
@@ -318,7 +319,7 @@ class TopNav extends Component {
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={e => this.uiStore.hideAccountDropdown()}>
                               <div className="btn-group">
-                                <button onClick={this.handleToggle} className="btn btn-transparent text-bold util-font-size-14" type="button" data-toggle="dropdown" aria-expanded="true">
+                                <button onClick={this.handleToggle} className="text-normal btn btn-transparent util-font-size-14" type="button" data-toggle="dropdown" aria-expanded="true">
                                   <span> Hi {name} <i class="fa fa-caret-down" aria-hidden="true"> </i></span>
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">

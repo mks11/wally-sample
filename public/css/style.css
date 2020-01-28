@@ -42,7 +42,6 @@ font-weight: 700;}
 h3{font-size: 24px;font-weight: 700;margin-bottom: 25px;}
 h3.fz28{font-size: 28px;}
 p{font-size: 19px;}
-.bg-pink{background-color: #fcf6f6;}
 .page-title{font-size: 38px;}
 .page-title.fz28{font-size: 28px;}
 
@@ -313,7 +312,7 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#78C98D;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
+background-color:#97ADFF;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:60px;}
 .footer-fb a{
@@ -771,7 +770,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   width: 100%;
   margin: 0 auto;
   color: #fff;
-  background-color: #78C98D;
+  background-color: #97ADFF;
   display: block;
 }
 .btn-main.disabled {
@@ -864,7 +863,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 .aw-input--control {
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid #cecece;
+  border-bottom: 1px solid #97ADFF;
   padding:0 10px;
 }
 .aw-input--control[readonly]:not(.aw-input--location) {
@@ -892,7 +891,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 .card-element-input {
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid #cecece;
+  border-bottom: 1px solid #97ADFF;
   padding: 20px 0;
 }
 
@@ -928,11 +927,11 @@ textarea.aw-input--control, textarea.aw-input--control:focus{
 .aw-input--control:focus {
   box-shadow: none;
   border: none;
-  border-bottom: 2px solid #78C98D;
+  border-bottom: 2px solid #97ADFF;
 }
 .aw-input--bordered:focus,
 .aw-input--bordered.focus-input {
-  border: 2px solid #78C98D;
+  border: 2px solid #97ADFF;
 }
 .aw-input--center {text-align:center;}
 
@@ -1179,7 +1178,7 @@ span.text-disclaimer {
 .help-btn{
   color: black;
   border-radius: 10px;
-  border: 2px solid #c0d6cd;
+  border: 2px solid #97ADFF;
   width: 100px;
   height: 40px;
   font-weight: bold;
@@ -1277,6 +1276,9 @@ a.view-all{
 }
 .text-bold {
   font-weight: bold;
+}
+.text-normal {
+  font-weight: normal;
 }
 
 .text-caps {
@@ -1977,6 +1979,8 @@ button.btn.btn-danger.btn-add-cart {
   text-transform: uppercase;
   font-weight:normal;
   line-height: .5;
+  background-color: #97ADFF;
+  border-color: #97ADFF;
 }
 button.btn.btn-danger.btn-add-cart.inactive {
   background-color: #cecece;

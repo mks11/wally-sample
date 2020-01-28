@@ -12,6 +12,7 @@ class Footer extends Component {
 
     this.zipStore = this.props.store.zip;
     this.userStore = this.props.store.user;
+    this.routing = this.props.store.routing
   }
 
   handleSubscribe() {
@@ -39,6 +40,8 @@ class Footer extends Component {
     this.setState({ email: e.target.value, invalidText: "" });
   };
   render() {
+    const isHomePage = this.routing.location.pathname === '/'
+
     let isAdmin = false;
     if (this.userStore.user) {
       const user = this.userStore.user;
@@ -46,7 +49,7 @@ class Footer extends Component {
     }
     if (isAdmin) return null;
     return (
-      <footer className="aw-footer bg-darkblue">
+      <footer className={ `aw-footer ${ isHomePage ? 'bg-pink' : 'util-bg-color-white' }` }>
         <div className="container">
           <div className="row">
             <div className="col-auto col-sm-2">
@@ -66,7 +69,7 @@ class Footer extends Component {
                       <Link to="howitworks">How It Works</Link>
                     </li>
                     <li>
-                      <Link to="blog">Blog</Link>
+                      <Link to="/backers">Backers</Link>
                     </li>
                     <li>
                       <Link to="help">Help</Link>
@@ -119,7 +122,7 @@ class Footer extends Component {
           </div>
         </div>
         <div className="container">
-          <div className="footer-bottom bg-darkblue">
+          <div className="footer-bottom">
             <div className="container">
               <form className="form-inline" style={{ position: "relative" }}>
                 <label htmlFor="subscribe-email">
