@@ -175,6 +175,30 @@
 
 @font-face {
   font-family: 'Sofia Pro';
+  src: url('../fonts/sofiapro/SofiaProMedium-Italic.eot');
+  src: local('Sofia Pro Medium Italic'), local('SofiaProMedium-Italic'),
+      url('../fonts/sofiapro/SofiaProMedium-Italic.eot?#iefix') format('embedded-opentype'),
+      url('../fonts/sofiapro/SofiaProMedium-Italic.woff2') format('woff2'),
+      url('../fonts/sofiapro/SofiaProMedium-Italic.woff') format('woff'),
+      url('../fonts/sofiapro/SofiaProMedium-Italic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Sofia Pro';
+  src: url('../fonts/sofiapro/SofiaProMedium.eot');
+  src: local('Sofia Pro Medium'), local('SofiaProMedium'),
+      url('../fonts/sofiapro/SofiaProMedium.eot?#iefix') format('embedded-opentype'),
+      url('../fonts/sofiapro/SofiaProMedium.woff2') format('woff2'),
+      url('../fonts/sofiapro/SofiaProMedium.woff') format('woff'),
+      url('../fonts/sofiapro/SofiaProMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sofia Pro';
   src: url('../fonts/sofiapro/SofiaProBlack-Italic.eot');
   src: local('Sofia Pro Black Italic'), local('SofiaProBlack-Italic'),
       url('../fonts/sofiapro/SofiaProBlack-Italic.eot?#iefix') format('embedded-opentype'),
@@ -224,7 +248,7 @@
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Circe", sans-serif;
+  font-family: 'Sofia Pro', sans-serif;
   color: #39393b;
   font-size: 13px;
 }
@@ -473,6 +497,12 @@ button:hover,
   background-color: #263a52;
 }*/
 
+.btn-inline-white {
+  background-color: #fff;
+  border-color: #fff;
+  border-width: 1px;
+}
+
 .btn-inline-black {
   color: #fff;
   background-color: #000;
@@ -670,7 +700,8 @@ button:hover,
   background-color: #fff !important;
 }
 .aw-header .btn-login,
-.aw-header .btn-sign-up {
+.aw-header .btn-sign-up,
+.aw-header .btn-backers {
   font-weight: bold;
   vertical-align: text-bottom;
 }
@@ -682,16 +713,15 @@ button:hover,
     padding: 11px;
   }
 
-  .aw-header .btn-login {
+  .aw-header .btn-login,
+  .aw-header .btn-sign-up,
+  .aw-header .btn-backers {
     font-size: 13px;
     width: 105px;
     padding: 6.5px;
   }
-
-  .aw-header .btn-sign-up {
-    font-size: 13px;
-    width: 105px;
-    padding: 6.5px;
+  .aw-header .btn-backers {
+    width: 30px;
   }
 }
 
@@ -751,7 +781,7 @@ button:hover,
   right: 0;
   top: 60px;
   bottom: 0;
-  background-color: #c0d6cd;
+  background-color: #fff;
   color: #263a52;
   line-height: 1;
   visibility: hidden;
@@ -965,6 +995,10 @@ button:hover,
 
 .nav-open .aw-nav--toggle svg path {
   stroke: #ffffff;
+}
+
+.nav-open + .aw-main {
+  display: none;
 }
 
 body {
