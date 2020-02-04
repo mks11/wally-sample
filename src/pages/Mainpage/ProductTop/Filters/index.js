@@ -38,10 +38,10 @@ class Filters extends Component {
 
   render() {
     const { filters } = this.state
-    const { vertical = false } = this.props
+    const { vertical = false, column = false } = this.props
 
     return (
-      <div className={`filters ${vertical ? 'vertical' : ''}`}>
+      <div className={`filters ${vertical ? 'vertical' : ''} ${column ? 'column' : ''}`}>
         <div className="filters-title">Filter by diet:</div>
         <div className="filters-values">
           <ul>

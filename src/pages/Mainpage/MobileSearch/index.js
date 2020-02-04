@@ -47,7 +47,7 @@ const MobileSearch = props => {
           <div className="px-3">
             <Filters
               onSelect={onFilterUpdate}
-              vertical
+              column
             />
           </div>
         </Col>

@@ -295,6 +295,10 @@ h1 {
     font-size: 38px;
     margin-bottom: 30px;
   }
+
+  .similar-products-checkout h3 {
+    margin-bottom: 30px !important;
+  }
 }
 
 h2 {
@@ -1338,7 +1342,7 @@ body {
 }
 
 .header-wrap + .aw-main {
-  padding-top: 80px;
+  padding-top: 90px;
 }
 
 .header-wrap.top-bar-open + .aw-main .product-top.fixed {

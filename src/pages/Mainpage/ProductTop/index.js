@@ -208,7 +208,15 @@ class ProductTop extends Component {
           <Row>
             <Col
               xs="auto"
-              className="pr-0 d-md-none d-block small-logo"
+              className="pr-0 d-none d-lg-block"
+            >
+              <Link to="/main">
+                <img src="/images/main_logo.svg" height="30" className="product-top-big-logo"/>
+              </Link>
+            </Col>
+            <Col
+              xs="auto"
+              className="pr-0 d-lg-none small-logo"
             >
               <Link to="/main">
                 <img src="/images/logo.png" height="40" />
@@ -293,7 +301,7 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col> */}
-            <Col xs={2} className="d-none d-md-block bdr-right">
+            {/* <Col xs={2} className="d-none d-md-block bdr-right">
               <h3
                 className="dropdown-categories"
                 onMouseEnter={this.handleMouseEnter}
@@ -325,7 +333,7 @@ class ProductTop extends Component {
                   }
                 </div>
               </div>
-            </Col>
+            </Col> */}
             <Col>
               <div className="d-flex align-items-start">
                 <SearchBar
