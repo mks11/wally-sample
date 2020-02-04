@@ -176,6 +176,7 @@ nav.aw-nav a.dropdown-item:hover::after {
   font-size: 20px;
   line-height: 32px;
   color: rgb(0, 0, 0);
+  font-weight: 500;
 }
 .landing-section h2.left{text-align: left;}
 .landing-section h5{font-size:16px;color:rgb(0, 0, 0);}
@@ -3230,4 +3231,8 @@ span.category-card-img {
 }
 .categories-list-group.selected-group + ul {
   display: block;
+}
+
+#nav-hero {
+  padding-top: 20px;
 }
