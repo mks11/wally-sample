@@ -15,7 +15,7 @@ class HowItWorks extends Component {
   render() {
     return (
       <div className="App align-items-center">
-         <Title content="Our Process" />
+         <Title content="Our Process" center />
 
          <section className="page-section aw-our--story align-items-center">
           <div className="container h-75 w-75">
