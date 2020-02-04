@@ -12,7 +12,6 @@ class SignupModal extends Component {
       name: '',
       email: '',
       password: '',
-      signupEmail: '',
 
       invalidText: '',
       signupRequest: false,
@@ -99,34 +98,6 @@ class SignupModal extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleSignUp = e => {
-    if(!validateEmail(this.state.signupEmail)) {
-      this.setState({ invalidText: 'Email not valid' })
-      return
-    }
-
-    const {
-      user,
-      modal,
-    } = this.props.stores
-
-    user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
-      .then(res => {
-        modal.switchModal('waitinglist', null, res)
-      })
-      .catch((e) => {
-        const msg =  e.response.data.error ? e.response.data.error.message : null
-        modal.switchModal('error', msg)
-      })
-    e.preventDefault()
-  }
-
-  handleEmailKeySubmit = e => {
-    if (e.keyCode === 13) {
-      this.handleSignUp(e)
-    }
-  }
-
   handlePinVerification = e => {
     const { user } = this.props.stores
     const {
@@ -151,7 +122,6 @@ class SignupModal extends Component {
       name,
       email,
       password,
-      signupEmail,
       invalidText,
       signupRequest,
       pinError,
@@ -165,24 +135,7 @@ class SignupModal extends Component {
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
-        <span className="mb-3">TWS is still in limited release. If you haven't already, enter your email below to join the waitlist and we'll email you when we get to your batch so you can start shopping waste-free.</span>
         <div className="form-wrapper">
-          <Input
-            className="aw-input--control mb-2 black"
-            type="text"
-            name="signupEmail"
-            placeholder="Enter your email"
-            onKeyDown={this.handleEmailKeySubmit}
-            onChange={this.onValueChange}
-          />
-          <button
-            className={`btn btn-main mb-2 ${signupEmail ? 'active' : ''}`}
-            onClick={this.handleSignUp}
-          >
-            JOIN WAITLIST
-          </button>
-          <br></br>
-          <span className="mb-3">Received your confirmation email? Enter your unique pin below and complete the sign up process.</span>
           <div className="pin-input">
             <Input
               className="aw-input--control black"

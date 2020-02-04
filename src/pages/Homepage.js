@@ -114,7 +114,7 @@ class Homepage extends Component {
     const store = this.props.store
     this.routing.push('/main')
     logModalView('/signup-info')
-    this.modalStore.toggleModal('signup')
+    this.modalStore.toggleModal('joinwaitlist')
     e.preventDefault()
   }
 
