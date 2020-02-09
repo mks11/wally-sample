@@ -292,10 +292,12 @@ class Mainpage extends Component {
                     <div className="mb-4">
                       <h4>The Wally Shop</h4>
                     </div>
-                    <Filters
-                      onSelect={this.handleFilterUpdate}
-                      vertical
-                    />
+                    <div className="d-md-block d-lg-none">
+                      <Filters
+                        onSelect={this.handleFilterUpdate}
+                        vertical
+                      />
+                    </div>
                     <CategoriesList
                       selectedId={id}
                       list={sidebar}

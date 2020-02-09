@@ -9,6 +9,7 @@ import { connect, logEvent } from 'utils'
 import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 
+import Filters from './Filters'
 import SearchBar from './SearchBar'
 import CartDropdown from './CartDropdown'
 
@@ -334,6 +335,9 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col> */}
+            <Col className="d-none d-lg-block">
+              <Filters onSelect={this.handleFiltersSelect} />
+            </Col>
             <Col>
               <div className="d-flex align-items-start">
                 <SearchBar
