@@ -177,7 +177,7 @@ class SimilarProducts extends Component {
         </div>
 
         <div className="container">
-          <div className="col-md-10 col-sm-8">
+          <div className="col-12">
             <div className="row">
             {
               this.productStore.impulse_products
