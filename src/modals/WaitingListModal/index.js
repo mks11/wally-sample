@@ -18,6 +18,19 @@ class WaitingListModal extends Component {
     )
   }
 
+  handleCopy = () => {
+    const $el = this.el
+    // console.log($el)
+    $el.select()
+    try {
+      var successful = document.execCommand('copy')
+      var msg = successful ? 'successfully' : 'unsuccessfully'
+      console.log('text coppied ' + msg)
+    } catch (err) {
+      console.log('Unable to copy text')
+    }
+  }
+
   render() {
     const { modal } = this.props.stores
 
@@ -38,7 +51,21 @@ class WaitingListModal extends Component {
         <p className="m-4">We will reach out as soon as we are ready for you to start ordering.</p>
 
         <p>
-          To get earlier access, share this link: <strong>{user_link}</strong>.
+          To get earlier access, share this link:
+          <input
+            className="waitinglist-link"
+            type="text"
+            value={user_link}
+            ref={el => this.el = el}
+            readOnly
+          />
+          <button
+            className="btn btn-transparent waitinglist-copy"
+            type="button"
+            onClick={this.handleCopy}
+          >
+            Copy to Clipboard
+          </button>
           <br />
           Plus, more people shopping package free means a 🌱planet
         </p>

@@ -7,12 +7,11 @@ const Product = props => {
   const { product, onProductClick, deliveryTimes } = props
   const producer = product.producer || null
   const price = product.product_price / 100
-  const unit_type = product.unit_type
-  
+
   let price_unit = 'per jar'
 
   const outOfStock = product.out_of_stock
-  return ( 
+  return (
     <div className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail" onClick={() => onProductClick(product.product_id, deliveryTimes)}>
       <LazyLoadImage
         alt={product.product_name || product.name}

@@ -207,17 +207,17 @@ class ProductTop extends Component {
       <div className="product-top">
         <Container>
           <Row>
-            <Col
+            {/* <Col
               xs="auto"
               className="pr-0 d-none d-lg-block"
             >
               <Link to="/main">
                 <img src="/images/main_logo.svg" height="30" className="product-top-big-logo"/>
               </Link>
-            </Col>
+            </Col> */}
             <Col
               xs="auto"
-              className="pr-0 d-lg-none small-logo"
+              className="pr-0 small-logo"
             >
               <Link to="/main">
                 <img src="/images/logo.png" height="40" />
@@ -335,7 +335,7 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col> */}
-            <Col className="d-none d-lg-block">
+            <Col className="d-none d-lg-block pl-5">
               <Filters onSelect={this.handleFiltersSelect} />
             </Col>
             <Col>

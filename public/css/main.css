@@ -354,12 +354,12 @@ h4 {
   background-color: #fae1ff;
 }
 
-.full-height {
-  min-height: 100vh;
+.bg-transparent {
+  background: transparent;
 }
 
-.bg-white {
-
+.full-height {
+  min-height: 100vh;
 }
 
 .bg-bottles {

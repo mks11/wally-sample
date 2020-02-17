@@ -178,7 +178,7 @@ class VendorProfile extends Component {
         ) : null}
 
         <div className="container">
-          <div className="col-md-10 col-sm-8">
+          <div className="col">
             <div className="row">
             {
               this.vendorProfileStore.products

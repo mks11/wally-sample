@@ -136,7 +136,7 @@ class SignupModal extends Component {
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
         <div className="form-wrapper">
-          <div className="pin-input">
+          <div className="pin-input mb-3">
             <Input
               className="aw-input--control black"
               type="text"
@@ -156,7 +156,7 @@ class SignupModal extends Component {
           </div>
 
           <Input
-            className="aw-input--control mb-2 black"
+            className="aw-input--control mb-3 black"
             type="text"
             name="email"
             placeholder="Enter your email"
@@ -165,7 +165,7 @@ class SignupModal extends Component {
             onBlur={this.handlePinVerification}
           />
           <Input
-            className="aw-input--control black"
+            className="aw-input--control mb-3 black"
             type="text"
             name="name"
             placeholder="Enter your name"
@@ -173,7 +173,7 @@ class SignupModal extends Component {
             onChange={this.onValueChange}
           />
           <Input
-            className="aw-input--control black"
+            className="aw-input--control mb-3 black"
             type="password"
             name="password"
             placeholder="Enter your password"

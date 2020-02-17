@@ -65,6 +65,14 @@ class Homepage extends Component {
       .catch((e) => {
         console.error('Failed to load zipcodes: ', e)
       })
+
+    window.$('body').addClass('homepage-background');
+
+    this.modalStore.toggleModal('waitinglist', null, { user_link: 'LINKe/URLe', verified_email: false, waitlist_position: 1023 })
+  }
+
+  componentWillUnmount() {
+    window.$('body').removeClass('homepage-background');
   }
 
   handleValidateZip() {
