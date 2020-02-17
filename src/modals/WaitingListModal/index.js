@@ -7,13 +7,15 @@ class WaitingListModal extends Component {
     const { modal } = this.props.stores
     const { waitlist_position } = modal.modalData
 
+    const size = waitlist_position > 999 ? 'md' : 'lg'
+
     new FlipCounterJs(
       document.getElementById('waitingListCounter'),
       {
         speed: 0,
         minDigits: 2,
         start: waitlist_position,
-        size: 'lg',
+        size,
       }
     )
   }
