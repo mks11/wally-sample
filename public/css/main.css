@@ -149,6 +149,13 @@
   color: #fc1aff;
 }
 
+/* Clearface Font */
+@font-face {
+  font-family: 'Clearface';
+  src: url('../fonts/clearface/ClearfaceITCPro-Black.ttf') format("truetype"),
+    url('../fonts/clearface/ClearfaceITCPro-Black.woff') format("woff") ;
+}
+
 /* SofiaPro Font */
 @font-face {
   font-family: 'Sofia Pro';
@@ -500,6 +507,11 @@ button:hover,
   color: #faf5ee;
   background-color: #263a52;
 }*/
+
+.btn-inline-transparent {
+  background-color: transparent;
+  border-width: 1px;
+}
 
 .btn-inline-white {
   background-color: #fff;

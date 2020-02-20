@@ -379,7 +379,7 @@ class TopNav extends Component {
               <div className="col-auto d-none d-md-block btn-top-account">
                 <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
                 <button onClick={this.handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
-                <button onClick={this.handleNavBackers} className="btn btn-inline-white btn-backers">✨</button>
+                <button onClick={this.handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
               </div>
                   : null}
 

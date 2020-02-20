@@ -11,6 +11,7 @@ input::-webkit-inner-spin-button {
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 body{padding:0; font-family: 'Sofia Pro', sans-serif; overflow-y: auto; overflow-x: hidden; }
+h1{ font-family: 'Clearface';}
 .btn-outline-white{border-color:#fff;border-width:2px;color:#fff;}
 .btn-outline-white:hover, .btn-outline-white:focus{background-color: #fff;color:#323f93;}
 .btn-success{border:0;font-family: 'Sofia Pro', sans-serif;font-size: 18px;line-height:24px;padding:13px 30px;
@@ -148,21 +149,8 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 .logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
-/* <<<<<<HEAD
-.logo-text-desktop{height:60px;padding-top:0px;}
-.logo-text-mobile{display:none;padding-top:12px;}
-=======*/
 .logo-text-desktop{height:35px;transition: 300ms all;}
 .logo-text-mobile{display:none;transition: 300ms all;}
-/*>>>>>>> packing-combined-mk*/
-
-/* Homepage */
-/* .landing-section{background-color:#9ECACB;background-image:url("../images/wally-home-banner-wood.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 10px 0 0;}
-.landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
-.landing-section-construct.mobile{background-image:url("../images/under-construction-mobile.jpg");}
-.landing-section-construct.mobile-horiz{background-image:url("../images/under-construction-mobile-horiz.jpg");}
-.landing-section.mobile{background-image:url("../images/wally-home-banner-wood-mobile.jpg");}
-.landing-section.mobile-horiz{background-image:url("../images/wally-home-banner-wood-mobile-horiz.jpg");} */
 
 .landing-section{background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 100px 0 0 0;}
 .landing-section-construct{min-height:100vh;color:#4940DB;background-color:#9ECACB;background-image:url("../images/under-construction.jpg");background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 0px 0 0;}
@@ -170,8 +158,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 .landing-section-construct.mobile-horiz{background-image:url("../images/under-construction-mobile-horiz.jpg");}
 .landing-section.mobile{}
 .landing-section.mobile-horiz{}
-.landing-section h1, h2{font-family: 'Aleo';}
-.landing-section h1{color:rgb(0, 0, 0);font-size:45px;}
+.landing-section h1{color:rgb(0, 0, 0);font-size:45px;font-family: 'Clearface';}
 .landing-section h2{
   font-size: 20px;
   line-height: 32px;
@@ -596,7 +583,7 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   /* .nav-open nav.aw-nav--toggle svg.icon-menu{display:none!important;} */
   .nav-open nav.aw-nav--toggle svg.icon-close{display:block;}
   .landing-section h1{max-width:300px;font-size: 32px;}
-  .landing-section h2{font-size: 24px;}
+  .landing-section h2{font-size: 24px;font-weight:300;}
   .landing-section p{max-width:320px;margin-left: auto;margin-right: auto;}
   .pricing-head{min-height:auto;}
   .card-pricing{box-shadow:none;-webkit-box-shadow:none;background-color:transparent;}

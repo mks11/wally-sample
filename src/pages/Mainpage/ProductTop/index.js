@@ -212,7 +212,7 @@ class ProductTop extends Component {
               className="pr-0 d-none d-lg-block"
             >
               <Link to="/main">
-                <img src="/images/main_logo.svg" height="30" className="product-top-big-logo"/>
+                <img src="/images/logo.png" height="30" className="product-top-big-logo"/>
               </Link>
             </Col>
             <Col
