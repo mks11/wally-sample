@@ -49,7 +49,7 @@ class Footer extends Component {
     }
     if (isAdmin) return null;
     return (
-      <footer className={ `aw-footer ${ isHomePage ? 'bg-pink' : 'util-bg-color-white' }` }>
+      <footer className={ `aw-footer ${ isHomePage ? 'bg-transparent' : 'util-bg-color-white' }` }>
         <div className="container">
           <div className="row">
             <div className="col-auto col-sm-2">

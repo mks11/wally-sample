@@ -199,7 +199,7 @@ border-radius: 0;}
   transform: translateY(-50%);
   font-size: 2.2rem;
 }
-.homepage {
+.homepage-background {
   background-image: linear-gradient(#fae1ff, #fff);
 }
 .homepage-info-section {
@@ -274,7 +274,7 @@ border-radius: 0;}
 .howto-item p{font-size: 15px;}
 .col-sm-6+.col-sm-6 .aw-iconbox::before{position: absolute;content:'';width:48px;height:86px;display:block;
 background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
-.howto-item img{height:auto;max-width:100%;width:100%;}
+.howto-item img{height:auto;max-width:90%;width:90%;}
 .howto-item h4{text-align: left;}
 
 .tagline{text-align: center;max-width:670px;margin:0 auto 70px;}
@@ -617,12 +617,12 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
 }
 @media (max-width:576px){
   .header-wrap + .aw-main {
-    padding-top: 80px;
+    padding-top: 70px;
   }
   p{font-size: 14px;}
   .page-title{font-size: 22px;}
   .page-title.fz28, h3.fz28{font-size: 20px;}
-  .aw-logo{height:40px;margin-left: -4px;}
+  .aw-logo{height:20px;margin-left: -4px;}
   .aw-logo svg{width:auto;height:40px;}
   .container{padding-left: 20px;padding-right: 20px;}
   .page-section{padding-top: 40px;padding-bottom: 20px;}
@@ -1497,7 +1497,10 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 /* .right-column{padding-left:50px;} */
 
-.product-content-left{padding-top: 20px;font-size: 15px;position: sticky; top: 71px;}
+.product-content-left{padding-top: 20px;font-size: 15px;position: sticky; top: 101px;}
+@media (max-width: 991px) {
+  .product-content-left{top: 71px;}
+}
 .header-wrap.top-bar-open + .aw-main .product-content-left{top: 181px;}
 .product-content-left.fixed{position:fixed; top: 51px;}
 .product-content-left h4 {font-weight: bold;font-size:15px;}
@@ -2110,7 +2113,7 @@ a {
   .btn-login {
     border: 0;
     float: right;
-    padding: 5px 10px;
+    padding: 20px 10px;
   }
   .header-wrap.top-bar-open + .aw-main .product-top.fixed {
     top: 0px;
@@ -2251,6 +2254,7 @@ a {
   .modal-body,
   .modal-body-no-footer {
     overflow-y: auto;
+    overflow-x: hidden;
     max-height: 100vh;
     padding-top: 4rem;
   }
@@ -3025,14 +3029,23 @@ span.category-card-img {
 .waitinglist-content {
   text-align: center;
 }
-.waitinglist-content .dcc {
+.waitinglist-content .fc-size-lg .dcc {
   height: 140px !important;
   width: 80px !important;
   font-size: 140px !important;
 }
-.waitinglist-content .dcc .tile {
+.waitinglist-content .fc-size-md .dcc {
+  height: 100px !important;
+  width: 56px !important;
+  font-size: 100px !important;
+}
+.waitinglist-content .fc-size-lg .dcc .tile {
   height: 70px !important;
   width: 80px !important;
+}
+.waitinglist-content .fc-size-md .dcc .tile {
+  height: 50px !important;
+  width: 56px !important;
 }
 .waitinglist-content .dcc .tile.front {
   background-color: #3c2dbf !important;
@@ -3046,16 +3059,28 @@ span.category-card-img {
   border-top-right-radius: 0 !important;
 }
 .waitinglist-content .dcc .hinge {
-  width: 80px !important;
-  top: 70px !important;
   border-bottom: none!important;
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.7)!important;
 }
-.waitinglist-content .dcc .digit {
+.waitinglist-content .fc-size-lg .dcc .hinge {
+  width: 80px !important;
+  top: 70px !important;
+}
+.waitinglist-content .fc-size-md .dcc .hinge {
+  width: 55px !important;
+  top: 50px !important;
+}
+.waitinglist-content .fc-size-lg .dcc .digit {
   height: 70px !important;
 }
-.waitinglist-content .dcc .back .digit {
+.waitinglist-content .fc-size-md .dcc .digit {
+  height: 50px !important;
+}
+.waitinglist-content .fc-size-lg .dcc .back .digit {
   padding-bottom: 70px !important;
+}
+.waitinglist-content .fc-size-md .dcc .back .digit {
+  padding-bottom: 50px !important;
 }
 #waitingListCounter {
   display: inline-block;
@@ -3063,7 +3088,21 @@ span.category-card-img {
 #waitingListCounter * {
   box-sizing: content-box;
 }
-
+.waitinglist-link {
+  font-weight: bold;
+  font-size: 14px;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  width: 100%;
+  outline: none;
+}
+.waitinglist-copy {
+  background: #6060a8;
+  color: #fff;
+  padding: 7px 15px;
+  margin: 7px 0;
+}
 
 .pin-input {
   position: relative;
@@ -3158,9 +3197,6 @@ span.category-card-img {
   position: absolute;
   width: 140px;
 } */
-.small-logo {
-  display: none;
-}
 .filters-values.as-sort ul li:before {
   content: none;
 }
@@ -3208,7 +3244,7 @@ span.category-card-img {
 .carbon-bar {
   height: 15px;
   background: #eee;
-  max-width: 200px;
+  max-width: 350px;
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 5px;

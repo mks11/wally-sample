@@ -65,6 +65,12 @@ class Homepage extends Component {
       .catch((e) => {
         console.error('Failed to load zipcodes: ', e)
       })
+
+    window.$('body').addClass('homepage-background');
+  }
+
+  componentWillUnmount() {
+    window.$('body').removeClass('homepage-background');
   }
 
   handleValidateZip() {

@@ -56,10 +56,10 @@ class JoinWaitlistModal extends Component {
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
-        <span className="mb-3">TWS is still in limited release. If you haven't already, enter your email below to join the waitlist and we'll email you when we get to your batch so you can start shopping waste-free.</span>
+        <span className="mb-4">TWS is still in limited release. If you haven't already, enter your email below to join the waitlist and we'll email you when we get to your batch so you can start shopping waste-free.</span>
         <div className="form-wrapper">
           <Input
-            className="aw-input--control mb-2 black"
+            className="aw-input--control mb-5 black"
             type="text"
             name="signupEmail"
             placeholder="Enter your email"
@@ -67,7 +67,7 @@ class JoinWaitlistModal extends Component {
             onChange={this.onValueChange}
           />
           <button
-            className={`btn btn-main mb-2 ${signupEmail ? 'active' : ''}`}
+            className={`btn btn-main mb-4 ${signupEmail ? 'active' : ''}`}
             onClick={this.handleSignUp}
           >
             JOIN WAITLIST
