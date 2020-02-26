@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'To ensure that we will be able to uphold our reusable goodness promise, we are starting with a limited release. Sign up now to secure your place in line!',
+      heroDescription: 'To ensure a top notch reusables signature experience, we are doing a phased rollout - It’s first sign up, first access so go! go! go!',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
