@@ -37,20 +37,6 @@ class About extends Component {
             <div className="row justify-content-between">
               <div className="col-md-5 col-xs-12">
                 <div className="tagline">
-                  <h1>Our History</h1>
-                  <p className="">
-                  The Wally Shop’s story starts with our founder, Tamara. Due to fate, destiny, luck, whatever you want to call it, she experienced first-hand two major trends of our generation: the rise of Amazon and the plastic-waste crisis.
-                  </p>
-
-                  <p className="">
-                  While working at Amazon, managing the packaging and shipping category, she wanted to switch to a more sustainable lifestyle. All the doom and gloom surrounding our environment made her anxious about the future, especially when thinking about the impact a single person could possibly have. But she saw she wasn’t alone ~ there were hundreds of thousands of us attending rallies, voicing our concerns and showing our support for the planet. She realized that if we could build an option that took the best of what something like Amazon could offer - value, selection, convenience - but in an inherently sustainably way, it would be something for people to rally around and feel powerful. Because everytime we choose the reusable option over the disposable option, we have made a real, positive impact. Together we can change the world, one order at a time.
-                  </p>
-                </div>  
-              </div> 
-
-            
-              <div className="col-md-5 col-xs-12">
-                <div className="tagline">
                   <h1>Our Mission</h1>
                   <p>
                   You’ve seen the news, we’ve seen the news. We have a climate- and waste- crisis that threatens all of us. However, we definitely don’t believe in doom and gloom! We believe that united, we control our future. We believe people want to do good, given the choice and it’s on us help make it more convenient. 
@@ -61,6 +47,19 @@ class About extends Component {
                   </p>
                 </div>  
               </div>
+
+              <div className="col-md-5 col-xs-12">
+                <div className="tagline">
+                  <h1>Our History</h1>
+                  <p className="">
+                  The Wally Shop’s story starts with our founder, Tamara. Due to fate, destiny, luck, whatever you want to call it, she experienced first-hand two major trends of our generation: the rise of Amazon and the plastic-waste crisis.
+                  </p>
+
+                  <p className="">
+                  While working at Amazon, managing the packaging and shipping category, she wanted to switch to a more sustainable lifestyle. All the doom and gloom surrounding our environment made her anxious about the future, especially when thinking about the impact a single person could possibly have. But she saw she wasn’t alone ~ there were hundreds of thousands of us attending rallies, voicing our concerns and showing our support for the planet. She realized that if we could build an option that took the best of what something like Amazon could offer - value, selection, convenience - but in an inherently sustainably way, it would be something for people to rally around and feel powerful. Because everytime we choose the reusable option over the disposable option, we have made a real, positive impact. Together we can change the world, one order at a time.
+                  </p>
+                </div>  
+              </div> 
             </div>
             <div className="tagline">
               <h2>Start your sustainable shopping <a href="/">here</a>.</h2>

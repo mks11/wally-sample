@@ -298,7 +298,7 @@ class Homepage extends Component {
                   <Col>
                     <div className="text-center">
                       <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
-                        SIGN UP
+                        SIGN UP NOW
                       </button>
                     </div>
                   </Col>
