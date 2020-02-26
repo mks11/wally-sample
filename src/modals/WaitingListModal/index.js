@@ -49,7 +49,9 @@ class WaitingListModal extends Component {
         <div className="text-caps"><strong>In line</strong></div>
         {!verified_email ? (
           <p className="m-2 text-error">Please check your email to verify your email and confirm your place in line</p>
-        ) : null}
+        ) : (
+          <p className="m-2 text-success">Your place in line is confirmed!</p>
+        )}
         <p className="m-4">We will reach out as soon as we are ready for you to start ordering.</p>
 
         <p>

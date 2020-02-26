@@ -72,7 +72,7 @@ class Footer extends Component {
                       <Link to="/backers">Backers</Link>
                     </li>
                     <li>
-                      <Link to="help">Help</Link>
+                      <Link to="help">FAQ</Link>
                     </li>
                   </ul>
                 </div>
@@ -88,9 +88,9 @@ class Footer extends Component {
                     <li>
                       <Link to={"/privacy"}>Privacy Policy</Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to={"/sell-through-wally"}>Sell through TWS</Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">

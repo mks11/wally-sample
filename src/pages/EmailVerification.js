@@ -23,7 +23,12 @@ class EmailVerification extends Component {
       this.userStore.verifyWaitlistEmail(email, token_id)
         .then(res => {
           if (res.verified) {
-            this.modalStore.toggleModal('emailverification', 'success')
+            this.userStore.getWaitlistInfo(email)
+              .then(res => {
+                this.modalStore.toggleModal('waitinglist', null, res)
+              }).catch(() => {
+                this.modalStore.toggleModal('error', 'Something went wrong during your request')
+              })
           } else {
             this.modalStore.toggleModal('emailverification', 'error')
           }
@@ -33,7 +38,7 @@ class EmailVerification extends Component {
         })
     }
 
-    this.props.store.routing.push('/main')
+    this.props.store.routing.push('/')
   }
 
   render() {
