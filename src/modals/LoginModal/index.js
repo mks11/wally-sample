@@ -130,13 +130,13 @@ class LoginModal extends Component {
         { step <= 2 && (
           <div>
             <h3 className="m-0 mb-2">Log in</h3>
-            <span className="mb-5">Welcome Back</span>
+            {/* <span className="mb-5">Welcome Back</span> */}
           </div>
         )}
         <div>
           { step === 1 && (
             <div>
-              <Input
+              {/* <Input
                 className="aw-input--control aw-input--center black"
                 type="text"
                 name="email"
@@ -156,6 +156,12 @@ class LoginModal extends Component {
                 userStore={user}
                 onSubmit={this.props.toggle}
               />
+            </div> */}
+            <div>
+            <span>UNDER CONSTRUCTION</span>
+            <span>All customer accounts are currently under maintenance. If you did have an account and ordered from The Wally Shop previously, do not worry - your store credit is still there!
+            We are excited to get started, and thank you for your patience!</span>
+            </div>
             </div>
           )
           }
@@ -188,7 +194,7 @@ class LoginModal extends Component {
           }
         </div>
         <div className="login-wrap text-center">
-          <span className="">New to The Wally Shop?</span>
+          <span className="">Want to join the waitlist?</span>
           <button onClick={this.handleLogin} className="btn-text btn-text--login">SIGN UP HERE</button>
         </div>
       </div>

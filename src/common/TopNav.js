@@ -16,13 +16,13 @@ class TopNav extends Component {
 
   handleLogin = () => {
     logModalView('/login')
-    this.routing.push('/main')
+    // this.routing.push('/main')
     this.modalStore.toggleModal('login')
   }
 
   handleSignup = () => {
     logModalView('/signup-zip')
-    this.routing.push('/main')
+    // this.routing.push('/main')
     this.modalStore.toggleModal('joinwaitlist')
   }
 
@@ -213,15 +213,15 @@ class TopNav extends Component {
 
                       {!this.userStore.status && (
                         <React.Fragment>
-                          {/* <li><a onClick={this.handleMobileNavLogin}>Log In</a></li> */}
+                          <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
                           <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
                           <li><a onClick={this.handleMobileNavBackers}>✨</a></li>
 
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
-                          <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li>
+                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> */}
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li>
-                          <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li>
+                          {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
                           <li><a onClick={() => this.handleNavMobile('/backers')}>Backers</a></li>
                         </React.Fragment>
                       )}
@@ -279,7 +279,6 @@ class TopNav extends Component {
                                   <Link onClick={this.hideAccountDropdown} to="/manage/packaging" className="dropdown-item">Packaging</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/delivery" className="dropdown-item">Delivery</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/courier-routing" className="dropdown-item">Courier Routing</Link>
-                                  {/* <Link onClick={this.hideAccountDropdown} to="/manage/blog" className="dropdown-item">Blog</Link> */}
                                   <Link onClick={this.hideAccountDropdown} to="/manage/shopping-app-1" className="dropdown-item">Shopping App</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/orders" className="dropdown-item">Packaging App</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/products" className="dropdown-item">Products App</Link>
@@ -377,13 +376,13 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ?
               <div className="col-auto d-none d-md-block btn-top-account">
-                {/* <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button> */}
+                <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
                 <button onClick={this.handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
                 <button onClick={this.handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
               </div>
                   : null}
 
-                  { this.userStore.status ?
+                  { this.userStore.status || true ?
                       <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" >
                         <span className="navbar-toggler-icon"></span>
                       </button>
