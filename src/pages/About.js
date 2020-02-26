@@ -24,9 +24,9 @@ class About extends Component {
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="tagline">
-              <h1>We are the sustainable grocery solution.</h1>
+              <h1>We deliver your favorites from the brands you love, 100% waste-free.</h1>
               <p className="text-center">
-                The Wally Shop is changing up the grocery game with package-free deliveries that come straight to your door. While a trash-free trip to the store might seem impossible, The Wally Shop’s all reusable packaging and same-day delivery means ordering groceries can be sustainable and convenient. So you can spend more time doing what you love, and we’ll ensure you have local, organic, zero waste ingredients whenever you need them.
+                We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (bulk foods! Beauty products! Household products!) in all reusable packaging conveniently and without sacrificing any value. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any products in mind ;)
               </p>
             </div>  
 
@@ -37,32 +37,33 @@ class About extends Component {
             <div className="row justify-content-between">
               <div className="col-md-5 col-xs-12">
                 <div className="tagline">
-                  <h1>It’s farmers market fresh - without the farmers market trip.</h1>
+                  <h1>Our History</h1>
                   <p className="">
-                  <b>“After managing the packaging and shipping category at Amazon, I became aware of just how much packaging we use on a daily basis.” - Tamara Lim, Founder</b>
+                  The Wally Shop’s story starts with our founder, Tamara. Due to fate, destiny, luck, whatever you want to call it, she experienced first-hand two major trends of our generation: the rise of Amazon and the plastic-waste crisis.
                   </p>
 
-                  <p>
-                  After switching to a more sustainable lifestyle, founder Tamara Lim realized how difficult zero waste grocery shopping was with a busy schedule. With single-use plastic packaging at an all-time high, grocery stores were a barrier to her sustainable endeavors. That’s why she created The Wally Shop, which combines the convenience of delivery with the responsibility of package-free groceries. 
-                  </p>
-
-                  <p>
-                  Buying groceries with The Wally Shop means you can guarantee that all ingredients were ethically purchased. We prioritize shopping at local farmers markets, supporting small businesses and choosing organic ingredients above all else. Want to find out more about where we shop? Click <a href="/help/topics/5b9157bc5e3b27043b178f8e">here</a>. 
-                  </p>
-                </div>  
-              </div>
-
-              <div className="col-md-5 col-xs-12">
-                <div className="tagline">
-                  <h1>Our Name</h1>
                   <p className="">
-                  The name "The Wally Shop" was inspired by an incredible cooperative of individuals from India called the dabbawalla. Dubbed the world’s “best food delivery system”, they visit suburbs to pick up worker’s freshly made lunch tiffins - usually prepared by a wife - and deliver them to their respective husbands working in the city. After lunch, the tiffins are collected and returned. At The Wally Shop, our goal is similar: we offer same-day delivery and a completely closed loop system with exclusively reusable packaging. And by shopping at farmers markets and local stores for healthy, organic ingredients, The Wally Shop gives you a fresh take on package-free groceries.
+                  While working at Amazon, managing the packaging and shipping category, she wanted to switch to a more sustainable lifestyle. All the doom and gloom surrounding our environment made her anxious about the future, especially when thinking about the impact a single person could possibly have. But she saw she wasn’t alone ~ there were hundreds of thousands of us attending rallies, voicing our concerns and showing our support for the planet. She realized that if we could build an option that took the best of what something like Amazon could offer - value, selection, convenience - but in an inherently sustainably way, it would be something for people to rally around and feel powerful. Because everytime we choose the reusable option over the disposable option, we have made a real, positive impact. Together we can change the world, one order at a time.
                   </p>
                 </div>  
               </div> 
+
+            
+              <div className="col-md-5 col-xs-12">
+                <div className="tagline">
+                  <h1>Our Mission</h1>
+                  <p>
+                  You’ve seen the news, we’ve seen the news. We have a climate- and waste- crisis that threatens all of us. However, we definitely don’t believe in doom and gloom! We believe that united, we control our future. We believe people want to do good, given the choice and it’s on us help make it more convenient. 
+                  </p>
+
+                  <p>
+                  That’s where we come in. Our mission is to help you get what you need from your favorite brands, in all reusable, returnable packaging for a 100% waste free shopping experience. And while we are all cleaning up the world ~ we’re going to have fun while we are at it, in full purple dreamy glow ✨ 
+                  </p>
+                </div>  
+              </div>
             </div>
             <div className="tagline">
-              <h2>Start your sustainable shopping <a href="/main">here</a>.</h2>
+              <h2>Start your sustainable shopping <a href="/">here</a>.</h2>
             </div>
           </div>
         </section>

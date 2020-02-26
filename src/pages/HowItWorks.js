@@ -23,7 +23,7 @@ class HowItWorks extends Component {
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
                 <div className="w-75 pl-lg-4">
                   <h1>Order</h1>
-                  <p>Shop produce from local, organic farmers markets & shops</p>
+                  <p>Choose from hundreds of responsibly-made, Trader Joe’s price-competitive bulk foods. At checkout, you will be charged a deposit for your packaging (don’t worry, you will be getting it back!).</p>
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -39,7 +39,7 @@ class HowItWorks extends Component {
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
                   <h1>Receive</h1>
-                  <p className="receive-item">Get it delivered in all reusable packaging</p>
+                  <p className="receive-item">our order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@ class HowItWorks extends Component {
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
                 <div className="w-75 pl-lg-4">
                   <h1>Return</h1>
-                  <p>Return packaging at a future delivery for reuse</p>
+                  <p>Once finished, you can return all your packaging (jars, totes, anything we send to you, we take back and reuse) to a FedEx/UPS delivery courier on a future delivery or schedule a free pick-up on the website. Your deposit is credited back to you and the packaging is cleaned to be put back into circulation.</p>
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
