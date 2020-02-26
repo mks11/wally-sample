@@ -53,9 +53,12 @@ class WaitingListModal extends Component {
           <p className="m-2 text-success">Your place in line is confirmed!</p>
         )}
         <p className="m-4">We will reach out as soon as we are ready for you to start ordering.</p>
+        <p className="m-4">The first 1000 people will have access to launch!</p>
 
         <p>
-          To get earlier access, share the link below. Refer a friend and skip ahead 100 places :)
+          <strong>Refer a friend & skip</strong>
+          <br></br>
+          Share the link below. Every friend that joins means 100 places skipped :)
           <input
             className="waitinglist-link"
             type="text"
