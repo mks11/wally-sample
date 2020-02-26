@@ -52,7 +52,7 @@ class Homepage extends Component {
           } else if (user.type === 'tws-ops') {
             this.routing.push('/manage/shopping-app-1')
           } else {
-            this.routing.push('/main')
+            // this.routing.push('/main')
           }
         }
         this.setState({fetching: false})

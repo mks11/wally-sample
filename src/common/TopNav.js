@@ -213,7 +213,7 @@ class TopNav extends Component {
 
                       {!this.userStore.status && (
                         <React.Fragment>
-                          <li><a onClick={this.handleMobileNavLogin}>Log In</a></li>
+                          {/* <li><a onClick={this.handleMobileNavLogin}>Log In</a></li> */}
                           <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
                           <li><a onClick={this.handleMobileNavBackers}>✨</a></li>
 
@@ -369,7 +369,7 @@ class TopNav extends Component {
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li>
+                        {/* <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li> */}
                       </React.Fragment>
                     )}
                   </ul>
@@ -377,7 +377,7 @@ class TopNav extends Component {
               </div>
               { !this.userStore.status ?
               <div className="col-auto d-none d-md-block btn-top-account">
-                <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
+                {/* <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button> */}
                 <button onClick={this.handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
                 <button onClick={this.handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
               </div>
