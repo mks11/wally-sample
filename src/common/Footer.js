@@ -71,9 +71,9 @@ class Footer extends Component {
                     <li>
                       <Link to="/backers">Backers</Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to="help">FAQ</Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">

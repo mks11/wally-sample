@@ -219,8 +219,8 @@ class TopNav extends Component {
 
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
-                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> */}
-                          <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li>
+                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> 
+                          <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
                           {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
                           <li><a onClick={() => this.handleNavMobile('/backers')}>Backers</a></li>
                         </React.Fragment>
@@ -367,8 +367,8 @@ class TopNav extends Component {
                       <React.Fragment>
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
-                        {/* <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li> */}
+                        {/* <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li> */}
                       </React.Fragment>
                     )}
                   </ul>

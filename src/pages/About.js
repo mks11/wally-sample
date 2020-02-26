@@ -30,8 +30,8 @@ class About extends Component {
               </p>
             </div>  
 
-            <div className="tagline">
-              <img alt="About page" src="images/brocoli.png" />
+            <div className="tagline howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+              <img alt="About page" src="images/about.jpg" />
             </div>
 
             <div className="row justify-content-between">
