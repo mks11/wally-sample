@@ -58,7 +58,7 @@ class WaitingListModal extends Component {
         <p>
           <strong>Refer a friend & skip</strong>
           <br></br>
-          Share the link below. Every friend that joins means 100 places skipped :)
+          Spread the reusables love. For every friend that joins, you'll skip ahead 100 places :)
           <input
             className="waitinglist-link"
             type="text"
