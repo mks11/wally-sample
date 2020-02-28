@@ -136,7 +136,7 @@ class LoginModal extends Component {
         <div>
           { step === 1 && (
             <div>
-              {/* <Input
+              <Input
                 className="aw-input--control aw-input--center black"
                 type="text"
                 name="email"
@@ -156,13 +156,13 @@ class LoginModal extends Component {
                 userStore={user}
                 onSubmit={this.props.toggle}
               />
-            </div> */}
-            <div>
+            </div>
+            {/* <div>
             <span>UNDER CONSTRUCTION</span>
             <span>All customer accounts are currently under maintenance. If you did have an account and ordered from The Wally Shop previously, do not worry - your store credit is still there!
             We are excited to get started, and thank you for your patience!</span>
-            </div>
-            </div>
+            </div> */}
+          </div>
           )
           }
 
