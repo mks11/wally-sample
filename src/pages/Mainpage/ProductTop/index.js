@@ -9,6 +9,7 @@ import { connect, logEvent } from 'utils'
 import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 
+import Filters from './Filters'
 import SearchBar from './SearchBar'
 import CartDropdown from './CartDropdown'
 
@@ -206,9 +207,17 @@ class ProductTop extends Component {
       <div className="product-top">
         <Container>
           <Row>
+            {/* <Col
+              xs="auto"
+              className="pr-0 d-none d-lg-block"
+            >
+              <Link to="/main">
+                <img src="/images/logo.png" height="30" className="product-top-big-logo"/>
+              </Link>
+            </Col> */}
             <Col
               xs="auto"
-              className="pr-0 d-md-none d-block small-logo"
+              className="pr-0 small-logo"
             >
               <Link to="/main">
                 <img src="/images/logo.png" height="40" />
@@ -293,7 +302,7 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col> */}
-            <Col xs={2} className="d-none d-md-block bdr-right">
+            {/* <Col xs={2} className="d-none d-md-block bdr-right">
               <h3
                 className="dropdown-categories"
                 onMouseEnter={this.handleMouseEnter}
@@ -325,6 +334,9 @@ class ProductTop extends Component {
                   }
                 </div>
               </div>
+            </Col> */}
+            <Col className="d-none d-lg-block pl-5">
+              <Filters onSelect={this.handleFiltersSelect} />
             </Col>
             <Col>
               <div className="d-flex align-items-start">

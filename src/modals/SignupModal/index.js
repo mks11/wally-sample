@@ -12,7 +12,6 @@ class SignupModal extends Component {
       name: '',
       email: '',
       password: '',
-      signupEmail: '',
 
       invalidText: '',
       signupRequest: false,
@@ -99,34 +98,6 @@ class SignupModal extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleSignUp = e => {
-    if(!validateEmail(this.state.signupEmail)) {
-      this.setState({ invalidText: 'Email not valid' })
-      return
-    }
-
-    const {
-      user,
-      modal,
-    } = this.props.stores
-
-    user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
-      .then(res => {
-        modal.switchModal('waitinglist', null, res)
-      })
-      .catch((e) => {
-        const msg =  e.response.data.error ? e.response.data.error.message : null
-        modal.switchModal('error', msg)
-      })
-    e.preventDefault()
-  }
-
-  handleEmailKeySubmit = e => {
-    if (e.keyCode === 13) {
-      this.handleSignUp(e)
-    }
-  }
-
   handlePinVerification = e => {
     const { user } = this.props.stores
     const {
@@ -151,7 +122,6 @@ class SignupModal extends Component {
       name,
       email,
       password,
-      signupEmail,
       invalidText,
       signupRequest,
       pinError,
@@ -165,27 +135,10 @@ class SignupModal extends Component {
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
-        <span className="mb-3">TWS is still in limited release. If you haven't already, enter your email below to join the waitlist and we'll email you when we get to your batch so you can start shopping waste-free.</span>
         <div className="form-wrapper">
-          <Input
-            className="aw-input--control mb-2"
-            type="text"
-            name="signupEmail"
-            placeholder="Enter your email"
-            onKeyDown={this.handleEmailKeySubmit}
-            onChange={this.onValueChange}
-          />
-          <button
-            className={`btn btn-main mb-2 ${signupEmail ? 'active' : ''}`}
-            onClick={this.handleSignUp}
-          >
-            JOIN WAITLIST
-          </button>
-          <br></br>
-          <span className="mb-3">Received your confirmation email? Enter your unique pin below and complete the sign up process.</span>
-          <div className="pin-input">
+          <div className="pin-input mb-3">
             <Input
-              className="aw-input--control"
+              className="aw-input--control black"
               type="text"
               name="pin"
               placeholder="Enter pin"
@@ -203,7 +156,7 @@ class SignupModal extends Component {
           </div>
 
           <Input
-            className="aw-input--control mb-2"
+            className="aw-input--control mb-3 black"
             type="text"
             name="email"
             placeholder="Enter your email"
@@ -212,7 +165,7 @@ class SignupModal extends Component {
             onBlur={this.handlePinVerification}
           />
           <Input
-            className="aw-input--control"
+            className="aw-input--control mb-3 black"
             type="text"
             name="name"
             placeholder="Enter your name"
@@ -220,7 +173,7 @@ class SignupModal extends Component {
             onChange={this.onValueChange}
           />
           <Input
-            className="aw-input--control"
+            className="aw-input--control mb-3 black"
             type="password"
             name="password"
             placeholder="Enter your password"
@@ -228,9 +181,9 @@ class SignupModal extends Component {
             onChange={this.onValueChange}
           />
 
-          <span className="tnc mt-3 mb-2">
-            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><strong>Terms of Service</strong></Link> &nbsp;and
-            &nbsp;<Link target="_blank" to={"/privacy"}><strong>Privacy Policy.</strong></Link>
+          <span className="tnc mt-5 mb-5">
+            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><i>Terms of Service</i></Link> &nbsp;and
+            &nbsp;<Link target="_blank" to={"/privacy"}><i>Privacy Policy.</i></Link>
           </span>
           {
             invalidText
@@ -246,9 +199,7 @@ class SignupModal extends Component {
           </button>
 
           <div className="fancy-spacing my-4">
-            <hr/>
             <span>or</span>
-            <hr/>
           </div>
 
           <FBLogin
@@ -258,9 +209,9 @@ class SignupModal extends Component {
             canSubmit={pin && !pinError}
           />
         </div>
-        <div className="login-wrap">
-          <span className="t-18">Already have an account</span>
-          <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOGIN</button>
+        <div className="login-wrap text-center">
+          <span className="">Already have an account?</span>
+          <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOG IN HERE</button>
         </div>
       </div>
     )

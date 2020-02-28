@@ -21,6 +21,7 @@ import MainFirstModal from './MainFirstModal'
 import ModalError from './ModalError'
 import WaitingListModal from './WaitingListModal'
 import EmailVerification from './EmailVerification'
+import JoinWaitlistModal from './JoinWaitlistModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -42,6 +43,7 @@ const ModalRoutes = {
   error: ModalError,
   waitinglist: WaitingListModal,
   emailverification: EmailVerification,
+  joinwaitlist: JoinWaitlistModal,
 }
 
 class RootModal extends Component {

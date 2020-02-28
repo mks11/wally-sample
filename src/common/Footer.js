@@ -49,7 +49,7 @@ class Footer extends Component {
     }
     if (isAdmin) return null;
     return (
-      <footer className={ `aw-footer ${ isHomePage ? 'bg-pink' : 'util-bg-color-white' }` }>
+      <footer className={ `aw-footer ${ isHomePage ? 'bg-transparent' : 'util-bg-color-white' }` }>
         <div className="container">
           <div className="row">
             <div className="col-auto col-sm-2">
@@ -71,9 +71,9 @@ class Footer extends Component {
                     <li>
                       <Link to="/backers">Backers</Link>
                     </li>
-                    <li>
-                      <Link to="help">Help</Link>
-                    </li>
+                    {/* <li>
+                      <Link to="help">FAQ</Link>
+                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">
@@ -88,9 +88,9 @@ class Footer extends Component {
                     <li>
                       <Link to={"/privacy"}>Privacy Policy</Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to={"/sell-through-wally"}>Sell through TWS</Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">

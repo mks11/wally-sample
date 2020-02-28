@@ -15,7 +15,7 @@ class Homepage extends Component {
       zip: '',
       email: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Small producer-made bulk foods & products conveniently delivered in our reusable, returnable packaging for a completely waste-free experience.',
+      heroDescription: 'To ensure a top notch reusables signature experience, we are doing a phased rollout - It’s first sign up, first access so go! go! go!',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -35,6 +35,7 @@ class Homepage extends Component {
     this.handleSubscribe = this.handleSubscribe.bind(this)
     this.handleStart = this.handleStart.bind(this)
     this.handleExplore = this.handleExplore.bind(this)
+    this.handleSignup = this.handleSignup.bind(this)
     this.zipStore = this.props.store.zip
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
@@ -52,7 +53,7 @@ class Homepage extends Component {
           } else if (user.type === 'tws-ops') {
             this.routing.push('/manage/shopping-app-1')
           } else {
-            this.routing.push('/main')
+            // this.routing.push('/main')
           }
         }
         this.setState({fetching: false})
@@ -65,6 +66,12 @@ class Homepage extends Component {
       .catch((e) => {
         console.error('Failed to load zipcodes: ', e)
       })
+
+    window.$('body').addClass('homepage-background');
+  }
+
+  componentWillUnmount() {
+    window.$('body').removeClass('homepage-background');
   }
 
   handleValidateZip() {
@@ -114,7 +121,7 @@ class Homepage extends Component {
     const store = this.props.store
     this.routing.push('/main')
     logModalView('/signup-info')
-    this.modalStore.toggleModal('signup')
+    this.modalStore.toggleModal('joinwaitlist')
     e.preventDefault()
   }
 
@@ -122,6 +129,11 @@ class Homepage extends Component {
     logEvent({ category: "Homepage", action: "ExploreShopping" })
     this.routing.push('/main')
     e.preventDefault()
+  }
+
+  handleSignup(e) {
+    logModalView('/signup-zip')
+    this.modalStore.toggleModal('joinwaitlist')
   }
 
   handleZip(e) {
@@ -239,15 +251,15 @@ class Homepage extends Component {
             <div className="tagline">
               <h2>It's what's on the inside that counts.</h2>
               <p></p>
-              <p>Say goodbye to wasteful packaging with The Wally Shop. Order local, organic produce and we'll deliver it same-day from farmers markets and bulk stores. The best part? We deliver in all reusable packaging, which means no plastic. Ever. Return your packaging during a future delivery, and we'll clean and reuse it.</p>
-              <p>You take care of the earth - we'll take care of the groceries.</p>
+              <p>We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (Bulk foods! Beauty products! Household products!) conveniently in all reusable packaging. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any brands in mind ;)</p>
+              <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
             <div className="row d-flex justify-content-center align-items-center">
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
                 <div className="w-75 pl-lg-4">
                   <h1>Order</h1>
-                  <p>Shop produce from local, organic farmers markets & shops</p>
+                  <p>Choose from hundreds of responsibly-made, Trader Joe’s price-competitive bulk foods. At checkout, you will be charged a deposit for your packaging (don’t worry, you will be getting it back!).</p>
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -263,7 +275,7 @@ class Homepage extends Component {
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
                   <h1>Receive</h1>
-                  <p className="receive-item">Get it delivered in all reusable packaging</p>
+                  <p className="receive-item">Your order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
                 </div>
               </div>
             </div>
@@ -272,7 +284,7 @@ class Homepage extends Component {
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
                 <div className="w-75 pl-lg-4">
                   <h1>Return</h1>
-                  <p>Return packaging at a future delivery for reuse</p>
+                  <p>Once finished, you can return all your packaging (jars, totes, anything we send to you, we take back and reuse) to a FedEx/UPS delivery courier on a future delivery or schedule a free pick-up on the website. Your deposit is credited back to you and the packaging is cleaned to be put back into circulation.</p>
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -285,8 +297,8 @@ class Homepage extends Component {
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <button onClick={this.handleExplore} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
-                        EXPLORE
+                      <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
+                        SIGN UP NOW
                       </button>
                     </div>
                   </Col>

@@ -13,7 +13,7 @@ class InviteFriends extends Component {
 
   handleSignup = () => {
     logEvent({ category: "ReferSignup", action: "StartSignup" })
-    this.modalStore.toggleModal('signup')
+    this.modalStore.toggleModal('joinwaitlist')
     this.routing.push('/main')
   }
 

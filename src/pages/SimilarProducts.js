@@ -3,6 +3,8 @@ import ReactGA from "react-ga";
 import { connect, logEvent, logModalView, datesEqual } from "utils";
 import { Link } from "react-router-dom";
 
+import CarbonBar from 'common/CarbonBar'
+
 import Product from "./Mainpage/Product";
 
 class SimilarProducts extends Component {
@@ -155,39 +157,27 @@ class SimilarProducts extends Component {
 
   render() {
     const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
-    const carbonBarValue = cartItems.length % 10;
 
     return (
       <div className="App">
         <div className="container">
-          <div className="row justify-content-md-center">
+          <div className="row justify-content-md-center mt-2">
             <div className="col col-lg-9">
               <h1>Customers also bought:</h1>
             </div>
             <hr />
-            <div className="col col-lg-3">
-              <h3>
-                <Link to="/checkout">Continue Checkout</Link>
+            <div className="col col-lg-3 similar-products-checkout">
+              <h3 className="text-right">
+                <Link to="/checkout" className="color-purple">Continue Checkout</Link>
               </h3>
             </div>
             <br />
           </div>
-          <div className="text-center">
-            <h3>
-              You are {carbonBarValue ? (10 - (carbonBarValue % 10)) : 10} items from fully minimizing your carbon footprint
-            </h3>
-            <div className="progress">
-              <div
-                className="progress-bar"
-                role="progressbar"
-                style={{ width: `${carbonBarValue * 10}%` }}
-              ></div>
-            </div>
-          </div>
+          <CarbonBar value={cartItems.length % 10} />
         </div>
 
         <div className="container">
-          <div className="col-md-10 col-sm-8">
+          <div className="col-12">
             <div className="row">
             {
               this.productStore.impulse_products
