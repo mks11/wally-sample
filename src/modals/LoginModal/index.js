@@ -38,7 +38,7 @@ class LoginModal extends Component {
     user.login(email, password)
       .then(user => {
         this.props.toggle()
-        routing.push('/')
+        routing.push('/main')
       }).catch(e => {
         console.error('Failed to login', e)
         const msg = e.response.data.error.message
@@ -157,12 +157,6 @@ class LoginModal extends Component {
                 onSubmit={this.props.toggle}
               />
             </div>
-            {/* <div>
-            <span>UNDER CONSTRUCTION</span>
-            <span>All customer accounts are currently under maintenance. If you did have an account and ordered from The Wally Shop previously, do not worry - your store credit is still there!
-            We are excited to get started, and thank you for your patience!</span>
-            </div> */}
-          </div>
           )
           }
 

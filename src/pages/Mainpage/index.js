@@ -45,16 +45,17 @@ class Mainpage extends Component {
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    this.routing.push('/');
-    // this.userStore.getStatus(true)
-    //   .then((status) => {
-    //     this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-    //     this.checkoutStore.getDeliveryTimes()
-    //     this.loadData()
+    // for web launch
+    // this.routing.push('/');
+    this.userStore.getStatus(true)
+      .then((status) => {
+        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+        this.checkoutStore.getDeliveryTimes()
+        this.loadData()
 
-    //     const { mainFirst } = this.userStore.flags || {}
-    //     !mainFirst && this.modalStore.toggleModal('mainFirst')
-    //   })
+        // const { mainFirst } = this.userStore.flags || {}
+        // !mainFirst && this.modalStore.toggleModal('mainFirst')
+      })
   }
 
   loadData() {

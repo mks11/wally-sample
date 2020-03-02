@@ -76,11 +76,7 @@ class ProductTop extends Component {
 
   handleCheckout = () => {
     if (this.userStore.status) {
-      if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
-        this.modalStore.toggleDelivery()
-      } else {
-        this.routing.push('/main/similar-products')
-      }
+      this.routing.push('/main/similar-products')
     } else {
       this.modalStore.toggleModal('login')
     }
