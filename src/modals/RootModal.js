@@ -22,6 +22,7 @@ import ModalError from './ModalError'
 import WaitingListModal from './WaitingListModal'
 import EmailVerification from './EmailVerification'
 import JoinWaitlistModal from './JoinWaitlistModal'
+import RedeemDepositModal from './RedeemDepositModal'
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -44,6 +45,7 @@ const ModalRoutes = {
   waitinglist: WaitingListModal,
   emailverification: EmailVerification,
   joinwaitlist: JoinWaitlistModal,
+  redeemdeposit: RedeemDepositModal,
 }
 
 class RootModal extends Component {
