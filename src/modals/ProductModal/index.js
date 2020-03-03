@@ -513,7 +513,9 @@ class ProductModal extends Component {
             )}
           </Col>
         </Row>
-        <ProductRatingForm product_id={product_id} />
+        {localStorage.user && (
+          <ProductRatingForm product_id={product_id} />
+        )}
       </div>
     )
   }

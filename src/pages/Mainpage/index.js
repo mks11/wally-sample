@@ -15,7 +15,7 @@ import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
 import Filters from './ProductTop/Filters'
-import CategoriesList from './CategoriesList'
+import CategoriesList from './CategoriesList' 
 import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
@@ -37,7 +37,7 @@ class Mainpage extends Component {
       categoryTypeMode: 'limit',
       showMobileSearch: false,
       filters: [],
-      sortType: null,
+      sortType: 'times_bought',
     }
 
     this.id = this.props.match.params.id
@@ -45,16 +45,16 @@ class Mainpage extends Component {
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    this.routing.push('/');
-    // this.userStore.getStatus(true)
-    //   .then((status) => {
-    //     this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-    //     this.checkoutStore.getDeliveryTimes()
-    //     this.loadData()
+    // if (!localStorage.user) this.routing.push('/');
+    this.userStore.getStatus(true)
+      .then((status) => {
+        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+        this.checkoutStore.getDeliveryTimes()
+        this.loadData()
 
-    //     const { mainFirst } = this.userStore.flags || {}
-    //     !mainFirst && this.modalStore.toggleModal('mainFirst')
-    //   })
+        const { mainFirst } = this.userStore.flags || {}
+        !mainFirst && this.modalStore.toggleModal('mainFirst')
+      })
   }
 
   loadData() {
@@ -287,17 +287,11 @@ class Mainpage extends Component {
       <div className="product-content">
         <div className="container">
           <div className="row ">
-            <div className="col-md-2 col-sm-4">
+            <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
                       <h4>The Wally Shop</h4>
-                    </div>
-                    <div className="d-md-block d-lg-none">
-                      <Filters
-                        onSelect={this.handleFilterUpdate}
-                        vertical
-                      />
                     </div>
                     <CategoriesList
                       selectedId={id}
@@ -315,18 +309,18 @@ class Mainpage extends Component {
 
               {
                 id === 'buyagain' && !this.productStore.search.state ? (
-                      <div className="col-md-10 col-sm-12">
+                      <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={cartItems.length % 10} />
+                            {/* <CarbonBar value={cartItems.length % 10} /> */}
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
                               <div className="filters-values as-sort">
                                 <ul>
-                                  <li onClick={() => this.handleSort('times_bought')}>Most Bought</li>
-                                  <li onClick={() => this.handleSort('last_ordered')}>Recently Ordered</li>
-                                  <li onClick={() => this.handleSort('by_name')}>A-Z</li>
+                                  <li className={this.state.sortType === 'times_bought' && 'active'} onClick={() => this.handleSort('times_bought')}>Most Bought</li>
+                                  <li className={this.state.sortType === 'last_ordered' && 'active'} onClick={() => this.handleSort('last_ordered')}>Recently Ordered</li>
+                                  <li className={this.state.sortType === 'by_name' && 'active'} onClick={() => this.handleSort('by_name')}>A-Z</li>
                                 </ul>
                               </div>
                             </div>
@@ -358,7 +352,7 @@ class Mainpage extends Component {
               {
                 this.productStore.search.state
                   ? (
-                      <div className="col-md-10 col-sm-12">
+                      <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
                           {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
@@ -392,7 +386,7 @@ class Mainpage extends Component {
                       </div>
                   ) : (
                     id !== 'buyagain' && (
-                      <div className="col-md-10 col-sm-12">
+                      <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
                           { this.props.location.pathname.split('/')[1] === 'packaging' ?
                             <ProductWithPackaging packagingId={this.props.match.params.id}/>
@@ -448,9 +442,9 @@ class Mainpage extends Component {
                 />
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button>
-                    <div className="px-3">
+                    {/* <div className="px-3">
                       <CarbonBar value={cartItems.length % 10} />
-                    </div>
+                    </div> */}
                   {cartItems.length>0 ?
                       <React.Fragment>
                         <h2 className="ml-4 mb-2">Order</h2>

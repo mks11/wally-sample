@@ -215,14 +215,14 @@ class ProductTop extends Component {
                 <img src="/images/logo.png" height="30" className="product-top-big-logo"/>
               </Link>
             </Col> */}
-            <Col
+            {/* <Col
               xs="auto"
               className="pr-0 small-logo"
             >
               <Link to="/main">
                 <img src="/images/logo.png" height="40" />
               </Link>
-            </Col>
+            </Col> */}
             {/* <Col xs="auto" className="d-none d-md-block bdr-right">
               <div
                 className="dropdown-address d-flex"
@@ -335,7 +335,7 @@ class ProductTop extends Component {
                 </div>
               </div>
             </Col> */}
-            <Col className="d-none d-lg-block pl-5">
+            <Col className="d-none d-lg-block col-4">
               <Filters onSelect={this.handleFiltersSelect} />
             </Col>
             <Col>
@@ -343,6 +343,14 @@ class ProductTop extends Component {
                 <SearchBar
                   onSearch={onSearch}
                 />
+                <Col xs="auto" className="d-block d-lg-none ml-auto">
+                  <button
+                    className="btn btn-transparent"
+                    onClick={this.handleMobileSearchOpen}
+                  >
+                    <span className="catsearch-icon"></span>
+                  </button>
+                </Col>
                 <Link
                   className="d-none d-md-block ml-3"
                   to="/main/buyagain"
@@ -375,14 +383,6 @@ class ProductTop extends Component {
                 </span>
               </div>
             </Col> */}
-            <Col xs="auto" className="d-block d-md-none ml-auto">
-              <button
-                className="btn btn-transparent"
-                onClick={this.handleMobileSearchOpen}
-              >
-                <span className="catsearch-icon"></span>
-              </button>
-            </Col>
           </Row>
         </Container>
       </div>
