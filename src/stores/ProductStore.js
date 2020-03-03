@@ -201,7 +201,7 @@ class ProductStore {
       term,
       filters: res.data.filters || []
     };
-    this.currentSearchFilter = res.data.filters.map(filter => filter.cat_id);
+    this.currentSearchFilter = res.data && res.data.filters && res.data.filters.map(filter => filter.cat_id);
     this.currentSearchCategory = "All Categories";
 
     return res.data;
