@@ -16,13 +16,13 @@ class TopNav extends Component {
 
   handleLogin = () => {
     logModalView('/login')
-    // this.routing.push('/main')
+    this.routing.push('/main')
     this.modalStore.toggleModal('login')
   }
 
   handleSignup = () => {
     logModalView('/signup-zip')
-    // this.routing.push('/main')
+    this.routing.push('/main')
     this.modalStore.toggleModal('joinwaitlist')
   }
 
