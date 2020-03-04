@@ -80,7 +80,7 @@ class Orders extends Component {
                 </thead>
                 <tbody>
                   <tr>
-                    {item.delivery_time ? (<td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>) : (<td>{moment(item.return_date.substring(0,10)).format('MMM DD, YYYY')}</td>)}
+                    {item.createdAt ? (<td>{moment(item.createdAt.substring(0,10)).format('MMM DD, YYYY')}</td>) : (<td>{moment(item.return_date.substring(0,10)).format('MMM DD, YYYY')}</td>)}
                     {item.cart_items ? (<td>{item.cart_items.length}</td>) : (<td>{item.returns.length}</td>)}
                     {item.total ? (<td>{item.total ? formatMoney(item.total/100) : "$0.00"}</td>) : (<td>{item.total_credit ? formatMoney(item.total_credit/100) : "$0.00"}</td>)}
                   </tr>
