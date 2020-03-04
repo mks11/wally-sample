@@ -19,6 +19,14 @@ class HowItWorks extends Component {
 
          <section className="page-section aw-our--story align-items-center">
           <div className="container h-75 w-75">
+
+            <div className="tagline">
+              <h2>It's what's on the inside that counts.</h2>
+              <p></p>
+              <p>We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (Bulk foods! Beauty products! Household products!) conveniently in all reusable packaging. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any brands in mind ;)</p>
+              <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
+            </div>
+            
             <div className="row d-flex justify-content-center align-items-center">
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
                 <div className="w-75 pl-lg-4">
