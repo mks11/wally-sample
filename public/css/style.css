@@ -1591,7 +1591,7 @@ border-left:10px solid transparent;border-right:10px solid transparent;border-bo
 }
 
 .product-thumbnail{margin-bottom: 40px;cursor:pointer}
-.product-thumbnail img{display:block;max-width:100%;width:100%;width: 200px;height: 180px;border-radius:50%}
+.product-thumbnail img{display:block;max-width:100%;width:100%;width: 200px;height: 180px;}
 
 .product-detail{
   margin-top:20px;
