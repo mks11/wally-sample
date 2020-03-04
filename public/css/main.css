@@ -715,6 +715,15 @@ button:hover,
 .util-bg-color-white {
   background-color: #fff !important;
 }
+
+.util-padding-20 {
+  padding: 20px;
+}
+
+.util-margin-top-20 {
+  margin-top: 20px;
+}
+
 .aw-header .btn-login,
 .aw-header .btn-sign-up,
 .aw-header .btn-backers {

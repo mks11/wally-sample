@@ -75,6 +75,49 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/**
+ * checkes if ts1 comes before ts2
+ * @param {string} begin 'hh:mm AM/PM'
+ * @param {string} end 'hh:mm AM/PM'
+ */
+const isValidTimeOrder = (begin, end) => {
+  // if either is null, return valid for now
+  if (!begin || !end){
+    return true
+  }
+  const beginTime = moment(begin,'h:mm a')
+  const endTime = moment(end, 'h:mm a')
+  return beginTime.isSameOrBefore(endTime)
+} 
+
+
+// takes 'HH:MM AM' or 'HH:MM PM' as first argument
+/**
+ * 
+ * @param {*} start_time 
+ * @param {*} end_time 
+ * @param {*} intervalInMins 
+ * @param {*} limit 
+ */
+function genTimePoints(start_time, end_time, intervalInMins = 0, limit = 60) {
+  const result = [];
+  const start = moment(start_time, 'hh:mm a')
+  const end = moment(end_time,'hh:mm a')
+  result.push(start.format('LT'))
+  for (let i = 0; i < limit; i++) {
+    start.add(intervalInMins,'minutes').format('LT')
+    if (start.isSameOrBefore(end)){
+      result.push(start.format('LT'))
+    } else {
+      break;
+    }
+  }
+
+  return result;
+}
+
+
+
 export {
-  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter
+  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder
 }

@@ -198,6 +198,7 @@ class TopNav extends Component {
                           <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
                           <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                           <li><a onClick={() => this.handleNavMobile('/orders')}>Order History</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/schedulepickup')}>Schedule Pickup</a></li>
                           <li><a onClick={() => this.handleNavMobile('/user')}>Account Settings</a></li>
                           <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
@@ -346,6 +347,7 @@ class TopNav extends Component {
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
                                       <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
+                                      <Link onClick = {this.hideAccountDropdown} to="/schedulepickup" className="dropdown-item">Schedule Pickup</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
                                       <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>

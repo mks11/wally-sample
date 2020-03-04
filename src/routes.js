@@ -47,6 +47,7 @@ import VendorProfile from "./pages/vendor/VendorProfile";
 import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
 import InboundShipments from "./pages/manage/shipments/InboundShipments";
 import ManageRetail from "./pages/manage/retail/ManageRetail";
+import SchedulePickup from "./pages/SchedulePickup";
 
 export default (
   <Fragment>
@@ -120,6 +121,7 @@ export default (
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
       <Route exact path="/howitworks" component={HowItWorks} />
+      <Route exact path="/schedulepickup" component={SchedulePickup}/>
     </Switch>
   </Fragment>
 );
