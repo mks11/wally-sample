@@ -4,14 +4,14 @@ import { API_SCHEDULED_PICKUP } from "../config";
 import axios from "axios";
 
 class UserPickupStore {
-  async schedulePickup(
+  async schedulePickup({
     address_id,
     scheduled_date,
     earliest_time,
     latest_time,
     pickup_notes,
     auth
-  ) {
+  }) {
     const resp = await axios.post(
       API_SCHEDULED_PICKUP,
       {
