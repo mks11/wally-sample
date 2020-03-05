@@ -114,6 +114,11 @@ class TopNav extends Component {
     this.modalStore.toggleModal('redeemdeposit')
   }
 
+  handleSchedulePickupClick = () => {
+    this.hideAccountDropdown()
+    this.modalStore.toggleModal('schedulepickup')
+  }
+
   render() {
     let storeCredit, name
     let isAdmin = false
@@ -357,6 +362,7 @@ class TopNav extends Component {
                                       <Link onClick={this.hideAccountDropdown} to="/help" className="dropdown-item">Help</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/giftcard" className="dropdown-item">Gift Card</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/backers" className="dropdown-item">Our Backers</Link>
+                                      <a onClick={this.handleSchedulePickupClick} className="dropdown-item">Schedule Pickup</a>
                                       <a onClick={this.handleRedeemDepositClick} className="dropdown-item">Redeem Deposit</a>
                                       <a onClick={this.handleLogout} className="dropdown-item">Sign Out</a>
                                 </div>

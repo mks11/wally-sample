@@ -477,6 +477,10 @@ class Checkout extends Component {
     });
   };
 
+  handlePackagingDepositClick = () => {
+    this.modalStore.toggleModal('packagingdeposit')
+  }
+
   updateTotal () {
     const order = this.checkoutStore.order;
     const customTip =
@@ -679,7 +683,7 @@ class Checkout extends Component {
                           </div>}
 
                       <div className="summary">
-                        <span>Packaging Deposit</span>
+                        <span><strong><a onClick={this.handlePackagingDepositClick}> Packaging Deposit </a></strong> (You'll get this back ;) )</span>
                         <span>{formatMoney (order.packaging_deposit / 100)}</span>
                       </div>
 
@@ -769,18 +773,8 @@ class Checkout extends Component {
                 </div>
 
                 <p className="mt-3">
-                  Prices and totals are subject to final adjustments based on
-                  available products, weights and at-location prices. The
-                  packaging deposit will be returned to your account as store
-                  credit upon the return of used packaging during any future
-                  order. By placing your order, you agree to be bound by the
-                  Terms of Service and Privacy Policy. Your card will be
-                  temporarily authorized for an amount slightly greater than the
-                  estimated order total. Your statement will reflect the final
-                  order total after order completion.{' '}
-                  <Link to={'/help/topics/5b919926d94b070836bd5e4b'}>
-                    Learn more.
-                  </Link>
+                  By placing your order, you agree to be bound by the
+                  Terms of Service and Privacy Policy.
                 </p>
               </section>
             </div>
