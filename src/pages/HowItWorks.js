@@ -47,7 +47,7 @@ class HowItWorks extends Component {
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
                   <h1>Receive</h1>
-                  <p className="receive-item">our order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
+                  <p className="receive-item">Your order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
                 </div>
               </div>
             </div>
