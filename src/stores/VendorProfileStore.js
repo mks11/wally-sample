@@ -11,9 +11,14 @@ class VendorProfileStore {
 
     if (res.data) {
       this.vendor = res.data.vendor;
-      console.log("vendor from API is");
-      console.log(this.vendor)
       this.products = res.data.products;
+
+      if (!this.vendor.length) {
+        this.vendor = {
+          logo_url: '/images/logo.png',
+          description: 'One of our responsible, sustainable vendors.',
+        }
+      }
     }
 
     return res.data

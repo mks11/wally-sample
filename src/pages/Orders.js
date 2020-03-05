@@ -87,9 +87,11 @@ class Orders extends Component {
                 </tbody>
               </table>
               <hr className="my-1"/>
-              <span className="text-bold">Order #: {item._id}</span><br/>
-              {item.cart_items ? (<span>{this.printItems(item.cart_items)}</span>) : (<span>{this.printPackaging(item.returns)}</span>)}
-              <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
+              <div className="text-bold order-item-content">{`${item.status === 'returned' ? 'Return' : 'Order'}`} #: {item._id}</div>
+              <div className="order-item-content-wrapper">
+                {item.cart_items ? (<div className="order-item-content">{this.printItems(item.cart_items)}</div>) : (<div className="order-item-content">{this.printPackaging(item.returns)}</div>)}
+                <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
+              </div>
             </div>
             ))}
 

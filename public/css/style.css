@@ -1362,18 +1362,21 @@ section.page-section.bg-fruitfull {
   font-size: 25px;
 }
 
-.aw--orders td, .aw--orders span{
+.aw--orders td, .aw--orders .order-item-content{
   font-size: 18px;
 }
-.order-item {
+.order-item,
+.order-item-content-wrapper {
   position:relative;
 }
-
+.order-item-content-wrapper .order-item-content {
+  margin-right: 200px;
+}
 .text-report {
   cursor: pointer;
   font-size: 18px;
   position: absolute;
-  bottom:0;
+  top:0;
   right:0;
 }
 
@@ -2092,6 +2095,9 @@ a {
   .text-report {
     display: block;
     position: relative;
+  }
+  .order-item-content-wrapper .order-item-content {
+    margin-right: 0;
   }
   .order-wrap {
     padding: 0;
