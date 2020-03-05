@@ -196,7 +196,7 @@ class SignupModal extends Component {
             className={`btn btn-main ${(pin && name && email && password && !signupRequest && !pinError) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
-            SIGN UP
+            CREATE ACCOUNT
           </button>
 
           <div className="fancy-spacing my-4">

@@ -204,14 +204,14 @@ class TopNav extends Component {
                           <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
                           <li><a onClick={() => this.handleNavMobile('/orders')}>Order History</a></li>
                           <li><a onClick={() => this.handleNavMobile('/user')}>Account Settings</a></li>
-                          <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li>
+                          {/* <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li> */}
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
 
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li>
                           <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li>
-                          <li><a onClick={() => this.handleNavMobile('/backers')}>Backers</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/backers')}>Our Backers</a></li>
                         </React.Fragment>
                       )}
 
@@ -226,7 +226,7 @@ class TopNav extends Component {
                           {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> 
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
                           {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
-                          <li><a onClick={() => this.handleNavMobile('/backers')}>Backers</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/backers')}>Our Backers</a></li>
                         </React.Fragment>
                       )}
                     </ul>
@@ -351,12 +351,12 @@ class TopNav extends Component {
                                       <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
-                                      <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a>
+                                      {/* <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a> */}
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/help" className="dropdown-item">Help</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/giftcard" className="dropdown-item">Gift Card</Link>
-                                      <Link onClick={this.hideAccountDropdown} to="/backers" className="dropdown-item">Backers</Link>
+                                      <Link onClick={this.hideAccountDropdown} to="/backers" className="dropdown-item">Our Backers</Link>
                                       <a onClick={this.handleRedeemDepositClick} className="dropdown-item">Redeem Deposit</a>
                                       <a onClick={this.handleLogout} className="dropdown-item">Sign Out</a>
                                 </div>

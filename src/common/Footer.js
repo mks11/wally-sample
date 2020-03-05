@@ -69,7 +69,7 @@ class Footer extends Component {
                       <Link to="howitworks">How It Works</Link>
                     </li>
                     <li>
-                      <Link to="/backers">Backers</Link>
+                      <Link to="/backers">Our Backers</Link>
                     </li>
                     {/* <li>
                       <Link to="help">FAQ</Link>

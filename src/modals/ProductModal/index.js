@@ -284,7 +284,7 @@ class ProductModal extends Component {
         if (subcat_name) {
           price_unit = subcat_name;
         } else {
-          price_unit = 'unit';
+          price_unit = 'jar';
         }
     } else {
       price_unit += unit_type;

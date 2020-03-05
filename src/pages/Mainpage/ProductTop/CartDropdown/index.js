@@ -57,7 +57,10 @@ class CartDropdown extends Component {
     const { cart } = this.props
 
     const items = cart ? cart.cart_items : []
-    const count = items.length
+    var count = 0;
+    for (var i = items.length - 1; i >= 0; i--) {
+      count += items[i].customer_quantity
+    };
     const subtotal = cart ? (cart.subtotal / 100) : 0
 
     // const deliveryFeeInfo =

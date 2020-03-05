@@ -49,12 +49,15 @@ class Mainpage extends Component {
     // this.routing.push('/');
     this.userStore.getStatus(true)
       .then((status) => {
-        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-        this.checkoutStore.getDeliveryTimes()
-        this.loadData()
-
-        // const { mainFirst } = this.userStore.flags || {}
-        // !mainFirst && this.modalStore.toggleModal('mainFirst')
+        if (!status) {
+          this.routing.push('/');
+        } else {
+          this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+          this.checkoutStore.getDeliveryTimes()
+          this.loadData()  
+          const { mainFirst } = this.userStore.flags || {}
+          !mainFirst && this.modalStore.toggleModal('mainFirst')
+        }
       })
   }
 
@@ -267,6 +270,10 @@ class Mainpage extends Component {
 
     const id = this.props.match.params.id
     const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
+    var count = 0;
+    for (var i = cartItems.length - 1; i >= 0; i--) {
+      count += cartItems[i].customer_quantity
+    };
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null
 
@@ -313,7 +320,7 @@ class Mainpage extends Component {
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
                           <div className="product-breadcrumb">
-                            {/* <CarbonBar value={cartItems.length % 10} /> */}
+                            {/* <CarbonBar value={count % 12} /> */}
                             <h2>Buy Again</h2>
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
@@ -358,7 +365,7 @@ class Mainpage extends Component {
                           {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={cartItems.length % 10} />
+                            <CarbonBar value={count % 12} />
                             <hr/>
                           </div>
 
@@ -395,7 +402,7 @@ class Mainpage extends Component {
                           {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={cartItems.length % 10} />
+                            <CarbonBar value={count % 12} />
                           </div>
 
                           {
@@ -444,7 +451,7 @@ class Mainpage extends Component {
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button>
                     {/* <div className="px-3">
-                      <CarbonBar value={cartItems.length % 10} />
+                      <CarbonBar value={count % 12} />
                     </div> */}
                   {cartItems.length>0 ?
                       <React.Fragment>
