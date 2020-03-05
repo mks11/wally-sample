@@ -11,6 +11,7 @@ import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
+import ScheduleUserPickupStore from "./ScheduleUserPickupStore";
 
 const store = {
   ui: UiStore,
@@ -27,7 +28,8 @@ const store = {
   admin: AdminStore,
   backer: BackerStore,
   vendor: VendorProfileStore,
-  products: VendorProfileStore
+  products: VendorProfileStore,
+  schedulePickup: ScheduleUserPickupStore
 };
 
 export default store;

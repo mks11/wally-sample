@@ -9,8 +9,8 @@ import { connect } from "utils";
 import TimeOnlyOptions from "../common/TimeOnlyOptions";
 import { FormGroup } from "reactstrap";
 
-function Container(props){
-  return <div className="util-margin-top-20" {...props}/>
+function Container(props) {
+  return <div className="util-margin-top-20" {...props} />;
 }
 
 class AddressOptionsManaged extends Component {
@@ -153,12 +153,8 @@ class SchedulePickup extends Component {
   constructor(props) {
     super(props);
 
+    this.schedulePickupStore = this.props.store.schedulePickup;
     this.userStore = this.props.store.user;
-    this.uiStore = this.props.store.ui;
-    this.modalStore = this.props.store.modal;
-    this.productStore = this.props.store.product;
-    this.checkoutStore = this.props.store.checkout;
-    this.routing = this.props.store.routing;
 
     this.state = {
       timeDropdown: false,
@@ -168,7 +164,7 @@ class SchedulePickup extends Component {
       earliestTime: this.props.earliestTime,
       latestTime: null,
 
-      preferredLocation: '',
+      preferredLocation: "",
 
       lockEarliestTime: false,
       lockLatestTime: false,
@@ -189,62 +185,85 @@ class SchedulePickup extends Component {
     };
   }
 
+  componentDidMount() {}
 
   checkValidityTime = () => {
-    const isValid = isValidTimeOrder(this.state.earliestTime, this.state.latestTime)
-    if (!isValid){
+    const isValid = isValidTimeOrder(
+      this.state.earliestTime,
+      this.state.latestTime
+    );
+    if (!isValid) {
       this.setState({
         invalidLatestTime: true // only make the latest time invalid
-      })
+      });
     } else {
       this.setState({
-        invalidLatestTime: false 
-      })
-    } 
-  }
-
-  handleSelectEarliestTime = ({time}) => {
-    this.setState({
-      // lockEarliestTime: true,
-      earliestTime: time
-    }, this.checkValidityTime);
-  };
-  handleSelectLatestTime = ({time}) => {
-    this.setState({
-      // lockLatestTime: true,
-      latestTime: time
-    }, this.checkValidityTime);
+        invalidLatestTime: false
+      });
+    }
   };
 
-  handleOnDatePick = (d) => {
+  handleSelectEarliestTime = ({ time }) => {
+    this.setState(
+      {
+        // lockEarliestTime: true,
+        earliestTime: time
+      },
+      this.checkValidityTime
+    );
+  };
+  handleSelectLatestTime = ({ time }) => {
+    this.setState(
+      {
+        // lockLatestTime: true,
+        latestTime: time
+      },
+      this.checkValidityTime
+    );
+  };
+
+  handleOnDatePick = d => {
     this.setState({
       pickupDate: d
-    })
-  }
+    });
+  };
 
-  handlePreferredLocation = (pref) => {
+  handlePreferredLocation = pref => {
     this.setState({
       preferredLocation: pref
-    })
-  }
+    });
+  };
 
-  handleConfirmPickup = () =>{
-    const {preferredLocation, latestTime, earliestTime, pickupDate} = this.state
-
-    alert(JSON.stringify({
-      earliestTime,
+  handleConfirmPickup = () => {
+    const {
+      preferredLocation,
       latestTime,
-      pickupDate,
-      preferredLocation
-    }))
-  }
+      earliestTime,
+      pickupDate
+    } = this.state;
+
+    const selectedAddress = this.userStore.selectedDeliveryAddress;
+
+    this.schedulePickupStore.schedulePickup({
+      address_id: selectedAddress.address_id,
+      scheduled_date: pickupDate,
+      earliest_time: earliestTime,
+      latest_time: latestTime,
+      pickup_notes: preferredLocation
+    });
+  };
 
   render() {
+    const INVALID_TIME = "pick a different time";
+    const {
+      preferredLocation,
+      latestTime,
+      earliestTime,
+      pickupDate
+    } = this.state;
+    const isReadyToSubmit =
+      preferredLocation && latestTime && earliestTime && pickupDate;
 
-    const INVALID_TIME = "pick a different time"
-    const {preferredLocation, latestTime, earliestTime, pickupDate} = this.state
-    const isReadyToSubmit = preferredLocation && latestTime && earliestTime && pickupDate
-                          
     return (
       <React.Fragment>
         <div class="container">
@@ -255,32 +274,41 @@ class SchedulePickup extends Component {
           </div>
         </div>
         <div class="container">
-        <Container>
-          <h3 class="m-0 mb-3 p-r">Date</h3>
-          <CustomDatepicker dateFormat={"MM / DD / YYYY"} 
-            selected={this.state.pickupDate} 
-            onDatePick={this.handleOnDatePick}
-          />
+          <Container>
+            <h3 class="m-0 mb-3 p-r">Date</h3>
+            <CustomDatepicker
+              dateFormat={"MM / DD / YYYY"}
+              selected={this.state.pickupDate}
+              onDatePick={this.handleOnDatePick}
+            />
           </Container>
           <Container>
-          <TimeOnlyOptions
-            title={"Earliest pickup time"}
-            lock={false}
-            placeholderText="Pick an earliest pickup time"
-            data={genTimePoints(this.props.earliestTime, this.props.latestTime, 30).map(p => ({time: p}))}
-            onSelectTime={this.handleSelectEarliestTime}
-            invalidText={this.state.invalidEarliestTime && INVALID_TIME}
-          />
+            <TimeOnlyOptions
+              title={"Earliest pickup time"}
+              lock={false}
+              placeholderText="Pick an earliest pickup time"
+              data={genTimePoints(
+                this.props.earliestTime,
+                this.props.latestTime,
+                30
+              ).map(p => ({ time: p }))}
+              onSelectTime={this.handleSelectEarliestTime}
+              invalidText={this.state.invalidEarliestTime && INVALID_TIME}
+            />
           </Container>
           <Container>
-          <TimeOnlyOptions
-            title={"Latest pickup time"}
-            lock={false}
-            placeholderText="Pick a latest pickup time"
-            data={genTimePoints(this.state.earliestTime, this.props.latestTime, 30).map(p => ({time: p}))}
-            onSelectTime={this.handleSelectLatestTime}
-            invalidText={this.state.invalidLatestTime && INVALID_TIME}
-          />
+            <TimeOnlyOptions
+              title={"Latest pickup time"}
+              lock={false}
+              placeholderText="Pick a latest pickup time"
+              data={genTimePoints(
+                this.state.earliestTime,
+                this.props.latestTime,
+                30
+              ).map(p => ({ time: p }))}
+              onSelectTime={this.handleSelectLatestTime}
+              invalidText={this.state.invalidLatestTime && INVALID_TIME}
+            />
           </Container>
           <Container>
             <AddressOptionsManaged
@@ -291,12 +319,18 @@ class SchedulePickup extends Component {
           <Container>
             <h3 class="m-0 mb-3 p-r"> Preferred Pickup Location </h3>
             <PreferredPickup
-              selected={this.state.preferredLocation} 
+              selected={this.state.preferredLocation}
               handleSelected={this.handlePreferredLocation}
             />
           </Container>
           <Container>
-            <button class={`btn btn-main ${isReadyToSubmit?"active":"inactive"}`} onClick={this.handleConfirmPickup}> Confirm Pickup </button>
+            <button
+              class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}
+              onClick={this.handleConfirmPickup}
+            >
+              {" "}
+              Confirm Pickup{" "}
+            </button>
           </Container>
         </div>
       </React.Fragment>
@@ -305,14 +339,14 @@ class SchedulePickup extends Component {
 }
 
 SchedulePickup.defaultProps = {
-  earliestTime:'6:00 AM',
-  latestTime: '11:00 PM'
-}
+  earliestTime: "6:00 AM",
+  latestTime: "11:00 PM"
+};
 
 SchedulePickup.propTypes = {
   earliestTime: PropTypes.string.isRequired,
   latestTime: PropTypes.string.isRequired,
   onConfirmPickup: PropTypes.func.isRequired
-}
+};
 
 export default connect("store")(SchedulePickup);
