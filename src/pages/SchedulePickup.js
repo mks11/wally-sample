@@ -249,7 +249,8 @@ class SchedulePickup extends Component {
       scheduled_date: pickupDate,
       earliest_time: earliestTime,
       latest_time: latestTime,
-      pickup_notes: preferredLocation
+      pickup_notes: preferredLocation,
+      auth: this.userStore.getHeaderAuth()
     });
   };
 

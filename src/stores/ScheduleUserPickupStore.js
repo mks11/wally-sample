@@ -9,15 +9,20 @@ class UserPickupStore {
     scheduled_date,
     earliest_time,
     latest_time,
-    pickup_notes
+    pickup_notes,
+    auth
   ) {
-    const resp = await axios.post(API_SCHEDULED_PICKUP, {
-      address_id,
-      scheduled_date,
-      earliest_time,
-      latest_time,
-      pickup_notes
-    });
+    const resp = await axios.post(
+      API_SCHEDULED_PICKUP,
+      {
+        address_id,
+        scheduled_date,
+        earliest_time,
+        latest_time,
+        pickup_notes
+      },
+      auth
+    );
   }
 }
 
