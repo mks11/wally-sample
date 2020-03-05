@@ -13,9 +13,9 @@ class CheckoutFirstModal extends Component {
   render() {
     return (
       <div className="login-wrap">
-        <h3 className="m-0 mb-2">Set of Packaging?</h3>
+        <h3 className="m-0 mb-2">Packaging Deposit?</h3>
         <p className="mb-5 info-popup">
-          To deliver you the Wally Signature reusables experience, we charge a deposit on our packaging.
+          To deliver you the Wally Signature reusables experience, we charge a deposit on your packaging. 
         </p>
         <button onClick={this.handleStart} className="btn btn-main active">Got it!</button>
       </div>

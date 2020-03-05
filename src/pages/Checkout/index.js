@@ -678,6 +678,20 @@ class Checkout extends Component {
                             </span>
                           </div>}
 
+                      <div className="summary">
+                        <span>Packaging Deposit</span>
+                        <span>{formatMoney (order.packaging_deposit / 100)}</span>
+                      </div>
+
+                      {order.applied_packaging_balance === 0
+                        ? null
+                        : <div className="summary">
+                            <span>Applied Packaging Deposit</span>
+                            <span>
+                              -{formatMoney (order.applied_packaging_balance / 100)}
+                            </span>
+                          </div>}
+
                       {order.promo_discount === 0
                         ? null
                         : <div className="summary">
@@ -687,15 +701,10 @@ class Checkout extends Component {
                             </span>
                           </div>}
 
-                      <div className="summary">
-                        <span>Packaging Deposit</span>
-                        <span>{formatMoney (order.packaging_deposit / 100)}</span>
-                      </div>
-
                       {order.applied_store_credit === 0
                         ? null
                         : <div className="summary">
-                            <span>Applied Packaging Deposit</span>
+                            <span>Applied Store Credit</span>
                             <span>
                               -{formatMoney (order.applied_store_credit / 100)}
                             </span>

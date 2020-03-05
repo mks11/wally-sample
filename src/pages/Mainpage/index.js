@@ -312,9 +312,9 @@ class Mainpage extends Component {
                 id === 'buyagain' && !this.productStore.search.state ? (
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
-
                           <div className="product-breadcrumb">
                             {/* <CarbonBar value={cartItems.length % 10} /> */}
+                            <h2>Buy Again</h2>
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
                               <div className="filters-values as-sort">
