@@ -329,8 +329,7 @@ class SchedulePickup extends Component {
               class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}
               onClick={this.handleConfirmPickup}
             >
-              {" "}
-              Confirm Pickup{" "}
+              Confirm Pickup
             </button>
           </Container>
         </div>
