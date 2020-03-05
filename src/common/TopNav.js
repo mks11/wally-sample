@@ -129,7 +129,7 @@ class TopNav extends Component {
       bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
-      storeCredit =  user.store_credit
+      storeCredit =  user.packaging_balance
       name = user.name.split(' ')[0]
       isAdmin = user.type === 'admin' || user.type === 'super-admin'
       isTwsOps = user.type === 'tws-ops'
