@@ -1760,8 +1760,10 @@ border-bottom:10px solid transparent;border-right:40px solid #ddd;left:-40px;top
   top: 18px;
 }
 
-.jar-icons img {
-  width: 25px;
+.jar-icons > div {
+  display: inline-block;
+  margin-right: 5px;
+  text-align: center;
 }
 
 .a-plus-image img {

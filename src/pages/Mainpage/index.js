@@ -15,7 +15,7 @@ import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
 import Filters from './ProductTop/Filters'
-import CategoriesList from './CategoriesList' 
+import CategoriesList from './CategoriesList'
 import ProductWithPackaging from "../ProductWithPackaging";
 
 class Mainpage extends Component {
@@ -291,8 +291,8 @@ class Mainpage extends Component {
             <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
-                    <div className="mb-4">
-                      <h4>The Wally Shop</h4>
+                    <div className="mb-4 text-center">
+                      <img src="/images/sidepanel_sticker.png" width="70%"/>
                     </div>
                     <CategoriesList
                       selectedId={id}
