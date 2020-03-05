@@ -16,13 +16,13 @@ class TopNav extends Component {
 
   handleLogin = () => {
     logModalView('/login')
-    // this.routing.push('/main')
+    this.routing.push('/main')
     this.modalStore.toggleModal('login')
   }
 
   handleSignup = () => {
     logModalView('/signup-zip')
-    // this.routing.push('/main')
+    this.routing.push('/main')
     this.modalStore.toggleModal('joinwaitlist')
   }
 
@@ -107,6 +107,11 @@ class TopNav extends Component {
   handleMobileNavBackers = () => {
     this.uiStore.hideNavMobile()
     this.handleNavBackers()
+  }
+
+  handleRedeemDepositClick = () => {
+    this.hideAccountDropdown()
+    this.modalStore.toggleModal('redeemdeposit')
   }
 
   render() {
@@ -205,7 +210,6 @@ class TopNav extends Component {
 
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
-                          <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li>
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li>
                           <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li>
                           <li><a onClick={() => this.handleNavMobile('/backers')}>Backers</a></li>
@@ -352,10 +356,10 @@ class TopNav extends Component {
                                       <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>
-                                      <Link onClick={this.hideAccountDropdown} to="/blog" className="dropdown-item">Blog</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/help" className="dropdown-item">Help</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/giftcard" className="dropdown-item">Gift Card</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/backers" className="dropdown-item">Backers</Link>
+                                      <a onClick={this.handleRedeemDepositClick} className="dropdown-item">Redeem Deposit</a>
                                       <a onClick={this.handleLogout} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>

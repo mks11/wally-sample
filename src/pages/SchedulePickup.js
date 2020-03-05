@@ -223,6 +223,7 @@ class SchedulePickup extends Component {
   };
 
   handleOnDatePick = d => {
+    console.log("date", d)
     this.setState({
       pickupDate: d
     });

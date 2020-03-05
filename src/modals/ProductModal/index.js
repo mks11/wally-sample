@@ -138,12 +138,12 @@ class ProductModal extends Component {
     console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
-    
+
     const finalUnitType = activeProduct.unit_type
 
     const items = [
       {
-        quantity: this.state.qty, 
+        quantity: this.state.qty,
         product_id: inventory.product_id,
         inventory_id: inventory._id,
         unit_type: finalUnitType,
@@ -152,14 +152,14 @@ class ProductModal extends Component {
 
     if (quantityAddon > 0) {
       const addonProduct = activeProduct.add_ons.find(p => p.product_id === packagingAddon)
-      
+
       items.push({
         quantity: quantityAddon,
         product_id: packagingAddon,
         inventory_id: addonProduct.inventory[0]._id,
         unit_type: addonProduct.unit_type
       })
-    } 
+    }
 
     checkout.editCurrentCart(
     { items },
@@ -187,7 +187,7 @@ class ProductModal extends Component {
   handlePackagingAddon = value => {
     this.setState({ packagingAddon: value })
   }
-  
+
   handleQuantityAddon = value => {
     this.setState({ quantityAddon: value })
   }
@@ -210,7 +210,7 @@ class ProductModal extends Component {
   }
 
   truncate = (text, length) => {
-    if (text.length <= length) {  
+    if (text.length <= length) {
       return text
     }
     return text.slice(0, length) + '...'
@@ -221,8 +221,8 @@ class ProductModal extends Component {
     const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
     let recentThreeComments = []
-    if (activeProductComments) recentThreeComments = activeProductComments.filter(comment => comment.comment).slice(0, 3) 
-  
+    if (activeProductComments) recentThreeComments = activeProductComments.filter(comment => comment.comment).slice(0, 3)
+
     const {
       a_plus_url,
       allergens,
@@ -276,7 +276,7 @@ class ProductModal extends Component {
     }
 
     let price = inventory.price / 100
-    
+
     let totalPrice = price * this.state.qty * this.state.priceMultiplier
 
     var price_unit = ""
@@ -302,24 +302,31 @@ class ProductModal extends Component {
 
     const packaging = packagings && packagings[0] ? packagings[0] : null
     const packaging_type = std_packaging
-    const packaging_description = packaging ? packaging.description : null 
+    const packaging_description = packaging ? packaging.description : null
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
-    console.log("packaging size is", packaging_size)
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
-
-    // display non-greyed-out icon for applicable icon
-    let eight = packaging_size === 8 ? '' : 'grey_'
-    let sixteen = packaging_size === 16 ? '' : 'grey_'
-    let thirtyTwo = packaging_size === 32 ? '' : 'grey_'
 
     let jarIcons = (
       <div className="jar-icons">
-        <img src={`/images/jar8_${eight}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
-        <img src={`/images/jar16_${sixteen}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
-        <img src={`/images/jar32_${thirtyTwo}icon.png`} alt={`Packaging size ${packaging_size} oz`} />
+        <div>
+          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 8 oz" width="22" />
+          <div>8 oz</div>
+        </div>
+        <div>
+          <img src={`/images/jar8_icon.png`} alt="Packaging size 25 oz" width="26" />
+          <div>25 oz</div>
+        </div>
+        <div>
+          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 32 oz" width="30" />
+          <div>32 oz</div>
+        </div>
+        <div>
+          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 64 oz" width="34" />
+          <div>64 oz</div>
+        </div>
       </div>
     )
-  
+
     return (
       <div className="product-modal-wrap">
         <Row>
@@ -377,11 +384,11 @@ class ProductModal extends Component {
               <div className="package-info-popover">
                 <h4>{packaging_type}</h4>
                 <p>{packaging_description}</p>
-                <p><a href="#">Click here</a> to learn more or see full breakdown.</p>
+                <p>More sizes coming soon!</p>
               </div>
             </div>
             <div className="mb-3">
-              { 
+              {
                 packaging_type
               }
             </div>
@@ -403,7 +410,7 @@ class ProductModal extends Component {
                     product={true}
                   />
                 </React.Fragment>
-              ) 
+              )
             }
 
             <div><strong>Choose your quantity</strong></div>
@@ -426,9 +433,9 @@ class ProductModal extends Component {
               }
             </button><br />
 
-            <div 
+            <div
               className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
-            > 
+            >
               {
                 this.state.available ? '' : 'Click on clock icon next to categories to change delivery date.'
               }
@@ -513,7 +520,9 @@ class ProductModal extends Component {
             )}
           </Col>
         </Row>
-        <ProductRatingForm product_id={product_id} />
+        {localStorage.user && (
+          <ProductRatingForm product_id={product_id} />
+        )}
       </div>
     )
   }

@@ -80,16 +80,18 @@ class Orders extends Component {
                 </thead>
                 <tbody>
                   <tr>
-                    {item.delivery_time ? (<td>{moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY')}</td>) : (<td>{moment(item.return_date.substring(0,10)).format('MMM DD, YYYY')}</td>)}
+                    {item.createdAt ? (<td>{moment(item.createdAt.substring(0,10)).format('MMM DD, YYYY')}</td>) : (<td>{moment(item.return_date.substring(0,10)).format('MMM DD, YYYY')}</td>)}
                     {item.cart_items ? (<td>{item.cart_items.length}</td>) : (<td>{item.returns.length}</td>)}
                     {item.total ? (<td>{item.total ? formatMoney(item.total/100) : "$0.00"}</td>) : (<td>{item.total_credit ? formatMoney(item.total_credit/100) : "$0.00"}</td>)}
                   </tr>
                 </tbody>
               </table>
               <hr className="my-1"/>
-              <span className="text-bold">Order #: {item._id}</span><br/>
-              {item.cart_items ? (<span>{this.printItems(item.cart_items)}</span>) : (<span>{this.printPackaging(item.returns)}</span>)}
-              <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
+              <div className="text-bold order-item-content">{`${item.status === 'returned' ? 'Return' : 'Order'}`} #: {item._id}</div>
+              <div className="order-item-content-wrapper">
+                {item.cart_items ? (<div className="order-item-content">{this.printItems(item.cart_items)}</div>) : (<div className="order-item-content">{this.printPackaging(item.returns)}</div>)}
+                <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
+              </div>
             </div>
             ))}
 

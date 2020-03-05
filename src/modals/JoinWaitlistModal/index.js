@@ -28,10 +28,12 @@ class JoinWaitlistModal extends Component {
     const {
       user,
       modal,
+      routing,
     } = this.props.stores
 
     user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
       .then(res => {
+        routing.push('/')
         modal.switchModal('waitinglist', null, res)
       })
       .catch((e) => {
