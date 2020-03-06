@@ -47,6 +47,25 @@ class Mainpage extends Component {
     ReactGA.pageview(window.location.pathname);
     // for web launch
     // this.routing.push('/');
+    if (window.location.pathname.split('/')[1] === 'packaging') {
+      if (["5e0e488c3f26046cc60195f6", "5e0e488c3f26046cc60195f4", "5e0e488c3f26046cc60195f3", "5e0e488c3f26046cc60195f2"].includes(this.props.match.params.id)) { 
+        window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf` 
+      }
+      else {
+        console.log("Getting product info");
+        this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
+          .then((unit) => {
+            console.log("Getting product info");
+            if (unit.product_id) { 
+              this.handleProductModal(unit.product_id) 
+            } else {
+              // this.routing.push('/')
+            }
+          }).catch((e) => console.error('Failed to load product displayed: ', e))
+      }
+    }
+
+
     this.userStore.getStatus(true)
       .then((status) => {
         if (!status) {
