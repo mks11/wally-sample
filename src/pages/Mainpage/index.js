@@ -55,8 +55,9 @@ class Mainpage extends Component {
           this.userStore.giftCardPromo && this.processGiftCardPromo(status)
           this.checkoutStore.getDeliveryTimes()
           this.loadData()  
-          const { mainFirst } = this.userStore.flags || {}
+          const { mainFirst, mainSecond } = this.userStore.flags || {}
           !mainFirst && this.modalStore.toggleModal('mainFirst')
+          mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')
         }
       })
   }

@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 
 class MainFirstModal extends Component {
   componentDidMount() {
-    const { user } = this.props.stores
+    const { user, modal } = this.props.stores
+    this.modalStore = modal
     user.updateFlags('mainFirst', true)
   }
 
   handleClose = () => {
     this.props.toggle()
+    this.modalStore.toggleModal('mainSecond')
   }
 
   render() {

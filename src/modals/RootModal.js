@@ -18,6 +18,7 @@ import ProductModal from './ProductModal'
 import DeliveryModal from './DeliveryModal'
 import CheckoutFirstModal from './CheckoutFirstModal'
 import MainFirstModal from './MainFirstModal'
+import MainSecondModal from './MainSecondModal'
 import ModalError from './ModalError'
 import WaitingListModal from './WaitingListModal'
 import EmailVerification from './EmailVerification'
@@ -43,6 +44,7 @@ const ModalRoutes = {
   delivery: DeliveryModal,
   checkoutfirst: CheckoutFirstModal,
   mainFirst: MainFirstModal,
+  mainSecond: MainSecondModal,
   error: ModalError,
   waitinglist: WaitingListModal,
   emailverification: EmailVerification,
