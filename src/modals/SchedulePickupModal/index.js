@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent, Component } from "react";
 import { Input } from "reactstrap";
 import {
   validateEmail,
@@ -9,203 +9,82 @@ import {
   isValidTimeOrder,
   genTimePoints
 } from "../../utils";
-
 import PropTypes from "prop-types";
 import moment from "moment";
 import PreferredPickup from "../../common/DropdownPreferredPickupLocation";
-import AddressOptions from "../../common/DeliveryAddressOptions";
-import CustomDatepicker from "../../common/CustomDatepicker";
+import DatePicker from "react-datepicker";
 import TimeOnlyOptions from "../../common/TimeOnlyOptions";
-import { FormGroup } from "reactstrap";
+import ErrorBoundary from "../../common/ErrorBoundary";
+import AddressOptionsManaged from "./AddressOptionsManaged";
+import { autorun } from "mobx";
 
 const ErrorInfo = props => {
   return props.invalidText ? (
-    <div>
+    <div className="container">
       <span className="text-error text-center my-3">{props.invalidText}</span>
     </div>
   ) : null;
 };
 
+const InputErrors = ({ errors }) => {
+  if (errors && errors.length < 1) {
+    return null;
+  }
+  return (
+    <div className="container">
+      <span className="text-error text-center my-3">{`Invalid ${
+        errors.length > 1 ? "inputs" : "input"
+      }`}</span>
+      <ul>
+        {errors.map((msg, i) => (
+          <li key={i} className="text-error util-font-size-14">
+            {msg}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 function Container(props) {
-  return <div className="util-margin-top-20" {...props} />;
+  return <div className="mt-4" {...props} />;
 }
 
-class AddressOptionsManaged extends Component {
+class SchedulePickup extends PureComponent {
   constructor(props) {
     super(props);
-    this.userStore = this.props.store.user;
-    this.routing = this.props.store.routing;
+
+    this.schedulePickupStore = props.store.schedulePickup;
+    this.userStore = props.store.user;
+    this.modalStore = props.store.modal;
+
+    const selectedAddressId =
+      (this.userStore.selectedDeliveryAddress &&
+        this.userStore.selectedDeliveryAddress.address_id) ||
+      (this.userStore.user && this.userStore.user.preferred_address);
 
     this.state = {
-      selectedAddress: null,
-      addressError: false,
-      lockAddress: true,
-      confirmHome: false,
-      confirmHomeError: false,
-      newAddress: false,
-      invalidSelectAddress: "",
-      invalidAddressText: "",
-      newStreetAddress: "",
-      newAptNo: "",
-      newZip: "",
-      newContactName: "",
-      newPhoneNumber: "",
-      newDeliveryNotes: "",
-      newState: "",
-      newCity: "",
-      newCountry: "",
-      newPreferedAddress: false
+      pickupDate: "",
+      selectedAddressId: selectedAddressId,
+      earliestTime: props.earliestTime,
+      latestTime: null,
+      preferredLocation: "",
+
+      // lockEarliestTime: false,
+      // lockLatestTime: false,
+
+      isFetching: false,
+      successText: "", //to add
+
+      invalidLatestTime: false,
+      requestFailedText: null, // on submit if error occurred
+      showIncompleteFieldErrors: false // if any field is invalid, before submission
     };
   }
 
   componentDidMount() {
-    this.userStore.getStatus(true).then(status => {
-      if (status) {
-        const selectedAddress =
-          this.userStore.selectedDeliveryAddress ||
-          (this.userStore.user
-            ? this.userStore.getAddressById(
-                this.userStore.user.preferred_address
-              )
-            : null);
-
-        if (selectedAddress) {
-          // INSTEAD
-          // this.userStore.setDeliveryAddress(selectedAddress);
-        }
-
-        if (this.userStore.user.addresses.length > 0) {
-          const selectedAddress = this.userStore.user.addresses.find(
-            d => d._id === this.userStore.user.preferred_address
-          );
-          this.setState({ selectedAddress: selectedAddress._id });
-        } else {
-          this.setState({ lockAddress: false });
-        }
-      } else {
-        this.routing.push("/main");
-      }
-    });
+    //autorun(() => console.log(this.schedulePickupStore.loading));
   }
-
-  handleSelectAddress = data => {
-    const selectedAddress = this.userStore.selectedDeliveryAddress;
-    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
-      this.setState({ selectedAddress: data, selectedAddressChanged: true });
-      this.userStore.setDeliveryAddress(data);
-    } else {
-      this.setState({ selectedAddressChanged: false });
-    }
-  };
-
-  handleSubmitAddress = async address => {
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-  };
-
-  handleUnlockAddress = () => {
-    this.setState({ lockAddress: false });
-  };
-
-  handleAddNewAddress = async data => {
-    const {
-      newContactName,
-      newState,
-      newDeliveryNotes,
-      newZip,
-      newAptNo,
-      newCity,
-      newCountry,
-      newPhoneNumber,
-      newStreetAddress,
-      newPreferedAddress
-    } = data;
-
-    const dataMap = {
-      name: newContactName,
-      state: newState,
-      delivery_notes: newDeliveryNotes,
-      zip: newZip,
-      unit: newAptNo,
-      city: newCity,
-      country: newCountry,
-      telephone: newPhoneNumber,
-      street_address: newStreetAddress,
-      preferred_address: newPreferedAddress
-    };
-
-    const response = await this.userStore.saveAddress(dataMap);
-    const address = this.userStore.selectedDeliveryAddress;
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-    return response;
-  };
-
-  render() {
-    return (
-      this.userStore.user && (
-        <AddressOptions
-          lock={this.state.lockAddress}
-          editable={true}
-          title={this.props.title}
-          selected={
-            this.userStore.selectedDeliveryAddress
-              ? this.userStore.selectedDeliveryAddress.address_id
-              : null
-          }
-          user={this.userStore.user}
-          onAddNew={this.handleAddNewAddress}
-          onSubmit={this.handleSubmitAddress}
-          onSelect={this.handleSelectAddress}
-          onUnlock={this.handleUnlockAddress}
-          newAddressPlaceholder={"Pickup from ..."}
-          addNewNotesPlaceholder={"Add pickup instructions ..."}
-        />
-      )
-    );
-  }
-}
-
-class SchedulePickup extends Component {
-  constructor(props) {
-    super(props);
-
-    this.schedulePickupStore = this.props.store.schedulePickup;
-    this.userStore = this.props.store.user;
-    this.modalStore = this.props.store.modal;
-
-    this.state = {
-      timeDropdown: false,
-
-      selectedAddress: null,
-
-      earliestTime: this.props.earliestTime,
-      latestTime: null,
-
-      preferredLocation: "",
-
-      lockEarliestTime: false,
-      lockLatestTime: false,
-
-      newAddress: false,
-
-      addressError: false,
-
-      invalidText: "",
-      successText: "",
-
-      invalidSelectAddress: "",
-      invalidLatestTime: false,
-      invalidEarliestTime: false,
-
-      pickupDate: moment.now(),
-      pickupNotes: "",
-
-      requestFailedText: null
-    };
-  }
-
-  componentDidMount() {}
 
   checkValidityTime = () => {
     const isValid = isValidTimeOrder(
@@ -235,7 +114,10 @@ class SchedulePickup extends Component {
         // lockEarliestTime: true,
         earliestTime: time
       },
-      this.checkValidityTime
+      () => {
+        this.checkValidityTime();
+        this.clearRequestFailText();
+      }
     );
   };
   handleSelectLatestTime = ({ time }) => {
@@ -244,34 +126,94 @@ class SchedulePickup extends Component {
         // lockLatestTime: true,
         latestTime: time
       },
-      this.checkValidityTime
+      () => {
+        this.checkValidityTime();
+        this.clearRequestFailText();
+      }
     );
   };
 
   handleOnDatePick = d => {
-    this.setState({
-      pickupDate: d
-    });
+    this.setState(
+      {
+        pickupDate: d
+      },
+      () => {
+        this.clearRequestFailText();
+      }
+    );
   };
 
   handlePreferredLocation = pref => {
-    this.setState({
-      preferredLocation: pref
-    });
+    this.setState(
+      {
+        preferredLocation: pref
+      },
+      () => {
+        this.clearRequestFailText();
+      }
+    );
+  };
+
+  getRequiredFieldsErrors = () => {
+    const {
+      selectedAddressId,
+      preferredLocation, //optional
+      latestTime,
+      earliestTime,
+      pickupDate,
+      invalidLatestTime
+    } = this.state;
+
+    const errors = [];
+
+    if (!selectedAddressId) {
+      errors.push("An address is required");
+    }
+
+    if (!latestTime) {
+      errors.push("A latest pickup time is required");
+    } else {
+      if (invalidLatestTime) {
+        errors.push("Pick a different pickup time");
+      }
+    }
+
+    if (!earliestTime) {
+      errors.push("An earliest pickup time is required");
+    }
+
+    if (!pickupDate) {
+      errors.push("A pickup date is required");
+    }
+
+    return errors;
   };
 
   handleConfirmPickup = async () => {
+    if (this.state.isFetching) {
+      return;
+    }
     const {
+      selectedAddressId,
       preferredLocation,
       latestTime,
       earliestTime,
-      pickupDate
+      pickupDate,
+      invalidLatestTime
     } = this.state;
 
-    const selectedAddress = this.userStore.selectedDeliveryAddress;
+    const incompletes = this.getRequiredFieldsErrors();
+
+    if (incompletes.length > 0) {
+      this.setState({
+        showIncompleteFieldErrors: true
+      });
+      return;
+    }
 
     const data = {
-      address_id: selectedAddress.address_id,
+      address_id: selectedAddressId,
       scheduled_date: moment(pickupDate).format("MM-DD-YYYY"),
       earliest_time: earliestTime,
       latest_time: latestTime,
@@ -279,46 +221,63 @@ class SchedulePickup extends Component {
       auth: this.userStore.getHeaderAuth()
     };
 
-    // console.log("data", data, this.modalStore.toggleModal);
-
     try {
-      const pickup = await this.schedulePickupStore.schedulePickup(data);
+      this.setState({ isFetching: true });
+      const pickup = await this.schedulePickupStore.schedulePickupAsync(data);
+      this.setState({ isFetching: false });
+      this.props.toggle(); //close the modal
     } catch (e) {
-      console.error("Failed to submit", e);
-      const msg = e.response.data.error.message;
-      this.setState({ requestFailedText: msg });
-      console.error(e);
+      if (e.response.status < 500) {
+        this.setState({
+          requestFailedText:
+            e.response.data &&
+            e.response.data.error &&
+            e.response.data.error.message,
+          isFetching: false
+        });
+      }
+      this.setState({
+        requestFailedText: "Something went wrong."
+      });
     }
   };
 
   render() {
     const INVALID_TIME = "pick a different time";
     const {
+      selectedAddressId,
       preferredLocation,
       latestTime,
       earliestTime,
       pickupDate
     } = this.state;
     const isReadyToSubmit =
-      preferredLocation && latestTime && earliestTime && pickupDate;
+      selectedAddressId && latestTime && earliestTime && pickupDate;
 
     return (
       <React.Fragment>
-        <div class="container">
-          <div class="page-header">
-            <div class="page-title">
-              <h1 class="mb-1"> Schedule Pickup </h1>
+        <div className="container">
+          <div className="page-header">
+            <div className="page-title">
+              <h1 className="mb-1"> Schedule Pickup </h1>
             </div>
           </div>
         </div>
-        <ErrorInfo invalidText={"this.state.requestFailed"} />
+
+        <ErrorInfo invalidText={this.state.requestFailedText} />
+        {this.state.showIncompleteFieldErrors && (
+          <InputErrors errors={this.getRequiredFieldsErrors()} />
+        )}
         <div class="container">
           <Container>
             <h3 class="m-0 mb-3 p-r">Date</h3>
-            <CustomDatepicker
+            <DatePicker
               dateFormat={"MM / DD / YYYY"}
               selected={this.state.pickupDate}
-              onDatePick={this.handleOnDatePick}
+              onChange={this.handleOnDatePick}
+              minDate={moment().toDate()}
+              placeholderText="Click to pick a date"
+              className={`form-control p-4 util-font-size-16`}
             />
           </Container>
           <Container>
@@ -332,7 +291,6 @@ class SchedulePickup extends Component {
                 30
               ).map(p => ({ time: p }))}
               onSelectTime={this.handleSelectEarliestTime}
-              invalidText={this.state.invalidEarliestTime && INVALID_TIME}
             />
           </Container>
           <Container>
@@ -351,8 +309,8 @@ class SchedulePickup extends Component {
           </Container>
           <Container>
             <AddressOptionsManaged
-              store={this.props.store}
               title={"Pickup Address"}
+              store={this.props.store}
             />
           </Container>
           <Container>
