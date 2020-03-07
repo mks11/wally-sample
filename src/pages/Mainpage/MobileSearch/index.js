@@ -16,7 +16,7 @@ const MobileSearch = props => {
   } = props
 
   return (
-    <div className={`category-mobile d-md-none ${show ? 'open' : ''}`}>
+    <div className={`category-mobile d-lg-none ${show ? 'open' : ''}`}>
       <Row>
         <Col xs={2}>
           <button

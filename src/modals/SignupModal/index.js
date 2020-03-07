@@ -72,7 +72,8 @@ class SignupModal extends Component {
         checkout.getDeliveryTimes()
         this.setState({ signupRequest: false })
         this.props.switchTo('welcome')
-
+        this.props.store.routing.push('/main')
+        
         user.giftCardPromo = null
         user.refPromo = null
       }).catch(e => {
@@ -219,4 +220,4 @@ class SignupModal extends Component {
 
 }
 
-export default SignupModal
+export default connect("store")(SignupModal)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from '../../../utils'
 import { Button } from 'reactstrap'
 import Product from '../Product'
 
@@ -18,6 +19,10 @@ class CategoriesList extends Component {
     })
   }
 
+  handleAllClick = () => {
+    this.props.store.routing.push('/main')
+  }
+
   render() {
     const {
       selectedId,
@@ -27,6 +32,9 @@ class CategoriesList extends Component {
 
     return (
       <div className="categories-list">
+        <div>
+          <h4 className={`categories-list-group`} onClick={this.handleAllClick}>All</h4>
+        </div>
         {
           list.map(s => {
             return (
@@ -56,4 +64,4 @@ class CategoriesList extends Component {
   }
 }
 
-export default CategoriesList
+export default connect("store")(CategoriesList)

@@ -150,8 +150,6 @@ class VendorProfile extends Component {
 
   render() {
     const vendor = this.vendorProfileStore.vendor;
-    console.log("vendor is");
-    console.log(vendor.shipping_address);
     const hasVendorProfile = this.vendorProfileStore.hasVendorProfile();
 
     return (

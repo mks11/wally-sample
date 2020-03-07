@@ -197,7 +197,7 @@ class Help extends Component {
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td>{item.delivery_time ? moment(item.delivery_time.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
+                                      <td>{item.createdAt ? moment(item.createdAt.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
                                       <td>{item.cart_items ? this.printItems(item.cart_items) : this.printPackaging(item.returns)}</td>
                                       <td>{item.total ? (formatMoney(item.total/100) : "$0.00") : (formatMoney(item.total_credit/100) : "$0.00")}</td>
                                       <td>
