@@ -30,6 +30,7 @@ class Mainpage extends Component {
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.zipStore = this.props.store.zip
+    this.packagingUnitStore = this.props.store.packagingUnit
 
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
@@ -56,10 +57,14 @@ class Mainpage extends Component {
         this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
           .then((unit) => {
             console.log("Getting product info");
-            if (unit.product_id) { 
-              this.handleProductModal(unit.product_id) 
+            if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
+              window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf` 
             } else {
-              // this.routing.push('/')
+              if (unit.product_id) { 
+                this.handleProductModal(unit.product_id) 
+              } else {
+                // this.routing.push('/')
+              }  
             }
           }).catch((e) => console.error('Failed to load product displayed: ', e))
       }
