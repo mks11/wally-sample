@@ -57,9 +57,9 @@ class Mainpage extends Component {
         this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
           .then((unit) => {
             console.log("Getting product info");
-            
+
             if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
-              window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf` 
+              window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${unit.id}` 
             } else {
               if (unit.product_id) { 
                 this.handleProductModal(unit.product_id) 
@@ -75,7 +75,9 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         if (!status) {
-          this.routing.push('/');
+          if (window.location.pathname.split('/')[1] != 'packaging') {
+            this.routing.push('/');  
+          }
         } else {
           this.userStore.giftCardPromo && this.processGiftCardPromo(status)
           this.checkoutStore.getDeliveryTimes()
@@ -422,7 +424,7 @@ class Mainpage extends Component {
                     id !== 'buyagain' && (
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
-                          { this.props.location.pathname.split('/')[1] === 'packaging' ?
+                          { this.props.location.pathname.split('/')[1] === 'packaging-blank' ?
                             <ProductWithPackaging packagingId={this.props.match.params.id}/>
                             : <React.Fragment>
                           {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
