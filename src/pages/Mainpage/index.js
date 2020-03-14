@@ -57,13 +57,14 @@ class Mainpage extends Component {
         this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
           .then((unit) => {
             console.log("Getting product info");
+            
             if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
               window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf` 
             } else {
               if (unit.product_id) { 
                 this.handleProductModal(unit.product_id) 
               } else {
-                // this.routing.push('/')
+                this.routing.push('/main')
               }  
             }
           }).catch((e) => console.error('Failed to load product displayed: ', e))
