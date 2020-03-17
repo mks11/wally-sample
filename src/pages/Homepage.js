@@ -248,9 +248,9 @@ class Homepage extends Component {
         <section className="page-section aw-our--story align-items-center">
           <div className="container h-75 w-75">
             <div className="tagline">
-              <h2>It's what's on the inside that counts.</h2>
+              <h2>Do you with reusables.</h2>
               <p></p>
-              <p>We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (Bulk foods! Beauty products! Household products!) conveniently in all reusable packaging. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any brands in mind ;)</p>
+              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide! Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
               <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
