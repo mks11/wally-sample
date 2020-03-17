@@ -203,9 +203,8 @@ border-radius: 0;}
   background: 
     radial-gradient(at top left, rgba(255, 133, 254, 1), transparent),
     radial-gradient(at top right, rgba(73, 128, 255, 1), transparent),
-    radial-gradient(at center right, rgba(255, 202, 103, 1), transparent),
     radial-gradient(at bottom left, rgba(137, 199, 255, 1), transparent),
-    radial-gradient(at bottom right, rgba(73, 128, 255, 1), transparent);
+    radial-gradient(at bottom right, rgba(255, 202, 103, 1), transparent);
 }
 
 

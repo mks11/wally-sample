@@ -250,7 +250,7 @@ class Homepage extends Component {
             <div className="tagline">
               <h2>Do you with reusables.</h2>
               <p></p>
-              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide! Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
+              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nAtiOnwiDe! Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
               <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
