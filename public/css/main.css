@@ -252,6 +252,14 @@
   font-style: normal;
 }
 
+/* Neon Glow */
+@font-face {
+  font-family: "NEONGLOW";
+  src: url("../fonts/neon_glow/neonglow.woff2") format("woff2"); /* Modern Browsers */
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -565,7 +573,7 @@ button:hover,
   transition: 0.15s background-color;
   width: 250px;
   text-align: center;
-  background-color:#8ca3ff;
+  background-color:#3c2ebf;
   -webkit-border-radius: 500px;
   -moz-border-radius: 500px;
   border-radius: 500px;

@@ -200,20 +200,19 @@ class Homepage extends Component {
 
     return (
       <div className="homepage">
-        {/* <section id="nav-hero" className={tempClass}>
-          <div className="container-fluid">
-            <div className="row justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-                <br></br>
-                <br></br>
-                <br></br>
-                <h1 className="aw-hero--heading mb-4 aw-hero-construct">Brb, currently crowdfunding OUR FUTURE</h1>
-                <h2 className={this.state.heroDescriptionAlign + ' pink'}>👉 back us on <a href="https://www.kickstarter.com/projects/the-wally-shop/the-wally-shop-the-everything-in-reusables-store"><u>kickstarter</u></a> 👈</h2>
-                <h2 className={this.state.heroDescriptionAlign}>for regular programming ⬇️⬇️⬇️</h2>
-              </div>
+        <section className="align-items-center">
+          <div className="container scroll-text">
+            <div>
+            <br></br>
+            </div>
+            <div id="div-1-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
+            </div>
+            <div id="div-2-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
             </div>
           </div>
-        </section> */}
+        </section>
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">

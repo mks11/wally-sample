@@ -267,8 +267,8 @@ class TopNav extends Component {
             <div className="row align-items-center mobile-top-nav top-nav">
               <div className="d-none col-auto d-md-block">
                 <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
-                  <img className="logo-text-desktop" src='/images/main_logo.svg' alt="The Wally Shop" />
-                  <img className="logo-text-mobile" src='/images/main_logo.svg' alt="The Wally Shop" />
+                  <img className="logo-text-desktop" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
+                  <img className="logo-text-mobile" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
                 </a>
               </div>
               <div className="col-auto ml-auto d-none d-md-block">
@@ -404,7 +404,7 @@ class TopNav extends Component {
             <div className="row d-md-none  d-sm-block">
               <div className="col-sm-12">
                 <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
-                  <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/main_logo.svg' alt="The Wally Shop" />
+                  <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
                 </a>
               </div>
             </div>
