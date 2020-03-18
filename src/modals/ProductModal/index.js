@@ -264,12 +264,12 @@ class ProductModal extends Component {
     }
 
     const inventory = available_inventory[0] ? available_inventory[0] : null
-    const limitOptions = fbw && !out_of_stock && available
     let qtyOptions = []
 
     const incrementValue = 1
     const minSize = 1
-    const maxQty = limitOptions ? Math.min(max_qty, 10) : 10
+    const maxQty = Math.min(max_qty, 10)
+    console.log("max qty is ", maxQty)
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
