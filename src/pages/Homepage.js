@@ -48,9 +48,12 @@ class Homepage extends Component {
   componentDidMount() {
     ReactGA.pageview("/");
     console.log(this.props);
-    if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src) {
-      this.setState({ audienceSource: qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src });
-      this.metricStore.triggerAudienceSource(qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src);
+    if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color) {
+      if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color == "purple") {
+        this.setState({ audienceSource: "ig" });
+        this.metricStore.triggerAudienceSource("ig");  
+      }
+      
     }
 
     this.userStore.getStatus()
