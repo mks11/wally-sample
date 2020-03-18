@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import qs from 'qs';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
 import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
@@ -14,6 +15,7 @@ class Homepage extends Component {
       // model
       zip: '',
       email: '',
+      audienceSource: '',
       heroText: 'Shop package-free groceries',
       heroDescription: 'To ensure a top notch reusables signature experience, we are doing a phased rollout - It’s first sign up, first access so go! go! go!',
       heroDescriptionAlign: 'center',
@@ -40,10 +42,17 @@ class Homepage extends Component {
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
     this.routing = this.props.store.routing
+    this.metricStore = this.props.store.metric
   }
 
   componentDidMount() {
     ReactGA.pageview("/");
+    console.log(this.props);
+    if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src) {
+      this.setState({ audienceSource: qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src });
+      this.metricStore.triggerAudienceSource(qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).src);
+    }
+
     this.userStore.getStatus()
       .then((status) => {
         if (status) {
@@ -107,7 +116,7 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
     logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
-    this.userStore.getWaitlistInfo(this.state.email)
+    this.userStore.getWaitlistInfo({ email: this.state.email, src: this.state.audienceSource })
       .then(res => {
         this.modalStore.toggleModal('waitinglist', null, res)
       }).catch(() => {

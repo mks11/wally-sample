@@ -11,6 +11,7 @@ import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
+import MetricStore from "./MetricStore";
 
 const store = {
   ui: UiStore,
@@ -27,7 +28,8 @@ const store = {
   admin: AdminStore,
   backer: BackerStore,
   vendor: VendorProfileStore,
-  products: VendorProfileStore
+  products: VendorProfileStore,
+  metric: MetricStore
 };
 
 export default store;

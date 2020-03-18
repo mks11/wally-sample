@@ -143,6 +143,8 @@ export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + "/api/email/signup";
 export const API_BLOG_POST = BASE_URL + "/api/blog";
 export const API_EDIT_CART_ITEM = BASE_URL + "/api/order";
 
+export const API_POST_METRIC_SOURCE = BASE_URL + "/api/metric/audience-source"
+
 export const INSTAGRAM = "https://www.instagram.com/thewallyshop/";
 export const FACEBOOK = "https://facebook.com/thewallyshop";
 
