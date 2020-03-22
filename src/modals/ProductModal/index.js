@@ -433,12 +433,8 @@ class ProductModal extends Component {
               }
             </button><br />
 
-            <div
-              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
-            >
-              {
-                this.state.available ? '' : 'Click on clock icon next to categories to change delivery date.'
-              }
+            <div className='text-muted'> 
+              **Product packaged in a facility that processes dairy, gluten, peanuts and tree nuts.
             </div>
           </Col>
         </Row>
