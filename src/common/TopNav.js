@@ -206,7 +206,7 @@ class TopNav extends Component {
                       { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
                         <React.Fragment>
                           <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
-                          <li><a>Store Credit ({formatMoney(storeCredit/100)})</a></li>
+                          <li><a>Packaging Balance ({formatMoney(storeCredit/100)})</a></li>
                           <li><a onClick={() => this.handleNavMobile('/orders')}>Order History</a></li>
                           <li><a onClick={() => this.handleNavMobile('/user')}>Account Settings</a></li>
                           {/* <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li> */}
@@ -353,7 +353,7 @@ class TopNav extends Component {
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
-                                      <a className="dropdown-item">Store Credit ({formatMoney(storeCredit / 100)})</a>
+                                      <a className="dropdown-item">Packaging Balance ({formatMoney(storeCredit / 100)})</a>
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
                                       {/* <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a> */}
