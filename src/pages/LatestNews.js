@@ -40,7 +40,7 @@ class About extends Component {
                 The Wally Shop x Feeding America 
               </h2>
               <p>
-                In addition, we’re donating $1 for every order you place to Feeding America and their COVID19 fund through April 30th. Feeding America helps millions of Americans access food every day and now, more than ever, it’s crucial to help this mission.
+                In addition, we’re donating $1 for every order you place to Feeding America and their COVID-19 fund through April 30th. Feeding America helps millions of Americans access food every day and now, more than ever, it’s crucial to help this mission.
                 <br></br>
                 <br></br>
               </p>
