@@ -17,7 +17,7 @@ class Homepage extends Component {
       email: '',
       audienceSource: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'To ensure a top notch reusables signature experience, we are doing a phased rollout - It’s first sign up, first access so go! go! go!',
+      heroDescription: 'In response to Covid-19, The Wally Shop is now available to anyone, anywhere',
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -145,7 +145,7 @@ class Homepage extends Component {
 
   handleSignup(e) {
     logModalView('/signup-zip')
-    this.modalStore.toggleModal('joinwaitlist')
+    this.modalStore.toggleModal('signup')
   }
 
   handleZip(e) {
@@ -186,8 +186,8 @@ class Homepage extends Component {
     )
 
     const ButtonNotify = () => (
-      <button onClick={this.handleSubscribe} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        SIGN UP NOW
+      <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
+        CREATE ACCOUNT
       </button>
     )
 
@@ -237,6 +237,7 @@ class Homepage extends Component {
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
                 <div className="mt-5">
+                  {/*}
                   <Input
                     className="zip"
                     type="text"
@@ -246,6 +247,7 @@ class Homepage extends Component {
                     onChange={this.handleEmail}
                   />
                   {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
+                  */}
                   <ButtonNotify/>
                 </div>
 

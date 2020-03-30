@@ -32,10 +32,10 @@ class SignupModal extends Component {
 
     if (!signupRequest) {
       this.setState({ invalidText: '', signupRequest: true })
-      if (pin && pinError) {
-        this.setState({ invalidText: 'Pin is incorrect', signupRequest: false })
-        return
-      }
+      // if (pin && pinError) {
+      //   this.setState({ invalidText: 'Pin is incorrect', signupRequest: false })
+      //   return
+      // }
 
       if (!name) {
         this.setState({ invalidText: 'Name cannot be empty', signupRequest: false })
@@ -137,7 +137,7 @@ class SignupModal extends Component {
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
         <div className="form-wrapper">
-          <div className="pin-input mb-3">
+          {/* <div className="pin-input mb-3">
             <Input
               className="aw-input--control black"
               type="text"
@@ -154,7 +154,7 @@ class SignupModal extends Component {
                 <i className="fa fa-times pin-input-ok" />
               )
             ) : null}
-          </div>
+          </div> */}
 
           <Input
             className="aw-input--control mb-3 black"
@@ -163,7 +163,6 @@ class SignupModal extends Component {
             placeholder="Enter your email"
             onKeyDown={this.handleKeySubmit}
             onChange={this.onValueChange}
-            onBlur={this.handlePinVerification}
           />
           <Input
             className="aw-input--control mb-3 black"
@@ -193,7 +192,7 @@ class SignupModal extends Component {
           }
 
           <button
-            className={`btn btn-main ${(pin && name && email && password && !signupRequest && !pinError) ? 'active' : ''}`}
+            className={`btn btn-main ${(name && email && password && !signupRequest) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
             CREATE ACCOUNT
@@ -207,7 +206,6 @@ class SignupModal extends Component {
             userStore={user}
             additionalData={additionalFBdata}
             onSubmit={this.props.toggle}
-            canSubmit={pin && !pinError}
           />
         </div>
         <div className="login-wrap text-center">

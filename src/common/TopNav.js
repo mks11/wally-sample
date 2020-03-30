@@ -23,7 +23,7 @@ class TopNav extends Component {
   handleSignup = () => {
     logModalView('/signup-zip')
     this.routing.push('/main')
-    this.modalStore.toggleModal('joinwaitlist')
+    this.modalStore.toggleModal('signup')
   }
 
   handleLogo = e => {
@@ -86,13 +86,8 @@ class TopNav extends Component {
     e.preventDefault()
   }
 
-  handleReferralModal = (e) => {
-    if (this.userStore.user) {
-      logModalView('/refer')
-      this.modalStore.toggleModal('referral')
-    } else {
-      this.routing.push("/help/detail/5c3d0df2fc84ff404f3b9eca")
-    }
+  handleBannerClick = (e) => {
+    this.routing.push("/latest-news")
     e.preventDefault()
   }
 
@@ -124,9 +119,8 @@ class TopNav extends Component {
     let isAdmin = false
     let isTwsOps = false
     let isCopacker = false
-    let bannerText = "Hello, Manhattan! 🎉 Wally now available in select Manhattan zip codes, click for details."
+    let bannerText = "In response to Covid-19, The Wally Shop is now available to anyone. Click for details."
     if (this.userStore.user) {
-      bannerText = "Give $10, get $10 when you refer a friend. Click for details."
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
       storeCredit =  user.packaging_balance
@@ -253,7 +247,7 @@ class TopNav extends Component {
           ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
             <div className={topBarClass}>
               <div className="container">
-                <div onClick={this.handleReferralModal}>
+                <div onClick={this.handleBannerClick}>
                   {bannerText}
                 </div>
                 <button className="close-top-bar" onClick={this.handleCloseTopBar}>

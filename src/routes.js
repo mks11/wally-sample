@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Mainpage from "./pages/Mainpage";
 import About from "./pages/About";
+import LatestNews from "./pages/LatestNews";
 import HowItWorks from "./pages/HowItWorks";
 import Account from "./pages/Account";
 import Help from "./pages/Help";
@@ -120,6 +121,7 @@ export default (
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
       <Route exact path="/howitworks" component={HowItWorks} />
+      <Route exact path="/latest-news" component={LatestNews} />
     </Switch>
   </Fragment>
 );
