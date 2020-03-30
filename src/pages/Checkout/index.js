@@ -669,18 +669,10 @@ class Checkout extends Component {
                         <span>Taxes</span>
                         <span>{formatMoney (order.tax_amount / 100)}</span>
                       </div>
-
-                      {order.delivery_amount === 0
-                        ? null
-                        : <div className="summary">
-                            <span>Delivery fee</span>
-                            <span>
-                              {isNaN (order.delivery_amount) ||
-                                order.delivery_amount === null
-                                ? 'TBD'
-                                : formatMoney (order.delivery_amount / 100)}
-                            </span>
-                          </div>}
+                      <div className="summary">
+                        <span>Delivery fee</span>
+                        <span>{formatMoney (order.delivery_amount / 100)}</span>
+                      </div>
 
                       <div className="summary">
                         <span><strong><a onClick={this.handlePackagingDepositClick}> Packaging Deposit </a></strong> (You'll get this back ;) )</span>
