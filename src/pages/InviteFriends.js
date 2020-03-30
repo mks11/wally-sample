@@ -13,7 +13,7 @@ class InviteFriends extends Component {
 
   handleSignup = () => {
     logEvent({ category: "ReferSignup", action: "StartSignup" })
-    this.modalStore.toggleModal('joinwaitlist')
+    this.modalStore.toggleModal('signup')
     this.routing.push('/main')
   }
 
@@ -41,10 +41,10 @@ class InviteFriends extends Component {
 
             <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
               <h1 className="aw-hero--heading mb-4">Shop package-free groceries</h1>
-              <h2 className="center">Small producer-made bulk foods & products conveniently delivered in our reusable, returnable packaging for a completely waste-free experience.</h2>
+              <h2 className="center">Pantry staples & favorite snacks conveniently delivered in our reusable, returnable packaging for a completely waste-free experience.</h2>
               <div className="mt-5">
                 <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-                  SIGN UP NOW
+                  START SHOPPING
                 </button>
               </div>
             </div>

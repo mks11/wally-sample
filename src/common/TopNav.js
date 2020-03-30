@@ -203,7 +203,7 @@ class TopNav extends Component {
                           <li><a>Packaging Balance ({formatMoney(storeCredit/100)})</a></li>
                           <li><a onClick={() => this.handleNavMobile('/orders')}>Order History</a></li>
                           <li><a onClick={() => this.handleNavMobile('/user')}>Account Settings</a></li>
-                          {/* <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li> */}
+                          {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
 
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/latest-news')}>COVID-19</a></li>
@@ -353,7 +353,7 @@ class TopNav extends Component {
                                       <a className="dropdown-item">Packaging Balance ({formatMoney(storeCredit / 100)})</a>
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
-                                      {/* <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a> */}
+                                      {/* <a onClick={this.handleInvite} className="dropdown-item">Refer a friend, receive a tote</a> */}
                                       <Link onClick={this.hideAccountDropdown} to="/latest-news" className="dropdown-item">COVID-19</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>

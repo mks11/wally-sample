@@ -116,7 +116,7 @@ export default (
       <Route exact path="/main" component={Mainpage} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
-      <Route exact path="/waitlist-signup" component={Signup} />
+      <Route exact path="/signup" component={Signup} />
       <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />

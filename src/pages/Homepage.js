@@ -17,7 +17,7 @@ class Homepage extends Component {
       email: '',
       audienceSource: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'In response to Covid-19, The Wally Shop is now available to anyone, anywhere',
+      heroDescription: "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,

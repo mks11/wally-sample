@@ -670,7 +670,7 @@ class Checkout extends Component {
                         <span>{formatMoney (order.tax_amount / 100)}</span>
                       </div>
                       <div className="summary">
-                        <span>Delivery fee</span>
+                        <span>Delivery fee (For there & back again)</span>
                         <span>{formatMoney (order.delivery_amount / 100)}</span>
                       </div>
 
