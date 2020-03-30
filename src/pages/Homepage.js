@@ -187,7 +187,7 @@ class Homepage extends Component {
 
     const ButtonNotify = () => (
       <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        CREATE ACCOUNT
+        START SHOPPING
       </button>
     )
 
@@ -230,7 +230,8 @@ class Homepage extends Component {
             <div className="row justify-content-center align-items-center">
 
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-                <img src="images/home5_hd.png" alt=""/>
+                {/* <img src="images/home5_hd.png" alt=""/> */}
+                <img src="images/cradle.jpg" alt=""/>
               </div>
 
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -276,14 +277,16 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home6_hd.png" alt=""/>
+                {/* <img src="images/home6_hd.png" alt=""/> */}
+                <img src="images/jar_3.jpg" alt=""/>
               </div>
             </div>
 
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                <img src="images/home7_hd.png" alt=""/>
+                {/* <img src="images/home7_hd.png" alt=""/> */}
+                <img src="images/tote.jpg" alt=""/>
               </div>
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
@@ -301,7 +304,8 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home8_hd.png" alt=""/>
+                {/* <img src="images/home8_hd.png" alt=""/> */}
+                <img src="images/jar_2.jpg" alt=""/>
               </div>
             </div>
 
@@ -311,7 +315,7 @@ class Homepage extends Component {
                   <Col>
                     <div className="text-center">
                       <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
-                        SIGN UP NOW
+                        START SHOPPING
                       </button>
                     </div>
                   </Col>

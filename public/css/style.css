@@ -200,11 +200,7 @@ border-radius: 0;}
   font-size: 2.2rem;
 }
 .homepage-background {
-  background: 
-    radial-gradient(at top left, rgba(255, 133, 254, 1), transparent),
-    radial-gradient(at top right, rgba(73, 128, 255, 1), transparent),
-    radial-gradient(at bottom left, rgba(137, 199, 255, 1), transparent),
-    radial-gradient(at bottom right, rgba(255, 202, 103, 1), transparent);
+  background-image: linear-gradient(#fae1ff, #fff);
 }
 
 
@@ -306,7 +302,7 @@ background:url(../images/howitworks_arrow.png) no-repeat;left:-30px;top:45px;}
 .footer-bottom .form-control{border-width:1px;height:34px;font-size: 14px;box-shadow:none!important;
 -webkit-box-shadow:none!important;}
 .footer-bottom .btn{font-size: 14px;line-height:20px;border:0;padding:7px 15px;border-radius:0 4px 4px 0;width:auto;
-background-color:#3c2ebf;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
+background-color:#97ADFF;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:60px;}
 .footer-fb a{
@@ -2588,7 +2584,7 @@ color:#6e8692
 }
 
 .btn-explore {
-  background-color: #78C98D;
+  background-color: #97ADFF;
   border-radius: 12px;
   border: 0;
 }
@@ -3311,7 +3307,7 @@ span.category-card-img {
 .scroll-text h1 {
   text-align: center;
   font-family: "NEONGLOW";
-  color: #FFCA67;
+  color: #3c2ebf;
 }
 
   /* Move it (define the animation) */

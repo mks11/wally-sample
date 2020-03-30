@@ -206,7 +206,8 @@ class TopNav extends Component {
                           {/* <li><a onClick={this.handleMobileNavInvite}>Give $10, Get $10</a></li> */}
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
 
-                          <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
+                          <li className="mt-5"><a onClick={() => this.handleNavMobile('/latest-news')}>COVID-19</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li>
                           <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li>
@@ -220,8 +221,10 @@ class TopNav extends Component {
                           <li><a onClick={this.handleMobileNavSignUp}>Sign Up</a></li>
                           <li><a onClick={this.handleMobileNavBackers}>✨</a></li>
 
-                          <li className="mt-5"><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
+                          <li className="mt-5"><a onClick={() => this.handleNavMobile('/latest-news')}>COVID-19</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
+                          
                           {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> 
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
                           {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
@@ -351,6 +354,7 @@ class TopNav extends Component {
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
                                       {/* <a onClick={this.handleInvite} className="dropdown-item">Give $10, get $10</a> */}
+                                      <Link onClick={this.hideAccountDropdown} to="/latest-news" className="dropdown-item">COVID-19</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/help" className="dropdown-item">Help</Link>
@@ -369,6 +373,7 @@ class TopNav extends Component {
                     }
                     { !this.userStore.status && (
                       <React.Fragment>
+                        <li><Link className="nav-link aw-nav--link p-0" to="/latest-news">COVID-19</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
                         {/* <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
