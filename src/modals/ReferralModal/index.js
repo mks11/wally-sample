@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { logEvent, logModalView, logPageView } from '../../utils'
+import Tote from "."
 
 class ReferralModal extends Component {
   constructor(props) {
@@ -45,11 +46,13 @@ class ReferralModal extends Component {
 
     return (
       <div className="login-wrap">
-        <h3 className="m-0 mb-2">Give $10, Get $10</h3>
+        <h3 className="m-0 mb-2">How Ripe & Ready are you?</h3>
         <span className="mb-1">
-          <small>Refer 2 friends in the next 2 hours and we'll throw in a free Wally tote in your order.</small>
+          <small>Refer 2 friends in the next 2 hours and we'll throw in an exclusive Wally Ripe & Ready tote in your order. Have them signup using the link below:</small>
         </span>
-        <p className="mb-5 text-center"><small>Have them signup using the link below</small></p>
+        <div className="mb-1">
+          <img src="./images/ripenready.png" alt=""/>
+        </div>
         <div className="referral-wrap p-2">
           <input
             type="text"

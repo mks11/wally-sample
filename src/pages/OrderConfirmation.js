@@ -18,7 +18,7 @@ class OrderConfirmation extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         if (status) {
-          {/* this.modalStore.toggleModal('referral') */}
+          this.modalStore.toggleModal('referral')
         } else {
           this.routing.push('/main')
         }
