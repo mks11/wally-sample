@@ -59,29 +59,28 @@ class SignupModal extends Component {
       } = this.props.stores
 
       logEvent({ category: "Signup", action: "SubmitInfo" })
-      console.log(user.refPromo);
-      // user.signup({
-      //   name,
-      //   email,
-      //   password,
-      //   signup_zip: zip.selectedZip,
-      //   reference_promo: user.refPromo || user.giftCardPromo
-      // }).then(data => {
-      //   user.setUserData(data.user)
-      //   user.setToken(data.token)
-      //   checkout.getCurrentCart(user.getHeaderAuth(),  user.getDeliveryParams())
-      //   checkout.getDeliveryTimes()
-      //   this.setState({ signupRequest: false })
-      //   this.props.switchTo('welcome')
-      //   this.props.store.routing.push('/main')
+      user.signup({
+        name,
+        email,
+        password,
+        signup_zip: zip.selectedZip,
+        reference_promo: user.refPromo || user.giftCardPromo
+      }).then(data => {
+        user.setUserData(data.user)
+        user.setToken(data.token)
+        checkout.getCurrentCart(user.getHeaderAuth(),  user.getDeliveryParams())
+        checkout.getDeliveryTimes()
+        this.setState({ signupRequest: false })
+        this.props.switchTo('welcome')
+        this.props.store.routing.push('/main')
         
-      //   user.giftCardPromo = null
-      //   user.refPromo = null
-      // }).catch(e => {
-      //   console.error('Failed to signup', e)
-      //   const msg = e.response.data.error.message
-      //   this.setState({ invalidText: msg, signupRequest: false })
-      // })
+        user.giftCardPromo = null
+        user.refPromo = null
+      }).catch(e => {
+        console.error('Failed to signup', e)
+        const msg = e.response.data.error.message
+        this.setState({ invalidText: msg, signupRequest: false })
+      })
     }
     e.preventDefault()
   }
