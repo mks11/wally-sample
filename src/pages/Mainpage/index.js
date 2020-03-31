@@ -176,12 +176,8 @@ class Mainpage extends Component {
   handleCheckoutMobile() {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
-      if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
-        this.modalStore.toggleDelivery()
-      } else {
-        this.uiStore.toggleCartMobile(false)
-        this.routing.push('/main/similar-products')
-      }
+      this.uiStore.toggleCartMobile(false)
+      this.routing.push('/main/similar-products')
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleModal('login')
