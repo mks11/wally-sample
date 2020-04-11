@@ -306,22 +306,23 @@ class ProductModal extends Component {
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
+
     let jarIcons = (
       <div className="jar-icons">
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 8 oz" width="22" />
+          <img src={ packaging_size == 8 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 8 oz" width="22" />
           <div>8 oz</div>
         </div>
         <div>
-          <img src={`/images/jar8_icon.png`} alt="Packaging size 25 oz" width="26" />
-          <div>25 oz</div>
+          <img src={ packaging_size == 16 || packaging_size == 25 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 25 oz" width="26" />
+          <div>{ packaging_size == 16 ? "16 oz" : "25 oz" }</div>
         </div>
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 32 oz" width="30" />
+          <img src={ packaging_size == 32 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 32 oz" width="30" />
           <div>32 oz</div>
         </div>
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 64 oz" width="34" />
+          <img src={ packaging_size == 64 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 64 oz" width="34" />
           <div>64 oz</div>
         </div>
       </div>
@@ -345,11 +346,11 @@ class ProductModal extends Component {
                       <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                     </div>
                   )}
-                  {packaging_size && (
+                  { /* {packaging_size && (
                     <div className="slick-item">
                       <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
                     </div>
-                  )}
+                  )} */ }
                 </div>
               </div>
             </div>
@@ -363,11 +364,11 @@ class ProductModal extends Component {
                     <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                   </div>
                 )}
-                {packaging_size && (
+                { /* {packaging_size && (
                   <div className="slick-item">
                     <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
                   </div>
-                )}
+                )} */ }
               </div>
             </div>
           </Col>

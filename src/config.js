@@ -124,6 +124,8 @@ export const API_RETAIL_UPLOAD_SHIPMENTS =
   BASE_URL + "/api/admin/retail/shipments";
 export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
   BASE_URL + "/api/admin/retail/product-actions";
+export const API_RETAIL_UPLOAD_SKUS =
+  BASE_URL + "/api/admin/retail/skus";  
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";

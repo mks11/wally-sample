@@ -41,6 +41,7 @@ import {
   API_RETAIL_UPLOAD_CATEGORIES,
   API_RETAIL_UPLOAD_SHIPMENTS,
   API_RETAIL_UPLOAD_PRODUCT_ACTIONS,
+  API_RETAIL_UPLOAD_SKUS,
   API_ADMIN_GET_PRINT_EMAIL
 } from "../config";
 import axios from "axios";
@@ -420,6 +421,14 @@ class AdminStore {
   async uploadProducts(filename, formData) {
     const res = await axios.post(
       `${API_RETAIL_UPLOAD_PRODUCTS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async uploadSKUs(filename, formData) {
+    const res = await axios.post(
+      `${API_RETAIL_UPLOAD_SKUS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
