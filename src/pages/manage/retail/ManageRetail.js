@@ -68,6 +68,31 @@ class ManageRetail extends Component {
     }
   }
 
+  onUploadProductEdits = (event) => {
+    event.preventDefault();
+    if (this.isFormValid(this.state)) {
+      this.setState({ errors: [], loading: true})
+      const formData = new FormData();
+      formData.append('file', this.state.file[0])
+      let fileName = this.state.file[0].name
+      this.adminStore.uploadProductEdits(fileName, formData)
+        .catch(() => {
+          this.modalStore.toggleModal('error')
+        })
+        .finally(() => {
+          this.setState({
+            loading: false,
+            file: null
+          })
+        })
+    } else {
+        this.setState({
+          errors: this.state.errors.concat("Please add a CSV file."),
+          loading: false,
+        })
+    }
+  }
+
   onUploadVendors = (event) => {
     event.preventDefault();
     if (this.isFormValid(this.state)) {
@@ -234,6 +259,13 @@ class ManageRetail extends Component {
                 <form onSubmit={this.onUploadProductRetirements} className={this.handleInputError(errors, 'file')} >
                   <input type="file" id="file" onChange={this.handleFileUpload} />
                   <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Product Actions</Button>
+                </form>
+              </div>
+
+              <div className="product-selection-button">
+                <form onSubmit={this.onUploadProductEdits} className={this.handleInputError(errors, 'file')} >
+                  <input type="file" id="file" onChange={this.handleFileUpload} />
+                  <Button disabled={loading} className={loading ? 'loading':''}  style={{ textTransform: 'none'}} size="medium" type="submit">Upload Product Edits</Button>
                 </form>
               </div>
               

@@ -119,7 +119,7 @@ class TopNav extends Component {
     let isAdmin = false
     let isTwsOps = false
     let isCopacker = false
-    let bannerText = "The Wally Shop has no more waitlist and $1 donated for every order. Click for details."
+    let bannerText = "We’re working hard to restock - try next week if you don’t see something!"
     if (this.userStore.user) {
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user

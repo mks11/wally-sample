@@ -425,6 +425,14 @@ class AdminStore {
     );
   }
 
+  async uploadProductEdits(filename, formData) {
+    const res = await axios.patch(
+      `${API_RETAIL_UPLOAD_PRODUCTS}?filename=${filename}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
   async uploadVendors(filename, formData) {
     const res = await axios.post(
       `${API_RETAIL_UPLOAD_VENDORS}?filename=${filename}`,

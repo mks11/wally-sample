@@ -6,10 +6,11 @@ const FILTERS_DATA = [
   { title: 'Gluten Free', value: 'allergen,gluten' },
   { title: 'Peanut Free', value: 'allergen,peanuts' },
   { title: 'Tree Nuts Free', value: 'allergen,tree nuts' },
-  { title: 'Organic', value: 'tag,organic' },
+  { title: 'Made With Organic', value: 'tag,organic' },
   { title: 'Non GMO', value: 'tag,non gmo' },
   { title: 'Fair Trade', value: 'tag,fair trade' },
-  { title: 'Kosher', value: 'tag,kosher' },
+  // { title: 'Fair Trade', value: 'tag,fair trade' },
+  // { title: 'Kosher', value: 'tag,kosher' },
 ]
 
 class Filters extends Component {
