@@ -593,11 +593,11 @@ class Checkout extends Component {
                   />
                 </React.Fragment>
 
-                <Returns
+                {/* <Returns
                   title="Returns"
                   default={this.userStore.user.pickup_notes || null}
                   onReturnChange={this.handleReturnSet}
-                />
+                /> */}
               </div>
             </div>
             <div className="">
