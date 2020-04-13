@@ -1,13 +1,34 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ClickOutside from "react-click-outside";
+import moment from "moment";
 
-class DeliveryTimeOptions extends Component {
+function TimeInput({ time, unavailable, selected, key, onClick }) {
+  return (
+    <div className="dropdown-item" key={key} onClick={onClick}>
+      <div className="custom-control custom-radio">
+        <input
+          checked={selected && selected.time === time}
+          type="radio"
+          name="timeRadio"
+          className="custom-control-input"
+        />
+        <label className="custom-control-label">
+          {time}
+          {unavailable && <span className="text-muted">Not Available</span>}
+        </label>
+      </div>
+    </div>
+  );
+}
+
+class TimeOnlyOptions extends Component {
   state = {
     selected: null,
     lock: false,
     confirmHome: false,
-    data: []
+    data: [],
+    timeDropdown: false
   };
 
   toggleTimeDropdown(e) {
@@ -24,16 +45,16 @@ class DeliveryTimeOptions extends Component {
     this.setState({ timeDropdown: false });
   }
 
-  handleChangeTime(day, time, date, availability) {
-    if (availability) {
+  handleChangeTime({ time, unavailable }) {
+    if (unavailable) {
       return;
     }
     this.setState({
-      selected: { day, time, date },
+      selected: { time },
       lock: true,
       timeDropdown: false
     });
-    this.props.onSelectTime({ day, date, time });
+    this.props.onSelectTime({ time });
   }
 
   unlock = () => {
@@ -42,6 +63,7 @@ class DeliveryTimeOptions extends Component {
 
   render() {
     let timeDropdownClass = "dropdown-menu";
+    //TODO uncouple it from addressUnlocked
     if (this.state.timeDropdown && !this.props.addressUnlocked) {
       timeDropdownClass += " show";
     }
@@ -72,7 +94,12 @@ class DeliveryTimeOptions extends Component {
             )}
           </h3>
         )}
-        <div className="dropdown show">
+        {this.props.invalidText && (
+          <span className="text-error text-left d-block mt-3">
+            {this.props.invalidText}
+          </span>
+        )}
+        <div className="dropdown show" style={this.props.invalidText ? {border:"1px solid #ff0000"}:{}}>
           <ClickOutside onClickOutside={e => this.hideTimeDropdown()}>
             <button
               onClick={e => this.toggleTimeDropdown()}
@@ -82,68 +109,48 @@ class DeliveryTimeOptions extends Component {
               aria-expanded="true"
             >
               {selected ? (
-                <React.Fragment>
-                  {selected.day}, {selected.time}
-                </React.Fragment>
+                <React.Fragment>{selected.time}</React.Fragment>
               ) : (
-                "Choose delivery date and time"
+                this.props.placeholderText
               )}
             </button>
             <div className={timeDropdownClass}>
-              {data.map((items, key) => (
-                <React.Fragment key={key}>
-                  <h6 className="dropdown-header">{items.day}</h6>
-                  {items.data.map((item, key2) => (
-                    <div
-                      className="dropdown-item"
-                      key={key2}
-                      onClick={e =>
-                        this.handleChangeTime(
-                          items.day,
-                          item.time,
-                          item.date,
-                          item.availability
-                        )
-                      }
-                    >
-                      <div className="custom-control custom-radio">
-                        <input
-                          checked={
-                            this.state.selected &&
-                            this.state.selected.date === item.date &&
-                            this.state.selected.time === item.time
-                          }
-                          type="radio"
-                          name="timeRadio"
-                          className="custom-control-input"
-                        />
-                        <label className="custom-control-label">
-                          {item.time}{" "}
-                          {item.availability && (
-                            <span className="text-muted">Not Available</span>
-                          )}
-                        </label>
-                      </div>
-                    </div>
-                  ))}
-                </React.Fragment>
+              {data.map(({ time, unavailable }, key) => (
+                <TimeInput
+                  time={time}
+                  unavailable={unavailable}
+                  selected={selected}
+                  onClick={e => this.handleChangeTime({ time, unavailable })}
+                  key={key}
+                />
               ))}
             </div>
           </ClickOutside>
+
         </div>
       </React.Fragment>
     );
   }
 }
 
-DeliveryTimeOptions.propTypes = {
+TimeOnlyOptions.defaultProps = {
+  lock: false,
+  editable: false
+};
+
+TimeOnlyOptions.propTypes = {
   title: PropTypes.string,
-  onSelectTime: PropTypes.func,
+  onSelectTime: PropTypes.func.isRequired,
+  data: PropTypes.shape({
+    time: PropTypes.string,
+    unavailable: PropTypes.bool
+  }),
+  addressUnlocked: PropTypes.bool,
+  placeholderText: PropTypes.string.isRequired,
   lock: PropTypes.bool,
   dropdown: PropTypes.string,
   editable: PropTypes.bool,
-  data: PropTypes.object,
-  addressUnlocked: PropTypes.bool
+  invalidText: PropTypes.string
 };
 
-export default DeliveryTimeOptions;
+export default TimeOnlyOptions;

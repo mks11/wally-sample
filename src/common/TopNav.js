@@ -80,39 +80,54 @@ class TopNav extends Component {
     this.uiStore.hideNavMobile()
     this.handleLogout()
   }
-
   handleCloseTopBar = (e) => {
     this.uiStore.closeTopBar()
     e.preventDefault()
   }
 
+  /** Schedule Pickup */
+  handleMobileNavSchedulePickup = () => {
+    this.uiStore.hideNavMobile();
+    this.handleSchedulePickup();
+  };
+
+  handleSchedulePickup = () => {
+    logModalView("/schedulePickup");
+    this.hideAccountDropdown();
+    this.modalStore.toggleModal("schedulepickup");
+    // throw new Error("Implementation");
+  };
+
+  handleReferralModal = (e) => {
+    if (this.userStore.user) {
+      logModalView('/refer')
+      this.modalStore.toggleModal('referral')
+    } else {
+      this.routing.push("/help/detail/5c3d0df2fc84ff404f3b9eca")
+    }
+  };
+
   handleBannerClick = (e) => {
     this.routing.push("/latest-news")
-    e.preventDefault()
-  }
+  };
 
   hideAccountDropdown = () => {
     this.uiStore.hideAccountDropdown()
-  }
+  };
 
   handleNavBackers = () => {
     this.props.store.routing.push('/backers')
-  }
+  };
 
   handleMobileNavBackers = () => {
     this.uiStore.hideNavMobile()
     this.handleNavBackers()
-  }
+  };
 
   handleRedeemDepositClick = () => {
     this.hideAccountDropdown()
     this.modalStore.toggleModal('redeemdeposit')
-  }
-
-  handleSchedulePickupClick = () => {
-    this.hideAccountDropdown()
-    this.modalStore.toggleModal('schedulepickup')
-  }
+  };
 
   render() {
     let storeCredit, name
@@ -202,6 +217,7 @@ class TopNav extends Component {
                           <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
                           <li><a>Packaging Balance ({formatMoney(storeCredit/100)})</a></li>
                           <li><a onClick={() => this.handleNavMobile('/orders')}>Order History</a></li>
+                          <li> <a onClick={this.handleMobileNavSchedulePickup}> Schedule Pickup </a> </li>
                           <li><a onClick={() => this.handleNavMobile('/user')}>Account Settings</a></li>
                           {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
@@ -352,6 +368,7 @@ class TopNav extends Component {
                                   <span className="dropdown-item lg"><strong>Hi {name}</strong></span>
                                       <a className="dropdown-item">Packaging Balance ({formatMoney(storeCredit / 100)})</a>
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
+                                      <a onClick={this.handleSchedulePickup} className="dropdown-item"> Schedule Pickup</a>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
                                       {/* <a onClick={this.handleInvite} className="dropdown-item">Refer a friend, receive a tote</a> */}
                                       <Link onClick={this.hideAccountDropdown} to="/latest-news" className="dropdown-item">COVID-19</Link>

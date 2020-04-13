@@ -1090,6 +1090,10 @@ span.tnc i {
   font-size: 20px;
 }
 
+.util-font-size-14 {
+  font-size: 14px;
+}
+
 .text-success {
   color: green;
   font-size: 20px;

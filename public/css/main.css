@@ -712,6 +712,10 @@ button:hover,
   font-size: 14px;
 }
 
+.util-font-size-16 {
+  font-size: 16px;
+}
+
 .util-relative {
   position: relative;
 }
@@ -723,6 +727,15 @@ button:hover,
 .util-bg-color-white {
   background-color: #fff !important;
 }
+
+.util-padding-20 {
+  padding: 20px;
+}
+
+.util-margin-top-20 {
+  margin-top: 20px;
+}
+
 .aw-header .btn-login,
 .aw-header .btn-sign-up,
 .aw-header .btn-backers {

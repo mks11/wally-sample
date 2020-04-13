@@ -1,44 +1,52 @@
-import React from 'react';
-import { Label, FormGroup } from 'reactstrap';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
- 
-import 'react-datepicker/dist/react-datepicker.css';
- 
+import React from "react";
+import PropTypes from "prop-types";
+import { Label, FormGroup } from "reactstrap";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 class CustomDatepicker extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       startDate: moment()
     };
-    this.handleChange = this.handleChange.bind(this);
   }
- 
-  handleChange(date) {
-    const { onDatePick } = this.props
+
+  handleChange = selected => {
+    const { onDatePick } = this.props;
 
     this.setState({
-      startDate: date
+      startDate: selected
     });
 
-    onDatePick && onDatePick(moment(date).format('YYYY-MM-DD'))
-  }
- 
+    onDatePick && onDatePick(moment(selected).format("YYYY-MM-DD"));
+  };
+
   render() {
-    const { date } = this.props
+    const { label, selected, onDatePick, containerStyle, className, ...rest } = this.props;
 
     return (
-      <FormGroup>
-        <Label>Post Date</Label>
+      <FormGroup style={containerStyle}>
+        <Label>{this.props.label}</Label>
         <DatePicker
-          selected={moment(date) || this.state.startDate}
+          selected={moment(selected) || this.state.startDate}
           onChange={this.handleChange}
           dateFormat="YYYY-MM-DD"
-          className="form-control custom-datepicker"
+          className={`form-control ${className}`}
+          {...rest}
         />
       </FormGroup>
-    )
+    );
   }
 }
 
-export default CustomDatepicker
+CustomDatepicker.propTypes = {
+  label: PropTypes.string,
+  selected: PropTypes.string,
+  onDatePick: PropTypes.func.isRequired,
+  containerStyle: PropTypes.object
+};
+
+export default CustomDatepicker;

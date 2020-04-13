@@ -72,12 +72,17 @@ class Mainpage extends Component {
           if (!status) {
             this.routing.push('/');  
           } else {
-            this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-            this.checkoutStore.getDeliveryTimes()
-            this.loadData()  
-            const { mainFirst, mainSecond } = this.userStore.flags || {}
-            !mainFirst && this.modalStore.toggleModal('mainFirst')
-            mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')
+            if (window.location.pathname.split('/')[1] === 'schedule-pickup') {
+              this.modalStore.toggleModal("schedulepickup");
+            } else {
+              this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+              this.checkoutStore.getDeliveryTimes()
+              this.loadData()  
+              const { mainFirst, mainSecond } = this.userStore.flags || {}
+              !mainFirst && this.modalStore.toggleModal('mainFirst')
+              mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')  
+            }
+            
           }
         }
       })

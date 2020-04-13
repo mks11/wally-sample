@@ -11,6 +11,7 @@ import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
+import ScheduleUserPickupStore from "./ScheduleUserPickupStore";
 import MetricStore from "./MetricStore";
 
 const store = {
@@ -29,6 +30,7 @@ const store = {
   backer: BackerStore,
   vendor: VendorProfileStore,
   products: VendorProfileStore,
+  schedulePickup: ScheduleUserPickupStore,
   metric: MetricStore
 };
 

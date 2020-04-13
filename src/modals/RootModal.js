@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils'
+import React, { Component } from "react";
+import { Modal, ModalBody } from "reactstrap";
+import { connect } from "../utils";
 
 import WelcomeModal from './WelcomeModal'
 import ZipModal from './ZipModal'
@@ -24,7 +24,7 @@ import WaitingListModal from './WaitingListModal'
 import EmailVerification from './EmailVerification'
 import JoinWaitlistModal from './JoinWaitlistModal'
 import RedeemDepositModal from './RedeemDepositModal'
-import SchedulePickupModal from './SchedulePickupModal'
+import SchedulePickupModal from './SchedulePickupModal';
 import PackagingDepositModal from './PackagingDepositModal'
 
 const ModalRoutes = {
@@ -49,6 +49,7 @@ const ModalRoutes = {
   waitinglist: WaitingListModal,
   emailverification: EmailVerification,
   joinwaitlist: JoinWaitlistModal,
+  schedulepickup: SchedulePickupModal,
   redeemdeposit: RedeemDepositModal,
   schedulepickup: SchedulePickupModal,
   packagingdeposit: PackagingDepositModal
@@ -56,51 +57,50 @@ const ModalRoutes = {
 
 class RootModal extends Component {
   constructor(props) {
-    super(props)
-    this.modalStore = this.props.store.modal
+    super(props);
+    this.modalStore = this.props.store.modal;
   }
 
   toggleModal = e => {
-    this.modalStore.modalPull.shift()
+    this.modalStore.modalPull.shift();
 
     if (this.modalStore.modalPull.length) {
-      const modalId = this.modalStore.modalPull[0]
-      this.switchModal(modalId)
+      const modalId = this.modalStore.modalPull[0];
+      this.switchModal(modalId);
     } else {
-      this.modalStore.toggleModal()
+      this.modalStore.toggleModal();
     }
 
-    e && e.preventDefault()
-  }
+    e && e.preventDefault();
+  };
 
   switchModal = modalId => {
-    this.modalStore.switchModal(modalId)
-  }
+    this.modalStore.switchModal(modalId);
+  };
 
-  renderEmpty = () => (null)
+  renderEmpty = () => null;
 
   render() {
-    const {
-      isOpen,
-      modalId,
-    } = this.modalStore
+    const { isOpen, modalId } = this.modalStore;
 
-    const ModalToRender = ModalRoutes[modalId] || this.renderEmpty
+    const ModalToRender = ModalRoutes[modalId] || this.renderEmpty;
 
     // temporary hack
-    const isLarge = modalId === 'product'
-    const withGradient = modalId === 'waitinglist'
+    const isLarge = modalId === "product";
+    const withGradient = modalId === "waitinglist";
 
     return (
       <Modal
         autoFocus={false}
         isOpen={isOpen}
         centered
-        size={isLarge ? 'lg' : ''}
-
+        size={isLarge ? "lg" : ""}
       >
-        <ModalBody className={`${withGradient ? 'waitinglist-modal' : ''}`}>
-          <button className="btn-icon btn-icon--close" onClick={this.toggleModal}></button>
+        <ModalBody className={`${withGradient ? "waitinglist-modal" : ""}`}>
+          <button
+            className="btn-icon btn-icon--close"
+            onClick={this.toggleModal}
+          ></button>
           <ModalToRender
             stores={this.props.store}
             toggle={this.toggleModal}
