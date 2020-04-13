@@ -50,8 +50,8 @@ class ReferralModal extends Component {
         <span className="mb-1">
           <small>Refer 2 friends in the next 2 hours and we'll throw in an exclusive Wally Ripe & Ready tote in your order. Have them signup using the link below:</small>
         </span>
-        <div className="mb-1">
-          <img src="./images/ripenready.png" alt=""/>
+        <div className="mb-2 text-center">
+          <img src="/images/ripenready.png" alt="" width="70%"/>
         </div>
         <div className="referral-wrap p-2">
           <input
