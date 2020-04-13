@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://evening-bayou-13995.herokuapp.com";
-export const BASE_URL = "https://43a28205.ngrok.io";
+export const BASE_URL = "https://the-wally-shop.herokuapp.com";
+// export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
@@ -52,7 +52,7 @@ export const API_SUBMIT_ISSUE = BASE_URL + "/api/issue";
 export const API_SUBMIT_FEEDBACK = BASE_URL + "/api/order/feedback";
 export const API_SUBMIT_SERVICE_FEEDBACK = BASE_URL + "/api/service/feedback";
 
-export const API_SCHEDULED_PICKUP = BASE_URL + "/api/schedulePickup";
+export const API_SCHEDULED_PICKUP = BASE_URL + "/api/pickup/schedule";
 
 export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + "/api/admin/timeframes";
 export const API_ADMIN_GET_SHOP_LOCATIONS =
@@ -126,6 +126,8 @@ export const API_RETAIL_UPLOAD_SHIPMENTS =
   BASE_URL + "/api/admin/retail/shipments";
 export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
   BASE_URL + "/api/admin/retail/product-actions";
+export const API_RETAIL_UPLOAD_SKUS =
+  BASE_URL + "/api/admin/retail/skus";  
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
@@ -145,17 +147,19 @@ export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + "/api/email/signup";
 export const API_BLOG_POST = BASE_URL + "/api/blog";
 export const API_EDIT_CART_ITEM = BASE_URL + "/api/order";
 
+export const API_POST_METRIC_SOURCE = BASE_URL + "/api/metric/audience-source"
+
 export const INSTAGRAM = "https://www.instagram.com/thewallyshop/";
 export const FACEBOOK = "https://facebook.com/thewallyshop";
 
 export const GOOGLE_API_KEY = "AIzaSyB1VsxMUiBN9H89Qgs5Z1eXtbkCyNB1KGQ";
 
 export const APP_URL = "https://thewallyshop.co";
-export const STRIPE_API_KEY = "pk_test_pq5Ha0elSORzrITfK2G7GkK4";
+export const STRIPE_API_KEY = "pk_live_QV08YsHEj9zFZeHcx3O6X5Wn";
 export const FB_KEY = "1634254033370820";
 
 export const PRODUCT_BASE_URL =
-  "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-ecomm/";
+  "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-flat/";
 export const NUTRITIONAL_INFO_BASE_URL =
   "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
 export const PACKAGING_BASE_URL =

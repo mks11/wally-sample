@@ -46,7 +46,7 @@ class CategoriesList extends Component {
                   {s.name}
                 </h4>
                 <ul>
-                  {s.categories && s.categories.map((sc, idx) => (
+                  {s.categories && s.categories.sort((a, b) => a.name.localeCompare(b.name)) && s.categories.map((sc, idx) => (
                     <li key={idx}>
                       <Link
                         to={`/main/${sc.category_id || ''}`}

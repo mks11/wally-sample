@@ -15,7 +15,7 @@ class CheckoutFirstModal extends Component {
       <div className="login-wrap">
         <h3 className="m-0 mb-2">Packaging Deposit?</h3>
         <p className="mb-5 info-popup">
-          To deliver you the Wally Signature reusables experience, we charge a deposit on your packaging. 
+          To deliver you the Wally Signature reusables experience, we charge a fully refundable deposit on the packaging, that you get back when you return.
         </p>
         <button onClick={this.handleStart} className="btn btn-main active">Got it!</button>
       </div>

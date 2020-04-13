@@ -30,6 +30,7 @@ class Mainpage extends Component {
     this.productStore = this.props.store.product
     this.checkoutStore = this.props.store.checkout
     this.zipStore = this.props.store.zip
+    this.packagingUnitStore = this.props.store.packagingUnit
 
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
@@ -45,16 +46,45 @@ class Mainpage extends Component {
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    // for web launch
-    // this.routing.push('/');
     this.userStore.getStatus(true)
       .then((status) => {
-        this.userStore.giftCardPromo && this.processGiftCardPromo(status)
-        this.checkoutStore.getDeliveryTimes()
-        this.loadData()
-
-        // const { mainFirst } = this.userStore.flags || {}
-        // !mainFirst && this.modalStore.toggleModal('mainFirst')
+        if (window.location.pathname.split('/')[1] === 'packaging') {
+          if (["5e0e488c3f26046cc60195f6", "5e0e488c3f26046cc60195f4", "5e0e488c3f26046cc60195f3", "5e0e488c3f26046cc60195f2"].includes(this.props.match.params.id)) { 
+            window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf` 
+          }
+          else {
+            console.log("Getting product info");
+            this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
+              .then((unit) => {
+                console.log("Getting product info");
+                if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
+                  window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${this.props.match.params.id}` 
+                } else {
+                  if (unit.product_id) { 
+                    this.handleProductModal(unit.product_id) 
+                  } else {
+                    this.routing.push(`/?qr_ref=${this.props.match.params.id}`)
+                  }  
+                }
+              }).catch((e) => console.error('Failed to load product displayed: ', e))
+          }
+        } else {
+          if (!status) {
+            this.routing.push('/');  
+          } else {
+            if (window.location.pathname.split('/')[1] === 'schedule-pickup') {
+              this.modalStore.toggleModal("schedulepickup");
+            } else {
+              this.userStore.giftCardPromo && this.processGiftCardPromo(status)
+              this.checkoutStore.getDeliveryTimes()
+              this.loadData()  
+              const { mainFirst, mainSecond } = this.userStore.flags || {}
+              !mainFirst && this.modalStore.toggleModal('mainFirst')
+              mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')  
+            }
+            
+          }
+        }
       })
   }
 
@@ -151,12 +181,8 @@ class Mainpage extends Component {
   handleCheckoutMobile() {
     logEvent({ category: "Cart", action: "ClickCheckoutMobile" })
     if (this.userStore.status) {
-      if (!this.userStore.user.is_ecomm && !this.userStore.selectedDeliveryTime) {
-        this.modalStore.toggleDelivery()
-      } else {
-        this.uiStore.toggleCartMobile(false)
-        this.routing.push('/main/similar-products')
-      }
+      this.uiStore.toggleCartMobile(false)
+      this.routing.push('/main/similar-products')
     } else {
       this.uiStore.toggleCartMobile(false)
       this.modalStore.toggleModal('login')
@@ -267,6 +293,10 @@ class Mainpage extends Component {
 
     const id = this.props.match.params.id
     const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
+    var count = 0;
+    for (var i = cartItems.length - 1; i >= 0; i--) {
+      count += cartItems[i].customer_quantity
+    };
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null
 
@@ -313,7 +343,7 @@ class Mainpage extends Component {
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
                           <div className="product-breadcrumb">
-                            {/* <CarbonBar value={cartItems.length % 10} /> */}
+                            {/* <CarbonBar value={count % 12} /> */}
                             <h2>Buy Again</h2>
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
@@ -358,7 +388,7 @@ class Mainpage extends Component {
                           {ads2 && <img src={APP_URL + ads2} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={cartItems.length % 10} />
+                            <CarbonBar value={count % 12} />
                             <hr/>
                           </div>
 
@@ -389,13 +419,13 @@ class Mainpage extends Component {
                     id !== 'buyagain' && (
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
-                          { this.props.location.pathname.split('/')[1] === 'packaging' ?
+                          { this.props.location.pathname.split('/')[1] === 'packaging-blank' ?
                             <ProductWithPackaging packagingId={this.props.match.params.id}/>
                             : <React.Fragment>
                           {ads2 && <img src={APP_URL + ads2.image} className="img-fluid" alt="" />}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={cartItems.length % 10} />
+                            <CarbonBar value={count % 12} />
                           </div>
 
                           {
@@ -444,7 +474,7 @@ class Mainpage extends Component {
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button>
                     {/* <div className="px-3">
-                      <CarbonBar value={cartItems.length % 10} />
+                      <CarbonBar value={count % 12} />
                     </div> */}
                   {cartItems.length>0 ?
                       <React.Fragment>

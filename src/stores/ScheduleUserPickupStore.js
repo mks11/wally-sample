@@ -39,6 +39,7 @@ class UserPickupStore {
 
     this.loading = false;
     return res.data;
+    // return 200
   }
 }
 

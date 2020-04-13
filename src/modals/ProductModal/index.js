@@ -264,12 +264,12 @@ class ProductModal extends Component {
     }
 
     const inventory = available_inventory[0] ? available_inventory[0] : null
-    const limitOptions = fbw && !out_of_stock && available
     let qtyOptions = []
 
     const incrementValue = 1
     const minSize = 1
-    const maxQty = limitOptions ? Math.min(max_qty, 10) : 10
+    const maxQty = Math.min(max_qty, 10)
+    console.log("max qty is ", maxQty)
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
@@ -284,7 +284,7 @@ class ProductModal extends Component {
         if (subcat_name) {
           price_unit = subcat_name;
         } else {
-          price_unit = 'unit';
+          price_unit = 'jar';
         }
     } else {
       price_unit += unit_type;
@@ -306,22 +306,23 @@ class ProductModal extends Component {
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
     const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
+
     let jarIcons = (
       <div className="jar-icons">
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 8 oz" width="22" />
+          <img src={ packaging_size == 8 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 8 oz" width="22" />
           <div>8 oz</div>
         </div>
         <div>
-          <img src={`/images/jar8_icon.png`} alt="Packaging size 25 oz" width="26" />
-          <div>25 oz</div>
+          <img src={ packaging_size == 16 || packaging_size == 25 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 25 oz" width="26" />
+          <div>{ packaging_size == 16 ? "16 oz" : "25 oz" }</div>
         </div>
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 32 oz" width="30" />
+          <img src={ packaging_size == 32 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 32 oz" width="30" />
           <div>32 oz</div>
         </div>
         <div>
-          <img src={`/images/jar8_grey_icon.png`} alt="Packaging size 64 oz" width="34" />
+          <img src={ packaging_size == 64 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 64 oz" width="34" />
           <div>64 oz</div>
         </div>
       </div>
@@ -345,11 +346,11 @@ class ProductModal extends Component {
                       <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                     </div>
                   )}
-                  {packaging_size && (
+                  { /* {packaging_size && (
                     <div className="slick-item">
                       <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
                     </div>
-                  )}
+                  )} */ }
                 </div>
               </div>
             </div>
@@ -363,11 +364,11 @@ class ProductModal extends Component {
                     <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                   </div>
                 )}
-                {packaging_size && (
+                { /* {packaging_size && (
                   <div className="slick-item">
                     <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
                   </div>
-                )}
+                )} */ }
               </div>
             </div>
           </Col>
@@ -433,12 +434,8 @@ class ProductModal extends Component {
               }
             </button><br />
 
-            <div
-              className={`${(this.state.available) ? 'text-muted' : 'text-muted-alert' }`}
-            >
-              {
-                this.state.available ? '' : 'Click on clock icon next to categories to change delivery date.'
-              }
+            <div className='text-muted'> 
+              **Product packaged in a facility that processes dairy, gluten, peanuts and tree nuts.
             </div>
           </Col>
         </Row>

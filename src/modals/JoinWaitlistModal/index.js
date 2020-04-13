@@ -31,7 +31,7 @@ class JoinWaitlistModal extends Component {
       routing,
     } = this.props.stores
 
-    user.getWaitlistInfo(this.state.signupEmail, user.refPromo)
+    user.getWaitlistInfo({ email: this.state.signupEmail, ref: user.refPromo })
       .then(res => {
         routing.push('/')
         modal.switchModal('waitinglist', null, res)
@@ -80,10 +80,10 @@ class JoinWaitlistModal extends Component {
               : null
           }
           <br></br>
-          <span className="mb-3">Received your confirmation email? Click below to enter your unique pin and complete the sign up process.</span>
+          <span className="mb-3">Received your account unlock email? Click below to enter your unique pin and complete the sign up process.</span>
         </div>
         <div className="login-wrap text-center">
-          <button type="button" onClick={this.handleSignUpModal} className="btn-text btn-text--login">SIGN UP</button>
+          <button type="button" onClick={this.handleSignUpModal} className="btn-text btn-text--login">ENTER PIN</button>
         </div>
       </div>
     )

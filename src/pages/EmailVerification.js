@@ -23,7 +23,7 @@ class EmailVerification extends Component {
       this.userStore.verifyWaitlistEmail(email, token_id)
         .then(res => {
           if (res.verified) {
-            this.userStore.getWaitlistInfo(email)
+            this.userStore.getWaitlistInfo({ email: email })
               .then(res => {
                 this.modalStore.toggleModal('waitinglist', null, res)
               }).catch(() => {

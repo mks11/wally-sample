@@ -12,6 +12,7 @@ import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
 import ScheduleUserPickupStore from "./ScheduleUserPickupStore";
+import MetricStore from "./MetricStore";
 
 const store = {
   ui: UiStore,
@@ -29,7 +30,8 @@ const store = {
   backer: BackerStore,
   vendor: VendorProfileStore,
   products: VendorProfileStore,
-  schedulePickup: ScheduleUserPickupStore
+  schedulePickup: ScheduleUserPickupStore,
+  metric: MetricStore
 };
 
 export default store;

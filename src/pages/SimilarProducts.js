@@ -168,7 +168,7 @@ class SimilarProducts extends Component {
             <hr />
             <div className="col col-lg-3 similar-products-checkout">
               <h3 className="text-right">
-                <Link to="/checkout" className="color-purple">Continue Checkout</Link>
+                <Link to="/checkout" className="color-purple">Continue To Checkout</Link>
               </h3>
             </div>
             <br />

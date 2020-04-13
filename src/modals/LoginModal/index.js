@@ -188,7 +188,7 @@ class LoginModal extends Component {
           }
         </div>
         <div className="login-wrap text-center">
-          <span className="">Want to join the waitlist?</span>
+          <span className="">New User?</span>
           <button onClick={this.handleLogin} className="btn-text btn-text--login">SIGN UP HERE</button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import qs from 'qs';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
 import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
@@ -14,8 +15,9 @@ class Homepage extends Component {
       // model
       zip: '',
       email: '',
+      audienceSource: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'To ensure a top notch reusables signature experience, we are doing a phased rollout - It’s first sign up, first access so go! go! go!',
+      heroDescription: "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -40,10 +42,20 @@ class Homepage extends Component {
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
     this.routing = this.props.store.routing
+    this.metricStore = this.props.store.metric
   }
 
   componentDidMount() {
     ReactGA.pageview("/");
+    console.log(this.props);
+    if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color) {
+      if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color == "purple") {
+        this.setState({ audienceSource: "ig" });
+        this.metricStore.triggerAudienceSource("ig");  
+      }
+      
+    }
+
     this.userStore.getStatus()
       .then((status) => {
         if (status) {
@@ -53,7 +65,7 @@ class Homepage extends Component {
           } else if (user.type === 'tws-ops') {
             this.routing.push('/manage/shopping-app-1')
           } else {
-            // this.routing.push('/main')
+            this.routing.push('/main')
           }
         }
         this.setState({fetching: false})
@@ -107,7 +119,7 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
     logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
-    this.userStore.getWaitlistInfo(this.state.email)
+    this.userStore.getWaitlistInfo({ email: this.state.email, src: this.state.audienceSource })
       .then(res => {
         this.modalStore.toggleModal('waitinglist', null, res)
       }).catch(() => {
@@ -133,7 +145,7 @@ class Homepage extends Component {
 
   handleSignup(e) {
     logModalView('/signup-zip')
-    this.modalStore.toggleModal('joinwaitlist')
+    this.modalStore.toggleModal('signup')
   }
 
   handleZip(e) {
@@ -174,8 +186,8 @@ class Homepage extends Component {
     )
 
     const ButtonNotify = () => (
-      <button onClick={this.handleSubscribe} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        SIGN UP NOW
+      <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
+        START SHOPPING
       </button>
     )
 
@@ -200,32 +212,33 @@ class Homepage extends Component {
 
     return (
       <div className="homepage">
-        {/* <section id="nav-hero" className={tempClass}>
-          <div className="container-fluid">
-            <div className="row justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-                <br></br>
-                <br></br>
-                <br></br>
-                <h1 className="aw-hero--heading mb-4 aw-hero-construct">Brb, currently crowdfunding OUR FUTURE</h1>
-                <h2 className={this.state.heroDescriptionAlign + ' pink'}>👉 back us on <a href="https://www.kickstarter.com/projects/the-wally-shop/the-wally-shop-the-everything-in-reusables-store"><u>kickstarter</u></a> 👈</h2>
-                <h2 className={this.state.heroDescriptionAlign}>for regular programming ⬇️⬇️⬇️</h2>
-              </div>
+        <section className="align-items-center">
+          <div className="container scroll-text">
+            <div>
+            <br></br>
+            </div>
+            <div id="div-1-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
+            </div>
+            <div id="div-2-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
             </div>
           </div>
-        </section> */}
+        </section>
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
 
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-                <img src="images/home5_hd.png" alt=""/>
+                {/* <img src="images/home5_hd.png" alt=""/> */}
+                <img src="images/cradle_6.jpg" alt=""/>
               </div>
 
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
                 <div className="mt-5">
+                  {/*}
                   <Input
                     className="zip"
                     type="text"
@@ -235,6 +248,7 @@ class Homepage extends Component {
                     onChange={this.handleEmail}
                   />
                   {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
+                  */}
                   <ButtonNotify/>
                 </div>
 
@@ -249,9 +263,9 @@ class Homepage extends Component {
         <section className="page-section aw-our--story align-items-center">
           <div className="container h-75 w-75">
             <div className="tagline">
-              <h2>It's what's on the inside that counts.</h2>
+              <h2>Do you with reusables.</h2>
               <p></p>
-              <p>We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (Bulk foods! Beauty products! Household products!) conveniently in all reusable packaging. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any brands in mind ;)</p>
+              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide ✨Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
               <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
@@ -263,14 +277,16 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home6_hd.png" alt=""/>
+                {/* <img src="images/home6_hd.png" alt=""/> */}
+                <img src="images/jar_3.jpg" alt=""/>
               </div>
             </div>
 
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                <img src="images/home7_hd.png" alt=""/>
+                {/* <img src="images/home7_hd.png" alt=""/> */}
+                <img src="images/tote.jpg" alt=""/>
               </div>
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
@@ -288,7 +304,8 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home8_hd.png" alt=""/>
+                {/* <img src="images/home8_hd.png" alt=""/> */}
+                <img src="images/jar_2.jpg" alt=""/>
               </div>
             </div>
 
@@ -298,7 +315,7 @@ class Homepage extends Component {
                   <Col>
                     <div className="text-center">
                       <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
-                        SIGN UP NOW
+                        START SHOPPING
                       </button>
                     </div>
                   </Col>

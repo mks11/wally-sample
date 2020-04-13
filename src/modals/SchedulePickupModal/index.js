@@ -187,6 +187,12 @@ class SchedulePickup extends PureComponent {
       errors.push("A pickup date is required");
     }
 
+    var startTime = moment(earliestTime, "h:mm a");
+    var endTime = moment(latestTime, "h:mm a");
+    if (endTime.diff(startTime, 'minutes') < 120) {
+      errors.push("At least a two hour window is required");
+    }
+
     return errors;
   };
 
@@ -214,7 +220,7 @@ class SchedulePickup extends PureComponent {
 
     const data = {
       address_id: selectedAddressId,
-      scheduled_date: moment(pickupDate).format("MM-DD-YYYY"),
+      scheduled_date: moment(pickupDate).format("YYYYMMDD"),
       earliest_time: earliestTime,
       latest_time: latestTime,
       pickup_notes: preferredLocation,
@@ -254,6 +260,11 @@ class SchedulePickup extends PureComponent {
     const isReadyToSubmit =
       selectedAddressId && latestTime && earliestTime && pickupDate;
 
+    const isWeekday = date => {
+      const day = date.day();
+      return day !== 0 && day !== 6;
+    };
+
     return (
       <React.Fragment>
         <div className="container">
@@ -275,7 +286,8 @@ class SchedulePickup extends PureComponent {
               dateFormat={"MM / DD / YYYY"}
               selected={this.state.pickupDate}
               onChange={this.handleOnDatePick}
-              minDate={moment().toDate()}
+              minDate={moment().add(1, 'd')}
+              filterDate = {isWeekday} 
               placeholderText="Click to pick a date"
               className={`form-control p-4 util-font-size-16`}
             />
@@ -288,7 +300,7 @@ class SchedulePickup extends PureComponent {
               data={genTimePoints(
                 this.props.earliestTime,
                 this.props.latestTime,
-                30
+                60
               ).map(p => ({ time: p }))}
               onSelectTime={this.handleSelectEarliestTime}
             />
@@ -301,7 +313,7 @@ class SchedulePickup extends PureComponent {
               data={genTimePoints(
                 this.state.earliestTime,
                 this.props.latestTime,
-                30
+                60
               ).map(p => ({ time: p }))}
               onSelectTime={this.handleSelectLatestTime}
               invalidText={this.state.invalidLatestTime && INVALID_TIME}
@@ -313,13 +325,13 @@ class SchedulePickup extends PureComponent {
               store={this.props.store}
             />
           </Container>
-          <Container>
+          {/* <Container>
             <h3 class="m-0 mb-3 p-r"> Preferred Pickup Location </h3>
             <PreferredPickup
               selected={this.state.preferredLocation}
               handleSelected={this.handlePreferredLocation}
             />
-          </Container>
+          </Container> */}
           <Container>
             <button
               class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}
@@ -335,8 +347,8 @@ class SchedulePickup extends PureComponent {
 }
 
 SchedulePickup.defaultProps = {
-  earliestTime: "6:00 AM",
-  latestTime: "11:00 PM"
+  earliestTime: "9:00 AM",
+  latestTime: "9:00 PM"
 };
 
 SchedulePickup.propTypes = {
@@ -346,6 +358,7 @@ SchedulePickup.propTypes = {
   toggle: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired
 };
+
 
 class SchedulePickupModal extends Component {
   render() {
