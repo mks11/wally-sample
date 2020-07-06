@@ -48,6 +48,7 @@ import VendorProfile from "./pages/vendor/VendorProfile";
 import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
 import InboundShipments from "./pages/manage/shipments/InboundShipments";
 import ManageRetail from "./pages/manage/retail/ManageRetail";
+import PickPackReturnsOverview from './pages/pick-pack-returns/PickPackReturnsOverview';
 
 export default (
   <Fragment>
@@ -123,6 +124,7 @@ export default (
       <Route exact path="/servicefeedback" component={Feedback} />
       <Route exact path="/howitworks" component={HowItWorks} />
       <Route exact path="/latest-news" component={LatestNews} />
+      <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
     </Switch>
   </Fragment>
 );
