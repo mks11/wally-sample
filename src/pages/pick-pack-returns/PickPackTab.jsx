@@ -5,6 +5,7 @@ import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
 import {BASE_URL, API_GET_TODAYS_ORDERS} from '../../config';
+import {Link} from 'react-router-dom';
 
 // Styles
 import styles from './PickPackTab.module.css';
@@ -77,7 +78,9 @@ class CardHeader extends Component {
     return (
       <Grid container justify={'space-evenly'} alignItems={'center'} className={styles.cardHeader}>
         <Grid item component={'h3'} className={styles.subTitle}>
-          Order {orderId}
+          <Link to={`/pick-pack-returns/order-fulfillment/${orderId}`}>
+            Order {orderId}
+          </Link>
         </Grid>
         <Grid item>
           <StatusIcon status={status}/>

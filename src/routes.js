@@ -49,6 +49,7 @@ import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
 import InboundShipments from "./pages/manage/shipments/InboundShipments";
 import ManageRetail from "./pages/manage/retail/ManageRetail";
 import PickPackReturnsOverview from './pages/pick-pack-returns/PickPackReturnsOverview';
+import OrderFulfillment from './pages/pick-pack-returns/OrderFulfillmentPage';
 
 export default (
   <Fragment>
@@ -125,6 +126,7 @@ export default (
       <Route exact path="/howitworks" component={HowItWorks} />
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
+      <Route exact path="/pick-pack-returns/order-fulfillment/:orderId" component={OrderFulfillment} />
     </Switch>
   </Fragment>
 );
