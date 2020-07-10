@@ -1,5 +1,5 @@
-export const BASE_URL = "https://the-wally-shop.herokuapp.com";
-// export const BASE_URL = "http://localhost:4001";
+// export const BASE_URL = "https://the-wally-shop.herokuapp.com";
+export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
@@ -127,7 +127,7 @@ export const API_RETAIL_UPLOAD_SHIPMENTS =
 export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
   BASE_URL + "/api/admin/retail/product-actions";
 export const API_RETAIL_UPLOAD_SKUS =
-  BASE_URL + "/api/admin/retail/skus";  
+  BASE_URL + "/api/admin/retail/skus";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
@@ -164,3 +164,6 @@ export const NUTRITIONAL_INFO_BASE_URL =
   "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/";
 export const PACKAGING_BASE_URL =
   "https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/";
+
+// Pick/Pack & Returns Portals
+export const API_GET_TODAYS_ORDERS = '/api/pick-pack/orders'

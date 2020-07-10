@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import {AppBar, Tabs, Tab, Typography} from '@material-ui/core/';
+import {AppBar, Tabs, Tab} from '@material-ui/core/';
+import PickPackTab from './PickPackTab';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+
+// CSS
+import styles from './Overview.module.css';
 
 class PickPackReturnsOverview extends Component{
   constructor(props) {
@@ -19,7 +23,7 @@ class PickPackReturnsOverview extends Component{
 
   render() {
     return (
-      <div>
+      <div className={styles.overview}>
         <h1 style={{textAlign: 'center', color: '#000'}}>
           {/* ex: July 6th, 2020 */}
           {moment().local().format("MMMM Do, YYYY")}
@@ -44,12 +48,11 @@ class TabPanel extends Component {
         role="tabpanel"
         hidden={value !== index }
         id={`full-width-tabpanel-${index}`}
+        className={styles.tabPanel}
         aria-labelledby={`simple-tab-${index}`}
       >
         {
-          value === index && (
-            <Typography>{children}</Typography>
-          )
+          value === index && children
         }
       </div>
     )
@@ -72,7 +75,7 @@ class NavigationTabs extends Component {
 
     return (
       <>
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="default" elevation={1}>
           <Tabs
             value={selectedTab}
             onChange={handleChange}
@@ -83,15 +86,19 @@ class NavigationTabs extends Component {
           >
             <Tab label="Pick/Pack" {...a11yProps(0) }/>
             <Tab label="Returns" {...a11yProps(1) }/>
+            <Tab label="Cleaning" {...a11yProps(2) }/>
           </Tabs>
         </AppBar>
         <TabPanel value={selectedTab} index={0}>
-          {/* TODO Replace with actual component */}
-          Pick Pack
+          <PickPackTab />
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
           {/* TODO Replace with actual component */}
           Returns
+        </TabPanel>
+        <TabPanel value={selectedTab} index={2}>
+          {/* TODO Replace with actual component */}
+          Cleaning
         </TabPanel>
       </>
     )
