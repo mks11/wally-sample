@@ -1,0 +1,24 @@
+.title {
+  text-align: center;
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  margin: 1rem;
+}
+
+.labelLink {
+  padding: 1rem 0;
+  font-size: 1rem;
+}
+
+.cardHeader {
+  width: 100%;
+  padding: 1rem;
+  background-color: #F5F5F5;
+}
+
+.subTitle {
+  font-size: 1rem;
+}
