@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import {Grid} from '@material-ui/core'
+
+// Components
+import {Grid} from '@material-ui/core';
+import {Formik, Form, Field, ErrorMessage} from 'formik';
 
 // API endpoints
-import {BASE_URL, API_GET_ORDER_FULFILLMENT_DETAILS, API_UPDATE_ORDER_FULFILLMENT_DETAILS, API_VERIFY_ORDER_FULFILLMENT} from '../../config';
+import {API_GET_ORDER_FULFILLMENT_DETAILS, API_UPDATE_ORDER_FULFILLMENT_DETAILS, API_VERIFY_ORDER_FULFILLMENT} from '../../config';
+
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
 
@@ -23,7 +27,7 @@ class OrderFulfillment extends Component {
 
   async componentDidMount(){
     const {orderId} = this.props.match.params;
-    const url = `${BASE_URL}${API_GET_ORDER_FULFILLMENT_DETAILS}${orderId}`;
+    const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${orderId}`;
     const res = await axios.get(url);
     const {id, items, order_id, shipping_totes, status} = res.data.orderFulfillmentDetails;
     this.setState({id, items, order_id, shipping_totes, status});
@@ -53,10 +57,13 @@ class OrderFulfillmentForm extends Component {
   }
 
   render() {
-    return (
-      <>
 
-      </>
+    return (
+      <Formik
+        // initialValues=
+      >
+
+      </Formik>
     )
   }
 }

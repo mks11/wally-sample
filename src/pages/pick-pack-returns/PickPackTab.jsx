@@ -4,7 +4,7 @@ import {Card, CardContent, Grid, Typography} from '@material-ui/core';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
-import {BASE_URL, API_GET_TODAYS_ORDERS} from '../../config';
+import {API_GET_TODAYS_ORDERS} from '../../config';
 import {Link} from 'react-router-dom';
 
 // Styles
@@ -19,10 +19,11 @@ class PickPackTab extends Component {
   }
 
   async componentDidMount(){
-    const url = BASE_URL + API_GET_TODAYS_ORDERS;
+    const url = API_GET_TODAYS_ORDERS;
     const res = await axios.get(url);
     const {ordersAndLabels} = res.data;
     this.setState({ordersAndLabels})
+    console.log(ordersAndLabels)
   }
 
   render() {

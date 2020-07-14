@@ -18,6 +18,7 @@
     "express": "^4.16.3",
     "file-type": "^12.0.0",
     "flip-counter-js": "^1.0.8",
+    "formik": "^2.1.4",
     "fs": "0.0.1-security",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
