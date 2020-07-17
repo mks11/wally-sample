@@ -63,12 +63,14 @@
   "scripts": {
     "server": "nodemon server/server.js",
     "start": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "cross-env NODE_PATH=src/ react-scripts build",
+    "build": "cross-env NODE_PATH=src/ npm run generate-robots && react-scripts build",
+    "generate-robots": "generate-robotstxt public/robots.txt",
     "test": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.0",
+    "generate-robotstxt": "^8.0.3"
   },
   "browserslist": [
     ">0.2%",
