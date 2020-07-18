@@ -105,9 +105,6 @@ export default (
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
-      <Route exact path="/help/detail/:id" component={HelpSingleAnswer} />
-      <Route exact path="/help/question/:question" component={HelpAnswer} />
-      <Route exact path="/help/topics/:id" component={HelpSingle} />
       <Route exact path="/giftcard" component={GiftCheckout} />
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
@@ -115,6 +112,9 @@ export default (
 
       {/* How do we crawl? */}
       <Route exact path="/blog/:id" component={BlogPost} />
+      <Route exact path="/help/detail/:id" component={HelpSingleAnswer} />
+      <Route exact path="/help/question/:question" component={HelpAnswer} />
+      <Route exact path="/help/topics/:id" component={HelpSingle} />
 
       {/* User Routes (NOT CRAWLED) */}
       <Route exact path="/main" component={Mainpage} />
