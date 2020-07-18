@@ -8957,53 +8957,6 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
   }
 }
 
-.aw-accordion .card {
-  background-color: transparent;
-  border-radius: 0;
-  border: none;
-}
-
-.aw-accordion .card:not(:last-child) {
-  border-bottom: 1px solid #ccc;
-}
-
-.aw-accordion .card-header {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-}
-
-.aw-accordion .card-body {
-  padding: 16px 0 28px;
-}
-
-.aw-accordion h5 {
-  font-weight: normal;
-}
-
-.aw-accordion .btn {
-  font-weight: normal;
-  display: block;
-  color: inherit;
-  font-size: 19px;
-  padding: 12px 0;
-  text-align: left;
-  width: 100%;
-  background-position: right center;
-  background-repeat: no-repeat;
-  background-size: 20px;
-  background-image: url(../images/arr-rounded-down.svg);
-}
-
-.aw-accordion .btn:focus, .aw-accordion .btn:hover {
-  text-decoration: none;
-}
-
-.aw-accordion .btn[aria-expanded="true"] {
-  font-weight: 700;
-  background-image: none;
-}
-
 .aw-header {
   padding: 10px 0;
   position: fixed;
@@ -9341,20 +9294,6 @@ body {
 .aw-process--title {
   position: relative;
   z-index: 1;
-}
-
-.aw-process--left {
-  background-color: #F8F8F8;
-  background-image: url("../images/Process1.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
-.aw-process--right {
-  background-color: #ECECEC;
-  background-image: url("../images/Process2.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
 }
 
 .aw-list--checked {
