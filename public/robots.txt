@@ -9,9 +9,6 @@ Allow: /blog
 Allow: /latest-news
 Allow: /help
 Allow: /help/topics
-Allow: /help/detail/:id
-Allow: /help/question/:question
-Allow: /help/topics/:id
 Allow: /giftcard
 Allow: /sell-through-wally
 Disallow: /manage/retail

@@ -15,9 +15,6 @@ const urls = [
   "/latest-news",
   "/help",
   "/help/topics",
-  "/help/detail/:id",
-  "/help/question/:question",
-  "/help/topics/:id",
   "/giftcard",
   "/sell-through-wally"
 ]
