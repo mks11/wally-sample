@@ -96,40 +96,41 @@ export default (
 
       {/* Guest Routes (CRAWLED) */}
       <Route exact path="/" component={Homepage} />
-
-      {/* User Routes (NOT CRAWLED) */}
-      <Route exact path="/main" component={Mainpage} />
-      <Route exact path="/orders" component={Orders} />
-      <Route exact path="/schedule-pickup" component={Mainpage} />
-      <Route exact path="/user" component={Account} />
-      <Route exact path="/blog" component={Blog} />
-      <Route exact path="/latest-news" component={LatestNews} />
+      <Route exact path="/tnc" component={Tnc} />
+      <Route exact path="/privacy" component={Privacy} />
       <Route exact path="/about" component={About} />
       <Route exact path="/howitworks" component={HowItWorks} />
+      <Route exact path="/backers" component={Backers} />
+      <Route exact path="/blog" component={Blog} />
+      <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
       <Route exact path="/help/detail/:id" component={HelpSingleAnswer} />
       <Route exact path="/help/question/:question" component={HelpAnswer} />
       <Route exact path="/help/topics/:id" component={HelpSingle} />
       <Route exact path="/giftcard" component={GiftCheckout} />
-      <Route exact path="/backers" component={Backers} />
-      <Route exact path="/thankyou" component={OrderConfirmation} />
-      <Route exact path="/api/user/reset-password" component={ResetPassword} />
-      <Route exact path="/tnc" component={Tnc} />
-      <Route exact path="/privacy" component={Privacy} />
-      <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
-      <Route exact path="/blog/:id" component={BlogPost} />
-      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>
+
+      {/* How do we crawl? */}
+      <Route exact path="/blog/:id" component={BlogPost} />
+
+      {/* User Routes (NOT CRAWLED) */}
+      <Route exact path="/main" component={Mainpage} />
+      <Route exact path="/orders" component={Orders} />
+      <Route exact path="/schedule-pickup" component={Mainpage} />
+      <Route exact path="/user" component={Account} />
+      <Route exact path="/thankyou" component={OrderConfirmation} />
+      <Route exact path="/api/user/reset-password" component={ResetPassword} />
+      <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
+      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
       <Route exact path="/checkout" component={Checkout} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
-      <Route exact path="/signup" component={Signup} />
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
 
@@ -137,6 +138,9 @@ export default (
 
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
       <Route exact path="/invitefriends" component={InviteFriends} />
+
+      {/* Redirects to the above route */}
+      <Route exact path="/signup" component={Signup} />
 
 
     </Switch>
