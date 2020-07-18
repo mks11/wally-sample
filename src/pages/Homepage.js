@@ -51,9 +51,9 @@ class Homepage extends Component {
     if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color) {
       if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color == "purple") {
         this.setState({ audienceSource: "ig" });
-        this.metricStore.triggerAudienceSource("ig");  
+        this.metricStore.triggerAudienceSource("ig");
       }
-      
+
     }
 
     this.userStore.getStatus()
@@ -200,14 +200,11 @@ class Homepage extends Component {
     const isMobile = this.state.width <= 500;
     const isMobileHoriz = (this.state.width > 500 && this.state.width <= 800);
     let heroClass = "landing-section aw-hero"
-    let tempClass = "landing-section-construct aw-hero"
     if (isMobile) {
       heroClass += ' mobile'
-      tempClass += ' mobile'
     }
     if (isMobileHoriz) {
       heroClass += ' mobile-horiz'
-      tempClass += ' mobile-horiz'
     }
 
     return (
@@ -230,7 +227,6 @@ class Homepage extends Component {
             <div className="row justify-content-center align-items-center">
 
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-                {/* <img src="images/home5_hd.png" alt=""/> */}
                 <img src="images/cradle_6.jpg" alt=""/>
               </div>
 
@@ -277,7 +273,6 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                {/* <img src="images/home6_hd.png" alt=""/> */}
                 <img src="images/jar_3.jpg" alt=""/>
               </div>
             </div>
@@ -285,7 +280,6 @@ class Homepage extends Component {
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                {/* <img src="images/home7_hd.png" alt=""/> */}
                 <img src="images/tote.jpg" alt=""/>
               </div>
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
@@ -304,7 +298,6 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                {/* <img src="images/home8_hd.png" alt=""/> */}
                 <img src="images/jar_2.jpg" alt=""/>
               </div>
             </div>
