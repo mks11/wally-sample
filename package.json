@@ -63,7 +63,7 @@
   "scripts": {
     "server": "nodemon server/server.js",
     "start": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "cross-env NODE_PATH=src/ npm run generate-robots && react-scripts build",
+    "build": "cross-env NODE_PATH=src/ react-scripts build",
     "generate-robots": "generate-robotstxt public/robots.txt",
     "test": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
