@@ -23,12 +23,33 @@ const styles = {
   }
 }
 
-class BarcodeScanner extends Component {
+function getQuaggaSettings({ width, height }) {
+  return {
+    inputStream: {
+      type: 'LiveStream',
+      constraints: {
+        width,
+        height,
+        facingMode: 'environment'
+      }
+    },
+    locator: {
+      patchSize: 'medium',
+      halfSample: true
+    },
+    numOfWorkers: 2,
+    decoder: {
+      readers: [ 'upc_reader' ], // we're interested only in UPC barcode type
+    },
+    locate: true,
+  }
+}
+
+class ScannerBarcode extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      packagingIds: [],
       isPortrait: true,
       result: '',
       isError: false,
@@ -48,6 +69,7 @@ class BarcodeScanner extends Component {
         height: Math.round(innerHeight),
       })
     } else {
+      // portrait
       this.setState({
         width: Math.round(innerWidth),
         height: Math.round(innerHeight / 2),
@@ -77,32 +99,16 @@ class BarcodeScanner extends Component {
 
     if(this.props.isOpen !== prevProps.isOpen) {
       if (this.props.isOpen) {
-        Quagga.init({
-          inputStream: {
-            type : 'LiveStream',
-            constraints: {
-              width,
-              height,
-              facingMode: 'environment'
+        Quagga.init(
+          getQuaggaSettings({ width, height }),
+          (err) => {
+            if (err) {
+              console.log(err);
+              return;
             }
-          },
-          locator: {
-            patchSize: 'medium',
-            halfSample: true
-          },
-          numOfWorkers: 2,
-          decoder: {
-            readers : [
-              'upc_reader',
-            ],
-          },
-          locate: true,
-        }, function(err) {
-          if (err) {
-            return console.log(err)
+            Quagga.start()
           }
-          Quagga.start()
-        })
+        )
         Quagga.onDetected(this.onScanDetect)
       } else {
         Quagga.offDetected(this.onScanDetect)
@@ -116,22 +122,39 @@ class BarcodeScanner extends Component {
   }
 
   render() {
-    const { isPortrait, result, isError, width, height } = this.state
+    const {
+      isPortrait,
+      result,
+      isError,
+      width,
+      height,
+    } = this.state
     const { isOpen, onClose } = this.props
 
     if (!isOpen) {
       return null
     }
 
-    const paperStyle = isMobile ? (isPortrait ? styles.mobile : styles.mobileLandscape) : styles.desktop
+    const paperStyle = isMobile
+      ? (isPortrait ? styles.mobile : styles.mobileLandscape)
+      : styles.desktop
 
     return (
       <div className="qr-modal">
         <div className='backdrop qr-modal-backdrop'>
           <Paper style={{ ...paperStyle, width, height }}>
-            <button className="btn-icon btn-icon--close" onClick={onClose} />
-            <div id="interactive" className="viewport"/>
-            <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>{result}</p>
+            <button
+              className="btn-icon btn-icon--close"
+              onClick={onClose}
+            />
+            {/* default id and class for quagga #interactive.viewport */}
+            <div
+              id="interactive"
+              className="viewport"
+            />
+            <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>
+              {result}
+            </p>
           </Paper>
         </div>
       </div>
@@ -140,4 +163,4 @@ class BarcodeScanner extends Component {
 }
 
 
-export default BarcodeScanner
+export default ScannerBarcode

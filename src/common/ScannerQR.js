@@ -32,16 +32,14 @@ const styles = {
 
 const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/
 
-class QRCodeScanner extends Component {
+class ScannerQR extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       packagingIds: [],
       isPortrait: true,
-      result: '',
       isError: false,
-
       snackBarOpen: false,
       snackBarText: '',
     }
@@ -98,7 +96,10 @@ class QRCodeScanner extends Component {
     }
   }
 
-  handleError = err => { /* console.error(err) */ }
+  handleError = err => {
+    const { onError } = this.props;
+    onError && onError(err);
+  }
 
   handleCloseModal = () => {
     const { onClose } = this.props
@@ -126,7 +127,13 @@ class QRCodeScanner extends Component {
     return (
       <div className="qr-modal">
         <div className='backdrop qr-modal-backdrop'>
-          <Paper style={isMobile ? (isPortrait ? styles.mobile : styles.mobileLandscape) : styles.desktop}>
+          <Paper
+            style={
+              isMobile
+                ? (isPortrait ? styles.mobile : styles.mobileLandscape)
+                : styles.desktop
+            }
+          >
             <div className="qr-modal-control">
               <button className="btn-icon btn-icon--close" onClick={this.handleCloseModal} />
             </div>
@@ -159,4 +166,4 @@ class QRCodeScanner extends Component {
 }
 
 
-export default QRCodeScanner
+export default ScannerQR

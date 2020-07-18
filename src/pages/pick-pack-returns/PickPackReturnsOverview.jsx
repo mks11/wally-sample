@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {AppBar, Tabs, Tab} from '@material-ui/core/';
-import PickPackTab from './PickPackTab';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+
+import PickPackTab from './PickPackTab';
 
 // CSS
 import styles from './Overview.module.css';
@@ -16,9 +17,9 @@ class PickPackReturnsOverview extends Component{
     }
   }
 
-  handleChange(event, value) {
-    event.preventDefault();
-    this.setState({selectedTab: value});
+  handleChange = (e, value) => {
+    e.preventDefault();
+    this.setState({ selectedTab: value });
   }
 
   render() {
@@ -28,35 +29,29 @@ class PickPackReturnsOverview extends Component{
           {/* ex: July 6th, 2020 */}
           {moment().local().format("MMMM Do, YYYY")}
         </h1>
-        <NavigationTabs selectedTab={this.state.selectedTab} handleChange={this.handleChange.bind(this)}/>
+        <NavigationTabs selectedTab={this.state.selectedTab} handleChange={this.handleChange}/>
       </div>
     )
   }
 }
 
-class TabPanel extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-
-  render() {
-    const { children, value, index } = this.props;
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index }
-        id={`full-width-tabpanel-${index}`}
-        className={styles.tabPanel}
-        aria-labelledby={`simple-tab-${index}`}
-      >
-        {
-          value === index && children
-        }
-      </div>
-    )
-  }
+// in future, if you are going to improve the project's code
+// if there is no `this` expected use simple functional component
+// it's not necessary to use arrow function, simple JS func is preferrable
+function TabPanel({ children, value, index }) {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index }
+      id={`full-width-tabpanel-${index}`}
+      className={styles.tabPanel}
+      aria-labelledby={`simple-tab-${index}`}
+    >
+      {
+        value === index && children
+      }
+    </div>
+  )
 }
 
 TabPanel.propTypes = {
