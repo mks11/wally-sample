@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { formatMoney, connect, logEvent, logModalView, logPageView } from '../utils'
 import ClickOutside from 'react-click-outside'
+import ToggleIcon from 'common/ToggleIcon'
+import styles from './TopNav.module.css';
 
 class TopNav extends Component {
   constructor(props) {
@@ -80,6 +82,7 @@ class TopNav extends Component {
     this.uiStore.hideNavMobile()
     this.handleLogout()
   }
+
   handleCloseTopBar = (e) => {
     this.uiStore.closeTopBar()
     e.preventDefault()
@@ -135,6 +138,7 @@ class TopNav extends Component {
     let isTwsOps = false
     let isCopacker = false
     let bannerText = "We’re working hard to restock - try next week if you don’t see something!"
+
     if (this.userStore.user) {
       !this.userStore.user.name && this.userStore.setUserData(null)
       const user = this.userStore.user
@@ -157,7 +161,6 @@ class TopNav extends Component {
       headerWrapClass += ' nav-open'
     }
 
-
     let topBarClass = 'top-bar d-none'
     if (this.uiStore.topBar) {
       topBarClass = 'top-bar'
@@ -169,6 +172,7 @@ class TopNav extends Component {
 
     return (
       <div className={headerWrapClass}>
+        {/* MOBILE Nav Modal */}
         <div className="aw-nav--mobile d-md-none">
           <div className="center-middle">
             <div className="container-fluid">
@@ -176,7 +180,6 @@ class TopNav extends Component {
                 <div className="col-12">
                   <nav className="navbar d-block">
                     <ul className="aw-nav--menu m-0 p-0 text-center">
-
                       { this.userStore.status && isAdmin && (
                         <React.Fragment>
                           <li><a style={{fontSize: '15px'}}><strong>Hello {name}</strong></a></li>
@@ -240,8 +243,8 @@ class TopNav extends Component {
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/latest-news')}>COVID-19</a></li>
                           <li><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
-                          
-                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> 
+
+                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li>
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
                           {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
                           <li><a onClick={() => this.handleNavMobile('/backers')}>Our Backers</a></li>
@@ -251,49 +254,46 @@ class TopNav extends Component {
                   </nav>
                 </div>
               </div>
-              <div className="row aw-nav--action">
-                <div className="col-12 text-center">
-                  {/*
-                  <a href="#nav-hero" className="btn btn-block mx-auto btn-outline-white btn-get--started d-inline-block d-md-block">Get notified</a>
-                      */}
-                </div>
-              </div>
             </div>
           </div>
         </div>
+
         <header className={`aw-header navbar-white ${(isAdmin || isTwsOps)  ? 'admin-navbar' : ''} ${ isHomePage ? '' : 'util-bg-color-white' } ${ isProductPage ? ' aw-absolute' : '' }`}>
+          {/* Out of stock banner */}
           {
-          ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status) ? (
-            <div className={topBarClass}>
-              <div className="container">
-                <div onClick={this.handleBannerClick}>
-                  {bannerText}
-                </div>
-                <button className="close-top-bar" onClick={this.handleCloseTopBar}>
-                  <i className="fa fa-times-circle" aria-hidden="true" ></i>
-                </button>
-              </div>
-            </div>
-            ) : null
+            ((this.userStore.status && !isAdmin && !isTwsOps && !isCopacker) || !this.userStore.status)
+              ?
+                (
+                  <div className={topBarClass}>
+                    <div className="container" style={{display: 'flex'}}>
+                      <div onClick={this.handleBannerClick} style={{flex: '1 1 auto'}}>
+                        {bannerText}
+                      </div>
+                      <button className="close-top-bar" onClick={this.handleCloseTopBar}>
+                        <i className="fa fa-times-circle" aria-hidden="true" ></i>
+                      </button>
+                    </div>
+                  </div>
+                )
+              :
+                null
           }
+
+          {/* DESKTOP Top Nav */}
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
-              <div className="d-none col-auto d-md-block">
-                <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
-                  <img className="logo-text-desktop" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
-                  <img className="logo-text-mobile" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
-                </a>
-              </div>
+              <DesktopLogo onClick={this.handleLogo} />
               <div className="col-auto ml-auto d-none d-md-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
+                    {/* Desktop Admin */}
                     { this.userStore.status && isAdmin && (
                         <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={this.hideAccountDropdown}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
-                                  <span className="navbar-toggler-icon account-icon"></span>
+                                  <AccountIcon />
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg">Hi {name}</span>
@@ -314,13 +314,14 @@ class TopNav extends Component {
                         </li>
                       )
                     }
+                    {/* Desktop ops */}
                     { this.userStore.status && isTwsOps && (
                         <li>
                           <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                             <ClickOutside onClickOutside={this.hideAccountDropdown}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
-                                  <span className="navbar-toggler-icon account-icon"></span>
+                                  <AccountIcon />
                                 </button>
                                 <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                   <span className="dropdown-item lg">Hi {name}</span>
@@ -334,13 +335,14 @@ class TopNav extends Component {
                         </li>
                       )
                     }
+                    {/* Desktop copackers */}
                     { this.userStore.status && isCopacker && (
                       <li>
                         <div className="col-auto ml-auto d-none d-md-block account-dropdown">
                           <ClickOutside onClickOutside={this.hideAccountDropdown}>
                             <div className="btn-group">
                               <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
-                                <span className="navbar-toggler-icon account-icon"></span>
+                                <AccountIcon />
                               </button>
                               <div className={dropdownClass} aria-labelledby="dropdownMenuButton">
                                 <span className="dropdown-item lg">Hi {name}</span>
@@ -354,6 +356,7 @@ class TopNav extends Component {
                         </div>
                       </li>
                     )}
+                    {/* Desktop user */}
                     { this.userStore.status && !isAdmin && !isTwsOps && !isCopacker && (
                       <React.Fragment>
                           <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14" to="/help">Help</Link></li>
@@ -388,6 +391,7 @@ class TopNav extends Component {
                         </React.Fragment>
                       )
                     }
+                    {/* Desktop guest */}
                     { !this.userStore.status && (
                       <React.Fragment>
                         <li><Link className="nav-link aw-nav--link p-0" to="/latest-news">COVID-19</Link></li>
@@ -400,30 +404,15 @@ class TopNav extends Component {
                   </ul>
                 </nav>
               </div>
-              { !this.userStore.status ?
-              <div className="col-auto d-none d-md-block btn-top-account">
-                <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
-                <button onClick={this.handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
-                <button onClick={this.handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
-              </div>
-                  : null}
-
-                  { this.userStore.status || true ?
-                      <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" >
-                        <span className="navbar-toggler-icon"></span>
-                      </button>
-                    :
-                      <button onClick={e=>this.handleLogin()} className="btn btn-outline-black btn-login text-caps d-md-none d-lg-none">Log in</button>
-                    }
+              <DesktopNavbar
+                status={this.userStore.status}
+                handleLogin={this.handleLogin}
+                handleSignup={this.handleSignup}
+                handleNavBackers={this.handleNavBackers}
+              />
+              <MobileNavbar uiStore={this.uiStore} />
             </div>
-
-            <div className="row d-md-none  d-sm-block">
-              <div className="col-sm-12">
-                <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
-                  <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
-                </a>
-              </div>
-            </div>
+            <MobileLogo onClick={this.handleLogo} />
           </div>
         </header>
       </div>
@@ -432,3 +421,51 @@ class TopNav extends Component {
 }
 
 export default connect("store")(TopNav);
+
+function DesktopLogo ({onClick}) {
+  return (
+    <div className="d-none col-auto d-md-block">
+      <a className="aw-logo d-flex align-items-center" onClick={onClick}>
+        <img className={styles.logo} src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
+      </a>
+    </div>
+  );
+}
+
+function MobileLogo ({onClick}) {
+  return (
+    <div className="row d-md-none d-sm-block">
+      <div className="col-sm-12">
+        <a className="aw-logo d-flex align-items-center justify-content-center" onClick={onClick}>
+          <img className={`${styles.logo} util-relative util-offset-top--30`} src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function DesktopNavbar ({status, handleLogin, handleSignup, handleNavBackers}){
+  let nav = (
+    <div className="col-auto d-none d-md-block btn-top-account">
+      <button onClick={handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
+      <button onClick={handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
+      <button onClick={handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
+    </div>
+  );
+
+  if (status) nav = null;
+
+  return nav;
+}
+
+function MobileNavbar ({uiStore}){
+  return (
+    <button onClick={e=> uiStore.toggleNavMobile()} className="navbar-toggler d-md-none" type="button" >
+      <ToggleIcon isOpen={uiStore.navMobile} />
+    </button>
+  )
+}
+
+function AccountIcon(){
+  return <img src="/images/beet-grey.png" />;
+}

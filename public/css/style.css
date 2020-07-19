@@ -92,10 +92,11 @@ border-radius:0;}
 .aw-header:not(.navbar-white) .btn-outline-black{border-color:#fff;color:#fff;}
 .aw-header:not(.navbar-white) .btn-outline-black:hover,
 .aw-header:not(.navbar-white) .btn-outline-black:focus{background-color: #fff;color:#323f93;}
-/* .aw-header:not(.navbar-white) nav.aw-nav--toggle svg path{stroke: #fff;} */
 .aw-header, .aw-header.navbar-white{background-color: transparent;}
-/* .navbar-toggler {
-} */
+
+.navbar-toggler {
+  display: flex;
+}
 
 .aw-header.navbar-white .navbar-toggler-icon {
   background-image: url("../images/hamburger.png");
@@ -129,9 +130,6 @@ border-radius:0;}
 }
 
 
-/* nav.aw-nav--toggle svg path, */
-body.nav-open .aw-header nav.aw-nav--toggle svg path,
-body.nav-open .aw-header.navbar-white nav.aw-nav--toggle svg path{stroke: #fff;}
 body.nav-open:not(.page-inner) .aw-header:not(.navbar-white){background-color:#303A88;}
 
 nav.aw-nav, .aw-header .btn-get--started{font-size: 13px;}
@@ -147,10 +145,6 @@ border-bottom-color:#000;border-bottom: .6px solid #000;}
 nav.aw-nav a.dropdown-item:hover::after {
   border-bottom:none;
 }
-
-.logo-middle{position: absolute;left:50%;width:100px;margin-left: -50px;top:10px;}
-.logo-text-desktop{height:35px;transition: 300ms all;}
-.logo-text-mobile{display:none;transition: 300ms all;}
 
 .landing-section{background-size:cover;background-repeat:no-repeat;background-position:center center;text-align:center;padding: 100px 0 0 0;}
 .landing-section h1{color:rgb(0, 0, 0);font-size:45px;font-family: 'Clearface';}
@@ -460,7 +454,6 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   .get-notified-form{margin-right: 0;max-width:300px;}
   body.page-inner .aw-header, body.page-inner .aw-header.navbar-white, .nav-open .aw-header.navbar-white{background-color: #ffffff;}
   body.page-inner .aw-header .cls-1, .nav-open .aw-header .cls-1{fill:#fff;}
-  /* body:not(.page-inner) .aw-header.navbar-white nav.aw-nav--toggle svg path{stroke:#ff0000;} */
   nav.aw-nav--mobile li a{font-size: 16px;}
   .btn{width:auto;padding-left: 25px;padding-right: 25px;}
   .tagline{margin-bottom: 45px;}
@@ -474,12 +467,6 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   .section-letsgetstarted h2{margin-top: 0;}
   nav.aw-nav--mobile li a{padding:13px 10px;}
   nav.aw-nav--middle{margin:0 0 10px;}
-  nav.aw-nav--action{margin-bottom:40px;}
-  /* nav.aw-nav--toggle svg{max-width:none;} */
-  /* nav.aw-nav--toggle svg.icon-menu{max-width:18px;} */
-  /* nav.aw-nav--toggle svg.icon-close{margin:5px auto 0;display:none;} */
-  /* .nav-open nav.aw-nav--toggle svg.icon-menu{display:none!important;} */
-  .nav-open nav.aw-nav--toggle svg.icon-close{display:block;}
   .landing-section h1{max-width:300px;font-size: 32px;}
   .landing-section h2{font-size: 24px;font-weight:300;}
   .landing-section p{max-width:320px;margin-left: auto;margin-right: auto;}
@@ -507,10 +494,6 @@ font-weight: 400;line-height: 1.5;text-align: center;white-space: nowrap;}
   .col-md-4:nth-child(2) .pricing-features > li:last-child{background-color:rgba(0,0,0,.05);}
 
   .full-img{height:200px;}
-
-  .logo-middle{display:none;}
-  .logo-text-desktop{display:none;}
-  .logo-text-mobile{display:inline-block;width:180px;}
   .slick-arrow{margin-top: -40px;}
 }
 @media (max-width:576px){
@@ -2128,9 +2111,6 @@ a {
 }
 
 .close-top-bar {
-  position: absolute;
-  right: 15px;
-  top: 0;
   border: none;
   background: none;
   z-index: 10;
@@ -2223,14 +2203,6 @@ a {
   width: 30px;
   height: 30px;
   margin: 20px;
-}
-
-.aw-header.navbar-white .navbar-toggler-icon.account-icon {
-  background-image: url(../images/beet-grey.png);
-  background-size: 34px 34px;
-  max-width: 40px;
-  width: 40px;
-  height: 40px;
 }
 
 .catsearch-icon {
@@ -3092,18 +3064,7 @@ span.category-card-img {
   margin-left: 30px;
   margin-top: 10px;
 }
-/* .body-scroll .filters {
-  max-height: 0;
-}
-.body-scroll .logo-text-desktop {
-  height: 25px;
-}
-.body-scroll .logo-text-mobile {
-  left: 10px;
-  top: -87%;
-  position: absolute;
-  width: 140px;
-} */
+
 .filters-values.as-sort ul li:before {
   content: none;
 }
