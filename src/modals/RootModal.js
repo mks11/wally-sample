@@ -25,7 +25,8 @@ import EmailVerification from './EmailVerification'
 import JoinWaitlistModal from './JoinWaitlistModal'
 import RedeemDepositModal from './RedeemDepositModal'
 import SchedulePickupModal from './SchedulePickupModal';
-import PackagingDepositModal from './PackagingDepositModal'
+import PackagingDepositModal from './PackagingDepositModal';
+import SuccessModal from "./SuccessModal";
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -52,7 +53,8 @@ const ModalRoutes = {
   schedulepickup: SchedulePickupModal,
   redeemdeposit: RedeemDepositModal,
   schedulepickup: SchedulePickupModal,
-  packagingdeposit: PackagingDepositModal
+  packagingdeposit: PackagingDepositModal,
+  success: SuccessModal
 }
 
 class RootModal extends Component {

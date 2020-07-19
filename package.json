@@ -6,7 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
     "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
     "@fortawesome/react-fontawesome": "^0.1.0-11",
-    "@material-ui/core": "^3.8.1",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^3.0.2",
     "aws-s3": "^2.0.5",
     "aws-sdk": "^2.476.0",
@@ -20,6 +20,7 @@
     "flip-counter-js": "^1.0.8",
     "formik": "^2.1.4",
     "fs": "0.0.1-security",
+    "lodash-es": "^4.17.15",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "mobx-react-devtools": "^6.0.2",
@@ -60,7 +61,8 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.2",
     "terser": "^3.14.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "yup": "^0.29.1"
   },
   "scripts": {
     "server": "nodemon server/server.js",
