@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { validateEmail, connect } from "../utils";
 import { INSTAGRAM, FACEBOOK } from "../config";
+import {Facebook, Instagram} from '@material-ui/icons';
 
 class Footer extends Component {
   constructor(props) {
@@ -96,24 +97,23 @@ class Footer extends Component {
                 <div className="col-sm-4">
                   <h4 className="aw-footer--title">FOLLOW US</h4>
                   <ul>
-                    <li>@thewallyshop</li>
-                    <li>
-                      <ul className="aw-social mt-2">
-                        <li className="d-inline-block align-middle footer-fb">
-                          <a
-                            href={FACEBOOK}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          ></a>
-                        </li>
-                        <li className="d-inline-block align-middle footer-ig">
-                          <a
-                            href={INSTAGRAM}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          ></a>
-                        </li>
-                      </ul>
+                    <li className="d-block align-middle">
+                      <a
+                        href={FACEBOOK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Facebook style={{fontSize: '48px'}} />
+                      </a>
+                    </li>
+                    <li className="d-block align-middle">
+                      <a
+                        href={INSTAGRAM}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Instagram style={{fontSize: '48px'}} />
+                      </a>
                     </li>
                   </ul>
                 </div>

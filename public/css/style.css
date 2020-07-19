@@ -271,20 +271,6 @@ border-radius: 0;}
 background-color:#97ADFF;box-shadow:none!important;-webkit-box-shadow:none!important;color:#fff;}
 .footer-bottom label{font-size: 14px;}
 .footer-logo{width:60px;}
-.footer-fb a{
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-  background: url("../images/facebook_icon.png") no-repeat;
-  background-size: cover;
-}
-.footer-ig a{
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-  background: url("../images/instagram_icon.png") no-repeat;
-  background-size: cover;
-}
 
 /* Blog */
 .section-blog .page-lead{max-width:560px;margin-bottom: 0;}
