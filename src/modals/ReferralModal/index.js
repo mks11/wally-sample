@@ -6,7 +6,7 @@ import Tote from "."
 class ReferralModal extends Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {
       refUrl: ''
     }
@@ -51,7 +51,7 @@ class ReferralModal extends Component {
           <small>Refer 2 friends in the next 2 hours and we'll throw in an exclusive Wally Ripe & Ready tote in your order. Have them signup using the link below:</small>
         </span>
         <div className="mb-2 text-center">
-          <img src="/images/ripenready.png" alt="" width="70%"/>
+          <img src="/images/ripenready.png" alt="The Wally Shop Ripe 'n Ready tote bag." width="70%"/>
         </div>
         <div className="referral-wrap p-2">
           <input

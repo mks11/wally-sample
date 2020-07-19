@@ -49,8 +49,8 @@ class Mainpage extends Component {
     this.userStore.getStatus(true)
       .then((status) => {
         if (window.location.pathname.split('/')[1] === 'packaging') {
-          if (["5e0e488c3f26046cc60195f6", "5e0e488c3f26046cc60195f4", "5e0e488c3f26046cc60195f3", "5e0e488c3f26046cc60195f2"].includes(this.props.match.params.id)) { 
-            window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf` 
+          if (["5e0e488c3f26046cc60195f6", "5e0e488c3f26046cc60195f4", "5e0e488c3f26046cc60195f3", "5e0e488c3f26046cc60195f2"].includes(this.props.match.params.id)) {
+            window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf`
           }
           else {
             console.log("Getting product info");
@@ -58,31 +58,31 @@ class Mainpage extends Component {
               .then((unit) => {
                 console.log("Getting product info");
                 if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
-                  window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${this.props.match.params.id}` 
+                  window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${this.props.match.params.id}`
                 } else {
-                  if (unit.product_id) { 
-                    this.handleProductModal(unit.product_id) 
+                  if (unit.product_id) {
+                    this.handleProductModal(unit.product_id)
                   } else {
                     this.routing.push(`/?qr_ref=${this.props.match.params.id}`)
-                  }  
+                  }
                 }
               }).catch((e) => console.error('Failed to load product displayed: ', e))
           }
         } else {
           if (!status) {
-            this.routing.push('/');  
+            this.routing.push('/');
           } else {
             if (window.location.pathname.split('/')[1] === 'schedule-pickup') {
               this.modalStore.toggleModal("schedulepickup");
             } else {
               this.userStore.giftCardPromo && this.processGiftCardPromo(status)
               this.checkoutStore.getDeliveryTimes()
-              this.loadData()  
+              this.loadData()
               const { mainFirst, mainSecond } = this.userStore.flags || {}
               !mainFirst && this.modalStore.toggleModal('mainFirst')
-              mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')  
+              mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond')
             }
-            
+
           }
         }
       })
@@ -321,8 +321,8 @@ class Mainpage extends Component {
             <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
-                    <div className="mb-4 text-center">
-                      <img src="/images/sidepanel_sticker.png" width="70%"/>
+                    <div className="mb-4">
+                      <img src="/images/sidepanel_sticker.png"/>
                     </div>
                     <CategoriesList
                       selectedId={id}
