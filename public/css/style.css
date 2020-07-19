@@ -241,6 +241,7 @@ border-radius: 0;}
 }
 
 .howto-item img{
+  height: auto;
   width: 100%;
 }
 
