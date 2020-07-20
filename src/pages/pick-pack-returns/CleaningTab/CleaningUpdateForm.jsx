@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Formik, Form, ErrorMessage, useField } from "formik";
+import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import {
   Grid,
@@ -8,23 +8,17 @@ import {
   FormControl,
   InputLabel,
   Button,
-  Container,
   Paper,
   FormHelperText,
   Input,
-  Typography,
 } from "@material-ui/core";
 import {connect} from "utils"
 
 import styles from "./CleaningUpdateForm.module.css"
 import axios from "axios";
-import {API_UPDATE_PACKAGING_STOCK}  from "./../../config"
+import {API_UPDATE_PACKAGING_STOCK}  from "../../../config"
 
-const Select = ({ label, classNames, ...props }) => {
-  if (classNames) {
-    // add it if needed
-    throw new Error("Unimplemented!");
-  }
+const Select = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <FormControl>
@@ -37,7 +31,7 @@ const Select = ({ label, classNames, ...props }) => {
   );
 };
 
-const TextField = ({ label, classNames, ...props }) => {
+const TextField = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <FormControl>
@@ -47,23 +41,11 @@ const TextField = ({ label, classNames, ...props }) => {
         {meta.error}
       </FormHelperText>
     </FormControl>
-    // <TextField
-    //   htmlFor={props.id || props.name}
-    //   label={label}
-    //   type={"number"}
-    //   error={!!(meta.touched && meta.error)}
-    //   helperText={meta.error}
-    //   {...field}
-    //   {...pr}
-    // />
   );
 };
 
-
-
 function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
-  const [submitFailed, setSubmitFailed] = useState(false) 
-  const [showModal, setShowModal] = useState(false)
+  const [submitFailed, setSubmitFailed] = useState(false)
 
   const updateStock = async ({action, size, amount, type}) => {
     await axios.patch(API_UPDATE_PACKAGING_STOCK, {
@@ -110,11 +92,14 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
       onSubmit={handleSubmit}
     >
       <Form>
-        <Paper style={{ padding: "2rem" }} elevation={1}>
+        <Paper style={{ padding: "2rem" }} elevation={3}>
+          <h2 style={{textAlign: 'center'}}>
+            Update Packaging Stocks
+          </h2>
           <Grid
             container
-            justify={"space-between"}
-            spacing={1}
+            justify={"center"}
+            spacing={4}
           >
             <Grid item>
               <Select name="action" label="Action">
@@ -135,7 +120,7 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
               </Select>
             </Grid>
             <Grid item>
-              <Select name="type" label="type">
+              <Select name="type" label="Type">
                 <option value=""></option>
                 {types.map((s) => (
                   <option key={s} value={s}>
@@ -144,13 +129,6 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
                 ))}
               </Select>
             </Grid>
-          </Grid>
-          <Grid
-            container
-            justify={"flex-start"}
-            spacing={1}
-            style={{ marginTop: "2rem" }}
-          >
             <Grid item>
               <TextField
                 id="updateAmt"
@@ -160,6 +138,7 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
               />
             </Grid>
           </Grid>
+
           <Grid
             container
             justify={"space-around"}

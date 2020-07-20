@@ -8,18 +8,31 @@
     text-align: center;
     margin-top: 1rem;
   }
-  
+
+  .tableHead {
+    font-size: 18px !important;
+    font-weight: bold !important;
+  }
+
+  .tableHeadRow {
+    background-color: #e0e0e0;
+  }
+
   .stockCard {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .cardHeader {
     width: 100%;
     padding: 1rem;
     background-color: #F5F5F5;
     text-align: center;
   }
-  
- 
-  
+
+  @media (max-width: 767px) {
+    th[class^="MuiTableCell-root"].tableHead {
+      text-align: start !important;
+      font-size: 16px !important;
+    }
+  }

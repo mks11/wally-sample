@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from "react";
-import PropTypes from "prop-types";
 import axios from 'axios';
 import CleaningUpdateForm from "./CleaningUpdateForm";
 import CleaningOverview from "./CleaningOverview";
-import { Container, Typography } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import {groupBy, mapValues} from "lodash"
 import styles from "./CleaningTab.module.css"
-import { API_GET_PACKAGING_STOCK } from "../../config";
+import { API_GET_PACKAGING_STOCK } from "../../../config";
+import Grid from '@material-ui/core/Grid';
 
 function sortSizes(unsorted_sizes) {
   return unsorted_sizes.sort((size1, size2) => {
@@ -58,24 +58,11 @@ function CleaningTab(props) {
   const [allTypes, setAllTypes] = useState([]);
 
   async function getPackagingStocks() {
-    // return new Promise((res, rej) => {
-    //   setTimeout(() => {
-    //     res([
-    //       { type: "jar", size: "10 Oz", status: "cleaned", in_stock: 100 },
-    //       { type: "lid", size: "25 Oz", status: "out", in_stock: 90 },
-    //       { type: "jar", size: "10 Oz", status: "unwashed", in_stock: 200 },
-    //       { type: "lid", size: "15 Oz", status: "packed", in_stock: 1 },
-    //       { type: "lid", size: "15 Oz", status: "out", in_stock: 20 },
-    //       { type: "lid", size: "1 Oz", status: "out", in_stock: 20 },
-    //       { type: "bottle", size: "1 Oz", status: "out", in_stock: 20 },
-    //     ]);
-    //   }, 300);
-    // });
-    
-      const url = API_GET_PACKAGING_STOCK;
-      const res = await axios.get(url);
-      const { packagingStocks } = res.data;
-      return packagingStocks
+    const url = API_GET_PACKAGING_STOCK;
+    const res = await axios.get(url);
+    const { packagingStocks } = res.data;
+    console.log(packagingStocks)
+    return packagingStocks
   }
 
   useEffect(() => {
@@ -89,20 +76,28 @@ function CleaningTab(props) {
   }, []);
 
   return (
-    <Container maxWidth={"sm"}>
-      <h2 className={styles.title}>Cleaning</h2>      
-      <CleaningUpdateForm types={allTypes} sizes={allSizes} />
-      <CleaningOverview
-        stock={packagingStocks}
-        types={allTypes}
-        sizes={allSizes}
-      />
+    <Container maxWidth={"lg"}>
+      <Grid container justify="start" spacing={2}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <h2 className={styles.title}>
+            Cleaning
+          </h2>
+        </Grid>
+        <Grid container justify="center" spacing={2}>
+          <Grid item xs={12} sm={10} md={6} lg={6} xl={4}>
+            <CleaningUpdateForm types={allTypes} sizes={allSizes} />
+          </Grid>
+        </Grid>
+        <CleaningOverview
+          stock={packagingStocks}
+          types={allTypes}
+          sizes={allSizes}
+          />
+      </Grid>
     </Container>
   );
 }
 
 CleaningTab.propTypes = {};
-
-
 
 export default CleaningTab;

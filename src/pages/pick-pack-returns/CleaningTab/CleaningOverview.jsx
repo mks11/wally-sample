@@ -1,9 +1,7 @@
-import React from "react"
-import PropTypes from "prop-types"
-import StockCard from './CleaningStockCard'
+import React from "react";
+import StockCard from './CleaningStockCard';
 
 function getSortedPermutations(ALL_SIZES, ALL_TYPES) {
-    // const SIZE_SORTED = sortSizes(ALL_SIZES);
     const cards_group = ALL_SIZES.map((size) => ALL_TYPES.map((type) => ({ size, type })));
     return cards_group.reduce((prev, c) => {
       Array.isArray(c) ? c.every((v) => prev.push(v)) : prev.push(c);
@@ -21,6 +19,6 @@ export default function CleaningOverview({ stock, sizes, types }) {
       if (!stock_status) {
         return null; // if there are combinations for which data doesn't exists, this is to not show the empty card
       }
-      return <StockCard key={comb.type + comb.size} title={makeTitle(comb)} stat={stock_status} />;
-    });
+      return <StockCard key={comb.type + comb.size} title={makeTitle(comb)} stat={stock_status} elevation={3}/>;
+    })
 }
