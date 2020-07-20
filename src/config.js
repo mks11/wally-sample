@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://the-wally-shop.herokuapp.com";
-export const BASE_URL = "http://localhost:4001";
+export const BASE_URL = "https://the-wally-shop.herokuapp.com";
+// export const BASE_URL = "http://localhost:4001";
 
 export const API_GET_USER = BASE_URL + "/api/user";
 export const API_EDIT_USER = BASE_URL + "/api/user";
@@ -172,8 +172,8 @@ export const API_GET_TODAYS_ORDERS = BASE_URL + '/api/pick-pack/orders';
 export const API_VALIDATE_PICK_PACK_ORDERS = '/api/pick-pack/validate-orders';
 
 // Cleaning Tab
-export const API_UPDATE_PACKAGING_STOCK = "/api/packaging-stock";
-export const API_GET_PACKAGING_STOCK = "/api/packaging-stocks";
+export const API_UPDATE_PACKAGING_STOCK = BASE_URL + "/api/packaging-stock";
+export const API_GET_PACKAGING_STOCK = BASE_URL + "/api/packaging-stocks";
 
 // Pick Pack Fulfillment Page
 export const API_GET_ORDER_FULFILLMENT_DETAILS = BASE_URL + '/api/pick-pack/order-fulfillment/';
