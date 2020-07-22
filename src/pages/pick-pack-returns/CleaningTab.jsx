@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from 'axios';
+import axios from "axios";
 import CleaningUpdateForm from "./CleaningUpdateForm";
 import CleaningOverview from "./CleaningOverview";
 import { Container, Typography } from "@material-ui/core";
-import {groupBy, mapValues} from "lodash"
-import styles from "./CleaningTab.module.css"
+import { groupBy, mapValues } from "lodash";
+import styles from "./CleaningTab.module.css";
 import { API_GET_PACKAGING_STOCK } from "../../config";
+import Tab from "./shared/Tab";
 
 function sortSizes(unsorted_sizes) {
   return unsorted_sizes.sort((size1, size2) => {
@@ -71,11 +72,11 @@ function CleaningTab(props) {
     //     ]);
     //   }, 300);
     // });
-    
-      const url = API_GET_PACKAGING_STOCK;
-      const res = await axios.get(url);
-      const { packagingStocks } = res.data;
-      return packagingStocks
+
+    const url = API_GET_PACKAGING_STOCK;
+    const res = await axios.get(url);
+    const { packagingStocks } = res.data;
+    return packagingStocks;
   }
 
   useEffect(() => {
@@ -89,20 +90,17 @@ function CleaningTab(props) {
   }, []);
 
   return (
-    <Container maxWidth={"sm"}>
-      <h2 className={styles.title}>Cleaning</h2>      
+    <Tab title="Cleaning">
       <CleaningUpdateForm types={allTypes} sizes={allSizes} />
       <CleaningOverview
         stock={packagingStocks}
         types={allTypes}
         sizes={allSizes}
       />
-    </Container>
+    </Tab>
   );
 }
 
 CleaningTab.propTypes = {};
-
-
 
 export default CleaningTab;

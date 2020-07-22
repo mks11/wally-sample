@@ -1,4 +1,4 @@
-import { observable, decorate, action } from "mobx";
+import { observable, decorate, action, computed } from "mobx";
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -56,6 +56,9 @@ class UserStore {
 
   flags = null;
 
+  get isOpsLead() {
+    return this.user.type === "ops_lead"; //TODO discuss to place it some place else
+  }
   togglePromoModal() {
     this.promoModal = !this.promoModal;
   }
@@ -560,6 +563,7 @@ decorate(UserStore, {
   verifyWaitlistEmail: action,
   getWaitlistInfo: action,
   verifyPin: action,
+  isOpsLead: computed,
 });
 
 export default new UserStore();

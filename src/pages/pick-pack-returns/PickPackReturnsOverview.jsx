@@ -7,7 +7,8 @@ import PickPackTab from './PickPackTab';
 import CleaningTab from './CleaningTab';
 
 // CSS
-import styles from './Overview.module.css';
+import styles from "./Overview.module.css";
+import ReturnsTab from "./ReturnsTab";
 
 class PickPackReturnsOverview extends Component{
   constructor(props) {
@@ -89,8 +90,7 @@ class NavigationTabs extends Component {
           <PickPackTab />
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
-          {/* TODO Replace with actual component */}
-          Returns
+          <ReturnsTab />
         </TabPanel>
         <TabPanel value={selectedTab} index={2}>
           {/* TODO Replace with actual component */}
