@@ -50,6 +50,7 @@ import InboundShipments from "./pages/manage/shipments/InboundShipments";
 import ManageRetail from "./pages/manage/retail/ManageRetail";
 import PickPackReturnsOverview from './pages/pick-pack-returns/PickPackReturnsOverview';
 import OrderFulfillment from './pages/pick-pack-returns/OrderFulfillmentPage';
+import NewPackagingReturn from './pages/pick-pack-returns/NewPackagingReturn';
 
 export default (
   <Fragment>
@@ -127,6 +128,7 @@ export default (
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
       <Route exact path="/pick-pack-returns/order-fulfillment/:orderId" component={OrderFulfillment} />
+      <Route exact path="/pick-pack-returns/packaging-return/new" component={NewPackagingReturn}/>
     </Switch>
   </Fragment>
 );

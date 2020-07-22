@@ -27,6 +27,7 @@ import RedeemDepositModal from './RedeemDepositModal'
 import SchedulePickupModal from './SchedulePickupModal';
 import PackagingDepositModal from './PackagingDepositModal';
 import SuccessModal from "./SuccessModal";
+import GenericModal from "./GenericModal";
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -54,7 +55,8 @@ const ModalRoutes = {
   redeemdeposit: RedeemDepositModal,
   schedulepickup: SchedulePickupModal,
   packagingdeposit: PackagingDepositModal,
-  success: SuccessModal
+  success: SuccessModal,
+  generic: GenericModal
 }
 
 class RootModal extends Component {

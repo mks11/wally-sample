@@ -7,6 +7,7 @@ class ModalStore {
   modalId = null
   msg = null
   modalData = null
+  childrenComponent = null
 
   product = false
   productId = null
@@ -41,7 +42,7 @@ class ModalStore {
     this.deliveryChangeData = null
   }
 
-  toggleModal(modalId, msg = null, data = null) {
+  toggleModal(modalId, msg = null, data = null, childrenComponent) {
     if (!this.modalPull.length) {
       this.switchModal(modalId)
       this.isOpen = !this.isOpen
@@ -52,6 +53,7 @@ class ModalStore {
     }
     this.msg = msg
     this.modalData = data
+    this.childrenComponent = childrenComponent 
   }
 
   switchModal(modalId, msg, data) {
@@ -129,6 +131,8 @@ decorate(ModalStore, {
   toggleDelivery: action,
   togglePackaging: action,
   toggleMissing: action,
+
+  closeModal: action
 })
 
 
