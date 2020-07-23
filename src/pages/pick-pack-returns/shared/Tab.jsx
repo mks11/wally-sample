@@ -7,13 +7,13 @@ function Tab({ title, children, style }) {
   return (
     <Container maxWidth={"sm"} style={style}>
       <h2 className={styles.title}>{title}</h2>
-      {children}
+      <>{children}</>
     </Container>
   );
 }
 
 Tab.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
 };
 

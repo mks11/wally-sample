@@ -3,73 +3,45 @@ import Tab from "./../shared/Tab";
 import {
   Card,
   List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   ListItemSecondaryAction,
   Typography,
   Button,
   Grid,
 } from "@material-ui/core";
-import { CheckCircle, AddCircle, LinearScale } from "@material-ui/icons";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { AddCircle } from "@material-ui/icons";
 import axios from "axios";
 import {
   API_GET_TODAYS_PACKAGING_RETURNS,
   API_GET_PACKAGING_RETURNS_JOB,
 } from "../../../config";
 import { connect } from "utils";
+import Row from "./Row";
+import { genRandomReturnData } from "./gen";
 
-function renderRow({ index, style, isReturned, isMostRecent }) {
-  // TODO show a title below the indicator
-  return (
-    <ListItem style={style} alignItems="center" component="div">
-      <ListItemText primary={`Item ${index + 1}`} />
-      {/* <div
-              style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-              }}
-          >
-              <ListItemIcon>
-                  <CheckCircle />
-              </ListItemIcon>
-              <h6>Recieved</h6>
-            </div> */}
-      <ListItemIcon>
-        {isReturned ? (
-          <CheckCircle style={{ color: "green" }} />
-        ) : (
-          <LinearScale style={{ color: "#FDD835" }} />
-        )}
-      </ListItemIcon>
-      <Button
-        variant="contained"
-        color="default"
-        startIcon={<AddCircle />}
-        href="#" //TODO
-      >
-        New Return
-      </Button>
-    </ListItem>
-  );
-}
+export const STATUS_RECEIVED = "received";
+export const STATUS_RETURNED = "returned";
 
 function ReturnsTab({ store: { user: userStore } }) {
-  const [details, setDetails] = useState([]);
+  const [returnItems, setReturnItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
   const fetchTodaysPackagingReturns = async () => {
-    const url = API_GET_TODAYS_PACKAGING_RETURNS;
-    const res = await axios.get(url);
-    const { details } = res.data;
-    return details;
+    // const url = API_GET_TODAYS_PACKAGING_RETURNS;
+    // const res = await axios.get(url);
+    // const returnItems = res.data; //TODO test
+    // return returnItems;
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        const data = genRandomReturnData();
+        res(data);
+      }, 300);
+    });
   };
 
-  const handleSubmit = () => {
+  const handleNewReturnSubmit = () => {
     const url = API_GET_PACKAGING_RETURNS_JOB;
     // TODO ask is it a link we move to?
   };
@@ -78,8 +50,8 @@ function ReturnsTab({ store: { user: userStore } }) {
     (async () => {
       try {
         setLoading(true);
-        const details = await fetchTodaysPackagingReturns();
-        setDetails(details);
+        const returnItems = await fetchTodaysPackagingReturns();
+        setReturnItems(returnItems || []);
       } catch (e) {
         setError("Failed to get today's packaging returns"); //TODO review the msg with Brian
       } finally {
@@ -95,40 +67,51 @@ function ReturnsTab({ store: { user: userStore } }) {
   // TODO check the empty length message with Brian
   // TODO Autosize not working
 
-  console.log("userStore", userStore);
-
   return (
     <Tab
       title="Returns"
       style={{
         border: "1px solid blue",
-        flex: 1,
-        height: "100%",
+        display: "flex",
+        flexGrow: 1,
+        flexDirection: "column",
+        height: "80vh",
       }}
     >
-      <div> {details.length}</div>
-      {details.length !== 0 ? ( // TODO debug remove !
+      {returnItems.length === 0 ? ( // TODO debug remove !
         !error ? (
           <OnEmpty />
         ) : (
           <OnError />
         )
       ) : (
-        <AutoSizer>
-          {({ height, width }) => {
-            //   console.log("height, width", height, width);
-            return (
-              <FixedSizeList
-                height={400}
-                width={width}
-                itemSize={80}
-                itemCount={100}
-              >
-                {renderRow}
-              </FixedSizeList>
-            );
-          }}
-        </AutoSizer>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <Button
+            variant="contained"
+            color="default"
+            startIcon={<AddCircle />}
+            href="#" //TODO
+          >
+            New Return
+          </Button>
+          <div style={{ flex: 1 }}>
+            <AutoSizer>
+              {({ height, width }) => {
+                return (
+                  <FixedSizeList
+                    height={height}
+                    width={width}
+                    itemSize={80}
+                    itemCount={returnItems.length}
+                    itemData={returnItems}
+                  >
+                    {Row}
+                  </FixedSizeList>
+                );
+              }}
+            </AutoSizer>
+          </div>
+        </div>
       )}
       {userStore.user &&
       userStore.isOpsLead && ( //TODO ask why it's logging out
@@ -137,7 +120,7 @@ function ReturnsTab({ store: { user: userStore } }) {
               <Button
                 color="primary"
                 variant="contained"
-                onClick={handleSubmit}
+                onClick={handleNewReturnSubmit}
               >
                 Submit Returns
               </Button>
