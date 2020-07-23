@@ -9,9 +9,7 @@ import {
 import { useStyles, emails } from "./index";
 import PropTypes from "prop-types";
 
-export default function JarOrLidDialog(props) {
-  const { onClose, selectedValue, open } = props;
-
+export default function JarOrLidDialog({ open, onClose, selectedValue }) {
   const handleClose = () => {
     onClose(selectedValue);
   };
