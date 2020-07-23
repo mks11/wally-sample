@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Container, Divider, Dialog, Grid } from "@material-ui/core";
 import { connect } from "utils";
 import JarOrLidDialog from "./JarOrLidOptionsDialog";
-import { NewReturnForm } from "./NewReturnForm";
+import NewReturnForm from "./NewReturnForm";
 
 function ScanQRCode({ show, onComplete }) {
   return <div></div>;

@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { API_POST_PACKAGING_RETURNS } from "../../../config";
 import TrackingDialogInput from "./TrackingDialogInput";
+import { withRouter } from "react-router-dom";
 
 const SUCCESS_COMPLETED = "successType1";
 const SUCCESS_REQUIRES_TRACKING = "successType2";
@@ -22,7 +23,7 @@ const SUCCESS_NOT_COMPLETED = "successType3";
 
 //TODO ask for persistance
 
-export function NewReturnForm({ user_id, packagingURLs = [] }) {
+function NewReturnForm({ user_id, packagingURLs = [], history }) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -68,13 +69,19 @@ export function NewReturnForm({ user_id, packagingURLs = [] }) {
     }
   };
 
+  const sendUserBackToReturnTab = () => {
+    history.push("/pick-pack-returns");
+  };
+
   useEffect(() => {
     if (successType === SUCCESS_COMPLETED) {
       setShowSuccessAlert(true);
+      sendUserBackToReturnTab();
     } else if (successType === SUCCESS_REQUIRES_TRACKING) {
       setShowTrackingInputDialog(true);
     } else if (successType === SUCCESS_NOT_COMPLETED) {
       setShowNotCompletedAlert(true);
+      sendUserBackToReturnTab();
     }
   }, [successType]);
 
@@ -192,3 +199,5 @@ export function NewReturnForm({ user_id, packagingURLs = [] }) {
     </Grid>
   );
 }
+
+export default withRouter(NewReturnForm);
