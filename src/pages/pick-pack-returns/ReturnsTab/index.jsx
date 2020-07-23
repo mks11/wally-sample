@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Tab from "./../shared/Tab";
+import Get from "./SubmitGet";
 import {
   Card,
   List,
@@ -7,6 +8,7 @@ import {
   Typography,
   Button,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -19,14 +21,15 @@ import {
 import { connect } from "utils";
 import Row from "./Row";
 import { genRandomReturnData } from "./gen";
-
+import { sortByTimestampDes } from "utils";
 export const STATUS_RECEIVED = "received";
 export const STATUS_RETURNED = "returned";
 
 function ReturnsTab({ store: { user: userStore } }) {
   const [returnItems, setReturnItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // default true .. so that no empty msg is shown at the load
   const [error, setError] = useState();
+  const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState("");
 
   const fetchTodaysPackagingReturns = async () => {
     // const url = API_GET_TODAYS_PACKAGING_RETURNS;
@@ -37,13 +40,14 @@ function ReturnsTab({ store: { user: userStore } }) {
       setTimeout(() => {
         const data = genRandomReturnData();
         res(data);
-      }, 300);
+      }, 3000);
     });
   };
 
-  const handleNewReturnSubmit = () => {
-    const url = API_GET_PACKAGING_RETURNS_JOB;
-    // TODO ask is it a link we move to?
+  const handleCompletionReturns = ({ data }) => {
+    if (data.status === "200") {
+      setSuccessMsgOnReturnSubmit(data.message);
+    }
   };
 
   useEffect(() => {
@@ -51,9 +55,9 @@ function ReturnsTab({ store: { user: userStore } }) {
       try {
         setLoading(true);
         const returnItems = await fetchTodaysPackagingReturns();
-        setReturnItems(returnItems || []);
+        setReturnItems(sortByTimestampDes(returnItems || [], "return_date"));
       } catch (e) {
-        setError("Failed to get today's packaging returns"); //TODO review the msg with Brian
+        setError("Failed to get packaging returns");
       } finally {
         setLoading(false);
       }
@@ -61,36 +65,41 @@ function ReturnsTab({ store: { user: userStore } }) {
   }, []);
 
   const OnEmpty = () => (
-    <Typography> No returns currently! check back later </Typography>
+    <Typography> No items currently! check back later </Typography>
   );
   const OnError = () => <Typography variant="error"> {error} </Typography>;
-  // TODO check the empty length message with Brian
-  // TODO Autosize not working
+
+  const Status = () => {
+    if (loading) {
+      return <CircularProgress />;
+    }
+    if (error) {
+      return <OnError />;
+    }
+    return <OnEmpty />;
+  };
 
   return (
     <Tab
       title="Returns"
       style={{
-        border: "1px solid blue",
         display: "flex",
         flexGrow: 1,
         flexDirection: "column",
         height: "80vh",
       }}
     >
-      {returnItems.length === 0 ? ( // TODO debug remove !
-        !error ? (
-          <OnEmpty />
-        ) : (
-          <OnError />
-        )
+      {returnItems.length === 0 ? (
+        <Grid container justify="center">
+          <Status />
+        </Grid>
       ) : (
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Button
             variant="contained"
             color="default"
             startIcon={<AddCircle />}
-            href="#" //TODO
+            href="/pick-pack-returns/packaging-return/new"
           >
             New Return
           </Button>
@@ -113,20 +122,18 @@ function ReturnsTab({ store: { user: userStore } }) {
           </div>
         </div>
       )}
-      {userStore.user &&
-      userStore.isOpsLead && ( //TODO ask why it's logging out
-          <Grid container justify="center">
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handleNewReturnSubmit}
-              >
-                Submit Returns
-              </Button>
-            </Grid>
-          </Grid>
-        )}
+      {userStore.user && userStore.isOpsLead && (
+        <Grid container justify="center" style={{ marginTop: "1rem" }}>
+          <Get
+            title={"Submit Returns"}
+            loadTitle={"Submitting .. "}
+            onCompletion={handleCompletionReturns}
+            onErrorMsg={"Submission failed!"}
+            onSuccessMsg={successMsgOnReturnSubmit}
+            url={API_GET_PACKAGING_RETURNS_JOB}
+          />
+        </Grid>
+      )}
     </Tab>
   );
 }
