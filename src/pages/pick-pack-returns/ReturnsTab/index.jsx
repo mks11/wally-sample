@@ -1,87 +1,63 @@
 import React, { useEffect, useState } from "react";
 import Tab from "./../shared/Tab";
+import Get from "./SubmitGet";
 import {
   Card,
   List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   ListItemSecondaryAction,
   Typography,
   Button,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
-import { CheckCircle, AddCircle, LinearScale } from "@material-ui/icons";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { AddCircle } from "@material-ui/icons";
 import axios from "axios";
 import {
   API_GET_TODAYS_PACKAGING_RETURNS,
   API_GET_PACKAGING_RETURNS_JOB,
 } from "../../../config";
 import { connect } from "utils";
-
-function renderRow({ index, style, isReturned, isMostRecent }) {
-  // TODO show a title below the indicator
-  return (
-    <ListItem style={style} alignItems="center" component="div">
-      <ListItemText primary={`Item ${index + 1}`} />
-      {/* <div
-              style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-              }}
-          >
-              <ListItemIcon>
-                  <CheckCircle />
-              </ListItemIcon>
-              <h6>Recieved</h6>
-            </div> */}
-      <ListItemIcon>
-        {isReturned ? (
-          <CheckCircle style={{ color: "green" }} />
-        ) : (
-          <LinearScale style={{ color: "#FDD835" }} />
-        )}
-      </ListItemIcon>
-      <Button
-        variant="contained"
-        color="default"
-        startIcon={<AddCircle />}
-        href="#" //TODO
-      >
-        New Return
-      </Button>
-    </ListItem>
-  );
-}
+import Row from "./Row";
+import { genRandomReturnData } from "./gen";
+import { sortByTimestampDes } from "utils";
+export const STATUS_RECEIVED = "received";
+export const STATUS_RETURNED = "returned";
 
 function ReturnsTab({ store: { user: userStore } }) {
-  const [details, setDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [returnItems, setReturnItems] = useState([]);
+  const [loading, setLoading] = useState(true); // default true .. so that no empty msg is shown at the load
   const [error, setError] = useState();
+  const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState("");
 
   const fetchTodaysPackagingReturns = async () => {
-    const url = API_GET_TODAYS_PACKAGING_RETURNS;
-    const res = await axios.get(url);
-    const { details } = res.data;
-    return details;
+    // const url = API_GET_TODAYS_PACKAGING_RETURNS;
+    // const res = await axios.get(url);
+    // const returnItems = res.data; //TODO test
+    // return returnItems;
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        const data = genRandomReturnData();
+        res(data);
+      }, 3000);
+    });
   };
 
-  const handleSubmit = () => {
-    const url = API_GET_PACKAGING_RETURNS_JOB;
-    // TODO ask is it a link we move to?
+  const handleCompletionReturns = ({ data }) => {
+    if (data.status === "200") {
+      setSuccessMsgOnReturnSubmit(data.message);
+    }
   };
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        const details = await fetchTodaysPackagingReturns();
-        setDetails(details);
+        const returnItems = await fetchTodaysPackagingReturns();
+        setReturnItems(sortByTimestampDes(returnItems || [], "return_date"));
       } catch (e) {
-        setError("Failed to get today's packaging returns"); //TODO review the msg with Brian
+        setError("Failed to get packaging returns");
       } finally {
         setLoading(false);
       }
@@ -89,61 +65,75 @@ function ReturnsTab({ store: { user: userStore } }) {
   }, []);
 
   const OnEmpty = () => (
-    <Typography> No returns currently! check back later </Typography>
+    <Typography> No items currently! check back later </Typography>
   );
   const OnError = () => <Typography variant="error"> {error} </Typography>;
-  // TODO check the empty length message with Brian
-  // TODO Autosize not working
 
-  console.log("userStore", userStore);
+  const Status = () => {
+    if (loading) {
+      return <CircularProgress />;
+    }
+    if (error) {
+      return <OnError />;
+    }
+    return <OnEmpty />;
+  };
 
   return (
     <Tab
       title="Returns"
       style={{
-        border: "1px solid blue",
-        flex: 1,
-        height: "100%",
+        display: "flex",
+        flexGrow: 1,
+        flexDirection: "column",
+        height: "80vh",
       }}
     >
-      <div> {details.length}</div>
-      {details.length !== 0 ? ( // TODO debug remove !
-        !error ? (
-          <OnEmpty />
-        ) : (
-          <OnError />
-        )
+      {returnItems.length === 0 ? (
+        <Grid container justify="center">
+          <Status />
+        </Grid>
       ) : (
-        <AutoSizer>
-          {({ height, width }) => {
-            //   console.log("height, width", height, width);
-            return (
-              <FixedSizeList
-                height={400}
-                width={width}
-                itemSize={80}
-                itemCount={100}
-              >
-                {renderRow}
-              </FixedSizeList>
-            );
-          }}
-        </AutoSizer>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <Button
+            variant="contained"
+            color="default"
+            startIcon={<AddCircle />}
+            href="/pick-pack-returns/packaging-return/new"
+          >
+            New Return
+          </Button>
+          <div style={{ flex: 1 }}>
+            <AutoSizer>
+              {({ height, width }) => {
+                return (
+                  <FixedSizeList
+                    height={height}
+                    width={width}
+                    itemSize={80}
+                    itemCount={returnItems.length}
+                    itemData={returnItems}
+                  >
+                    {Row}
+                  </FixedSizeList>
+                );
+              }}
+            </AutoSizer>
+          </div>
+        </div>
       )}
-      {userStore.user &&
-      userStore.isOpsLead && ( //TODO ask why it's logging out
-          <Grid container justify="center">
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handleSubmit}
-              >
-                Submit Returns
-              </Button>
-            </Grid>
-          </Grid>
-        )}
+      {userStore.user && userStore.isOpsLead && (
+        <Grid container justify="center" style={{ marginTop: "1rem" }}>
+          <Get
+            title={"Submit Returns"}
+            loadTitle={"Submitting .. "}
+            onCompletion={handleCompletionReturns}
+            onErrorMsg={"Submission failed!"}
+            onSuccessMsg={successMsgOnReturnSubmit}
+            url={API_GET_PACKAGING_RETURNS_JOB}
+          />
+        </Grid>
+      )}
     </Tab>
   );
 }

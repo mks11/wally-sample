@@ -116,8 +116,16 @@ function genTimePoints(start_time, end_time, intervalInMins = 0, limit = 60) {
   return result;
 }
 
-
+function sortByTimestampDes(arr, field = "timestamp") {
+  return arr.sort((a, b) => {
+    if (moment(a[field]).isSame(b[field])) {
+      return 0;
+    }
+    return moment(a[field]).isBefore(b[field]) ? 1 : -1;
+  });
+}
 
 export {
-  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder
+  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder,
+  sortByTimestampDes
 }
