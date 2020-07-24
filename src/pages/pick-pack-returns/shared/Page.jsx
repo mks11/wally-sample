@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Container } from "@material-ui/core";
-import styles from "./Tab.module.css";
+import styles from "./Page.module.css";
 
-function Tab({ title, children, ...rest }) {
+function Page({ title, children, ...rest }) {
   return (
     <Container maxWidth={"sm"} {...rest}>
       <h2 className={styles.title}>{title}</h2>
@@ -12,9 +12,9 @@ function Tab({ title, children, ...rest }) {
   );
 }
 
-Tab.propTypes = {
+Page.propTypes = {
   children: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-export default Tab;
+export default Page;

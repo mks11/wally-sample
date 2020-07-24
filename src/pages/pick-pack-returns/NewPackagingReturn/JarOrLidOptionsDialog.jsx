@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   ListItem,
   ListItemText,
@@ -6,8 +7,7 @@ import {
   DialogTitle,
   Dialog,
 } from "@material-ui/core";
-import { useStyles, emails } from "./index";
-import PropTypes from "prop-types";
+import styles from "./JarOrLidOptionsDialog.module.css";
 
 export default function JarOrLidDialog({ open, onClose, selectedValue }) {
   const handleClose = () => {
@@ -31,7 +31,7 @@ export default function JarOrLidDialog({ open, onClose, selectedValue }) {
             button
             onClick={() => handleListItemClick(type)}
             key={type}
-            style={{ minWidth: "200px" }}
+            className={styles.itemContainer}
           >
             <ListItemText primary={type} />
           </ListItem>

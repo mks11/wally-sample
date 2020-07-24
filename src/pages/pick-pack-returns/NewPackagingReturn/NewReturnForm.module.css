@@ -1,0 +1,11 @@
+.url {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.pseudoInputContainer {
+  height: 40vh;
+  overflow: auto;
+  box-shadow: 1px 1px 4px 0px #bbb inset;
+  background-color: #fafafa;
+}

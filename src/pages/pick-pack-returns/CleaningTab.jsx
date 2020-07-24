@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import CleaningUpdateForm from "./CleaningUpdateForm";
 import CleaningOverview from "./CleaningOverview";
-import { Container, Typography } from "@material-ui/core";
 import { groupBy, mapValues } from "lodash";
-import styles from "./CleaningTab.module.css";
 import { API_GET_PACKAGING_STOCK } from "../../config";
-import Tab from "./shared/Tab";
+import Tab from "./shared/Page";
 
 function sortSizes(unsorted_sizes) {
   return unsorted_sizes.sort((size1, size2) => {
@@ -100,7 +97,5 @@ function CleaningTab(props) {
     </Tab>
   );
 }
-
-CleaningTab.propTypes = {};
 
 export default CleaningTab;

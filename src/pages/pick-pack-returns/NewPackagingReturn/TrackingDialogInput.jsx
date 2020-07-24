@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   TextField,
@@ -24,14 +25,13 @@ export default function FormDialog({ show, setShow }) {
 
   const handleChange = (e) => {
     setTrackId(e.target.value);
-    e.preventDefault();
   };
 
   useEffect(() => {
-    if (!!values["Tracking_id"]) {
+    if (values["Tracking_id"]) {
       submitForm();
     }
-  }, [values["Tracking_id"]]);
+  }, [submitForm, values]);
 
   return (
     <div>
@@ -63,3 +63,8 @@ export default function FormDialog({ show, setShow }) {
     </div>
   );
 }
+
+FormDialog.propTypes = {
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired,
+};

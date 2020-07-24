@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Button, Container, Divider, Dialog, Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { connect } from "utils";
 import JarOrLidDialog from "./JarOrLidOptionsDialog";
 import NewReturnForm from "./NewReturnForm";
+import Page from "../shared/Page";
+import styles from "./index.module.css";
 
 function ScanQRCode({ show, onComplete }) {
+  //TODO
   return <div></div>;
 }
 
 function NewPackagingReturn({
-  store: { user: userStore, packagingReturn, modal },
+  store: { user: userStore, packagingReturn: returnStore },
 }) {
   const [showJarOrLidOpen, setShowJarOrLidOpen] = useState(false);
   const [showQRCodePage, setShowQRCodePage] = useState(false);
@@ -19,14 +21,14 @@ function NewPackagingReturn({
 
   const handleClose = (selectedValue) => {
     setShowJarOrLidOpen(false);
-    if (!!selectedValue) {
-      packagingReturn.addPackagingURL(selectedValue);
+    if (selectedValue) {
+      returnStore.addPackagingURL(selectedValue);
     }
   };
 
   const handleScanCompletion = (url) => {
     if (url) {
-      packagingReturn.addPackagingURL(url);
+      returnStore.addPackagingURL(url);
     }
     setShowQRCodePage(false);
   };
@@ -40,31 +42,16 @@ function NewPackagingReturn({
   };
 
   return (
-    <Container
-      style={{
-        // flex: 1,
-        flexDirection: "column",
-        // border: "1px solid bldddue",
-        // height: "80vh",
-        display: "flex",
-        // justifyContent: "flex-end",
-        alignItems: "center",
-        marginBottom: "2rem",
-      }}
+    <Page
+      title="New Packaging Return"
+      className={styles.pageContainer}
       maxWidth="sm"
     >
-      <h2 className={{ textAlign: "center" }}>New Packaging Return </h2>
       <NewReturnForm
-        packagingURLs={packagingReturn.packaging_urls.toJS().reverse()}
+        packagingURLs={returnStore.packaging_urls.toJS().reverse()}
         user_id={user_id}
       />
-      <Divider />
-      <Grid
-        container
-        style={{ border: "1px solid pink" }}
-        // alignContent={"stretch"}
-        justify="center"
-      >
+      <Grid container justify="center">
         <JarOrLidDialog open={showJarOrLidOpen} onClose={handleClose} />
         <Grid container item xs={6} justify="center">
           <Button
@@ -72,7 +59,7 @@ function NewPackagingReturn({
             variant="outlined"
             size="large"
             onClick={handleMissingQRCode}
-            style={{ padding: "1.75rem 1.3rem", margin: "0.2rem" }}
+            className={styles.bigActionButton}
           >
             Missing QR Code
           </Button>
@@ -83,18 +70,16 @@ function NewPackagingReturn({
             variant="contained"
             size="large"
             onClick={handleClickScanQR}
-            style={{ padding: "1.75rem 1.5rem", margin: "0.2rem" }}
+            className={styles.bigActionButton}
           >
             Scan QR Code
           </Button>
         </Grid>
         <ScanQRCode show={showQRCodePage} onComplete={handleScanCompletion} />
       </Grid>
-    </Container>
+    </Page>
   );
 }
-
-NewPackagingReturn.propTypes = {};
 
 // mobx v5 work around for hooks
 class _NewPackagingReturn extends React.Component {

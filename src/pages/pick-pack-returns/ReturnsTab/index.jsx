@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ReturnsTab.module.css";
-import Tab from "./../shared/Tab";
+import Tab from "../shared/Page";
 import Get from "./SubmitGet";
 import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
 import { FixedSizeList } from "react-window";
