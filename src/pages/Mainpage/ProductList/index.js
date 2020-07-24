@@ -35,7 +35,7 @@ class ProductList extends Component {
         <h2>{display.cat_name}</h2>
         <div className="product-sub">
           <h5>{display.cat_name}</h5>
-          <Link to={`/main/${display.cat_id}`}>View All {display.number_products} ></Link>
+          <Link to={`/main/${display.cat_id}`}>View All {display.number_products}</Link>
         </div>
 
         {mode === 'limit' && <Button className="big-arrow right-arrow" />}
