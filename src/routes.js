@@ -117,11 +117,22 @@ export default (
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/signup" component={Signup} />
-      <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
       <Route exact path="/howitworks" component={HowItWorks} />
       <Route exact path="/latest-news" component={LatestNews} />
+      <Route
+        exact
+        path="/social/:id"
+        render={({ match }) => {
+          const id = match.params.id;
+          if (id.match(/[\w-]{7,14}$/g)) {
+            return <Route component={Homepage} />;
+          }
+        }}
+      />
+      <Route exact path="/" component={Homepage} />
+      <Route component={Homepage} /> {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
   </Fragment>
 );
