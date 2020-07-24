@@ -1,0 +1,19 @@
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.listContainer {
+  flex: 1;
+}
+
+.submitButtonContainer {
+  margin-top: 1rem;
+}

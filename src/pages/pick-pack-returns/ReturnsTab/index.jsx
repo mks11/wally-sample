@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
+import styles from "./ReturnsTab.module.css";
 import Tab from "./../shared/Tab";
 import Get from "./SubmitGet";
-import {
-  Card,
-  List,
-  ListItemSecondaryAction,
-  Typography,
-  Button,
-  Grid,
-  CircularProgress,
-} from "@material-ui/core";
+import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+
 import { AddCircle } from "@material-ui/icons";
 import axios from "axios";
 import {
@@ -20,7 +14,6 @@ import {
 } from "../../../config";
 import { connect } from "utils";
 import Row from "./Row";
-import { genRandomReturnData } from "./gen";
 import { sortByTimestampDes } from "utils";
 export const STATUS_RECEIVED = "received";
 export const STATUS_RETURNED = "returned";
@@ -32,21 +25,16 @@ function ReturnsTab({ store: { user: userStore } }) {
   const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState("");
 
   const fetchTodaysPackagingReturns = async () => {
-    // const url = API_GET_TODAYS_PACKAGING_RETURNS;
-    // const res = await axios.get(url);
-    // const returnItems = res.data; //TODO test
-    // return returnItems;
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        const data = genRandomReturnData();
-        res(data);
-      }, 3000);
-    });
+    const url = API_GET_TODAYS_PACKAGING_RETURNS;
+    const {
+      data: { returnItems },
+    } = await axios.get(url);
+    return returnItems;
   };
 
-  const handleCompletionReturns = ({ data }) => {
-    if (data.status === "200") {
-      setSuccessMsgOnReturnSubmit(data.message);
+  const handleCompletionReturns = ({ status, data: { message } }) => {
+    if (status === "200") {
+      setSuccessMsgOnReturnSubmit(message);
     }
   };
 
@@ -55,7 +43,7 @@ function ReturnsTab({ store: { user: userStore } }) {
       try {
         setLoading(true);
         const returnItems = await fetchTodaysPackagingReturns();
-        setReturnItems(sortByTimestampDes(returnItems || [], "return_date"));
+        setReturnItems(sortByTimestampDes(returnItems, "return_date"));
       } catch (e) {
         setError("Failed to get packaging returns");
       } finally {
@@ -67,7 +55,7 @@ function ReturnsTab({ store: { user: userStore } }) {
   const OnEmpty = () => (
     <Typography> No items currently! check back later </Typography>
   );
-  const OnError = () => <Typography variant="error"> {error} </Typography>;
+  const OnError = () => <Typography color="error"> {error} </Typography>;
 
   const Status = () => {
     if (loading) {
@@ -80,21 +68,13 @@ function ReturnsTab({ store: { user: userStore } }) {
   };
 
   return (
-    <Tab
-      title="Returns"
-      style={{
-        display: "flex",
-        flexGrow: 1,
-        flexDirection: "column",
-        height: "80vh",
-      }}
-    >
+    <Tab title="Returns" className={styles.tabContainer}>
       {returnItems.length === 0 ? (
         <Grid container justify="center">
           <Status />
         </Grid>
       ) : (
-        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <div className={styles.contentContainer}>
           <Button
             variant="contained"
             color="default"
@@ -103,7 +83,7 @@ function ReturnsTab({ store: { user: userStore } }) {
           >
             New Return
           </Button>
-          <div style={{ flex: 1 }}>
+          <div className={styles.listContainer}>
             <AutoSizer>
               {({ height, width }) => {
                 return (
@@ -123,10 +103,14 @@ function ReturnsTab({ store: { user: userStore } }) {
         </div>
       )}
       {userStore.user && userStore.isOpsLead && (
-        <Grid container justify="center" style={{ marginTop: "1rem" }}>
+        <Grid
+          container
+          justify="center"
+          className={styles.submitButtonContainer}
+        >
           <Get
             title={"Submit Returns"}
-            loadTitle={"Submitting .. "}
+            loadTitle={"Submitting ... "}
             onCompletion={handleCompletionReturns}
             onErrorMsg={"Submission failed!"}
             onSuccessMsg={successMsgOnReturnSubmit}

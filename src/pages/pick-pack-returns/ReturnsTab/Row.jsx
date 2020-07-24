@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Button,
-} from "@material-ui/core";
+import { ListItem, ListItemText, ListItemIcon } from "@material-ui/core";
 import { CheckCircle, LinearScale } from "@material-ui/icons";
 import moment from "moment";
 import { STATUS_RETURNED } from ".";
@@ -19,9 +14,9 @@ export default function Row({ index, style, data }) {
       <ListItemText primary={`${name}`} secondary={msg} />
       <ListItemIcon>
         {isReturned ? (
-          <CheckCircle style={{ color: "green" }} />
+          <CheckCircle color="success" />
         ) : (
-          <LinearScale style={{ color: "#FDD835" }} />
+          <LinearScale color="warning" />
         )}
       </ListItemIcon>
     </ListItem>

@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Container } from "@material-ui/core";
 import styles from "./Tab.module.css";
 
-function Tab({ title, children, style }) {
+function Tab({ title, children, ...rest }) {
   return (
-    <Container maxWidth={"sm"} style={style}>
+    <Container maxWidth={"sm"} {...rest}>
       <h2 className={styles.title}>{title}</h2>
       <Fragment>{children}</Fragment>
     </Container>
