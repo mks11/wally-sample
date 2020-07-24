@@ -71,6 +71,9 @@ class Footer extends Component {
                     <li>
                       <Link to="/backers">Our Backers</Link>
                     </li>
+                    <li>
+                      <Link to="/blog">Blog</Link>
+                    </li>
                     {/* <li>
                       <Link to="help">FAQ</Link>
                     </li> */}
