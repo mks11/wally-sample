@@ -1,26 +1,26 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Snackbar, CircularProgress, Grid, Button } from "@material-ui/core";
+import { Snackbar, Grid, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
 
 export default function Get({
   title,
   loadTitle,
-  children,
   onSuccessMsg,
   onErrorMsg,
   onCompletion,
   url,
-  axiosReqConfig,
   autoHideDuration = 3000,
 }) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const loadingTitle = loadTitle || title;
+
   const makeRequest = async (URL) => {
-    const response = await axios.get(URL, axiosReqConfig);
+    const response = await axios.get(URL);
     return response;
   };
 
@@ -37,7 +37,7 @@ export default function Get({
   };
 
   useEffect(() => {
-    if (!!onSuccessMsg) {
+    if (onSuccessMsg) {
       setShowSuccess(true);
     }
   }, [onSuccessMsg]);
@@ -65,10 +65,19 @@ export default function Get({
           disabled={loading}
           onClick={handleSubmit}
         >
-          {loading ? loadTitle : title}
+          {loading ? loadingTitle : title}
         </Button>
       </Grid>
-      {children}
     </Fragment>
   );
 }
+
+Get.propTypes = {
+  title: PropTypes.string.isRequired,
+  loadTitle: PropTypes.string,
+  onSuccessMsg: PropTypes.string,
+  onErrorMsg: PropTypes.string,
+  onCompletion: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  autoHideDuration: PropTypes.number.isRequired,
+};
