@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Title from "../common/page/Title";
 import ReactGA from "react-ga";
-import { connect, logEvent, logModalView, logPageView } from "../utils";
+import { connect } from "../utils";
 
 import Head from "../common/Head";
 
@@ -64,12 +64,7 @@ class About extends Component {
                   </p>
 
                   <p>
-                    That’s where we come in. Our mission is to help you get what
-                    you need from your favorite brands, in all reusable,
-                    returnable packaging for a 100% waste free shopping
-                    experience. And while we are all cleaning up the world ~
-                    we’re going to have fun while we are at it, in full purple
-                    dreamy glow ✨
+                  That’s where we come in. Our mission is to help you get what you need from your favorite brands, in all reusable, returnable packaging for a 100% waste free shopping experience. And while we are all cleaning up the world ~ we’re going to have fun while we are at it, in full purple dreamy glow <span role="img" aria-label="sparkle">✨</span> 
                   </p>
                 </div>
               </div>

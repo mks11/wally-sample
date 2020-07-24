@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import qs from 'qs';
-import { Link } from 'react-router-dom'
-import { Row, Col, Input } from 'reactstrap';
-import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
+import { Row, Col } from 'reactstrap';
+import { validateEmail, connect, logEvent, logModalView } from '../utils'
 
 
 class Homepage extends Component {
@@ -47,13 +46,11 @@ class Homepage extends Component {
 
   componentDidMount() {
     ReactGA.pageview("/");
-    console.log(this.props);
     if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color) {
-      if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color == "purple") {
+      if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color === "purple") {
         this.setState({ audienceSource: "ig" });
-        this.metricStore.triggerAudienceSource("ig");  
+        this.metricStore.triggerAudienceSource("ig");
       }
-      
     }
 
     this.userStore.getStatus()
@@ -130,7 +127,6 @@ class Homepage extends Component {
 
   handleStart(e) {
     logEvent({ category: "Homepage", action: "StartShopping" })
-    const store = this.props.store
     this.routing.push('/main')
     logModalView('/signup-info')
     this.modalStore.toggleModal('joinwaitlist')
@@ -173,12 +169,6 @@ class Homepage extends Component {
   render() {
     if (this.state.fetching) return null
 
-    const ButtonStart = () => (
-      <button onClick={this.handleValidateZip} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        START SHOPPING
-      </button>
-    )
-
     const ButtonStartShopping = () => (
       <button onClick={this.handleStart} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         START SHOPPING
@@ -200,14 +190,11 @@ class Homepage extends Component {
     const isMobile = this.state.width <= 500;
     const isMobileHoriz = (this.state.width > 500 && this.state.width <= 800);
     let heroClass = "landing-section aw-hero"
-    let tempClass = "landing-section-construct aw-hero"
     if (isMobile) {
       heroClass += ' mobile'
-      tempClass += ' mobile'
     }
     if (isMobileHoriz) {
       heroClass += ' mobile-horiz'
-      tempClass += ' mobile-horiz'
     }
 
     return (
@@ -230,7 +217,6 @@ class Homepage extends Component {
             <div className="row justify-content-center align-items-center">
 
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-                {/* <img src="images/home5_hd.png" alt=""/> */}
                 <img src="images/cradle_6.jpg" alt=""/>
               </div>
 
@@ -238,17 +224,6 @@ class Homepage extends Component {
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
                 <div className="mt-5">
-                  {/*}
-                  <Input
-                    className="zip"
-                    type="text"
-                    value={this.state.email}
-                    placeholder="Enter your email"
-                    onKeyDown={this.handleEmailEnter}
-                    onChange={this.handleEmail}
-                  />
-                  {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
-                  */}
                   <ButtonNotify/>
                 </div>
 
@@ -265,7 +240,7 @@ class Homepage extends Component {
             <div className="tagline">
               <h2>Do you with reusables.</h2>
               <p></p>
-              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide ✨Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
+              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide <span role="img" aria-label="sprinkle" >✨</span> Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
               <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
@@ -277,7 +252,6 @@ class Homepage extends Component {
                 </div>
               </div>
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                {/* <img src="images/home6_hd.png" alt=""/> */}
                 <img src="images/jar_3.jpg" alt=""/>
               </div>
             </div>
@@ -285,7 +259,6 @@ class Homepage extends Component {
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
               <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                {/* <img src="images/home7_hd.png" alt=""/> */}
                 <img src="images/tote.jpg" alt=""/>
               </div>
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">

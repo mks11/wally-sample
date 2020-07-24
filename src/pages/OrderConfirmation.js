@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect, logEvent, logModalView, logPageView } from '../utils';
+import { connect, logModalView } from '../utils';
 import ReactGA from 'react-ga';
 
 class OrderConfirmation extends Component {

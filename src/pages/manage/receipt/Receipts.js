@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReceiptCapture from "./ReceiptCapture";
 import { connect } from "../../../utils";
-import { Container, Col, Row, Button, Input } from "reactstrap";
+import { Container, Col, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import Table from "@material-ui/core/Table";
 import Paper from "@material-ui/core/Paper";

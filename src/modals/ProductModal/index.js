@@ -13,7 +13,6 @@ import {
 import {
   PRODUCT_BASE_URL,
   NUTRITIONAL_INFO_BASE_URL,
-  PACKAGING_BASE_URL,
 } from 'config'
 import AmountGroup from 'common/AmountGroup'
 
@@ -48,7 +47,7 @@ class ProductModal extends Component {
     const modal = this.modalStore
     const user = this.userStore
 
-    this.state.qty = product.activeProduct.min_size
+    this.setState({qty: product.activeProduct.min_size})
     let priceMultiplier = 1
     this.setState({ priceMultiplier: priceMultiplier });
 
@@ -102,9 +101,9 @@ class ProductModal extends Component {
         asNavFor: '#product-carousel',
         dots: false,
         infinite: false,
-
         variableWidth: true
       });
+
       $thumb.find('.slick-item').click(function() {
         $prod.slick('slickGoTo', window.$(this).index())
       })
@@ -115,14 +114,9 @@ class ProductModal extends Component {
     this.setState({ infoPackage: !this.state.infoPackage })
   }
 
-  // handleCloseModal(e) {
-  //   logEvent({category:"Product", action:"ClickClosed", label:this.productStore.activeProductId})
-  //   this.props.toggle()
-  // }
-
   handleAddToCart = () => {
     const { product, checkout, user, routing } = this.props.stores
-    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock, available, packagingType } = this.state
+    const { custom, customIsEmpty, quantityAddon, packagingAddon, outOfStock, available } = this.state
 
     if (outOfStock || !available) return
 
@@ -135,7 +129,6 @@ class ProductModal extends Component {
 
     logEvent({category:"Product", action:"AddToCart", value:this.state.qty, label:product.activeProductId})
     const activeProduct = product.activeProduct
-    console.log("Active product is", activeProduct);
     const inventory = activeProduct.available_inventory[0] ? activeProduct.available_inventory[0] : null
     const order_summary = routing.location.pathname.indexOf('checkout') !== -1
 
@@ -169,7 +162,6 @@ class ProductModal extends Component {
       .then(data => {
         data && user.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       }).catch((e) => {
-        console.log(e)
         if (e.response) {
           const msg = e.response.data.error.message
           this.setState({invalidText: msg})
@@ -217,7 +209,6 @@ class ProductModal extends Component {
   }
 
   render() {
-    const { packagingType } = this.state
     const { activeProduct, activeProductComments } = this.productStore
     if (!activeProduct) return null
     let recentThreeComments = []
@@ -226,22 +217,18 @@ class ProductModal extends Component {
     const {
       a_plus_url,
       allergens,
-      available,
       available_inventory,
       avg_rating,
       buy_by_packaging,
       description,
       fbw,
       image_refs,
-      increment_size,
       ingredients,
       manufacturer,
       manufacturer_url_name,
       max_qty,
-      min_size,
       name,
       nutritional_info_url,
-      out_of_stock,
       packaging_vol,
       packagings,
       product_id,
@@ -250,10 +237,9 @@ class ProductModal extends Component {
       subcat_name,
       tags,
       unit_type,
-      unit_weight,
       vendor,
-    } = activeProduct
-
+    } = activeProduct;
+    let  { unit_weight } = activeProduct;
     let shipMessage = `Fulfilled by The Wally Shop.`
     if (available_inventory[0]) shipMessage = `Sold and fulfilled by The Wally Shop`;
     if (fbw) shipMessage = "Sold by " + vendor + ", fulfilled by The Wally Shop."
@@ -269,7 +255,7 @@ class ProductModal extends Component {
     const incrementValue = 1
     const minSize = 1
     const maxQty = Math.min(max_qty, 10)
-    console.log("max qty is ", maxQty)
+
     for (var i = 0; i < maxQty; i++) {
       var opt = minSize + i * incrementValue
       qtyOptions.push(+(opt.toFixed(3)))
@@ -291,7 +277,7 @@ class ProductModal extends Component {
     }
 
     var weight_unit = "lbs"
-    if (unit_weight && unit_weight && unit_weight < 0.05) {
+    if (unit_weight && unit_weight < 0.05) {
       weight_unit = "oz"
       unit_weight = unit_weight * 16
     }
@@ -304,25 +290,24 @@ class ProductModal extends Component {
     const packaging_type = std_packaging
     const packaging_description = packaging ? packaging.description : null
     const packaging_size = inventory && inventory.packaging && inventory.packaging.size
-    const packaging_image_url = packaging_size && ("jar-" + packaging_size + ".jpg")
 
 
     let jarIcons = (
       <div className="jar-icons">
         <div>
-          <img src={ packaging_size == 8 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 8 oz" width="22" />
+          <img src={ packaging_size === 8 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 8 oz" width="22" />
           <div>8 oz</div>
         </div>
         <div>
-          <img src={ packaging_size == 16 || packaging_size == 25 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 25 oz" width="26" />
-          <div>{ packaging_size == 16 ? "16 oz" : "25 oz" }</div>
+          <img src={ packaging_size === 16 || packaging_size === 25 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 25 oz" width="26" />
+          <div>{ packaging_size === 16 ? "16 oz" : "25 oz" }</div>
         </div>
         <div>
-          <img src={ packaging_size == 32 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 32 oz" width="30" />
+          <img src={ packaging_size === 32 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 32 oz" width="30" />
           <div>32 oz</div>
         </div>
         <div>
-          <img src={ packaging_size == 64 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 64 oz" width="34" />
+          <img src={ packaging_size === 64 ? `/images/jar8_icon.png` : `/images/jar8_grey_icon.png` } alt="Packaging size 64 oz" width="34" />
           <div>64 oz</div>
         </div>
       </div>
@@ -346,11 +331,6 @@ class ProductModal extends Component {
                       <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                     </div>
                   )}
-                  { /* {packaging_size && (
-                    <div className="slick-item">
-                      <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
-                    </div>
-                  )} */ }
                 </div>
               </div>
             </div>
@@ -364,11 +344,6 @@ class ProductModal extends Component {
                     <img src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url} alt="Nutritional info" />
                   </div>
                 )}
-                { /* {packaging_size && (
-                  <div className="slick-item">
-                    <img src={PACKAGING_BASE_URL + packaging_image_url} alt={"Packaging size " + packaging_size} />
-                  </div>
-                )} */ }
               </div>
             </div>
           </Col>
@@ -434,7 +409,7 @@ class ProductModal extends Component {
               }
             </button><br />
 
-            <div className='text-muted'> 
+            <div className='text-muted'>
               **Product packaged in a facility that processes dairy, gluten, peanuts and tree nuts.
             </div>
           </Col>
@@ -490,7 +465,7 @@ class ProductModal extends Component {
             <Col>
               <hr />
               <div className="a-plus-image">
-                <img src={a_plus_url} alt="A+ image" />
+                <img src={a_plus_url} alt="A+" />
               </div>
             </Col>
           </Row>

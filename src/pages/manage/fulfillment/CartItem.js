@@ -1,24 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "../../../utils";
 import {
-  Container,
   Input,
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Label,
-  Row
 } from "reactstrap";
-import { Col, ControlLabel, FormControl, FormGroup } from "react-bootstrap";
 import Button from "@material-ui/core/Button/Button";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography/Typography";
-import Paper from "@material-ui/core/Paper/Paper";
-import Table from "@material-ui/core/Table/Table";
-import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody/TableBody";
 import { BASE_URL } from "../../../config";
 
 class CartItem extends Component {
@@ -92,7 +82,7 @@ class CartItem extends Component {
   };
 
   render() {
-    const { isEdit, cart_item, order_id, weight } = this.state;
+    const { isEdit, cart_item, weight } = this.state;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
     let initialTotal = (

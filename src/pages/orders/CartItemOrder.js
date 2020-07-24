@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from "react";
+import React, { Component } from "react";
 import {
   Input,
   InputGroup,
@@ -80,7 +80,7 @@ class CartItemOrder extends Component {
   };
 
   setWeight = e => {
-    const { cart_item, weight } = this.state;
+    const { cart_item } = this.state;
     cart_item[e.target.name] = e.target.value;
     this.setState({
       weight: e.target.value
@@ -143,8 +143,6 @@ class CartItemOrder extends Component {
 
     makePatchAPICallLinkPackaging = async packagingUnitId => {
 
-      console.log('packaging unit id ', packagingUnitId);
-
         const cartItem = this.props.cart_item;
 
         const payload = {
@@ -172,7 +170,6 @@ class CartItemOrder extends Component {
   };
 
   toggleErrorOff = e => {
-    console.log("toggleErrorOff", e);
     this.setState({
       isErrorModalOpen: false
     });
@@ -186,20 +183,14 @@ class CartItemOrder extends Component {
     };
 
     toggleQROff = e => {
-        console.log("QR close", e);
         this.setState({
             isQRModalOpen: false
         });
-
-
-
-
     };
 
   render() {
-    const { weight, quantityUnit, error, unconfirmedMissingState } = this.state;
+    const { weight, quantityUnit, unconfirmedMissingState } = this.state;
     const { cart_item, order_id } = this.props;
-    console.log('cart_item ', cart_item)
     const missing = cart_item.missing;
     let unit_type = cart_item.unit_type;
     if (!unit_type) unit_type = cart_item.price_unit;
@@ -238,7 +229,7 @@ class CartItemOrder extends Component {
         <TableCell className="error-code">
           <p onClick={this.toggleErrorModal}>
             {cart_item.product_error_reason &&
-            !cart_item.product_error_reason == "no_error"
+            !cart_item.product_error_reason === "no_error"
               ? cart_item.product_error_reason
               : "Ok"}
           </p>
@@ -275,7 +266,7 @@ class CartItemOrder extends Component {
           <TableCell className="error-code">
               <p onClick={this.toggleQRModal}>
                   {cart_item.product_error_reason &&
-                  !cart_item.product_error_reason == "no_error"
+                  !cart_item.product_error_reason === "no_error"
                       ? cart_item.product_error_reason
                       : "Link"}
               </p>

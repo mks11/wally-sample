@@ -58,7 +58,6 @@ class Help extends Component {
   }
 
   handleSearch = (e) => {
-    console.log(this.state.terms)
     this.helpStore.search(this.state.terms).then((data) => {
       this.setState({onSearch: true, searchResults: data})
     })

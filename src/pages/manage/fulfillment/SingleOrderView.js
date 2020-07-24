@@ -4,22 +4,15 @@ import {
   Container,
   FormGroup,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
   Modal,
   ModalBody,
   ModalHeader,
   ModalFooter
 } from "reactstrap";
-import { Col, Row, ControlLabel, FormControl, Form } from "react-bootstrap";
+import { Col, Row, ControlLabel } from "react-bootstrap";
 import Button from "@material-ui/core/Button/Button";
 import CloseIcon from "@material-ui/icons/Close";
-import ArrowLeft from "@material-ui/icons/KeyboardArrowLeftOutlined";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRightOutlined";
 import Typography from "@material-ui/core/Typography/Typography";
-import Select from "react-select";
 import Paper from "@material-ui/core/Paper/Paper";
 import Table from "@material-ui/core/Table/Table";
 import TableHead from "@material-ui/core/TableHead/TableHead";
@@ -37,9 +30,6 @@ class SingleOrderView extends Component {
       cart_items: props.selectedOrder.cart_items,
       packagings: props.packagings.map(packaging => {
         return { ...packaging, quantity: 0 };
-      }),
-      packagings: props.packagings.map(packaging => {
-        return { ...packaging };
       }),
       packagingUsed: props.selectedOrder.packaging_used.map(item => {
         return { ...item, type: item.type };
@@ -62,7 +52,6 @@ class SingleOrderView extends Component {
 
   saveCartRow = (cart_item, index) => {
     const { cart_items } = this.state;
-    console.log("saveCartRow", cart_items);
     cart_items.map((item, i) => {
       if (i === index) {
         return cart_item;
@@ -73,7 +62,6 @@ class SingleOrderView extends Component {
   };
 
   handleWeightChange = update => {
-    const { cart_items, selectedOrder } = this.state;
     return new Promise(done => {
       this.setState(({ cart_items }) => ({
         cart_items: cart_items.map(item =>
@@ -87,7 +75,6 @@ class SingleOrderView extends Component {
       }));
       this.setState({}, () => {
         done();
-        console.log("end of callstate", this.state.cart_items);
       });
     });
   };
@@ -114,7 +101,6 @@ class SingleOrderView extends Component {
   handleOrderUpdate = payload => {
     let orderId = this.state.selectedOrder._id;
     let cart_items = this.state.cart_items;
-    let selectedOrder = this.state.selectedOrder;
     let packagings = payload.packagings;
     let auth = this.userStore.getHeaderAuth();
     fetch(`${BASE_URL}/api/order/${orderId}`, {
@@ -161,8 +147,7 @@ class SingleOrderView extends Component {
   };
 
   updateOrder = async () => {
-    const { packaging_used, cart_items, selectedOrder } = this.state;
-    console.log("updateOrder", cart_items);
+    const { selectedOrder } = this.state;
     const items = selectedOrder.cart_items.map(item => {
       return {
         product_name: item.product_name,
@@ -183,7 +168,6 @@ class SingleOrderView extends Component {
       cart_items: items,
       packagings: packagings
     };
-    console.log("payload", payload.cart_items);
 
     await this.setState(
       {
@@ -195,7 +179,6 @@ class SingleOrderView extends Component {
       },
       async () => {
         await this.handleOrderUpdate(payload);
-        // window.location.reload();
       }
     );
   };
@@ -204,19 +187,9 @@ class SingleOrderView extends Component {
     const {
       cart_items,
       selectedOrder,
-      packagings,
-      packagingUsed,
       originalSubTotal,
       currentSubTotal
     } = this.state;
-    console.log('selected order', selectedOrder);
-    const packagingArr = packagings.reduce((acc, packaging) => {
-      const pUsed = packagingUsed.find(e => e.type === packaging.type);
-      if (pUsed)
-        acc[packaging.type] = { ...packaging, quantity: pUsed.quantity };
-      else acc[packaging.type] = { ...packaging, quantity: 0 };
-      return acc;
-    }, []);
     return (
       <section className="page-section pt-1 single-order">
         <Container>
@@ -252,7 +225,7 @@ class SingleOrderView extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cart_items.map((cart_item, i, order_id) => (
+                {cart_items.map((cart_item, i) => (
                   <CartItem
                     key={cart_item._id}
                     order_id={selectedOrder._id}

@@ -21,14 +21,13 @@ class InviteModal extends Component {
 
   handleCopy = () => {
     const $el = this.el
-    // console.log($el)
     $el.select()
     try {
       var successful = document.execCommand('copy')
       var msg = successful ? 'successfully' : 'unsuccessfully'
-      console.log('text coppied ' + msg)
+      console.log('Text copied ' + msg)
     } catch (err) {
-      console.log('Unable to copy text')
+      console.warn('Unable to copy text')
     }
   }
 

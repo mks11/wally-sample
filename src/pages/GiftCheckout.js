@@ -107,9 +107,9 @@ class GiftCheckout extends Component {
 
     if (!processGiftCard) return null
 
-    const giftFrom = this.userStore.user && this.userStore.user.email || ''
-    const userPayment = this.userStore.user && this.userStore.user.payment || guestUserPayment
-    const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
+    const giftFrom = this.userStore.user ? this.userStore.user.email : ''
+    const userPayment = this.userStore.user ? this.userStore.user.payment : guestUserPayment
+    const userPreferredPayment = this.userStore.user ? this.userStore.user.preferred_payment : null
     const userGuest = !this.userStore.status
 
     return (

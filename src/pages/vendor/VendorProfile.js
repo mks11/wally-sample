@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ReactGA from "react-ga";
 import {
   connect,
-  logModalView,
   datesEqual
 } from "utils";
 

@@ -57,7 +57,6 @@ class ModalStep3MissingPopUp extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
-    console.log(this.state)
   }
 
   handleChecked = () => {
@@ -73,7 +72,7 @@ class ModalStep3MissingPopUp extends Component {
   handleSubmit = async () => {
     //debugger
     const { toggleModal, id, location } = this.props
-    const { selected, quantity, timeframe, busy } = this.state
+    const { selected, quantity, busy } = this.state
     let status = ""
 
     if (busy) return

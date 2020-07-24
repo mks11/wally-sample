@@ -67,7 +67,6 @@ class AddressOptions extends Component {
   };
 
   handleAddNewAddress = () => {
-    // console.log('newpreffered address', this.state.newPreferedAddress)
     this.setState({ invalidText: null });
     if (!this.state.newStreetAddress) {
       this.setState({ invalidText: "Street address cannot be empty" });
@@ -143,7 +142,6 @@ class AddressOptions extends Component {
         address[addressType] = val;
       }
     }
-    // console.log('adddres', address)
 
     let city = address.locality;
     if (!city && address.sublocality_level_1) {
@@ -172,7 +170,6 @@ class AddressOptions extends Component {
     this.setState({ newStreetAddress });
     geocodeByAddress(newStreetAddress)
       .then(results => {
-        // console.log('first result', results[0])
         this.fillInAddress(results[0]);
       })
       .catch(error => console.error("Error", error));

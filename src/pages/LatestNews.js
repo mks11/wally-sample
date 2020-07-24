@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-
-import { connect, logEvent, logModalView, logPageView } from '../utils'
+import { connect, logModalView } from '../utils'
 
 import Head from '../common/Head'
 import Title from '../common/page/Title';

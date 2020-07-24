@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import ReactGA from "react-ga";
-// import App from './App';
-// import registerServiceWorker from './registerServiceWorker';
 import routes from "./routes";
 
 import Head from "./common/Head";

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { formatMoney, connect, logEvent, logModalView, logPageView } from '../utils'
+import { formatMoney, connect, logModalView } from '../utils'
 import ClickOutside from 'react-click-outside'
 
 class TopNav extends Component {
@@ -39,7 +39,6 @@ class TopNav extends Component {
   handleInvite = () => {
     logModalView('/refer')
     this.hideAccountDropdown()
-    // this.modalStore.toggleModal('invite')
     this.modalStore.toggleModal('referral')
   }
 
@@ -49,7 +48,6 @@ class TopNav extends Component {
     this.hideAccountDropdown()
     this.props.store.routing.push('/')
     this.userStore.logout()
-    // e.preventDefault()
   }
 
   handleToggle = () => {
@@ -95,7 +93,6 @@ class TopNav extends Component {
     logModalView("/schedulePickup");
     this.hideAccountDropdown();
     this.modalStore.toggleModal("schedulepickup");
-    // throw new Error("Implementation");
   };
 
   handleReferralModal = (e) => {
@@ -252,13 +249,6 @@ class TopNav extends Component {
                   </nav>
                 </div>
               </div>
-              {/*<div className="row aw-nav--action">
-                <div className="col-12 text-center">
-
-                  <a href="#nav-hero" className="btn btn-block mx-auto btn-outline-white btn-get--started d-inline-block d-md-block">Get notified</a>
-
-              </div>
-              </div>*/}
             </div>
           </div>
         </div>
@@ -372,7 +362,6 @@ class TopNav extends Component {
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <a onClick={this.handleSchedulePickup} className="dropdown-item"> Schedule Pickup</a>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
-                                      {/* <a onClick={this.handleInvite} className="dropdown-item">Refer a friend, receive a tote</a> */}
                                       <Link onClick={this.hideAccountDropdown} to="/latest-news" className="dropdown-item">COVID-19</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>
@@ -396,8 +385,6 @@ class TopNav extends Component {
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
-                        {/* <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li> */}
                       </React.Fragment>
                     )}
                   </ul>

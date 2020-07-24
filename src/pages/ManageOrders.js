@@ -44,7 +44,6 @@ class ManageOrders extends Component {
         }
       })
       .catch(error => {
-        console.log(error);
         this.props.store.routing.push("/");
       });
   }

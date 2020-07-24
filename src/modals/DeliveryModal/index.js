@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { logModalView, logEvent } from 'utils'
+import { logEvent } from 'utils'
 import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 
 
@@ -23,7 +23,6 @@ class DeliveryModal extends Component {
       user.setDeliveryTime(this.state.selectedTime)
       this.props.toggle()
       checkout.getDeliveryTimes()
-      // this.props.onChangeSubmit && this.props.onChangeSubmit()
     }
   }
 

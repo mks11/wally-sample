@@ -51,7 +51,6 @@ const ModalRoutes = {
   joinwaitlist: JoinWaitlistModal,
   schedulepickup: SchedulePickupModal,
   redeemdeposit: RedeemDepositModal,
-  schedulepickup: SchedulePickupModal,
   packagingdeposit: PackagingDepositModal
 }
 

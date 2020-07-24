@@ -74,9 +74,6 @@ class Footer extends Component {
                     <li>
                       <Link to="/blog">Blog</Link>
                     </li>
-                    {/* <li>
-                      <Link to="help">FAQ</Link>
-                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">
@@ -91,9 +88,6 @@ class Footer extends Component {
                     <li>
                       <Link to={"/privacy"}>Privacy Policy</Link>
                     </li>
-                    {/* <li>
-                      <Link to={"/sell-through-wally"}>Sell through TWS</Link>
-                    </li> */}
                   </ul>
                 </div>
                 <div className="col-sm-4">
@@ -107,14 +101,14 @@ class Footer extends Component {
                             href={FACEBOOK}
                             target="_blank"
                             rel="noopener noreferrer"
-                          ></a>
+                          ><span className="sr-only">Facebook</span></a>
                         </li>
                         <li className="d-inline-block align-middle footer-ig">
                           <a
                             href={INSTAGRAM}
                             target="_blank"
                             rel="noopener noreferrer"
-                          ></a>
+                          ><span className="sr-only">Instagram</span></a>
                         </li>
                       </ul>
                     </li>

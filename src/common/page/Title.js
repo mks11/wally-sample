@@ -1,4 +1,4 @@
-import React, {  Fragment, Component  } from 'react'
+import React from 'react'
 
 const Title = ({ content, center = false }) => (
   <div className="container">
