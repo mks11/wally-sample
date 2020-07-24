@@ -99,6 +99,9 @@ class ScanUPCFooter extends Component {
           isOpen={isBarScanOpen}
           onClose={this.toggleBarScan}
           onDetect={this.handleDetectedValue}
+          messageSuccess="Barcode Scanned"
+          messageError="Barcode Scan Error"
+          closeOnScan
         />
       </>
     )

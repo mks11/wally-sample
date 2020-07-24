@@ -288,6 +288,8 @@ class ModalSKUDetails extends Component {
           <ScannerQR
             isOpen={isQROpen}
             onClose={this.handleQRClose}
+            messageSuccess="QR Scanned"
+            messageError="QR Already Scanned"
           />
         </ModalBody>
       </Modal>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Quagga from 'quagga'
 import { isMobile } from 'react-device-detect'
-import { Paper } from '@material-ui/core'
+import { Paper, Snackbar, SnackbarContent } from '@material-ui/core'
 
 const styles = {
   desktop: {
@@ -51,8 +51,8 @@ class ScannerBarcode extends Component {
 
     this.state = {
       isPortrait: true,
-      result: '',
       isError: false,
+      snackBarOpen: false,
       width: 200,
       height: 200,
     }
@@ -103,8 +103,14 @@ class ScannerBarcode extends Component {
           getQuaggaSettings({ width, height }),
           (err) => {
             if (err) {
-              console.log(err);
-              return;
+              this.setState({
+                snackBarOpen: true,
+                isError: true,
+              })
+
+              console.log(err)
+
+              return
             }
             Quagga.start()
           }
@@ -117,19 +123,40 @@ class ScannerBarcode extends Component {
   }
 
   onScanDetect = result => {
-    this.props.onDetect(result.codeResult.code)
-    this.props.onClose()
+    const { onDetect, onClose, closeOnScan } = this.props
+
+    onDetect(result.codeResult.code)
+    this.setState({ snackBarOpen: true })
+
+    if (closeOnScan) {
+      onClose && onClose()
+    }
+  }
+
+  handleToggleSnackbar = () => {
+    const { onClose, closeOnScan } = this.props
+
+    this.setState({ snackBarOpen: !this.state.snackBarOpen })
+
+    if (!closeOnScan) {
+      onClose && onClose()
+    }
   }
 
   render() {
     const {
       isPortrait,
-      result,
       isError,
       width,
       height,
+      snackBarOpen,
     } = this.state
-    const { isOpen, onClose } = this.props
+    const {
+      isOpen,
+      onClose,
+      messageSuccess = 'Scan Success',
+      messageError = 'Scan Error',
+    } = this.props
 
     if (!isOpen) {
       return null
@@ -152,10 +179,20 @@ class ScannerBarcode extends Component {
               id="interactive"
               className="viewport"
             />
-            <p className={`text-center qr-modal-result p-2 ${isError ? 'text-error' : 'text-success'}`}>
-              {result}
-            </p>
           </Paper>
+
+          <Snackbar
+            autoHideDuration={1000}
+            onClose={this.handleToggleSnackbar}
+            open={snackBarOpen}
+          >
+            <SnackbarContent
+              style={{
+                backgroundColor: isError ? '#ffa000' : '#43a047'
+              }}
+              message={isError ? messageError : messageSuccess}
+            />
+          </Snackbar>
         </div>
       </div>
     )

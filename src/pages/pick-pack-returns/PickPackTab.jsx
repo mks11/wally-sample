@@ -6,7 +6,7 @@ import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
 
-import { API_GET_TODAYS_ORDERS } from '../../config';
+import { API_GET_TODAYS_ORDERS } from 'config';
 
 // Styles
 import styles from './PickPackTab.module.css';

@@ -41,7 +41,6 @@ class ScannerQR extends Component {
       isPortrait: true,
       isError: false,
       snackBarOpen: false,
-      snackBarText: '',
     }
   }
 
@@ -77,7 +76,6 @@ class ScannerQR extends Component {
 
         if (!packagingIds.includes(packagingId)) {
           this.setState({
-            snackBarText: 'QR Scanned',
             snackBarOpen: true,
             isError: false,
             packagingIds,
@@ -86,7 +84,6 @@ class ScannerQR extends Component {
           packagingIds.push(packagingId)
         } else {
           this.setState({
-            snackBarText: 'QR Already Scanned',
             snackBarOpen: true,
             isError: true,
             packagingIds,
@@ -116,9 +113,12 @@ class ScannerQR extends Component {
       isPortrait,
       isError,
       snackBarOpen,
-      snackBarText,
-      } = this.state
-    const { isOpen } = this.props
+    } = this.state
+    const {
+      isOpen,
+      messageSuccess = 'Scan Success',
+      messageError = 'Scan Error',
+    } = this.props
 
     if (!isOpen) {
       return null
@@ -156,7 +156,7 @@ class ScannerQR extends Component {
               style={{
                 backgroundColor: isError ? '#ffa000' : '#43a047'
               }}
-              message={snackBarText}
+              message={isError ? messageError : messageSuccess}
             />
           </Snackbar>
         </div>
