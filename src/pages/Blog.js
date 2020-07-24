@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom'
-import Title from '../common/page/Title'
-import { connect } from '../utils'
 import moment from 'moment'
+
+import { connect } from '../utils'
+
+import Head from '../common/Head'
+import Title from '../common/page/Title'
 
 class Blog extends Component {
   constructor(props, context){
@@ -41,6 +44,10 @@ class Blog extends Component {
   render() {
     return (
       <div className="App">
+        <Head
+          title="Blog"
+          description="The Wally Shop blog."
+        />
         <Title content="Blog" />
         <section>
           <div className="container mt-5">

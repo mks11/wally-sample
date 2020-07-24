@@ -1,12 +1,15 @@
 import React, { Fragment, Component } from 'react';
-import moment from 'moment'
-import Title from '../common/page/Title'
-import BoxOrder from '../common/page/help/BoxOrder'
-import { connect, formatMoney } from '../utils'
 import { Link } from 'react-router-dom'
+import ReactGA from 'react-ga';
+import moment from 'moment'
+
+import { connect, formatMoney } from '../utils'
+
+import BoxOrder from '../common/page/help/BoxOrder'
+import Head from '../common/Head'
+import Title from '../common/page/Title'
 import  ReportModal from './orders/ReportModal'
 import  ReportSuccessModal from './orders/ReportSuccessModal'
-import ReactGA from 'react-ga';
 
 
 class Help extends Component {
@@ -120,6 +123,10 @@ class Help extends Component {
     let qClass = 'list-bordered list-group-item '
     return (
       <div className="App">
+        <Head
+          title="Help"
+          description="Get help with The Wally Shop's service."
+        />
         <Title content="Help" />
 
         <section className="page-section aw-our--story">
@@ -199,7 +206,7 @@ class Help extends Component {
                                     <tr>
                                       <td>{item.createdAt ? moment(item.createdAt.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
                                       <td>{item.cart_items ? this.printItems(item.cart_items) : this.printPackaging(item.returns)}</td>
-                                      <td>{item.total ? (formatMoney(item.total/100) : "$0.00") : (formatMoney(item.total_credit/100) : "$0.00")}</td>
+                                      <td>{item.total ? ( item.total ? formatMoney(item.total/100) : "$0.00") : (item.total_credit ? formatMoney(item.total_credit/100) : "$0.00")}</td>
                                       <td>
                                         <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
                                           Help

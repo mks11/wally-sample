@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import Title from '../common/page/Title';
 import ReactGA from 'react-ga';
+
 import { connect, logEvent, logModalView, logPageView } from '../utils'
+
+import Head from '../common/Head'
+import Title from '../common/page/Title';
 
 class HowItWorks extends Component {
   constructor(props, context){
@@ -15,6 +18,10 @@ class HowItWorks extends Component {
   render() {
     return (
       <div className="App align-items-center">
+        <Head
+          title="How it Works"
+          description="Learn about The Wally Shop service."
+        />
          <Title content="Our Process" center />
 
          <section className="page-section aw-our--story align-items-center">

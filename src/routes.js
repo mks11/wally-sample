@@ -10,7 +10,6 @@ import Account from "./pages/Account";
 import Help from "./pages/Help";
 import HelpSingle from "./pages/HelpSingle";
 import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-// import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
 import EmailVerification from "./pages/EmailVerification";
