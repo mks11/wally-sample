@@ -12,13 +12,13 @@ import ScannerQR from 'common/ScannerQR';
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
 
-function ShippingToteInput({ field, ...props }) {
+function InputShippingTote({ field, ...props }) {
   const [qrOpened, setQrOpened] = useState(false);
 
   const handleQRScan = useCallback((value) => {
     if (value) {
       // formik setFieldValue method
-      props.onScanQr(field.name, value)
+      props.onScan(field.name, value)
     }
     setQrOpened(false)
   }, [])
@@ -56,4 +56,4 @@ function ShippingToteInput({ field, ...props }) {
   );
 }
 
-export default ShippingToteInput
+export default InputShippingTote

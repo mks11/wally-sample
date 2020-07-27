@@ -12,7 +12,8 @@ import {
   API_VERIFY_ORDER_FULFILLMENT,
 } from 'config';
 
-import ShippingToteInput from './ShippingToteInput'
+import InputShippingTote from './InputShippingTote'
+import InputItem from './InputItem'
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
@@ -32,11 +33,19 @@ class OrderFulfillment extends Component {
         }],
         items: [{
           name: 'Item#1',
-          warehouse_location: 'A1B2',
+          warehouse_location: {
+            shelf: 'SHELF_LOC',
+            row: 'ROW_LOC'
+          },
           upc_code: 'UPC Code',
           was_upc_verified: true,
           customer_quantity: 4,
-          packaging_urls: 'url_2',
+          packaging_urls: [
+            'url_2',
+            'url_3',
+            'https://thewallyshop.co/packaging/ABSCJO',
+            'url_5',
+          ],
         }],
         status: 'complete',
       }
@@ -94,19 +103,26 @@ function OrderFulfillmentForm({
           }, 400);
         }}
       >
-        {({ values, isSubmitting, setFieldValue }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form>
-            {shipping_totes.map((s, idx) => (
+            {shipping_totes.map((_, idx) => (
               <Field
                 key={idx}
                 name={`shipping_totes.${idx}.packaging_url`}
-                component={ShippingToteInput}
-                onScanQr={setFieldValue}
+                component={InputShippingTote}
+                onScan={setFieldValue}
                 fieldIndex={idx}
               />
             ))}
-            <FieldArray name="items">
-            </FieldArray>
+            {items.map((_, idx) => (
+              <Field
+                key={idx}
+                name={`items.${idx}`}
+                component={InputItem}
+                onScan={setFieldValue}
+                fieldIndex={idx}
+              />
+            ))}
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>

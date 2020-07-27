@@ -6,7 +6,8 @@
   padding: 1rem;
   margin: 1rem;
 }
-.toteItem {
+.toteItem,
+.itemBlock {
   padding: 1rem;
   margin-bottom: .5rem;
 }
@@ -18,4 +19,22 @@
   color: #fff!important;
   background-color: green!important;
   opacity: .7;
+}
+
+.itemBlockLocation {
+  font-size: 14px;
+}
+.jarInput {
+  margin-bottom: .2rem!important;
+}
+.jarInputButton {
+  color: #fff!important;
+  background-color: blue!important;
+  float: right;
+}
+.jarInputButtonScanned {
+  color: #fff!important;
+  background-color: green!important;
+  opacity: .7;
+  float: right;
 }
