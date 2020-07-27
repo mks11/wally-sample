@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Card, CardContent, Grid, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
 
-import { API_GET_TODAYS_ORDERS } from 'config';
+import { connect } from 'utils'
+import {
+  API_GET_TODAYS_ORDERS,
+  API_VALIDATE_PICK_PACK_ORDERS,
+} from 'config';
 
 // Styles
 import styles from './PickPackTab.module.css';
@@ -94,7 +104,7 @@ function OrderCardContent({ orderLabel, returnLabel }) {
   )
 }
 
-function OrderCard({ orderDetails }) {
+function OrderCard({ orderDetails, highlight = false }) {
   const {
     orderId,
     inboundLabel,
@@ -103,11 +113,21 @@ function OrderCard({ orderDetails }) {
   } = orderDetails;
 
   return (
-    <Card className={styles.card}>
+    <Card className={`${styles.card} ${ highlight ? styles.highlight : ''}`}>
       <CardHeader orderId={orderId} status={status} />
       <OrderCardContent returnLabel={inboundLabel} orderLabel={outboundLabel} />
     </Card>
   )
+}
+
+function sortOrders(a, b) {
+  // Sort from received -> pending_quality_assurance -> packaged
+  const aStatus = a.status;
+  const bStatus = b.status;
+
+  return aStatus < bStatus
+    ? 1
+    : (aStatus > bStatus ? -1 : 0)
 }
 
 class PickPackTab extends Component {
@@ -115,8 +135,27 @@ class PickPackTab extends Component {
     super(props)
 
     this.state = {
-      ordersAndLabels: [],
+      ordersAndLabels: [{
+        orderId: 'ABC1',
+        inboundLabel: `some_link_to_inbound_label.pdf`,
+        outboundLabel: `some_link_to_outbound_label.pdf`,
+        status: 'packaged',
+      }, {
+        orderId: 'ABC2',
+        inboundLabel: `some_link_to_inbound_label.pdf`,
+        outboundLabel: `some_link_to_outbound_label.pdf`,
+        status: 'pending_quality_assurance',
+      }, {
+        orderId: 'ABC3',
+        inboundLabel: `some_link_to_inbound_label.pdf`,
+        outboundLabel: `some_link_to_outbound_label.pdf`,
+        status: 'status',
+      }],
+      highlightedOrders: [],
+      showValidateOrders: true,
     }
+
+    this.modalStore = props.store.modal
   }
 
   componentDidMount() {
@@ -128,9 +167,24 @@ class PickPackTab extends Component {
     const res = await axios.get(url);
     const { ordersAndLabels } = res.data;
 
-    this.setState({ordersAndLabels})
+    this.setState({ ordersAndLabels })
+  }
 
-    console.log(ordersAndLabels)
+  validateOrders = async () => {
+    const url = API_VALIDATE_PICK_PACK_ORDERS;
+    const res = await axios.get(url);
+    const { unpackedOrders } = res.data;
+
+    if (unpackedOrders.length) {
+      this.modalStore.toggleModal('error', 'Some orders are not valid')
+      this.setState({ highlightedOrders: unpackedOrders });
+    } else {
+      this.setState({ showValidateOrders: false });
+    }
+  }
+
+  isHighlightedOrder = (orderId) => {
+    return !!this.state.highlightedOrders.find(o => o.orderId === orderId)
   }
 
   render() {
@@ -139,27 +193,31 @@ class PickPackTab extends Component {
         <h2 className={styles.title}>Pick/Pack Orders</h2>
         {
           this.state.ordersAndLabels
-          .sort((a, b) => {
-            // Sort from received -> pending_quality_assurance -> packaged
-            const aStatus = a.status;
-            const bStatus = b.status;
-
-            return aStatus < bStatus
-              ? 1
-              : (aStatus > bStatus ? -1 : 0)
-          })
+          .sort(sortOrders)
           .map(orderDetails => {
             return (
               <OrderCard
                 key={orderDetails.orderId}
                 orderDetails={orderDetails}
+                highlight={this.isHighlightedOrder(orderDetails.orderId)}
               />
             )
           })
         }
+        {this.state.showValidateOrders ? (
+          <div className={styles.validateContainer}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.validateOrders}
+            >
+              Validate Orders
+            </Button>
+          </div>
+        ) : null}
       </div>
     )
   }
 }
 
-export default PickPackTab;
+export default connect("store")(PickPackTab);
