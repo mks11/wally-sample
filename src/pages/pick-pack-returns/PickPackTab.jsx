@@ -135,22 +135,23 @@ class PickPackTab extends Component {
     super(props)
 
     this.state = {
-      ordersAndLabels: [{
-        orderId: 'ABC1',
-        inboundLabel: `some_link_to_inbound_label.pdf`,
-        outboundLabel: `some_link_to_outbound_label.pdf`,
-        status: 'packaged',
-      }, {
-        orderId: 'ABC2',
-        inboundLabel: `some_link_to_inbound_label.pdf`,
-        outboundLabel: `some_link_to_outbound_label.pdf`,
-        status: 'pending_quality_assurance',
-      }, {
-        orderId: 'ABC3',
-        inboundLabel: `some_link_to_inbound_label.pdf`,
-        outboundLabel: `some_link_to_outbound_label.pdf`,
-        status: 'status',
-      }],
+      // ordersAndLabels: [{
+      //   orderId: 'ABC1',
+      //   inboundLabel: `some_link_to_inbound_label.pdf`,
+      //   outboundLabel: `some_link_to_outbound_label.pdf`,
+      //   status: 'packaged',
+      // }, {
+      //   orderId: 'ABC2',
+      //   inboundLabel: `some_link_to_inbound_label.pdf`,
+      //   outboundLabel: `some_link_to_outbound_label.pdf`,
+      //   status: 'pending_quality_assurance',
+      // }, {
+      //   orderId: 'ABC3',
+      //   inboundLabel: `some_link_to_inbound_label.pdf`,
+      //   outboundLabel: `some_link_to_outbound_label.pdf`,
+      //   status: 'status',
+      // }],
+      ordersAndLabels: [],
       highlightedOrders: [],
       showValidateOrders: false,
     }
