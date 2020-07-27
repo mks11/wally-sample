@@ -57,7 +57,7 @@ function CleaningTab(props) {
   const [allSizes, setAllSizes] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
   // intended to act as switch to refetch updated data 
-  const [needFetch, setNeedFetch] = useState(true);
+  const [needsAFetch, setNeedsAFetch] = useState(true);
 
   async function getPackagingStocks() {
     const url = API_GET_PACKAGING_STOCK;
@@ -68,7 +68,7 @@ function CleaningTab(props) {
 
   useEffect(() => {
     (async () => {
-      if(!needFetch){
+      if(!needsAFetch){
         return
       }
       const res = await getPackagingStocks();
@@ -76,12 +76,12 @@ function CleaningTab(props) {
       setAllSizes(sortSizes(allSizes));
       setAllTypes(allTypes.sort());
       setPackagingStocks(collectByStatus);
-      setNeedFetch(false)
+      setNeedsAFetch(false)
     })();
-  }, [needFetch]);
+  }, [needsAFetch]);
 
   const handleSuccessfulSubmit = () => {
-    setNeedFetch(true); // => will trigger the refetch once
+    setNeedsAFetch(true); // => will trigger the refetch once
   };
 
   return (
