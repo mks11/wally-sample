@@ -4,7 +4,6 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import PickPackTab from './PickPackTab';
-import CleaningTab from './CleaningTab';
 
 // CSS
 import styles from "./Overview.module.css";
@@ -94,7 +93,7 @@ class NavigationTabs extends Component {
         </TabPanel>
         <TabPanel value={selectedTab} index={2}>
           {/* TODO Replace with actual component */}
-          <CleaningTab/>
+          Cleaning
         </TabPanel>
       </>
     )
