@@ -44,11 +44,11 @@ const TextField = ({ label, ...props }) => {
   );
 };
 
-function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
+function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSuccessfulSubmit }) {
   const [submitFailed, setSubmitFailed] = useState(false)
 
   const updateStock = async ({action, size, amount, type}) => {
-    await axios.patch(API_UPDATE_PACKAGING_STOCK, {
+    return await axios.patch(API_UPDATE_PACKAGING_STOCK, {
       action,
       size,
       type,
@@ -59,7 +59,10 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
   const handleSubmit =  async (values, { setSubmitting, resetForm}) => {
     try{
       setSubmitFailed(false)
-      await updateStock(values)
+      const {status, data} = await updateStock(values)
+      if([200, 203].includes(status)){
+        onSuccessfulSubmit(data)
+      }
     } catch {
       setSubmitFailed(true)
     } finally {
@@ -160,7 +163,8 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types }) {
 }
 CleaningUpdateForm.propTypes = {
   sizes: PropTypes.arrayOf(PropTypes.string),
-  types: PropTypes.arrayOf(PropTypes.string)
+  types: PropTypes.arrayOf(PropTypes.string),
+  onSuccessfulSubmit: PropTypes.func.isRequired
 };
 
 // needed to wrap it because connect("store") on CleaningUpdateForm

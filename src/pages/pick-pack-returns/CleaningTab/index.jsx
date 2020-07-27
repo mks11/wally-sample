@@ -56,43 +56,54 @@ function CleaningTab(props) {
   const [packagingStocks, setPackagingStocks] = useState([]);
   const [allSizes, setAllSizes] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
+  // intended to act as switch to refetch updated data 
+  const [needFetch, setNeedFetch] = useState(true);
 
   async function getPackagingStocks() {
     const url = API_GET_PACKAGING_STOCK;
     const res = await axios.get(url);
     const { packagingStocks } = res.data;
-    console.log(packagingStocks)
-    return packagingStocks
+    return packagingStocks;
   }
 
   useEffect(() => {
     (async () => {
+      if(!needFetch){
+        return
+      }
       const res = await getPackagingStocks();
       const { allSizes, allTypes, collectByStatus } = reshapeStockArray(res);
       setAllSizes(sortSizes(allSizes));
       setAllTypes(allTypes.sort());
       setPackagingStocks(collectByStatus);
+      setNeedFetch(false)
     })();
-  }, []);
+  }, [needFetch]);
+
+  const handleSuccessfulSubmit = () => {
+    setNeedFetch(true); // => will trigger the refetch once
+  };
 
   return (
     <Container maxWidth={"lg"}>
-      <Grid container justify="start" spacing={2}>
+      <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <h2 className={styles.title}>
-            Cleaning
-          </h2>
+          <h2 className={styles.title}>Cleaning</h2>
         </Grid>
         <Grid container justify="center" spacing={2}>
           <Grid item xs={12} sm={10} md={6} lg={6} xl={4}>
-            <CleaningUpdateForm types={allTypes} sizes={allSizes} />
+            <CleaningUpdateForm
+              types={allTypes}
+              sizes={allSizes}
+              onSuccessfulSubmit={handleSuccessfulSubmit}
+            />
           </Grid>
         </Grid>
         <CleaningOverview
           stock={packagingStocks}
           types={allTypes}
           sizes={allSizes}
-          />
+        />
       </Grid>
     </Container>
   );
