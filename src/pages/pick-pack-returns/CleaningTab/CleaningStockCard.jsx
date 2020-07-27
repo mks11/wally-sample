@@ -11,15 +11,16 @@ import {
   TableCell,
   TableRow,
   Table,
-} from "@material-ui/core";
-import styles from "./CleaningTab.module.css"
+} from "@material-ui/core"
+import tabStyles from "./CleaningTab.module.css"
+import styles from "./CleaningStockCard.module.css"
 
 export default function StockCard({ title, stat = [], ...rest }) {
   return (
     <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-      <Card {...rest} style={{ marginTop: "2rem", marginBottom: "1rem" }}>
-        <div style={{textAlign:"center", marginTop: "1rem"}}>
-          <h2 className={styles.title}>{title}</h2>
+      <Card className={styles.headlineCard} {...rest}>
+        <div className={styles.headlineContainer}>
+          <h2 className={tabStyles.title}>{title}</h2>
         </div>
         <CardContent>
           <TableContainer>
@@ -27,7 +28,9 @@ export default function StockCard({ title, stat = [], ...rest }) {
               <TableHead>
                 <TableRow className={styles.tableHeadRow}>
                   <TableCell className={styles.tableHead}>Status</TableCell>
-                  <TableCell align={"left"} className={styles.tableHead}>In Stock </TableCell>
+                  <TableCell align={"left"} className={styles.tableHead}>
+                    In Stock
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -38,9 +41,9 @@ export default function StockCard({ title, stat = [], ...rest }) {
                         <Typography>{v.status}</Typography>
                       </TableCell>
                       <TableCell align={"left"}>
-                      <Typography align={"left"} component="h4">
+                        <Typography align={"left"} component="h4">
                           {v.in_stock}
-                      </Typography>
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -50,7 +53,7 @@ export default function StockCard({ title, stat = [], ...rest }) {
         </CardContent>
       </Card>
     </Grid>
-  );
+  )
 }
 
 StockCard.propTypes = {

@@ -1,5 +1,17 @@
 .FormRoot {
-    /* border: 1px solid blue; */
-    min-width: 6rem;
-    /* margin: 3rem; */
+  min-width: 6rem;
+}
+.container {
+  padding: 2rem;
+}
+.title {
+  text-align: center;
+}
+
+.buttonContainer {
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.25rem 1.5rem;
 }

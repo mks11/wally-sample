@@ -19,17 +19,17 @@ import axios from "axios";
 import {API_UPDATE_PACKAGING_STOCK}  from "../../../config"
 
 const Select = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+  const [field, meta] = useField(props)
   return (
     <FormControl>
       <InputLabel htmlFor={props.id || props.name}>{label}</InputLabel>
-      <NativeSelect className={styles["FormRoot"]} {...field} {...props} />
+      <NativeSelect className={styles.FormRoot} {...field} {...props} />
       <FormHelperText error={meta.touched && meta.error}>
         {meta.error}
       </FormHelperText>
     </FormControl>
-  );
-};
+  )
+}
 
 const TextField = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -95,15 +95,9 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSucces
       onSubmit={handleSubmit}
     >
       <Form>
-        <Paper style={{ padding: "2rem" }} elevation={3}>
-          <h2 style={{textAlign: 'center'}}>
-            Update Packaging Stocks
-          </h2>
-          <Grid
-            container
-            justify={"center"}
-            spacing={4}
-          >
+        <Paper className={styles.container} elevation={3}>
+          <h2 className={styles.title}>Update Packaging Stocks</h2>
+          <Grid container justify={"center"} spacing={4}>
             <Grid item>
               <Select name="action" label="Action">
                 <option value=""></option>
@@ -146,12 +140,12 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSucces
             container
             justify={"space-around"}
             spacing={1}
-            style={{ marginTop: "2rem" }}
+            className={styles.buttonContainer}
           >
             <Button
               variant={"outlined"}
               type={"submit"}
-              style={{ padding: "0.25rem 1.5rem" }}
+              className={styles.button}
             >
               Submit
             </Button>
