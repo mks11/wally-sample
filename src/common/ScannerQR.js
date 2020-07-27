@@ -37,6 +37,7 @@ class ScannerQR extends Component {
     super(props)
 
     this.state = {
+      packagingId: '',
       packagingIds: [],
       isPortrait: true,
       isError: false,
@@ -68,25 +69,35 @@ class ScannerQR extends Component {
       const packagingId = matchedData && matchedData[1]
 
       if (matchedData && packagingId) {
-        const { packagingIds } = this.state
-
         if (window.navigator.vibrate) {
           window.navigator.vibrate(500)
         }
 
-        if (!packagingIds.includes(packagingId)) {
+        if (this.props.multiple) {
+          // scan multiple values
+          const { packagingIds } = this.state
+
+          if (!packagingIds.includes(packagingId)) {
+            this.setState({
+              snackBarOpen: true,
+              isError: false,
+              packagingIds,
+            })
+
+            packagingIds.push(packagingId)
+          } else {
+            this.setState({
+              snackBarOpen: true,
+              isError: true,
+              packagingIds,
+            })
+          }
+        } else {
+          // scan sinlge value
           this.setState({
             snackBarOpen: true,
             isError: false,
-            packagingIds,
-          })
-
-          packagingIds.push(packagingId)
-        } else {
-          this.setState({
-            snackBarOpen: true,
-            isError: true,
-            packagingIds,
+            packagingId,
           })
         }
       }
@@ -99,9 +110,14 @@ class ScannerQR extends Component {
   }
 
   handleCloseModal = () => {
-    const { onClose } = this.props
-    const { packagingIds } = this.state
-    onClose(packagingIds)
+    const { onClose, multiple } = this.props
+    const { packagingId, packagingIds } = this.state
+
+    if (multiple) {
+      onClose(packagingIds)
+    } else {
+      onClose(packagingId)
+    }
   }
 
   handleToggleSnackbar = () => {

@@ -152,7 +152,7 @@ class PickPackTab extends Component {
         status: 'status',
       }],
       highlightedOrders: [],
-      showValidateOrders: true,
+      showValidateOrders: false,
     }
 
     this.modalStore = props.store.modal

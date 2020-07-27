@@ -2,11 +2,17 @@ import React, { Component } from 'react'
 import axios from 'axios';
 
 // Components
-import {Grid} from '@material-ui/core';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import { Paper, Grid } from '@material-ui/core';
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 
 // API endpoints
-import {API_GET_ORDER_FULFILLMENT_DETAILS, API_UPDATE_ORDER_FULFILLMENT_DETAILS, API_VERIFY_ORDER_FULFILLMENT} from '../../config';
+import {
+  API_GET_ORDER_FULFILLMENT_DETAILS,
+  API_UPDATE_ORDER_FULFILLMENT_DETAILS,
+  API_VERIFY_ORDER_FULFILLMENT,
+} from 'config';
+
+import ShippingToteInput from './ShippingToteInput'
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
@@ -16,11 +22,24 @@ class OrderFulfillment extends Component {
     super(props)
 
     this.state = {
-      id: '',
-      order_id: '',
-      shipping_totes: [],
-      items: [],
-      status: ''
+      fulfillmentOrder: {
+        id: 'ABC3',
+        order_id: 'ABC3',
+        shipping_totes: [{
+          packaging_url: 'url_1',
+        },{
+          packaging_url: 'https://thewallyshop.co/packaging/ABSCJO',
+        }],
+        items: [{
+          name: 'Item#1',
+          warehouse_location: 'A1B2',
+          upc_code: 'UPC Code',
+          was_upc_verified: true,
+          customer_quantity: 4,
+          packaging_urls: 'url_2',
+        }],
+        status: 'complete',
+      }
     }
   }
 
@@ -29,17 +48,25 @@ class OrderFulfillment extends Component {
     const {orderId} = this.props.match.params;
     const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${orderId}`;
     const res = await axios.get(url);
-    const {id, items, order_id, shipping_totes, status} = res.data.orderFulfillmentDetails;
-    this.setState({id, items, order_id, shipping_totes, status});
+    this.setState({ fulfillmentOrder: res.data.orderFulfillmentDetails });
   }
 
   render() {
     const {orderId} = this.props.match.params;
     return (
-      <Grid container  justify='center'>
-        <h1 className={styles.title}>
-          Order {orderId}
-        </h1>
+      <Grid container justify='center'>
+        <Grid item xs={12}>
+          <h1 className={styles.title}>
+            Order {orderId}
+          </h1>
+        </Grid>
+        <Grid item xs={12}>
+          <OrderFulfillmentForm
+            shipping_totes={this.state.fulfillmentOrder.shipping_totes}
+            items={this.state.fulfillmentOrder.items}
+            status={this.state.fulfillmentOrder.status}
+          />
+        </Grid>
       </Grid>
     )
   }
@@ -47,23 +74,45 @@ class OrderFulfillment extends Component {
 
 export default OrderFulfillment;
 
-class OrderFulfillmentForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-
-    }
-  }
-
-  render() {
-
-    return (
+function OrderFulfillmentForm({
+  shipping_totes,
+  items,
+  status,
+}) {
+  return (
+    <div className={styles.formWrapper}>
       <Formik
-        // initialValues=
+        initialValues={{
+          shipping_totes: shipping_totes,
+          items: items,
+          status: status,
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 400);
+        }}
       >
-
+        {({ values, isSubmitting, setFieldValue }) => (
+          <Form>
+            {shipping_totes.map((s, idx) => (
+              <Field
+                key={idx}
+                name={`shipping_totes.${idx}.packaging_url`}
+                component={ShippingToteInput}
+                onScanQr={setFieldValue}
+                fieldIndex={idx}
+              />
+            ))}
+            <FieldArray name="items">
+            </FieldArray>
+            <button type="submit" disabled={isSubmitting}>
+              Submit
+            </button>
+          </Form>
+        )}
       </Formik>
-    )
-  }
+    </div>
+  )
 }

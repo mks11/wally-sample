@@ -290,6 +290,7 @@ class ModalSKUDetails extends Component {
             onClose={this.handleQRClose}
             messageSuccess="QR Scanned"
             messageError="QR Already Scanned"
+            multiple
           />
         </ModalBody>
       </Modal>

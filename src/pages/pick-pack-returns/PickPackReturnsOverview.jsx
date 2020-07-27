@@ -60,44 +60,36 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-class NavigationTabs extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const {selectedTab, handleChange} = this.props;
-
-    return (
-      <>
-        <AppBar position="static" color="default" elevation={1}>
-          <Tabs
-            value={selectedTab}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            aria-label="Pick/Pack and Returns Portal navigation"
-          >
-            <Tab label="Pick/Pack" {...a11yProps(0) }/>
-            <Tab label="Returns" {...a11yProps(1) }/>
-            <Tab label="Cleaning" {...a11yProps(2) }/>
-          </Tabs>
-        </AppBar>
-        <TabPanel value={selectedTab} index={0}>
-          <PickPackTab />
-        </TabPanel>
-        <TabPanel value={selectedTab} index={1}>
-          {/* TODO Replace with actual component */}
-          Returns
-        </TabPanel>
-        <TabPanel value={selectedTab} index={2}>
-          {/* TODO Replace with actual component */}
-          Cleaning
-        </TabPanel>
-      </>
-    )
-  }
+function NavigationTabs({ selectedTab, handleChange }) {
+  return (
+    <>
+      <AppBar position="static" color="default" elevation={1}>
+        <Tabs
+          value={selectedTab}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+          aria-label="Pick/Pack and Returns Portal navigation"
+        >
+          <Tab label="Pick/Pack" {...a11yProps(0) }/>
+          <Tab label="Returns" {...a11yProps(1) }/>
+          <Tab label="Cleaning" {...a11yProps(2) }/>
+        </Tabs>
+      </AppBar>
+      <TabPanel value={selectedTab} index={0}>
+        <PickPackTab />
+      </TabPanel>
+      <TabPanel value={selectedTab} index={1}>
+        {/* TODO Replace with actual component */}
+        Returns
+      </TabPanel>
+      <TabPanel value={selectedTab} index={2}>
+        {/* TODO Replace with actual component */}
+        Cleaning
+      </TabPanel>
+    </>
+  )
 }
 
 function a11yProps(index) {
