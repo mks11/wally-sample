@@ -170,7 +170,7 @@ class OrderFulfillment extends Component {
     this.setState({
       fulfillmentOrder: {
         ...this.state.fulfillmentOrder,
-        status: isWarehouseAssociate ? 'pending_quality_assurance' : 'packaged',
+        status: this.state.isWarehouseAssociate ? 'pending_quality_assurance' : 'packaged',
       }
     })
   }
