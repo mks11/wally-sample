@@ -1,19 +1,21 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { Container } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import styles from "./Tab.module.css";
 
 function Tab({ title, children, ...rest }) {
   return (
-    <Container maxWidth={"sm"} {...rest}>
-      <h2 className={styles.title}>{title}</h2>
+    <Container maxWidth={"lg"} {...rest}>
+      <Grid container xm={12} sm={12} md={12} lg={12} justify="center">
+        <h2 className={styles.title}>{title}</h2>
+      </Grid>
       <Fragment>{children}</Fragment>
     </Container>
   );
 }
 
 Tab.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.oneOfType(PropTypes.array, PropTypes.element),
   title: PropTypes.string.isRequired,
 };
 
