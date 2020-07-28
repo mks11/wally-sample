@@ -6,8 +6,10 @@ import styles from "./Tab.module.css";
 function Tab({ title, children, ...rest }) {
   return (
     <Container maxWidth={"lg"} {...rest}>
-      <Grid container xm={12} sm={12} md={12} lg={12} justify="center">
-        <h2 className={styles.title}>{title}</h2>
+      <Grid container justify="flex-start" spacing={2}>
+        <Grid item xm={12} sm={12} md={12} lg={12} xl={12}>
+          <h2 className={styles.title}>{title}</h2>
+        </Grid>
       </Grid>
       <Fragment>{children}</Fragment>
     </Container>
@@ -15,7 +17,7 @@ function Tab({ title, children, ...rest }) {
 }
 
 Tab.propTypes = {
-  children: PropTypes.oneOfType(PropTypes.array, PropTypes.element),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
   title: PropTypes.string.isRequired,
 };
 
