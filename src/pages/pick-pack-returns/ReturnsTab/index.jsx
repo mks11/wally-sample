@@ -33,7 +33,7 @@ function ReturnsTab({ store: { user: userStore } }) {
   };
 
   const handleCompletionReturns = ({ status, data: { message } }) => {
-    if (status === "200") {
+    if (status === 200) {
       setSuccessMsgOnReturnSubmit(message);
     }
   };
