@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ReturnsTab.module.css";
 import Tab from "./../shared/Tab";
-import Get from "./SubmitGet";
+import FetchButton from "./FetchButton";
 import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -108,7 +108,7 @@ function ReturnsTab({ store: { user: userStore } }) {
           justify="center"
           className={styles.submitButtonContainer}
         >
-          <Get
+          <FetchButton
             title={"Submit Returns"}
             loadTitle={"Submitting ... "}
             onCompletion={handleCompletionReturns}
