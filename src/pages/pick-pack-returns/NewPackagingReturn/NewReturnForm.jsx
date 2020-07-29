@@ -96,7 +96,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history }) {
     try {
       setErrorOnSubmit(false);
       const { status, data } = await submitNewReturn(values);
-      if (status === "200") {
+      if (status === 200) {
         setCorrectTypeOfSuccess(data);
       }
     } catch (e) {
