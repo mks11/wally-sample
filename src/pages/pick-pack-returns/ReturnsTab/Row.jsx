@@ -1,7 +1,8 @@
-import React from "react";
-import { ListItem, ListItemText, ListItemIcon } from "@material-ui/core";
-import { CheckCircle, LinearScale } from "@material-ui/icons";
-import { STATUS_RETURNED } from ".";
+import React from 'react';
+import { ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
+import { CheckCircle, LinearScale } from '@material-ui/icons';
+import { STATUS_RETURNED } from '.';
+import styles from './Row.module.css';
 
 export default function Row({ index, style, data }) {
   const item = data[index];
@@ -11,11 +12,16 @@ export default function Row({ index, style, data }) {
     <ListItem style={style} alignItems="center" component="div">
       <ListItemText primary={`${name}`} />
       <ListItemIcon>
-        {isReturned ? (
-          <CheckCircle color="success" />
-        ) : (
-          <LinearScale color="warning" />
-        )}
+        <div className={styles.iconContainer}>
+          {isReturned ? (
+            <CheckCircle color="primary" />
+          ) : (
+            <LinearScale color="secondary" />
+          )}
+          {status && (
+            <div>{status.charAt(0).toUpperCase() + status.slice(1)}</div>
+          )}
+        </div>
       </ListItemIcon>
     </ListItem>
   );
