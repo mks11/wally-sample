@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Button, Grid } from "@material-ui/core";
-import { connect } from "utils";
-import JarOrLidDialog from "./JarOrLidOptionsDialog";
-import NewReturnForm from "./NewReturnForm";
-import Page from "../shared/Page";
-import styles from "./index.module.css";
+import React, { useState } from 'react';
+import { Button, Grid } from '@material-ui/core';
+import { connect } from 'utils';
+import JarOrLidDialog from './JarOrLidOptionsDialog';
+import NewReturnForm from './NewReturnForm';
+import Page from '../shared/Tab';
+import styles from './index.module.css';
 
 function ScanQRCode({ show, onComplete }) {
   //TODO
@@ -88,4 +88,4 @@ class _NewPackagingReturn extends React.Component {
   }
 }
 
-export default connect("store")(_NewPackagingReturn);
+export default connect('store')(_NewPackagingReturn);
