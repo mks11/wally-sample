@@ -21,7 +21,6 @@
     "flip-counter-js": "^1.0.8",
     "formik": "^2.1.4",
     "fs": "0.0.1-security",
-    "lodash-es": "^4.17.15",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "mobx-react-devtools": "^6.0.2",
@@ -64,8 +63,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.2",
     "terser": "^3.14.1",
-    "uuid": "^3.3.2",
-    "yup": "^0.29.1"
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "server": "nodemon server/server.js",

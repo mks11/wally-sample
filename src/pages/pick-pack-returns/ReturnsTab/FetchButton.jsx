@@ -4,7 +4,7 @@ import { Snackbar, Grid, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
 
-export default function Get({
+export default function FetchButton({
   title,
   loadTitle,
   onSuccessMsg,
@@ -72,7 +72,7 @@ export default function Get({
   );
 }
 
-Get.propTypes = {
+FetchButton.propTypes = {
   title: PropTypes.string.isRequired,
   loadTitle: PropTypes.string,
   onSuccessMsg: PropTypes.string,
