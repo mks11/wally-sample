@@ -53,12 +53,8 @@ function NewReturnForm({ user_id, packagingURLs = [], history }) {
     }
   }, [isErrorOnSubmit]);
 
-  if (!user_id) {
-    return <div>Please login!</div>;
-  }
-
   const submitNewReturn = async ({
-    Tracking_id = "",
+    Tracking_id = '',
     packaging_urls,
     warehouse_associate_id,
   }) => {
