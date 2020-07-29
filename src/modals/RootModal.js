@@ -25,6 +25,7 @@ import JoinWaitlistModal from './JoinWaitlistModal';
 import RedeemDepositModal from './RedeemDepositModal';
 import SchedulePickupModal from './SchedulePickupModal';
 import PackagingDepositModal from './PackagingDepositModal';
+import ServiceFeedbackModal from './ServiceFeedbackModal';
 import GenericModal from './GenericModal';
 
 const ModalRoutes = {
