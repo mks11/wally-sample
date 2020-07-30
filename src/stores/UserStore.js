@@ -25,6 +25,8 @@ import axios from "axios";
 import moment from "moment";
 import uuid from "uuid";
 
+const USER_TYPE_OPS_LEAD = "ops-lead"
+
 class UserStore {
   user = null;
   status = false;
@@ -57,7 +59,7 @@ class UserStore {
   flags = null;
 
   get isOpsLead() {
-    return this.user.type === "ops_lead"; //TODO discuss to place it some place else
+    return this.user.type === USER_TYPE_OPS_LEAD; 
   }
   togglePromoModal() {
     this.promoModal = !this.promoModal;
