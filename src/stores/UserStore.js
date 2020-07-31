@@ -1,4 +1,4 @@
-import { observable, decorate, action } from "mobx";
+import { observable, decorate, action } from 'mobx';
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -20,15 +20,16 @@ import {
   API_EMAIL_VERIFICATION,
   API_WAITLIST_INFO,
   API_PIN_VERIFICATION,
-} from "../config";
-import axios from "axios";
-import moment from "moment";
-import uuid from "uuid";
+} from '../config';
+import axios from 'axios';
+import moment from 'moment';
+import uuid from 'uuid';
 
+const OPS_TYPES = ['admin', 'ops_lead', 'tws_ops'];
 class UserStore {
   user = null;
   status = false;
-  token = "";
+  token = '';
 
   // for account page
   addressModal = false;
@@ -49,7 +50,7 @@ class UserStore {
   refPromo = null;
   giftCardPromo = null;
 
-  refUrl = "";
+  refUrl = '';
 
   cameFromCartUrl = false;
   feedback = null;
@@ -66,19 +67,19 @@ class UserStore {
 
   setUserData(user) {
     this.user = user;
-    localStorage.setItem("user", JSON.stringify(this.user));
+    localStorage.setItem('user', JSON.stringify(this.user));
     let zip = null;
-    zip = localStorage.getItem("zip");
+    zip = localStorage.getItem('zip');
     if (!zip) {
       if (user.addresses.length > 0) {
         for (const address of user.addresses) {
           if (address.address_id === user.preferred_address) {
-            localStorage.setItem("zip", JSON.stringify(address.zip));
+            localStorage.setItem('zip', JSON.stringify(address.zip));
           }
         }
       } else {
         if (user.signup_zip)
-          localStorage.setItem("zip", JSON.stringify(user.signup_zip));
+          localStorage.setItem('zip', JSON.stringify(user.signup_zip));
       }
     }
   }
@@ -86,13 +87,13 @@ class UserStore {
   setToken(token) {
     this.token = token;
     this.status = true;
-    localStorage.setItem("token", JSON.stringify(this.token));
+    localStorage.setItem('token', JSON.stringify(this.token));
   }
 
   async login(email, password) {
     const resp = await axios.post(API_LOGIN, {
       email,
-      password
+      password,
     });
 
     this.setUserData(resp.data.user);
@@ -141,7 +142,7 @@ class UserStore {
 
   getHeaderAuth() {
     return {
-      headers: { Authorization: "Bearer " + this.token.accessToken }
+      headers: { Authorization: 'Bearer ' + this.token.accessToken },
     };
   }
 
@@ -155,7 +156,7 @@ class UserStore {
     const res = await axios.patch(
       API_ADDRESS_EDIT,
       { address_id },
-      this.getHeaderAuth()
+      this.getHeaderAuth(),
     );
     return res.data;
   }
@@ -163,7 +164,7 @@ class UserStore {
   async deleteAddress(address_id) {
     const res = await axios.delete(
       API_ADDRESS_REMOVE + address_id,
-      this.getHeaderAuth()
+      this.getHeaderAuth(),
     );
     return res.data;
   }
@@ -179,7 +180,7 @@ class UserStore {
     const res = await axios.post(
       API_PAYMENT_EDIT,
       { id },
-      this.getHeaderAuth()
+      this.getHeaderAuth(),
     );
     return res.data;
   }
@@ -187,7 +188,7 @@ class UserStore {
   async deletePayment(payment_id) {
     const res = await axios.delete(
       API_PAYMENT_REMOVE + payment_id,
-      this.getHeaderAuth()
+      this.getHeaderAuth(),
     );
     return res.data;
   }
@@ -203,9 +204,9 @@ class UserStore {
     const newAddresses = newUser.addresses;
 
     function comparer(otherArray) {
-      return function(current) {
+      return function (current) {
         return (
-          otherArray.filter(function(other) {
+          otherArray.filter(function (other) {
             return other.address_id === current.address_id;
           }).length === 0
         );
@@ -218,16 +219,16 @@ class UserStore {
     let diff = addressOldFilter.concat(addressNewFilter);
     this.selectedDeliveryAddress = diff[0];
     localStorage.setItem(
-      "zip",
-      JSON.stringify(this.selectedDeliveryAddress.zip)
+      'zip',
+      JSON.stringify(this.selectedDeliveryAddress.zip),
     );
   }
 
   readStorage() {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const delivery = localStorage.getItem("delivery");
-    const flags = localStorage.getItem("flags");
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    const delivery = localStorage.getItem('delivery');
+    const flags = localStorage.getItem('flags');
 
     if (token && user) {
       this.token = JSON.parse(token);
@@ -246,12 +247,12 @@ class UserStore {
   setDeliveryData() {
     const data = {
       address: this.selectedDeliveryAddress,
-      time: this.selectedDeliveryTime
+      time: this.selectedDeliveryTime,
     };
     if (data.address)
-      localStorage.setItem("zip", JSON.stringify(data.address.zip));
+      localStorage.setItem('zip', JSON.stringify(data.address.zip));
 
-    localStorage.setItem("delivery", JSON.stringify(data));
+    localStorage.setItem('delivery', JSON.stringify(data));
   }
 
   async getUser() {
@@ -263,8 +264,8 @@ class UserStore {
 
   async saveLocalAddresses() {
     let addresses = [];
-    if (localStorage.getItem("addresses")) {
-      addresses = JSON.parse(localStorage.getItem("addresses"));
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'));
     }
 
     for (const address of addresses) {
@@ -275,7 +276,7 @@ class UserStore {
       }
     }
 
-    localStorage.removeItem("addresses");
+    localStorage.removeItem('addresses');
   }
 
   async getStatus(update) {
@@ -289,11 +290,11 @@ class UserStore {
 
     try {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
-      let status = resp.data.status && localStorage.getItem("user");
-      if (resp.data.status && localStorage.getItem("user")) {
+      let status = resp.data.status && localStorage.getItem('user');
+      if (resp.data.status && localStorage.getItem('user')) {
         this.status = true;
         // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-        this.user = JSON.parse(localStorage.getItem("user"));
+        this.user = JSON.parse(localStorage.getItem('user'));
         if (update) {
           this.getUser();
         }
@@ -307,18 +308,18 @@ class UserStore {
       return status;
     } catch (e) {
       this.logout();
-      console.error("Error getstatus: ", e);
+      console.error('Error getstatus: ', e);
       return false;
     }
   }
 
   logout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("delivery");
-    localStorage.removeItem("cart");
-    localStorage.removeItem("zip");
-    this.token = "";
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('delivery');
+    localStorage.removeItem('cart');
+    localStorage.removeItem('zip');
+    this.token = '';
     this.status = false;
     this.user = null;
     this.selectedDeliveryAddress = null;
@@ -328,7 +329,7 @@ class UserStore {
   async loginFacebook(data) {
     const res = await axios.post(API_LOGIN_FACEBOOK, {
       access_token: data.accessToken,
-      reference_promo: data.reference_promo
+      reference_promo: data.reference_promo,
     });
     this.setUserData(res.data.user);
     this.setToken(res.data.token);
@@ -343,7 +344,7 @@ class UserStore {
   async addPromo(promoCode) {
     const res = await axios.post(
       `${API_USER_ADD_PROMO}?promo_code=${promoCode}`,
-      this.getHeaderAuth()
+      this.getHeaderAuth(),
     );
     return res.data;
   }
@@ -351,25 +352,25 @@ class UserStore {
   async purchaseGiftCard(data) {
     const auth = this.getHeaderAuth();
     const options =
-      auth.headers.Authorization === "Bearer undefined" ? {} : auth;
+      auth.headers.Authorization === 'Bearer undefined' ? {} : auth;
     const res = await axios.post(API_PURCHASE_GIFTCARD, data, options);
     return res.data;
   }
 
   async resetPassword(token, data) {
-    const res = await axios.patch(API_FORGOT_PASSWORD + "/" + token, data);
+    const res = await axios.patch(API_FORGOT_PASSWORD + '/' + token, data);
     return res.data;
   }
 
   getAddressById(id) {
     return this.user
-      ? this.user.addresses.find(item => item.address_id === id)
+      ? this.user.addresses.find((item) => item.address_id === id)
       : null;
   }
 
   setDeliveryAddress(data) {
     this.selectedDeliveryAddress = data;
-    localStorage.setItem("zip", data.zip);
+    localStorage.setItem('zip', data.zip);
     this.setDeliveryData();
   }
 
@@ -381,7 +382,7 @@ class UserStore {
   getDeliveryParams() {
     let data = {
       zip: null,
-      date: null
+      date: null,
     };
 
     if (this.selectedDeliveryAddress) {
@@ -397,12 +398,12 @@ class UserStore {
 
   loadFakeUser() {
     let addresses = [];
-    if (localStorage.getItem("addresses")) {
-      addresses = JSON.parse(localStorage.getItem("addresses"));
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'));
     }
     const user = {
       addresses,
-      preferred_address: null
+      preferred_address: null,
     };
 
     return user;
@@ -410,15 +411,15 @@ class UserStore {
 
   addFakeAddress(data) {
     let addresses = [];
-    if (localStorage.getItem("addresses")) {
-      addresses = JSON.parse(localStorage.getItem("addresses"));
+    if (localStorage.getItem('addresses')) {
+      addresses = JSON.parse(localStorage.getItem('addresses'));
     }
     data.address_id = uuid();
     data._id = data.address_id;
 
     addresses.push(data);
 
-    localStorage.setItem("addresses", JSON.stringify(addresses));
+    localStorage.setItem('addresses', JSON.stringify(addresses));
   }
 
   async subscribeNewsletter(email) {
@@ -429,18 +430,18 @@ class UserStore {
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
     if (delivery_date && deliveryTimes && this.selectedDeliveryTime) {
       const currentDate = this.selectedDeliveryTime.date;
-      const date = moment.utc(delivery_date).format("YYYY-MM-DD");
+      const date = moment.utc(delivery_date).format('YYYY-MM-DD');
       if (date !== currentDate) {
         const day = moment(date).calendar(null, {
-          sameDay: "[Today]",
-          nextDay: "[Tomorrow]",
-          nextWeek: "dddd",
-          lastDay: "[Yesterday]",
-          lastWeek: "[Last] dddd",
-          sameElse: "DD/MM/YYYY"
+          sameDay: '[Today]',
+          nextDay: '[Tomorrow]',
+          nextWeek: 'dddd',
+          lastDay: '[Yesterday]',
+          lastWeek: '[Last] dddd',
+          sameElse: 'DD/MM/YYYY',
         });
 
-        const deliveryDate = deliveryTimes.find(data => data.day === day);
+        const deliveryDate = deliveryTimes.find((data) => data.day === day);
         if (deliveryDate) {
           let data = deliveryDate.data[0];
 
@@ -453,18 +454,20 @@ class UserStore {
   }
 
   updateFlags(id, value) {
-    const lsFlags = localStorage.getItem("flags");
+    const lsFlags = localStorage.getItem('flags');
     const flags = lsFlags ? JSON.parse(lsFlags) : {};
 
     flags[id] = value;
     this.flags = flags;
 
-    localStorage.setItem("flags", JSON.stringify(flags));
+    localStorage.setItem('flags', JSON.stringify(flags));
   }
 
   async verifyWaitlistEmail(email, token) {
-    const res = await axios.get(`${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`)
-    return res.data
+    const res = await axios.get(
+      `${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`,
+    );
+    return res.data;
   }
 
   async getWaitlistInfo(data) {
@@ -474,14 +477,20 @@ class UserStore {
     var qs = `user_email=${email}`;
     if (ref) qs += `&referral_code=${ref}`;
     if (src) qs += `&src=${src}`;
-    const reqUrl = `${API_WAITLIST_INFO}?${qs}`
-    const res = await axios.get(reqUrl)
-    return res.data
+    const reqUrl = `${API_WAITLIST_INFO}?${qs}`;
+    const res = await axios.get(reqUrl);
+    return res.data;
   }
 
   async verifyPin(pin, email) {
-    const res = await axios.get(`${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`)
-    return res.data
+    const res = await axios.get(
+      `${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`,
+    );
+    return res.data;
+  }
+
+  isOps() {
+    return OPS_TYPES.includes(this.user.type);
   }
 }
 
