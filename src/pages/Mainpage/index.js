@@ -81,7 +81,11 @@ class Mainpage extends Component {
         if (!status) {
           this.routing.push('/');
         } else {
-          if (this.userStore.isOps()) {
+          if (
+            this.userStore.isOps() ||
+            this.userStore.isOpsLead() ||
+            this.userStore.isAdmin()
+          ) {
             this.routing.push('/ops-overview');
           }
           if (window.location.pathname.split('/')[1] === 'schedule-pickup') {

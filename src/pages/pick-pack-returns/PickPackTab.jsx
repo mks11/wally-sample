@@ -70,9 +70,7 @@ function CardHeader({ orderId, status }) {
         className={styles.cardHeader}
       >
         <Grid className={styles.subTitle} component="h3" item>
-          <Link to={`/pick-pack-returns/order-fulfillment/${orderId}`}>
-            Order {orderId}
-          </Link>
+          <Link to={`/order-fulfillment/${orderId}`}>Order {orderId}</Link>
         </Grid>
         <Grid item>
           <StatusIcon status={status} />
@@ -154,11 +152,14 @@ class PickPackTab extends Component {
   validateOrders = async () => {
     const url = API_VALIDATE_PICK_PACK_ORDERS;
     const res = await axios.get(url);
-    const { unpackedOrders } = res.data;
+    const { incompleteOrders } = res.data;
 
-    if (unpackedOrders.length) {
-      this.modalStore.toggleModal('error', 'Some orders are not valid');
-      this.setState({ highlightedOrders: unpackedOrders });
+    if (incompleteOrders.length) {
+      this.modalStore.toggleModal(
+        'error',
+        'Some orders still need to be packed',
+      );
+      this.setState({ highlightedOrders: incompleteOrders });
     } else {
       this.setState({ showValidateOrders: false });
     }
@@ -175,9 +176,16 @@ class PickPackTab extends Component {
         <Grid container justify="flex-start">
           {this.state.ordersAndLabels.sort(sortOrders).map((orderDetails) => {
             return (
-              <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+              <Grid
+                key={orderDetails.orderId}
+                item
+                xs={12}
+                sm={6}
+                md={6}
+                lg={4}
+                xl={4}
+              >
                 <OrderCard
-                  key={orderDetails.orderId}
                   orderDetails={orderDetails}
                   highlight={this.isHighlightedOrder(orderDetails.orderId)}
                 />
@@ -185,7 +193,7 @@ class PickPackTab extends Component {
             );
           })}
         </Grid>
-        {this.state.showValidateOrders ? (
+        {this.userStore.isOpsLead() ? (
           <div className={styles.validateContainer}>
             <Button
               color="primary"

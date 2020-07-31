@@ -25,7 +25,7 @@ import axios from 'axios';
 import moment from 'moment';
 import uuid from 'uuid';
 
-const OPS_TYPES = ['admin', 'ops_lead', 'tws_ops'];
+const TYPES = ['admin', 'ops_lead', 'tws_ops', 'user'];
 class UserStore {
   user = null;
   status = false;
@@ -489,8 +489,20 @@ class UserStore {
     return res.data;
   }
 
+  isAdmin() {
+    return this.user.type === TYPES[0];
+  }
+
+  isOpsLead() {
+    return this.user.type === TYPES[1];
+  }
+
   isOps() {
-    return OPS_TYPES.includes(this.user.type);
+    return this.user.type === TYPES[2];
+  }
+
+  isUser() {
+    return this.user.type === TYPES[3];
   }
 }
 

@@ -2129,10 +2129,6 @@ textarea.aw-input--bordered-strong:focus {
   text-align: center;
 }
 
-.modal-body-bordertop {
-  border-top: 1px solid #ececec;
-}
-
 .addresses--icon::before {
   content: '';
   display: inline-block;
@@ -2463,10 +2459,6 @@ a.view-all {
 .modal-outline .modal-header {
   border-bottom: 1px solid #ececec;
   padding: 30px 50px 0 50px;
-}
-
-.modal-outline .modal-body {
-  padding: 10px 50px;
 }
 
 .form-address-info {
@@ -3656,11 +3648,6 @@ li.no-underline a:hover::after {
   border: none !important;
 }
 
-.modal-open {
-  padding-right: 0 !important;
-  /* overflow-y: auto; */
-  overflow-y: hidden;
-}
 button.btn.btn-danger.btn-add-cart {
   height: 50px;
   border-radius: 10px;
@@ -3763,9 +3750,7 @@ a {
   .order-wrap {
     padding: 0;
   }
-  .modal-outline .modal-body {
-    padding: 10px;
-  }
+
   .login-wrap,
   .signup-wrap {
     width: 90%;
@@ -3931,9 +3916,17 @@ a {
 .modal-body {
   min-height: 200px;
   padding: 3rem 0;
-  overflow: scroll;
+  overflow-x: auto;
   -webkit-transition: height 1s;
   transition: height 1s;
+}
+
+.modal-body-bordertop {
+  border-top: 1px solid #ececec;
+}
+
+.modal-outline .modal-body {
+  padding: 10px;
 }
 
 .modal-body-no-footer {

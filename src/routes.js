@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { connect } from './utils';
 import Homepage from './pages/Homepage';
 import Mainpage from './pages/Mainpage';
 import About from './pages/About';
@@ -125,7 +124,7 @@ export default () => (
     <Route exact path="/ops-overview" component={PickPackReturnsOverview} />
     <Route
       exact
-      path="/pick-pack-returns/order-fulfillment/:orderId"
+      path="/order-fulfillment/:orderId"
       component={OrderFulfillment}
     />
     <Route

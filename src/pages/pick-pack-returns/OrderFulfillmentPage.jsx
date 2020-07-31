@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import axios from 'axios';
 
 // Components
@@ -13,8 +13,8 @@ import {
 } from 'config';
 import { connect } from 'utils';
 
-import InputShippingTote from './InputShippingTote'
-import InputItem from './InputItem'
+import InputShippingTote from './InputShippingTote';
+import InputItem from './InputItem';
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
@@ -25,10 +25,8 @@ function OrderFulfillmentForm({
   userId,
   onSubmit,
 }) {
-  const {
-    shipping_totes = [],
-    items = [],
-  } = fulfillmentOrder
+  console.log(fulfillmentOrder);
+  const { shipping_totes = [], items = [] } = fulfillmentOrder;
 
   return (
     <div className={styles.formWrapper}>
@@ -38,23 +36,28 @@ function OrderFulfillmentForm({
           items: items,
         }}
         onSubmit={(values, { setSubmitting }) => {
-          onSubmit()
+          onSubmit();
 
           const requestUrl = isWarehouseAssociate
-            ? `${API_GET_ORDER_FULFILLMENT_DETAILS}${fulfillmentOrder._id}`
-            : `${API_GET_ORDER_FULFILLMENT_DETAILS}verify/${fulfillmentOrder._id}`
+            ? `${API_UPDATE_ORDER_FULFILLMENT_DETAILS}${fulfillmentOrder._id}`
+            : `${API_VERIFY_ORDER_FULFILLMENT}${fulfillmentOrder._id}`;
 
-          axios.patch(requestUrl, {
-            orderFulfillmentDetails: {
-              ...fulfillmentOrder,
-              ...values,
-              ...(isWarehouseAssociate ? { warehouse_associate_id: userId } : { shift_lead_id: userId }),
-            },
-          }).then(res => {
-            // all good
-          }).finally(() => {
-            setSubmitting(false);
-          })
+          axios
+            .patch(requestUrl, {
+              orderFulfillmentDetails: {
+                ...fulfillmentOrder,
+                ...values,
+                ...(isWarehouseAssociate
+                  ? { warehouse_associate_id: userId }
+                  : { shift_lead_id: userId }),
+              },
+            })
+            .then((res) => {
+              // all good
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
         }}
       >
         {({ isSubmitting, setFieldValue }) => (
@@ -83,106 +86,103 @@ function OrderFulfillmentForm({
               disabled={isSubmitting}
               variant="contained"
             >
-              {isWarehouseAssociate
-                ? 'Fulfill Order'
-                : 'Verify Order'}
+              {isWarehouseAssociate ? 'Fulfill Order' : 'Verify Order'}
             </Button>
           </Form>
         )}
       </Formik>
     </div>
-  )
+  );
 }
 
 class OrderFulfillment extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       fulfillmentOrder: {},
-      // fulfillmentOrder: {
-      //   _id: 'ABC3',
-      //   order_id: 'ABC3',
-      //   shipping_totes: [{
-      //     packaging_url: 'url_1',
-      //   },{
-      //     packaging_url: 'https://thewallyshop.co/packaging/ABSCJO',
-      //   }],
-      //   items: [{
-      //     name: 'Item#1',
-      //     warehouse_location: {
-      //       shelf: 'SHELF_LOC',
-      //       row: 'ROW_LOC'
-      //     },
-      //     upc_code: 'UPC Code',
-      //     was_upc_verified: true,
-      //     customer_quantity: 4,
-      //     packaging_urls: [
-      //       'url_2',
-      //       'url_3',
-      //       'https://thewallyshop.co/packaging/ABSCJO',
-      //       'url_5',
+      //   fulfillmentOrder: {
+      //     _id: 'ABC3',
+      //     order_id: 'ABC3',
+      //     shipping_totes: [
+      //       {
+      //         packaging_url: 'url_1',
+      //       },
+      //       {
+      //         packaging_url: 'https://thewallyshop.co/packaging/ABSCJO',
+      //       },
       //     ],
-      //   }],
-      //   status: 'complete',
-      // },
-      isWarehouseAssociate: true,
-      userId: '',
-    }
+      //     items: [
+      //       {
+      //         name: 'Item#1',
+      //         warehouse_location: {
+      //           shelf: 'SHELF_LOC',
+      //           row: 'ROW_LOC',
+      //         },
+      //         upc_code: 'UPC Code',
+      //         was_upc_verified: true,
+      //         customer_quantity: 4,
+      //         packaging_urls: [
+      //           'url_2',
+      //           'url_3',
+      //           'https://thewallyshop.co/packaging/ABSCJO',
+      //           'url_5',
+      //         ],
+      //       },
+      //     ],
+      //     status: 'complete',
+      //   },
+      //   isWarehouseAssociate: true,
+      //   userId: '',
+    };
 
-    this.userStore = props.store.user
+    this.userStore = props.store.user;
+    this.routing = props.store.routing;
   }
 
-  componentDidMount(){
-    this.userStore.getStatus(true)
+  componentDidMount() {
+    this.userStore
+      .getStatus(true)
       .then((status) => {
-        const user = this.userStore.user
-        if (
-          status &&
-          (user.type === 'admin' ||
-          user.type === 'super-admin' ||
-          user.type === 'tws-ops' ||
-          user.type === 'retail')
-        ) {
-          this.setState({
-            userId: user._id,
-            isWarehouseAssociate: user.type === 'warehouse_associate'
-          })
-          this.fetchOrder()
+        if (!status || this.userStore.isUser()) {
+          this.routing.push('/');
         } else {
-          this.props.store.routing.push('/')
+          this.setState({
+            userId: this.userStore.user._id,
+            isWarehouseAssociate: this.userStore.isOps(),
+          });
+          this.fetchOrder();
         }
       })
       .catch((error) => {
-        this.props.store.routing.push('/')
-      })
+        this.props.store.routing.push('/');
+      });
   }
 
   fetchOrder = async () => {
     const { orderId } = this.props.match.params;
     const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${orderId}`;
     const res = await axios.get(url);
-
     this.setState({ fulfillmentOrder: res.data.orderFulfillmentDetails });
-  }
+  };
 
   handleSubmit = () => {
     this.setState({
       fulfillmentOrder: {
         ...this.state.fulfillmentOrder,
-        status: this.state.isWarehouseAssociate ? 'pending_quality_assurance' : 'packaged',
-      }
-    })
-  }
+        status: this.state.isWarehouseAssociate
+          ? 'pending_quality_assurance'
+          : 'packaged',
+      },
+    });
+  };
 
   render() {
-    const {orderId} = this.props.match.params;
+    const { orderId } = this.props.match.params;
     return (
-      <Grid container justify='center'>
+      <Grid container justify="center">
         <Grid item xs={12}>
-          <h1 className={styles.title}>
-            Order {orderId}
-          </h1>
+          <h1 className={styles.title}>Order {orderId}</h1>
         </Grid>
         <Grid item xs={12}>
           <OrderFulfillmentForm
@@ -193,8 +193,8 @@ class OrderFulfillment extends Component {
           />
         </Grid>
       </Grid>
-    )
+    );
   }
 }
 
-export default connect("store")(OrderFulfillment);
+export default connect('store')(OrderFulfillment);

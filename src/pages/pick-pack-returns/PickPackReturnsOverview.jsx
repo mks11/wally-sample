@@ -17,7 +17,7 @@ class PickPackReturnsOverview extends Component {
       selectedTab: 0,
       fetching: true,
     };
-    this.userStore = props.store.user;
+    this.user = props.store.user;
     this.routing = props.store.routing;
   }
 
@@ -27,11 +27,11 @@ class PickPackReturnsOverview extends Component {
   };
 
   componentDidMount() {
-    this.userStore
+    this.user
       .getStatus()
       .then((status) => {
         if (status) {
-          if (!this.userStore.isOps()) {
+          if (this.user.isUser()) {
             this.routing.push('/main');
           }
         }
