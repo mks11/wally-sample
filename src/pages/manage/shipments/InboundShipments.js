@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
   Container,
-  Row,
-  Col,
-  ModalBody,
-  Button,
   UncontrolledCollapse
 } from "reactstrap";
 import Paper from "@material-ui/core/Paper/Paper";
@@ -21,12 +12,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import { connect } from "utils";
 import Title from "./../../../common/page/Title";
 import {
-  Modal,
-  TextField,
-  FormControl,
-  MenuItem,
-  Select,
-  InputLabel
+  Modal
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
@@ -59,7 +45,6 @@ class InboundShipments extends Component {
           this.adminStore
             .getInboundProductShipments()
             .then(res => {
-              console.log(res);
               if (res) {
                 // Uncomment below to test long lists
                 // let extra = [...res.data, ...res.data, ...res.data];
@@ -106,7 +91,6 @@ class InboundShipments extends Component {
   render() {
     let results = this.state.results;
     // let errors = this.state.errors;
-    let buttonClass = "btn btn-main my-3";
 
     return (
       <>

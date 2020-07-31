@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ClickOutside from "react-click-outside";
-import moment from "moment";
 
 function TimeInput({ time, unavailable, selected, key, onClick }) {
   return (

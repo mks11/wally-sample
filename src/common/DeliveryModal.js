@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, ModalBody } from 'reactstrap'
-import { logModalView, logEvent, connect } from 'utils'
+import { logEvent, connect } from 'utils'
 import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
 
 

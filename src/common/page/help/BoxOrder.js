@@ -10,39 +10,6 @@ class BoxOrder extends Component{
     }
   }
 
-  componentDidMount(){
-    console.log(this.props)
-  }
-
-  // componentWillMount(){
-  //   if(!this.props.data){
-  //     this.setDefaultDataState()
-  //   } else {
-  //     this.setState({
-  //       data: this.props.data
-  //     })
-  //   }
-  // }
-
-  // setDefaultDataState(){
-  //   this.setState({
-  //     data: [
-  //       {
-  //        text: 'Is everything packaged in reusable containers?',
-  //        link: 'haha'
-  //       },
-  //       {
-  //         text: 'Is everything packaged in reusable containers?',
-  //         link: 'hehe'
-  //       },
-  //       {
-  //         text: 'Is everything packaged in reusable containers?',
-  //         link: 'huhu'
-  //       }       
-  //     ]
-  //   })
-  // }
-
   renderList(){
     const list = this.props.data.map((item, key) => {
 

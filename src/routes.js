@@ -10,7 +10,6 @@ import Account from "./pages/Account";
 import Help from "./pages/Help";
 import HelpSingle from "./pages/HelpSingle";
 import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-// import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
 import EmailVerification from "./pages/EmailVerification";
@@ -120,13 +119,24 @@ export default (
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/signup" component={Signup} />
-      <Route exact path="/" component={Homepage} />
       <Route exact path="/feedback" component={Feedback} />
       <Route exact path="/servicefeedback" component={Feedback} />
       <Route exact path="/howitworks" component={HowItWorks} />
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
       <Route exact path="/pick-pack-returns/order-fulfillment/:orderId" component={OrderFulfillment} />
+      <Route
+        exact
+        path="/social/:id"
+        render={({ match }) => {
+          const id = match.params.id;
+          if (id.match(/[\w-]{7,14}$/g)) {
+            return <Route component={Homepage} />;
+          }
+        }}
+      />
+      <Route exact path="/" component={Homepage} />
+      <Route component={Homepage} /> {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
   </Fragment>
 );

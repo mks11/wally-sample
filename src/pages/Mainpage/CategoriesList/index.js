@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from '../../../utils'
-import { Button } from 'reactstrap'
-import Product from '../Product'
 
 class CategoriesList extends Component {
   constructor(props) {

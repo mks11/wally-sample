@@ -45,7 +45,6 @@ class Orders extends Component {
   }
 
   printItems(data) {
-    console.log(data)
     let items = []
     for (const d of data) {
       items.push(d.product_name)
@@ -54,7 +53,6 @@ class Orders extends Component {
   }
 
   printPackaging(data) {
-    console.log(data)
     let items = []
     for (const d of data) {
       items.push(d.type)
@@ -94,79 +92,6 @@ class Orders extends Component {
               </div>
             </div>
             ))}
-
-            {/*
-            <div className="order-item mt-5">
-
-              <table>
-                <thead>
-                  <tr>
-                    <th className="pr-4">Package returned</th>
-                    <th className="pr-4">Items</th>
-                    <th className="pr-4">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>May 07, 2018</td>
-                    <td>8</td>
-                    <td>$27.99</td>
-                  </tr>
-                </tbody>
-              </table>
-              <hr className="my-1"/>
-              <span className="text-bold">Order #: 123456</span><br/>
-              <span>std(1), wrap std (2)</span>
-              <a onClick={e => store.modal.toggleReport(e)} className="text-report text-blue">Report a Problem</a>
-            </div>
-            <div className="order-item mt-5">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="pr-4">Orders placed</th>
-                    <th className="pr-4">Items</th>
-                    <th className="pr-4">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>May 07, 2018</td>
-                    <td>8</td>
-                    <td>$27.99</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <hr className="my-1"/>
-              <span className="text-bold">Order #: 123456</span><br/>
-              <span>lemon, broccali, cauliflower, butter, almond milk, cheese, meat, napa cabbage,
-                roast beef, salmon</span>
-              <a onClick={e => store.modal.toggleReport(e)} className="text-report text-blue">Report a Problem</a>
-            </div>
-            <div className="order-item mt-5">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="pr-4">Orders placed</th>
-                    <th className="pr-4">Items</th>
-                    <th className="pr-4">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>May 07, 2018</td>
-                    <td>8</td>
-                    <td>$27.99</td>
-                  </tr>
-                </tbody>
-              </table>
-              <hr className="my-1"/>
-              <span className="text-bold">Order #: 123456</span><br/>
-              <span>lemon, broccali, cauliflower, butter, almond milk, cheese, meat, napa cabbage,
-                roast beef, salmon</span>
-              <a onClick={e => store.modal.toggleReport(e)} className="text-report text-blue">Report a Problem</a>
-            </div>
-            */}
           </div>
       </section>
       <ReportModal/>

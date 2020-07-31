@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import Title from '../common/page/Title'
+
 import { connect } from '../utils'
+
+import Title from '../common/page/Title'
+import Head from '../common/Head'
 
 class About extends Component {
   constructor(props, context){
@@ -17,6 +20,10 @@ class About extends Component {
   render() {
     return (
       <div className="App">
+        <Head
+          title="Terms and Conditions"
+          description="The Wally Shop's terms and conditions of service."
+        />
         <Title content="Terms and Conditions" />
 
         <section className="page-section aw-our--story">

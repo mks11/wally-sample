@@ -14,7 +14,6 @@ import AmountGroup from 'common/AmountGroup'
 
 import QuantitySelect from '../common/QuantitySelect';
 import Addons from '../common/ProductAddons';
-import Main from "../pages/Mainpage";
 
 class ProductWithPackaging extends Component {
   constructor(props) {
@@ -197,7 +196,6 @@ class ProductWithPackaging extends Component {
       .then(data => {
         data && user.adjustDeliveryTimes(data.delivery_date, this.state.deliveryTimes)
       }).catch((e) => {
-        console.log(e)
         if (e.response) {
           const msg = e.response.data.error.message
           this.setState({invalidText: msg})
