@@ -1,139 +1,133 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
-import { validateEmail, logModalView } from '../../utils'
-import FBLogin from '../../common/FBLogin'
+import { validateEmail, logModalView } from '../../utils';
+import FBLogin from '../../common/FBLogin';
 
-const ErrorInfo = props => {
-  return (
-    props.invalidText
-      ? <div><span className="text-error text-center my-3">{props.invalidText}</span></div>
-      : null
-  )
-}
+const ErrorInfo = (props) => {
+  return props.invalidText ? (
+    <div>
+      <span className="text-error text-center my-3">{props.invalidText}</span>
+    </div>
+  ) : null;
+};
 
 class LoginModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       step: 1,
       email: '',
       password: '',
       invalidText: '',
-    }
+    };
   }
 
-  handleSubmit = e => {
-    this.setState({ invalidText: ''})
-    const {
-      email,
-      password,
-    } = this.state
-    const { user, routing } = this.props.stores
+  handleSubmit = (e) => {
+    this.setState({ invalidText: '' });
+    const { email, password } = this.state;
+    const { user, routing } = this.props.stores;
 
     if (!password) {
-      this.setState({ invalidText: 'Password cannot be empty'})
-      return
+      this.setState({ invalidText: 'Password cannot be empty' });
+      return;
     }
 
-    user.login(email, password)
+    user
+      .login(email, password)
       .then(() => {
-        this.props.toggle()
-        routing.push('/main')
-      }).catch(e => {
-        console.error('Failed to login', e)
-        const msg = e.response.data.error.message
-        this.setState({ invalidText: msg })
+        this.props.toggle();
+        routing.push('/main');
       })
-    e.preventDefault()
-  }
+      .catch((e) => {
+        console.error('Failed to login', e);
+        const msg = e.response.data.error.message;
+        this.setState({ invalidText: msg });
+      });
+    e.preventDefault();
+  };
 
-
-  handleNext = e => {
-    const { email } = this.state
+  handleNext = (e) => {
+    const { email } = this.state;
 
     if (!email) {
-      this.setState({ invalidText: 'Email cannot be empty' })
-      return
+      this.setState({ invalidText: 'Email cannot be empty' });
+      return;
     } else if (!validateEmail(email)) {
-      this.setState({ invalidText: 'Email not valid' })
-      return
+      this.setState({ invalidText: 'Email not valid' });
+      return;
     }
 
-    this.setState({ step: 2 })
-    e.preventDefault()
-  }
+    this.setState({ step: 2 });
+    e.preventDefault();
+  };
 
-  handlePrev = e => {
-    const { step } = this.state
+  handlePrev = (e) => {
+    const { step } = this.state;
     this.setState({
       invalidText: '',
-      password:'',
+      password: '',
       step: step - 1,
-    })
-    e.preventDefault()
-  }
+    });
+    e.preventDefault();
+  };
 
-  handleLogin = e => {
-    logModalView('/signup-zip')
-    this.props.switchTo('signup')
-  }
+  handleLogin = (e) => {
+    logModalView('/signup-zip');
+    this.props.switchTo('signup');
+  };
 
-  handleInputChange = e => {
-    const value = e.target.name === 'email'
-                    ? e.target.value.toLowerCase()
-                    : e.target.value
+  handleInputChange = (e) => {
+    const value =
+      e.target.name === 'email' ? e.target.value.toLowerCase() : e.target.value;
 
     this.setState({
       [e.target.name]: value,
-      invalidText: ''
-    })
-    e.preventDefault()
-  }
+      invalidText: '',
+    });
+    e.preventDefault();
+  };
 
-  handleEnter = e => {
+  handleEnter = (e) => {
     if (e.keyCode === 13) {
-      e.target.name === 'email'
-        ? this.handleNext(e)
-        : this.handleSubmit(e)
+      e.target.name === 'email' ? this.handleNext(e) : this.handleSubmit(e);
     }
-  }
+  };
 
   handleForgotPassword = () => {
-    const { user } = this.props.stores
-    const { email } = this.state
+    const { user } = this.props.stores;
+    const { email } = this.state;
 
-    user.forgotPassword(email)
+    user
+      .forgotPassword(email)
       .then(() => {
-        this.setState({ step: 3 })
-      }).catch((e) => {
-        console.error('Failed to login', e)
-        const msg = e.response.data.error.message
-        this.setState({ invalidText: msg })
+        this.setState({ step: 3 });
       })
-  }
+      .catch((e) => {
+        console.error('Failed to login', e);
+        const msg = e.response.data.error.message;
+        this.setState({ invalidText: msg });
+      });
+  };
 
   render() {
-    const {
-      step,
-      email,
-      password,
-      invalidText,
-    } = this.state
-    const { user } = this.props.stores
+    const { step, email, password, invalidText } = this.state;
+    const { user } = this.props.stores;
 
     return (
       <div className="login-wrap">
-        { step >=2
-            ? <button className="btn-icon btn-icon--back" onClick={this.handlePrev}></button>
-            : null
-        }
-        { step <= 2 && (
+        {step >= 2 ? (
+          <button
+            className="btn-icon btn-icon--back"
+            onClick={this.handlePrev}
+          ></button>
+        ) : null}
+        {step <= 2 && (
           <div>
             <h3 className="m-0 mb-2">Log in</h3>
           </div>
         )}
         <div>
-          { step === 1 && (
+          {step === 1 && (
             <div>
               <Input
                 className="aw-input--control aw-input--center black"
@@ -145,21 +139,21 @@ class LoginModal extends Component {
                 onChange={this.handleInputChange}
               />
               <ErrorInfo invalidText={invalidText} />
-              <button type="button" className={`btn btn-main mt-5 ${email ? 'active' : ''}`} onClick={this.handleNext}>
+              <button
+                type="button"
+                className={`btn btn-main mt-5 ${email ? 'active' : ''}`}
+                onClick={this.handleNext}
+              >
                 SUBMIT
               </button>
               <div className="fancy-spacing my-4">
                 <span>or</span>
               </div>
-              <FBLogin
-                userStore={user}
-                onSubmit={this.props.toggle}
-              />
+              <FBLogin userStore={user} onSubmit={this.props.toggle} />
             </div>
-          )
-          }
+          )}
 
-          { step === 2 &&
+          {step === 2 && (
             <div>
               <Input
                 className="aw-input--control aw-input--center black"
@@ -169,30 +163,45 @@ class LoginModal extends Component {
                 onKeyDown={this.handleEnter}
                 onChange={this.handleInputChange}
               />
-              <a className="forgot-text mt-2 mb-4" onClick={this.handleForgotPassword}>Forgot Password?</a>
+              <a
+                className="forgot-text mt-2 mb-4"
+                onClick={this.handleForgotPassword}
+              >
+                Forgot Password?
+              </a>
               <ErrorInfo invalidText={invalidText} />
-              <button type="button" className={`btn btn-main ${password ? 'active' : ''}`} onClick={this.handleSubmit}>
+              <button
+                type="button"
+                className={`btn btn-main ${password ? 'active' : ''}`}
+                onClick={this.handleSubmit}
+              >
                 SUBMIT
               </button>
               <div className="mb-5"></div>
             </div>
-          }
+          )}
 
-          {
-            step === 3 &&
+          {step === 3 && (
             <div>
               <h3>Forgot Password</h3>
-              <p>Check your email for instructions how to reset your password</p>
+              <p>
+                Check your email for instructions how to reset your password
+              </p>
             </div>
-          }
+          )}
         </div>
         <div className="login-wrap text-center">
           <span className="">New User?</span>
-          <button onClick={this.handleLogin} className="btn-text btn-text--login">SIGN UP HERE</button>
+          <button
+            onClick={this.handleLogin}
+            className="btn-text btn-text--login"
+          >
+            SIGN UP HERE
+          </button>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default LoginModal
+export default LoginModal;
