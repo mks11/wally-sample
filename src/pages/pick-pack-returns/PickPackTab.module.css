@@ -8,6 +8,10 @@
   margin: 1rem;
 }
 
+.highlight {
+  border: 1px solid red;
+}
+
 .labelLink {
   padding: 1rem 0;
   font-size: 1rem;
@@ -21,4 +25,9 @@
 
 .subTitle {
   font-size: 1rem;
+}
+
+.validateContainer {
+  text-align: center;
+  padding: 2rem 0;
 }
