@@ -67,6 +67,11 @@ let theme = createMuiTheme({
         marginBottom: "0.75em",
       },
     },
+    MuiButton: {
+      label: {
+        textTransform: "capitalize",
+      },
+    },
   },
 });
 

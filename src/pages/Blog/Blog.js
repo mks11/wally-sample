@@ -49,7 +49,7 @@ class Blog extends Component {
         </PageTitle>
         {isLoading ? (
           <Grid container justify="center" alignItems="center">
-            <PuffLoader />
+            <PuffLoader color="#97adff" />
           </Grid>
         ) : (
           posts.map((post) => <BlogPostCard key={post.slug} post={post} />)

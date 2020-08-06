@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
 import { Redirect } from "react-router-dom";
-import { Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { LazyLoadComponent } from "react-lazy-load-image-component";
 import styled from "styled-components";
 
@@ -19,6 +19,15 @@ const PostContainer = styled(Grid)`
     justify-content: flex-start;
     align-items: flex-start;
   }
+`;
+
+const StartShopping = styled(Button)`
+  width: 250px;
+  text-align: center;
+  background-color: #97adff;
+  border-radius: 500px;
+  padding: 1rem;
+  color: #fff;
 `;
 
 class BlogPost extends Component {
@@ -65,20 +74,23 @@ class BlogPost extends Component {
             {post.title}
           </ResponsiveText>
           <BlogPostSubtitle author={author} postDate={posted_date} />
+          <br />
           {post.body.length
             ? post.body.map((section) => {
                 const { title, image, body } = section;
                 return <PostSection title={title} image={image} body={body} />;
               })
             : null}
-          <button
-            onClick={this.handleGetStarted}
-            className="btn btn-main active blog-get-started"
-            data-submit="Submit"
-          >
-            Start shopping
-          </button>
         </PostContainer>
+        <Grid container justify="center">
+          <Grid item>
+            <StartShopping onClick={this.handleGetStarted}>
+              <Typography variant="h3" component="span">
+                Start Shopping
+              </Typography>
+            </StartShopping>
+          </Grid>
+        </Grid>
       </Container>
     );
   }
