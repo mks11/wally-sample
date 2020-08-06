@@ -149,7 +149,7 @@ class Account extends Component {
                 </li>
               ))}
               </ul>
-              <button className="btn btn-icon-transparent mt-4" onClick={e => this.userStore.showAddressModal()}><i className="ico ico-add-circle mr-3"></i>Add new address</button>
+              {/* <button className="btn btn-icon-transparent mt-4" onClick={e => this.userStore.showAddressModal()}><i className="ico ico-add-circle mr-3"></i>Add new address</button> */}
           </div>
         </section>
 

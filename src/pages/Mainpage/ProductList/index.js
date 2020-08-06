@@ -25,6 +25,7 @@ class ProductList extends Component {
     const {
       display,
       mode,
+      filters,
       deliveryTimes,
       onProductClick,
     } = this.props
@@ -41,7 +42,16 @@ class ProductList extends Component {
         <div className="container-fluid">
           <div className={`row flex-row ${mode === 'limit' ? 'flex-nowrap' : ''}`} >
             {
-              display.products.map((product, index) => (
+              display.products
+                .filter(p => filters.length ? !(filters.some(f => {
+                  if (p.allergens && p.tags) {
+                    let [t, v] = f.split(",");
+                    if (t == "allergen") return p.allergens.includes(v);
+                    if (t == "tag") return !p.tags.includes(v);
+                  }
+                  return true
+                })) : true)
+                .map((product, index) => (
                 <Product
                   key={index}
                   product={product}

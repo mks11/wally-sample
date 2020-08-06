@@ -9022,16 +9022,12 @@ button:focus, button:active, button:hover, .btn:focus, .btn:active, .btn:hover, 
     padding: 11px;
   }
 
-  .aw-header .btn-login {
+  .aw-header .btn-login,
+  .aw-header .btn-sign-up,
+  .aw-header .btn-backers {
     font-size: 17px;
     width: 130px;
     padding: 11px;
-  }
-  .aw-header .btn-sign-up {
-    font-size: 17px;
-    width: 130px;
-    padding: 11px;
-  }
 }
 
 @media (min-width: 768px) {

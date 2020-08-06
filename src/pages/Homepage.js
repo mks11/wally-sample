@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import qs from 'qs';
 import { Link } from 'react-router-dom'
 import { Row, Col, Input } from 'reactstrap';
 import { validateEmail, connect, logEvent, logModalView, logPageView } from '../utils'
@@ -14,8 +15,9 @@ class Homepage extends Component {
       // model
       zip: '',
       email: '',
+      audienceSource: '',
       heroText: 'Shop package-free groceries',
-      heroDescription: 'Delivered in reusable packaging, picked back up again for reuse.',
+      heroDescription: "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
       heroDescriptionAlign: 'center',
 
       invalidEmail: false,
@@ -35,20 +37,33 @@ class Homepage extends Component {
     this.handleSubscribe = this.handleSubscribe.bind(this)
     this.handleStart = this.handleStart.bind(this)
     this.handleExplore = this.handleExplore.bind(this)
+    this.handleSignup = this.handleSignup.bind(this)
     this.zipStore = this.props.store.zip
     this.userStore = this.props.store.user
     this.modalStore = this.props.store.modal
     this.routing = this.props.store.routing
+    this.metricStore = this.props.store.metric
   }
 
   componentDidMount() {
     ReactGA.pageview("/");
+    console.log(this.props);
+    if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color) {
+      if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color == "purple") {
+        this.setState({ audienceSource: "ig" });
+        this.metricStore.triggerAudienceSource("ig");  
+      }
+      
+    }
+
     this.userStore.getStatus()
       .then((status) => {
         if (status) {
           const user = this.userStore.user
           if (user.type === 'admin') {
             this.routing.push('/manage/shopper')
+          } else if (user.type === 'tws-ops') {
+            this.routing.push('/manage/shopping-app-1')
           } else {
             this.routing.push('/main')
           }
@@ -63,6 +78,12 @@ class Homepage extends Component {
       .catch((e) => {
         console.error('Failed to load zipcodes: ', e)
       })
+
+    window.$('body').addClass('homepage-background');
+  }
+
+  componentWillUnmount() {
+    window.$('body').removeClass('homepage-background');
   }
 
   handleValidateZip() {
@@ -98,17 +119,11 @@ class Homepage extends Component {
 
     this.setState({invalidEmail: ''})
     logEvent({ category: "Homepage", action: "SubmitEmail", value: this.state.zip, label: "GetNotified" })
-    this.zipStore.subscribeNotifications({email: this.state.email, zip: this.state.zip, subscribe: false})
-      .then(() => {
-        this.setState({
-          heroStatus: 'invalid_zip_success',
-          heroText: 'We\’ll notify you when we launch in your area.',
-          heroDescription: 'Find #zerowastetips, Wally hauls, and sustainable inspiration with the Wally Shop community via @thewallyshop.',
-        })
-      }).catch((e) => {
-        console.error('Failed to subscribe', e)
-        const msg = e.response.data.error.message
-        this.setState({invalidEmail: msg})
+    this.userStore.getWaitlistInfo({ email: this.state.email, src: this.state.audienceSource })
+      .then(res => {
+        this.modalStore.toggleModal('waitinglist', null, res)
+      }).catch(() => {
+        this.modalStore.toggleModal('error', 'Something went wrong during your request')
       })
 
   }
@@ -118,7 +133,7 @@ class Homepage extends Component {
     const store = this.props.store
     this.routing.push('/main')
     logModalView('/signup-info')
-    this.modalStore.toggleModal('signup')
+    this.modalStore.toggleModal('joinwaitlist')
     e.preventDefault()
   }
 
@@ -126,6 +141,11 @@ class Homepage extends Component {
     logEvent({ category: "Homepage", action: "ExploreShopping" })
     this.routing.push('/main')
     e.preventDefault()
+  }
+
+  handleSignup(e) {
+    logModalView('/signup-zip')
+    this.modalStore.toggleModal('signup')
   }
 
   handleZip(e) {
@@ -152,13 +172,13 @@ class Homepage extends Component {
 
   render() {
     if (this.state.fetching) return null
-      
+
     const ButtonStart = () => (
       <button onClick={this.handleValidateZip} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         START SHOPPING
       </button>
     )
-    
+
     const ButtonStartShopping = () => (
       <button onClick={this.handleStart} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
         START SHOPPING
@@ -166,8 +186,8 @@ class Homepage extends Component {
     )
 
     const ButtonNotify = () => (
-      <button onClick={this.handleSubscribe} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
-        GET NOTIFIED
+      <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-block mx-auto btn-success btn-get--started" data-submit="Submit">
+        START SHOPPING
       </button>
     )
 
@@ -192,55 +212,45 @@ class Homepage extends Component {
 
     return (
       <div className="homepage">
-        <section id="nav-hero" className={tempClass}>
-          <div className="container-fluid">
-            <div className="row justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-                <br></br>
-                <br></br>
-                <br></br>
-                <h1 className="aw-hero--heading mb-4 aw-hero-construct">Brb, currently crowdfunding OUR FUTURE</h1>
-                <h2 className={this.state.heroDescriptionAlign + ' pink'}>👉 back us on <a href="https://www.kickstarter.com/projects/the-wally-shop/the-wally-shop-the-everything-in-reusables-store"><u>kickstarter</u></a> 👈</h2>
-                <h2 className={this.state.heroDescriptionAlign}>for regular programming ⬇️⬇️⬇️</h2>
-              </div>
+        <section className="align-items-center">
+          <div className="container scroll-text">
+            <div>
+            <br></br>
+            </div>
+            <div id="div-1-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
+            </div>
+            <div id="div-2-scroll" className="">
+              <h1>Now shipping nationwide ~ Now shipping nationwide ~ Now shipping nationwide ~ </h1>
             </div>
           </div>
         </section>
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
+                {/* <img src="images/home5_hd.png" alt=""/> */}
+                <img src="images/cradle_6.jpg" alt=""/>
+              </div>
+
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
                 <h2 className={this.state.heroDescriptionAlign}>{this.state.heroDescription}</h2>
-
-                {this.state.heroStatus === 'start' && 
-                    <div>
-                      <Input
-                        className="zip"
-                        type="number"
-                        value={this.state.zip}
-                        placeholder="Enter zip code..."
-                        onKeyDown={this.handleZipEnter}
-                        onChange={this.handleZip}/>
-                      {this.state.invalidZip && <div className="text-error">Invalid zip codes</div>}
-                      <ButtonStart/>
-                    </div>
-                }
-
-                {this.state.heroStatus === 'invalid_zip' &&
-                    <div>
-                      <Input
-                        className="zip"
-                        type="text"
-                        value={this.state.email}
-                        placeholder="Enter your email..."
-                        onKeyDown={this.handleEmailEnter}
-                        onChange={this.handleEmail}
-                      />
-                      {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
-                      <ButtonNotify/>
-                    </div>
-                }
+                <div className="mt-5">
+                  {/*}
+                  <Input
+                    className="zip"
+                    type="text"
+                    value={this.state.email}
+                    placeholder="Enter your email"
+                    onKeyDown={this.handleEmailEnter}
+                    onChange={this.handleEmail}
+                  />
+                  {this.state.invalidEmail && <div className="text-error">{this.state.invalidEmail}</div>}
+                  */}
+                  <ButtonNotify/>
+                </div>
 
                 {this.state.heroStatus === 'success' && <ButtonStartShopping/>}
 
@@ -250,42 +260,62 @@ class Homepage extends Component {
           </div>
         </section>
 
-        <section className="page-section aw-our--story">
-          <div className="container">
+        <section className="page-section aw-our--story align-items-center">
+          <div className="container h-75 w-75">
             <div className="tagline">
-              <h2>It's what's on the inside that counts.</h2>
+              <h2>Do you with reusables.</h2>
               <p></p>
-              <p>Say goodbye to wasteful packaging with The Wally Shop. Order local, organic produce and we'll deliver it same-day from farmers markets and bulk stores. The best part? We deliver in all reusable packaging, which means no plastic. Ever. Return your packaging during a future delivery, and we'll clean and reuse it.</p>
-              <p>You take care of the earth - we'll take care of the groceries.</p>
+              <p>The Wally Shop is the platform connecting you with your favorite brands 100% waste-free IRL and we are now available nationwide ✨Our vision is to help you shop for everything in all reusable packaging (cleaning, beauty, pet supplies, you name it!).</p>
+              <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
             </div>
 
-            <div className="row">
-              <div className="col-md-12 mb-md-4">
-                <div className="row">
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home1_hd.jpg" alt=""/>
-                      <h4>Shop produce from local, organic farmers markets & shops</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home2_hd.jpg" alt=""/>
-                      <h4>Get it delivered in all reusable packaging</h4>
-                    </div>
-                  </div>
-                  <div className="col-sm-12 col-lg-4">
-                    <div className="howto-item">
-                      <img src="images/home3_hd.jpg" alt=""/>
-                      <h4>Return packaging at a future delivery for reuse</h4>
-                    </div>
-                  </div>
+            <div className="row d-flex justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Order</h1>
+                  <p>Choose from hundreds of responsibly-made, Trader Joe’s price-competitive bulk foods. At checkout, you will be charged a deposit for your packaging (don’t worry, you will be getting it back!).</p>
                 </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                {/* <img src="images/home6_hd.png" alt=""/> */}
+                <img src="images/jar_3.jpg" alt=""/>
+              </div>
+            </div>
+
+
+            <div className="row d-flex justify-content-center align-items-center mt-5">
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+                {/* <img src="images/home7_hd.png" alt=""/> */}
+                <img src="images/tote.jpg" alt=""/>
+              </div>
+              <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
+                <div className="receive-item w-75 pull-right">
+                  <h1>Receive</h1>
+                  <p className="receive-item">Your order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="row d-flex mt-5 justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Return</h1>
+                  <p>Once finished, you can return all your packaging (jars, totes, anything we send to you, we take back and reuse) to a FedEx/UPS delivery courier on a future delivery or schedule a free pick-up on the website. Your deposit is credited back to you and the packaging is cleaned to be put back into circulation.</p>
+                </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                {/* <img src="images/home8_hd.png" alt=""/> */}
+                <img src="images/jar_2.jpg" alt=""/>
+              </div>
+            </div>
+
+            <div className="row mt-5">
+              <div className="col-md-12 mb-md-4">
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <button onClick={this.handleExplore} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
-                        EXPLORE
+                      <button onClick={this.handleSignup} id="btn-hero--submit" href="#nav-hero" className="btn btn-primary btn-explore" data-submit="Submit">
+                        START SHOPPING
                       </button>
                     </div>
                   </Col>
@@ -295,17 +325,6 @@ class Homepage extends Component {
           </div>
 
           <br /><br />
-          <div className="container">
-            <h3>All available zip codes</h3>
-            <hr />
-            <div className="mb-5">
-              <div className="row ">
-                { this.zipStore.zipcodes.map((z,key) => (
-                  <div className="col-sm-1" key={key}>{z}</div>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
       </div>
     );

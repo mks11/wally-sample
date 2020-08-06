@@ -8,32 +8,42 @@ class SignupModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      pin: '',
       name: '',
       email: '',
       password: '',
 
       invalidText: '',
       signupRequest: false,
+      pinError: false,
+      displayPinErrorInfo: false,
     }
   }
 
   handleSubmit = e => {
     const {
+      pin,
       name,
       email,
       password,
       signupRequest,
+      pinError,
     } = this.state
 
     if (!signupRequest) {
       this.setState({ invalidText: '', signupRequest: true })
-      if(!validateEmail(email)) {
-        this.setState({ invalidText: 'Email not valid', signupRequest: false })
-        return
-      }
+      // if (pin && pinError) {
+      //   this.setState({ invalidText: 'Pin is incorrect', signupRequest: false })
+      //   return
+      // }
 
       if (!name) {
         this.setState({ invalidText: 'Name cannot be empty', signupRequest: false })
+        return
+      }
+
+      if(!validateEmail(email)) {
+        this.setState({ invalidText: 'Email not valid', signupRequest: false })
         return
       }
 
@@ -62,7 +72,10 @@ class SignupModal extends Component {
         checkout.getDeliveryTimes()
         this.setState({ signupRequest: false })
         this.props.switchTo('welcome')
+        this.props.store.routing.push('/main')
+        
         user.giftCardPromo = null
+        user.refPromo = null
       }).catch(e => {
         console.error('Failed to signup', e)
         const msg = e.response.data.error.message
@@ -86,50 +99,91 @@ class SignupModal extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handlePinVerification = e => {
+    const { user } = this.props.stores
+    const {
+      pin,
+      email,
+    } = this.state
+
+    user.verifyPin(pin, email)
+      .then(res => {
+        this.setState({ pinError: !res.verified })
+      }).catch(() => {
+        this.setState({ pinError: true })
+      })
+      .finally(() => {
+        this.setState({ displayPinErrorInfo: true })
+      })
+  }
+
   render() {
     const {
+      pin,
       name,
       email,
       password,
       invalidText,
       signupRequest,
+      pinError,
+      displayPinErrorInfo,
     } = this.state
-    const { zip, user } = this.props.stores
+    const { user } = this.props.stores
     const additionalFBdata = {
-      signup_zip: zip.selectedZip,
       reference_promo: user.refPromo
     }
 
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
-        <span className="mb-5">Shop package-free groceries</span>
         <div className="form-wrapper">
+          {/* <div className="pin-input mb-3">
+            <Input
+              className="aw-input--control black"
+              type="text"
+              name="pin"
+              placeholder="Enter pin"
+              onKeyDown={this.handleKeySubmit}
+              onChange={this.onValueChange}
+              onBlur={this.handlePinVerification}
+            />
+            {displayPinErrorInfo ? (
+              !pinError ? (
+                <i className="fa fa-check pin-input-ok" />
+              ) : (
+                <i className="fa fa-times pin-input-ok" />
+              )
+            ) : null}
+          </div> */}
+
           <Input
-            className="aw-input--control"
-            type="text"
-            name="name"
-            placeholder="Enter your name"
-            onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
-          <Input
-            className="aw-input--control"
+            className="aw-input--control mb-3 black"
             type="text"
             name="email"
             placeholder="Enter your email"
             onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
+            onChange={this.onValueChange}
+          />
           <Input
-            className="aw-input--control"
+            className="aw-input--control mb-3 black"
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            onKeyDown={this.handleKeySubmit}
+            onChange={this.onValueChange}
+          />
+          <Input
+            className="aw-input--control mb-3 black"
             type="password"
             name="password"
             placeholder="Enter your password"
             onKeyDown={this.handleKeySubmit}
-            onChange={this.onValueChange}/>
+            onChange={this.onValueChange}
+          />
 
-          <span className="tnc mt-3 mb-2">
-            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><strong>Terms of Service</strong></Link> &nbsp;and 
-            &nbsp;<Link target="_blank" to={"/privacy"}><strong>Privacy Policy.</strong></Link>
+          <span className="tnc mt-5 mb-5">
+            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><i>Terms of Service</i></Link> &nbsp;and
+            &nbsp;<Link target="_blank" to={"/privacy"}><i>Privacy Policy.</i></Link>
           </span>
           {
             invalidText
@@ -141,13 +195,11 @@ class SignupModal extends Component {
             className={`btn btn-main ${(name && email && password && !signupRequest) ? 'active' : ''}`}
             onClick={this.handleSubmit}
           >
-            SUBMIT
+            CREATE ACCOUNT
           </button>
 
           <div className="fancy-spacing my-4">
-            <hr/>
             <span>or</span>
-            <hr/>
           </div>
 
           <FBLogin
@@ -156,9 +208,9 @@ class SignupModal extends Component {
             onSubmit={this.props.toggle}
           />
         </div>
-        <div className="login-wrap">
-          <span className="t-18">Already have an account</span>
-          <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOGIN</button>
+        <div className="login-wrap text-center">
+          <span className="">Already have an account?</span>
+          <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOG IN HERE</button>
         </div>
       </div>
     )
@@ -166,4 +218,4 @@ class SignupModal extends Component {
 
 }
 
-export default SignupModal
+export default connect("store")(SignupModal)

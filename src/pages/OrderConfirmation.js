@@ -45,9 +45,9 @@ class OrderConfirmation extends Component {
               <button onClick={e => this.handleShopMore(e)} id="btn-hero--submit" href="#nav-hero" className="btn btn-block btn-success btn-get--started btn-left mr-4 confirm-submit" data-submit="Submit">
                 KEEP SHOPPING
               </button>
-              <span>
+              {/* <span>
                 For every friend you refer, you’ll get $10 once they purchase, and they’ll get $10 just for signing up! Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
-              </span>
+              </span> */}
             </div>
         </div>
       </section>

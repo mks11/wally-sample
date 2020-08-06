@@ -38,7 +38,7 @@ class LoginModal extends Component {
     user.login(email, password)
       .then(user => {
         this.props.toggle()
-        routing.push('/')
+        routing.push('/main')
       }).catch(e => {
         console.error('Failed to login', e)
         const msg = e.response.data.error.message
@@ -75,7 +75,7 @@ class LoginModal extends Component {
 
   handleLogin = e => {
     logModalView('/signup-zip')
-    this.props.switchTo('zip')
+    this.props.switchTo('signup')
   }
 
   handleInputChange = e => {
@@ -123,21 +123,21 @@ class LoginModal extends Component {
 
     return (
       <div className="login-wrap">
-        { step >=2 
+        { step >=2
             ? <button className="btn-icon btn-icon--back" onClick={this.handlePrev}></button>
             : null
         }
         { step <= 2 && (
           <div>
             <h3 className="m-0 mb-2">Log in</h3>
-            <span className="mb-5">Welcome Back</span>
+            {/* <span className="mb-5">Welcome Back</span> */}
           </div>
         )}
         <div>
           { step === 1 && (
             <div>
               <Input
-                className="aw-input--control aw-input--center"
+                className="aw-input--control aw-input--center black"
                 type="text"
                 name="email"
                 value={email}
@@ -148,17 +148,14 @@ class LoginModal extends Component {
               <ErrorInfo invalidText={invalidText} />
               <button type="button" className={`btn btn-main mt-5 ${email ? 'active' : ''}`} onClick={this.handleNext}>
                 SUBMIT
-              </button>              
+              </button>
               <div className="fancy-spacing my-4">
-                <hr/>
                 <span>or</span>
-                <hr/>
               </div>
               <FBLogin
                 userStore={user}
                 onSubmit={this.props.toggle}
               />
-              <hr className="mt-5"/>
             </div>
           )
           }
@@ -166,7 +163,7 @@ class LoginModal extends Component {
           { step === 2 &&
             <div>
               <Input
-                className="aw-input--control aw-input--center"
+                className="aw-input--control aw-input--center black"
                 type="password"
                 name="password"
                 placeholder="Enter your password"
@@ -182,7 +179,7 @@ class LoginModal extends Component {
             </div>
           }
 
-          { 
+          {
             step === 3 &&
             <div>
               <h3>Forgot Password</h3>
@@ -190,9 +187,9 @@ class LoginModal extends Component {
             </div>
           }
         </div>
-        <div className="login-wrap">
-          <span className="t-18">New to The Wally Shop</span>
-          <button onClick={this.handleLogin} className="btn-text btn-text--login">SIGN UP</button>
+        <div className="login-wrap text-center">
+          <span className="">New User?</span>
+          <button onClick={this.handleLogin} className="btn-text btn-text--login">SIGN UP HERE</button>
         </div>
       </div>
     )

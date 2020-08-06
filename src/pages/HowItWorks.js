@@ -14,27 +14,58 @@ class HowItWorks extends Component {
   }
   render() {
     return (
-      <div className="App">
-         <Title content="Our Process" />
+      <div className="App align-items-center">
+         <Title content="Our Process" center />
 
-        <section className="page-section aw-our--story">
-          <div className="container">
+         <section className="page-section aw-our--story align-items-center">
+          <div className="container h-75 w-75">
+
             <div className="tagline">
-              <h1>How The Wally Shop works:</h1>
-              <p className="">
-                <ol>
-                  <li><strong>Start shopping.</strong><br/> Create an account with us - right now, we’re only available in <a href="/help/detail/5c3d0df2fc84ff404f3b9eca">these select zip codes.</a> If you’re not in one of our neighborhoods, sign up to get notified on when we’re available in your area.<br/><br/></li>
-                  <li><strong>Everything's in reusable packaging which we collect back for reuse.</strong><br/> All of our groceries come packaged in reusable packaging - think mesh bags, glass jars, and totes. Once finished, simply return the packaging to a courier on a future delivery and get your deposit back as store credit.<br/><br/></li>
-                  <li><strong>Our produce are exclusively local, organic or fairtrade.</strong><br/> We proudly source from small local shops and farmers markets to ensure that all of the ingredients we offer are ethically-sourced and high quality. Everything is shopped for on the day of your delivery, so you can be sure it's as fresh as possible.<br/><br/></li>
-                  <li><strong>Prices - no markup, ever.</strong><br/> The prices you pay are the prices you’d pay at the store or at the market. The charges we do include are: a service fee to compensate the great people who do your shopping and the team that makes this possible; a delivery fee to fairly pay our couriers that deliver via bike; and a packaging deposit that you get back when you return our packaging to us.<br/><br/></li>
-                </ol>
-              </p>
-            </div>  
+              <h2>It's what's on the inside that counts.</h2>
+              <p></p>
+              <p>We are introducing a whole new way to shop sustainably. Our vision is to help you shop for everything (Bulk foods! Beauty products! Household products!) conveniently in all reusable packaging. We’re starting with responsibly-made, Trader Joe’s price-competitive bulk foods, but we will be expanding categories and on-boarding more brands in the coming weeks. We want to get you what you need, 100% waste free, so please reach out if you have any brands in mind ;)</p>
+              <p>We hope you’re as ready as we are to join the #reusablesrevolution and change the world in dreamy purple ~ one order at a time. #wallydreamsinpurple</p>
+            </div>
+            
+            <div className="row d-flex justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Order</h1>
+                  <p>Choose from hundreds of responsibly-made, Trader Joe’s price-competitive bulk foods. At checkout, you will be charged a deposit for your packaging (don’t worry, you will be getting it back!).</p>
+                </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                <img src="images/home6_hd.png" alt=""/>
+              </div>
+            </div>
 
-            <div className="tagline howitworks">
-              <img alt="How It Works" src="images/howitworks.jpg" />
+
+            <div className="row d-flex justify-content-center align-items-center mt-5">
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+                <img src="images/home7_hd.png" alt=""/>
+              </div>
+              <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
+                <div className="receive-item w-75 pull-right">
+                  <h1>Receive</h1>
+                  <p className="receive-item">Your order will arrive at your doorstep in completely reusable, returnable packaging. The shipping tote it arrives in folds up for easy storage. Simple, convenient, 100% waste free shopping.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="row d-flex mt-5 justify-content-center align-items-center">
+              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
+                <div className="w-75 pl-lg-4">
+                  <h1>Return</h1>
+                  <p>Once finished, you can return all your packaging (jars, totes, anything we send to you, we take back and reuse) to a FedEx/UPS delivery courier on a future delivery or schedule a free pick-up on the website. Your deposit is credited back to you and the packaging is cleaned to be put back into circulation.</p>
+                </div>
+              </div>
+              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+                <img src="images/home8_hd.png" alt=""/>
+              </div>
             </div>
           </div>
+
+          <br /><br />
         </section>
       </div>
     );

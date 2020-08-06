@@ -114,7 +114,9 @@ class BlogPostEditor extends Component {
                 </FormGroup>
                 </Col>
                 <Col>
-                  <CustomDatepicker date={post.post_date} onDatePick={this.onDatePick} />
+                    <CustomDatepicker date={post.post_date} onDatePick={this.onDatePick} label={"Post Date"}
+                      className={"custom-datepicker"}
+                    />
                 </Col>
               </Row>
               <Button className="my-3" type="button" onClick={this.onSubmit}>Submit</Button>

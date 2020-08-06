@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 
+import Filters from '../ProductTop/Filters'
+
 const MobileSearch = props => {
   const {
     show,
@@ -10,10 +12,11 @@ const MobileSearch = props => {
     onClose,
     onSearch,
     onCategoryClick,
+    onFilterUpdate,
   } = props
 
   return (
-    <div className={`category-mobile d-md-none ${show ? 'open' : ''}`}>
+    <div className={`category-mobile d-lg-none ${show ? 'open' : ''}`}>
       <Row>
         <Col xs={2}>
           <button
@@ -22,7 +25,7 @@ const MobileSearch = props => {
             onClick={onClose}
           >
             <span className="navbar-toggler-icon close-icon"></span>
-          </button> 
+          </button>
         </Col>
         <Col xs={10}>
           <div className="input-group search-product" style={{width: '90%', marginTop: 15}}>
@@ -41,11 +44,21 @@ const MobileSearch = props => {
       </Row>
       <Row>
         <Col>
+          <div className="px-3">
+            <Filters
+              onSelect={onFilterUpdate}
+              column
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
           <ul className="category-mobile-wrap">
             {
               sidebar.map((s,i) => {
-                const parentSidebarClass = id === s.cat_id ? 'text-violet' : ''
-                const link = `/main/${s.cat_id}`
+                const parentSidebarClass = id === s.category_id ? 'text-violet' : ''
+                const link = `/main/${s.category_id}`
 
                 return (
                   <li key={i}>
@@ -55,16 +68,16 @@ const MobileSearch = props => {
                         className={parentSidebarClass}
                         onClick={onCategoryClick}
                         replace
-                      >{s.cat_name}</Link>
+                      >{s.name}</Link>
                     </div>
-                    <ul>  
-                      {s.sub_cats && s.sub_cats.map((sc, idx) => (
+                    <ul>
+                      {s.categories && s.categories.map((sc, idx) => (
                         <li key={idx}>
                         <Link
-                          to={`/main/${sc.cat_id || ''}`} 
-                          className={id === sc.cat_id ? "text-violet": ""}
+                          to={`/main/${sc.category_id || ''}`}
+                          className={id === sc.category_id ? "text-violet": ""}
                           onClick={onCategoryClick}
-                        >{sc.cat_name}</Link></li>
+                        >{sc.name}</Link></li>
                       ) )}
                     </ul>
                   </li>

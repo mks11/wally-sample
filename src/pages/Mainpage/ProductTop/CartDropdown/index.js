@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import CarbonBar from 'common/CarbonBar'
 import {
   formatMoney,
-  connect,
   logEvent,
   logModalView,
 } from 'utils'
@@ -57,7 +57,10 @@ class CartDropdown extends Component {
     const { cart } = this.props
 
     const items = cart ? cart.cart_items : []
-    const count = items.length
+    var count = 0;
+    for (var i = items.length - 1; i >= 0; i--) {
+      count += items[i].customer_quantity
+    };
     const subtotal = cart ? (cart.subtotal / 100) : 0
 
     // const deliveryFeeInfo =
@@ -85,6 +88,10 @@ class CartDropdown extends Component {
             onMouseLeave={this.handleMouseLeaveWithoutLog}
           >
             <div className="dropdown-menu dropdown-menu-right">
+              <div className="px-3">
+                <CarbonBar value={count % 10} />
+              </div>
+
               { (items && count > 0) ?
                   <React.Fragment>
                     <h3 className="px-3">Orders: {deliveryFeeInfo}</h3>
@@ -100,7 +107,7 @@ class CartDropdown extends Component {
                                 {
                                   unit_type !== 'packaging' && <span className="item-detail mb-1">{c.packaging_name}</span>
                                 }
-                                
+
                                 <div className="item-link">
                                   <a className="text-blue mr-2" onClick={() => this.handleEdit({product_id: c.product_id, customer_quantity: c.customer_quantity})}>EDIT</a>
                                   <a className="text-dark-grey" onClick={() => this.handleDelete({product_id: c.product_id, inventory_id: c._id})}>DELETE</a>
