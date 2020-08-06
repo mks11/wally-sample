@@ -10,7 +10,7 @@ export default function Row({ index, style, data }) {
   const isReturned = status === STATUS_RETURNED;
   return (
     <ListItem style={style} alignItems="center" component="div">
-      <ListItemText primary={`${name}`} />
+      <ListItemText primary={name} />
       <ListItemIcon>
         <div className={styles.iconContainer}>
           {isReturned ? (
