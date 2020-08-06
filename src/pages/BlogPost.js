@@ -1,52 +1,42 @@
-import React, { Component } from 'react';
-import ReactGA from 'react-ga';
-import Title from '../common/page/Title'
-import { Row, Col } from 'reactstrap';
-import { connect, logEvent } from '../utils'
-import moment from 'moment'
+import React, { Component } from "react";
+import ReactGA from "react-ga";
+import Title from "../common/page/Title";
+import { Row, Col } from "reactstrap";
+import { connect, logEvent } from "../utils";
+import moment from "moment";
 
 class BlogPost extends Component {
-  constructor(props, context){
-    super(props, context)
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
-      item: null
-    }
+      item: null,
+    };
 
-    this.userStore = this.props.store.user
-    this.contentStore = this.props.store.content
-    this.routing = this.props.store.routing
-    this.handleGetStarted = this.handleGetStarted.bind(this)
+    this.userStore = this.props.store.user;
+    this.contentStore = this.props.store.content;
+    this.routing = this.props.store.routing;
+    this.handleGetStarted = this.handleGetStarted.bind(this);
   }
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    this.userStore.getStatus()
-      .then((status) => {
-        this.loadData()
-      })
+    this.userStore.getStatus().then(() => {
+      // this.loadData();
+    });
   }
 
   handleGetStarted(e) {
-    logEvent({ category: "BlogPost", action: "GetStarted" })
-    this.routing.push('/')
-    e.preventDefault()
-  }
-
-  loadData() {
-    const id = this.props.match.params.id
-
-    this.contentStore.getBlogPost().then((items) => {
-      const item = items.filter(item => item._id === id)[0]
-      this.setState({ item })
-    })
+    logEvent({ category: "BlogPost", action: "GetStarted" });
+    this.routing.push("/");
+    e.preventDefault();
   }
 
   render() {
-    const id = this.props.match.params.id
-    const { item } = this.state
+    const id = this.props.match.params.id;
+    const { item } = this.state;
 
     if (!id || !item) {
-      return null
+      return null;
     }
 
     return (
@@ -58,20 +48,26 @@ class BlogPost extends Component {
               <Col>
                 <img className="img-fluid" src={item.image_ref} alt="" />
                 <h2 className="m-0 p-0">{item.title}</h2>
-                <div className="my-3 blog-date">Posted {moment.utc(item.post_date).format('MMMM DD, YYYY')} by {item.author}</div>
-                <p dangerouslySetInnerHTML={{__html: item.body}}></p>
+                <div className="my-3 blog-date">
+                  Posted {moment.utc(item.post_date).format("MMMM DD, YYYY")} by{" "}
+                  {item.author}
+                </div>
+                <p dangerouslySetInnerHTML={{ __html: item.body }}></p>
               </Col>
-              <hr/>
+              <hr />
             </Row>
             <Row>
               <Col>
-                <button onClick={this.handleGetStarted} className="btn btn-main active blog-get-started" data-submit="Submit">
+                <button
+                  onClick={this.handleGetStarted}
+                  className="btn btn-main active blog-get-started"
+                  data-submit="Submit"
+                >
                   Start shopping
                 </button>
               </Col>
             </Row>
           </div>
-
         </section>
       </div>
     );

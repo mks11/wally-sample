@@ -101,7 +101,7 @@ export default (
         <Redirect to="#!" />
       </Route>
       <Route exact path="/blog" component={Blog} />
-      <Route exact path="/blog/:id" component={BlogPost} />
+      <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
@@ -132,7 +132,8 @@ export default (
         }}
       />
       <Route exact path="/" component={Homepage} />
-      <Route component={Homepage} /> {/* This catchall will redirect any unidentified routes to the homepage */}
+      <Route component={Homepage} />{" "}
+      {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
   </Fragment>
 );
