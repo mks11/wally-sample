@@ -67,7 +67,7 @@
   "scripts": {
     "server": "nodemon server/server.js",
     "start": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "yarn run prebuild && cross-env NODE_PATH=src/ react-scripts build",
+    "build": "npm run prebuild && cross-env NODE_PATH=src/ react-scripts build",
     "prebuild": "generate-robotstxt --config ./src/robots-txt.config.js public/robots.txt && node src/generate-sitemap.js",
     "generate-robots": "generate-robotstxt --config ./src/robots-txt.config.js public/robots.txt",
     "generate-sitemap": "node src/generate-sitemap.js",
