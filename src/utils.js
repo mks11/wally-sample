@@ -10,25 +10,21 @@ export const datesEqual = (aDate, bDate) => {
 }
 
 export const logPageView = () => {
-  console.log('Logging pageview for ${window.location.pathname}');
   ReactGA.set({ page: window.location.pathname });
   ReactGA.pageview(window.location.pathname);
 }
 
 export const logEvent = ({category = '', action = '', value=null, label=''} = {}) => {
   if (category && action) {
-    console.log("Logging event for ", category, action, value, label);
     var GAEvent = { category: category, action: action };
     if (label) GAEvent["label"] = label;
     if (value) GAEvent["value"] = parseFloat(value);
-    console.log("GAEvent is", GAEvent);
     ReactGA.event(GAEvent);
   }
 }
 
 export const logModalView = (modalPath = '') => {
   if (modalPath) {
-    console.log("Logging modal view for ", modalPath);
     ReactGA.modalview(modalPath);
   }
 }
@@ -38,35 +34,16 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
-const formatNumber = (n, c, d, t) => {
-  var c = n % 1 != 0 ? 2 : 2,
-  c = isNaN(c = Math.abs(c)) ? 0 : c, 
-  d = d == undefined ? "." : d, 
-  t = t == undefined ? "," : t, 
-  s = n < 0 ? "-" : "", 
-  i = String(parseInt(n = Math.abs(Number(n) || 0))), 
-  j = (j = i.length) > 3 ? j % 3 : 0;
-  var money =  ''+ s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+const formatMoney = (n, precision, d = '.', t = ',') => {
+  if (isNaN(precision = Math.abs(precision))){
+    precision = 2;
+  }
 
-  // var sep = money.split(d)
-  // if (sep.length == 2) {
-  //   var dec = parseFloat(money.replace('$', ''))
-  //   dec = Math.abs(dec)
-  //
-  //   return '$'+dec
-  // }
-
-  return money
-}
-
-const formatMoney = (n, c, d, t) => {
-  var c = isNaN(c = Math.abs(c)) ? 2 : c,
-    d = d == undefined ? "." : d,
-    t = t == undefined ? "," : t,
-    s = n < 0 ? "-" : "",
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-    j = (j = i.length) > 3 ? j % 3 : 0;
-  var money = "$" + s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+  var s = n < 0 ? "-" : "";
+  var i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(precision)));
+  var numDigits = i.length;
+  var j = numDigits > 3 ? numDigits % 3 : 0;
+  var money = "$" + s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (precision? d + Math.abs(n - i).toFixed(precision).slice(2) : "");
 
   return money
 }
@@ -88,16 +65,16 @@ const isValidTimeOrder = (begin, end) => {
   const beginTime = moment(begin,'h:mm a')
   const endTime = moment(end, 'h:mm a')
   return beginTime.isSameOrBefore(endTime)
-} 
+}
 
 
 // takes 'HH:MM AM' or 'HH:MM PM' as first argument
 /**
- * 
- * @param {*} start_time 
- * @param {*} end_time 
- * @param {*} intervalInMins 
- * @param {*} limit 
+ *
+ * @param {*} start_time
+ * @param {*} end_time
+ * @param {*} intervalInMins
+ * @param {*} limit
  */
 function genTimePoints(start_time, end_time, intervalInMins = 0, limit = 60) {
   const result = [];
@@ -119,5 +96,5 @@ function genTimePoints(start_time, end_time, intervalInMins = 0, limit = 60) {
 
 
 export {
-  connect, validateEmail, formatNumber, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder
+  connect, validateEmail, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder
 }

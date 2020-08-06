@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
-import { validateEmail, connect, logEvent, logModalView, logPageView } from '../../utils'
+import { validateEmail, logModalView } from '../../utils'
 import FBLogin from '../../common/FBLogin'
 
 const ErrorInfo = props => {
@@ -36,7 +36,7 @@ class LoginModal extends Component {
     }
 
     user.login(email, password)
-      .then(user => {
+      .then(() => {
         this.props.toggle()
         routing.push('/main')
       }).catch(e => {
@@ -103,7 +103,7 @@ class LoginModal extends Component {
     const { email } = this.state
 
     user.forgotPassword(email)
-      .then(data => {
+      .then(() => {
         this.setState({ step: 3 })
       }).catch((e) => {
         console.error('Failed to login', e)
@@ -130,7 +130,6 @@ class LoginModal extends Component {
         { step <= 2 && (
           <div>
             <h3 className="m-0 mb-2">Log in</h3>
-            {/* <span className="mb-5">Welcome Back</span> */}
           </div>
         )}
         <div>

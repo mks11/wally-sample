@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap';
-import { validateEmail, connect, logEvent, logModalView, logPageView } from '../../utils'
+import { validateEmail, connect, logEvent } from '../../utils'
 import FBLogin from '../../common/FBLogin'
 
 class SignupModal extends Component {
@@ -12,7 +12,6 @@ class SignupModal extends Component {
       name: '',
       email: '',
       password: '',
-
       invalidText: '',
       signupRequest: false,
       pinError: false,
@@ -22,20 +21,14 @@ class SignupModal extends Component {
 
   handleSubmit = e => {
     const {
-      pin,
       name,
       email,
       password,
       signupRequest,
-      pinError,
     } = this.state
 
     if (!signupRequest) {
       this.setState({ invalidText: '', signupRequest: true })
-      // if (pin && pinError) {
-      //   this.setState({ invalidText: 'Pin is incorrect', signupRequest: false })
-      //   return
-      // }
 
       if (!name) {
         this.setState({ invalidText: 'Name cannot be empty', signupRequest: false })
@@ -119,14 +112,11 @@ class SignupModal extends Component {
 
   render() {
     const {
-      pin,
       name,
       email,
       password,
       invalidText,
-      signupRequest,
-      pinError,
-      displayPinErrorInfo,
+      signupRequest
     } = this.state
     const { user } = this.props.stores
     const additionalFBdata = {
@@ -137,24 +127,6 @@ class SignupModal extends Component {
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
         <div className="form-wrapper">
-          {/* <div className="pin-input mb-3">
-            <Input
-              className="aw-input--control black"
-              type="text"
-              name="pin"
-              placeholder="Enter pin"
-              onKeyDown={this.handleKeySubmit}
-              onChange={this.onValueChange}
-              onBlur={this.handlePinVerification}
-            />
-            {displayPinErrorInfo ? (
-              !pinError ? (
-                <i className="fa fa-check pin-input-ok" />
-              ) : (
-                <i className="fa fa-times pin-input-ok" />
-              )
-            ) : null}
-          </div> */}
 
           <Input
             className="aw-input--control mb-3 black"

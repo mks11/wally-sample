@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
-import { connect, logEvent, logModalView, datesEqual } from "utils";
+import { connect, datesEqual } from "utils";
 import { Link } from "react-router-dom";
 
 import CarbonBar from 'common/CarbonBar'

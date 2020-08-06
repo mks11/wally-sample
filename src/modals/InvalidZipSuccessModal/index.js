@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 
 class InvalidZipSuccessModal extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   handleExpore = e => {
     this.props.toggle()

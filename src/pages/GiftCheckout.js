@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import ReactGA from 'react-ga';
 import qs from 'qs'
-import { Link } from 'react-router-dom'
-import Title from '../common/page/Title'
-import FontAwesome from 'react-fontawesome';
-import GiftForm from './gift/GiftForm';
 
 import { connect } from '../utils'
+
+import FontAwesome from 'react-fontawesome';
+import GiftForm from './gift/GiftForm';
+import Head from '../common/Head'
+import Title from '../common/page/Title'
+
 
 class GiftCheckout extends Component {
   constructor(props) {
@@ -85,13 +88,13 @@ class GiftCheckout extends Component {
         _id: 'guestuser_id',
         last4: data.last4,
       }] : null
-  
+
       this.setState({
         stripeToken: data.stripeToken,
         guestUserPayment: guestPayment,
         selectedPayment: 'guestuser_id',
       })
-    } 
+    }
   }
 
   render() {
@@ -104,13 +107,17 @@ class GiftCheckout extends Component {
 
     if (!processGiftCard) return null
 
-    const giftFrom = this.userStore.user && this.userStore.user.email || ''
-    const userPayment = this.userStore.user && this.userStore.user.payment || guestUserPayment
-    const userPreferredPayment = this.userStore.user && this.userStore.user.preferred_payment || null
+    const giftFrom = this.userStore.user ? this.userStore.user.email : ''
+    const userPayment = this.userStore.user ? this.userStore.user.payment : guestUserPayment
+    const userPreferredPayment = this.userStore.user ? this.userStore.user.preferred_payment : null
     const userGuest = !this.userStore.status
 
     return (
       <div className="App">
+        <Head
+          title="Gift Card"
+          description="Treat your loved ones to a zero-waste Wally Shop giftcard."
+        />
         <Title content="Gift card" />
         <div className="container">
           <div className="gift-checkout-wrap card1 card-shadow">

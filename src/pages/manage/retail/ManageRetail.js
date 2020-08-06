@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
-import { Message } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
-import Snackbar from '@material-ui/core/Snackbar'
 import Title from '../../../common/page/Title'
 import {connect} from '../../../utils';
-import { CSVLink } from 'react-csv';
-import axios from 'axios'
 
 
 class ManageRetail extends Component {
@@ -237,7 +233,7 @@ class ManageRetail extends Component {
 
   render () {
     if (!this.userStore.user) return null
-    const { productListData, categoryListData, errors, loading } = this.state
+    const { errors, loading } = this.state
 
     return (
       <div>

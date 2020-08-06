@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import { Modal, ModalBody, Container, Row, Col, } from 'reactstrap'
+import { Modal, ModalBody, Container } from 'reactstrap'
 
 class ModalRequiredPackaging extends Component {
   constructor(props) {

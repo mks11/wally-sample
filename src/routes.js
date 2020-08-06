@@ -10,7 +10,6 @@ import Account from "./pages/Account";
 import Help from "./pages/Help";
 import HelpSingle from "./pages/HelpSingle";
 import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-// import HelpTopics from './pages/HelpTopics';
 import HelpAnswer from "./pages/HelpAnswer";
 import ResetPassword from "./pages/ResetPassword";
 import EmailVerification from "./pages/EmailVerification";
@@ -24,8 +23,8 @@ import InviteFriends from "./pages/InviteFriends";
 import Backers from "./pages/Backers";
 import Tnc from "./pages/Tnc";
 import Privacy from "./pages/Privacy";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import Blog from "./pages/Blog/Blog";
+import BlogPost from "./pages/Blog/BlogPost";
 import CartAdd from "./pages/CartAdd";
 import ReferFriend from "./pages/ReferFriend";
 import ManageShopper from "./pages/ManageShopper";
@@ -52,7 +51,6 @@ import ManageRetail from "./pages/manage/retail/ManageRetail";
 export default (
   <Fragment>
     <Switch>
-
       {/* Admin Routes (NOT CRAWLED) */}
       <Route exact path="/manage/retail" component={ManageRetail} />
       <Route exact path="/manage/printing" component={ManagePrinting} />
@@ -68,7 +66,6 @@ export default (
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/manage/products" component={ManageProducts} />
-
       {/* Copacker Routes (NOT CRAWLED) */}
       <Route
         exact
@@ -90,10 +87,8 @@ export default (
         path="/manage/co-packing/runs/:runId"
         component={ManageCoPackingRunsSpecific}
       />
-
       {/* Ambassador Routes (NOT CRAWLED) */}
       <Route exact path="/packaging/:id" component={Mainpage} />
-
       {/* Guest Routes (CRAWLED) */}
       <Route exact path="/" component={Homepage} />
       <Route exact path="/tnc" component={Tnc} />
@@ -109,40 +104,48 @@ export default (
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>
-
-      {/* How do we crawl? */}
-      <Route exact path="/blog/:id" component={BlogPost} />
+      {/* User Routes (NOT CRAWLED) */}
+      <Route exact path="/blog/:slug" component={BlogPost} />
+      <Route exact path="/orders/:id" component={OrderConfirmation} />
+      <Route exact path="/help" component={Help} />
+      <Route exact path="/help/topics" component={HelpSingle} />
+      <Route exact path="/help/topics/:id" component={HelpSingle} />
       <Route exact path="/help/detail/:id" component={HelpSingleAnswer} />
       <Route exact path="/help/question/:question" component={HelpAnswer} />
       <Route exact path="/help/topics/:id" component={HelpSingle} />
-
-      {/* User Routes (NOT CRAWLED) */}
       <Route exact path="/main" component={Mainpage} />
       <Route exact path="/orders" component={Orders} />
+      <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/schedule-pickup" component={Mainpage} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
       <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
       <Route exact path="/verify" component={EmailVerification} />
-      <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
       <Route exact path="/checkout" component={Checkout} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
-      <Route exact path="/feedback" component={Feedback} />
-      <Route exact path="/servicefeedback" component={Feedback} />
-
-      {/* User Routes (bugged) */}
-
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
       <Route exact path="/invitefriends" component={InviteFriends} />
-
       {/* Redirects to the above route */}
       <Route exact path="/signup" component={Signup} />
-
-
+      <Route exact path="/feedback" component={Feedback} />
+      <Route exact path="/servicefeedback" component={Feedback} />
+      <Route
+        exact
+        path="/social/:id"
+        render={({ match }) => {
+          const id = match.params.id;
+          if (id.match(/[\w-]{7,14}$/g)) {
+            return <Route component={Homepage} />;
+          }
+        }}
+      />
+      <Route exact path="/" component={Homepage} />
+      <Route component={Homepage} />{" "}
+      {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
   </Fragment>
 );
