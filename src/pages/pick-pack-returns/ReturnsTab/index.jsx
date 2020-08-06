@@ -68,7 +68,7 @@ function ReturnsTab({ store: { user: userStore } }) {
   };
 
   return (
-    <Tab title="Returns" className={styles.tabContainer}>
+    <Tab title="Returns" className={styles.tabContainer} maxWidth="sm">
       {returnItems.length === 0 ? (
         <Grid container justify="center">
           <Status />
