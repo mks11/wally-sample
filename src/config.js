@@ -5,7 +5,7 @@
 // 2. The app is always started in production when `npm run build` is executed.
 
 export let BASE_URL = "http://localhost:4001";
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   BASE_URL = "https://the-wally-shop.herokuapp.com";
 }
 
@@ -134,8 +134,7 @@ export const API_RETAIL_UPLOAD_SHIPMENTS =
   BASE_URL + "/api/admin/retail/shipments";
 export const API_RETAIL_UPLOAD_PRODUCT_ACTIONS =
   BASE_URL + "/api/admin/retail/product-actions";
-export const API_RETAIL_UPLOAD_SKUS =
-  BASE_URL + "/api/admin/retail/skus";
+export const API_RETAIL_UPLOAD_SKUS = BASE_URL + "/api/admin/retail/skus";
 
 export const API_GET_ADVERTISEMENTS = BASE_URL + "/api/web/ad_display";
 export const GET_ZIP_CODES = BASE_URL + "/api/service/zipcodes";
@@ -152,10 +151,10 @@ export const API_HELP_SEARCH = BASE_URL + "/api/help/search?search_term=";
 
 export const API_SUBSCRIBE_EMAIL = BASE_URL + "/api/email/newsletter/signup";
 export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + "/api/email/signup";
-export const API_BLOG_POST = BASE_URL + "/api/blog";
+export const API_BLOG_POSTS_INDEX = BASE_URL + "/api/blogposts";
 export const API_EDIT_CART_ITEM = BASE_URL + "/api/order";
 
-export const API_POST_METRIC_SOURCE = BASE_URL + "/api/metric/audience-source"
+export const API_POST_METRIC_SOURCE = BASE_URL + "/api/metric/audience-source";
 
 export const INSTAGRAM = "https://www.instagram.com/thewallyshop/";
 export const FACEBOOK = "https://facebook.com/thewallyshop";
