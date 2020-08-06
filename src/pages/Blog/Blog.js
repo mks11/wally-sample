@@ -7,12 +7,10 @@ import { Container, Grid, Typography } from "@material-ui/core";
 import { FaChevronRight } from "react-icons/fa";
 import styled from "styled-components";
 
-import { connect } from "../utils";
-import Head from "../common/Head";
-
-const Title = styled(Typography)`
-  margin-top: 0.75rem;
-`;
+import { connect } from "../../utils";
+import Head from "common/Head";
+import { PageTitle } from "common/page/Title";
+import { ResponsiveText } from "common/ResponsiveText";
 
 class Blog extends Component {
   constructor(props, context) {
@@ -46,9 +44,9 @@ class Blog extends Component {
     return (
       <Container maxWidth="lg" component={"section"}>
         <Head title="Blog" description="The Wally Shop blog." />
-        <Title variant="h1" align="center" gutterBottom>
+        <PageTitle variant="h1" align="center" gutterBottom>
           Blog
-        </Title>
+        </PageTitle>
         {isLoading ? (
           <Grid container justify="center" alignItems="center">
             <PuffLoader />
@@ -71,19 +69,25 @@ const BlogPostCardContainer = styled(Grid)`
     align-items: flex-start;
   }
   margin-bottom: 1rem;
-  border-bottom: 1px solid #a9abb1;
+  border-bottom: 2px solid #ebebeb;
 `;
 
-const ResponsiveText = styled(Typography)`
-  @media only screen and (max-width: 767px) {
-    text-align: center;
-  }
-  @media only screen and (min-width: 768px) {
-    text-align: start;
-  }
-`;
+export const BlogPostTitle = ({ children }) => {
+  return <ResponsiveText variant="h2">{children}</ResponsiveText>;
+};
 
-const BlogPostImage = styled.img`
+export const BlogPostSubtitle = ({ postDate, author }) => {
+  const postedBy = `Posted ${moment
+    .utc(postDate)
+    .format("MMMM DD, YYYY")} by ${author}`;
+  return (
+    <ResponsiveText variant="subtitle1" gutterBottom>
+      {postedBy}
+    </ResponsiveText>
+  );
+};
+
+export const BlogPostImage = styled.img`
   width: 100%;
 `;
 
@@ -100,9 +104,7 @@ const ReadMore = styled(Link)`
 
 function BlogPostCard({ post }) {
   const intro = post.body[0];
-  const postedBy = `Posted ${moment
-    .utc(post.post_date)
-    .format("MMMM DD, YYYY")} by ${post.author}`;
+
   const postPath = {
     pathname: `/blog/${post.slug}`,
     state: post,
@@ -117,12 +119,10 @@ function BlogPostCard({ post }) {
       component="article"
     >
       <Grid item xs={10} sm={10} md={12} lg={12} xl={12}>
-        <ResponsiveText variant="h2">
+        <BlogPostTitle>
           <ReadMore to={postPath}>{post.title}</ReadMore>
-        </ResponsiveText>
-        <ResponsiveText variant="subtitle1" gutterBottom>
-          {postedBy}
-        </ResponsiveText>
+        </BlogPostTitle>
+        <BlogPostSubtitle author={post.author} postDate={post.posted_date} />
       </Grid>
       <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
         <BlogPostImage src={intro.image.src} alt={intro.image.alt} />

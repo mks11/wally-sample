@@ -1393,12 +1393,21 @@ nav.aw-nav a.dropdown-item:hover::after {
   }
   .section-letsgetstarted h2 {
     margin-top: 30px;
+<<<<<<< Updated upstream
   }
   .landing-section h1 {
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
   }
+=======
+  }
+  .landing-section h1 {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+>>>>>>> Stashed changes
   .hero-left {
     left: -30px;
   }
@@ -1691,7 +1700,11 @@ nav.aw-nav a.dropdown-item:hover::after {
     padding-top: 70px;
   }
   p {
+<<<<<<< Updated upstream
     font-size: 16px;
+=======
+    font-size: 14px;
+>>>>>>> Stashed changes
   }
   .page-title {
     font-size: 22px;
