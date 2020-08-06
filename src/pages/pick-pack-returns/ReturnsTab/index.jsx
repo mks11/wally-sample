@@ -27,9 +27,9 @@ function ReturnsTab({ store: { user: userStore } }) {
   const fetchTodaysPackagingReturns = async () => {
     const url = API_GET_TODAYS_PACKAGING_RETURNS;
     const {
-      data: { returnItems },
+      data: { details },
     } = await axios.get(url);
-    return returnItems;
+    return details;
   };
 
   const handleCompletionReturns = ({ status, data: { message } }) => {
