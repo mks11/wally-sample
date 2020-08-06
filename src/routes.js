@@ -23,8 +23,8 @@ import InviteFriends from "./pages/InviteFriends";
 import Backers from "./pages/Backers";
 import Tnc from "./pages/Tnc";
 import Privacy from "./pages/Privacy";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import Blog from "./pages/Blog/Blog";
+import BlogPost from "./pages/Blog/BlogPost";
 import CartAdd from "./pages/CartAdd";
 import ReferFriend from "./pages/ReferFriend";
 import ManageShopper from "./pages/ManageShopper";
@@ -101,7 +101,7 @@ export default (
         <Redirect to="#!" />
       </Route>
       <Route exact path="/blog" component={Blog} />
-      <Route exact path="/blog/:id" component={BlogPost} />
+      <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
@@ -132,7 +132,8 @@ export default (
         }}
       />
       <Route exact path="/" component={Homepage} />
-      <Route component={Homepage} /> {/* This catchall will redirect any unidentified routes to the homepage */}
+      <Route component={Homepage} />{" "}
+      {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
   </Fragment>
 );
