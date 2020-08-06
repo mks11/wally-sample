@@ -1,22 +1,14 @@
 import React, { PureComponent, Component } from "react";
-import { Input } from "reactstrap";
 import {
-  validateEmail,
   connect,
-  logEvent,
-  logModalView,
-  logPageView,
   isValidTimeOrder,
   genTimePoints
 } from "../../utils";
 import PropTypes from "prop-types";
 import moment from "moment";
-import PreferredPickup from "../../common/DropdownPreferredPickupLocation";
 import DatePicker from "react-datepicker";
 import TimeOnlyOptions from "../../common/TimeOnlyOptions";
-import ErrorBoundary from "../../common/ErrorBoundary";
 import AddressOptionsManaged from "./AddressOptionsManaged";
-import { autorun } from "mobx";
 
 const ErrorInfo = props => {
   return props.invalidText ? (
@@ -69,10 +61,6 @@ class SchedulePickup extends PureComponent {
       earliestTime: props.earliestTime,
       latestTime: null,
       preferredLocation: "",
-
-      // lockEarliestTime: false,
-      // lockLatestTime: false,
-
       isFetching: false,
       successText: "", //to add
 
@@ -80,10 +68,6 @@ class SchedulePickup extends PureComponent {
       requestFailedText: null, // on submit if error occurred
       showIncompleteFieldErrors: false // if any field is invalid, before submission
     };
-  }
-
-  componentDidMount() {
-    //autorun(() => console.log(this.schedulePickupStore.loading));
   }
 
   checkValidityTime = () => {
@@ -158,7 +142,6 @@ class SchedulePickup extends PureComponent {
   getRequiredFieldsErrors = () => {
     const {
       selectedAddressId,
-      preferredLocation, //optional
       latestTime,
       earliestTime,
       pickupDate,
@@ -200,14 +183,6 @@ class SchedulePickup extends PureComponent {
     if (this.state.isFetching) {
       return;
     }
-    const {
-      selectedAddressId,
-      preferredLocation,
-      latestTime,
-      earliestTime,
-      pickupDate,
-      invalidLatestTime
-    } = this.state;
 
     const incompletes = this.getRequiredFieldsErrors();
 
@@ -218,19 +193,9 @@ class SchedulePickup extends PureComponent {
       return;
     }
 
-    const data = {
-      address_id: selectedAddressId,
-      scheduled_date: moment(pickupDate).format("YYYYMMDD"),
-      earliest_time: earliestTime,
-      latest_time: latestTime,
-      pickup_notes: preferredLocation,
-      auth: this.userStore.getHeaderAuth()
-    };
-
     try {
       this.setState({ isFetching: true });
-      const pickup = await this.schedulePickupStore.schedulePickupAsync(data);
-      this.setState({ isFetching: false });
+      this.setState({ isFetching: false }); // TODO: Why set and then unset this?
       this.props.toggle(); //close the modal
     } catch (e) {
       if (e.response.status < 500) {
@@ -252,7 +217,6 @@ class SchedulePickup extends PureComponent {
     const INVALID_TIME = "pick a different time";
     const {
       selectedAddressId,
-      preferredLocation,
       latestTime,
       earliestTime,
       pickupDate
@@ -325,13 +289,6 @@ class SchedulePickup extends PureComponent {
               store={this.props.store}
             />
           </Container>
-          {/* <Container>
-            <h3 class="m-0 mb-3 p-r"> Preferred Pickup Location </h3>
-            <PreferredPickup
-              selected={this.state.preferredLocation}
-              handleSelected={this.handlePreferredLocation}
-            />
-          </Container> */}
           <Container>
             <button
               class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}

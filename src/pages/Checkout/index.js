@@ -1,32 +1,22 @@
 import React, {Component} from 'react';
 import ReactGA from 'react-ga';
 import moment from 'moment';
-import {Link} from 'react-router-dom';
 import {Input} from 'reactstrap';
-import CurrencyInput from 'react-currency-input';
 import Title from 'common/page/Title';
 import PaymentSelect from 'common/PaymentSelect';
-import AmountGroup from 'common/AmountGroup';
 
 import {
   connect,
   formatMoney,
   logEvent,
-  logModalView,
-  logPageView,
   datesEqual,
 } from 'utils';
 
-import DeliveryTimeOptions from 'common/DeliveryTimeOptions';
 import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
 import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
-import Notes from './Notes';
-import ServiceSummary from './ServiceSummary';
 import PackagingSummary from './PackagingSummary';
-import TippingSummary from './TippingSummary';
 import PromoSummary from './PromoSummary';
-import Returns from './Returns';
 import ShippingOption from '../../common/ShippingOption';
 
 class Checkout extends Component {
@@ -374,7 +364,6 @@ class Checkout extends Component {
   }
 
   handleReturnSet = (has_returns, pickup_notes) => {
-    console.log (pickup_notes);
     this.setState ({
       hasReturns: has_returns,
       pickupNotes: pickup_notes,

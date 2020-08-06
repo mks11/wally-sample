@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import { logEvent, logModalView, logPageView } from '../../utils'
-import Tote from "."
+import { logEvent } from '../../utils'
 
 class ReferralModal extends Component {
   constructor(props) {
@@ -30,14 +28,13 @@ class ReferralModal extends Component {
   handleCopy = () => {
     logEvent({ category: "Refer", action: "CopyReferralLink" })
     const $el = this.el
-    // console.log($el)
     $el.select()
     try {
       var successful = document.execCommand('copy')
       var msg = successful ? 'successfully' : 'unsuccessfully'
-      console.log('text coppied ' + msg)
+      console.log('Text copied ' + msg)
     } catch (err) {
-      console.log('Unable to copy text')
+      console.warn('Unable to copy text')
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Title from '../common/page/Title'
+import Head from '../common/Head'
 import { connect } from '../utils'
 
 class About extends Component {
@@ -17,6 +18,10 @@ class About extends Component {
   render() {
     return (
       <div className="App">
+        <Head
+          title="Privay Policy"
+          description="The Wally Shop's privacy policy."
+        />
          <Title content="Privacy Policy" />
 
         <section className="page-section aw-our--story">

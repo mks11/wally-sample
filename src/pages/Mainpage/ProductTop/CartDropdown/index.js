@@ -7,9 +7,6 @@ import {
 } from 'utils'
 
 class CartDropdown extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   handleMouseEnter = () => {
     const { ui } = this.props

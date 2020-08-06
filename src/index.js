@@ -1,14 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import ReactGA from "react-ga";
-// import App from './App';
-// import registerServiceWorker from './registerServiceWorker';
 import routes from "./routes";
 
+import Head from "./common/Head";
 import TopNav from "./common/TopNav";
 import Footer from "./common/Footer";
 import ScrollToTop from "./common/ScrollToTop";
-import ScrollSpy from 'common/ScrollSpy'
+import ScrollSpy from "common/ScrollSpy";
 import RootModal from "./modals/RootModal";
 import Backdrop from "./common/Backdrop";
 
@@ -32,7 +31,7 @@ const browserHistory = createBrowserHistory();
 store.routing = routingStore;
 
 // ReactGA.initialize('UA-128193575-1', { debug: true });
-ReactGA.initialize('UA-128193575-1');
+ReactGA.initialize("UA-128193575-1");
 
 const history = syncHistoryWithStore(browserHistory, routingStore);
 
@@ -42,6 +41,10 @@ ReactDOM.render(
       <ScrollSpy>
         <ScrollToTop>
           <div className="app">
+            <Head
+              title="The Wally Shop"
+              description="Your favorite grocery brands delivered nationwide in 100% reusable packaging."
+            />
             <Backdrop />
             <TopNav />
             <main className="aw-main aw-home">{routes}</main>

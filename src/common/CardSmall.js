@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input, FormGroup, Label } from 'reactstrap';
-import type {InjectedProps} from 'react-stripe-elements';
 
 import {
   CardNumberElement,
@@ -13,17 +12,11 @@ import {
 const handleBlur = () => {
   console.log('[blur]');
 };
-// const handleClick = () => {
-//   console.log('[click]');
-// };
 const handleFocus = () => {
   console.log('[focus]');
 };
-// const handleReady = () => {
-//   console.log('[ready]');
-// };
 
-const createOptions = (fontSize: string, padding: ?string) => {
+const createOptions = (padding) => {
   return {
     style: {
       base: {
@@ -44,7 +37,7 @@ const createOptions = (fontSize: string, padding: ?string) => {
   };
 };
 
-class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
+class _SplitForm extends React.Component {
 
   state = {
     invalidText: '',
@@ -116,7 +109,6 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
           this._cvc.clear()
           this._zip.clear()
         }).catch((e) => {
-          console.log(e)
           if (e.response) {
             const msg = e.response.data.error.message
             this.setState({invalidText: msg})
