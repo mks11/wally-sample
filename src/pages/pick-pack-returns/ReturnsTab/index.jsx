@@ -53,7 +53,7 @@ function ReturnsTab({ store: { user: userStore } }) {
   }, []);
 
   const OnEmpty = () => (
-    <Typography> No items currently! check back later </Typography>
+    <Typography> No returns have been processed today. </Typography>
   );
   const OnError = () => <Typography color="error"> {error} </Typography>;
 
@@ -78,7 +78,7 @@ function ReturnsTab({ store: { user: userStore } }) {
           <Button
             variant="contained"
             color="default"
-            startIcon={<AddCircle />}
+            endIcon={<AddCircle />}
             href="/pick-pack-returns/packaging-return/new"
           >
             New Return
