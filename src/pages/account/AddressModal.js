@@ -174,7 +174,6 @@ class AddressModal extends Component {
         address[addressType] = val;
       }
     }
-    console.log('adddres', address)
 
     let city = address.locality
     if (!city && address.administrative_area_level_1) {

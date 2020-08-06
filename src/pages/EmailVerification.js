@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import qs from 'qs'
 import { connect } from 'utils'
 
-class EmailVerification extends Component {
+class EmailVerification extends React.Component {
   constructor(props) {
     super(props)
 

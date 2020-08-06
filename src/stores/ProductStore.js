@@ -50,8 +50,6 @@ class ProductStore {
     const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`)
     this.activeProductComments = await this.getComments(product_id)
     this.activeProduct = res.data
-    let inventory = null
-    if (this.activeProduct.available_inventory && this.activeProduct.available_inventory.length > 0) inventory = this.activeProduct.available_inventory[0]
     var min_size = 1
 
     this.customer_quantity = customer_quantity ? customer_quantity : min_size
@@ -79,7 +77,7 @@ class ProductStore {
     const time = moment().format("YYYY-MM-DD HH:mm:ss");
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED;
 
-    if (auth && auth.headers.Authorization != "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== "Bearer undefined") {
       res = await axios.get(
         `${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
         auth
@@ -106,7 +104,7 @@ class ProductStore {
 
     this.fetch = true;
 
-    if (auth && auth.headers.Authorization != "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== "Bearer undefined") {
       res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth);
     } else {
       res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`);
@@ -124,7 +122,7 @@ class ProductStore {
 
   async getHistoricalProducts(auth) {
     let res;
-    if (auth && auth.headers.Authorization != "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== "Bearer undefined") {
       res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
     } else {
       res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
@@ -182,7 +180,7 @@ class ProductStore {
     const time = moment().format("YYYY-MM-DD HH:mm:ss");
     keyword = encodeURIComponent(keyword);
 
-    if (auth && auth.headers.Authorization != "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== "Bearer undefined") {
       res = await axios.get(
         `${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
         auth

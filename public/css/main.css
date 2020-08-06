@@ -837,6 +837,7 @@ button:hover,
   display: inline-block;
   padding: 10px 10px;
   color: #fff;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -846,13 +847,25 @@ button:hover,
   }
 }
 
+@media (min-width: 480px) {
+  .aw-nav--mobile li a {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .aw-nav--mobile li a {
+    font-size: 1.5rem;
+  }
+}
+
 .aw-nav--mobile li a:focus,
 .aw-nav--mobile li a:active,
 .aw-nav--mobile li a:hover {
   color: #ccc;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 991px) {
   .aw-nav--mobile li {
     display: inline-block;
     vertical-align: middle;
@@ -1015,6 +1028,7 @@ button:hover,
 .nav-open .aw-nav--mobile {
   visibility: visible;
   opacity: 1;
+  overflow-y: auto;
 }
 
 .nav-open .aw-logo--fill {

@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import BoxOrder from '../common/page/help/BoxOrder';
-import Title from '../common/page/Title';
-import PropTypes from 'prop-types';
-import { connect } from '../utils';
 import ReactGA from 'react-ga';
+import PropTypes from 'prop-types';
+
+import { connect } from '../utils';
+
+import BoxOrder from '../common/page/help/BoxOrder';
+import Head from '../common/Head'
+import Title from '../common/page/Title';
 
 class HelpSingle extends Component {
   state = {
@@ -63,6 +66,10 @@ class HelpSingle extends Component {
     let qClass = 'list-bordered list-group-item d-flex justify-content-between align-items-center'
     return (
       <div className="app">
+        <Head
+          title="Help"
+          description="View all topics regarding The Wally Shop's service."
+        />
         <Title content="Help"/>
         <section className="page-section aw-our--story">
           <div className="container">

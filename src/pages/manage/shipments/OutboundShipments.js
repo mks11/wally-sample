@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
   Container,
-  Row,
-  Col,
   ModalBody
 } from "reactstrap";
 import Paper from "@material-ui/core/Paper/Paper";
@@ -21,11 +14,6 @@ import Title from "./../../../common/page/Title";
 import {
   Button,
   Modal,
-  TextField,
-  FormControl,
-  MenuItem,
-  Select,
-  InputLabel
 } from "@material-ui/core";
 
 class OutboundShipments extends Component {
@@ -61,7 +49,6 @@ class OutboundShipments extends Component {
                 this.setState({
                   results: res.data
                 });
-                console.log(res.data);
               } else {
                 this.setState({
                   apiError: true
@@ -112,8 +99,6 @@ class OutboundShipments extends Component {
     let chosenShipment = this.state.modal;
     let carrier = this.state.carrier;
     let trackingNum = this.state.trackingEdit;
-    let errors = this.state.errors;
-    let buttonClass = "btn btn-main my-3";
     return (
       <>
         <section className="page-section pt-1 fulfillment-page co-packing-page">
@@ -316,7 +301,6 @@ class OutboundShipments extends Component {
                       {chosenShipment !== null &&
                         chosenShipment.packing_list.map((product, i) => (
                           <TableRow key={i}>
-                            {console.log(product)}
                             <TableCell align="left">{product.name}</TableCell>
                             <TableCell align="left">
                               {product.units} Jars / {product.cases} Case
