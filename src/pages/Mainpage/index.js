@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import { formatMoney, connect, logEvent, logModalView, datesEqual } from 'utils'
-import { Link } from 'react-router-dom'
 import { APP_URL } from 'config'
 
 import AddonFirstModal from 'common/AddonFirstModal'
 import CarbonBar from 'common/CarbonBar'
 
-// import Hero from './Hero'
 import Product from './Product'
 import ProductList from './ProductList'
 import ProductTop from './ProductTop'
 import MobileSearch from './MobileSearch'
 import MobileCartBtn from './MobileCartBtn'
 import CategoryCard from './CategoryCard'
-import Filters from './ProductTop/Filters'
 import CategoriesList from './CategoriesList'
 import ProductWithPackaging from "../ProductWithPackaging";
 
@@ -53,11 +50,9 @@ class Mainpage extends Component {
             window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf` 
           }
           else {
-            console.log("Getting product info");
             this.packagingUnitStore.getPackagingUnit(this.props.match.params.id)
               .then((unit) => {
-                console.log("Getting product info");
-                if (unit.packaging_type_id == "5e0e45220ec2446bcfeed983") {
+                if (unit.packaging_type_id === "5e0e45220ec2446bcfeed983") {
                   window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${this.props.match.params.id}` 
                 } else {
                   if (unit.product_id) { 
@@ -97,9 +92,6 @@ class Mainpage extends Component {
         .catch((e) => console.error('Failed to load historical products: ', e))
     } else {
       let categoryTypeMode = 'all'
-      // if (!this.id) {
-      //   categoryTypeMode = 'limit'
-      // }
 
       this.setState({categoryTypeMode})
 
@@ -300,12 +292,6 @@ class Mainpage extends Component {
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null
 
-    const categoryLink =
-      this.productStore.currentSearchCategory === 'All Categories'
-        ? <Link to="/main" onClick={this.handleCategoryClick}>{this.productStore.currentSearchCategory}</Link>
-        : this.productStore.currentSearchCategory
-
-
     return (
       <div className="App">
         <ProductTop
@@ -322,7 +308,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4 text-center">
-                      <img src="/images/sidepanel_sticker.png" width="70%"/>
+                      <img src="/images/sidepanel_sticker.png" width="70%" alt="" />
                     </div>
                     <CategoriesList
                       selectedId={id}
@@ -343,7 +329,6 @@ class Mainpage extends Component {
                       <div className="col-xl-10 col-md-9 col-sm-12">
                         <div className="product-content-right">
                           <div className="product-breadcrumb">
-                            {/* <CarbonBar value={count % 12} /> */}
                             <h2>Buy Again</h2>
                             <div className="filters">
                               <div className="filters-title">Sort:</div>
@@ -398,8 +383,8 @@ class Mainpage extends Component {
                                 .filter(p => filters.length ? !(filters.some(f => {
                                   if (p.allergens && p.tags) {
                                     let [t, v] = f.split(",");
-                                    if (t == "allergen") return p.allergens.includes(v);
-                                    if (t == "tag") return !p.tags.includes(v);
+                                    if (t === "allergen") return p.allergens.includes(v);
+                                    if (t === "tag") return !p.tags.includes(v);
                                   }
                                   return true
                                 })) : true)
@@ -465,17 +450,12 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-                {/* <DeliveryModal onChangeSubmit={this.handleChangeDelivery} /> */}
-                {/* <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery}/> */}
                 <MobileCartBtn
                   onClick={this.handleOpenCartMobile}
                   items={cartItems.length}
                 />
                 <div className={`cart-mobile d-md-none ${this.uiStore.cartMobile ? 'open' : ''}`}>
                   <button className="btn-close-cart btn-transparent" type="button" onClick={e=>this.uiStore.toggleCartMobile(false)}><span className="navbar-toggler-icon close-icon"></span></button>
-                    {/* <div className="px-3">
-                      <CarbonBar value={count % 12} />
-                    </div> */}
                   {cartItems.length>0 ?
                       <React.Fragment>
                         <h2 className="ml-4 mb-2">Order</h2>

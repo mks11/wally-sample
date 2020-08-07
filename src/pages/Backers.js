@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
+
 import { connect } from "../utils";
+
+import Head from '../common/Head'
 
 class Backers extends Component {
   constructor(props) {
@@ -30,6 +33,10 @@ class Backers extends Component {
   render() {
     return (
       <div className="App">
+        <Head
+          title="Our Backers"
+          description="The Wally Shop's Kick-Starter backers."
+        />
         <section className="page-section aw-our--story">
           <div className="container">
             <div className="text-center">

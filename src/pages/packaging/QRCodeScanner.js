@@ -1,5 +1,4 @@
-import React, { Component, Suspense, lazy } from "react";
-import { Link } from 'react-router-dom'
+import React, {Component} from "react";
 import QrReader from 'react-qr-reader'
 import Paper from "@material-ui/core/Paper/Paper";
 import LazyLoad from 'react-lazyload';
@@ -32,13 +31,10 @@ class QRCodeScanner extends Component {
     result: 'No result',
   }
 
-  // localMediaStream.getTracks()[0].stop()
 
 
   constructor(props) {
     super(props);
-
-    //this.adminStore = props.store.admin;
 
     this.state = {
       name: '',
@@ -49,7 +45,6 @@ class QRCodeScanner extends Component {
   }
 
   componentDidMount() {
-    console.log('ismobile ', isMobile)
     window.addEventListener('orientationchange', this.setScreenOrientation)
   }
 
@@ -58,7 +53,6 @@ class QRCodeScanner extends Component {
 
 
     if (window.matchMedia("(orientation: portrait)").matches) {
-      console.log('orientation: portrait');
       this.setState({
         isPortrait: true
       });
@@ -69,17 +63,11 @@ class QRCodeScanner extends Component {
         isPortrait: false
       });
     }
-
-    // alert(this.state.isPortrait);
-
-    console.log('screen orientation portrait', this.state.isPortrait)
   };
 
 
   handleScan = data => {
     if (data) {
-
-      console.log('qr data ', data);
       //www.thewallyshop.co/packaging/{PackagingUnit.id} encode in QR url format
 
       var domain = data.split('/');

@@ -10,7 +10,6 @@ import Table from "@material-ui/core/Table/Table";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import { BASE_URL } from "../../config";
 
 class CourierModal extends Component {
   constructor(props) {
@@ -81,11 +80,10 @@ class CourierModal extends Component {
                   <TableCell>
                     <InputGroup>
                       <Input
-                        placeholder="Enter name..."
+                        placeholder="Enter courier name..."
                         value={name}
                         name="name"
                         type="string"
-                        placeholder="enter courier name here"
                         onChange={this.onNameChange}
                       />
                     </InputGroup>

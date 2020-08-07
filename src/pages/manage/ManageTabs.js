@@ -1,3 +1,5 @@
+/* eslint-disable */
+/* TODO: Determine the utility of this component- It's not clear what its purpose is or why it is disabled. */
 import React from "react";
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
@@ -62,21 +64,21 @@ const Tab = ({ item, page }) => {
 
 const ManageTabs = ({ page }) => {
   return null // todo remove this line to get old admin tabs
-  return (
-    <div className="admin-tabs mt-3">
-      <Container>
-        <Row>
-          {
-            manageTabsRouter.map(item => {
-              return (
-                <Tab {...{ item, page }} key={item.id} />
-              )
-            })
-          }
-        </Row>
-      </Container>
-    </div>
-  )
+  // return (
+  //   <div className="admin-tabs mt-3">
+  //     <Container>
+  //       <Row>
+  //         {
+  //           manageTabsRouter.map(item => {
+  //             return (
+  //               <Tab {...{ item, page }} key={item.id} />
+  //             )
+  //           })
+  //         }
+  //       </Row>
+  //     </Container>
+  //   </div>
+  // )
 }
 
 export default ManageTabs

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
-import { connect, logEvent, logModalView, logPageView } from '../../utils'
+import { logEvent } from '../../utils'
 
 class ZipModal extends Component {
   constructor(props) {

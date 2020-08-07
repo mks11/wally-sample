@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { formatMoney, connect, logEvent, logModalView, logPageView } from '../utils'
+import { formatMoney, connect, logModalView } from '../utils'
 import ClickOutside from 'react-click-outside'
 
 class TopNav extends Component {
@@ -39,7 +39,6 @@ class TopNav extends Component {
   handleInvite = () => {
     logModalView('/refer')
     this.hideAccountDropdown()
-    // this.modalStore.toggleModal('invite')
     this.modalStore.toggleModal('referral')
   }
 
@@ -49,7 +48,6 @@ class TopNav extends Component {
     this.hideAccountDropdown()
     this.props.store.routing.push('/')
     this.userStore.logout()
-    // e.preventDefault()
   }
 
   handleToggle = () => {
@@ -95,7 +93,6 @@ class TopNav extends Component {
     logModalView("/schedulePickup");
     this.hideAccountDropdown();
     this.modalStore.toggleModal("schedulepickup");
-    // throw new Error("Implementation");
   };
 
   handleReferralModal = (e) => {
@@ -169,7 +166,7 @@ class TopNav extends Component {
 
     return (
       <div className={headerWrapClass}>
-        <div className="aw-nav--mobile d-md-none">
+        <div className="aw-nav--mobile d-lg-none">
           <div className="center-middle">
             <div className="container-fluid">
               <div className="row aw-nav--middle">
@@ -189,6 +186,7 @@ class TopNav extends Component {
                           <li><a onClick={() => this.handleNavMobile('/manage/products')}>Products App</a></li>
                           <li><a onClick={() => this.handleNavMobile('/manage/shipping')}>Shipping</a></li>
                           <li><a onClick={() => this.handleNavMobile('/manage/printing')}>Printing</a></li>
+                          <li><a onClick={() => this.handleNavMobile('/manage/blog')}>Blog</a></li>
                           <li><a onClick={this.handleMobileNavLogout}>Sign Out</a></li>
                         </React.Fragment>
                       )}
@@ -240,8 +238,8 @@ class TopNav extends Component {
                           <li className="mt-5"><a onClick={() => this.handleNavMobile('/latest-news')}>COVID-19</a></li>
                           <li><a onClick={() => this.handleNavMobile('/about')}>About</a></li>
                           <li><a onClick={() => this.handleNavMobile('/howitworks')}>How It Works</a></li>
-                          
-                          {/* <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li> 
+                          <li><a onClick={() => this.handleNavMobile('/blog')}>Blog</a></li>
+                          {/*
                           <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
                           {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
                           <li><a onClick={() => this.handleNavMobile('/backers')}>Our Backers</a></li>
@@ -249,13 +247,6 @@ class TopNav extends Component {
                       )}
                     </ul>
                   </nav>
-                </div>
-              </div>
-              <div className="row aw-nav--action">
-                <div className="col-12 text-center">
-                  {/*
-                  <a href="#nav-hero" className="btn btn-block mx-auto btn-outline-white btn-get--started d-inline-block d-md-block">Get notified</a>
-                      */}
                 </div>
               </div>
             </div>
@@ -278,18 +269,18 @@ class TopNav extends Component {
           }
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
-              <div className="d-none col-auto d-md-block">
+              <div className="d-none col-auto d-lg-block">
                 <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
                   <img className="logo-text-desktop" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
                   <img className="logo-text-mobile" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />
                 </a>
               </div>
-              <div className="col-auto ml-auto d-none d-md-block">
+              <div className="col-auto ml-auto d-none d-lg-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
                     { this.userStore.status && isAdmin && (
                         <li>
-                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                          <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
                             <ClickOutside onClickOutside={this.hideAccountDropdown}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
@@ -306,6 +297,7 @@ class TopNav extends Component {
                                   <Link onClick={this.hideAccountDropdown} to="/manage/products" className="dropdown-item">Products App</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/shipping" className="dropdown-item">Shipping</Link>
                                   <Link onClick={this.hideAccountDropdown} to="/manage/printing" className="dropdown-item">Printing</Link>
+                                  <Link onClick={this.hideAccountDropdown} to="/manage/blog" className="dropdown-item">Blog</Link>
                                   <a onClick={this.handleLogout} className="dropdown-item">Sign Out</a>
                                 </div>
                               </div>
@@ -316,7 +308,7 @@ class TopNav extends Component {
                     }
                     { this.userStore.status && isTwsOps && (
                         <li>
-                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                          <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
                             <ClickOutside onClickOutside={this.hideAccountDropdown}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
@@ -336,7 +328,7 @@ class TopNav extends Component {
                     }
                     { this.userStore.status && isCopacker && (
                       <li>
-                        <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                        <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
                           <ClickOutside onClickOutside={this.hideAccountDropdown}>
                             <div className="btn-group">
                               <button onClick={this.handleToggle} className="btn btn-transparent" type="button" data-toggle="dropdown" aria-expanded="true">
@@ -358,7 +350,7 @@ class TopNav extends Component {
                       <React.Fragment>
                           <li className="aw-align-self-center"><Link className="nav-link aw-nav--link p-0 util-font-size-14" to="/help">Help</Link></li>
                           <li>
-                          <div className="col-auto ml-auto d-none d-md-block account-dropdown">
+                          <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
                             <ClickOutside onClickOutside={this.hideAccountDropdown}>
                               <div className="btn-group">
                                 <button onClick={this.handleToggle} className="text-normal btn btn-transparent util-font-size-14" type="button" data-toggle="dropdown" aria-expanded="true">
@@ -370,14 +362,13 @@ class TopNav extends Component {
                                       <Link onClick = {this.hideAccountDropdown} to="/orders" className="dropdown-item">Order History</Link>
                                       <a onClick={this.handleSchedulePickup} className="dropdown-item"> Schedule Pickup</a>
                                       <Link onClick={this.hideAccountDropdown} to="/user" className="dropdown-item">Account Settings</Link>
-                                      {/* <a onClick={this.handleInvite} className="dropdown-item">Refer a friend, receive a tote</a> */}
                                       <Link onClick={this.hideAccountDropdown} to="/latest-news" className="dropdown-item">COVID-19</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/about" className="dropdown-item">About</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/howitworks" className="dropdown-item">How It Works</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/help" className="dropdown-item">Help</Link>
+                                      <Link onClick={this.hideAccountDropdown} to="/blog" className="dropdown-item">Blog</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/giftcard" className="dropdown-item">Gift Card</Link>
                                       <Link onClick={this.hideAccountDropdown} to="/backers" className="dropdown-item">Our Backers</Link>
-                                      <a onClick={this.handleSchedulePickupClick} className="dropdown-item">Schedule Pickup</a>
                                       <a onClick={this.handleRedeemDepositClick} className="dropdown-item">Redeem Deposit</a>
                                       <a onClick={this.handleLogout} className="dropdown-item">Sign Out</a>
                                 </div>
@@ -393,15 +384,14 @@ class TopNav extends Component {
                         <li><Link className="nav-link aw-nav--link p-0" to="/latest-news">COVID-19</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/about">About</Link></li>
                         <li><Link className="nav-link aw-nav--link p-0" to="/howitworks">How It Works</Link></li>
-                        {/* <li><Link className="nav-link aw-nav--link p-0" to="/help/topics">FAQ</Link></li>
-                        <li><Link className="nav-link aw-nav--link p-0" to="/main">Explore</Link></li> */}
+                        <li><Link className="nav-link aw-nav--link p-0" to="/blog">Blog</Link></li>
                       </React.Fragment>
                     )}
                   </ul>
                 </nav>
               </div>
               { !this.userStore.status ?
-              <div className="col-auto d-none d-md-block btn-top-account">
+              <div className="col-auto d-none d-lg-block btn-top-account">
                 <button onClick={this.handleLogin} className="btn btn-outline-black btn-login text-caps">Log in</button>
                 <button onClick={this.handleSignup} className="btn btn-inline-black btn-sign-up text-caps">Sign up</button>
                 <button onClick={this.handleNavBackers} className="btn btn-inline-transparent btn-backers">✨</button>
@@ -409,7 +399,7 @@ class TopNav extends Component {
                   : null}
 
                   { this.userStore.status || true ?
-                      <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-md-none" type="button" >
+                      <button onClick={e=> this.uiStore.toggleNavMobile()} className="navbar-toggler aw-nav--toggle d-lg-none" type="button" >
                         <span className="navbar-toggler-icon"></span>
                       </button>
                     :
@@ -417,7 +407,7 @@ class TopNav extends Component {
                     }
             </div>
 
-            <div className="row d-md-none  d-sm-block">
+            <div className="row d-lg-none  d-sm-block">
               <div className="col-sm-12">
                 <a className="aw-logo d-block text-center" onClick={this.handleLogo}>
                   <img className="logo-text-mobile util-relative util-offset-top--30" src='/images/TheWallyShop_Logo_Horizontal.svg' alt="The Wally Shop" />

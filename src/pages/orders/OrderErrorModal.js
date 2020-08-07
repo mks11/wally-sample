@@ -14,18 +14,17 @@ class OrderErrorModal extends Component {
       cart_item: props.cart_item,
       quantityUnit: props.quantityUnit,
       toolittle:
-        props.cart_item.product_error_reason == "too_little" ? true : false,
-      ugly: props.cart_item.product_error_reason == "ugly" ? true : false,
+        props.cart_item.product_error_reason === "too_little" ? true : false,
+      ugly: props.cart_item.product_error_reason === "ugly" ? true : false,
       noError:
-        props.cart_item.product_error_reason == undefined ||
-        props.cart_item.product_error_reason == "no_error"
+        props.cart_item.product_error_reason === undefined ||
+        props.cart_item.product_error_reason === "no_error"
           ? true
           : false
     };
   }
 
   onLittleChange = e => {
-    const { ugly, toolittle, noError } = this.state;
     this.setState({
       ugly: false,
       toolittle: true,
@@ -34,7 +33,6 @@ class OrderErrorModal extends Component {
   };
 
   onUglyChange = e => {
-    const { ugly, toolittle, noError } = this.state;
     this.setState({
       ugly: true,
       toolittle: false,
@@ -43,7 +41,6 @@ class OrderErrorModal extends Component {
   };
 
   onNoErrorChange = e => {
-    const { ugly, toolittle, noError } = this.state;
     this.setState({
       ugly: false,
       toolittle: false,

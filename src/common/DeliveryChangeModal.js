@@ -10,12 +10,6 @@ class DeliveryChangeModal extends Component {
     if (modalStore.deliveryChangeType === 'address') {
       logEvent({ category: "DeliveryOptions", action: "ConfirmAddressChange" })
       userStore.setDeliveryAddress(modalStore.deliveryChangeData.address)
-      if (modalStore.deliveryChangeData.times && modalStore.deliveryChangeData.times.length > 0) {
-        // const items = modalStore.deliveryChangeData.times[0]
-        // const item = items.data[0]
-        // const selected = {day: items.day, time: item.time, date: item.date, availability: item.availability}
-        // userStore.setDeliveryTime(selected)
-      }
     } else {
       logEvent({ category: "DeliveryOptions", action: "ConfirmTimeChange" })
       userStore.setDeliveryTime(modalStore.deliveryChangeData)

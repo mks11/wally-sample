@@ -209,8 +209,8 @@ class UserStore {
       return function(current) {
         return (
           otherArray.filter(function(other) {
-            return other.address_id == current.address_id;
-          }).length == 0
+            return other.address_id === current.address_id;
+          }).length === 0
         );
       };
     }

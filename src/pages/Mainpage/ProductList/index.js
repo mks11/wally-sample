@@ -35,7 +35,7 @@ class ProductList extends Component {
         <h2>{display.cat_name}</h2>
         <div className="product-sub">
           <h5>{display.cat_name}</h5>
-          <Link to={`/main/${display.cat_id}`}>View All {display.number_products} ></Link>
+          <Link to={`/main/${display.cat_id}`}>View All {display.number_products}</Link>
         </div>
 
         {mode === 'limit' && <Button className="big-arrow right-arrow" />}
@@ -46,8 +46,8 @@ class ProductList extends Component {
                 .filter(p => filters.length ? !(filters.some(f => {
                   if (p.allergens && p.tags) {
                     let [t, v] = f.split(",");
-                    if (t == "allergen") return p.allergens.includes(v);
-                    if (t == "tag") return !p.tags.includes(v);
+                    if (t === "allergen") return p.allergens.includes(v);
+                    if (t === "tag") return !p.tags.includes(v);
                   }
                   return true
                 })) : true)

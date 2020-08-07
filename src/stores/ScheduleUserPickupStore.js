@@ -1,4 +1,4 @@
-import { observable, decorate, action, runInAction } from "mobx";
+import { observable, decorate, action } from "mobx";
 import { API_SCHEDULED_PICKUP } from "../config";
 import axios from "axios";
 
@@ -14,16 +14,6 @@ class UserPickupStore {
     auth
   }) {
     this.loading = true;
-    // alert(
-    //   JSON.stringify({
-    //     address_id,
-    //     scheduled_date,
-    //     earliest_time,
-    //     latest_time,
-    //     pickup_notes,
-    //     auth
-    //   })
-    // );
 
     const res = await axios.post(
       API_SCHEDULED_PICKUP,
