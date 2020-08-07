@@ -70,7 +70,7 @@ class ShoppingAppStep2 extends Component {
 
   render() {
 		const {locations} = this.adminStore
-		const {timeframe, location} = this.state
+		const {location} = this.state
     return (
       <div className="App">
         <ManageTabs page="shopper" />

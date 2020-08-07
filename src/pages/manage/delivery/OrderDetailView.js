@@ -87,7 +87,7 @@ class OrderDetailView extends Component {
   }
 
   onSubmit = () => {
-    const {editedPackagings, orderId, missingReason, isMissingModalOpen, isDeliveredModalOpen} = this.state
+    const {editedPackagings, orderId, missingReason, isMissingModalOpen} = this.state
     const {packagings} = this.adminStore
     const {onSubmit} = this.props
 
@@ -109,7 +109,6 @@ class OrderDetailView extends Component {
     const options = this.userStore.getHeaderAuth()
 
     this.adminStore.completeOrder(orderId, payload, options)
-    console.log(onSubmit)
     onSubmit && onSubmit()
     this.props.toggle({})
   }
@@ -185,18 +184,6 @@ class OrderDetailView extends Component {
               </Table>
             </Col>
           </Row>
-          {/*<Row>
-            <Col className="my-3">
-              <CustomDropdown
-                values={[
-                  { id: 'Delivered', title: 'Delivered' },
-                  { id: 'Didn’t Respond', title: 'Didn’t Respond' },
-                  { id: 'Couldn’t Contact', title: 'Couldn’t Contact' }
-                ]}
-                onItemClick={this.updateStatus}
-              />
-            </Col>
-          </Row>*/}
           <Grid container justify={"center"}>
             <Grid item xs={4} className={"d-flex m-2"}>
               <Button fullWidth={true} color="primary" variant={"contained"}

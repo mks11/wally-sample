@@ -63,9 +63,6 @@ class ViewSingleOrder extends Component {
             .then(res => console.log(res))
             .catch(e => console.log(e));
 
-        console.log('packagings ', packagings);
-        console.log('selected order ', selectedOrder);
-        console.log('cart_items ', cart_items);
     };
 
     onChangePackaging = (e, type) => {
@@ -113,7 +110,6 @@ class ViewSingleOrder extends Component {
     };
 
     handleCartStateChange = update => {
-        const {cart_items, selectedOrder} = this.state;
         return new Promise(done => {
             this.setState(({cart_items}) => ({
                 cart_items: cart_items.map(item =>
@@ -127,14 +123,12 @@ class ViewSingleOrder extends Component {
             }));
             this.setState({}, () => {
                 done();
-                console.log("end of callstate", cart_items);
             });
         });
     };
 
     render() {
         const {cart_items, selectedOrder} = this.state;
-        const hideRow = {display: "none"};
         return (
             <section className="page-section pt-1 single-order">
                 <Container>

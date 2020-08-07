@@ -45,6 +45,7 @@ class Addons extends PureComponent {
     const { popup } = this.state
 
     const addonsList = addons.map(addon => `${addon.name} (${formatMoney(addon.inventory[0].price/100)})`)
+    const availableAddons = addons.filter((addon) => addon.inventory && addon.inventory.length);
 
     return (
       <FormGroup className="product-addons">
@@ -59,11 +60,11 @@ class Addons extends PureComponent {
             </div>
             <Input type="select" value={packagingAddon} onChange={this.handlePackagingAddon}>
               {
-                addons.map((addon, i) => {
-                  if (!addon.inventory || addon.inventory.length === 0) return
+                availableAddons.map((addon) => {
                   const value = `${addon.name} - ${formatMoney(addon.inventory[0].price/100)}`
+
                   return (
-                    <option key={i} value={addon.product_id}>{`${value} per unit`}</option>
+                    <option key={`${addon.name}`} value={addon.product_id}>{`${value} per unit`}</option>
                   )
                 })
               }

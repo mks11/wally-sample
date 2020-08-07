@@ -24,13 +24,10 @@ class HelpAnswer extends Component {
   }
 
   async componentWillMount(){
-    // await this.helpStore.getQuestion(1);
     await this.fetchData(1);
-    // console.log(this.helpStore.question.text)
   }
 
   renderTitle(){
-    // const { title } = this.props.location.state;
     return ( <Title content="Help" /> )
   }
 
