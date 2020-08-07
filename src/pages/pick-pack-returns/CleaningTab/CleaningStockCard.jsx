@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Typography,
   Card,
   CardContent,
   Grid,
@@ -11,25 +10,27 @@ import {
   TableCell,
   TableRow,
   Table,
-} from "@material-ui/core"
-import tabStyles from "./CleaningTab.module.css"
-import styles from "./CleaningStockCard.module.css"
-
+  Typography,
+} from "@material-ui/core";
+import styles from "./CleaningStockCard.module.css";
+import { PageTitle } from "common/page/Title";
 export default function StockCard({ title, stat = [], ...rest }) {
   return (
-    <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
+    <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
       <Card className={styles.headlineCard} {...rest}>
-        <div className={styles.headlineContainer}>
-          <h2 className={tabStyles.title}>{title}</h2>
-        </div>
+        <PageTitle variant="h2" align="center">
+          {title}
+        </PageTitle>
         <CardContent>
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow className={styles.tableHeadRow}>
-                  <TableCell className={styles.tableHead}>Status</TableCell>
-                  <TableCell align={"left"} className={styles.tableHead}>
-                    In Stock
+                  <TableCell>
+                    <Typography variant="h3">Status</Typography>
+                  </TableCell>
+                  <TableCell align={"left"}>
+                    <Typography variant="h3">In Stock</Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -38,10 +39,10 @@ export default function StockCard({ title, stat = [], ...rest }) {
                   stat.stats.map((v) => (
                     <TableRow key={`${v.status}${v.in}`}>
                       <TableCell align={"left"}>
-                        <Typography>{v.status}</Typography>
+                        <Typography variant="body1">{v.status}</Typography>
                       </TableCell>
                       <TableCell align={"left"}>
-                        <Typography align={"left"} component="h4">
+                        <Typography variant="body1" align={"left"}>
                           {v.in_stock}
                         </Typography>
                       </TableCell>
@@ -53,7 +54,7 @@ export default function StockCard({ title, stat = [], ...rest }) {
         </CardContent>
       </Card>
     </Grid>
-  )
+  );
 }
 
 StockCard.propTypes = {

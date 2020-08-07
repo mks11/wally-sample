@@ -1,11 +1,9 @@
 .FormRoot {
   min-width: 6rem;
 }
+
 .container {
   padding: 2rem;
-}
-.title {
-  text-align: center;
 }
 
 .buttonContainer {

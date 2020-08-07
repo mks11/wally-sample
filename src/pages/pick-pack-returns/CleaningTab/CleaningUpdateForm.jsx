@@ -11,15 +11,17 @@ import {
   Paper,
   FormHelperText,
   Input,
+  Typography,
 } from "@material-ui/core";
-import {connect} from "utils"
+import { connect } from "utils";
 
-import styles from "./CleaningUpdateForm.module.css"
+import styles from "./CleaningUpdateForm.module.css";
+import { PageTitle } from "common/page/Title";
 import axios from "axios";
-import {API_UPDATE_PACKAGING_STOCK}  from "../../../config"
+import { API_UPDATE_PACKAGING_STOCK } from "../../../config";
 
 const Select = ({ label, ...props }) => {
-  const [field, meta] = useField(props)
+  const [field, meta] = useField(props);
   return (
     <FormControl>
       <InputLabel htmlFor={props.id || props.name}>{label}</InputLabel>
@@ -28,8 +30,8 @@ const Select = ({ label, ...props }) => {
         {meta.error}
       </FormHelperText>
     </FormControl>
-  )
-}
+  );
+};
 
 const TextField = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -44,37 +46,42 @@ const TextField = ({ label, ...props }) => {
   );
 };
 
-function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSuccessfulSubmit }) {
-  const [submitFailed, setSubmitFailed] = useState(false)
+function CleaningUpdateForm({
+  store: { modal: modalStore },
+  sizes,
+  types,
+  onSuccessfulSubmit,
+}) {
+  const [submitFailed, setSubmitFailed] = useState(false);
 
-  const updateStock = async ({action, size, amount, type}) => {
+  const updateStock = async ({ action, size, amount, type }) => {
     return await axios.patch(API_UPDATE_PACKAGING_STOCK, {
       action,
       size,
       type,
-      updateAmt: amount
-    })
-  }
+      updateAmt: amount,
+    });
+  };
 
-  const handleSubmit =  async (values, { setSubmitting, resetForm}) => {
-    try{
-      setSubmitFailed(false)
-      const {status, data} = await updateStock(values)
-      if([200, 203].includes(status)){
-        onSuccessfulSubmit(data)
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setSubmitFailed(false);
+      const { status, data } = await updateStock(values);
+      if ([200, 203].includes(status)) {
+        onSuccessfulSubmit(data);
       }
     } catch {
-      setSubmitFailed(true)
+      setSubmitFailed(true);
     } finally {
-      setSubmitting(false)
-      if(submitFailed){
-        modalStore.toggleModal("error")
+      setSubmitting(false);
+      if (submitFailed) {
+        modalStore.toggleModal("error");
       } else {
-        modalStore.toggleModal("success")
-        resetForm()
+        modalStore.toggleModal("success");
+        resetForm();
       }
     }
-  }
+  };
 
   return (
     <Formik
@@ -96,7 +103,9 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSucces
     >
       <Form>
         <Paper className={styles.container} elevation={3}>
-          <h2 className={styles.title}>Update Packaging Stocks</h2>
+          <Typography variant="h2" align="center" gutterBottom>
+            Update Packaging Stocks
+          </Typography>
           <Grid container justify={"center"} spacing={4}>
             <Grid item>
               <Select name="action" label="Action">
@@ -147,7 +156,7 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSucces
               type={"submit"}
               className={styles.button}
             >
-              Submit
+              <Typography variant="body1">Submit</Typography>
             </Button>
           </Grid>
         </Paper>
@@ -158,14 +167,14 @@ function CleaningUpdateForm({ store: {modal: modalStore}, sizes, types, onSucces
 CleaningUpdateForm.propTypes = {
   sizes: PropTypes.arrayOf(PropTypes.string),
   types: PropTypes.arrayOf(PropTypes.string),
-  onSuccessfulSubmit: PropTypes.func.isRequired
+  onSuccessfulSubmit: PropTypes.func.isRequired,
 };
 
 // needed to wrap it because connect("store") on CleaningUpdateForm
 // gives 'invalid hook call' error
-class _CleaningUpdateForm extends React.Component{
-  render(){
-    return <CleaningUpdateForm  {...this.props}/>
+class _CleaningUpdateForm extends React.Component {
+  render() {
+    return <CleaningUpdateForm {...this.props} />;
   }
 }
 

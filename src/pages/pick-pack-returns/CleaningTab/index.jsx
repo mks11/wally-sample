@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import CleaningUpdateForm from "./CleaningUpdateForm";
 import CleaningOverview from "./CleaningOverview";
 import { Container } from "@material-ui/core";
-import {groupBy, mapValues} from "lodash"
-import styles from "./CleaningTab.module.css"
+import { groupBy, mapValues } from "lodash";
 import { API_GET_PACKAGING_STOCK } from "../../../config";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
+import { PageTitle } from "common/page/Title";
 
 function sortSizes(unsorted_sizes) {
   return unsorted_sizes.sort((size1, size2) => {
@@ -56,7 +56,7 @@ function CleaningTab(props) {
   const [packagingStocks, setPackagingStocks] = useState([]);
   const [allSizes, setAllSizes] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
-  // intended to act as switch to refetch updated data 
+  // intended to act as switch to refetch updated data
   const [needsAFetch, setNeedsAFetch] = useState(true);
 
   async function getPackagingStocks() {
@@ -68,15 +68,15 @@ function CleaningTab(props) {
 
   useEffect(() => {
     (async () => {
-      if(!needsAFetch){
-        return
+      if (!needsAFetch) {
+        return;
       }
       const res = await getPackagingStocks();
       const { allSizes, allTypes, collectByStatus } = reshapeStockArray(res);
       setAllSizes(sortSizes(allSizes));
       setAllTypes(allTypes.sort());
       setPackagingStocks(collectByStatus);
-      setNeedsAFetch(false)
+      setNeedsAFetch(false);
     })();
   }, [needsAFetch]);
 
@@ -88,10 +88,12 @@ function CleaningTab(props) {
     <Container maxWidth={"lg"}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <h2 className={styles.title}>Cleaning</h2>
+          <PageTitle variant="h2" align="center" gutterBottom>
+            Cleaning
+          </PageTitle>
         </Grid>
         <Grid container justify="center" spacing={2}>
-          <Grid item xs={12} sm={10} md={6} lg={6} xl={4}>
+          <Grid item xs={12} sm={10} md={8} lg={8} xl={6}>
             <CleaningUpdateForm
               types={allTypes}
               sizes={allSizes}
