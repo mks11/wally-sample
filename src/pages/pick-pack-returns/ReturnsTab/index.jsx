@@ -3,6 +3,7 @@ import styles from "./ReturnsTab.module.css";
 import Tab from "./../shared/Tab";
 import FetchButton from "./FetchButton";
 import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
@@ -23,13 +24,18 @@ function ReturnsTab({ store: { user: userStore } }) {
   const [loading, setLoading] = useState(true); // default true .. so that no empty msg is shown at the load
   const [error, setError] = useState();
   const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState("");
+  const { token } = userStore;
 
   const fetchTodaysPackagingReturns = async () => {
     const url = API_GET_TODAYS_PACKAGING_RETURNS;
     const {
-      data: { returnItems },
-    } = await axios.get(url);
-    return returnItems;
+      data: { details },
+    } = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token.accessToken}`,
+      },
+    });
+    return details;
   };
 
   const handleCompletionReturns = ({ status, data: { message } }) => {
@@ -42,6 +48,7 @@ function ReturnsTab({ store: { user: userStore } }) {
     (async () => {
       try {
         setLoading(true);
+        userStore.getStatus();
         const returnItems = await fetchTodaysPackagingReturns();
         setReturnItems(sortByTimestampDes(returnItems, "return_date"));
       } catch (e) {
@@ -75,14 +82,14 @@ function ReturnsTab({ store: { user: userStore } }) {
         </Grid>
       ) : (
         <div className={styles.contentContainer}>
-          <Button
-            variant="contained"
-            color="default"
-            startIcon={<AddCircle />}
-            href="/pick-pack-returns/packaging-return/new"
+          <Link
+            to={{
+              pathname: "/pick-pack-returns/packaging-return/new",
+              state: { token: token.accessToken },
+            }}
           >
             New Return
-          </Button>
+          </Link>
           <div className={styles.listContainer}>
             <AutoSizer>
               {({ height, width }) => {

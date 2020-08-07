@@ -183,7 +183,7 @@ export const API_GET_TODAYS_PACKAGING_RETURNS =
 export const API_GET_PACKAGING_RETURNS_JOB =
   BASE_URL + "/api/packaging-returns/packaging-returns-job";
 export const API_POST_PACKAGING_RETURNS =
-  BASE_URL + "/api/packaging-returns/submit";
+  BASE_URL + "/api/packaging-return/submit";
 // Cleaning Tab
 export const API_UPDATE_PACKAGING_STOCK = BASE_URL + "/api/packaging-stock";
 export const API_GET_PACKAGING_STOCK = BASE_URL + "/api/packaging-stocks";
