@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AddressOptions from "../../common/DeliveryAddressOptions";
-import PropTypes from "prop-types";
 
 export default class AddressOptionsManaged extends Component {
   constructor(props) {

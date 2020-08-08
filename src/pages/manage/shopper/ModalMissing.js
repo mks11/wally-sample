@@ -29,15 +29,13 @@ class ModalMissing extends Component {
 	}
 	
 	componentDidMount() {
-		console.log("Component did mount");
-		this.state = {
+		this.setState({
 			selectedSubs: [],
 			checked: {},
-		}
+		})
 	}
 
 	componentWillUnmount = () => {
-		console.log("Unmounting component");
 		this.adminStore.clearStoreSubs()
 	}
 	
@@ -67,7 +65,6 @@ class ModalMissing extends Component {
 		selectedSubs = selectedSubs && selectedSubs.map(sub => {
 			return { ...sub, product_shop: location }
 		})
-		// console.log(selectedSubs);
 		this.adminStore.updateDailySubstitute(timeframe, shopitemId, selectedSubs)
 			.then(() => {
 				this.modalStore.toggleMissing()

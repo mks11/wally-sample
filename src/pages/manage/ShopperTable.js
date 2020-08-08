@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import StatusDropdown from '../../common/StatusDropdown';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +7,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter'
 import {connect} from '../../utils'
-import {Button} from "reactstrap"
 
 class ShopperTable extends Component {
   constructor(props) {
@@ -36,14 +34,10 @@ class ShopperTable extends Component {
     this.setState({ [id]: selectedStatus })
   }
 
-  onUpdateClick = (shopitem_id, inventory_id, product_id, e) => {
+  onUpdateClick = (shopitem_id, e) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log(this.state);
-    const { timeframe } = this.props;
     const status = this.state[shopitem_id];
-    console.log(shopitem_id);
-    console.log(status);
     this.adminStore.setShopItemStatus(shopitem_id, status);
   }
 
@@ -53,9 +47,7 @@ class ShopperTable extends Component {
   }
 
   render() {
-    let {shopitemsFarms} = this.adminStore
     const {shopitems} = this.props
-    const {timeframe} = this.props
     const totalPrice = ({shopitems}) => shopitems && shopitems.reduce((sum, item) => sum + item.estimated_total, 0)
     
     return (
@@ -97,33 +89,6 @@ class ShopperTable extends Component {
         </Table>
       </Paper>
     )
-    /*return (
-      <Table responsive className="shopper-table">
-        <TableHead/>
-        <tbody>
-        {shopitems &&
-        shopitems.map(item => {
-          return (item.complete === undefined || item.complete) ? (
-              <TableRow
-                key={item._id}
-                item={item}
-                onEditClick={this.onEditClick}
-                onClick={() => this.props.toggleSingleProductModal(item)}
-              />
-          ) : (
-              <TableEditRow
-                key={item._id}
-                item={item}
-                shopitemsFarms={shopitemsFarms}
-                onSubmitClick={this.onSubmitClick}
-                timeframe={timeframe}
-              />
-          )
-        })}
-        </tbody>
-        <TableFoot {...{shopitems}} />
-      </Table>
-    )*/
   }
 }
 

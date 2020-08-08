@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import ReactGA from 'react-ga';
 import Title from '../common/page/Title'
 import { Row, Col } from 'reactstrap';

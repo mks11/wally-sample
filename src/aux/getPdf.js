@@ -24,26 +24,8 @@ const getPdf = async () => {
     await pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 11, 8.5);
 
     let filename = name.split(" ").join("-");
-    // const data = await pdf.output("arraybuffer"); // after passing to back end, this looks like an empty object
-    // const data = await pdf.output("blob");     // after passing to back end, this looks like an empty object
-    // const data = await pdf.output("datauri");  // too large - causes 'about:blank#blocked'
-    // const base64 = window.btoa(data);
-    // console.log('data', data)
-
-    // Perhaps data needs to be chunked, but I'm not sure how to do that with JS
-
-    // try {
-    //   axios.post("https://localhost:4001/api/admin/certificate", {
-    //     name: names[i],
-    //     email: emails[i],
-    //     data,
-    //   });
-    // } catch (err) {
-    //   console.error(err)
-    // }
     
   // save locally
-    console.log(filename);
     await pdf.save(filename);
   }
 };

@@ -44,6 +44,7 @@ class ManageShipping extends Component {
                   className="btn btn-main active"
                   href={`${BASE_URL}/api/admin/shipment/label`}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Print Shipping Label
                 </a>

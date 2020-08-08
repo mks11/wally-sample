@@ -1,38 +1,41 @@
-import React, { Component } from 'react';
-import { AppBar, Tabs, Tab } from '@material-ui/core';
-import moment from 'moment';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { AppBar, Tabs, Tab } from "@material-ui/core";
+import moment from "moment";
+import PropTypes from "prop-types";
 
-import PickPackTab from './PickPackTab';
+import PickPackTab from "./PickPackTab";
 
 // CSS
 import styles from "./Overview.module.css";
 import ReturnsTab from "./ReturnsTab";
 
-class PickPackReturnsOverview extends Component{
+class PickPackReturnsOverview extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       selectedTab: 0,
-    }
+    };
   }
 
   handleChange = (e, value) => {
     e.preventDefault();
     this.setState({ selectedTab: value });
-  }
+  };
 
   render() {
     return (
       <div className={styles.overview}>
-        <h1 style={{textAlign: 'center', color: '#000'}}>
+        <h1 style={{ textAlign: "center", color: "#000" }}>
           {/* ex: July 6th, 2020 */}
           {moment().local().format("MMMM Do, YYYY")}
         </h1>
-        <NavigationTabs selectedTab={this.state.selectedTab} handleChange={this.handleChange}/>
+        <NavigationTabs
+          selectedTab={this.state.selectedTab}
+          handleChange={this.handleChange}
+        />
       </div>
-    )
+    );
   }
 }
 
@@ -43,16 +46,14 @@ function TabPanel({ children, value, index }) {
   return (
     <div
       role="tabpanel"
-      hidden={value !== index }
+      hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       className={styles.tabPanel}
       aria-labelledby={`simple-tab-${index}`}
     >
-      {
-        value === index && children
-      }
+      {value === index && children}
     </div>
-  )
+  );
 }
 
 TabPanel.propTypes = {
@@ -63,11 +64,11 @@ TabPanel.propTypes = {
 
 class NavigationTabs extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    const {selectedTab, handleChange} = this.props;
+    const { selectedTab, handleChange } = this.props;
 
     return (
       <>
@@ -80,13 +81,13 @@ class NavigationTabs extends Component {
             variant="fullWidth"
             aria-label="Pick/Pack and Returns Portal navigation"
           >
-            <Tab label="Pick/Pack" {...a11yProps(0) }/>
-            <Tab label="Returns" {...a11yProps(1) }/>
-            <Tab label="Cleaning" {...a11yProps(2) }/>
+            <Tab label="Pick/Pack" {...a11yProps(0)} />
+            <Tab label="Returns" {...a11yProps(1)} />
+            <Tab label="Cleaning" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={selectedTab} index={0}>
-          <PickPackTab />
+          {/* <PickPackTab /> */}
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
           <ReturnsTab />
@@ -96,14 +97,14 @@ class NavigationTabs extends Component {
           Cleaning
         </TabPanel>
       </>
-    )
+    );
   }
 }
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 

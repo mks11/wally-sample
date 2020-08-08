@@ -68,7 +68,6 @@ class ServiceFeedbackModal extends Component {
           this.props.toggle()
         })
         .catch(e => {
-          console.log(e)
           this.props.toggle()
         })
     }
@@ -104,7 +103,7 @@ class ServiceFeedbackModal extends Component {
               className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
             >
-              <img src="images/smile.svg" />
+              <img src="images/smile.svg" alt="smile" />
             </Button>
             <div className="feedback-caption">Just haven’t ordered yet, waiting for: …</div>
           </Col>
@@ -113,7 +112,7 @@ class ServiceFeedbackModal extends Component {
               className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
             >
-              <img src="images/meh.svg" />
+              <img src="images/meh.svg" alt="meh" />
             </Button>
             <div className="feedback-caption">Want to order, but haven’t because: …</div>
           </Col>
@@ -122,7 +121,7 @@ class ServiceFeedbackModal extends Component {
               className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
             >
-              <img src="images/sad.svg" />
+              <img src="images/sad.svg" alt="sad" />
             </Button>
             <div className="feedback-caption">Won't order, here’s why: …</div>
           </Col>
