@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from "prop-types"
 import QrReader from 'react-qr-reader'
 import LazyLoad from 'react-lazyload'
 import { isMobile } from 'react-device-detect'
@@ -76,20 +77,17 @@ class ScannerQR extends Component {
         }
 
         if (!packagingIds.includes(packagingId)) {
-          this.setState({
+          this.setState(({packagingIds}) => ({
             snackBarText: 'QR Scanned',
             snackBarOpen: true,
             isError: false,
-            packagingIds,
-          })
-
-          packagingIds.push(packagingId)
+            packagingIds: [...packagingIds, packagingId],
+          }))
         } else {
           this.setState({
             snackBarText: 'QR Already Scanned',
             snackBarOpen: true,
             isError: true,
-            packagingIds,
           })
         }
       }
@@ -108,7 +106,7 @@ class ScannerQR extends Component {
   }
 
   handleToggleSnackbar = () => {
-    this.setState({ snackBarOpen: !this.state.snackBarOpen })
+    this.setState(prev=>({snackBarOpen: !prev.snackBarOpen}))
   }
 
   render() {
@@ -163,6 +161,12 @@ class ScannerQR extends Component {
       </div>
     )
   }
+}
+
+ScannerQR.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onError: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 }
 
 
