@@ -25,7 +25,7 @@ import axios from "axios";
 import moment from "moment";
 import uuid from "uuid";
 
-const USER_TYPE_OPS_LEAD = "ops-lead"
+const ROLES = ['admin', 'ops_lead', 'user', 'tws_ops'];
 
 class UserStore {
   user = null;
@@ -59,7 +59,7 @@ class UserStore {
   flags = null;
 
   get isOpsLead() {
-    return this.user.type === USER_TYPE_OPS_LEAD; 
+    return this.user.type === ROLES[1]; 
   }
   togglePromoModal() {
     this.promoModal = !this.promoModal;
