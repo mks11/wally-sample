@@ -1,4 +1,3 @@
-import { observable, decorate, action } from "mobx";
 import { API_POST_METRIC_SOURCE } from "../config";
 import axios from "axios";
 
@@ -9,8 +8,5 @@ class MetricStore {
   }
 
 }
-
-// decorate(MetricStore, {
-// });
 
 export default new MetricStore();

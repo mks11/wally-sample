@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 class ReferralResultModal extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     const { modal } = this.props.stores

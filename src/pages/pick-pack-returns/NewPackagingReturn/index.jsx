@@ -5,12 +5,48 @@ import SelectOneDialog from "./OnMissingDialogOptions";
 import NewReturnForm from "./NewReturnForm";
 import Page from "../shared/Tab";
 import styles from "./index.module.css";
+import { useFormikContext } from "formik";
+import QRScanner from "common/ScannerQR";
 
-function ScanQRCode({ show, onComplete }) {
-  //TODO
-  return <div></div>;
+function ScanQRCode({ value }) {
+  const { setFieldValue } = useFormikContext();
+  const [qrOpened, setQrOpened] = useState(false);
+
+  const handleQRScan = useCallback((v) => {
+    if (v) {
+      setFieldValue(`packaging_urls.${index}`, v);
+    }
+    setQrOpened(false);
+  }, []);
+
+  const handleQROpen = useCallback(() => {
+    setQrOpened(true);
+  }, []);
+
+  const disabled = value.includes("thewallyshop.co/packaging");
+
+  return (
+    <Grid item xs="12">
+      <Button
+        className={
+          disabled ? styles.jarInputButtonScanned : styles.jarInputButton
+        }
+        onClick={handleQROpen}
+        variant="contained"
+        disabled={disabled}
+      >
+        {disabled ? "QR Scanned" : "Scan QR Code"}
+      </Button>
+
+      <ScannerQR
+        isOpen={qrOpened}
+        onClose={handleQRScan}
+        messageSuccess="QR Scanned"
+        messageError="QR Scan error"
+      />
+    </Grid>
+  );
 }
-
 function NewPackagingReturn({
   store: { user: userStore, packagingReturn: returnStore },
 }) {
@@ -37,10 +73,6 @@ function NewPackagingReturn({
     setShowOptionsOnMissing(true);
   };
 
-  const handleClickScanQR = () => {
-    setShowQRCodePage(true);
-  };
-
   return (
     <Page
       title="New Packaging Return"
@@ -64,18 +96,7 @@ function NewPackagingReturn({
             Missing QR Code
           </Button>
         </Grid>
-        <Grid container item xs={6} justify="center">
-          <Button
-            color="primary"
-            variant="contained"
-            size="large"
-            onClick={handleClickScanQR}
-            className={styles.bigActionButton}
-          >
-            Scan QR Code
-          </Button>
-        </Grid>
-        <ScanQRCode show={showQRCodePage} onComplete={handleScanCompletion} />
+        <ScanQRCode />
       </Grid>
     </Page>
   );

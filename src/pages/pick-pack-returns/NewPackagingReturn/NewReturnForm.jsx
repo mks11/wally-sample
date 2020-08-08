@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import {
   Grid,
   Button,
@@ -25,13 +25,13 @@ const NOT_COMPLETED_MESSAGE =
   "Packaging return couldn't be completed. Report sent to Ops team.";
 const ERROR_MESSAGE = "Submission failed, something went wrong!";
 
-function NewReturnForm({ user_id, packagingURLs = [], history }) {
+function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
   const [showNotCompletedAlert, setShowNotCompletedAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
-
+  const { token } = location.state;
   useEffect(() => {
     if (successType === SUCCESS_REQUIRES_TRACKING) {
       setShowTrackingInputDialog(true);
@@ -54,16 +54,25 @@ function NewReturnForm({ user_id, packagingURLs = [], history }) {
   }, [isErrorOnSubmit]);
 
   const submitNewReturn = async ({
-    Tracking_id = '',
+    tracking_number = "",
     packaging_urls,
     warehouse_associate_id,
   }) => {
     const url = API_POST_PACKAGING_RETURNS;
-    const response = await axios.post(url, {
-      Tracking_id,
-      packaging_urls,
-      warehouse_associate_id,
-    });
+    const response = await axios.post(
+      url,
+      {
+        tracking_number,
+        packaging_urls,
+        warehouse_associate_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response);
     return response;
   };
 
@@ -141,7 +150,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history }) {
       <Grid item container xs={12} justify="center">
         <Formik
           initialValues={{
-            Tracking_id: "",
+            tracking_number: "",
             packaging_urls: packagingURLs,
             warehouse_associate_id: user_id,
           }}

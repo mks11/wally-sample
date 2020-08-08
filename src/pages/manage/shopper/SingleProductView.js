@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from '../../../utils'
-import {Container, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row} from "reactstrap"
+import {Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap"
 import {
-    ListGroup,
-    ListGroupItem,
     Form,
     FormGroup,
     FormControl,
     Col,
-    Checkbox,
     ControlLabel
 } from "react-bootstrap";
 import Button from '@material-ui/core/Button/Button'
@@ -16,7 +13,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import ArrowLeft from '@material-ui/icons/KeyboardArrowLeftOutlined';
 import ArrowRight from '@material-ui/icons/KeyboardArrowRightOutlined';
 import Typography from "@material-ui/core/Typography/Typography";
-import Select from 'react-select'
 import Createable from 'react-select/lib/Creatable';
 
 class SingleProductView extends Component {
@@ -91,7 +87,6 @@ class SingleProductView extends Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
-
     handleSubmit = (e) => {
         e.preventDefault()
         const {id, isEdit, product, shopPrice, completed, organic, local, producer, shop, substitute, quantity, missing, finalQuantity, totalPaid, weight, missingReason, subProductName} = this.state
@@ -127,10 +122,10 @@ class SingleProductView extends Component {
 
 
     prepareFarmValues = ({shopitem, other}) => {
-        const {product_id, product_producer} = shopitem
+        const {product_producer} = shopitem
         const initial = product_producer
         const restFarms = (other) || []
-        return [...new Set([initial, ...restFarms])].map(item => {
+        return [...new Set([initial, ...restFarms])].foreach(item => {
             if (item) {
                 return {id: item, title: item, label: item, value: item}
             }
@@ -313,7 +308,7 @@ class SingleProductView extends Component {
                             <Row>
                                 <Col componentClass={ControlLabel} sm={2}>
                                     <strong>Final Quantity
-                                        ({product.unit_type != 'oz' ? product.unit_type : 'lbs'}):</strong>
+                                        ({product.unit_type !== 'oz' ? product.unit_type : 'lbs'}):</strong>
                                 </Col>
                                 <Col sm={10}>
                                     <FormControl placeholder="Enter Quantity" name="finalQuantity" value={finalQuantity}

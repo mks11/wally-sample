@@ -6,8 +6,6 @@ import {
   Container,
 } from 'reactstrap'
 import { connect, logEvent } from 'utils'
-import DeliveryTimeOptions from 'common/DeliveryTimeOptions'
-import DeliveryAddressOptions from 'common/DeliveryAddressOptions'
 
 import Filters from './Filters'
 import SearchBar from './SearchBar'
@@ -112,7 +110,8 @@ class ProductTop extends Component {
 
     if (!this.userStore.user) {
       if (!this.zipStore.validateZipCode(newZip)) {
-        throw {response: {data: {error:{message: 'Invalid zip code'}}}}
+        let err = {response: { data: { error:{message: 'Invalid zip code'}}}}
+        throw err;
       }
 
       this.userStore.addFakeAddress(dataMap)
@@ -191,146 +190,12 @@ class ProductTop extends Component {
   }
 
   render() {
-    const {
-      selectedAddressChanged,
-      selectedTimeChanged,
-      fakeUser,
-    } = this.state
-    const { onSearch, onCategoryClick } = this.props
-    const user = this.userStore.user ? this.userStore.user : fakeUser
+    const { onSearch } = this.props
 
     return (
       <div className="product-top">
         <Container>
           <Row>
-            {/* <Col
-              xs="auto"
-              className="pr-0 d-none d-lg-block"
-            >
-              <Link to="/main">
-                <img src="/images/logo.png" height="30" className="product-top-big-logo"/>
-              </Link>
-            </Col> */}
-            {/* <Col
-              xs="auto"
-              className="pr-0 small-logo"
-            >
-              <Link to="/main">
-                <img src="/images/logo.png" height="40" />
-              </Link>
-            </Col> */}
-            {/* <Col xs="auto" className="d-none d-md-block bdr-right">
-              <div
-                className="dropdown-address d-flex"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <i className="fa fa-map-marker bar-icon" />
-                {
-                  this.userStore.selectedDeliveryAddress &&
-                  <span className="dropdown-details align-self-center">{this.formatAddress(this.userStore.selectedDeliveryAddress.street_address)}</span>
-                }
-              </div>
-              <div
-                className="dropdown-wrapper"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <div className="dropdown-menu dropdown-large p-3">
-
-                  <h3 className="m-0 mb-3 p-r">Delivery address</h3>
-                  <div className="scroller">
-                    <DeliveryAddressOptions
-                      title={false}
-                      button={false}
-                      lock={false}
-                      selected={
-                        this.userStore.selectedDeliveryAddress
-                          ? this.userStore.selectedDeliveryAddress.address_id
-                          : this.userStore.user
-                            ? this.userStore.user.preferred_address
-                            : null
-                          }
-                      user={user}
-                      onAddNew={this.handleAddNewAddress}
-                      onSubmit={this.handleSubmitAddress}
-                      onSelect={this.handleSelectAddress}
-                      locking={false}
-                    />
-                  </div>
-                  <button className={`btn btn-main ${selectedAddressChanged ? 'active' : ''}`} onClick={this.handleSubmitDeliveryAddress}>SUBMIT</button>
-                </div>
-              </div>
-            </Col>
-            <Col xs="auto" className="d-none d-md-block bdr-right">
-              <div
-                className="dropdown-time d-flex"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <i className="fa fa-clock-o bar-icon" />
-                <span className="dropdown-details align-self-center">
-                  {
-                    this.userStore.selectedDeliveryTime
-                      ? `${this.userStore.selectedDeliveryTime.day}, ${this.userStore.selectedDeliveryTime.time}`
-                      : null
-                  }
-                </span>
-              </div>
-              <div
-                className="dropdown-wrapper"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <div className="dropdown-menu dropdown-large p-3">
-                  <h3 className="m-0 mb-3 p-r">Time</h3>
-                  <div className="scroller">
-                    <DeliveryTimeOptions
-                      title={false}
-                      lock={false}
-                      data={this.checkoutStore.deliveryTimes}
-                      selected={this.userStore.selectedDeliveryTime}
-                      onSelectTime={this.handleSelectTime}
-                    />
-                  </div>
-                  <div className="font-italic mb-1 text-center">Order by 2:00PM for same day delivery</div>
-                  <button className={`btn btn-main ${selectedTimeChanged ? 'active' : ''}`} onClick={this.handleSubmitDeliveryTime}>SUBMIT</button>
-                </div>
-              </div>
-            </Col> */}
-            {/* <Col xs={2} className="d-none d-md-block bdr-right">
-              <h3
-                className="dropdown-categories"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <b>Categories</b><i className="fa fa-chevron-down d-none d-lg-block" />
-              </h3>
-
-              <div
-                className="dropdown-wrapper dropdown-fwidth"
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-              >
-                <div className="dropdown-menu dropdown-menu-right">
-                  <Link
-                    to="/main"
-                    className="dropdown-item"
-                    onClick={onCategoryClick}
-                  >All Categories</Link>
-                  {
-                    this.productStore.categories.map(s => (
-                      <Link
-                        to={`/main/${s.cat_id ? s.cat_id : ''}`}
-                        className="dropdown-item"
-                        key={s.cat_id}
-                        onClick={onCategoryClick}
-                      >{s.cat_name}</Link>
-                    ))
-                  }
-                </div>
-              </div>
-            </Col> */}
             <Col className="d-none d-lg-block col-4">
               <Filters onSelect={this.handleFiltersSelect} />
             </Col>
@@ -351,7 +216,7 @@ class ProductTop extends Component {
                   className="d-none d-md-block ml-3"
                   to="/main/buyagain"
                 >
-                  <img src="/images/reorder.png" height="40" />
+                  <img src="/images/reorder.png" height="40" alt="" />
                 </Link>
                 <span className="d-none d-md-block">
                   <CartDropdown
@@ -364,21 +229,6 @@ class ProductTop extends Component {
                 </span>
               </div>
             </Col>
-            {/* <Col xs="auto" className="d-block d-md-none">
-              <div
-                className="dropdown-time d-flex"
-                onClick={() => this.modalStore.toggleDelivery()}
-              >
-                <i className="fa fa-clock-o bar-icon" />
-                <span className="dropdown-details-mobile align-self-center">
-                  {
-                    this.userStore.selectedDeliveryTime
-                      ? `${this.userStore.selectedDeliveryTime.day}, ${this.userStore.selectedDeliveryTime.time}`
-                      : null
-                  }
-                </span>
-              </div>
-            </Col> */}
           </Row>
         </Container>
       </div>

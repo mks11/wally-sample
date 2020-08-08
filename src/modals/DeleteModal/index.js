@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { logEvent } from '../../utils'
 
 class DeleteModal extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   handleDelete = () => {
     logEvent({ category: "Cart", action: "ConfirmDelete" })

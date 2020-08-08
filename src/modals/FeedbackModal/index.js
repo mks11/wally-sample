@@ -73,7 +73,6 @@ class FeedbackModal extends Component {
           this.props.toggle()
         })
         .catch(e => {
-          console.log(e)
           this.props.toggle()
         })
     }

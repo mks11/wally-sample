@@ -4,7 +4,6 @@ import {
   Col,
   Container,
   Table,
-  Button,
 } from 'reactstrap'
 import Title from '../common/page/Title'
 import ManageTabs from './manage/ManageTabs'
@@ -12,12 +11,9 @@ import CustomDropdown from '../common/CustomDropdown'
 import OrderDetailView from './manage/delivery/OrderDetailView'
 
 import {connect} from '../utils'
-import Paper from "@material-ui/core/Paper/Paper";
-import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import TableFooter from "@material-ui/core/TableFooter/TableFooter";
 
 class ManageDelivery extends Component {
   constructor(props) {

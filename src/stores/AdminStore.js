@@ -23,7 +23,6 @@ import {
   API_ADMIN_GET_RECEIPTS,
   API_ADMIN_POST_RECEIPT,
   API_ADMIN_GET_PRODUCT_SELECTION_DOWNLOAD,
-  API_EDIT_CART_ITEM,
   API_ADMIN_CREATE_COURIER,
   API_ADMIN_GET_PURCHASED_SHOP_ITEMS,
   API_ADMIN_UPDATE_PURCHASED_SHOP_ITEM,
@@ -31,7 +30,6 @@ import {
   API_ADMIN_UPLOAD_SELECTION,
   API_ADMIN_GET_INBOUND_PROD_SHIPMENTS,
   API_ADMIN_GET_OUTBOUND_PROD_SHIPMENTS,
-  API_ADMIN_UPDATE_PRODUCT_SHIPMENT,
   API_ADMIN_GET_CO_PACKING_RUNS,
   API_UPDATE_SKU_UNIT_WEIGHT,
   API_UPLOAD_COPACKING_QR_CODES,
@@ -92,17 +90,10 @@ class AdminStore {
     };
     const S3Client = new S3(config);
     let uploaded = false;
-    let res;
     // Upload File to S3
     try {
       let data = await S3Client.uploadFile(file);
-      console.log(
-        data.key
-          .split("/")
-          .slice(-1)
-          .join("/")
-      );
-      let res = await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
+      await axios.post(`${API_ADMIN_POST_RECEIPT}`, {
         shop_date: date,
         filename: data.key
           .split("/")
@@ -119,7 +110,6 @@ class AdminStore {
 
   async getTimeFrames() {
     const time = moment().format("YYYY-MM-DD HH:mm:ss");
-    // const time = '2018-11-04 15:30:00'
     const res = await axios.get(`${API_ADMIN_GET_TIME_FRAMES}?time=${time}`);
     this.timeframes = res.data.timeframes;
   }
@@ -211,12 +201,11 @@ class AdminStore {
 
   async getInboundProductShipments() {
     const res = await axios.get(`${API_ADMIN_GET_INBOUND_PROD_SHIPMENTS}`);
-    console.log(res, "resresres");
     return res;
   }
 
   async uploadSelection(filename, formData) {
-    const res = await axios.post(
+    await axios.post(
       `${API_ADMIN_UPLOAD_SELECTION}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -362,7 +351,6 @@ class AdminStore {
   async linkPackaging(data, options) {
     this.packagings = [];
     const res = await axios.patch(`${API_ADMIN_LINK_PACKAGING}`, data, options);
-    console.log(res.data);
     return res.data;
   }
 
@@ -372,7 +360,6 @@ class AdminStore {
       data,
       options
     ); // API_CREATE_ORDER
-    console.log(res.data);
     this.updateOrderItem(id, res.data);
   }
 
@@ -386,8 +373,7 @@ class AdminStore {
   }
 
   async postBlogPost(data) {
-    const res = await axios.post(API_ADMIN_POST_BLOG_POST, data);
-    console.log(res.data);
+    await axios.post(API_ADMIN_POST_BLOG_POST, data);
   }
 
   async getCopackingRuns() {
@@ -419,7 +405,7 @@ class AdminStore {
   }
 
   async uploadProducts(filename, formData) {
-    const res = await axios.post(
+    await axios.post(
       `${API_RETAIL_UPLOAD_PRODUCTS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -427,7 +413,7 @@ class AdminStore {
   }
 
   async uploadSKUs(filename, formData) {
-    const res = await axios.post(
+    await axios.post(
       `${API_RETAIL_UPLOAD_SKUS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -435,7 +421,7 @@ class AdminStore {
   }
 
   async uploadProductEdits(filename, formData) {
-    const res = await axios.patch(
+    await axios.patch(
       `${API_RETAIL_UPLOAD_PRODUCTS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -443,7 +429,7 @@ class AdminStore {
   }
 
   async uploadVendors(filename, formData) {
-    const res = await axios.post(
+    await axios.post(
       `${API_RETAIL_UPLOAD_VENDORS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -451,7 +437,7 @@ class AdminStore {
   }
 
   async uploadCategories(filename, formData) {
-    const res = await axios.post(
+     await axios.post(
       `${API_RETAIL_UPLOAD_CATEGORIES}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -459,7 +445,7 @@ class AdminStore {
   }
 
   async uploadShipments(filename, formData) {
-    const res = await axios.post(
+     await axios.post(
       `${API_RETAIL_UPLOAD_SHIPMENTS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
@@ -467,7 +453,7 @@ class AdminStore {
   }
 
   async uploadProductRetirements(filename, formData) {
-    const res = await axios.post(
+     await axios.post(
       `${API_RETAIL_UPLOAD_PRODUCT_ACTIONS}?filename=${filename}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
