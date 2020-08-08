@@ -7,9 +7,13 @@ import {
   DialogTitle,
   Dialog,
 } from "@material-ui/core";
-import styles from "./JarOrLidOptionsDialog.module.css";
+import styles from "./OnMissingOptionsDialog.module.css";
 
-export default function JarOrLidDialog({ open, onClose, selectedValue }) {
+export default function OnMissingOptionsDialog({
+  open,
+  onClose,
+  selectedValue,
+}) {
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -21,12 +25,12 @@ export default function JarOrLidDialog({ open, onClose, selectedValue }) {
   return (
     <Dialog
       onClose={handleClose}
-      aria-labelledby="select jar or lid"
+      aria-labelledby="select jar or tote"
       open={open}
     >
       <DialogTitle id="Select One">Please select one</DialogTitle>
       <List>
-        {["Jar", "Lid"].map((type) => (
+        {["Jar", "Tote"].map((type) => (
           <ListItem
             button
             onClick={() => handleListItemClick(type)}
@@ -41,7 +45,7 @@ export default function JarOrLidDialog({ open, onClose, selectedValue }) {
   );
 }
 
-JarOrLidDialog.propTypes = {
+OnMissingOptionsDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
