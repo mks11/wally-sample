@@ -5,6 +5,7 @@ import FetchButton from "./FetchButton";
 import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { groupBy } from "lodash-es";
 
 import { AddCircle } from "@material-ui/icons";
 import axios from "axios";
@@ -17,6 +18,14 @@ import Row from "./Row";
 import { sortByTimestampDes } from "utils";
 export const STATUS_RECEIVED = "received";
 export const STATUS_RETURNED = "returned";
+
+function sortItemsByStatus(items) {
+  const { received, returned } = groupBy(items, "status");
+  return [
+    ...sortByTimestampDes(received, "return_date"),
+    ...sortByTimestampDes(returned, "return_date"),
+  ];
+}
 
 function ReturnsTab({ store: { user: userStore } }) {
   const [returnItems, setReturnItems] = useState([]);
@@ -43,7 +52,7 @@ function ReturnsTab({ store: { user: userStore } }) {
       try {
         setLoading(true);
         const returnItems = await fetchTodaysPackagingReturns();
-        setReturnItems(sortByTimestampDes(returnItems, "return_date"));
+        setReturnItems(sortItemsByStatus(returnItems));
       } catch (e) {
         setError("Failed to get packaging returns");
       } finally {
