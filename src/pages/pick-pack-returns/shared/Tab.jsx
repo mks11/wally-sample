@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import styles from "./Tab.module.css";
 
 function Tab({ title, children, ...rest }) {
@@ -8,7 +8,7 @@ function Tab({ title, children, ...rest }) {
     <Container maxWidth={"lg"} {...rest}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xm={12} sm={12} md={12} lg={12} xl={12}>
-          <h2 className={styles.title}>{title}</h2>
+          <Typography variant={"h2"} className={styles.title}>{title}</Typography>
         </Grid>
       </Grid>
       <Fragment>{children}</Fragment>
