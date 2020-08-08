@@ -1,33 +1,31 @@
-import React, { Component } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
-import { connect } from '../utils';
+import React, { Component } from "react";
+import { Modal, ModalBody } from "reactstrap";
+import { connect } from "../utils";
 
-import WelcomeModal from './WelcomeModal';
-import ZipModal from './ZipModal';
-import SignupModal from './SignupModal';
-import LoginModal from './LoginModal';
-import ReferralModal from './ReferralModal';
-import FeedbackModal from './FeedbackModal';
-import ReferralResultModal from './ReferralResultModal';
-import InviteModal from './InviteModal';
-import InvalidZipModal from './InvalidZipModal';
-import InvalidZipSuccessModal from './InvalidZipSuccessModal';
-import DeleteModal from './DeleteModal';
-import ProductModal from './ProductModal';
-import DeliveryModal from './DeliveryModal';
-import CheckoutFirstModal from './CheckoutFirstModal';
-import MainFirstModal from './MainFirstModal';
-import MainSecondModal from './MainSecondModal';
-import ModalError from './ModalError';
-import WaitingListModal from './WaitingListModal';
-import EmailVerification from './EmailVerification';
-import JoinWaitlistModal from './JoinWaitlistModal';
-import RedeemDepositModal from './RedeemDepositModal';
-import SchedulePickupModal from './SchedulePickupModal';
-import PackagingDepositModal from './PackagingDepositModal';
-import ServiceFeedbackModal from './ServiceFeedbackModal';
-import GenericModal from './GenericModal';
-
+import WelcomeModal from "./WelcomeModal";
+import ZipModal from "./ZipModal";
+import SignupModal from "./SignupModal";
+import LoginModal from "./LoginModal";
+import ReferralModal from "./ReferralModal";
+import FeedbackModal from "./FeedbackModal";
+import ReferralResultModal from "./ReferralResultModal";
+import InviteModal from "./InviteModal";
+import InvalidZipModal from "./InvalidZipModal";
+import InvalidZipSuccessModal from "./InvalidZipSuccessModal";
+import DeleteModal from "./DeleteModal";
+import ProductModal from "./ProductModal";
+import DeliveryModal from "./DeliveryModal";
+import CheckoutFirstModal from "./CheckoutFirstModal";
+import MainFirstModal from "./MainFirstModal";
+import MainSecondModal from "./MainSecondModal";
+import ModalError from "./ModalError";
+import WaitingListModal from "./WaitingListModal";
+import EmailVerification from "./EmailVerification";
+import JoinWaitlistModal from "./JoinWaitlistModal";
+import RedeemDepositModal from "./RedeemDepositModal";
+import SchedulePickupModal from "./SchedulePickupModal";
+import PackagingDepositModal from "./PackagingDepositModal";
+import ServiceFeedbackModal from "./ServiceFeedbackModal";
 const ModalRoutes = {
   welcome: WelcomeModal,
   zip: ZipModal,
@@ -54,7 +52,6 @@ const ModalRoutes = {
   redeemdeposit: RedeemDepositModal,
   schedulepickup: SchedulePickupModal,
   packagingdeposit: PackagingDepositModal,
-  generic: GenericModal,
 };
 
 class RootModal extends Component {
@@ -88,17 +85,17 @@ class RootModal extends Component {
     const ModalToRender = ModalRoutes[modalId] || this.renderEmpty;
 
     // temporary hack
-    const isLarge = modalId === 'product';
-    const withGradient = modalId === 'waitinglist';
+    const isLarge = modalId === "product";
+    const withGradient = modalId === "waitinglist";
 
     return (
       <Modal
         autoFocus={false}
         isOpen={isOpen}
         centered
-        size={isLarge ? 'lg' : ''}
+        size={isLarge ? "lg" : ""}
       >
-        <ModalBody className={`${withGradient ? 'waitinglist-modal' : ''}`}>
+        <ModalBody className={`${withGradient ? "waitinglist-modal" : ""}`}>
           <button
             className="btn-icon btn-icon--close"
             onClick={this.toggleModal}
@@ -114,4 +111,4 @@ class RootModal extends Component {
   }
 }
 
-export default connect('store')(RootModal);
+export default connect("store")(RootModal);
