@@ -130,7 +130,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
       </Snackbar>
       <Grid item xs={12} spacing={1} className={styles.pseudoInputContainer}>
         {!packagingURLs.length && (
-          <FormHelperText> Start scanning ... </FormHelperText>
+          <Typography variant={"subtitle1"} color={"textSecondary"}> Start scanning ... </Typography>
         )}
         <List dense>
           {packagingURLs.map((url, i) => (
