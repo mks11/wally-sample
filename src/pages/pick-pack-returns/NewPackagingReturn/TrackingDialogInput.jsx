@@ -20,7 +20,7 @@ export default function FormDialog({ show, setShow }) {
   };
 
   const handleSubmit = () => {
-    setFieldValue("Tracking_id", trackId, (v) => !v);
+    setFieldValue("tracking_number", trackId, (v) => !v);
   };
 
   const handleChange = (e) => {
@@ -28,7 +28,7 @@ export default function FormDialog({ show, setShow }) {
   };
 
   useEffect(() => {
-    if (values["Tracking_id"]) {
+    if (values["tracking_number"]) {
       submitForm();
     }
   }, [submitForm, values]);
