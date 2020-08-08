@@ -102,10 +102,14 @@ class ScannerBarcode extends Component {
 
     if (this.props.isOpen !== prevProps.isOpen) {
       if (this.props.isOpen) {
-        Quagga.init(getQuaggaSettings({ width, height }), (err) => {
-          if (err) {
-            console.log(err);
-            return;
+        Quagga.init(
+          getQuaggaSettings({ width, height }),
+          (err) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            Quagga.start()
           }
           Quagga.start();
         });

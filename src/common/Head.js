@@ -2,10 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 
-function Head({ htmlAttributes, description, meta, title, children, props }) {
+function Head({
+  htmlAttributes,
+  description,
+  meta = [],
+  title,
+  children,
+  props,
+}) {
   // Check if the current url matches the homepage url
   const isHomepage = () => window.location.pathname === "/";
-  meta = meta ? meta : [];
 
   return (
     <Helmet

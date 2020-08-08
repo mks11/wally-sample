@@ -117,11 +117,5 @@ function sortByTimestampDes(arr, field = "timestamp") {
 }
 
 export {
-  connect,
-  validateEmail,
-  formatMoney,
-  capitalizeFirstLetter,
-  genTimePoints,
-  isValidTimeOrder,
-  sortByTimestampDes,
-};
+  connect, validateEmail, formatMoney, capitalizeFirstLetter, genTimePoints, isValidTimeOrder, sortByTimestampDes
+}

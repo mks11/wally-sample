@@ -25,7 +25,7 @@ import axios from "axios";
 import moment from "moment";
 import uuid from "uuid";
 
-const ROLES = ['admin', 'ops_lead', 'user', 'tws_ops'];
+const TYPES = ["admin", "ops_lead", "user", "tws_ops"];
 
 class UserStore {
   user = null;
@@ -58,9 +58,34 @@ class UserStore {
 
   flags = null;
 
-  get isOpsLead() {
-    return this.user.type === ROLES[1]; 
+  get isAdmin() {
+    if (this.user) {
+      return this.user.type === TYPES[0];
+    }
+    return false;
   }
+
+  get isOpsLead() {
+    if (this.user) {
+      return this.user.type === TYPES[1];
+    }
+    return false;
+  }
+  
+  get isUser() {
+    if (this.user) {
+      return this.user.type === TYPES[2];
+    }
+    return false;
+  }
+
+  get isOps() {
+    if (this.user) {
+      return this.user.type === TYPES[3];
+    }
+    return false;
+  }
+
   togglePromoModal() {
     this.promoModal = !this.promoModal;
   }
@@ -97,7 +122,7 @@ class UserStore {
   async login(email, password) {
     const resp = await axios.post(API_LOGIN, {
       email,
-      password
+      password,
     });
 
     this.setUserData(resp.data.user);
@@ -146,7 +171,7 @@ class UserStore {
 
   getHeaderAuth() {
     return {
-      headers: { Authorization: "Bearer " + this.token.accessToken }
+      headers: { Authorization: "Bearer " + this.token.accessToken },
     };
   }
 
@@ -208,9 +233,9 @@ class UserStore {
     const newAddresses = newUser.addresses;
 
     function comparer(otherArray) {
-      return function(current) {
+      return function (current) {
         return (
-          otherArray.filter(function(other) {
+          otherArray.filter(function (other) {
             return other.address_id === current.address_id;
           }).length === 0
         );
@@ -251,7 +276,7 @@ class UserStore {
   setDeliveryData() {
     const data = {
       address: this.selectedDeliveryAddress,
-      time: this.selectedDeliveryTime
+      time: this.selectedDeliveryTime,
     };
     if (data.address)
       localStorage.setItem("zip", JSON.stringify(data.address.zip));
@@ -333,7 +358,7 @@ class UserStore {
   async loginFacebook(data) {
     const res = await axios.post(API_LOGIN_FACEBOOK, {
       access_token: data.accessToken,
-      reference_promo: data.reference_promo
+      reference_promo: data.reference_promo,
     });
     this.setUserData(res.data.user);
     this.setToken(res.data.token);
@@ -368,7 +393,7 @@ class UserStore {
 
   getAddressById(id) {
     return this.user
-      ? this.user.addresses.find(item => item.address_id === id)
+      ? this.user.addresses.find((item) => item.address_id === id)
       : null;
   }
 
@@ -386,7 +411,7 @@ class UserStore {
   getDeliveryParams() {
     let data = {
       zip: null,
-      date: null
+      date: null,
     };
 
     if (this.selectedDeliveryAddress) {
@@ -407,7 +432,7 @@ class UserStore {
     }
     const user = {
       addresses,
-      preferred_address: null
+      preferred_address: null,
     };
 
     return user;
@@ -442,10 +467,10 @@ class UserStore {
           nextWeek: "dddd",
           lastDay: "[Yesterday]",
           lastWeek: "[Last] dddd",
-          sameElse: "DD/MM/YYYY"
+          sameElse: "DD/MM/YYYY",
         });
 
-        const deliveryDate = deliveryTimes.find(data => data.day === day);
+        const deliveryDate = deliveryTimes.find((data) => data.day === day);
         if (deliveryDate) {
           let data = deliveryDate.data[0];
 
@@ -468,8 +493,10 @@ class UserStore {
   }
 
   async verifyWaitlistEmail(email, token) {
-    const res = await axios.get(`${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`)
-    return res.data
+    const res = await axios.get(
+      `${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`
+    );
+    return res.data;
   }
 
   async getWaitlistInfo(data) {
@@ -479,14 +506,16 @@ class UserStore {
     var qs = `user_email=${email}`;
     if (ref) qs += `&referral_code=${ref}`;
     if (src) qs += `&src=${src}`;
-    const reqUrl = `${API_WAITLIST_INFO}?${qs}`
-    const res = await axios.get(reqUrl)
-    return res.data
+    const reqUrl = `${API_WAITLIST_INFO}?${qs}`;
+    const res = await axios.get(reqUrl);
+    return res.data;
   }
 
   async verifyPin(pin, email) {
-    const res = await axios.get(`${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`)
-    return res.data
+    const res = await axios.get(
+      `${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`
+    );
+    return res.data;
   }
 }
 
@@ -522,6 +551,11 @@ decorate(UserStore, {
   feedback: observable,
 
   flags: observable,
+
+  isAdmin: computed,
+  isOpsLead: computed,
+  isOps: computed,
+  isUser: computed,
 
   login: action,
   getUser: action,
@@ -565,7 +599,6 @@ decorate(UserStore, {
   verifyWaitlistEmail: action,
   getWaitlistInfo: action,
   verifyPin: action,
-  isOpsLead: computed,
 });
 
 export default new UserStore();

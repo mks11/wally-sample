@@ -151,7 +151,7 @@ export const API_HELP_SEARCH = BASE_URL + "/api/help/search?search_term=";
 
 export const API_SUBSCRIBE_EMAIL = BASE_URL + "/api/email/newsletter/signup";
 export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + "/api/email/signup";
-export const API_BLOG_POST = BASE_URL + "/api/blog";
+export const API_BLOG_POSTS_INDEX = BASE_URL + "/api/blogposts";
 export const API_EDIT_CART_ITEM = BASE_URL + "/api/order";
 
 export const API_POST_METRIC_SOURCE = BASE_URL + "/api/metric/audience-source";
@@ -182,6 +182,8 @@ export const API_GET_TODAYS_PACKAGING_RETURNS =
   BASE_URL + "/api/todays-packaging-returns";
 export const API_GET_PACKAGING_RETURNS_JOB =
   BASE_URL + "/api/packaging-returns/packaging-returns-job";
+export const API_POST_PACKAGING_RETURNS =
+  BASE_URL + "/api/packaging-return/submit";
 // Cleaning Tab
 export const API_UPDATE_PACKAGING_STOCK = BASE_URL + "/api/packaging-stock";
 export const API_GET_PACKAGING_STOCK = BASE_URL + "/api/packaging-stocks";
