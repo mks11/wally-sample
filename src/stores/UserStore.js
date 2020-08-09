@@ -584,7 +584,7 @@ decorate(UserStore, {
   savePayment: action,
   makeDefaultPayment: action,
 
-  getHeaderAuth: action,
+  getHeaderAuth: computed,
   forgotPassword: action,
   resetPassword: action,
 
