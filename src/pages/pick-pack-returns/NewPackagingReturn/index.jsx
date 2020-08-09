@@ -1,46 +1,45 @@
-import React, { useState } from "react";
-import { Button, Grid } from "@material-ui/core";
+import React, { useState, useCallback } from "react";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { connect } from "utils";
 import SelectOneDialog from "./OnMissingOptions.dialog";
 import NewReturnForm from "./NewReturnForm";
 import Page from "../shared/Tab";
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
-import QRScanner from "common/ScannerQR";
+import ScannerQR from "common/ScannerQR";
 
-function ScanQRCode({ value }) {
-  const { setFieldValue } = useFormikContext();
+function makeURLFromId(id) {
+  return `https://thewallyshop.co/packaging/${id}`;
+}
+
+function ScanQRCode({ returnStore }) {
   const [qrOpened, setQrOpened] = useState(false);
-
-  const handleQRScan = useCallback((v) => {
-    if (v) {
-      setFieldValue(`packaging_urls.${index}`, v);
-    }
-    setQrOpened(false);
-  }, []);
-
   const handleQROpen = useCallback(() => {
     setQrOpened(true);
   }, []);
 
-  const disabled = value.includes("thewallyshop.co/packaging");
+  const handleScanCompletion = (packaging_ids = []) => {
+    packaging_ids.forEach((id) => {
+      const url = makeURLFromId(id);
+      returnStore.addPackagingURL(url);
+    });
+    setQrOpened(false);
+  };
 
   return (
-    <Grid item xs="12">
+    <Grid item xs={12}>
       <Button
-        className={
-          disabled ? styles.jarInputButtonScanned : styles.jarInputButton
-        }
+        className={styles.bigActionButton}
         onClick={handleQROpen}
         variant="contained"
-        disabled={disabled}
+        fullWidth={true}
+        color={"primary"}
       >
-        {disabled ? "QR Scanned" : "Scan QR Code"}
+        Scan QR Code
       </Button>
-
       <ScannerQR
         isOpen={qrOpened}
-        onClose={handleQRScan}
+        onClose={handleScanCompletion}
         messageSuccess="QR Scanned"
         messageError="QR Scan error"
       />
@@ -51,22 +50,15 @@ function NewPackagingReturn({
   store: { user: userStore, packagingReturn: returnStore },
 }) {
   const [showOptionsOnMissing, setShowOptionsOnMissing] = useState(false);
-  const [showQRCodePage, setShowQRCodePage] = useState(false);
 
   const user_id = userStore.user && userStore.user._id;
+  const { token = {} } = userStore;
 
   const handleClose = (selectedValue) => {
     setShowOptionsOnMissing(false);
     if (selectedValue) {
       returnStore.addPackagingURL(selectedValue);
     }
-  };
-
-  const handleScanCompletion = (url) => {
-    if (url) {
-      returnStore.addPackagingURL(url);
-    }
-    setShowQRCodePage(false);
   };
 
   const handleMissingQRCode = () => {
@@ -83,7 +75,7 @@ function NewPackagingReturn({
         packagingURLs={returnStore.packaging_urls.toJS().reverse()}
         user_id={user_id}
       />
-      <Grid container justify="center">
+      <Grid container justify="center" spacing={2}>
         <SelectOneDialog open={showOptionsOnMissing} onClose={handleClose} />
         <Grid container item xs={6} justify="center">
           <Button
@@ -92,11 +84,14 @@ function NewPackagingReturn({
             size="large"
             onClick={handleMissingQRCode}
             className={styles.bigActionButton}
+            fullWidth={true}
           >
             Missing QR Code
           </Button>
         </Grid>
-        <ScanQRCode />
+        <Grid container item xs={6} justify="center">
+          <ScanQRCode returnStore={returnStore} />
+        </Grid>
       </Grid>
     </Page>
   );
