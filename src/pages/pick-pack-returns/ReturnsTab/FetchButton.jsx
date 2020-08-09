@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { Snackbar, Grid, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
+import { connect } from "utils";
 
-export default function FetchButton({
+function FetchButton({
   title,
   loadTitle,
   onSuccessMsg,
@@ -12,6 +13,7 @@ export default function FetchButton({
   onCompletion,
   url,
   autoHideDuration = 3000,
+  user: userStore,
 }) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -19,8 +21,14 @@ export default function FetchButton({
 
   const loadingTitle = loadTitle || title;
 
+  const { token } = userStore;
+
   const makeRequest = async (URL) => {
-    const response = await axios.get(URL);
+    const response = await axios.get(URL, {
+      headers: {
+        Authorization: `Bearer ${token.accessToken}`,
+      },
+    });
     return response;
   };
 
@@ -81,3 +89,12 @@ FetchButton.propTypes = {
   url: PropTypes.string.isRequired,
   autoHideDuration: PropTypes.number.isRequired,
 };
+
+// wrapped because connecting store to functional component giving hooks error
+class _FetchButton extends React.Component {
+  render() {
+    return <FetchButton {...this.props} />;
+  }
+}
+
+export default connect("store")(_FetchButton);
