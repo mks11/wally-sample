@@ -91,14 +91,20 @@ function ReturnsTab({ store: { user: userStore } }) {
         </Grid>
       ) : (
         <div className={styles.contentContainer}>
-          <Link
-            to={{
-              pathname: "/pick-pack-returns/packaging-return/new",
-              state: { token: token.accessToken },
-            }}
-          >
-            New Return
-          </Link>
+          <Grid container justify="center">
+            <Button
+              to={{
+                pathname: "/pick-pack-returns/packaging-return/new",
+                state: { token: token.accessToken },
+              }}
+              fullWidth={true}
+              component={Link}
+              startIcon={<AddCircle />}
+              size={"large"}
+            >
+              New Return
+            </Button>
+          </Grid>
           <div className={styles.listContainer}>
             <AutoSizer>
               {({ height, width }) => {
