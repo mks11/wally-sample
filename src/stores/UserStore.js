@@ -71,7 +71,7 @@ class UserStore {
     }
     return false;
   }
-  
+
   get isUser() {
     if (this.user) {
       return this.user.type === TYPES[2];
@@ -584,7 +584,7 @@ decorate(UserStore, {
   savePayment: action,
   makeDefaultPayment: action,
 
-  getHeaderAuth: computed,
+  getHeaderAuth: action,
   forgotPassword: action,
   resetPassword: action,
 
