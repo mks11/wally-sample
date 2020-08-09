@@ -8,6 +8,7 @@ import {
   List,
   Snackbar,
   FormHelperText,
+  Box,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Typography from "@material-ui/core/Typography";
@@ -74,7 +75,6 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
         },
       }
     );
-    console.log(response);
     return response;
   };
 
@@ -130,19 +130,17 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
           {ERROR_MESSAGE}
         </Alert>
       </Snackbar>
-      <Grid item xs={12} spacing={1} className={styles.pseudoInputContainer}>
+      <Grid item xs={12} className={styles.pseudoInputContainer}>
         {!packagingURLs.length && (
-          <Typography variant={"subtitle1"} color={"textSecondary"}> Start scanning ... </Typography>
+          <Typography variant={"subtitle1"} color={"textSecondary"}>
+            Start scanning ...
+          </Typography>
         )}
         <List dense>
           {packagingURLs.map((url, i) => (
             <ListItem key={uuid()}>
               <ListItemText>
-                <Typography
-                  className={styles.url}
-                  maxWidth="sm"
-                  variant="body2"
-                >
+                <Typography className={styles.url} variant="body2">
                   {url}
                 </Typography>
               </ListItemText>
@@ -157,7 +155,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
             packaging_urls: packagingURLs,
             warehouse_associate_id: user_id,
           }}
-          enableReinitialize={true}
+          enableReinitialize={true} //imp! to keep the form always in sync with the store
           onSubmit={handleSubmit}
         >
           <Form>
@@ -167,9 +165,17 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
                 setShowTrackingInputDialog(val);
               }}
             />
-            <Button color="primary" type="submit" size="large">
-              Submit
-            </Button>
+            <Box p={2}>
+              <Button
+                color="primary"
+                type="submit"
+                size={"large"}
+                variant={"contained"}
+                disabled={!packagingURLs.length}
+              >
+                Submit
+              </Button>
+            </Box>
           </Form>
         </Formik>
       </Grid>
