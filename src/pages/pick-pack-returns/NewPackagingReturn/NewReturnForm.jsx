@@ -31,7 +31,8 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
   const [showNotCompletedAlert, setShowNotCompletedAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const { token } = location.state;
+  const { token } = location.state || {};
+
   useEffect(() => {
     if (successType === SUCCESS_REQUIRES_TRACKING) {
       setShowTrackingInputDialog(true);
