@@ -9,9 +9,9 @@ import {
 } from "@material-ui/core";
 import styles from "./OnMissingOptions.module.css";
 
-export default function OnMissingOptions({ open, onClose, selectedValue }) {
+export default function OnMissingOptions({ open, onClose }) {
   const handleClose = () => {
-    onClose(selectedValue);
+    onClose();
   };
 
   const handleListItemClick = (value) => {
@@ -44,5 +44,4 @@ export default function OnMissingOptions({ open, onClose, selectedValue }) {
 OnMissingOptions.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
 };
