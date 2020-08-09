@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Grid } from "@material-ui/core";
 import { connect } from "utils";
-import SelectOneDialog from "./OnMissingDialogOptions";
+import SelectOneDialog from "./OnMissingOptions.dialog";
 import NewReturnForm from "./NewReturnForm";
 import Page from "../shared/Tab";
 import styles from "./index.module.css";

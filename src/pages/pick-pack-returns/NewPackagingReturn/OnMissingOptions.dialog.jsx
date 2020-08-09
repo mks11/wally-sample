@@ -7,13 +7,9 @@ import {
   DialogTitle,
   Dialog,
 } from "@material-ui/core";
-import styles from "./OnMissingOptionsDialog.module.css";
+import styles from "./OnMissingOptions.module.css";
 
-export default function OnMissingOptionsDialog({
-  open,
-  onClose,
-  selectedValue,
-}) {
+export default function OnMissingOptions({ open, onClose, selectedValue }) {
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -45,7 +41,7 @@ export default function OnMissingOptionsDialog({
   );
 }
 
-OnMissingOptionsDialog.propTypes = {
+OnMissingOptions.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
