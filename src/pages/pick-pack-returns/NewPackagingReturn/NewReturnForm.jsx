@@ -16,6 +16,7 @@ import { API_POST_PACKAGING_RETURNS } from "../../../config";
 import TrackingDialogInput from "./TrackingDialogInput";
 import { withRouter } from "react-router-dom";
 import styles from "./NewReturnForm.module.css";
+import uuid from "uuid";
 
 const SUCCESS_COMPLETED = "successType1";
 const SUCCESS_REQUIRES_TRACKING = "successType2";
@@ -135,7 +136,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
         )}
         <List dense>
           {packagingURLs.map((url, i) => (
-            <ListItem key={`${url + i}`}>
+            <ListItem key={uuid()}>
               <ListItemText>
                 <Typography
                   className={styles.url}
