@@ -27,7 +27,13 @@ const NOT_COMPLETED_MESSAGE =
   "Packaging return couldn't be completed. Report sent to Ops team.";
 const ERROR_MESSAGE = "Submission failed, something went wrong!";
 
-function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
+function NewReturnForm({
+  user_id,
+  packagingURLs = [],
+  history,
+  location,
+  returnStore,
+}) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
@@ -104,6 +110,7 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
       setErrorOnSubmit(false);
       const { status, data } = await submitNewReturn(values);
       if (status === 200) {
+        returnStore.clearEntries();
         setCorrectTypeOfSuccess(data);
       }
     } catch (e) {

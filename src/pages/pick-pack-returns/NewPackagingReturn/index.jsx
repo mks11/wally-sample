@@ -74,6 +74,7 @@ function NewPackagingReturn({
       <NewReturnForm
         packagingURLs={returnStore.packaging_urls.toJS().reverse()}
         user_id={user_id}
+        returnStore={returnStore}
       />
       <Grid container justify="center" spacing={2}>
         <SelectOneDialog open={showOptionsOnMissing} onClose={handleClose} />

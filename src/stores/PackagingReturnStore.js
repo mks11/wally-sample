@@ -9,11 +9,16 @@ class PackagingReturnStore {
   async addPackagingURL(url) {
     this.packaging_urls.push(url);
   }
+
+  clearEntries() {
+    this.packaging_urls = [];
+  }
 }
 
 decorate(PackagingReturnStore, {
   packaging_urls: observable,
   addPackagingURL: action,
+  clearEntries: action,
 });
 
 export default new PackagingReturnStore();
