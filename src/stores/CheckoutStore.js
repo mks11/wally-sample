@@ -5,7 +5,7 @@ import {
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
   API_CREATE_ORDER,
-  API_CHECK_PROMO
+  API_CHECK_PROMO,
 } from "../config";
 import axios from "axios";
 import moment from "moment";
@@ -56,8 +56,9 @@ class CheckoutStore {
     }
 
     const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    const url = `${API_EDIT_CURRENT_CART +
-      cart_id}?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${
+    const url = `${
+      API_EDIT_CURRENT_CART + cart_id
+    }?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${
       delivery.date
     }`;
     let res;
@@ -152,15 +153,15 @@ class CheckoutStore {
       nextWeek: "dddd",
       lastDay: "[Yesterday]",
       lastWeek: "[Last] dddd",
-      sameElse: "DD/MM/YYYY"
+      sameElse: "DD/MM/YYYY",
     });
 
-    const findTime = this.deliveryTimes.findIndex(data => data.day === day);
+    const findTime = this.deliveryTimes.findIndex((data) => data.day === day);
 
     const obj = {
       time: data[0],
       date: data[1],
-      availability: data[2]
+      availability: data[2],
     };
 
     if (findTime === -1) {
@@ -180,7 +181,7 @@ decorate(CheckoutStore, {
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
-  checkPromo: action
+  checkPromo: action,
 });
 
 export default new CheckoutStore();
