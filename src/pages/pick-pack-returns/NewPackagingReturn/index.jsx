@@ -7,6 +7,7 @@ import Page from "../shared/Tab";
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import ScannerQR from "common/ScannerQR";
+import { Observer } from "mobx-react";
 
 function makeURLFromId(id) {
   return `https://thewallyshop.co/packaging/${id}`;
@@ -65,43 +66,63 @@ function NewPackagingReturn({
     setShowOptionsOnMissing(true);
   };
 
+  const handleRemoveItemByIndex = (i) => {
+    const n = returnStore.packaging_urls.length;
+    returnStore.removeUrlByIndex(n - i - 1); // we are showing items in reverse currently
+  };
+
+  const handleClearEntries = () => {
+    returnStore.clearEntries();
+  };
+
   return (
     <Page
       title="New Packaging Return"
       className={styles.pageContainer}
       maxWidth="sm"
     >
-      <NewReturnForm
-        packagingURLs={returnStore.packaging_urls.toJS().reverse()}
-        user_id={user_id}
-      />
-      <Grid container justify="center" spacing={2}>
-        <SelectOneDialog open={showOptionsOnMissing} onClose={handleClose} />
-        <Grid container item xs={6} justify="center">
-          <Button
-            color="secondary"
-            variant="outlined"
-            size="large"
-            onClick={handleMissingQRCode}
-            className={styles.bigActionButton}
-            fullWidth={true}
-          >
-            Missing QR Code
-          </Button>
-        </Grid>
-        <Grid container item xs={6} justify="center">
-          <ScanQRCode returnStore={returnStore} />
-        </Grid>
-      </Grid>
+      <Observer>
+        {() => (
+          <>
+            <NewReturnForm
+              packagingURLs={returnStore.packaging_urls.toJS().reverse()}
+              user_id={user_id}
+              onClearEntries={handleClearEntries}
+              removeItemByIndex={handleRemoveItemByIndex}
+            />
+            <Grid container justify="center" spacing={2}>
+              <SelectOneDialog
+                open={showOptionsOnMissing}
+                onClose={handleClose}
+              />
+              <Grid container item xs={6} justify="center">
+                <Button
+                  color="secondary"
+                  variant="outlined"
+                  size="large"
+                  onClick={handleMissingQRCode}
+                  className={styles.bigActionButton}
+                  fullWidth={true}
+                >
+                  Missing QR Code
+                </Button>
+              </Grid>
+              <Grid container item xs={6} justify="center">
+                <ScanQRCode returnStore={returnStore} />
+              </Grid>
+            </Grid>
+          </>
+        )}
+      </Observer>
     </Page>
   );
 }
 
-// mobx v5 work around for hooks
-class _NewPackagingReturn extends React.Component {
+//mobx v5 fix
+class A extends React.Component {
   render() {
     return <NewPackagingReturn {...this.props} />;
   }
 }
 
-export default connect("store")(_NewPackagingReturn);
+export default connect("store")(A);

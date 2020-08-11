@@ -9,7 +9,10 @@ import {
   Snackbar,
   FormHelperText,
   Box,
+  ListItemSecondaryAction,
+  IconButton,
 } from "@material-ui/core";
+import { Delete as DeleteIcon } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
@@ -27,7 +30,14 @@ const NOT_COMPLETED_MESSAGE =
   "Packaging return couldn't be completed. Report sent to Ops team.";
 const ERROR_MESSAGE = "Submission failed, something went wrong!";
 
-function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
+function NewReturnForm({
+  user_id,
+  packagingURLs = [],
+  history,
+  location,
+  onClearEntries,
+  removeItemByIndex,
+}) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
@@ -78,24 +88,24 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
     return response;
   };
 
-  const setCorrectTypeOfSuccess = (data = {}) => {
+  const getCorrectTypeOfSuccess = (data = {}) => {
     const { packagingReturn, message = "" } = data;
     if (packagingReturn) {
-      setSuccessType(SUCCESS_COMPLETED);
+      return SUCCESS_COMPLETED;
     } else if (
       // Expected Message: 'Enter the tracking number to complete the return.'
       message.toLowerCase() &&
       message.includes("enter") &&
       message.includes("tracking")
     ) {
-      setSuccessType(SUCCESS_REQUIRES_TRACKING);
+      return SUCCESS_REQUIRES_TRACKING;
     } else if (
       //Expected Message: "Packaging return couldn't be completed. Report sent to Ops team."
       message.toLowerCase() &&
       message.includes("report") &&
       message.includes("ops")
     ) {
-      setSuccessType(SUCCESS_NOT_COMPLETED);
+      return SUCCESS_NOT_COMPLETED;
     }
   };
 
@@ -104,7 +114,11 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
       setErrorOnSubmit(false);
       const { status, data } = await submitNewReturn(values);
       if (status === 200) {
-        setCorrectTypeOfSuccess(data);
+        const successType = getCorrectTypeOfSuccess(data);
+        if (successType !== SUCCESS_REQUIRES_TRACKING) {
+          onClearEntries();
+        }
+        setSuccessType(successType);
       }
     } catch (e) {
       setErrorOnSubmit(true);
@@ -144,6 +158,11 @@ function NewReturnForm({ user_id, packagingURLs = [], history, location }) {
                   {url}
                 </Typography>
               </ListItemText>
+              <ListItemSecondaryAction onClick={() => removeItemByIndex(i)}>
+                <IconButton edge="end" aria-label="delete">
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
