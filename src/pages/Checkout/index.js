@@ -98,7 +98,7 @@ class Checkout extends Component {
           this.userStore.setDeliveryAddress(selectedAddress);
         }
 
-        this.checkoutStore.getDeliveryTimes();
+        // this.checkoutStore.getDeliveryTimes();
         this.loadData();
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find(
@@ -226,6 +226,7 @@ class Checkout extends Component {
       this.setState({ selectedAddressChanged: false });
     }
   };
+
   handleAddNewAddress = async (data) => {
     const {
       newContactName,
@@ -310,7 +311,6 @@ class Checkout extends Component {
     }
 
     this.setState({ invalidText: "", placeOrderRequest: true });
-    this.loading.toggle();
     if (!this.userStore.selectedDeliveryAddress) {
       this.setState({
         invalidText: "Please select address",
@@ -326,6 +326,7 @@ class Checkout extends Component {
       });
       return;
     }
+    this.loading.toggle();
     logEvent({ category: "Checkout", action: "ConfirmCheckout" });
     const deliveryTime = "UPS Ground (1-5 Days)";
 
