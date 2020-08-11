@@ -11,7 +11,11 @@ let theme = createMuiTheme({
       xl: 1200,
     },
   },
-  palette: {},
+  palette: {
+    primary: {
+      main: "#97adff",
+    },
+  },
   typography: {
     h1: {
       fontFamily: ["ClearFace"].join(","),

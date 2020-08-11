@@ -9,6 +9,7 @@ import Footer from "./common/Footer";
 import ScrollToTop from "./common/ScrollToTop";
 import ScrollSpy from "common/ScrollSpy";
 import RootModal from "./modals/RootModal";
+import LoadingSpinner from "modals/LoadingSpinner";
 import Backdrop from "./common/Backdrop";
 
 //router
@@ -50,6 +51,7 @@ ReactDOM.render(
                 <main className="aw-main aw-home">{routes}</main>
                 <Footer />
                 <RootModal />
+                <LoadingSpinner />
               </div>
             </ScrollToTop>
           </ScrollSpy>
