@@ -76,45 +76,43 @@ function NewPackagingReturn({
   };
 
   return (
-    <Page
-      title="New Packaging Return"
-      className={styles.pageContainer}
-      maxWidth="sm"
-    >
-      <Observer>
-        {() => (
-          <>
-            <NewReturnForm
-              packagingURLs={returnStore.packaging_urls.toJS().reverse()}
-              user_id={user_id}
-              onClearEntries={handleClearEntries}
-              removeItemByIndex={handleRemoveItemByIndex}
+    <Observer>
+      {() => (
+        <Page
+          title="New Packaging Return"
+          className={styles.pageContainer}
+          maxWidth="sm"
+        >
+          <NewReturnForm
+            packagingURLs={returnStore.packaging_urls.toJS().reverse()}
+            user_id={user_id}
+            onClearEntries={handleClearEntries}
+            removeItemByIndex={handleRemoveItemByIndex}
+          />
+          <Grid container justify="center" spacing={2}>
+            <SelectOneDialog
+              open={showOptionsOnMissing}
+              onClose={handleClose}
             />
-            <Grid container justify="center" spacing={2}>
-              <SelectOneDialog
-                open={showOptionsOnMissing}
-                onClose={handleClose}
-              />
-              <Grid container item xs={6} justify="center">
-                <Button
-                  color="secondary"
-                  variant="outlined"
-                  size="large"
-                  onClick={handleMissingQRCode}
-                  className={styles.bigActionButton}
-                  fullWidth={true}
-                >
-                  Missing QR Code
-                </Button>
-              </Grid>
-              <Grid container item xs={6} justify="center">
-                <ScanQRCode returnStore={returnStore} />
-              </Grid>
+            <Grid container item xs={6} justify="center">
+              <Button
+                color="secondary"
+                variant="outlined"
+                size="large"
+                onClick={handleMissingQRCode}
+                className={styles.bigActionButton}
+                fullWidth={true}
+              >
+                Missing QR Code
+              </Button>
             </Grid>
-          </>
-        )}
-      </Observer>
-    </Page>
+            <Grid container item xs={6} justify="center">
+              <ScanQRCode returnStore={returnStore} />
+            </Grid>
+          </Grid>
+        </Page>
+      )}
+    </Observer>
   );
 }
 

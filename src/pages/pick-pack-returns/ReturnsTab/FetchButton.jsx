@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { Observer } from "mobx-react";
 import PropTypes from "prop-types";
 import { Snackbar, Grid, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
@@ -51,32 +52,36 @@ function FetchButton({
   }, [onSuccessMsg]);
 
   return (
-    <Fragment>
-      <Snackbar
-        open={showSuccess}
-        autoHideDuration={autoHideDuration}
-        onClose={() => setShowSuccess(false)}
-      >
-        <Alert severity="success">{onSuccessMsg}</Alert>
-      </Snackbar>
-      <Snackbar
-        open={showError}
-        autoHideDuration={autoHideDuration + 1000}
-        onClose={() => setShowError(false)}
-      >
-        <Alert severity="error">{onErrorMsg}</Alert>
-      </Snackbar>
-      <Grid container justify="center">
-        <Button
-          color="primary"
-          variant="contained"
-          disabled={loading}
-          onClick={handleSubmit}
-        >
-          {loading ? loadingTitle : title}
-        </Button>
-      </Grid>
-    </Fragment>
+    <Observer>
+      {() => (
+        <Fragment>
+          <Snackbar
+            open={showSuccess}
+            autoHideDuration={autoHideDuration}
+            onClose={() => setShowSuccess(false)}
+          >
+            <Alert severity="success">{onSuccessMsg}</Alert>
+          </Snackbar>
+          <Snackbar
+            open={showError}
+            autoHideDuration={autoHideDuration + 1000}
+            onClose={() => setShowError(false)}
+          >
+            <Alert severity="error">{onErrorMsg}</Alert>
+          </Snackbar>
+          <Grid container justify="center">
+            <Button
+              color="primary"
+              variant="contained"
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              {loading ? loadingTitle : title}
+            </Button>
+          </Grid>
+        </Fragment>
+      )}
+    </Observer>
   );
 }
 
