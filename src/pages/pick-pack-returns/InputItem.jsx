@@ -29,10 +29,10 @@ function InputCustomerJar({ index, onScan, value }) {
     setQrOpened(true);
   }, [])
 
-  const disabled = value.includes('thewallyshop.co/packaging');
+  const disabled = value && value.includes('thewallyshop.co/packaging');
 
   return (
-    <Grid item xs="12" className={styles.jarInput}>
+    <Grid item xs={12} className={styles.jarInput}>
       Jar {index + 1}
       <Button
         className={disabled ? styles.jarInputButtonScanned : styles.jarInputButton}
@@ -44,6 +44,7 @@ function InputCustomerJar({ index, onScan, value }) {
       </Button>
 
       <ScannerQR
+        dataId={null} // new parameter to handle specific input
         isOpen={qrOpened}
         onClose={handleQRScan}
         messageSuccess="QR Scanned"
@@ -81,7 +82,7 @@ function InputItem({ field, ...props }) {
           {field.value.name}
           <br />
           <span className={styles.itemBlockLocation}>
-            row: {field.value.warehouse_location.row || '-'} shelf: {field.value.warehouse_location.shelf || '-'}
+            row: {field.value.warehouse_location?.row || '-'} shelf: {field.value.warehouse_location?.shelf || '-'}
           </span>
         </Grid>
         <Grid item>
@@ -99,6 +100,7 @@ function InputItem({ field, ...props }) {
       <Grid container justify="space-evenly" alignItems="center">
         {[...new Array(field.value.customer_quantity)].map((_, idx) => (
           <InputCustomerJar
+            key={idx}
             index={idx}
             onScan={props.onScan}
             value={field.value.packaging_urls[idx]}
@@ -107,6 +109,7 @@ function InputItem({ field, ...props }) {
       </Grid>
 
       <ScannerBarcode
+        dataId={null} // new parameter to handle specific input
         isOpen={barscanOpened}
         onClose={handleToggleBarscan}
         onDetect={handleBarcodeScan}

@@ -110,13 +110,13 @@ class ScannerQR extends Component {
   }
 
   handleCloseModal = () => {
-    const { onClose, multiple } = this.props
+    const { onClose, multiple, dataId } = this.props
     const { packagingId, packagingIds } = this.state
 
     if (multiple) {
-      onClose(packagingIds)
+      onClose(packagingIds, dataId)
     } else {
-      onClose(packagingId)
+      onClose(packagingId, dataId)
     }
   }
 

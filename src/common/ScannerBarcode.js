@@ -123,9 +123,9 @@ class ScannerBarcode extends Component {
   }
 
   onScanDetect = result => {
-    const { onDetect, onClose, closeOnScan } = this.props
+    const { onDetect, onClose, closeOnScan, dataId } = this.props
 
-    onDetect(result.codeResult.code)
+    onDetect(result.codeResult.code, dataId)
     this.setState({ snackBarOpen: true })
 
     if (closeOnScan) {

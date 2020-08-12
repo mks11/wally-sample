@@ -25,7 +25,8 @@ function OrderFulfillmentForm({
   userId,
   onSubmit,
 }) {
-  console.log(fulfillmentOrder);
+  if (!fulfillmentOrder) return null;
+
   const { shipping_totes = [], items = [] } = fulfillmentOrder;
 
   return (
@@ -39,8 +40,8 @@ function OrderFulfillmentForm({
           onSubmit();
 
           const requestUrl = isWarehouseAssociate
-            ? `${API_UPDATE_ORDER_FULFILLMENT_DETAILS}${fulfillmentOrder._id}`
-            : `${API_VERIFY_ORDER_FULFILLMENT}${fulfillmentOrder._id}`;
+            ? `${API_UPDATE_ORDER_FULFILLMENT_DETAILS}${fulfillmentOrder.id}`
+            : `${API_VERIFY_ORDER_FULFILLMENT}${fulfillmentOrder.id}`;
 
           axios
             .patch(requestUrl, {
@@ -100,40 +101,7 @@ class OrderFulfillment extends Component {
     super(props);
 
     this.state = {
-      fulfillmentOrder: {},
-      //   fulfillmentOrder: {
-      //     _id: 'ABC3',
-      //     order_id: 'ABC3',
-      //     shipping_totes: [
-      //       {
-      //         packaging_url: 'url_1',
-      //       },
-      //       {
-      //         packaging_url: 'https://thewallyshop.co/packaging/ABSCJO',
-      //       },
-      //     ],
-      //     items: [
-      //       {
-      //         name: 'Item#1',
-      //         warehouse_location: {
-      //           shelf: 'SHELF_LOC',
-      //           row: 'ROW_LOC',
-      //         },
-      //         upc_code: 'UPC Code',
-      //         was_upc_verified: true,
-      //         customer_quantity: 4,
-      //         packaging_urls: [
-      //           'url_2',
-      //           'url_3',
-      //           'https://thewallyshop.co/packaging/ABSCJO',
-      //           'url_5',
-      //         ],
-      //       },
-      //     ],
-      //     status: 'complete',
-      //   },
-      //   isWarehouseAssociate: true,
-      //   userId: '',
+      fulfillmentOrder: undefined,
     };
 
     this.userStore = props.store.user;

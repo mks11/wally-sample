@@ -47,6 +47,7 @@ function InputShippingTote({ field, ...props }) {
         </Grid>
       </Grid>
       <ScannerQR
+        dataId={null} // new parameter to handle specific input
         isOpen={qrOpened}
         onClose={handleQRScan}
         messageSuccess="QR Scanned"
