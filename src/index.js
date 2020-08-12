@@ -15,7 +15,7 @@ import Backdrop from "./common/Backdrop";
 //router
 import { Router } from "react-router-dom";
 import { Provider } from "mobx-react";
-import createBrowserHistory from "history/createBrowserHistory";
+import { createBrowserHistory } from "history";
 import { syncHistoryWithStore } from "mobx-react-router";
 
 //mobx
@@ -31,8 +31,14 @@ const history = syncHistoryWithStore(browserHistory, store.routing);
 
 library.add(faStroopwafel, faSearch);
 
-// ReactGA.initialize('UA-128193575-1', { debug: true });
-ReactGA.initialize("UA-128193575-1");
+if (process.env.NODE_ENV === "production") {
+  ReactGA.initialize(process.env.REACT_APP_GA_PROPERTY_DEFAULT);
+} else {
+  ReactGA.initialize(process.env.REACT_APP_GA_PROPERTY_DEFAULT, {
+    debug: true,
+    testMode: true,
+  });
+}
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
