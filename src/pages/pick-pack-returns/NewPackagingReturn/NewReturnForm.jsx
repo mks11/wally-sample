@@ -90,20 +90,19 @@ function NewReturnForm({
 
   const getCorrectTypeOfSuccess = (data = {}) => {
     const { packagingReturn, message = "" } = data;
+    const messageLC = message.toLowerCase();
     if (packagingReturn) {
       return SUCCESS_COMPLETED;
     } else if (
       // Expected Message: 'Enter the tracking number to complete the return.'
-      message.toLowerCase() &&
-      message.includes("enter") &&
-      message.includes("tracking")
+      messageLC.includes("enter") &&
+      messageLC.includes("tracking")
     ) {
       return SUCCESS_REQUIRES_TRACKING;
     } else if (
       //Expected Message: "Packaging return couldn't be completed. Report sent to Ops team."
-      message.toLowerCase() &&
-      message.includes("report") &&
-      message.includes("ops")
+      messageLC.includes("report") &&
+      messageLC.includes("ops")
     ) {
       return SUCCESS_NOT_COMPLETED;
     }
@@ -124,6 +123,7 @@ function NewReturnForm({
       setErrorOnSubmit(true);
     } finally {
       setSubmitting(false);
+      setSuccessType(null);
     }
   };
 
