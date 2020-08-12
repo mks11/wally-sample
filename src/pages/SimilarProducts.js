@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
-import { connect, datesEqual } from "utils";
 import { Link } from "react-router-dom";
 
-import CarbonBar from 'common/CarbonBar'
+import { logPageView } from "services/google-analytics";
+import { connect, datesEqual } from "utils";
 
+import CarbonBar from "common/CarbonBar";
 import Product from "./Mainpage/Product";
 
 class SimilarProducts extends Component {
@@ -23,15 +23,18 @@ class SimilarProducts extends Component {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
       categoryTypeMode: "limit",
-      showMobileSearch: false
+      showMobileSearch: false,
     };
 
     this.id = this.props.match.params.id;
   }
 
   componentDidMount() {
-    ReactGA.pageview(window.location.pathname);
-    this.userStore.getStatus(true).then(status => {
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
+
+    this.userStore.getStatus(true).then((status) => {
       this.userStore.giftCardPromo && this.processGiftCardPromo(status);
       this.checkoutStore.getDeliveryTimes();
       this.loadData();
@@ -58,14 +61,14 @@ class SimilarProducts extends Component {
     this.productStore.getCategories();
     this.productStore
       .getImpulseProducts(this.userStore.getHeaderAuth())
-      .then(data => {
+      .then((data) => {
         this.setState({ sidebar: this.productStore.sidebar });
       })
-      .catch(e => console.error("Failed to load similar products: ", e));
+      .catch((e) => console.error("Failed to load similar products: ", e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
-      .then(data => {
+      .then((data) => {
         if (
           !datesEqual(data.delivery_date, deliveryData.date) &&
           deliveryData.date !== null
@@ -106,7 +109,7 @@ class SimilarProducts extends Component {
           }
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("Failed to load current cart", e);
       });
   }
@@ -118,7 +121,7 @@ class SimilarProducts extends Component {
           { promoCode: this.userStore.giftCardPromo },
           this.userStore.getHeaderAuth()
         )
-        .then(data => {
+        .then((data) => {
           let msg = "";
           if (data.valid) {
             msg = "Store Credit Redeemed";
@@ -131,7 +134,7 @@ class SimilarProducts extends Component {
           this.modalStore.toggleModal("referralresult", msg);
           this.userStore.giftCardPromo = null;
         })
-        .catch(e => {
+        .catch((e) => {
           const msg = !e.response.data.error
             ? "Check Promo failed"
             : e.response.data.error.message;
@@ -146,17 +149,16 @@ class SimilarProducts extends Component {
   handleProductModal = (product_id, deliveryTimes) => {
     this.productStore
       .showModal(product_id, null, this.userStore.getDeliveryParams())
-      .then(data => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          deliveryTimes
-        );
+      .then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
         this.modalStore.toggleModal("product");
-      })
+      });
   };
 
   render() {
-    const cartItems = this.checkoutStore.cart ? this.checkoutStore.cart.cart_items : []
+    const cartItems = this.checkoutStore.cart
+      ? this.checkoutStore.cart.cart_items
+      : [];
 
     return (
       <div className="App">
@@ -168,7 +170,9 @@ class SimilarProducts extends Component {
             <hr />
             <div className="col col-lg-3 similar-products-checkout">
               <h3 className="text-right">
-                <Link to="/checkout" className="color-purple">Continue To Checkout</Link>
+                <Link to="/checkout" className="color-purple">
+                  Continue To Checkout
+                </Link>
               </h3>
             </div>
             <br />
@@ -179,19 +183,16 @@ class SimilarProducts extends Component {
         <div className="container">
           <div className="col-12">
             <div className="row">
-            {
-              this.productStore.impulse_products
-                ? this.productStore.impulse_products
-                    .map(product => (
-                      <Product
-                        key={product.product_id}
-                        product={product}
-                        deliveryTimes={this.state.deliveryTimes}
-                        onProductClick={this.handleProductModal}
-                      />
-                    ))
-                : null
-            }
+              {this.productStore.impulse_products
+                ? this.productStore.impulse_products.map((product) => (
+                    <Product
+                      key={product.product_id}
+                      product={product}
+                      deliveryTimes={this.state.deliveryTimes}
+                      onProductClick={this.handleProductModal}
+                    />
+                  ))
+                : null}
             </div>
           </div>
         </div>

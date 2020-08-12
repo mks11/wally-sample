@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
+import { logPageView } from "services/google-analytics";
 
 import { connect } from "../utils";
 
-import Head from '../common/Head'
+import Head from "../common/Head";
 
 class Backers extends Component {
   constructor(props) {
@@ -11,20 +11,23 @@ class Backers extends Component {
 
     this.backerStore = this.props.store.backer;
     this.modalStore = this.props.store.modal;
+    this.routing = this.props.store.routing;
   }
 
   componentDidMount() {
-    ReactGA.pageview(window.location.pathname);
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
     this.loadData();
   }
 
   loadData() {
     this.backerStore
       .loadBackers()
-      .then(data => {
+      .then((data) => {
         // data loaded
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("Failed to load backers", e);
         this.modalStore.toggleModal("error");
       });

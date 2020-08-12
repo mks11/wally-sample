@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
-import {
-  connect,
-  datesEqual
-} from "utils";
+
+import { logPageView } from "services/google-analytics";
+import { connect, datesEqual } from "utils";
 
 import Product from "../Mainpage/Product";
 
@@ -30,8 +28,11 @@ class VendorProfile extends Component {
   }
 
   componentDidMount() {
-    ReactGA.pageview(window.location.pathname);
-    this.userStore.getStatus(true).then(status => {
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
+
+    this.userStore.getStatus(true).then((status) => {
       this.userStore.giftCardPromo && this.processGiftCardPromo(status);
       this.checkoutStore.getDeliveryTimes();
       this.loadData();
@@ -44,11 +45,10 @@ class VendorProfile extends Component {
   loadData() {
     const name = this.props.match.params.vendor_name;
 
-    this.vendorProfileStore.loadVendorProfile(name)
-      .catch(e => {
-        console.error("Failed to load vendor profile", e);
-        this.modalStore.toggleModal("error");
-      });
+    this.vendorProfileStore.loadVendorProfile(name).catch((e) => {
+      console.error("Failed to load vendor profile", e);
+      this.modalStore.toggleModal("error");
+    });
 
     const deliveryData = this.userStore.getDeliveryParams();
 
@@ -57,7 +57,7 @@ class VendorProfile extends Component {
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
-      .then(data => {
+      .then((data) => {
         if (
           !datesEqual(data.delivery_date, deliveryData.date) &&
           deliveryData.date !== null
@@ -98,7 +98,7 @@ class VendorProfile extends Component {
           }
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("Failed to load current cart", e);
       });
   }
@@ -110,7 +110,7 @@ class VendorProfile extends Component {
           { promoCode: this.userStore.giftCardPromo },
           this.userStore.getHeaderAuth()
         )
-        .then(data => {
+        .then((data) => {
           let msg = "";
           if (data.valid) {
             msg = "Store Credit Redeemed";
@@ -123,7 +123,7 @@ class VendorProfile extends Component {
           this.modalStore.toggleModal("referralresult", msg);
           this.userStore.giftCardPromo = null;
         })
-        .catch(e => {
+        .catch((e) => {
           const msg = !e.response.data.error
             ? "Check Promo failed"
             : e.response.data.error.message;
@@ -138,13 +138,10 @@ class VendorProfile extends Component {
   handleProductModal = (product_id, deliveryTimes) => {
     this.productStore
       .showModal(product_id, null, this.userStore.getDeliveryParams())
-      .then(data => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          deliveryTimes
-        );
+      .then((data) => {
+        this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
         this.modalStore.toggleModal("product");
-      })
+      });
   };
 
   render() {
@@ -164,7 +161,8 @@ class VendorProfile extends Component {
                 <h1>{vendor.name}</h1>
                 {vendor.city && (
                   <h2>
-                    {vendor.shipping_address.city} | {vendor.shipping_address.state}
+                    {vendor.shipping_address.city} |{" "}
+                    {vendor.shipping_address.state}
                   </h2>
                 )}
                 <hr />
@@ -177,19 +175,16 @@ class VendorProfile extends Component {
         <div className="container">
           <div className="col">
             <div className="row">
-            {
-              this.vendorProfileStore.products
-                ? this.vendorProfileStore.products
-                    .map(product => (
-                      <Product
-                        key={product.product_id}
-                        product={product}
-                        deliveryTimes={this.state.deliveryTimes}
-                        onProductClick={this.handleProductModal}
-                      />
-                    ))
-                : null
-            }
+              {this.vendorProfileStore.products
+                ? this.vendorProfileStore.products.map((product) => (
+                    <Product
+                      key={product.product_id}
+                      product={product}
+                      deliveryTimes={this.state.deliveryTimes}
+                      onProductClick={this.handleProductModal}
+                    />
+                  ))
+                : null}
             </div>
           </div>
         </div>

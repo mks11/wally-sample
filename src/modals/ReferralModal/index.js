@@ -1,69 +1,78 @@
-import React, { Component } from 'react';
-import { logEvent } from '../../utils'
+import React, { Component } from "react";
+import { logEvent } from "services/google-analytics";
 
 class ReferralModal extends Component {
   constructor(props) {
-    super(props)
-    
+    super(props);
+
     this.state = {
-      refUrl: ''
-    }
+      refUrl: "",
+    };
   }
 
   componentDidMount() {
-    const { user } = this.props.stores
+    const { user } = this.props.stores;
 
-    user.referFriend()
-      .then(res => {
-        this.setState({
-          refUrl: res.data.ref_url
-        })
-      })
+    user.referFriend().then((res) => {
+      this.setState({
+        refUrl: res.data.ref_url,
+      });
+    });
   }
 
-  handleHere = e => {
-    this.props.toggle()
-  }
+  handleHere = (e) => {
+    this.props.toggle();
+  };
 
   handleCopy = () => {
-    logEvent({ category: "Refer", action: "CopyReferralLink" })
-    const $el = this.el
-    $el.select()
+    logEvent({ category: "Refer", action: "CopyReferralLink" });
+    const $el = this.el;
+    $el.select();
     try {
-      var successful = document.execCommand('copy')
-      var msg = successful ? 'successfully' : 'unsuccessfully'
-      console.log('Text copied ' + msg)
+      var successful = document.execCommand("copy");
+      var msg = successful ? "successfully" : "unsuccessfully";
+      console.log("Text copied " + msg);
     } catch (err) {
-      console.warn('Unable to copy text')
+      console.warn("Unable to copy text");
     }
-  }
+  };
 
   render() {
-    const { refUrl } = this.state
+    const { refUrl } = this.state;
 
     return (
       <div className="login-wrap">
         <h3 className="m-0 mb-2">How Ripe & Ready are you?</h3>
         <span className="mb-1">
-          <small>Refer 2 friends in the next 2 hours and we'll throw in an exclusive Wally Ripe & Ready tote in your order. Have them signup using the link below:</small>
+          <small>
+            Refer 2 friends in the next 2 hours and we'll throw in an exclusive
+            Wally Ripe & Ready tote in your order. Have them signup using the
+            link below:
+          </small>
         </span>
         <div className="mb-2 text-center">
-          <img src="/images/ripenready.png" alt="" width="70%"/>
+          <img src="/images/ripenready.png" alt="" width="70%" />
         </div>
         <div className="referral-wrap p-2">
           <input
             type="text"
-            style={{ position: 'absolute', zIndex:-100 }}
+            style={{ position: "absolute", zIndex: -100 }}
             value={refUrl}
-            ref={el => this.el = el}
+            ref={(el) => (this.el = el)}
             readOnly
           />
           <span className="referral-link">{refUrl}</span>
-          <button type="button" className="btn btn-transparent btn-transparent-light" onClick={this.handleCopy}>COPY</button>
+          <button
+            type="button"
+            className="btn btn-transparent btn-transparent-light"
+            onClick={this.handleCopy}
+          >
+            COPY
+          </button>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default ReferralModal
+export default ReferralModal;

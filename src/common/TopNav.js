@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { formatMoney, connect, logModalView } from "../utils";
 import ClickOutside from "react-click-outside";
+
+import { logModalView } from "services/google-analytics";
+import { formatMoney, connect } from "../utils";
 
 class TopNav extends Component {
   constructor(props) {

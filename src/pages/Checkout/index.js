@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
 import moment from "moment";
 import { Input } from "reactstrap";
 import Title from "common/page/Title";
 import PaymentSelect from "common/PaymentSelect";
 
-import { connect, formatMoney, logEvent, datesEqual } from "utils";
+import { logPageView, logEvent } from "services/google-analytics";
+import { connect, formatMoney, datesEqual } from "utils";
 
 import DeliveryAddressOptions from "common/DeliveryAddressOptions";
 import DeliveryChangeModal from "common/DeliveryChangeModal";
@@ -84,7 +84,10 @@ class Checkout extends Component {
   }
 
   componentDidMount() {
-    ReactGA.pageview("/checkout");
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
+
     this.userStore.getStatus(true).then((status) => {
       if (status) {
         const selectedAddress =
@@ -345,7 +348,7 @@ class Checkout extends Component {
         this.userStore.getHeaderAuth()
       )
       .then((data) => {
-        ReactGA.event({
+        logEvent({
           category: "Order",
           action: "Submit Order",
         });
