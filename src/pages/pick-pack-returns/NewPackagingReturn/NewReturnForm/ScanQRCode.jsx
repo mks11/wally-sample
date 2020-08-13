@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import { Button, Grid } from "@material-ui/core";
 import styles from "./bigButton.module.css";
 import ScannerQR from "common/ScannerQR";
@@ -7,17 +8,15 @@ function makeURLFromId(id) {
   return `https://thewallyshop.co/packaging/${id}`;
 }
 
-export default function ScanQRCode({ returnStore }) {
+export default function ScanQRCode({ onScanCompletion }) {
   const [qrOpened, setQrOpened] = useState(false);
   const handleQROpen = useCallback(() => {
     setQrOpened(true);
   }, []);
 
   const handleScanCompletion = (packaging_ids = []) => {
-    packaging_ids.forEach((id) => {
-      const url = makeURLFromId(id);
-      returnStore.addPackagingURL(url);
-    });
+    const urls = packaging_ids.map((id) => makeURLFromId(id));
+    onScanCompletion(urls);
     setQrOpened(false);
   };
 
@@ -29,15 +28,15 @@ export default function ScanQRCode({ returnStore }) {
         variant="contained"
         fullWidth={true}
         color={"primary"}
+        type="button"
       >
         Scan QR Code
       </Button>
-      <ScannerQR
-        isOpen={qrOpened}
-        onClose={handleScanCompletion}
-        messageSuccess="QR Scanned"
-        messageError="QR Scan error"
-      />
+      <ScannerQR isOpen={qrOpened} onClose={handleScanCompletion} />
     </Grid>
   );
 }
+
+ScanQRCode.propTypes = {
+  onScanCompletion: PropTypes.func.isRequired,
+};

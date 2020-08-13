@@ -13,7 +13,7 @@ import { useFormikContext } from "formik";
 
 export default function FormDialog({ show, setShow }) {
   const { values, submitForm, setFieldValue } = useFormikContext();
-  const [trackId, setTrackId] = useState("");
+  const [trackId, setTrackId] = useState(values["tracking_number"]);
 
   const handleClose = () => {
     setShow(false);
@@ -30,8 +30,9 @@ export default function FormDialog({ show, setShow }) {
   useEffect(() => {
     if (values["tracking_number"]) {
       submitForm();
+      setShow(false);
     }
-  }, [submitForm, values]);
+  }, [submitForm, values["tracking_number"]]); //once we know the value has updated submit
 
   return (
     <div>

@@ -11,6 +11,7 @@ export default function MissingQRCodeButton({ onClick }) {
       onClick={onClick}
       className={styles.bigButton}
       fullWidth={true}
+      type={"button"}
     >
       Missing QR Code
     </Button>
