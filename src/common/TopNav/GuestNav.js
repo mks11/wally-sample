@@ -3,51 +3,58 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 // Styled components
-import { MobileNavLink, MobileNavButton } from "./MobileStyledComponents";
+import {
+  MobileNavLinkText,
+  MobileNavButton,
+  MobileNavDivider,
+} from "./MobileStyledComponents";
 import { DesktopNavLink, DesktopNavLinkText } from "./DesktopNavComponents";
 
 export function MobileGuestNav({ hideNav, handleLogin, handleSignup }) {
   return (
     <>
       <li>
-        <MobileNavButton onClick={handleLogin} text="Log In" />
+        <MobileNavButton onClick={handleLogin}>Log In</MobileNavButton>
       </li>
       <li>
-        <MobileNavButton onClick={handleSignup} text="Sign Up" />
+        <MobileNavButton onClick={handleSignup}>Sign Up</MobileNavButton>
       </li>
       <li>
-        <Link to="/backers" onClick={hideNav}>
-          <MobileNavLink>Our Backers</MobileNavLink>
-        </Link>
+        <MobileNavDivider />
       </li>
       <li>
         <Link to="/latest-news" onClick={hideNav}>
-          <MobileNavLink>COVID-19</MobileNavLink>
+          <MobileNavLinkText>COVID-19</MobileNavLinkText>
         </Link>
       </li>
       <li>
         <Link to="/about" onClick={hideNav}>
-          <MobileNavLink>About</MobileNavLink>
+          <MobileNavLinkText>About</MobileNavLinkText>
         </Link>
       </li>
       <li>
         <Link to="/howitworks" onClick={hideNav}>
-          <MobileNavLink>How It Works</MobileNavLink>
+          <MobileNavLinkText>How It Works</MobileNavLinkText>
         </Link>
       </li>
       <li>
         <Link to="/blog" onClick={hideNav}>
-          <MobileNavLink>Blog</MobileNavLink>
+          <MobileNavLinkText>Blog</MobileNavLinkText>
+        </Link>
+      </li>
+      <li>
+        <Link to="/backers" onClick={hideNav}>
+          <MobileNavLinkText>Our Backers</MobileNavLinkText>
         </Link>
       </li>
       {/* <li>
         <Link to="/help" onClick={hideNav}>
-          <MobileNavLink>Help</MobileNavLink>
+          <MobileNavLinkText>Help</MobileNavLinkText>
         </Link>
       </li>
       <li>
         <Link to="/giftcard" onClick={hideNav}>
-          <MobileNavLink>Gift Card</MobileNavLink>
+          <MobileNavLinkText>Gift Card</MobileNavLinkText>
         </Link>
       </li> */}
     </>
