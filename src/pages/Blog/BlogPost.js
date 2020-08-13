@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
 import { Redirect } from "react-router-dom";
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { LazyLoadComponent } from "react-lazy-load-image-component";
 import styled from "styled-components";
 
-import { connect, logEvent } from "utils";
+import { logPageView, logEvent } from "services/google-analytics";
+import { connect } from "utils";
+
 import Head from "common/Head";
 import { ResponsiveText } from "common/ResponsiveText";
 import { BlogPostSubtitle } from "./Blog";
@@ -43,7 +44,9 @@ class BlogPost extends Component {
     this.handleGetStarted = this.handleGetStarted.bind(this);
   }
   componentDidMount() {
-    ReactGA.pageview(window.location.pathname);
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
   }
 
   handleGetStarted(e) {

@@ -1,125 +1,123 @@
-import React, { Fragment, Component } from 'react';
-import { Link } from 'react-router-dom'
-import ReactGA from 'react-ga';
-import moment from 'moment'
+import React, { Fragment, Component } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 
-import { connect, formatMoney } from '../utils'
+import { logPageView } from "services/google-analytics";
+import { connect, formatMoney } from "../utils";
 
-import BoxOrder from '../common/page/help/BoxOrder'
-import Head from '../common/Head'
-import Title from '../common/page/Title'
-import  ReportModal from './orders/ReportModal'
-import  ReportSuccessModal from './orders/ReportSuccessModal'
-
+import BoxOrder from "../common/page/help/BoxOrder";
+import Head from "../common/Head";
+import Title from "../common/page/Title";
+import ReportModal from "./orders/ReportModal";
+import ReportSuccessModal from "./orders/ReportSuccessModal";
 
 class Help extends Component {
   state = {
     activeQuestion: null,
-    terms: '',
+    terms: "",
     searchResults: [],
-    onSearch: false
+    onSearch: false,
+  };
+
+  constructor(props, context) {
+    super(props, context);
+    this.helpStore = this.props.store.help;
+    this.userStore = this.props.store.user;
+    this.routing = this.props.store.routing;
+    this.orderStore = this.props.store.order;
+    this.modalStore = this.props.store.modal;
   }
 
-  constructor(props, context){
-    super(props, context)
-    this.helpStore = this.props.store.help
-    this.userStore = this.props.store.user
-    this.routing = this.props.store.routing
-    this.orderStore = this.props.store.order
-    this.modalStore = this.props.store.modal
-  }
-
-  componentDidMount(){
-    ReactGA.pageview(window.location.pathname);
-    this.userStore.getStatus()
-      .then((status) => {
-        this.loadData()
-      })
+  componentDidMount() {
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
+    this.userStore.getStatus().then((status) => {
+      this.loadData();
+    });
   }
 
   loadData() {
-    this.helpStore.getQuestions('top');
+    this.helpStore.getQuestions("top");
     this.helpStore.getHelpTopics();
     // await this.helpStore.getContact();
 
     if (this.userStore.status) {
-      this.orderStore.getOrders(this.userStore.getHeaderAuth())
+      this.orderStore.getOrders(this.userStore.getHeaderAuth());
     }
-
-
   }
 
   handleToggleQuestion = (id) => {
     if (id === this.state.activeQuestion) {
-      this.setState({activeQuestion: null})
-      return
+      this.setState({ activeQuestion: null });
+      return;
     }
-    this.setState({activeQuestion: id})
-  }
+    this.setState({ activeQuestion: id });
+  };
 
   handleSearch = (e) => {
     this.helpStore.search(this.state.terms).then((data) => {
-      this.setState({onSearch: true, searchResults: data})
-    })
-    e.preventDefault()
-  }
+      this.setState({ onSearch: true, searchResults: data });
+    });
+    e.preventDefault();
+  };
 
   handleSearchEnter = (e) => {
     if (e.keyCode === 13) {
-      this.handleSearch(e)
+      this.handleSearch(e);
     }
-  }
+  };
   handleViewAllQuestions = (e) => {
-    this.helpStore.activeTopics = 'All'
-    this.routing.push('/help/topics')
-    e.preventDefault()
-  }
+    this.helpStore.activeTopics = "All";
+    this.routing.push("/help/topics");
+    e.preventDefault();
+  };
 
   handleViewAllOrders = (e) => {
-    this.routing.push('/orders')
-    e.preventDefault()
-  }
+    this.routing.push("/orders");
+    e.preventDefault();
+  };
   countItems(data) {
-    let total = 0 
-    if (!data) return formatMoney(total)
+    let total = 0;
+    if (!data) return formatMoney(total);
 
     for (const d of data) {
-      total += parseFloat(d.customer_quantity)
+      total += parseFloat(d.customer_quantity);
     }
-    return formatMoney(total)
+    return formatMoney(total);
   }
 
   printItems(data) {
-    let items = []
-    if (!data) return items
+    let items = [];
+    if (!data) return items;
 
     for (const d of data) {
-      items.push(d.product_name)
+      items.push(d.product_name);
     }
-    return items.join(', ')
+    return items.join(", ");
   }
 
   printPackaging(data) {
-    let items = []
-    if (!data) return items
+    let items = [];
+    if (!data) return items;
 
     for (const d of data) {
-      items.push(d.type)
+      items.push(d.type);
     }
-    return items.join(', ')
+    return items.join(", ");
   }
 
   goToTopics(id, name) {
-    this.helpStore.activeTopics = name
-    this.routing.push('/help/topics/'+id)
+    this.helpStore.activeTopics = name;
+    this.routing.push("/help/topics/" + id);
   }
 
   handleReportOrder = (item) => {
-    this.orderStore.toggleReport(item)
-  }
+    this.orderStore.toggleReport(item);
+  };
 
   render() {
-    let qClass = 'list-bordered list-group-item '
+    let qClass = "list-bordered list-group-item ";
     return (
       <div className="App">
         <Head
@@ -129,11 +127,14 @@ class Help extends Component {
         <Title content="Help" />
 
         <section className="page-section aw-our--story">
-
           <div className="container">
             <form className="search-form" onSubmit={this.handleSearch}>
               <i className="fa fa-search"></i>
-              <input type="text"  placeholder="Search anything..." value={this.state.terms} onChange={e=>this.setState({terms: e.target.value})}
+              <input
+                type="text"
+                placeholder="Search anything..."
+                value={this.state.terms}
+                onChange={(e) => this.setState({ terms: e.target.value })}
                 onKeyDown={this.handleSearchEnter}
               />
             </form>
@@ -141,179 +142,256 @@ class Help extends Component {
 
           <div className="help-content mt-5">
             <div className="container">
-
-              { this.state.onSearch  ?
+              {this.state.onSearch ? (
+                <div className="row">
+                  <div className="col-md-12 col-xs-12 help-box">
+                    <div className="list-header">
+                      <div className="row">
+                        <div className="col-10">
+                          <h2>Search results</h2>
+                        </div>
+                      </div>
+                    </div>
+                    <ul className="list-group list-group-flush">
+                      {this.state.searchResults.map((item, key) => (
+                        <li
+                          key={key}
+                          className={
+                            qClass +
+                            (key === this.state.activeQuestion ? " active" : "")
+                          }
+                          onClick={(e) => this.handleToggleQuestion(key)}
+                        >
+                          <div className="d-flex justify-content-between">
+                            <div className="">
+                              <a className="list-link">
+                                <h4> {item.question_text} </h4>
+                              </a>
+                            </div>
+                            <span className="badge badge-pill">
+                              <i className="fa fa-chevron-right fa-2x"></i>
+                            </span>
+                          </div>
+                          <div className="answer">{item.answer_text}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <Fragment>
                   <div className="row">
-                    <div className="col-md-12 col-xs-12 help-box">
+                    <div className="col-md-6 col-xs-12 help-box">
+                      <div className="list">
+                        <div className="list-header">
+                          <div className="row">
+                            <div className="col-10">
+                              <h2>Recent Orders</h2>
+                            </div>
+                            <div className="col-2">
+                              <a
+                                className="view-all"
+                                href="#"
+                                onClick={this.handleViewAllOrders}
+                              >
+                                View All
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <ul className="list-group list-group-flush">
+                          <table className="table table-sm borderless">
+                            {this.orderStore.orders.map((item, key) => (
+                              <React.Fragment key={key}>
+                                <thead>
+                                  <tr>
+                                    <th scope="col" style={{ width: "110px" }}>
+                                      {item.cart_items
+                                        ? "Order Placed"
+                                        : "Packaging Returned"}
+                                    </th>
+                                    <th scope="col">Items</th>
+                                    <th scope="col" style={{ width: "80px" }}>
+                                      Total
+                                    </th>
+                                    <th />
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      {item.createdAt
+                                        ? moment(
+                                            item.createdAt.substring(0, 10)
+                                          ).format("MMM DD, YYYY")
+                                        : ""}
+                                    </td>
+                                    <td>
+                                      {item.cart_items
+                                        ? this.printItems(item.cart_items)
+                                        : this.printPackaging(item.returns)}
+                                    </td>
+                                    <td>
+                                      {item.total
+                                        ? item.total
+                                          ? formatMoney(item.total / 100)
+                                          : "$0.00"
+                                        : item.total_credit
+                                        ? formatMoney(item.total_credit / 100)
+                                        : "$0.00"}
+                                    </td>
+                                    <td>
+                                      <button
+                                        onClick={this.handleReportOrder.bind(
+                                          this,
+                                          item
+                                        )}
+                                        className="help-btn"
+                                      >
+                                        Help
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </React.Fragment>
+                            ))}
+                          </table>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6 col-xs-12 help-box">
                       <div className="list-header">
                         <div className="row">
                           <div className="col-10">
-                            <h2>Search results</h2>
+                            <h2>Top Questions</h2>
+                          </div>
+                          <div className="col-2">
+                            <a
+                              className="view-all"
+                              href="#"
+                              onClick={this.handleViewAllQuestions}
+                            >
+                              View All
+                            </a>
                           </div>
                         </div>
                       </div>
                       <ul className="list-group list-group-flush">
-                        {this.state.searchResults.map((item, key) => (
-                          <li key={key} className={qClass + (key===this.state.activeQuestion ? ' active' : '')}  onClick={e=>this.handleToggleQuestion(key)}>
+                        {this.helpStore.questions.map((item, key) => (
+                          <li
+                            key={key}
+                            className={
+                              qClass +
+                              (key === this.state.activeQuestion
+                                ? " active"
+                                : "")
+                            }
+                            onClick={(e) => this.handleToggleQuestion(key)}
+                          >
                             <div className="d-flex justify-content-between">
                               <div className="">
-                                <a className="list-link"><h4> {item.question_text} </h4></a>
+                                <a className="list-link">
+                                  <h4> {item.question_text} </h4>
+                                </a>
                               </div>
                               <span className="badge badge-pill">
                                 <i className="fa fa-chevron-right fa-2x"></i>
                               </span>
                             </div>
-                              <div className="answer">
-                                {item.answer_text}
-                              </div>
+                            <div className="answer">
+                              {item.read_more ? (
+                                <React.Fragment>
+                                  {item.answer_text.substring(0, 50)}...
+                                  <Link
+                                    className="text-violet text-bold"
+                                    to={"/help/detail/" + item._id}
+                                  >
+                                    Read more
+                                  </Link>
+                                </React.Fragment>
+                              ) : (
+                                <React.Fragment>
+                                  {item.answer_text}
+                                </React.Fragment>
+                              )}
+                            </div>
                           </li>
                         ))}
-
                       </ul>
                     </div>
                   </div>
-                  : 
-                  <Fragment>
-                    <div className="row">
-                      <div className="col-md-6 col-xs-12 help-box">
-                        <div className="list">
-                          <div className="list-header">
+                  <br />
+                  <br />
+                  <div className="row">
+                    <div className="col-md-6 col-xs-12 help-box">
+                      <div className="list-header">
+                        <div className="row">
+                          <div className="col-10">
+                            <h2>Topics</h2>
+                          </div>
+                          <div className="col-2">
+                            <a
+                              className="view-all"
+                              href="#"
+                              onClick={this.handleViewAllQuestions}
+                            >
+                              View All
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="list-group list-group-flush">
+                        {this.helpStore.topics.map((item, key) => (
+                          <li
+                            key={key}
+                            className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer"
+                            onClick={(e) =>
+                              this.goToTopics(item._id, item.name)
+                            }
+                          >
                             <div className="row">
-                              <div className="col-10">
-                                <h2>Recent Orders</h2>
-                              </div>
-                              <div className="col-2">
-                                <a className="view-all" href="#"  onClick={this.handleViewAllOrders}>View All</a>
-                              </div>
+                              <a className="list-link">
+                                <h4> {item.name} </h4>
+                              </a>
                             </div>
-                          </div>
-
-                          <ul className="list-group list-group-flush">
-
-                            <table className="table table-sm borderless" > 
-                              {this.orderStore.orders.map((item, key) => (
-                                <React.Fragment key={key}>
-                                  <thead>
-                                    <tr>
-                                      <th scope="col" style={{width: '110px'}}>{item.cart_items ? "Order Placed" : "Packaging Returned"}</th>
-                                      <th scope="col">Items</th>
-                                      <th scope="col" style={{width: '80px'}}>Total</th>
-                                      <th />
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>{item.createdAt ? moment(item.createdAt.substring(0,10)).format('MMM DD, YYYY') : ''}</td>
-                                      <td>{item.cart_items ? this.printItems(item.cart_items) : this.printPackaging(item.returns)}</td>
-                                      <td>{item.total ? ( item.total ? formatMoney(item.total/100) : "$0.00") : (item.total_credit ? formatMoney(item.total_credit/100) : "$0.00")}</td>
-                                      <td>
-                                        <button onClick={this.handleReportOrder.bind(this, item)} className="help-btn">
-                                          Help
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </React.Fragment>
-                              ))}
-                            </table>
-                          </ul>
-                        </div>
-                      </div>
-
-                      <div className="col-md-6 col-xs-12 help-box">
-                        <div className="list-header">
-                          <div className="row">
-                            <div className="col-10">
-                              <h2>Top Questions</h2>
-                            </div>
-                            <div className="col-2"><a className="view-all" href="#"  onClick={this.handleViewAllQuestions}>View All</a></div>
-                          </div>
-                        </div>
-                        <ul className="list-group list-group-flush">
-                          {this.helpStore.questions.map((item, key) => (
-                            <li key={key} className={qClass + (key===this.state.activeQuestion ? ' active' : '')}  onClick={e=>this.handleToggleQuestion(key)}>
-                              <div className="d-flex justify-content-between">
-                                <div className="">
-                                  <a className="list-link"><h4> {item.question_text} </h4></a>
-                                </div>
-                                <span className="badge badge-pill">
-                                  <i className="fa fa-chevron-right fa-2x"></i>
-                                </span>
-                              </div>
-                                <div className="answer">
-                                  {item.read_more ?
-                                      <React.Fragment>
-                                        {item.answer_text.substring(0, 50)}...<Link className="text-violet text-bold" to={"/help/detail/" + item._id}>Read more</Link>
-                                      </React.Fragment>
-                                      :
-                                      <React.Fragment>
-                                      {item.answer_text}
-                                      </React.Fragment>
-                                  }
-                                </div>
-                            </li>
-                          ))}
-
-                        </ul>
-                      </div>
+                            <span className="badge badge-pill">
+                              <i className="fa fa-chevron-right fa-2x"></i>
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <br />
-                    <br />
-                    <div className="row">
-                      <div className="col-md-6 col-xs-12 help-box">
 
-                        <div className="list-header">
-                          <div className="row">
-                            <div className="col-10">
-                              <h2>Topics</h2>
-                            </div>
-                            <div className="col-2"><a className="view-all" href="#"  onClick={this.handleViewAllQuestions}>View All</a></div>
-                          </div>
-                        </div>
-                        <ul className="list-group list-group-flush">
-                          {this.helpStore.topics.map((item, key) => (
-                            <li key={key} className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer" onClick={e=>this.goToTopics(item._id, item.name)} >
-                              <div className="row">
-                                <a className="list-link" ><h4> {item.name} </h4></a>
-                              </div>
-                              <span className="badge badge-pill">
-                                <i className="fa fa-chevron-right fa-2x"></i>
-                              </span>
-                            </li>
-                          ))}
-
-                        </ul>
-                      </div>
-
-                      <div className="col-md-6 col-xs-12 help-box">
-                        <BoxOrder
-                          title="Contact Us"
-                          data={this.helpStore.contact}
-                          methodName="contact"
-                        />
-
+                    <div className="col-md-6 col-xs-12 help-box">
+                      <BoxOrder
+                        title="Contact Us"
+                        data={this.helpStore.contact}
+                        methodName="contact"
+                      />
 
                       <li className="list-bordered list-group-item d-flex justify-content-between align-items-center cursor-pointer">
                         <div className="row">
                           <i className="fa fa-envelope ml-2"></i>
 
-                          <a href="mailto:info@thewallyshop.co" className="list-link ml-3">
-                            <h4> 
-                             info@thewallyshop.co
-                            </h4>
+                          <a
+                            href="mailto:info@thewallyshop.co"
+                            className="list-link ml-3"
+                          >
+                            <h4>info@thewallyshop.co</h4>
                           </a>
                         </div>
                       </li>
                     </div>
                   </div>
-
                 </Fragment>
-              }
+              )}
             </div>
           </div>
         </section>
-      <ReportModal/>
-      <ReportSuccessModal/>
+        <ReportModal />
+        <ReportSuccessModal />
       </div>
     );
   }

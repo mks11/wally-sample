@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { logModalView, logEvent, genTimePoints, isValidTimeOrder } from "utils";
+
+import { genTimePoints, isValidTimeOrder } from "utils";
 import PreferredPickup from "../common/DropdownPreferredPickupLocation";
 import AddressOptions from "../common/DeliveryAddressOptions";
 import CustomDatepicker from "../common/CustomDatepicker";
 import { connect } from "utils";
 import TimeOnlyOptions from "../common/TimeOnlyOptions";
-import { FormGroup } from "reactstrap";
 
 function Container(props) {
   return <div className="util-margin-top-20" {...props} />;
@@ -37,12 +37,12 @@ class AddressOptionsManaged extends Component {
       newState: "",
       newCity: "",
       newCountry: "",
-      newPreferedAddress: false
+      newPreferedAddress: false,
     };
   }
 
   componentDidMount() {
-    this.userStore.getStatus(true).then(status => {
+    this.userStore.getStatus(true).then((status) => {
       if (status) {
         const selectedAddress =
           this.userStore.selectedDeliveryAddress ||
@@ -59,7 +59,7 @@ class AddressOptionsManaged extends Component {
 
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find(
-            d => d._id === this.userStore.user.preferred_address
+            (d) => d._id === this.userStore.user.preferred_address
           );
           this.setState({ selectedAddress: selectedAddress._id });
         } else {
@@ -71,7 +71,7 @@ class AddressOptionsManaged extends Component {
     });
   }
 
-  handleSelectAddress = data => {
+  handleSelectAddress = (data) => {
     const selectedAddress = this.userStore.selectedDeliveryAddress;
     if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
       this.setState({ selectedAddress: data, selectedAddressChanged: true });
@@ -81,7 +81,7 @@ class AddressOptionsManaged extends Component {
     }
   };
 
-  handleSubmitAddress = async address => {
+  handleSubmitAddress = async (address) => {
     this.userStore.setDeliveryAddress(address);
     this.setState({ lockAddress: true });
   };
@@ -90,7 +90,7 @@ class AddressOptionsManaged extends Component {
     this.setState({ lockAddress: false });
   };
 
-  handleAddNewAddress = async data => {
+  handleAddNewAddress = async (data) => {
     const {
       newContactName,
       newState,
@@ -101,7 +101,7 @@ class AddressOptionsManaged extends Component {
       newCountry,
       newPhoneNumber,
       newStreetAddress,
-      newPreferedAddress
+      newPreferedAddress,
     } = data;
 
     const dataMap = {
@@ -114,7 +114,7 @@ class AddressOptionsManaged extends Component {
       country: newCountry,
       telephone: newPhoneNumber,
       street_address: newStreetAddress,
-      preferred_address: newPreferedAddress
+      preferred_address: newPreferedAddress,
     };
 
     const response = await this.userStore.saveAddress(dataMap);
@@ -181,7 +181,7 @@ class SchedulePickup extends Component {
       invalidEarliestTime: false,
 
       pickupDate: moment.now(),
-      pickupNotes: ""
+      pickupNotes: "",
     };
   }
 
@@ -194,11 +194,11 @@ class SchedulePickup extends Component {
     );
     if (!isValid) {
       this.setState({
-        invalidLatestTime: true // only make the latest time invalid
+        invalidLatestTime: true, // only make the latest time invalid
       });
     } else {
       this.setState({
-        invalidLatestTime: false
+        invalidLatestTime: false,
       });
     }
   };
@@ -207,7 +207,7 @@ class SchedulePickup extends Component {
     this.setState(
       {
         // lockEarliestTime: true,
-        earliestTime: time
+        earliestTime: time,
       },
       this.checkValidityTime
     );
@@ -216,21 +216,21 @@ class SchedulePickup extends Component {
     this.setState(
       {
         // lockLatestTime: true,
-        latestTime: time
+        latestTime: time,
       },
       this.checkValidityTime
     );
   };
 
-  handleOnDatePick = d => {
+  handleOnDatePick = (d) => {
     this.setState({
-      pickupDate: d
+      pickupDate: d,
     });
   };
 
-  handlePreferredLocation = pref => {
+  handlePreferredLocation = (pref) => {
     this.setState({
-      preferredLocation: pref
+      preferredLocation: pref,
     });
   };
 
@@ -239,7 +239,7 @@ class SchedulePickup extends Component {
       preferredLocation,
       latestTime,
       earliestTime,
-      pickupDate
+      pickupDate,
     } = this.state;
 
     const selectedAddress = this.userStore.selectedDeliveryAddress;
@@ -250,7 +250,7 @@ class SchedulePickup extends Component {
       earliest_time: earliestTime,
       latest_time: latestTime,
       pickup_notes: preferredLocation,
-      auth: this.userStore.getHeaderAuth()
+      auth: this.userStore.getHeaderAuth(),
     });
   };
 
@@ -260,7 +260,7 @@ class SchedulePickup extends Component {
       preferredLocation,
       latestTime,
       earliestTime,
-      pickupDate
+      pickupDate,
     } = this.state;
     const isReadyToSubmit =
       preferredLocation && latestTime && earliestTime && pickupDate;
@@ -292,7 +292,7 @@ class SchedulePickup extends Component {
                 this.props.earliestTime,
                 this.props.latestTime,
                 30
-              ).map(p => ({ time: p }))}
+              ).map((p) => ({ time: p }))}
               onSelectTime={this.handleSelectEarliestTime}
               invalidText={this.state.invalidEarliestTime && INVALID_TIME}
             />
@@ -306,7 +306,7 @@ class SchedulePickup extends Component {
                 this.state.earliestTime,
                 this.props.latestTime,
                 30
-              ).map(p => ({ time: p }))}
+              ).map((p) => ({ time: p }))}
               onSelectTime={this.handleSelectLatestTime}
               invalidText={this.state.invalidLatestTime && INVALID_TIME}
             />
@@ -340,13 +340,13 @@ class SchedulePickup extends Component {
 
 SchedulePickup.defaultProps = {
   earliestTime: "6:00 AM",
-  latestTime: "11:00 PM"
+  latestTime: "11:00 PM",
 };
 
 SchedulePickup.propTypes = {
   earliestTime: PropTypes.string.isRequired,
   latestTime: PropTypes.string.isRequired,
-  onConfirmPickup: PropTypes.func.isRequired
+  onConfirmPickup: PropTypes.func.isRequired,
 };
 
 export default connect("store")(SchedulePickup);

@@ -1,26 +1,24 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import {
-  Row,
-  Col,
-  Container,
-} from 'reactstrap'
-import { connect, logEvent } from 'utils'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Row, Col, Container } from "reactstrap";
 
-import Filters from './Filters'
-import SearchBar from './SearchBar'
-import CartDropdown from './CartDropdown'
+import { logEvent } from "services/google-analytics";
+import { connect } from "utils";
+
+import Filters from "./Filters";
+import SearchBar from "./SearchBar";
+import CartDropdown from "./CartDropdown";
 
 class ProductTop extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.userStore = props.store.user
-    this.uiStore = props.store.ui
-    this.productStore = props.store.product
-    this.checkoutStore = props.store.checkout
-    this.routing = props.store.routing
-    this.modalStore = props.store.modal
+    this.userStore = props.store.user;
+    this.uiStore = props.store.ui;
+    this.productStore = props.store.product;
+    this.checkoutStore = props.store.checkout;
+    this.routing = props.store.routing;
+    this.modalStore = props.store.modal;
 
     this.state = {
       selectedAddressChanged: false,
@@ -30,167 +28,198 @@ class ProductTop extends Component {
       fakeUser: this.userStore.loadFakeUser(),
 
       sticky: 0,
-    }
+    };
   }
 
   componentDidMount() {
-    const $ = window.$
-    const self = this
-    $(document).ready(function() {
-      self.calculateSticyPosition()
-    })
-    $(window).bind('scroll', this.handleFixedTop)
-    $(window).bind('resize', this.calculateSticyPosition)
+    const $ = window.$;
+    const self = this;
+    $(document).ready(function () {
+      self.calculateSticyPosition();
+    });
+    $(window).bind("scroll", this.handleFixedTop);
+    $(window).bind("resize", this.calculateSticyPosition);
   }
 
   componentWillUnmount() {
-    const $ = window.$
-    $(window).unbind('scroll', this.handleFixedTop)
-    $(window).unbind('resize', this.calculateSticyPosition)
+    const $ = window.$;
+    $(window).unbind("scroll", this.handleFixedTop);
+    $(window).unbind("resize", this.calculateSticyPosition);
   }
 
   calculateSticyPosition = () => {
-    const element = document.getElementsByClassName("aw-header")[0]
-    const newSticky = element ? element.offsetHeight : 0
+    const element = document.getElementsByClassName("aw-header")[0];
+    const newSticky = element ? element.offsetHeight : 0;
     this.setState({
-      sticky: newSticky
-    })
-  }
+      sticky: newSticky,
+    });
+  };
 
   handleFixedTop = () => {
-    const $ = window.$
-    const { sticky } = this.state
-    const stickyPos = sticky
+    const $ = window.$;
+    const { sticky } = this.state;
+    const stickyPos = sticky;
     if (window.pageYOffset >= stickyPos) {
-      $('.product-top').addClass('fixed');
+      $(".product-top").addClass("fixed");
     } else {
-      $('.product-top').removeClass('fixed');
+      $(".product-top").removeClass("fixed");
     }
-  }
+  };
 
   formatAddress(address) {
-    return address ? address.substr(0, 25).concat('...') : null
+    return address ? address.substr(0, 25).concat("...") : null;
   }
 
   handleCheckout = () => {
     if (this.userStore.status) {
-      this.routing.push('/main/similar-products')
+      this.routing.push("/main/similar-products");
     } else {
-      this.modalStore.toggleModal('login')
+      this.modalStore.toggleModal("login");
     }
-  }
+  };
 
-  handleEdit = data => {
-    this.productStore.showModal(data.product_id, data.customer_quantity, this.userStore.getDeliveryParams())
-      .then(data => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, this.checkoutStore.deliveryTimes)
-        this.modalStore.toggleModal('product')
-      })
-  }
+  handleEdit = (data) => {
+    this.productStore
+      .showModal(
+        data.product_id,
+        data.customer_quantity,
+        this.userStore.getDeliveryParams()
+      )
+      .then((data) => {
+        this.userStore.adjustDeliveryTimes(
+          data.delivery_date,
+          this.checkoutStore.deliveryTimes
+        );
+        this.modalStore.toggleModal("product");
+      });
+  };
 
-  handleDelete =id => {
-    this.modalStore.toggleModal('delete', id)
-  }
+  handleDelete = (id) => {
+    this.modalStore.toggleModal("delete", id);
+  };
 
   handleMobileSearchOpen = () => {
-    const { onMobileSearchClick } = this.props
-    onMobileSearchClick && onMobileSearchClick()
-  }
+    const { onMobileSearchClick } = this.props;
+    onMobileSearchClick && onMobileSearchClick();
+  };
 
   handleAddNewAddress = async (data) => {
-    const { newContactName, newState, newDeliveryNotes, newZip, newAptNo, newCity, newCountry, newPhoneNumber, newStreetAddress, newPreferedAddress } = data
+    const {
+      newContactName,
+      newState,
+      newDeliveryNotes,
+      newZip,
+      newAptNo,
+      newCity,
+      newCountry,
+      newPhoneNumber,
+      newStreetAddress,
+      newPreferedAddress,
+    } = data;
 
     const dataMap = {
       name: newContactName,
       state: newState,
       delivery_notes: newDeliveryNotes,
-      zip: newZip, unit: newAptNo, city: newCity, country: newCountry, telephone: newPhoneNumber,street_address: newStreetAddress,
-      preferred_address: newPreferedAddress
-    }
+      zip: newZip,
+      unit: newAptNo,
+      city: newCity,
+      country: newCountry,
+      telephone: newPhoneNumber,
+      street_address: newStreetAddress,
+      preferred_address: newPreferedAddress,
+    };
 
     if (!this.userStore.user) {
       if (!this.zipStore.validateZipCode(newZip)) {
-        let err = {response: { data: { error:{message: 'Invalid zip code'}}}}
+        let err = {
+          response: { data: { error: { message: "Invalid zip code" } } },
+        };
         throw err;
       }
 
-      this.userStore.addFakeAddress(dataMap)
-      const fakeUser =  this.userStore.loadFakeUser()
-      this.setState({fakeUser})
+      this.userStore.addFakeAddress(dataMap);
+      const fakeUser = this.userStore.loadFakeUser();
+      this.setState({ fakeUser });
 
-      return fakeUser
+      return fakeUser;
     }
 
-    const response = await this.userStore.saveAddress(dataMap)
-    const address = this.userStore.selectedDeliveryAddress
-    this.handleSubmitAddress(address)
-    return response
-  }
+    const response = await this.userStore.saveAddress(dataMap);
+    const address = this.userStore.selectedDeliveryAddress;
+    this.handleSubmitAddress(address);
+    return response;
+  };
 
   handleSubmitAddress = async (address) => {
-    this.modalStore.showDeliveryChange('address', {
+    this.modalStore.showDeliveryChange("address", {
       address,
-    })
-    this.userStore.setDeliveryAddress(address)
-    return
-  }
+    });
+    this.userStore.setDeliveryAddress(address);
+    return;
+  };
 
   handleSelectAddress = (data) => {
-    const selectedAddress  = this.userStore.selectedDeliveryAddress
+    const selectedAddress = this.userStore.selectedDeliveryAddress;
     if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
-      this.setState({selectedAddress: data, selectedAddressChanged: true})
+      this.setState({ selectedAddress: data, selectedAddressChanged: true });
     } else {
-      this.setState({selectedAddressChanged: false})
+      this.setState({ selectedAddressChanged: false });
     }
-  }
+  };
 
-  handleSubmitDeliveryAddress= () => {
-    logEvent({ category: "DeliveryOptions", action: "ClickEditAddressChoice" })
+  handleSubmitDeliveryAddress = () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditAddressChoice" });
     if (!this.state.selectedAddressChanged) {
-      return
+      return;
     }
     this.checkoutStore.getDeliveryTimes().then(() => {
-      this.modalStore.showDeliveryChange('address', {
+      this.modalStore.showDeliveryChange("address", {
         address: this.state.selectedAddress,
-        times: this.checkoutStore.deliveryTimes
-      })
-    })
-  }
+        times: this.checkoutStore.deliveryTimes,
+      });
+    });
+  };
 
   handleSelectTime = (data) => {
-    const selectedTime  = this.userStore.selectedDeliveryTime
-    if (!selectedTime || (selectedTime.date !== data.date || selectedTime.time !== data.time || selectedTime.day !== data.day)) {
-      this.setState({selectedTime: data, selectedTimeChanged: true})
-      logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
+    const selectedTime = this.userStore.selectedDeliveryTime;
+    if (
+      !selectedTime ||
+      selectedTime.date !== data.date ||
+      selectedTime.time !== data.time ||
+      selectedTime.day !== data.day
+    ) {
+      this.setState({ selectedTime: data, selectedTimeChanged: true });
+      logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" });
     } else {
-      this.setState({selectedTimeChanged: false})
+      this.setState({ selectedTimeChanged: false });
     }
-  }
+  };
 
-  handleSubmitDeliveryTime= () => {
-    logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" })
+  handleSubmitDeliveryTime = () => {
+    logEvent({ category: "DeliveryOptions", action: "ClickEditTimeChoice" });
     if (!this.state.selectedTimeChanged) {
-      return
+      return;
     }
 
-    this.setState({ selectedTimeChanged: false })
-    this.modalStore.showDeliveryChange('time', this.state.selectedTime)
-  }
+    this.setState({ selectedTimeChanged: false });
+    this.modalStore.showDeliveryChange("time", this.state.selectedTime);
+  };
 
   handleMouseEnter = () => {
-    this.uiStore.showBackdrop()
-  }
+    this.uiStore.showBackdrop();
+  };
 
   handleMouseLeave = () => {
-    this.uiStore.hideBackdrop()
-  }
+    this.uiStore.hideBackdrop();
+  };
 
-  handleFiltersSelect = values => {
-    this.props.onFilterUpdate(values)
-  }
+  handleFiltersSelect = (values) => {
+    this.props.onFilterUpdate(values);
+  };
 
   render() {
-    const { onSearch } = this.props
+    const { onSearch } = this.props;
 
     return (
       <div className="product-top">
@@ -201,9 +230,7 @@ class ProductTop extends Component {
             </Col>
             <Col>
               <div className="d-flex align-items-start">
-                <SearchBar
-                  onSearch={onSearch}
-                />
+                <SearchBar onSearch={onSearch} />
                 <Col xs="auto" className="d-block d-lg-none ml-auto">
                   <button
                     className="btn btn-transparent"
@@ -212,15 +239,12 @@ class ProductTop extends Component {
                     <span className="catsearch-icon"></span>
                   </button>
                 </Col>
-                <Link
-                  className="d-none d-md-block ml-3"
-                  to="/main/buyagain"
-                >
+                <Link className="d-none d-md-block ml-3" to="/main/buyagain">
                   <img src="/images/reorder.png" height="40" alt="" />
                 </Link>
                 <span className="d-none d-md-block">
                   <CartDropdown
-                    ui ={this.uiStore}
+                    ui={this.uiStore}
                     cart={this.checkoutStore.cart}
                     onCheckout={this.handleCheckout}
                     onEdit={this.handleEdit}
@@ -232,8 +256,8 @@ class ProductTop extends Component {
           </Row>
         </Container>
       </div>
-    )
+    );
   }
 }
 
-export default connect('store')(ProductTop)
+export default connect("store")(ProductTop);

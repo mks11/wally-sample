@@ -1,133 +1,131 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import { Input } from 'reactstrap';
-import { validateEmail, connect, logEvent } from '../../utils'
-import FBLogin from '../../common/FBLogin'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Input } from "reactstrap";
+
+import { logEvent } from "services/google-analytics";
+import { validateEmail, connect } from "../../utils";
+
+import FBLogin from "../../common/FBLogin";
 
 class SignupModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      pin: '',
-      name: '',
-      email: '',
-      password: '',
-      invalidText: '',
+      pin: "",
+      name: "",
+      email: "",
+      password: "",
+      invalidText: "",
       signupRequest: false,
       pinError: false,
       displayPinErrorInfo: false,
-    }
+    };
   }
 
-  handleSubmit = e => {
-    const {
-      name,
-      email,
-      password,
-      signupRequest,
-    } = this.state
+  handleSubmit = (e) => {
+    const { name, email, password, signupRequest } = this.state;
 
     if (!signupRequest) {
-      this.setState({ invalidText: '', signupRequest: true })
+      this.setState({ invalidText: "", signupRequest: true });
 
       if (!name) {
-        this.setState({ invalidText: 'Name cannot be empty', signupRequest: false })
-        return
+        this.setState({
+          invalidText: "Name cannot be empty",
+          signupRequest: false,
+        });
+        return;
       }
 
-      if(!validateEmail(email)) {
-        this.setState({ invalidText: 'Email not valid', signupRequest: false })
-        return
+      if (!validateEmail(email)) {
+        this.setState({ invalidText: "Email not valid", signupRequest: false });
+        return;
       }
 
       if (!password) {
-        this.setState({ invalidText: 'Password cannot be empty', signupRequest: false })
-        return
+        this.setState({
+          invalidText: "Password cannot be empty",
+          signupRequest: false,
+        });
+        return;
       }
 
-      const {
-        user,
-        zip,
-        checkout
-      } = this.props.stores
+      const { user, zip, checkout } = this.props.stores;
 
-      logEvent({ category: "Signup", action: "SubmitInfo" })
-      user.signup({
-        name,
-        email,
-        password,
-        signup_zip: zip.selectedZip,
-        reference_promo: user.refPromo || user.giftCardPromo
-      }).then(data => {
-        user.setUserData(data.user)
-        user.setToken(data.token)
-        checkout.getCurrentCart(user.getHeaderAuth(),  user.getDeliveryParams())
-        checkout.getDeliveryTimes()
-        this.setState({ signupRequest: false })
-        this.props.switchTo('welcome')
-        this.props.store.routing.push('/main')
-        
-        user.giftCardPromo = null
-        user.refPromo = null
-      }).catch(e => {
-        console.error('Failed to signup', e)
-        const msg = e.response.data.error.message
-        this.setState({ invalidText: msg, signupRequest: false })
-      })
+      logEvent({ category: "Signup", action: "SubmitInfo" });
+      user
+        .signup({
+          name,
+          email,
+          password,
+          signup_zip: zip.selectedZip,
+          reference_promo: user.refPromo || user.giftCardPromo,
+        })
+        .then((data) => {
+          user.setUserData(data.user);
+          user.setToken(data.token);
+          checkout.getCurrentCart(
+            user.getHeaderAuth(),
+            user.getDeliveryParams()
+          );
+          checkout.getDeliveryTimes();
+          this.setState({ signupRequest: false });
+          this.props.switchTo("welcome");
+          this.props.store.routing.push("/main");
+
+          user.giftCardPromo = null;
+          user.refPromo = null;
+        })
+        .catch((e) => {
+          console.error("Failed to signup", e);
+          const msg = e.response.data.error.message;
+          this.setState({ invalidText: msg, signupRequest: false });
+        });
     }
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
-  handleKeySubmit = e => {
+  handleKeySubmit = (e) => {
     if (e.keyCode === 13) {
-      this.handleSubmit(e)
+      this.handleSubmit(e);
     }
-  }
+  };
 
   handleLogin = () => {
-    this.props.switchTo('login')
-  }
+    this.props.switchTo("login");
+  };
 
-  onValueChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
+  onValueChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
-  handlePinVerification = e => {
-    const { user } = this.props.stores
-    const {
-      pin,
-      email,
-    } = this.state
+  handlePinVerification = (e) => {
+    const { user } = this.props.stores;
+    const { pin, email } = this.state;
 
-    user.verifyPin(pin, email)
-      .then(res => {
-        this.setState({ pinError: !res.verified })
-      }).catch(() => {
-        this.setState({ pinError: true })
+    user
+      .verifyPin(pin, email)
+      .then((res) => {
+        this.setState({ pinError: !res.verified });
+      })
+      .catch(() => {
+        this.setState({ pinError: true });
       })
       .finally(() => {
-        this.setState({ displayPinErrorInfo: true })
-      })
-  }
+        this.setState({ displayPinErrorInfo: true });
+      });
+  };
 
   render() {
-    const {
-      name,
-      email,
-      password,
-      invalidText,
-      signupRequest
-    } = this.state
-    const { user } = this.props.stores
+    const { name, email, password, invalidText, signupRequest } = this.state;
+    const { user } = this.props.stores;
     const additionalFBdata = {
-      reference_promo: user.refPromo
-    }
+      reference_promo: user.refPromo,
+    };
 
     return (
       <div className="signup-wrap">
         <h3 className="m-0 mb-2">Sign up</h3>
         <div className="form-wrapper">
-
           <Input
             className="aw-input--control mb-3 black"
             type="text"
@@ -154,17 +152,23 @@ class SignupModal extends Component {
           />
 
           <span className="tnc mt-5 mb-5">
-            By signing up, you agree to our <Link target="_blank" to={"/tnc"}><i>Terms of Service</i></Link> &nbsp;and
-            &nbsp;<Link target="_blank" to={"/privacy"}><i>Privacy Policy.</i></Link>
+            By signing up, you agree to our{" "}
+            <Link target="_blank" to={"/tnc"}>
+              <i>Terms of Service</i>
+            </Link>{" "}
+            &nbsp;and &nbsp;
+            <Link target="_blank" to={"/privacy"}>
+              <i>Privacy Policy.</i>
+            </Link>
           </span>
-          {
-            invalidText
-              ? <span className="text-error text-center my-3">{invalidText}</span>
-              : null
-          }
+          {invalidText ? (
+            <span className="text-error text-center my-3">{invalidText}</span>
+          ) : null}
 
           <button
-            className={`btn btn-main ${(name && email && password && !signupRequest) ? 'active' : ''}`}
+            className={`btn btn-main ${
+              name && email && password && !signupRequest ? "active" : ""
+            }`}
             onClick={this.handleSubmit}
           >
             CREATE ACCOUNT
@@ -182,12 +186,17 @@ class SignupModal extends Component {
         </div>
         <div className="login-wrap text-center">
           <span className="">Already have an account?</span>
-          <button type="button" onClick={this.handleLogin} className="btn-text btn-text--login">LOG IN HERE</button>
+          <button
+            type="button"
+            onClick={this.handleLogin}
+            className="btn-text btn-text--login"
+          >
+            LOG IN HERE
+          </button>
         </div>
       </div>
-    )
+    );
   }
-
 }
 
-export default connect("store")(SignupModal)
+export default connect("store")(SignupModal);

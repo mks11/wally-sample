@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { PuffLoader } from "react-spinners";
@@ -7,7 +6,9 @@ import { Container, Grid, Typography } from "@material-ui/core";
 import { FaChevronRight } from "react-icons/fa";
 import styled from "styled-components";
 
+import { logPageView } from "services/google-analytics";
 import { connect } from "../../utils";
+
 import Head from "common/Head";
 import { PageTitle } from "common/page/Title";
 import { ResponsiveText } from "common/ResponsiveText";
@@ -26,7 +27,10 @@ class Blog extends Component {
     this.routing = this.props.store.routing;
   }
   componentDidMount() {
-    ReactGA.pageview("/blog");
+    // Store page view in google analytics
+    const { location } = this.routing;
+    logPageView(location.pathname);
+
     this.userStore.getStatus().then((status) => {
       this.loadData();
     });
