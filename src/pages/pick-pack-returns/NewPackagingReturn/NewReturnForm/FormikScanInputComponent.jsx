@@ -67,7 +67,7 @@ export default function ScanInputContainer({
           ))}
         </List>
       </Grid>
-      <Box p={2}>
+      <Box p={2} justifyContent={"center"} display={"flex"}>
         <Button
           color="primary"
           type="submit"
@@ -84,7 +84,6 @@ export default function ScanInputContainer({
         xs={12}
         justify="center"
         spacing={2}
-        style={{ border: "1px solid blue" }}
         alignItems="center"
       >
         <SelectOneDialog open={showOptionsOnMissing} onClose={handleClose} />

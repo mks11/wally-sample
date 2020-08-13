@@ -11,3 +11,7 @@
   box-shadow: 1px 1px 4px 0px #bbb inset;
   background-color: #fafafa;
 }
+
+.form {
+  flex: 1;
+}

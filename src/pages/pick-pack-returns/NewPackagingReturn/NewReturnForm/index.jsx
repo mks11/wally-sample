@@ -9,6 +9,7 @@ import { API_POST_PACKAGING_RETURNS } from "../../../../config";
 import TrackingDialogInput from "./TrackingDialogInput";
 import { withRouter } from "react-router-dom";
 import FormikScanInputComponent from "./FormikScanInputComponent";
+import styles from "./index.module.css";
 
 const SUCCESS_COMPLETED = "successType1";
 const SUCCESS_REQUIRES_TRACKING = "successType2";
@@ -144,18 +145,7 @@ function NewReturnForm({ user_id, history, location }) {
               .required(),
           })}
         >
-          <Form
-            fullWidth={true}
-            style={{
-              border: "1px solid blue",
-              flex: 1,
-              // justifyContent: "center",
-              // alignItems: "center",
-              // display: "flex",
-              // flexDirection: "column",
-              // width: "100%",
-            }}
-          >
+          <Form fullWidth={true} className={styles.form}>
             <TrackingDialogInput
               show={showTrackingInputDialog}
               setShow={(val) => {
