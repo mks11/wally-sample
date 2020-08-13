@@ -4,7 +4,7 @@ import ReactGA from "react-ga";
 import routes from "./routes";
 import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
 
-import TopNav from "./common/TopNav";
+import TopNav from "common/TopNav";
 import Footer from "./common/Footer";
 import ScrollToTop from "./common/ScrollToTop";
 import ScrollSpy from "common/ScrollSpy";

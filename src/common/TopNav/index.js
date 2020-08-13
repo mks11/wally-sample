@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import ClickOutside from "react-click-outside";
 
 import { logModalView } from "services/google-analytics";
-import { formatMoney, connect } from "../utils";
+import { formatMoney, connect } from "../../utils";
+
+// Nav Menus
+import { MobileGuestNav } from "common/TopNav/GuestNav";
 
 class TopNav extends Component {
   constructor(props) {
@@ -80,6 +83,7 @@ class TopNav extends Component {
     this.uiStore.hideNavMobile();
     this.handleLogout();
   };
+
   handleCloseTopBar = (e) => {
     this.uiStore.closeTopBar();
     e.preventDefault();
@@ -131,16 +135,15 @@ class TopNav extends Component {
   render() {
     let storeCredit, name;
     const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
-    // let isOps = false;
-    let isCopacker = false;
+    const { hideNavMobile } = this.uiStore;
     let bannerText =
       "We’re working hard to restock - try next week if you don’t see something!";
+
     if (this.userStore.user) {
       !this.userStore.user.name && this.userStore.setUserData(null);
       const user = this.userStore.user;
       storeCredit = user.packaging_balance;
       name = user.name.split(" ")[0];
-      isCopacker = user.type === "co-packer";
     } else {
       storeCredit = 0;
     }
@@ -316,7 +319,8 @@ class TopNav extends Component {
                         </React.Fragment>
                       )}
 
-                      {this.userStore.status && isCopacker && (
+                      {/* TODO COMBINE WITH OPS */}
+                      {/* {this.userStore.status && isCopacker && (
                         <React.Fragment>
                           <li>
                             <a style={{ fontSize: "15px" }}>
@@ -358,7 +362,7 @@ class TopNav extends Component {
                             <a onClick={this.handleMobileNavLogout}>Sign Out</a>
                           </li>
                         </React.Fragment>
-                      )}
+                      )} */}
 
                       {this.userStore.status && isUser && (
                         <React.Fragment>
@@ -444,54 +448,11 @@ class TopNav extends Component {
                       )}
 
                       {!this.userStore.status && (
-                        <React.Fragment>
-                          <li>
-                            <a onClick={this.handleMobileNavLogin}>Log In</a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavSignUp}>Sign Up</a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavBackers}>✨</a>
-                          </li>
-
-                          <li className="mt-5">
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/latest-news")
-                              }
-                            >
-                              COVID-19
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/about")}>
-                              About
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/howitworks")
-                              }
-                            >
-                              How It Works
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/blog")}>
-                              Blog
-                            </a>
-                          </li>
-                          {/*
-                          <li><a onClick={() => this.handleNavMobile('/help')}>Help</a></li> */}
-                          {/* <li><a onClick={() => this.handleNavMobile('/giftcard')}>Gift Card</a></li> */}
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/backers")}>
-                              Our Backers
-                            </a>
-                          </li>
-                        </React.Fragment>
+                        <MobileGuestNav
+                          hideNav={hideNavMobile}
+                          logIn={this.handleMobileNavLogin}
+                          signUp={this.handleMobileNavSignUp}
+                        />
                       )}
                     </ul>
                   </nav>
@@ -507,8 +468,8 @@ class TopNav extends Component {
             isProductPage ? " aw-absolute" : ""
           }`}
         >
-          {(this.userStore.status && !isAdmin && !isOps && !isCopacker) ||
-          !this.userStore.status ? (
+          {/* Only guests and users should see the banner */}
+          {(this.userStore.status && isUser) || !this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
                 <div onClick={this.handleBannerClick}>{bannerText}</div>
@@ -705,6 +666,8 @@ class TopNav extends Component {
                         </div>
                       </li>
                     )}
+
+                    {/* TODO COMBINE WITH OPS
                     {this.userStore.status && isCopacker && (
                       <li>
                         <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
@@ -760,7 +723,8 @@ class TopNav extends Component {
                           </ClickOutside>
                         </div>
                       </li>
-                    )}
+                    )} */}
+
                     {this.userStore.status && isUser && (
                       <React.Fragment>
                         <li className="aw-align-self-center">
