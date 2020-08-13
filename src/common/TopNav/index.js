@@ -6,7 +6,7 @@ import { logModalView } from "services/google-analytics";
 import { formatMoney, connect } from "../../utils";
 
 // Nav Menus
-import { MobileGuestNav } from "common/TopNav/GuestNav";
+import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
 
 class TopNav extends Component {
   constructor(props) {
@@ -450,8 +450,8 @@ class TopNav extends Component {
                       {!this.userStore.status && (
                         <MobileGuestNav
                           hideNav={hideNavMobile}
-                          logIn={this.handleMobileNavLogin}
-                          signUp={this.handleMobileNavSignUp}
+                          handleLogin={this.handleMobileNavLogin}
+                          handleSignup={this.handleMobileNavSignUp}
                         />
                       )}
                     </ul>
@@ -468,7 +468,7 @@ class TopNav extends Component {
             isProductPage ? " aw-absolute" : ""
           }`}
         >
-          {/* Only guests and users should see the banner */}
+          {/* Banner that Only guests and users should see */}
           {(this.userStore.status && isUser) || !this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
@@ -482,8 +482,10 @@ class TopNav extends Component {
               </div>
             </div>
           ) : null}
+
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
+              {/* Logo */}
               <div className="d-none col-auto d-lg-block">
                 <a
                   className="aw-logo d-block text-center"
@@ -505,6 +507,7 @@ class TopNav extends Component {
               <div className="col-auto ml-auto d-none d-lg-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   <ul className="nav m-0 p-0" role="tablist">
+                    {/* Admin Menu */}
                     {this.userStore.status && isAdmin && (
                       <li>
                         <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
@@ -610,6 +613,8 @@ class TopNav extends Component {
                         </div>
                       </li>
                     )}
+
+                    {/* Ops Menu */}
                     {this.userStore.status && (isOps || isOpsLead) && (
                       <li>
                         <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
@@ -667,6 +672,7 @@ class TopNav extends Component {
                       </li>
                     )}
 
+                    {/* Copacking Menu */}
                     {/* TODO COMBINE WITH OPS
                     {this.userStore.status && isCopacker && (
                       <li>
@@ -725,6 +731,7 @@ class TopNav extends Component {
                       </li>
                     )} */}
 
+                    {/* User Menu */}
                     {this.userStore.status && isUser && (
                       <React.Fragment>
                         <li className="aw-align-self-center">
@@ -859,68 +866,20 @@ class TopNav extends Component {
                         </li>
                       </React.Fragment>
                     )}
+
+                    {/* Guest Menu */}
                     {!this.userStore.status && (
-                      <React.Fragment>
-                        <li>
-                          <Link
-                            className="nav-link aw-nav--link p-0"
-                            to="/latest-news"
-                          >
-                            COVID-19
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="nav-link aw-nav--link p-0"
-                            to="/about"
-                          >
-                            About
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="nav-link aw-nav--link p-0"
-                            to="/howitworks"
-                          >
-                            How It Works
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="nav-link aw-nav--link p-0"
-                            to="/blog"
-                          >
-                            Blog
-                          </Link>
-                        </li>
-                      </React.Fragment>
+                      <DesktopGuestNav
+                        handleLogin={this.handleLogin}
+                        handleSignup={this.handleSignup}
+                        handleBackers={this.handleNavBackers}
+                      />
                     )}
                   </ul>
                 </nav>
               </div>
-              {!this.userStore.status ? (
-                <div className="col-auto d-none d-lg-block btn-top-account">
-                  <button
-                    onClick={this.handleLogin}
-                    className="btn btn-outline-black btn-login text-caps"
-                  >
-                    Log in
-                  </button>
-                  <button
-                    onClick={this.handleSignup}
-                    className="btn btn-inline-black btn-sign-up text-caps"
-                  >
-                    Sign up
-                  </button>
-                  <button
-                    onClick={this.handleNavBackers}
-                    className="btn btn-inline-transparent btn-backers"
-                  >
-                    ✨
-                  </button>
-                </div>
-              ) : null}
 
+              {/* Mobile Nav Toggle Button */}
               {this.userStore.status || true ? (
                 <button
                   onClick={(e) => this.uiStore.toggleNavMobile()}
