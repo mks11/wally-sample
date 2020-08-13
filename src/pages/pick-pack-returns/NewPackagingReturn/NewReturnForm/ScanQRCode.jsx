@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Button, Grid } from "@material-ui/core";
-import styles from "./index.module.css";
+import styles from "./bigButton.module.css";
 import ScannerQR from "common/ScannerQR";
 
 function makeURLFromId(id) {

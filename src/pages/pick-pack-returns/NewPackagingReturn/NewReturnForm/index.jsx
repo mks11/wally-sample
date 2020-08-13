@@ -160,29 +160,6 @@ function NewReturnForm({
           {ERROR_MESSAGE}
         </Alert>
       </Snackbar>
-      <Grid item xs={12} className={styles.pseudoInputContainer}>
-        {!packagingURLs.length && (
-          <Typography variant={"subtitle1"} color={"textSecondary"}>
-            Start scanning ...
-          </Typography>
-        )}
-        <List dense>
-          {packagingURLs.map((url, i) => (
-            <ListItem key={uuid()}>
-              <ListItemText>
-                <Typography className={styles.url} variant="body2">
-                  {url}
-                </Typography>
-              </ListItemText>
-              <ListItemSecondaryAction onClick={() => removeItemByIndex(i)}>
-                <IconButton edge="end" aria-label="delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </Grid>
       <Grid item container xs={12} justify="center">
         <Formik
           initialValues={{
@@ -193,13 +170,51 @@ function NewReturnForm({
           enableReinitialize={true} //imp! to keep the form always in sync with the store
           onSubmit={handleSubmit}
         >
-          <Form>
+          <Form
+            fullWidth={true}
+            style={{
+              border: "1px solid blue",
+              flex: 1,
+              // justifyContent: "center",
+              // alignItems: "center",
+              // display: "flex",
+              // flexDirection: "column",
+              // width: "100%",
+              // margin: "0 auto",
+            }}
+          >
             <TrackingDialogInput
               show={showTrackingInputDialog}
               setShow={(val) => {
                 setShowTrackingInputDialog(val);
               }}
             />
+            <Grid item xs={12} className={styles.pseudoInputContainer}>
+              {!packagingURLs.length && (
+                <Typography variant={"subtitle1"} color={"textSecondary"}>
+                  Start scanning ...
+                </Typography>
+              )}
+              <List dense>
+                {packagingURLs.map((url, i) => (
+                  <ListItem key={uuid()}>
+                    <ListItemText>
+                      <Typography className={styles.url} variant="body2">
+                        {url}
+                      </Typography>
+                    </ListItemText>
+                    <ListItemSecondaryAction
+                      onClick={() => removeItemByIndex(i)}
+                    >
+                      <IconButton edge="end" aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+
             <Box p={2}>
               <Button
                 color="primary"
@@ -211,7 +226,15 @@ function NewReturnForm({
                 Submit
               </Button>
             </Box>
-            <Grid container justify="center" spacing={2}>
+            <Grid
+              // item
+              container
+              xs={12}
+              justify="center"
+              spacing={2}
+              style={{ border: "1px solid blue" }}
+              alignItems="center"
+            >
               <SelectOneDialog
                 open={showOptionsOnMissing}
                 onClose={handleClose}
