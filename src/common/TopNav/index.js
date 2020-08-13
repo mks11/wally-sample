@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import ClickOutside from "react-click-outside";
 
 import { logModalView } from "services/google-analytics";
-import { formatMoney, connect } from "../../utils";
+import { connect } from "../../utils";
 
 // Nav Menus
 import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
@@ -281,6 +281,14 @@ class TopNav extends Component {
                     <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
                       <ClickOutside onClickOutside={this.hideAccountDropdown}>
                         <div className="btn-group">
+                          {isUser && (
+                            <Link
+                              className="nav-link aw-nav--link util-font-size-14"
+                              to="/help"
+                            >
+                              Help
+                            </Link>
+                          )}
                           <button
                             onClick={this.handleToggle}
                             className="btn btn-transparent"
@@ -288,18 +296,45 @@ class TopNav extends Component {
                             data-toggle="dropdown"
                             aria-expanded="true"
                           >
-                            <span className="navbar-toggler-icon account-icon"></span>
+                            <span>
+                              Hello {name}{" "}
+                              <i
+                                className="fa fa-caret-down"
+                                aria-hidden="true"
+                              >
+                                {" "}
+                              </i>
+                            </span>
                           </button>
                           <div
                             className={dropdownClass}
                             aria-labelledby="dropdownMenuButton"
                           >
-                            <Grid container direction="column" role="tablist">
+                            <Grid
+                              container
+                              direction="column"
+                              role="tablist"
+                              component="ul"
+                              style={{ paddingLeft: 0 }}
+                            >
                               {isAdmin && (
                                 <DesktopAdminNav
                                   handleSignout={this.handleLogout}
                                   hideDropdown={this.hideAccountDropdown}
-                                  userName={name}
+                                />
+                              )}
+
+                              {isUser && (
+                                <DesktopUserNav
+                                  balance={storeCredit}
+                                  handleRedeemDeposit={
+                                    this.handleRedeemDepositClick
+                                  }
+                                  handleSchedulePickup={
+                                    this.handleSchedulePickup
+                                  }
+                                  handleSignout={this.handleLogout}
+                                  hideDropdown={this.hideAccountDropdown}
                                 />
                               )}
                             </Grid>
