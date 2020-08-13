@@ -14,7 +14,7 @@ export const MobileNavButtonWrapper = styled(Button).attrs({
   variant: "contained",
 })`
   text-align: center;
-  width: 200px;
+  min-width: 210px;
   border-radius: 50px;
   padding: 1rem;
   color: #fff;
