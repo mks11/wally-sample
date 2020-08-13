@@ -12,12 +12,14 @@ class Backers extends Component {
     this.backerStore = this.props.store.backer;
     this.modalStore = this.props.store.modal;
     this.routing = this.props.store.routing;
+    this.userStore = this.props.store.user;
   }
 
   componentDidMount() {
     // Store page view in google analytics
     const { location } = this.routing;
     logPageView(location.pathname);
+    this.userStore.getStatus();
     this.loadData();
   }
 

@@ -59,7 +59,7 @@ let theme = createMuiTheme({
     },
     body2: {
       fontFamily: ["Sofia Pro"].join(","),
-      fontSize: "1.5rem",
+      fontSize: "1rem",
     },
     button: {},
     caption: {},
