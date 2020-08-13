@@ -7,6 +7,8 @@ import { formatMoney, connect } from "../../utils";
 
 // Nav Menus
 import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
+import { MobileUserNav, DesktopUserNav } from "common/TopNav/UserNav";
+import { MobileOpsNav, DesktopOpsNav } from "common/TopNav/OpsNav";
 
 class TopNav extends Component {
   constructor(props) {
@@ -279,174 +281,30 @@ class TopNav extends Component {
                         </React.Fragment>
                       )}
 
+                      {/* OPS */}
                       {this.userStore.status && (isOps || isOpsLead) && (
-                        <React.Fragment>
-                          <li>
-                            <a style={{ fontSize: "15px" }}>
-                              <strong>Hello {name}</strong>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/shopping-app-1")
-                              }
-                            >
-                              Shopping App
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/orders")
-                              }
-                            >
-                              Packing App
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/pick-pack-returns")
-                              }
-                            >
-                              Ops Portal
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-                          </li>
-                        </React.Fragment>
+                        <MobileOpsNav
+                          hideNav={hideNavMobile}
+                          handleSignout={this.handleMobileNavLogout}
+                          userName={name}
+                          isOpsLead={isOpsLead}
+                        />
                       )}
 
-                      {/* TODO COMBINE WITH OPS */}
-                      {/* {this.userStore.status && isCopacker && (
-                        <React.Fragment>
-                          <li>
-                            <a style={{ fontSize: "15px" }}>
-                              <strong>Hello {name}</strong>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile(
-                                  "/manage/co-packing/inbound"
-                                )
-                              }
-                            >
-                              Inbound Shipment
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile(
-                                  "/manage/co-packing/outbound"
-                                )
-                              }
-                            >
-                              Outbound Shipment
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/co-packing/runs")
-                              }
-                            >
-                              Co-packing
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-                          </li>
-                        </React.Fragment>
-                      )} */}
-
+                      {/* USER */}
                       {this.userStore.status && isUser && (
-                        <React.Fragment>
-                          <li>
-                            <a style={{ fontSize: "15px" }}>
-                              <strong>Hello {name}</strong>
-                            </a>
-                          </li>
-                          <li>
-                            <a>
-                              Packaging Balance (
-                              {formatMoney(storeCredit / 100)})
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/orders")}>
-                              Order History
-                            </a>
-                          </li>
-                          <li>
-                            {" "}
-                            <a onClick={this.handleMobileNavSchedulePickup}>
-                              {" "}
-                              Schedule Pickup{" "}
-                            </a>{" "}
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/user")}>
-                              Account Settings
-                            </a>
-                          </li>
-                          {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
-                          <li>
-                            <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-                          </li>
-
-                          <li className="mt-5">
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/latest-news")
-                              }
-                            >
-                              COVID-19
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/about")}>
-                              About
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/howitworks")
-                              }
-                            >
-                              How It Works
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/help")}>
-                              Help
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/blog")}>
-                              Blog
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() => this.handleNavMobile("/giftcard")}
-                            >
-                              Gift Card
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => this.handleNavMobile("/backers")}>
-                              Our Backers
-                            </a>
-                          </li>
-                        </React.Fragment>
+                        <MobileUserNav
+                          hideNav={hideNavMobile}
+                          handleSignout={this.handleMobileNavLogout}
+                          handleSchedulePickup={
+                            this.handleMobileNavSchedulePickup
+                          }
+                          userName={name}
+                          userStoreCredit={storeCredit}
+                        />
                       )}
 
+                      {/* GUEST */}
                       {!this.userStore.status && (
                         <MobileGuestNav
                           hideNav={hideNavMobile}
