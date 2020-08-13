@@ -1,25 +1,12 @@
-import React, { useState } from "react";
-import { Button, Grid, Typography } from "@material-ui/core";
+import React from "react";
 import { connect } from "utils";
 import NewReturnForm from "./NewReturnForm";
 import Page from "../shared/Tab";
 import styles from "./index.module.css";
 import { Observer } from "mobx-react";
 
-function NewPackagingReturn({
-  store: { user: userStore, packagingReturn: returnStore },
-}) {
+function NewPackagingReturn({ store: { user: userStore } }) {
   const user_id = userStore.user && userStore.user._id;
-  const { token = {} } = userStore;
-
-  const handleRemoveItemByIndex = (i) => {
-    const n = returnStore.packaging_urls.length;
-    returnStore.removeUrlByIndex(n - i - 1); // we are showing items in reverse currently
-  };
-
-  const handleClearEntries = () => {
-    returnStore.clearEntries();
-  };
 
   return (
     <Observer>
@@ -29,13 +16,7 @@ function NewPackagingReturn({
           className={styles.pageContainer}
           maxWidth="sm"
         >
-          <NewReturnForm
-            packagingURLs={returnStore.packaging_urls.toJS().reverse()}
-            user_id={user_id}
-            onClearEntries={handleClearEntries}
-            removeItemByIndex={handleRemoveItemByIndex}
-            returnStore={returnStore}
-          />
+          <NewReturnForm user_id={user_id} />
         </Page>
       )}
     </Observer>

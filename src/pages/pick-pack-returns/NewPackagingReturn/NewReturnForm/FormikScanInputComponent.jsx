@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 import {
   Grid,
   Button,
@@ -13,7 +14,6 @@ import {
 import SelectOneDialog from "./OnMissingOptions.dialog";
 import ScanQRCode from "./ScanQRCode";
 import { Delete as DeleteIcon } from "@material-ui/icons";
-import TrackingDialogInput from "./TrackingDialogInput";
 import MissingQRCodeButton from "./MissingQRCodeButton";
 import styles from "./index.module.css";
 
@@ -79,7 +79,7 @@ export default function ScanInputContainer({
         </Button>
       </Box>
       <Grid
-        // item
+        item
         container
         xs={12}
         justify="center"

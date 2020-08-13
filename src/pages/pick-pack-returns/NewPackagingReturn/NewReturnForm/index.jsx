@@ -1,29 +1,13 @@
-import React, { useState, useEffect, useReducer, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  Grid,
-  Button,
-  ListItem,
-  ListItemText,
-  List,
-  Snackbar,
-  FormHelperText,
-  Box,
-  ListItemSecondaryAction,
-  IconButton,
-} from "@material-ui/core";
-import { Delete as DeleteIcon } from "@material-ui/icons";
+import { Grid, Snackbar, FormHelperText } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { API_POST_PACKAGING_RETURNS } from "../../../../config";
 import TrackingDialogInput from "./TrackingDialogInput";
 import { withRouter } from "react-router-dom";
-import styles from "./index.module.css";
-import uuid from "uuid";
-import MissingQRCodeButton from "./MissingQRCodeButton";
-import ScanQRCode from "./ScanQRCode";
 import FormikScanInputComponent from "./FormikScanInputComponent";
 
 const SUCCESS_COMPLETED = "successType1";
@@ -54,25 +38,7 @@ const getCorrectTypeOfSuccess = (data = {}) => {
   }
 };
 
-function reducer(state, action) {}
-
-function NewReturnForm({
-  user_id,
-  packagingURLs = [],
-  history,
-  location,
-  onClearEntries,
-  children,
-  // returnStore,
-}) {
-  // const initState = {
-  //   successType: null,
-  //   errorOnSubmit: false,
-  //   showErrorAlert: false,
-  //   showTrackingInputDialog: false,
-  //   showNotCompletedAlert: false,
-  // };
-
+function NewReturnForm({ user_id, history, location }) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
@@ -109,41 +75,20 @@ function NewReturnForm({
     warehouse_associate_id,
   }) => {
     const url = API_POST_PACKAGING_RETURNS;
-    // const response = await axios.post(
-    //   url,
-    //   {
-    //     tracking_number,
-    //     packaging_urls,
-    //     warehouse_associate_id,
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   }
-    // );
-
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        console.log({
-          packaging_urls,
-          tracking_number,
-          warehouse_associate_id,
-        });
-
-        res({
-          data: {
-            message: "tracking enter",
-            // packagingReturn: {
-            //   oj: "ok",
-            // },
-          },
-          status: 200,
-        });
-      }, 2000);
-    });
-
-    // return response;
+    const response = await axios.post(
+      url,
+      {
+        tracking_number,
+        packaging_urls,
+        warehouse_associate_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
