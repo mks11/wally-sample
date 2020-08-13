@@ -6,6 +6,10 @@ import {
   MobileNavDivider,
   MobileUserGreeting,
 } from "./MobileStyledComponents";
+import {
+  DesktopDropdownMenuItem,
+  DesktopDropdownMenuLink,
+} from "./DesktopNavComponents";
 
 export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
   return (
@@ -58,77 +62,58 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
       </li>
     </>
   );
-  // <React.Fragment>
-  //   <li>
-  //     <a style={{ fontSize: "15px" }}>
-  //       <strong>Hello {name}</strong>
-  //     </a>
-  //   </li>
-  //   <li>
-  //     <a onClick={() => this.handleNavMobile("/manage/shopping-app-1")}>
-  //       Shopping App
-  //     </a>
-  //   </li>
-  //   <li>
-  //     <a onClick={() => this.handleNavMobile("/manage/orders")}>Packing App</a>
-  //   </li>
-  //   <li>
-  //     <a onClick={() => this.handleNavMobile("/pick-pack-returns")}>
-  //       Ops Portal
-  //     </a>
-  //   </li>
-  //   <li>
-  //     <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-  //   </li>
-  // </React.Fragment>;
-  {
-    /* TODO COMBINE WITH OPS */
-  }
-  {
-    /* {this.userStore.status && isCopacker && (
-                        <React.Fragment>
-                          <li>
-                            <a style={{ fontSize: "15px" }}>
-                              <strong>Hello {name}</strong>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile(
-                                  "/manage/co-packing/inbound"
-                                )
-                              }
-                            >
-                              Inbound Shipment
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile(
-                                  "/manage/co-packing/outbound"
-                                )
-                              }
-                            >
-                              Outbound Shipment
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/co-packing/runs")
-                              }
-                            >
-                              Co-packing
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-                          </li>
-                        </React.Fragment>
-                      )} */
-  }
 }
 
-export function DesktopOpsNav() {}
+export function DesktopOpsNav({ hideDropdown, handleSignout }) {
+  return (
+    <>
+      {/* <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/shopping-app-1"
+        >
+          Shopping App
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/orders">
+          Packaging App
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem> */}
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/pick-pack-returns">
+          Ops Portal
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      {/* <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/co-packing/inbound"
+        >
+          Inbound Shipment
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/co-packing/outbound"
+        >
+          Outbound Shipment
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/co-packing/runs"
+        >
+          Co-packing
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem> */}
+      <DesktopDropdownMenuItem>
+        <a onClick={handleSignout} className="dropdown-item">
+          Sign Out
+        </a>
+      </DesktopDropdownMenuItem>
+    </>
+  );
+}

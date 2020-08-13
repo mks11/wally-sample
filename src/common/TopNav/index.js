@@ -337,6 +337,13 @@ class TopNav extends Component {
                                   hideDropdown={this.hideAccountDropdown}
                                 />
                               )}
+
+                              {(isOps || isOpsLead) && (
+                                <DesktopOpsNav
+                                  hideDropdown={this.hideAccountDropdown}
+                                  handleSignout={this.handleLogout}
+                                />
+                              )}
                             </Grid>
                           </div>
                         </div>
