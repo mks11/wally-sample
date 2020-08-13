@@ -9,6 +9,7 @@ import { formatMoney, connect } from "../../utils";
 import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
 import { MobileUserNav, DesktopUserNav } from "common/TopNav/UserNav";
 import { MobileOpsNav, DesktopOpsNav } from "common/TopNav/OpsNav";
+import { MobileAdminNav } from "common/TopNav/AdminNav";
 
 class TopNav extends Component {
   constructor(props) {
@@ -170,6 +171,7 @@ class TopNav extends Component {
     const isProductPage = this.routing.location.pathname.includes("/main");
 
     return (
+      // Mobile Nav Modal
       <div className={headerWrapClass}>
         <div className="aw-nav--mobile d-lg-none">
           <div className="center-middle">
@@ -178,107 +180,13 @@ class TopNav extends Component {
                 <div className="col-12">
                   <nav className="navbar d-block">
                     <ul className="aw-nav--menu m-0 p-0 text-center">
+                      {/* ADMIN */}
                       {this.userStore.status && isAdmin && (
-                        <React.Fragment>
-                          <li>
-                            <a style={{ fontSize: "15px" }}>
-                              <strong>Hello {name}</strong>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/shopper")
-                              }
-                            >
-                              Shopper
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/packaging")
-                              }
-                            >
-                              Packing
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/delivery")
-                              }
-                            >
-                              Delivery
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/courier-routing")
-                              }
-                            >
-                              Courier Routing
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/shopping-app-1")
-                              }
-                            >
-                              Shopping App
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/orders")
-                              }
-                            >
-                              Packing App
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/products")
-                              }
-                            >
-                              Products App
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/shipping")
-                              }
-                            >
-                              Shipping
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/printing")
-                              }
-                            >
-                              Printing
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                this.handleNavMobile("/manage/blog")
-                              }
-                            >
-                              Blog
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={this.handleMobileNavLogout}>Sign Out</a>
-                          </li>
-                        </React.Fragment>
+                        <MobileAdminNav
+                          hideNav={hideNavMobile}
+                          handleSignout={this.handleMobileNavLogout}
+                          userName={name}
+                        />
                       )}
 
                       {/* OPS */}
@@ -319,6 +227,7 @@ class TopNav extends Component {
             </div>
           </div>
         </div>
+
         <header
           className={`aw-header navbar-white ${
             isAdmin || isOps ? "admin-navbar" : ""
@@ -756,6 +665,7 @@ class TopNav extends Component {
               )}
             </div>
 
+            {/* Desktop Logo */}
             <div className="row d-lg-none  d-sm-block">
               <div className="col-sm-12">
                 <a
