@@ -23,6 +23,11 @@ export function MobileAdminNav({ hideNav, handleSignout, userName }) {
         <MobileNavDivider />
       </li>
       <li>
+        <Link to="/manage/retail" onClick={hideNav}>
+          <MobileNavLinkText>Retail</MobileNavLinkText>
+        </Link>
+      </li>
+      <li>
         <Link to="/manage/shopper" onClick={hideNav}>
           <MobileNavLinkText>Shopper</MobileNavLinkText>
         </Link>
@@ -83,6 +88,11 @@ export function DesktopAdminNav({ handleSignout, hideDropdown }) {
   return (
     <>
       <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/retail">
+          Retail
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
         <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/shopper">
           Shopper
         </DesktopDropdownMenuLink>
@@ -139,7 +149,9 @@ export function DesktopAdminNav({ handleSignout, hideDropdown }) {
         </DesktopDropdownMenuLink>
       </DesktopDropdownMenuItem>
       <DesktopDropdownMenuItem>
-        <a onClick={handleSignout}>Sign Out</a>
+        <a onClick={handleSignout} className="dropdown-item">
+          Sign Out
+        </a>
       </DesktopDropdownMenuItem>
     </>
   );
