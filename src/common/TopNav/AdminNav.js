@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import {
   MobileNavLinkText,
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
 } from "./MobileStyledComponents";
+
+import {
+  DesktopDropdownMenuItem,
+  DesktopDropdownMenuLink,
+} from "./DesktopNavComponents";
 
 export function MobileAdminNav({ hideNav, handleSignout, userName }) {
   return (
@@ -69,6 +75,72 @@ export function MobileAdminNav({ hideNav, handleSignout, userName }) {
       <li>
         <MobileNavButton onClick={handleSignout}>Sign Out</MobileNavButton>
       </li>
+    </>
+  );
+}
+
+export function DesktopAdminNav({ handleSignout, hideDropdown }) {
+  return (
+    <>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/shopper">
+          Shopper
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/packaging">
+          Packaging
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/delivery">
+          Delivery
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/courier-routing"
+        >
+          Courier Routing
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/shopping-app-1"
+        >
+          Shopping App
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/orders">
+          Packaging App
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/products">
+          Products App
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/shipping">
+          Shipping
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/printing">
+          Printing
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/blog">
+          Blog
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <a onClick={handleSignout}>Sign Out</a>
+      </DesktopDropdownMenuItem>
     </>
   );
 }

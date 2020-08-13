@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Grid } from "@material-ui/core";
 import ClickOutside from "react-click-outside";
 
 import { logModalView } from "services/google-analytics";
@@ -9,7 +10,7 @@ import { formatMoney, connect } from "../../utils";
 import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
 import { MobileUserNav, DesktopUserNav } from "common/TopNav/UserNav";
 import { MobileOpsNav, DesktopOpsNav } from "common/TopNav/OpsNav";
-import { MobileAdminNav } from "common/TopNav/AdminNav";
+import { MobileAdminNav, DesktopAdminNav } from "common/TopNav/AdminNav";
 
 class TopNav extends Component {
   constructor(props) {
@@ -136,6 +137,7 @@ class TopNav extends Component {
   };
 
   render() {
+    const isLoggedIn = this.userStore.status;
     let storeCredit, name;
     const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
     const { hideNavMobile } = this.uiStore;
@@ -271,378 +273,47 @@ class TopNav extends Component {
                 </a>
               </div>
 
+              {/* Desktop Nav */}
               <div className="col-auto ml-auto d-none d-lg-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
-                  <ul className="nav m-0 p-0" role="tablist">
-                    {/* Admin Menu */}
-                    {this.userStore.status && isAdmin && (
-                      <li>
-                        <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
-                          <ClickOutside
-                            onClickOutside={this.hideAccountDropdown}
+                  {/* Check if the user is logged in, then check their role. */}
+                  {isLoggedIn ? (
+                    <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
+                      <ClickOutside onClickOutside={this.hideAccountDropdown}>
+                        <div className="btn-group">
+                          <button
+                            onClick={this.handleToggle}
+                            className="btn btn-transparent"
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-expanded="true"
                           >
-                            <div className="btn-group">
-                              <button
-                                onClick={this.handleToggle}
-                                className="btn btn-transparent"
-                                type="button"
-                                data-toggle="dropdown"
-                                aria-expanded="true"
-                              >
-                                <span className="navbar-toggler-icon account-icon"></span>
-                              </button>
-                              <div
-                                className={dropdownClass}
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <span className="dropdown-item lg">
-                                  Hi {name}
-                                </span>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/shopper"
-                                  className="dropdown-item"
-                                >
-                                  Shopper
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/packaging"
-                                  className="dropdown-item"
-                                >
-                                  Packaging
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/delivery"
-                                  className="dropdown-item"
-                                >
-                                  Delivery
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/courier-routing"
-                                  className="dropdown-item"
-                                >
-                                  Courier Routing
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/shopping-app-1"
-                                  className="dropdown-item"
-                                >
-                                  Shopping App
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/orders"
-                                  className="dropdown-item"
-                                >
-                                  Packaging App
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/products"
-                                  className="dropdown-item"
-                                >
-                                  Products App
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/shipping"
-                                  className="dropdown-item"
-                                >
-                                  Shipping
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/printing"
-                                  className="dropdown-item"
-                                >
-                                  Printing
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/blog"
-                                  className="dropdown-item"
-                                >
-                                  Blog
-                                </Link>
-                                <a
-                                  onClick={this.handleLogout}
-                                  className="dropdown-item"
-                                >
-                                  Sign Out
-                                </a>
-                              </div>
-                            </div>
-                          </ClickOutside>
-                        </div>
-                      </li>
-                    )}
-
-                    {/* Ops Menu */}
-                    {this.userStore.status && (isOps || isOpsLead) && (
-                      <li>
-                        <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
-                          <ClickOutside
-                            onClickOutside={this.hideAccountDropdown}
+                            <span className="navbar-toggler-icon account-icon"></span>
+                          </button>
+                          <div
+                            className={dropdownClass}
+                            aria-labelledby="dropdownMenuButton"
                           >
-                            <div className="btn-group">
-                              <button
-                                onClick={this.handleToggle}
-                                className="btn btn-transparent"
-                                type="button"
-                                data-toggle="dropdown"
-                                aria-expanded="true"
-                              >
-                                <span className="navbar-toggler-icon account-icon"></span>
-                              </button>
-                              <div
-                                className={dropdownClass}
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <span className="dropdown-item lg">
-                                  Hi {name}
-                                </span>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/shopping-app-1"
-                                  className="dropdown-item"
-                                >
-                                  Shopping App
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/orders"
-                                  className="dropdown-item"
-                                >
-                                  Packaging App
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/pick-pack-returns"
-                                  className="dropdown-item"
-                                >
-                                  Ops Portal
-                                </Link>
-                                <a
-                                  onClick={this.handleLogout}
-                                  className="dropdown-item"
-                                >
-                                  Sign Out
-                                </a>
-                              </div>
-                            </div>
-                          </ClickOutside>
-                        </div>
-                      </li>
-                    )}
-
-                    {/* Copacking Menu */}
-                    {/* TODO COMBINE WITH OPS
-                    {this.userStore.status && isCopacker && (
-                      <li>
-                        <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
-                          <ClickOutside
-                            onClickOutside={this.hideAccountDropdown}
-                          >
-                            <div className="btn-group">
-                              <button
-                                onClick={this.handleToggle}
-                                className="btn btn-transparent"
-                                type="button"
-                                data-toggle="dropdown"
-                                aria-expanded="true"
-                              >
-                                <span className="navbar-toggler-icon account-icon"></span>
-                              </button>
-                              <div
-                                className={dropdownClass}
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <span className="dropdown-item lg">
-                                  Hi {name}
-                                </span>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/co-packing/inbound"
-                                  className="dropdown-item"
-                                >
-                                  Inbound Shipment
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/co-packing/outbound"
-                                  className="dropdown-item"
-                                >
-                                  Outbound Shipment
-                                </Link>
-                                <Link
-                                  onClick={this.hideAccountDropdown}
-                                  to="/manage/co-packing/runs"
-                                  className="dropdown-item"
-                                >
-                                  Co-packing
-                                </Link>
-                                <a
-                                  onClick={this.handleLogout}
-                                  className="dropdown-item"
-                                >
-                                  Sign Out
-                                </a>
-                              </div>
-                            </div>
-                          </ClickOutside>
-                        </div>
-                      </li>
-                    )} */}
-
-                    {/* User Menu */}
-                    {this.userStore.status && isUser && (
-                      <React.Fragment>
-                        <li className="aw-align-self-center">
-                          <Link
-                            className="nav-link aw-nav--link p-0 util-font-size-14"
-                            to="/help"
-                          >
-                            Help
-                          </Link>
-                        </li>
-                        <li>
-                          <div className="col-auto ml-auto d-none d-lg-block account-dropdown">
-                            <ClickOutside
-                              onClickOutside={this.hideAccountDropdown}
-                            >
-                              <div className="btn-group">
-                                <button
-                                  onClick={this.handleToggle}
-                                  className="text-normal btn btn-transparent util-font-size-14"
-                                  type="button"
-                                  data-toggle="dropdown"
-                                  aria-expanded="true"
-                                >
-                                  <span>
-                                    {" "}
-                                    Hi {name}{" "}
-                                    <i
-                                      className="fa fa-caret-down"
-                                      aria-hidden="true"
-                                    >
-                                      {" "}
-                                    </i>
-                                  </span>
-                                </button>
-                                <div
-                                  className={dropdownClass}
-                                  aria-labelledby="dropdownMenuButton"
-                                >
-                                  <span className="dropdown-item lg">
-                                    <strong>Hi {name}</strong>
-                                  </span>
-                                  <a className="dropdown-item">
-                                    Packaging Balance (
-                                    {formatMoney(storeCredit / 100)})
-                                  </a>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/orders"
-                                    className="dropdown-item"
-                                  >
-                                    Order History
-                                  </Link>
-                                  <a
-                                    onClick={this.handleSchedulePickup}
-                                    className="dropdown-item"
-                                  >
-                                    {" "}
-                                    Schedule Pickup
-                                  </a>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/user"
-                                    className="dropdown-item"
-                                  >
-                                    Account Settings
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/latest-news"
-                                    className="dropdown-item"
-                                  >
-                                    COVID-19
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/about"
-                                    className="dropdown-item"
-                                  >
-                                    About
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/howitworks"
-                                    className="dropdown-item"
-                                  >
-                                    How It Works
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/help"
-                                    className="dropdown-item"
-                                  >
-                                    Help
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/blog"
-                                    className="dropdown-item"
-                                  >
-                                    Blog
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/giftcard"
-                                    className="dropdown-item"
-                                  >
-                                    Gift Card
-                                  </Link>
-                                  <Link
-                                    onClick={this.hideAccountDropdown}
-                                    to="/backers"
-                                    className="dropdown-item"
-                                  >
-                                    Our Backers
-                                  </Link>
-                                  <a
-                                    onClick={this.handleRedeemDepositClick}
-                                    className="dropdown-item"
-                                  >
-                                    Redeem Deposit
-                                  </a>
-                                  <a
-                                    onClick={this.handleLogout}
-                                    className="dropdown-item"
-                                  >
-                                    Sign Out
-                                  </a>
-                                </div>
-                              </div>
-                            </ClickOutside>
+                            <Grid container direction="column" role="tablist">
+                              {isAdmin && (
+                                <DesktopAdminNav
+                                  handleSignout={this.handleLogout}
+                                  hideDropdown={this.hideAccountDropdown}
+                                  userName={name}
+                                />
+                              )}
+                            </Grid>
                           </div>
-                        </li>
-                      </React.Fragment>
-                    )}
-
-                    {/* Guest Menu */}
-                    {!this.userStore.status && (
-                      <DesktopGuestNav
-                        handleLogin={this.handleLogin}
-                        handleSignup={this.handleSignup}
-                        handleBackers={this.handleNavBackers}
-                      />
-                    )}
-                  </ul>
+                        </div>
+                      </ClickOutside>
+                    </div>
+                  ) : (
+                    <DesktopGuestNav
+                      handleLogin={this.handleLogin}
+                      handleSignup={this.handleSignup}
+                      handleBackers={this.handleNavBackers}
+                    />
+                  )}
                 </nav>
               </div>
 
