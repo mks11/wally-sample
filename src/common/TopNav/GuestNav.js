@@ -111,7 +111,9 @@ export function DesktopGuestNav({ handleLogin, handleSignup, handleBackers }) {
           onClick={handleBackers}
           className="btn btn-inline-transparent btn-backers"
         >
-          ✨
+          <span role="img" aria-label="Sparkle">
+            ✨
+          </span>
         </button>
       </li>
     </>
