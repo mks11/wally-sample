@@ -23,11 +23,11 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
 
       {/* PICK PACK */}
 
-      {/* <li>
+      <li>
         <Link to="/pick-pack-returns" onClick={hideNav}>
           <MobileNavLinkText>Ops Portal</MobileNavLinkText>
         </Link>
-      </li> */}
+      </li>
 
       {/* TODO - ARE THESE STILL USED? */}
 

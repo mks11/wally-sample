@@ -315,7 +315,7 @@ class TopNav extends Component {
                               direction="column"
                               role="tablist"
                               component="ul"
-                              style={{ paddingLeft: 0 }}
+                              style={{ paddingLeft: 0, marginBottom: 0 }}
                             >
                               {isAdmin && (
                                 <DesktopAdminNav
