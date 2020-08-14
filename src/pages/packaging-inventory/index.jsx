@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import CleaningUpdateForm from "./CleaningUpdateForm";
-import CleaningOverview from "./CleaningOverview";
-import { Container } from "@material-ui/core";
-import { groupBy, mapValues } from "lodash";
-import { API_GET_PACKAGING_STOCK } from "../../../config";
-import Grid from "@material-ui/core/Grid";
-import { PageTitle } from "common/page/Title";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import PackagingStockUpdateForm from './PackagingStockUpdateForm';
+import PackagingInventoryOverview from './PackagingInventoryOverview';
+import { Container } from '@material-ui/core';
+import { groupBy, mapValues } from 'lodash';
+import { API_GET_PACKAGING_STOCK } from 'config';
+import Grid from '@material-ui/core/Grid';
+import { PageTitle } from 'common/page/Title';
 
 function sortSizes(unsorted_sizes) {
   return unsorted_sizes.sort((size1, size2) => {
@@ -16,9 +16,9 @@ function sortSizes(unsorted_sizes) {
 }
 
 function reshapeStockArray(stock) {
-  const groupedBySize = groupBy(stock, "size");
+  const groupedBySize = groupBy(stock, 'size');
   const nestedGroupedByType = mapValues(groupedBySize, (grp) =>
-    groupBy(grp, "type")
+    groupBy(grp, 'type'),
   );
   const collectByStatus = mapValues(nestedGroupedByType, (grp) => {
     return mapValues(grp, (arr) => {
@@ -37,10 +37,10 @@ function reshapeStockArray(stock) {
           return acc;
         },
         {
-          type: "",
-          size: "",
+          type: '',
+          size: '',
           stats: [],
-        }
+        },
       );
 
       return final_shape;
@@ -48,7 +48,7 @@ function reshapeStockArray(stock) {
   });
 
   const allSizes = Object.keys(groupedBySize);
-  const allTypes = Object.keys(groupBy(stock, "type"));
+  const allTypes = Object.keys(groupBy(stock, 'type'));
   return { collectByStatus, allSizes, allTypes };
 }
 
@@ -85,23 +85,23 @@ function CleaningTab(props) {
   };
 
   return (
-    <Container maxWidth={"lg"}>
+    <Container maxWidth={'lg'}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <PageTitle variant="h2" align="center" gutterBottom>
-            Cleaning
+          <PageTitle variant="h1" align="center" gutterBottom>
+            Packaging Inventory
           </PageTitle>
         </Grid>
         <Grid container justify="center" spacing={2}>
           <Grid item xs={12} sm={10} md={8} lg={8} xl={6}>
-            <CleaningUpdateForm
+            <PackagingStockUpdateForm
               types={allTypes}
               sizes={allSizes}
               onSuccessfulSubmit={handleSuccessfulSubmit}
             />
           </Grid>
         </Grid>
-        <CleaningOverview
+        <PackagingInventoryOverview
           stock={packagingStocks}
           types={allTypes}
           sizes={allSizes}

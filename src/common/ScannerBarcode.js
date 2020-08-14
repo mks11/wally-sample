@@ -169,13 +169,6 @@ class ScannerBarcode extends Component {
             <button className="btn-icon btn-icon--close" onClick={onClose} />
             {/* default id and class for quagga #interactive.viewport */}
             <div id="interactive" className="viewport" />
-            <p
-              className={`text-center qr-modal-result p-2 ${
-                isError ? 'text-error' : 'text-success'
-              }`}
-            >
-              {result}
-            </p>
           </Paper>
 
           <Snackbar

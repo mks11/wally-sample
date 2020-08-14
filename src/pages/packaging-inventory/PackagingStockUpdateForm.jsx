@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Formik, Form, useField } from "formik";
-import * as Yup from "yup";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Formik, Form, useField } from 'formik';
+import * as Yup from 'yup';
 import {
   Grid,
   NativeSelect,
@@ -12,13 +12,12 @@ import {
   FormHelperText,
   Input,
   Typography,
-} from "@material-ui/core";
-import { connect } from "utils";
+} from '@material-ui/core';
+import { connect } from 'utils';
 
-import styles from "./CleaningUpdateForm.module.css";
-import { PageTitle } from "common/page/Title";
-import axios from "axios";
-import { API_UPDATE_PACKAGING_STOCK } from "../../../config";
+import styles from './PackagingStockUpdateForm.module.css';
+import axios from 'axios';
+import { API_UPDATE_PACKAGING_STOCK } from 'config';
 
 const Select = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -46,7 +45,7 @@ const TextField = ({ label, ...props }) => {
   );
 };
 
-function CleaningUpdateForm({
+function PackagingStockUpdateForm({
   store: { modal: modalStore },
   sizes,
   types,
@@ -75,9 +74,9 @@ function CleaningUpdateForm({
     } finally {
       setSubmitting(false);
       if (submitFailed) {
-        modalStore.toggleModal("error");
+        modalStore.toggleModal('error');
       } else {
-        modalStore.toggleModal("success");
+        modalStore.toggleModal('success');
         resetForm();
       }
     }
@@ -86,18 +85,18 @@ function CleaningUpdateForm({
   return (
     <Formik
       initialValues={{
-        action: "Cleaning",
-        size: "",
+        action: 'Cleaning',
+        size: '',
         amount: 0,
-        type: "",
+        type: '',
       }}
       validationSchema={Yup.object({
-        action: Yup.string().required("Required"),
-        size: Yup.string().required("Required"),
-        type: Yup.string().required("Required"),
+        action: Yup.string().required('Required'),
+        size: Yup.string().required('Required'),
+        type: Yup.string().required('Required'),
         amount: Yup.number()
-          .moreThan(0, () => "The amount should be more than 0.")
-          .required("Required"),
+          .moreThan(0, () => 'The amount should be more than 0.')
+          .required('Required'),
       })}
       onSubmit={handleSubmit}
     >
@@ -106,7 +105,7 @@ function CleaningUpdateForm({
           <Typography variant="h2" align="center" gutterBottom>
             Update Packaging Stocks
           </Typography>
-          <Grid container justify={"center"} spacing={4}>
+          <Grid container justify={'center'} spacing={4}>
             <Grid item>
               <Select name="action" label="Action">
                 <option value=""></option>
@@ -140,20 +139,20 @@ function CleaningUpdateForm({
                 id="updateAmt"
                 name="amount"
                 type="number"
-                label={"Update Amount"}
+                label={'Update Amount'}
               />
             </Grid>
           </Grid>
 
           <Grid
             container
-            justify={"space-around"}
+            justify={'space-around'}
             spacing={1}
             className={styles.buttonContainer}
           >
             <Button
-              variant={"outlined"}
-              type={"submit"}
+              variant={'outlined'}
+              type={'submit'}
               className={styles.button}
             >
               <Typography variant="body1">Submit</Typography>
@@ -164,18 +163,19 @@ function CleaningUpdateForm({
     </Formik>
   );
 }
-CleaningUpdateForm.propTypes = {
+
+PackagingStockUpdateForm.propTypes = {
   sizes: PropTypes.arrayOf(PropTypes.string),
   types: PropTypes.arrayOf(PropTypes.string),
   onSuccessfulSubmit: PropTypes.func.isRequired,
 };
 
-// needed to wrap it because connect("store") on CleaningUpdateForm
+// needed to wrap it because connect("store") on PackagingStockUpdateForm
 // gives 'invalid hook call' error
-class _CleaningUpdateForm extends React.Component {
+class _PackagingStockUpdateForm extends React.Component {
   render() {
-    return <CleaningUpdateForm {...this.props} />;
+    return <PackagingStockUpdateForm {...this.props} />;
   }
 }
 
-export default connect("store")(_CleaningUpdateForm);
+export default connect('store')(_PackagingStockUpdateForm);

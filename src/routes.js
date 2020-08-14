@@ -56,6 +56,9 @@ import OrderFulfillment from 'pages/pick-pack/OrderFulfillmentPage';
 import PackagingReturnsPortal from 'pages/packaging-returns/ReturnsPortal';
 import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
 
+// Packaging Inventory
+import PackagingInventoryPortal from 'pages/packaging-inventory/';
+
 function Routes({ store }) {
   const { user } = store;
   return (
@@ -102,6 +105,13 @@ function Routes({ store }) {
         component={NewPackagingReturn}
         userStore={user}
       />
+      {/* Packaging Inventory */}
+      <OpsRoute
+        exact
+        path="/packaging-inventory"
+        component={PackagingInventoryPortal}
+        userStore={user}
+      />
       {/* Old Copacker Routes */}
       <Route
         exact
@@ -123,8 +133,6 @@ function Routes({ store }) {
         path="/manage/co-packing/runs/:runId"
         component={ManageCoPackingRunsSpecific}
       />
-      <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
-      <Route exact path="/pick-pack-returns/order-fulfillment/:orderId" component={OrderFulfillment} />
       {/* Ambassador Routes (NOT CRAWLED) */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}

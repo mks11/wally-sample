@@ -30,6 +30,11 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
           <MobileNavLinkText>Packaging Returns</MobileNavLinkText>
         </Link>
       </li>
+      <li>
+        <Link to="/packaging-inventory">
+          <MobileNavLinkText>Packaging Inventory</MobileNavLinkText>
+        </Link>
+      </li>
       {/* TODO - ARE THESE STILL USED? */}
 
       {/* <li>
@@ -89,6 +94,14 @@ export function DesktopOpsNav({ hideDropdown, handleSignout }) {
       <DesktopDropdownMenuItem>
         <DesktopDropdownMenuLink onClick={hideDropdown} to="/packaging-returns">
           Packaging Returns
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/packaging-inventory"
+        >
+          Packaging Inventory
         </DesktopDropdownMenuLink>
       </DesktopDropdownMenuItem>
       {/* <DesktopDropdownMenuItem>
