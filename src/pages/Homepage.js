@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { logPageView, logEvent, logModalView } from "services/google-analytics";
-import qs from "qs";
-import { Row, Col } from "reactstrap";
-import { validateEmail, connect } from "../utils";
+import React, { Component } from 'react';
+import { logPageView, logEvent, logModalView } from 'services/google-analytics';
+import qs from 'qs';
+import { Row, Col } from 'reactstrap';
+import { validateEmail, connect } from '../utils';
 
 class Homepage extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      heroStatus: "start",
+      heroStatus: 'start',
       // model
-      zip: "",
-      email: "",
-      audienceSource: "",
-      heroText: "Shop package-free groceries",
+      zip: '',
+      email: '',
+      audienceSource: '',
+      heroText: 'Shop package-free groceries',
       heroDescription:
         "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
-      heroDescriptionAlign: "center",
+      heroDescriptionAlign: 'center',
 
       invalidEmail: false,
       invalidZip: false,
@@ -51,10 +51,10 @@ class Homepage extends Component {
     ) {
       if (
         qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
-          .color === "purple"
+          .color === 'purple'
       ) {
-        this.setState({ audienceSource: "ig" });
-        this.metricStore.triggerAudienceSource("ig");
+        this.setState({ audienceSource: 'ig' });
+        this.metricStore.triggerAudienceSource('ig');
       }
     }
 
@@ -63,30 +63,31 @@ class Homepage extends Component {
       .then((status) => {
         if (status) {
           const user = this.userStore.user;
-          if (user.type === "admin") {
-            this.routing.push("/manage/shopper");
-          } else if (user.type === "tws-ops") {
-            this.routing.push("/manage/shopping-app-1");
+          console.log(user.type);
+          if (user.type === 'admin') {
+            this.routing.push('/manage/retail');
+          } else if (user.type === 'tws_ops') {
+            this.routing.push('/ops-overview');
           } else {
-            this.routing.push("/main");
+            this.routing.push('/main');
           }
         }
         this.setState({ fetching: false });
       })
       .catch((e) => {
-        console.error("Failed to get status", e);
+        console.error('Failed to get status', e);
         this.setState({ fetching: false });
       });
 
     this.zipStore.loadZipCodes().catch((e) => {
-      console.error("Failed to load zipcodes: ", e);
+      console.error('Failed to load zipcodes: ', e);
     });
 
-    window.$("body").addClass("homepage-background");
+    window.$('body').addClass('homepage-background');
   }
 
   componentWillUnmount() {
-    window.$("body").removeClass("homepage-background");
+    window.$('body').removeClass('homepage-background');
   }
 
   handleValidateZip() {
@@ -98,21 +99,21 @@ class Homepage extends Component {
 
     this.zipStore.selectedZip = this.state.zip;
     logEvent({
-      category: "Homepage",
-      action: "SubmitZip",
+      category: 'Homepage',
+      action: 'SubmitZip',
       label: this.state.zip,
     });
     if (this.zipStore.validateZipCode(this.state.zip)) {
       this.zipStore.setZip(this.state.zip);
       this.setState({
-        heroStatus: "success",
+        heroStatus: 'success',
         heroText: "Huzzah! It looks like we're in your zip code.",
-        heroDescription: "Click here to start shopping.",
+        heroDescription: 'Click here to start shopping.',
       });
     } else {
       this.setState({
-        heroStatus: "invalid_zip",
-        heroText: "Hope to be there soon!",
+        heroStatus: 'invalid_zip',
+        heroText: 'Hope to be there soon!',
         heroDescription:
           "We're not in your zip code yet, but sign up and we'll send you a notification when we are.",
       });
@@ -121,16 +122,16 @@ class Homepage extends Component {
 
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({ invalidEmail: "Invalid Email" });
+      this.setState({ invalidEmail: 'Invalid Email' });
       return;
     }
 
-    this.setState({ invalidEmail: "" });
+    this.setState({ invalidEmail: '' });
     logEvent({
-      category: "Homepage",
-      action: "SubmitEmail",
+      category: 'Homepage',
+      action: 'SubmitEmail',
       value: this.state.zip,
-      label: "GetNotified",
+      label: 'GetNotified',
     });
     this.userStore
       .getWaitlistInfo({
@@ -138,33 +139,33 @@ class Homepage extends Component {
         src: this.state.audienceSource,
       })
       .then((res) => {
-        this.modalStore.toggleModal("waitinglist", null, res);
+        this.modalStore.toggleModal('waitinglist', null, res);
       })
       .catch(() => {
         this.modalStore.toggleModal(
-          "error",
-          "Something went wrong during your request"
+          'error',
+          'Something went wrong during your request',
         );
       });
   }
 
   handleStart(e) {
-    logEvent({ category: "Homepage", action: "StartShopping" });
-    this.routing.push("/main");
-    logModalView("/signup-info");
-    this.modalStore.toggleModal("joinwaitlist");
+    logEvent({ category: 'Homepage', action: 'StartShopping' });
+    this.routing.push('/main');
+    logModalView('/signup-info');
+    this.modalStore.toggleModal('joinwaitlist');
     e.preventDefault();
   }
 
   handleExplore(e) {
-    logEvent({ category: "Homepage", action: "ExploreShopping" });
-    this.routing.push("/main");
+    logEvent({ category: 'Homepage', action: 'ExploreShopping' });
+    this.routing.push('/main');
     e.preventDefault();
   }
 
   handleSignup(e) {
-    logModalView("/signup-zip");
-    this.modalStore.toggleModal("signup");
+    logModalView('/signup-zip');
+    this.modalStore.toggleModal('signup');
   }
 
   handleZip(e) {
@@ -230,12 +231,12 @@ class Homepage extends Component {
 
     const isMobile = this.state.width <= 500;
     const isMobileHoriz = this.state.width > 500 && this.state.width <= 800;
-    let heroClass = "landing-section aw-hero";
+    let heroClass = 'landing-section aw-hero';
     if (isMobile) {
-      heroClass += " mobile";
+      heroClass += ' mobile';
     }
     if (isMobileHoriz) {
-      heroClass += " mobile-horiz";
+      heroClass += ' mobile-horiz';
     }
 
     return (
@@ -248,13 +249,13 @@ class Homepage extends Component {
             <div id="div-1-scroll" className="">
               <h1>
                 Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-                nationwide ~{" "}
+                nationwide ~{' '}
               </h1>
             </div>
             <div id="div-2-scroll" className="">
               <h1>
                 Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-                nationwide ~{" "}
+                nationwide ~{' '}
               </h1>
             </div>
           </div>
@@ -275,9 +276,9 @@ class Homepage extends Component {
                   <ButtonNotify />
                 </div>
 
-                {this.state.heroStatus === "success" && <ButtonStartShopping />}
+                {this.state.heroStatus === 'success' && <ButtonStartShopping />}
 
-                {this.state.heroStatus === "invalid_zip_success" && (
+                {this.state.heroStatus === 'invalid_zip_success' && (
                   <ButtonExplore />
                 )}
               </div>
@@ -292,10 +293,10 @@ class Homepage extends Component {
               <p></p>
               <p>
                 The Wally Shop is the platform connecting you with your favorite
-                brands 100% waste-free IRL and we are now available nationwide{" "}
+                brands 100% waste-free IRL and we are now available nationwide{' '}
                 <span role="img" aria-label="sprinkle">
                   ✨
-                </span>{" "}
+                </span>{' '}
                 Our vision is to help you shop for everything in all reusable
                 packaging (cleaning, beauty, pet supplies, you name it!).
               </p>
@@ -389,4 +390,4 @@ class Homepage extends Component {
   }
 }
 
-export default connect("store")(Homepage);
+export default connect('store')(Homepage);

@@ -3,55 +3,57 @@ import QrReader from 'react-qr-reader'
 import Paper from "@material-ui/core/Paper/Paper";
 import LazyLoad from 'react-lazyload';
 
-import {isMobile} from "react-device-detect";
-
+import { isMobile } from "react-device-detect";
 
 const desktopBrowserStyle = {
-    content: {
-        zindex: -1,
-        position: 'absolute', left: '50%', top: '20%',
-        width: '40%',
-        height: '40%',
-        transform: 'translate(-50%, -50%)'
-    }
+  content: {
+    zindex: -1,
+    position: 'absolute', left: '50%', top: '20%',
+    width: '40%',
+    height: '40%',
+    transform: 'translate(-50%, -50%)'
+  }
 };
 
 const mobileBrowserStyle = {
-    mobile: {
-        zindex: 1,
-        position: 'absolute',
-        left: '50%', top: '35%',
-        width: '60%',
-        height: '60%',
-        transform: 'translate(-50%, -50%)'
-    },
+  mobile: {
+    zindex: 1,
+    position: 'absolute',
+    left: '50%', top: '35%',
+    width: '60%',
+    height: '60%',
+    transform: 'translate(-50%, -50%)'
+  },
 };
 
-
 class QRCodeScanner extends Component {
-    state = {
-        result: 'No result',
-    }
+  state = {
+    result: 'No result',
+  }
+
+  // localMediaStream.getTracks()[0].stop()
 
 
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    //this.adminStore = props.store.admin;
 
-        this.state = {
-            name: '',
-            paypal_email: '',
-            busy: false,
-            isPortrait: true
-        };
-    }
+    this.state = {
+      name: '',
+      paypal_email: '',
+      busy: false,
+      isPortrait: true
+    };
+  }
 
-    componentDidMount() {
-        window.addEventListener('orientationchange', this.setScreenOrientation)
-    }
+  componentDidMount() {
+    console.log('ismobile ', isMobile)
+    window.addEventListener('orientationchange', this.setScreenOrientation)
+  }
 
 
-    setScreenOrientation = () => {
+  setScreenOrientation = () => {
 
 
         if (window.matchMedia("(orientation: portrait)").matches) {
@@ -68,8 +70,8 @@ class QRCodeScanner extends Component {
     };
 
 
-    handleScan = data => {
-        if (data) {
+  handleScan = data => {
+    if (data) {
 
             var domain = data.split('/');
             try {
@@ -78,58 +80,59 @@ class QRCodeScanner extends Component {
                 this.setState({result: "link format error"})
             }
 
-            this.setState({
-                result: 'packaging Unit Id = ' + packagingUnitId
-            });
+      this.setState({
+        result: 'packaging Unit Id = ' + packagingUnitId
+      });
 
-            //callback to cartItemOrder with packagingUnitId
-            this.props.makePatchAPICallLinkPackaging(packagingUnitId);
+      //callback to cartItemOrder with packagingUnitId
+      this.props.makePatchAPICallLinkPackaging(packagingUnitId);
 
-            //auto close QR popup after request is done
-            this.props.onClose();
-        }
-    };
-    handleError = err => {
-        console.error(err)
-    };
+      //auto close QR popup after request is done
+      this.props.onClose();
+    }
+  };
+  handleError = err => {
+    console.error(err)
+  };
 
-    render() {
-        if (!this.props.isOpen) {
-            return null;
-        }
+  render() {
+    if (!this.props.isOpen) {
+      return null;
+    }
 
-        return (
+    // alert("renter portrait ", this.state.isPortrait)
+
+    return (
+      <LazyLoad>
+        <div className="error">
+          <div className="backdrop">
+
             <LazyLoad>
-                <div className="error">
-                    <div className="backdrop">
-
-                        <LazyLoad>
-                            <Paper
-                                style={isMobile ? mobileBrowserStyle.mobile : desktopBrowserStyle.content}>
-                                <button className="error-modal-button"
-                                        onClick={this.props.onClose}>
-                                    X
+              <Paper
+                style={isMobile ? mobileBrowserStyle.mobile : desktopBrowserStyle.content}>
+                <button className="error-modal-button"
+                  onClick={this.props.onClose}>
+                  X
                                 </button>
 
-                                <LazyLoad>
-                                    <QrReader
-                                        delay={300}
-                                        onError={this.handleError}
-                                        onScan={this.handleScan}
-                                        props
-                                    />
-                                    <p>{this.state.result}</p>
-                                </LazyLoad>
+                <LazyLoad>
+                  <QrReader
+                    delay={300}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    props
+                  />
+                  <p>{this.state.result}</p>
+                </LazyLoad>
 
-                            </Paper>
-                        </LazyLoad>
-
-                    </div>
-                </div>
+              </Paper>
             </LazyLoad>
-        )
-    }
-}
 
+          </div>
+        </div>
+      </LazyLoad>
+    )
+  }
+}
 
 export default QRCodeScanner;

@@ -11,12 +11,14 @@
     "aws-s3": "^2.0.5",
     "aws-sdk": "^2.476.0",
     "axios": "^0.19.0",
+    "babel-loader": "8.0.6",
     "bluebird": "^3.5.5",
     "body-parser": "^1.18.3",
     "csv-to-json": "^0.1.2",
     "express": "^4.16.3",
     "file-type": "^12.0.0",
     "flip-counter-js": "^1.0.8",
+    "formik": "^2.1.4",
     "fs": "0.0.1-security",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
@@ -26,6 +28,7 @@
     "multer": "^1.4.1",
     "multiparty": "^4.2.1",
     "node-sass": "^4.13.0",
+    "prop-types": "^15.7.2",
     "qs": "^6.5.2",
     "quagga": "^0.12.1",
     "react": "^16.4.1",
@@ -76,7 +79,13 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "generate-robotstxt": "^8.0.3"
+    "generate-robotstxt": "^8.0.3",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-react": "^7.20.5",
+    "prettier": "^2.0.5",
+    "stylelint": "^13.6.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^20.0.0"
   },
   "browserslist": [
     ">0.2%",

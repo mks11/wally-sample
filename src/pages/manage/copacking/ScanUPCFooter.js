@@ -7,7 +7,7 @@ import {
 
 import { connect } from 'utils'
 
-import BarcodeScanner from './BarcodeScanner'
+import ScannerBarcode from 'common/ScannerBarcode'
 
 class ScanUPCFooter extends Component {
   constructor(props) {
@@ -95,10 +95,13 @@ class ScanUPCFooter extends Component {
           </Col>
         </Row>
 
-        <BarcodeScanner
+        <ScannerBarcode
           isOpen={isBarScanOpen}
           onClose={this.toggleBarScan}
           onDetect={this.handleDetectedValue}
+          messageSuccess="Barcode Scanned"
+          messageError="Barcode Scan Error"
+          closeOnScan
         />
       </>
     )

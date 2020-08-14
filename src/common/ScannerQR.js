@@ -32,18 +32,16 @@ const styles = {
 
 const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/
 
-class QRCodeScanner extends Component {
+class ScannerQR extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      packagingId: '',
       packagingIds: [],
       isPortrait: true,
-      result: '',
       isError: false,
-
       snackBarOpen: false,
-      snackBarText: '',
     }
   }
 
@@ -71,39 +69,55 @@ class QRCodeScanner extends Component {
       const packagingId = matchedData && matchedData[1]
 
       if (matchedData && packagingId) {
-        const { packagingIds } = this.state
-
         if (window.navigator.vibrate) {
           window.navigator.vibrate(500)
         }
 
-        if (!packagingIds.includes(packagingId)) {
+        if (this.props.multiple) {
+          // scan multiple values
+          const { packagingIds } = this.state
+
+          if (!packagingIds.includes(packagingId)) {
+            this.setState({
+              snackBarOpen: true,
+              isError: false,
+              packagingIds,
+            })
+
+            packagingIds.push(packagingId)
+          } else {
+            this.setState({
+              snackBarOpen: true,
+              isError: true,
+              packagingIds,
+            })
+          }
+        } else {
+          // scan sinlge value
           this.setState({
-            snackBarText: 'QR Scanned',
             snackBarOpen: true,
             isError: false,
-            packagingIds,
-          })
-
-          packagingIds.push(packagingId)
-        } else {
-          this.setState({
-            snackBarText: 'QR Already Scanned',
-            snackBarOpen: true,
-            isError: true,
-            packagingIds,
+            packagingId,
           })
         }
       }
     }
   }
 
-  handleError = err => { /* console.error(err) */ }
+  handleError = err => {
+    const { onError } = this.props;
+    onError && onError(err);
+  }
 
   handleCloseModal = () => {
-    const { onClose } = this.props
-    const { packagingIds } = this.state
-    onClose(packagingIds)
+    const { onClose, multiple, dataId } = this.props
+    const { packagingId, packagingIds } = this.state
+
+    if (multiple) {
+      onClose(packagingIds, dataId)
+    } else {
+      onClose(packagingId, dataId)
+    }
   }
 
   handleToggleSnackbar = () => {
@@ -115,9 +129,12 @@ class QRCodeScanner extends Component {
       isPortrait,
       isError,
       snackBarOpen,
-      snackBarText,
-      } = this.state
-    const { isOpen } = this.props
+    } = this.state
+    const {
+      isOpen,
+      messageSuccess = 'Scan Success',
+      messageError = 'Scan Error',
+    } = this.props
 
     if (!isOpen) {
       return null
@@ -126,7 +143,13 @@ class QRCodeScanner extends Component {
     return (
       <div className="qr-modal">
         <div className='backdrop qr-modal-backdrop'>
-          <Paper style={isMobile ? (isPortrait ? styles.mobile : styles.mobileLandscape) : styles.desktop}>
+          <Paper
+            style={
+              isMobile
+                ? (isPortrait ? styles.mobile : styles.mobileLandscape)
+                : styles.desktop
+            }
+          >
             <div className="qr-modal-control">
               <button className="btn-icon btn-icon--close" onClick={this.handleCloseModal} />
             </div>
@@ -149,7 +172,7 @@ class QRCodeScanner extends Component {
               style={{
                 backgroundColor: isError ? '#ffa000' : '#43a047'
               }}
-              message={snackBarText}
+              message={isError ? messageError : messageSuccess}
             />
           </Snackbar>
         </div>
@@ -159,4 +182,4 @@ class QRCodeScanner extends Component {
 }
 
 
-export default QRCodeScanner
+export default ScannerQR
