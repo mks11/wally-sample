@@ -1,15 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   MobileNavLinkText,
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
-} from "./MobileStyledComponents";
+} from './MobileStyledComponents';
 import {
   DesktopDropdownMenuItem,
   DesktopDropdownMenuLink,
-} from "./DesktopNavComponents";
+} from './DesktopNavComponents';
 
 export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
   return (
@@ -24,8 +24,8 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
       {/* PICK PACK */}
 
       <li>
-        <Link to="/pick-pack-returns" onClick={hideNav}>
-          <MobileNavLinkText>Ops Portal</MobileNavLinkText>
+        <Link to="/pick-pack" onClick={hideNav}>
+          <MobileNavLinkText>Pick/Pack</MobileNavLinkText>
         </Link>
       </li>
 
@@ -81,8 +81,8 @@ export function DesktopOpsNav({ hideDropdown, handleSignout }) {
         </DesktopDropdownMenuLink>
       </DesktopDropdownMenuItem> */}
       <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/pick-pack-returns">
-          Ops Portal
+        <DesktopDropdownMenuLink onClick={hideDropdown} to="/pick-pack">
+          Pick/Pack
         </DesktopDropdownMenuLink>
       </DesktopDropdownMenuItem>
       {/* <DesktopDropdownMenuItem>
