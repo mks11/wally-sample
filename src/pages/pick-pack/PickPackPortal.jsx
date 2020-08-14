@@ -123,7 +123,7 @@ function sortOrders(a, b) {
   return aStatus < bStatus ? 1 : aStatus > bStatus ? -1 : 0;
 }
 
-class PickPackTab extends Component {
+class PickPackPortal extends Component {
   constructor(props) {
     super(props);
 
@@ -137,6 +137,7 @@ class PickPackTab extends Component {
   }
 
   componentDidMount() {
+    this.userStore.getStatus();
     this.fetchTodaysOrders();
     console.log(this.userStore);
   }
@@ -170,6 +171,8 @@ class PickPackTab extends Component {
   };
 
   render() {
+    const { isOpsLead } = this.userStore;
+
     return (
       <div>
         <h2 className={styles.title}>Pick/Pack Orders</h2>
@@ -193,7 +196,7 @@ class PickPackTab extends Component {
             );
           })}
         </Grid>
-        {this.userStore.isOpsLead() ? (
+        {isOpsLead ? (
           <div className={styles.validateContainer}>
             <Button
               color="primary"
@@ -209,4 +212,4 @@ class PickPackTab extends Component {
   }
 }
 
-export default connect('store')(PickPackTab);
+export default connect('store')(PickPackPortal);
