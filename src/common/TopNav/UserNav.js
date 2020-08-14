@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { formatMoney } from "../../utils";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { formatMoney } from '../../utils';
 
 import {
   MobileNavLinkText,
@@ -8,12 +8,12 @@ import {
   MobileNavDivider,
   MobileUserGreeting,
   MobileUserPackagingBalance,
-} from "./MobileStyledComponents";
+} from './MobileStyledComponents';
 
 import {
   DesktopDropdownMenuItem,
   DesktopDropdownMenuLink,
-} from "./DesktopNavComponents";
+} from './DesktopNavComponents';
 
 export function MobileUserNav({
   hideNav,
@@ -30,7 +30,7 @@ export function MobileUserNav({
       <li>
         <MobileNavDivider />
       </li>
-      <li style={{ padding: "15px 0" }}>
+      <li style={{ padding: '15px 0' }}>
         <MobileUserPackagingBalance balance={userStoreCredit} />
       </li>
       <li>
