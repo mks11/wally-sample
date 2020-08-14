@@ -15,7 +15,6 @@ import ScheduleUserPickupStore from './ScheduleUserPickupStore';
 import MetricStore from './MetricStore';
 import LoadingSpinnerStore from './LoadingSpinnerStore';
 import { RouterStore } from 'mobx-react-router';
-import PackagingReturnStore from './PackagingReturnStore';
 
 const store = {
   ui: UiStore,
@@ -37,7 +36,6 @@ const store = {
   metric: MetricStore,
   loading: LoadingSpinnerStore,
   routing: new RouterStore(),
-  packagingReturn: PackagingReturnStore,
 };
 
 export default store;

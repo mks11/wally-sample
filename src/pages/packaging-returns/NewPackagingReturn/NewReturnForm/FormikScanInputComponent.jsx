@@ -75,6 +75,7 @@ export default function ScanInputContainer({
         <Button
           color="secondary"
           type="submit"
+          fullWidth
           size={'large'}
           variant={'contained'}
           disabled={!packaging_urls.length || isSubmitting}
