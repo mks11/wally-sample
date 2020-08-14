@@ -1,40 +1,45 @@
-import React, { Component } from 'react'
-import QrReader from 'react-qr-reader'
-import LazyLoad from 'react-lazyload'
-import { isMobile } from 'react-device-detect'
-import { Paper, Snackbar, SnackbarContent } from '@material-ui/core'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import QrReader from 'react-qr-reader';
+import LazyLoad from 'react-lazyload';
+import { isMobile } from 'react-device-detect';
+import { Paper, Snackbar, SnackbarContent } from '@material-ui/core';
 
 const styles = {
   desktop: {
     zindex: -1,
-    position: 'absolute', left: '50%', top: '40%',
+    position: 'absolute',
+    left: '50%',
+    top: '40%',
     width: '40vw',
     height: '40vw',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
   },
   mobile: {
     zindex: 1,
     position: 'absolute',
-    left: '50%', top: '40%',
+    left: '50%',
+    top: '40%',
     width: '80vw',
     height: '80vw',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
   },
   mobileLandscape: {
     zindex: 1,
     position: 'absolute',
-    left: '50%', top: '25%',
+    left: '50%',
+    top: '25%',
     width: '40vw',
     height: '40vw',
-    transform: 'translate(-50%, -50%)'
-  }
-}
+    transform: 'translate(-50%, -50%)',
+  },
+};
 
-const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/
+const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/;
 
 class ScannerQR extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       packagingId: '',
@@ -42,55 +47,62 @@ class ScannerQR extends Component {
       isPortrait: true,
       isError: false,
       snackBarOpen: false,
-    }
+    };
   }
 
   componentDidMount() {
-    window.addEventListener('orientationchange', this.setScreenOrientation)
+    window.addEventListener('orientationchange', this.setScreenOrientation);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('orientationchange', this.setScreenOrientation)
+    window.removeEventListener('orientationchange', this.setScreenOrientation);
   }
 
   setScreenOrientation = () => {
     if (window.matchMedia('(orientation: portrait)').matches) {
-      this.setState({ isPortrait: false })
+      this.setState({ isPortrait: false });
     }
 
     if (window.matchMedia('(orientation: landscape)').matches) {
-      this.setState({ isPortrait: true })
+      this.setState({ isPortrait: true });
     }
-  }
+  };
 
-  handleScan = scannedData => {
+  handleScan = (scannedData) => {
     if (scannedData) {
-      const matchedData = scannedData.match(REGEX_MATCH)
-      const packagingId = matchedData && matchedData[1]
+      const matchedData = scannedData.match(REGEX_MATCH);
+      const packagingId = matchedData && matchedData[1];
 
       if (matchedData && packagingId) {
         if (window.navigator.vibrate) {
-          window.navigator.vibrate(500)
+          window.navigator.vibrate(500);
         }
 
         if (this.props.multiple) {
           // scan multiple values
-          const { packagingIds } = this.state
+          const { packagingIds } = this.state;
 
           if (!packagingIds.includes(packagingId)) {
-            this.setState({
+            // TODO This is the original QR Scanning code, but Mukul pointed out the incorrect use of state here.
+            // TODO Remove on confirmation the new code works.
+            // this.setState({
+            //   snackBarOpen: true,
+            //   isError: false,
+            //   packagingIds,
+            // })
+
+            // packagingIds.push(packagingId)
+            this.setState(({ packagingIds }) => ({
               snackBarOpen: true,
               isError: false,
-              packagingIds,
-            })
-
-            packagingIds.push(packagingId)
+              packagingIds: [...packagingIds, packagingId],
+            }));
           } else {
             this.setState({
               snackBarOpen: true,
               isError: true,
               packagingIds,
-            })
+            });
           }
         } else {
           // scan sinlge value
@@ -98,60 +110,61 @@ class ScannerQR extends Component {
             snackBarOpen: true,
             isError: false,
             packagingId,
-          })
+          });
         }
       }
     }
-  }
+  };
 
-  handleError = err => {
+  handleError = (err) => {
     const { onError } = this.props;
     onError && onError(err);
-  }
+  };
 
   handleCloseModal = () => {
-    const { onClose, multiple, dataId } = this.props
-    const { packagingId, packagingIds } = this.state
+    const { onClose, multiple, dataId } = this.props;
+    const { packagingId, packagingIds } = this.state;
 
     if (multiple) {
-      onClose(packagingIds, dataId)
+      onClose(packagingIds, dataId);
     } else {
-      onClose(packagingId, dataId)
+      onClose(packagingId, dataId);
     }
-  }
+  };
 
   handleToggleSnackbar = () => {
-    this.setState({ snackBarOpen: !this.state.snackBarOpen })
-  }
+    this.setState((prev) => ({ snackBarOpen: !prev.snackBarOpen }));
+  };
 
   render() {
-    const {
-      isPortrait,
-      isError,
-      snackBarOpen,
-    } = this.state
+    const { isPortrait, isError, snackBarOpen } = this.state;
     const {
       isOpen,
       messageSuccess = 'Scan Success',
       messageError = 'Scan Error',
-    } = this.props
+    } = this.props;
 
     if (!isOpen) {
-      return null
+      return null;
     }
 
     return (
       <div className="qr-modal">
-        <div className='backdrop qr-modal-backdrop'>
+        <div className="backdrop qr-modal-backdrop">
           <Paper
             style={
               isMobile
-                ? (isPortrait ? styles.mobile : styles.mobileLandscape)
+                ? isPortrait
+                  ? styles.mobile
+                  : styles.mobileLandscape
                 : styles.desktop
             }
           >
             <div className="qr-modal-control">
-              <button className="btn-icon btn-icon--close" onClick={this.handleCloseModal} />
+              <button
+                className="btn-icon btn-icon--close"
+                onClick={this.handleCloseModal}
+              />
             </div>
             <LazyLoad>
               <QrReader
@@ -170,16 +183,21 @@ class ScannerQR extends Component {
           >
             <SnackbarContent
               style={{
-                backgroundColor: isError ? '#ffa000' : '#43a047'
+                backgroundColor: isError ? '#ffa000' : '#43a047',
               }}
               message={isError ? messageError : messageSuccess}
             />
           </Snackbar>
         </div>
       </div>
-    )
+    );
   }
 }
 
+ScannerQR.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onError: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
-export default ScannerQR
+export default ScannerQR;

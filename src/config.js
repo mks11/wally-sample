@@ -172,17 +172,25 @@ export const NUTRITIONAL_INFO_BASE_URL =
 export const PACKAGING_BASE_URL =
   'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/';
 
-// Pick/Pack & Returns Portals
-
-// Pick Pack Tab
+// Pick Pack Portal
 export const API_GET_TODAYS_ORDERS = BASE_URL + '/api/pick-pack/orders';
 export const API_VALIDATE_PICK_PACK_ORDERS =
   BASE_URL + '/api/pick-pack/validate-orders';
-
-// Pick Pack Fulfillment Page
 export const API_GET_ORDER_FULFILLMENT_DETAILS =
   BASE_URL + '/api/pick-pack/order-fulfillment/';
 export const API_UPDATE_ORDER_FULFILLMENT_DETAILS =
   BASE_URL + '/api/pick-pack/order-fulfillment/:id';
 export const API_VERIFY_ORDER_FULFILLMENT =
   BASE_URL + '/api/pick-pack/order-fulfillment/verify/:id';
+
+// Packaging Returns Portal
+export const API_GET_TODAYS_PACKAGING_RETURNS =
+  BASE_URL + '/api/todays-packaging-returns';
+export const API_GET_PACKAGING_RETURNS_JOB =
+  BASE_URL + '/api/packaging-returns/packaging-returns-job';
+export const API_POST_PACKAGING_RETURNS =
+  BASE_URL + '/api/packaging-return/submit';
+
+// Cleaning Portal
+export const API_UPDATE_PACKAGING_STOCK = BASE_URL + '/api/packaging-stock';
+export const API_GET_PACKAGING_STOCK = BASE_URL + '/api/packaging-stocks';
