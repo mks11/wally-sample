@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "the-wally-shop"
+  },
+  "targets": {
+    "the-wally-shop": {
+      "hosting": {
+        "staging": [
+          "the-wally-shop-test"
+        ]
+      }
+    }
   }
 }
