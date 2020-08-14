@@ -22,11 +22,11 @@
 }
 
 .pendingQA {
-  color: #dc3318;
+  color: #e0ac00;
 }
 
 .received {
-  color: #372772;
+  color: #ba3b46;
 }
 
 .statusText {
@@ -42,9 +42,4 @@
 .labelLink {
   padding: 1rem 0;
   font-size: 1rem;
-}
-
-.validateContainer {
-  text-align: center;
-  padding: 2rem 0;
 }

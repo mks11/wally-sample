@@ -1,15 +1,11 @@
-
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react';
 
 // Components
-import {
-  Paper,
-  Button,
-  Grid,
-} from '@material-ui/core';
+import { Paper, Button, Grid, Typography } from '@material-ui/core';
+import { ScanQRButton, ScanUPCButton } from './PickPackComponents';
 
 import ScannerQR from 'common/ScannerQR';
-import ScannerBarcode from 'common/ScannerBarcode'
+import ScannerBarcode from 'common/ScannerBarcode';
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
@@ -20,29 +16,28 @@ function InputCustomerJar({ index, onScan, value }) {
   const handleQRScan = useCallback((v) => {
     if (v) {
       // formik setFieldValue method
-      onScan(`packaging_urls.${index}`, v)
+      onScan(`packaging_urls.${index}`, v);
     }
-    setQrOpened(false)
-  }, [])
+    setQrOpened(false);
+  }, []);
 
   const handleQROpen = useCallback(() => {
     setQrOpened(true);
-  }, [])
+  }, []);
 
   const disabled = value && value.includes('thewallyshop.co/packaging');
 
   return (
-    <Grid item xs={12} className={styles.jarInput}>
-      Jar {index + 1}
-      <Button
-        className={disabled ? styles.jarInputButtonScanned : styles.jarInputButton}
+    <Grid item xs={12}>
+      <ScanQRButton
         onClick={handleQROpen}
         variant="contained"
         disabled={disabled}
       >
-        {disabled ? 'QR Scanned' : 'Scan QR Code'}
-      </Button>
-
+        <Typography variant="body1">
+          {disabled ? `Jar ${index + 1} Scanned` : `Scan Jar ${index + 1}`}
+        </Typography>
+      </ScanQRButton>
       <ScannerQR
         dataId={null} // new parameter to handle specific input
         isOpen={qrOpened}
@@ -51,7 +46,7 @@ function InputCustomerJar({ index, onScan, value }) {
         messageError="QR Scan error"
       />
     </Grid>
-  )
+  );
 }
 
 function InputItem({ field, ...props }) {
@@ -60,44 +55,55 @@ function InputItem({ field, ...props }) {
 
   const handleBarcodeScan = useCallback((value) => {
     if (value) {
-      setBarscanError(false)
+      setBarscanError(false);
       if (value === field.value.upc_code) {
         // formik setFieldValue method
-        props.onScan(`field.name.was_upc_verified`, true)
+        props.onScan(`field.name.was_upc_verified`, true);
       } else {
-        setBarscanError(true)
+        setBarscanError(true);
       }
     }
-    setBarscanOpened(false)
-  }, [])
+    setBarscanOpened(false);
+  }, []);
 
   const handleToggleBarscan = useCallback(() => {
     setBarscanOpened(!barscanOpened);
-  }, [barscanOpened])
+  }, [barscanOpened]);
+  let packagingType = field.value.name.match(/ - [\d]+ oz Wally Jar/).pop();
+  const productName = field.value.name.replace(packagingType, '');
 
   return (
     <Paper className={styles.itemBlock}>
       <Grid container justify="space-between" alignItems="center" wrap="nowrap">
-        <Grid item component="h3">
-          {field.value.name}
-          <br />
-          <span className={styles.itemBlockLocation}>
-            row: {field.value.warehouse_location?.row || '-'} shelf: {field.value.warehouse_location?.shelf || '-'}
-          </span>
+        <Grid item>
+          <Typography variant="body1">{productName}</Typography>
+          <Typography variant="subtitle1">
+            {packagingType.replace(' - ', '')}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            style={{ display: 'inline', marginRight: '0.5rem' }}
+          >
+            Row: {field.value.warehouse_location?.row || 'N/A'}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            style={{ display: 'inline', marginRight: '0.5rem' }}
+          >
+            Shelf: {field.value.warehouse_location?.shelf || 'N/A'}
+          </Typography>
         </Grid>
         <Grid item>
-          <Button
-            onClick={handleToggleBarscan}
-            variant="contained"
-          >
-            Scan UPC
-          </Button>
+          <ScanUPCButton onClick={handleToggleBarscan} variant="contained">
+            <Typography variant="body1">Scan UPC</Typography>
+          </ScanUPCButton>
         </Grid>
       </Grid>
       {barscanError ? (
         <div className="text-center text-error">Bar code didn't match</div>
       ) : null}
-      <Grid container justify="space-evenly" alignItems="center">
+      <br />
+      <Grid container direction="column" alignItems={'flex-end'} spacing={4}>
         {[...new Array(field.value.customer_quantity)].map((_, idx) => (
           <InputCustomerJar
             key={idx}
@@ -121,4 +127,4 @@ function InputItem({ field, ...props }) {
   );
 }
 
-export default InputItem
+export default InputItem;

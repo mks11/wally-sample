@@ -1,11 +1,8 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react';
 
 // Components
-import {
-  Paper,
-  Button,
-  Grid,
-} from '@material-ui/core';
+import { Paper, Button, Grid, Typography } from '@material-ui/core';
+import { ScanQRButton } from './PickPackComponents';
 
 import ScannerQR from 'common/ScannerQR';
 
@@ -18,32 +15,33 @@ function InputShippingTote({ field, ...props }) {
   const handleQRScan = useCallback((value) => {
     if (value) {
       // formik setFieldValue method
-      props.onScan(field.name, value)
+      props.onScan(field.name, value);
     }
-    setQrOpened(false)
-  }, [])
+    setQrOpened(false);
+  }, []);
 
   const handleQROpen = useCallback(() => {
     setQrOpened(true);
-  }, [])
+  }, []);
 
   const disabled = field.value.includes('thewallyshop.co/packaging');
 
   return (
     <Paper className={styles.toteItem}>
       <Grid container justify="space-between" alignItems="center">
-        <Grid item component="h3">
-          Tote {props.fieldIndex + 1}
+        <Grid item>
+          <Typography variant="body1">Tote {props.fieldIndex + 1}</Typography>
         </Grid>
         <Grid item>
-          <Button
-            className={disabled ? styles.toteScanDisabled : styles.toteScan}
+          <ScanQRButton
             onClick={handleQROpen}
             disabled={disabled}
             variant="contained"
           >
-            {disabled ? 'QR Scanned' : 'Scan QR Code'}
-          </Button>
+            <Typography variant="body1">
+              {disabled ? 'QR Scanned' : 'Scan QR Code'}
+            </Typography>
+          </ScanQRButton>
         </Grid>
       </Grid>
       <ScannerQR
@@ -57,4 +55,4 @@ function InputShippingTote({ field, ...props }) {
   );
 }
 
-export default InputShippingTote
+export default InputShippingTote;

@@ -89,8 +89,6 @@ const CardHeaderLinkText = styled(Typography)`
 
 const StatusTextWrapper = styled(Grid)`
   padding: 1rem;
-  padding-top: 0;
-  background-color: #97adff;
 `;
 
 function CardHeader({ orderId, status }) {
@@ -236,15 +234,22 @@ class PickPackPortal extends Component {
           })}
         </Grid>
         {isOpsLead ? (
-          <div className={styles.validateContainer}>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={this.validateOrders}
-            >
-              Validate Orders
-            </Button>
-          </div>
+          <Grid container justify="center">
+            <Grid item>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.validateOrders}
+                style={{
+                  margin: '1rem 0',
+                  borderRadius: '50px',
+                  color: '#fff',
+                }}
+              >
+                <Typography variant="body1">Validate Orders</Typography>
+              </Button>
+            </Grid>
+          </Grid>
         ) : null}
       </Container>
     );

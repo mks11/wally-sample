@@ -78,7 +78,7 @@ function Routes({ store }) {
       />
       <OpsRoute
         exact
-        path="/order-fulfillment/:id"
+        path="/order-fulfillment/:orderId"
         component={OrderFulfillment}
         userStore={user}
       />
