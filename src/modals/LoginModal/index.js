@@ -38,7 +38,12 @@ class LoginModal extends Component {
       .login(email, password)
       .then(() => {
         this.props.toggle();
-        routing.push('/main');
+        const { isUser, isOps, isOpsLead } = user;
+        if (isUser) {
+          routing.push('/main');
+        } else if (isOps || isOpsLead) {
+          routing.push('/pick-pack');
+        }
       })
       .catch((e) => {
         console.error('Failed to login', e);
