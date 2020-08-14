@@ -6,7 +6,7 @@
 
 export let BASE_URL = 'http://localhost:4001';
 if (process.env.NODE_ENV === 'production') {
-  BASE_URL = 'https://the-wally-shop.herokuapp.com';
+  BASE_URL = 'https://evening-bayou-13995.herokuapp.com';
 }
 
 export const API_GET_USER = BASE_URL + '/api/user';
