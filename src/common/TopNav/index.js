@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Grid } from "@material-ui/core";
-import ClickOutside from "react-click-outside";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Grid, Typography } from '@material-ui/core';
+import ClickOutside from 'react-click-outside';
 
-import { logModalView } from "services/google-analytics";
-import { connect } from "../../utils";
+import moment from 'moment';
+import { logModalView } from 'services/google-analytics';
+import { connect } from '../../utils';
 
 // Nav Menus
-import { MobileGuestNav, DesktopGuestNav } from "common/TopNav/GuestNav";
-import { MobileUserNav, DesktopUserNav } from "common/TopNav/UserNav";
-import { MobileOpsNav, DesktopOpsNav } from "common/TopNav/OpsNav";
-import { MobileAdminNav, DesktopAdminNav } from "common/TopNav/AdminNav";
+import { MobileGuestNav, DesktopGuestNav } from 'common/TopNav/GuestNav';
+import { MobileUserNav, DesktopUserNav } from 'common/TopNav/UserNav';
+import { MobileOpsNav, DesktopOpsNav } from 'common/TopNav/OpsNav';
+import { MobileAdminNav, DesktopAdminNav } from 'common/TopNav/AdminNav';
 
 class TopNav extends Component {
   constructor(props) {
@@ -24,38 +25,38 @@ class TopNav extends Component {
   }
 
   handleLogin = () => {
-    logModalView("/login");
-    this.routing.push("/main");
-    this.modalStore.toggleModal("login");
+    logModalView('/login');
+    this.routing.push('/main');
+    this.modalStore.toggleModal('login');
   };
 
   handleSignup = () => {
-    logModalView("/signup-zip");
-    this.routing.push("/main");
-    this.modalStore.toggleModal("signup");
+    logModalView('/signup-zip');
+    this.routing.push('/main');
+    this.modalStore.toggleModal('signup');
   };
 
   handleLogo = (e) => {
     if (this.userStore.user) {
-      this.props.store.routing.push("/main");
+      this.props.store.routing.push('/main');
       this.productStore.resetSearch();
     } else {
-      this.props.store.routing.push("/");
+      this.props.store.routing.push('/');
     }
     e.preventDefault();
   };
 
   handleInvite = () => {
-    logModalView("/refer");
+    logModalView('/refer');
     this.hideAccountDropdown();
-    this.modalStore.toggleModal("referral");
+    this.modalStore.toggleModal('referral');
   };
 
   handleLogout = () => {
     this.checkoutStore.cart = null;
     this.checkoutStore.order = null;
     this.hideAccountDropdown();
-    this.props.store.routing.push("/");
+    this.props.store.routing.push('/');
     this.userStore.logout();
   };
 
@@ -100,22 +101,22 @@ class TopNav extends Component {
   };
 
   handleSchedulePickup = () => {
-    logModalView("/schedulePickup");
+    logModalView('/schedulePickup');
     this.hideAccountDropdown();
-    this.modalStore.toggleModal("schedulepickup");
+    this.modalStore.toggleModal('schedulepickup');
   };
 
   handleReferralModal = (e) => {
     if (this.userStore.user) {
-      logModalView("/refer");
-      this.modalStore.toggleModal("referral");
+      logModalView('/refer');
+      this.modalStore.toggleModal('referral');
     } else {
-      this.routing.push("/help/detail/5c3d0df2fc84ff404f3b9eca");
+      this.routing.push('/help/detail/5c3d0df2fc84ff404f3b9eca');
     }
   };
 
   handleBannerClick = (e) => {
-    this.routing.push("/latest-news");
+    this.routing.push('/latest-news');
   };
 
   hideAccountDropdown = () => {
@@ -123,7 +124,7 @@ class TopNav extends Component {
   };
 
   handleNavBackers = () => {
-    this.props.store.routing.push("/backers");
+    this.props.store.routing.push('/backers');
   };
 
   handleMobileNavBackers = () => {
@@ -133,7 +134,7 @@ class TopNav extends Component {
 
   handleRedeemDepositClick = () => {
     this.hideAccountDropdown();
-    this.modalStore.toggleModal("redeemdeposit");
+    this.modalStore.toggleModal('redeemdeposit');
   };
 
   render() {
@@ -142,35 +143,35 @@ class TopNav extends Component {
     const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
     const { hideNavMobile } = this.uiStore;
     let bannerText =
-      "We’re working hard to restock - try next week if you don’t see something!";
+      'We’re working hard to restock - try next week if you don’t see something!';
 
     if (this.userStore.user) {
       !this.userStore.user.name && this.userStore.setUserData(null);
       const user = this.userStore.user;
       storeCredit = user.packaging_balance;
-      name = user.name.split(" ")[0];
+      name = user.name.split(' ')[0];
     } else {
       storeCredit = 0;
     }
 
-    let dropdownClass = "dropdown-menu dropdown-menu-right profile-dropdown";
+    let dropdownClass = 'dropdown-menu dropdown-menu-right profile-dropdown';
     if (this.uiStore.accountDropdown) {
-      dropdownClass += " show";
+      dropdownClass += ' show';
     }
 
-    let headerWrapClass = "header-wrap";
+    let headerWrapClass = 'header-wrap';
     if (this.uiStore.navMobile) {
-      headerWrapClass += " nav-open";
+      headerWrapClass += ' nav-open';
     }
 
-    let topBarClass = "top-bar d-none";
+    let topBarClass = 'top-bar d-none';
     if (this.uiStore.topBar) {
-      topBarClass = "top-bar";
-      headerWrapClass += " top-bar-open";
+      topBarClass = 'top-bar';
+      headerWrapClass += ' top-bar-open';
     }
 
-    const isHomePage = this.routing.location.pathname === "/";
-    const isProductPage = this.routing.location.pathname.includes("/main");
+    const isHomePage = this.routing.location.pathname === '/';
+    const isProductPage = this.routing.location.pathname.includes('/main');
 
     return (
       // Mobile Nav Modal
@@ -232,9 +233,9 @@ class TopNav extends Component {
 
         <header
           className={`aw-header navbar-white ${
-            isAdmin || isOps ? "admin-navbar" : ""
-          } ${isHomePage ? "" : "util-bg-color-white"} ${
-            isProductPage ? " aw-absolute" : ""
+            isAdmin || isOps ? 'admin-navbar' : ''
+          } ${isHomePage ? '' : 'util-bg-color-white'} ${
+            isProductPage ? ' aw-absolute' : ''
           }`}
         >
           {/* Banner that Only guests and users should see */}
@@ -289,6 +290,15 @@ class TopNav extends Component {
                               Help
                             </Link>
                           )}
+                          {(isOps || isOpsLead) && (
+                            <Typography
+                              variant="body2"
+                              style={{ marginRight: '1.25rem' }}
+                            >
+                              {/* ex: July 6th, 2020 */}
+                              {moment().local().format('MMMM Do, YYYY')}
+                            </Typography>
+                          )}
                           <button
                             onClick={this.handleToggle}
                             className="btn btn-transparent"
@@ -297,12 +307,12 @@ class TopNav extends Component {
                             aria-expanded="true"
                           >
                             <span>
-                              Hello {name}{" "}
+                              Hello {name}{' '}
                               <i
                                 className="fa fa-caret-down"
                                 aria-hidden="true"
                               >
-                                {" "}
+                                {' '}
                               </i>
                             </span>
                           </button>
@@ -400,4 +410,4 @@ class TopNav extends Component {
   }
 }
 
-export default connect("store")(TopNav);
+export default connect('store')(TopNav);

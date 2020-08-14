@@ -66,8 +66,6 @@ class Homepage extends Component {
           console.log(user.type);
           if (user.type === 'admin') {
             this.routing.push('/manage/retail');
-          } else if (user.type === 'tws_ops') {
-            this.routing.push('/ops-overview');
           } else {
             this.routing.push('/main');
           }

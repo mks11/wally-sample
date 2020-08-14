@@ -24,7 +24,7 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
       {/* PICK PACK */}
 
       <li>
-        <Link to="/pick-pack" onClick={hideNav}>
+        <Link to="/pick-pack">
           <MobileNavLinkText>Pick/Pack</MobileNavLinkText>
         </Link>
       </li>

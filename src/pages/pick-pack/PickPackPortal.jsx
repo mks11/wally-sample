@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
+import styled from 'styled-components';
 
 import { connect } from 'utils';
 import { API_GET_TODAYS_ORDERS, API_VALIDATE_PICK_PACK_ORDERS } from 'config';
@@ -60,27 +68,55 @@ function StatusText({ status }) {
   );
 }
 
+const CardHeaderWrapper = styled(Grid)`
+  ${'' /* padding: 1rem;
+  background-color: #97adff; */}
+`;
+
+const CardHeaderLink = styled(Link)`
+  padding: 1rem;
+  background-color: #97adff;
+  width: 100%;
+  text-decoration: none;
+`;
+
+const CardHeaderLinkText = styled(Typography)`
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+`;
+
+const StatusTextWrapper = styled(Grid)`
+  padding: 1rem;
+  padding-top: 0;
+  background-color: #97adff;
+`;
+
 function CardHeader({ orderId, status }) {
   return (
     <>
-      <Grid
+      <CardHeaderWrapper container alignItems="center" justify="center">
+        <CardHeaderLink to={`/order-fulfillment/${orderId}`}>
+          <CardHeaderLinkText variant="h4" component="span">
+            Order {orderId}
+          </CardHeaderLinkText>
+        </CardHeaderLink>
+      </CardHeaderWrapper>
+      <StatusTextWrapper
         container
-        alignItems="center"
         justify="center"
-        className={styles.cardHeader}
+        alignItems="center"
+        spacing={2}
       >
-        <Grid className={styles.subTitle} component="h3" item>
-          <Link to={`/order-fulfillment/${orderId}`}>Order {orderId}</Link>
-        </Grid>
-        <Grid item>
-          <StatusIcon status={status} />
-        </Grid>
-      </Grid>
-      <Grid container justify="center" className={styles.statusText}>
         <Grid item>
           <StatusText status={status} />
         </Grid>
-      </Grid>
+
+        <Grid item>
+          <StatusIcon status={status} />
+        </Grid>
+      </StatusTextWrapper>
     </>
   );
 }
@@ -91,12 +127,12 @@ function OrderCardContent({ orderLabel, returnLabel }) {
       <Grid container justify="space-evenly" alignItems="center">
         <Grid item className={styles.labelLink}>
           <a href={orderLabel} alt="Order Label">
-            Order Label
+            <Typography variant="body2">Order Label</Typography>
           </a>
         </Grid>
         <Grid item className={styles.labelLink}>
           <a href={returnLabel} alt="Return Label">
-            Return Label
+            <Typography variant="body2">Return Label</Typography>
           </a>
         </Grid>
       </Grid>
@@ -134,19 +170,20 @@ class PickPackPortal extends Component {
 
     this.modalStore = props.store.modal;
     this.userStore = props.store.user;
+    this.loadingStore = props.store.loading;
   }
 
   componentDidMount() {
-    this.userStore.getStatus();
-    this.fetchTodaysOrders();
-    console.log(this.userStore);
+    this.loadingStore.toggle();
+    this.fetchTodaysOrders().then(() => {
+      this.loadingStore.toggle();
+    });
   }
 
   fetchTodaysOrders = async () => {
     const url = API_GET_TODAYS_ORDERS;
     const res = await axios.get(url);
     const { ordersAndLabels } = res.data;
-
     this.setState({ ordersAndLabels });
   };
 
@@ -174,8 +211,10 @@ class PickPackPortal extends Component {
     const { isOpsLead } = this.userStore;
 
     return (
-      <div>
-        <h2 className={styles.title}>Pick/Pack Orders</h2>
+      <Container maxWidth="lg" disableGutters>
+        <Typography variant="h1" align="center" gutterBottom>
+          Pick/Pack Orders
+        </Typography>
         <Grid container justify="flex-start">
           {this.state.ordersAndLabels.sort(sortOrders).map((orderDetails) => {
             return (
@@ -207,7 +246,7 @@ class PickPackPortal extends Component {
             </Button>
           </div>
         ) : null}
-      </div>
+      </Container>
     );
   }
 }

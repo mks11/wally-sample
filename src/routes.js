@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Homepage from './pages/Homepage';
@@ -48,10 +48,10 @@ import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';
+import OrderFulfillment from 'pages/pick-pack/OrderFulfillmentPage';
 
 function Routes({ store }) {
   const { user } = store;
-
   return (
     <Switch>
       {/* Admin Routes (NOT CRAWLED) */}
@@ -74,6 +74,12 @@ function Routes({ store }) {
         exact
         path="/pick-pack"
         component={PickPackPortal}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/order-fulfillment/:id"
+        component={OrderFulfillment}
         userStore={user}
       />
       <Route
@@ -161,7 +167,7 @@ function Routes({ store }) {
 
 function OpsRoute({ component: Component, userStore, ...rest }) {
   const { isOps, isOpsLead } = userStore;
-  console.log(isOpsLead);
+
   return (
     <Route
       {...rest}
