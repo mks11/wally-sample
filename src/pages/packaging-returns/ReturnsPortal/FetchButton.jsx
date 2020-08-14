@@ -1,12 +1,11 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { Observer } from "mobx-react";
-import PropTypes from "prop-types";
-import { Snackbar, Grid, Button } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import axios from "axios";
-import { connect } from "utils";
+import React, { Fragment, useState, useEffect } from 'react';
+import { Observer } from 'mobx-react';
+import PropTypes from 'prop-types';
+import { Snackbar, Grid, Button, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import axios from 'axios';
 
-function FetchButton({
+export default function FetchButton({
   title,
   loadTitle,
   onSuccessMsg,
@@ -14,7 +13,7 @@ function FetchButton({
   onCompletion,
   url,
   autoHideDuration = 3000,
-  user: userStore,
+  userStore,
 }) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -46,6 +45,7 @@ function FetchButton({
   };
 
   useEffect(() => {
+    userStore.getStatus();
     if (onSuccessMsg) {
       setShowSuccess(true);
     }
@@ -60,14 +60,18 @@ function FetchButton({
             autoHideDuration={autoHideDuration}
             onClose={() => setShowSuccess(false)}
           >
-            <Alert severity="success">{onSuccessMsg}</Alert>
+            <Alert severity="success" onClose={() => setShowSuccess(false)}>
+              {onSuccessMsg}
+            </Alert>
           </Snackbar>
           <Snackbar
             open={showError}
             autoHideDuration={autoHideDuration + 1000}
             onClose={() => setShowError(false)}
           >
-            <Alert severity="error">{onErrorMsg}</Alert>
+            <Alert severity="error" onClose={() => setShowError(false)}>
+              {onErrorMsg}
+            </Alert>
           </Snackbar>
           <Grid container justify="center">
             <Button
@@ -75,8 +79,11 @@ function FetchButton({
               variant="contained"
               disabled={loading}
               onClick={handleSubmit}
+              style={{ color: '#fff', borderRadius: '50px', margin: '1rem 0' }}
             >
-              {loading ? loadingTitle : title}
+              <Typography variant="body1">
+                {loading ? loadingTitle : title}
+              </Typography>
             </Button>
           </Grid>
         </Fragment>
@@ -92,14 +99,6 @@ FetchButton.propTypes = {
   onErrorMsg: PropTypes.string,
   onCompletion: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  userStore: PropTypes.object.isRequired,
   autoHideDuration: PropTypes.number.isRequired,
 };
-
-// wrapped because connecting store to functional component giving hooks error
-class _FetchButton extends React.Component {
-  render() {
-    return <FetchButton {...this.props} />;
-  }
-}
-
-export default connect("store")(_FetchButton);

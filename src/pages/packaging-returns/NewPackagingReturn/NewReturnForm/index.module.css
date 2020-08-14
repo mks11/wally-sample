@@ -6,8 +6,7 @@
 .pseudoInputContainer {
   height: 40vh;
   overflow: auto;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding: 0.5rem;
   box-shadow: 1px 1px 4px 0px #bbb inset;
   background-color: #fafafa;
 }

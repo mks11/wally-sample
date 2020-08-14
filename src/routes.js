@@ -47,8 +47,14 @@ import VendorProfile from './pages/vendor/VendorProfile';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
+
+// Pick/Pack
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';
 import OrderFulfillment from 'pages/pick-pack/OrderFulfillmentPage';
+
+// Packaging Returns
+import PackagingReturnsPortal from 'pages/packaging-returns/ReturnsPortal';
+import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
 
 function Routes({ store }) {
   const { user } = store;
@@ -70,6 +76,7 @@ function Routes({ store }) {
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/manage/products" component={ManageProducts} />
       {/* Ops Routes (NOT CRAWLED) */}
+      {/* Pick/Pack */}
       <OpsRoute
         exact
         path="/pick-pack"
@@ -78,10 +85,24 @@ function Routes({ store }) {
       />
       <OpsRoute
         exact
-        path="/order-fulfillment/:orderId"
+        path="/pick-pack/:orderId"
         component={OrderFulfillment}
         userStore={user}
       />
+      {/* Packaging Returns */}
+      <OpsRoute
+        exact
+        path="/packaging-returns"
+        component={PackagingReturnsPortal}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/packaging-returns/new"
+        component={NewPackagingReturn}
+        userStore={user}
+      />
+      {/* Old Copacker Routes */}
       <Route
         exact
         path="/manage/co-packing/outbound"

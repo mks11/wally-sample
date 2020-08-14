@@ -1,39 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { Observer } from "mobx-react";
-import styles from "./ReturnsTab.module.css";
-import Tab from "./../shared/Tab";
-import FetchButton from "./FetchButton";
-import { Typography, Button, Grid, CircularProgress } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { groupBy } from "lodash-es";
+import React, { useEffect, useState } from 'react';
+import { Observer } from 'mobx-react';
+import styles from './ReturnsTab.module.css';
+import Tab from './../shared/Tab';
+import FetchButton from './FetchButton';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { FixedSizeList } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { groupBy } from 'lodash-es';
 
-import { AddCircle } from "@material-ui/icons";
-import axios from "axios";
+import { AddCircle } from '@material-ui/icons';
+import axios from 'axios';
 import {
   API_GET_TODAYS_PACKAGING_RETURNS,
   API_GET_PACKAGING_RETURNS_JOB,
-} from "../../../config";
-import { connect } from "utils";
-import Row from "./Row";
-import { sortByTimestampDes } from "utils";
-export const STATUS_RECEIVED = "received";
-export const STATUS_RETURNED = "returned";
+} from '../../../config';
+import { connect } from 'utils';
+import Row from './Row';
+import { sortByTimestampDes } from 'utils';
+export const STATUS_RECEIVED = 'received';
+export const STATUS_RETURNED = 'returned';
 
 function sortItemsByStatus(items) {
-  const { received, returned } = groupBy(items, "status");
-  return [
-    ...sortByTimestampDes(received, "return_date"),
-    ...sortByTimestampDes(returned, "return_date"),
-  ];
+  const grouped = groupBy(items, 'status');
+  const numGroups = Object.keys(grouped).length;
+  if (numGroups > 1) {
+    const { received, returned } = grouped;
+    return [
+      ...sortByTimestampDes(received, 'return_date'),
+      ...sortByTimestampDes(returned, 'return_date'),
+    ];
+  } else {
+    return sortByTimestampDes(items, 'return_date');
+  }
 }
 
-function ReturnsTab({ store: { user: userStore } }) {
+function ReturnsPortal({ store: { user: userStore, loading: loadingStore } }) {
   const [returnItems, setReturnItems] = useState([]);
-  const [loading, setLoading] = useState(true); // default true .. so that no empty msg is shown at the load
   const [error, setError] = useState();
-  const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState("");
+  const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState('');
   const { token } = userStore;
 
   const fetchTodaysPackagingReturns = async () => {
@@ -45,6 +50,7 @@ function ReturnsTab({ store: { user: userStore } }) {
         Authorization: `Bearer ${token.accessToken}`,
       },
     });
+
     return details;
   };
 
@@ -57,29 +63,24 @@ function ReturnsTab({ store: { user: userStore } }) {
   useEffect(() => {
     (async () => {
       try {
-        setLoading(true);
+        loadingStore.toggle();
         userStore.getStatus();
         const returnItems = await fetchTodaysPackagingReturns();
-        setReturnItems(sortItemsByStatus(returnItems));
+        if (returnItems.length) {
+          setReturnItems(sortItemsByStatus(returnItems));
+        }
       } catch (e) {
-        setError("Failed to get packaging returns");
+        console.error(e);
+        setError('Failed to get packaging returns');
       } finally {
-        setLoading(false);
+        loadingStore.toggle();
       }
     })();
   }, []);
 
-  const OnEmpty = () => (
-    <Typography> No returns have been processed today. </Typography>
-  );
-  const OnError = () => <Typography color="error"> {error} </Typography>;
-
   const Status = () => {
-    if (loading) {
-      return <CircularProgress />;
-    }
     if (error) {
-      return <OnError />;
+      return <OnError error={error} />;
     }
     return <OnEmpty />;
   };
@@ -97,15 +98,18 @@ function ReturnsTab({ store: { user: userStore } }) {
               <Grid container justify="center">
                 <Button
                   to={{
-                    pathname: "/pick-pack-returns/packaging-return/new",
+                    pathname: '/packaging-returns/new',
                     state: { token: token.accessToken },
                   }}
+                  variant="contained"
+                  color="primary"
+                  style={{ color: '#fff' }}
                   fullWidth={true}
                   component={Link}
                   startIcon={<AddCircle />}
-                  size={"large"}
+                  size={'large'}
                 >
-                  New Return
+                  <Typography variant="body1">New Return</Typography>
                 </Button>
               </Grid>
               <div className={styles.listContainer}>
@@ -134,12 +138,13 @@ function ReturnsTab({ store: { user: userStore } }) {
               className={styles.submitButtonContainer}
             >
               <FetchButton
-                title={"Submit Returns"}
-                loadTitle={"Submitting ... "}
+                title={'Submit Returns'}
+                loadTitle={'Submitting ... '}
                 onCompletion={handleCompletionReturns}
-                onErrorMsg={"Submission failed!"}
+                onErrorMsg={'Submission failed!'}
                 onSuccessMsg={successMsgOnReturnSubmit}
                 url={API_GET_PACKAGING_RETURNS_JOB}
+                userStore={userStore}
               />
             </Grid>
           )}
@@ -149,12 +154,28 @@ function ReturnsTab({ store: { user: userStore } }) {
   );
 }
 
+function OnEmpty() {
+  return (
+    <Typography variant="body1">
+      No returns have been processed today.
+    </Typography>
+  );
+}
+
+function OnError({ error }) {
+  return (
+    <Typography color="error" variant="body1">
+      {error}
+    </Typography>
+  );
+}
+
 // needed to wrap it because connect("store") on CleaningUpdateForm
 // gives 'invalid hook call' error
-class _ReturnsTab extends React.Component {
+class _ReturnsPortal extends React.Component {
   render() {
-    return <ReturnsTab {...this.props} />;
+    return <ReturnsPortal {...this.props} />;
   }
 }
 
-export default connect("store")(_ReturnsTab);
+export default connect('store')(_ReturnsPortal);

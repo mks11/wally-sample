@@ -95,7 +95,7 @@ function CardHeader({ orderId, status }) {
   return (
     <>
       <CardHeaderWrapper container alignItems="center" justify="center">
-        <CardHeaderLink to={`/order-fulfillment/${orderId}`}>
+        <CardHeaderLink to={`/pick-pack/${orderId}`}>
           <CardHeaderLinkText variant="h4" component="span">
             Order {orderId}
           </CardHeaderLinkText>

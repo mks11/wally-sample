@@ -1,49 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, FieldArray, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { Grid, Snackbar, FormHelperText } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import Typography from "@material-ui/core/Typography";
-import axios from "axios";
-import { API_POST_PACKAGING_RETURNS } from "../../../../config";
-import TrackingDialogInput from "./TrackingDialogInput";
-import { withRouter } from "react-router-dom";
-import FormikScanInputComponent from "./FormikScanInputComponent";
-import styles from "./index.module.css";
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { Grid, Snackbar, FormHelperText } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+import { API_POST_PACKAGING_RETURNS } from '../../../../config';
+import TrackingDialogInput from './TrackingDialogInput';
+import { withRouter } from 'react-router-dom';
+import FormikScanInputComponent from './FormikScanInputComponent';
+import styles from './index.module.css';
 
-const SUCCESS_COMPLETED = "successType1";
-const SUCCESS_REQUIRES_TRACKING = "successType2";
-const SUCCESS_NOT_COMPLETED = "successType3";
+const SUCCESS_COMPLETED = 'successType1';
+const SUCCESS_REQUIRES_TRACKING = 'successType2';
+const SUCCESS_NOT_COMPLETED = 'successType3';
 
+const COMPLETED_MESSAGE = 'Packaging return submitted successfully!';
 const NOT_COMPLETED_MESSAGE =
   "Packaging return couldn't be completed. Report sent to Ops team.";
-const ERROR_MESSAGE = "Submission failed, something went wrong!";
+const ERROR_MESSAGE = 'Submission failed, something went wrong!';
 
 const getCorrectTypeOfSuccess = (data = {}) => {
-  const { packagingReturn, message = "" } = data;
+  const { packagingReturn, message = '' } = data;
   const messageLC = message.toLowerCase();
   if (packagingReturn) {
     return SUCCESS_COMPLETED;
   } else if (
     // Expected Message: 'Enter the tracking number to complete the return.'
-    messageLC.includes("enter") &&
-    messageLC.includes("tracking")
+    messageLC.includes('enter') &&
+    messageLC.includes('tracking')
   ) {
     return SUCCESS_REQUIRES_TRACKING;
   } else if (
     //Expected Message: "Packaging return couldn't be completed. Report sent to Ops team."
-    messageLC.includes("report") &&
-    messageLC.includes("ops")
+    messageLC.includes('report') &&
+    messageLC.includes('ops')
   ) {
     return SUCCESS_NOT_COMPLETED;
   }
 };
 
-function NewReturnForm({ user_id, history, location }) {
+function NewReturnForm({ user_id, history, location, loadingStore }) {
   const [successType, setSuccessType] = useState();
   const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
   const [showNotCompletedAlert, setShowNotCompletedAlert] = useState(false);
+  const [showCompletedAlert, setShowCompletedAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const { token } = location.state || {};
 
@@ -55,8 +57,9 @@ function NewReturnForm({ user_id, history, location }) {
         setShowNotCompletedAlert(true);
       }
       if ([SUCCESS_NOT_COMPLETED, SUCCESS_COMPLETED].includes(successType)) {
+        setShowCompletedAlert(true);
         setTimeout(() => {
-          history.push("/pick-pack-returns");
+          history.push('/packaging-returns');
         }, 2400);
       }
     }
@@ -71,7 +74,7 @@ function NewReturnForm({ user_id, history, location }) {
   }, [isErrorOnSubmit]);
 
   const submitNewReturn = async ({
-    tracking_number = "",
+    tracking_number = '',
     packaging_urls,
     warehouse_associate_id,
   }) => {
@@ -87,13 +90,14 @@ function NewReturnForm({ user_id, history, location }) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     return response;
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
+      loadingStore.toggle();
       setErrorOnSubmit(false);
       const { status, data } = await submitNewReturn(values);
       if (status === 200) {
@@ -110,12 +114,24 @@ function NewReturnForm({ user_id, history, location }) {
     } finally {
       setSubmitting(false);
       setSuccessType(null);
+      loadingStore.toggle();
     }
   };
 
   return (
     <Grid container>
-      <Typography variant={"h5"}> Packaging </Typography>
+      <Typography variant={'h2'} gutterBottom>
+        Packaging
+      </Typography>
+      <Snackbar
+        open={showCompletedAlert}
+        autoHideDuration={6000}
+        onClose={() => setShowCompletedAlert(false)}
+      >
+        <Alert onClose={() => setShowCompletedAlert(false)} severity="success">
+          {COMPLETED_MESSAGE}
+        </Alert>
+      </Snackbar>
       <Snackbar
         open={showNotCompletedAlert}
         autoHideDuration={6000}
@@ -133,7 +149,7 @@ function NewReturnForm({ user_id, history, location }) {
       <Grid item container xs={12} justify="center">
         <Formik
           initialValues={{
-            tracking_number: "",
+            tracking_number: '',
             packaging_urls: [],
             warehouse_associate_id: user_id,
           }}
@@ -141,7 +157,7 @@ function NewReturnForm({ user_id, history, location }) {
           validationSchema={Yup.object({
             packaging_urls: Yup.array()
               .of(Yup.string())
-              .min(1, "Atleast have one item to submit")
+              .min(1, 'Atleast have one item to submit')
               .required(),
           })}
         >

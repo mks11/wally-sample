@@ -3,39 +3,54 @@ import PropTypes from 'prop-types';
 import QrReader from 'react-qr-reader';
 import LazyLoad from 'react-lazyload';
 import { isMobile } from 'react-device-detect';
-import { Paper, Snackbar, SnackbarContent } from '@material-ui/core';
-
-const styles = {
-  desktop: {
-    zindex: -1,
-    position: 'absolute',
-    left: '50%',
-    top: '40%',
-    width: '40vw',
-    height: '40vw',
-    transform: 'translate(-50%, -50%)',
-  },
-  mobile: {
-    zindex: 1,
-    position: 'absolute',
-    left: '50%',
-    top: '40%',
-    width: '80vw',
-    height: '80vw',
-    transform: 'translate(-50%, -50%)',
-  },
-  mobileLandscape: {
-    zindex: 1,
-    position: 'absolute',
-    left: '50%',
-    top: '25%',
-    width: '40vw',
-    height: '40vw',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+import {
+  Container,
+  Grid,
+  Paper,
+  Snackbar,
+  SnackbarContent,
+} from '@material-ui/core';
+import styled from 'styled-components';
 
 const REGEX_MATCH = /https:\/\/thewallyshop\.co\/packaging\/(.*)/;
+
+const ScannerBackdrop = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+`;
+
+const ScannerContainer = styled(Grid)`
+  height: 100%;
+`;
+
+const Scanner = styled(Paper)`
+  @media only screen and (max-width: 767px) {
+    z-index: 1;
+    position: relative;
+    width: 80vw;
+    height: 80vw;
+  }
+
+  @media only screen and (orientation: 'landscape') {
+    z-index: 1;
+    position: relative;
+    width: 40vw;
+    height: 40vw;
+  }
+
+  @media only screen and (min-width: 768px) {
+    z-index: -1;
+    width: 40vw;
+    height: 40vw;
+  }
+`;
 
 class ScannerQR extends Component {
   constructor(props) {
@@ -149,32 +164,28 @@ class ScannerQR extends Component {
     }
 
     return (
-      <div className="qr-modal">
-        <div className="backdrop qr-modal-backdrop">
-          <Paper
-            style={
-              isMobile
-                ? isPortrait
-                  ? styles.mobile
-                  : styles.mobileLandscape
-                : styles.desktop
-            }
-          >
-            <div className="qr-modal-control">
-              <button
-                className="btn-icon btn-icon--close"
-                onClick={this.handleCloseModal}
-              />
-            </div>
-            <LazyLoad>
-              <QrReader
-                delay={300}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                props
-              />
-            </LazyLoad>
-          </Paper>
+      <Container maxWidth="md">
+        <ScannerBackdrop>
+          <ScannerContainer container justify="center" alignItems="center">
+            <Grid item>
+              <Scanner>
+                <div className="qr-modal-control">
+                  <button
+                    className="btn-icon btn-icon--close"
+                    onClick={this.handleCloseModal}
+                  />
+                </div>
+                <LazyLoad>
+                  <QrReader
+                    delay={300}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    props
+                  />
+                </LazyLoad>
+              </Scanner>
+            </Grid>
+          </ScannerContainer>
 
           <Snackbar
             autoHideDuration={1000}
@@ -188,8 +199,8 @@ class ScannerQR extends Component {
               message={isError ? messageError : messageSuccess}
             />
           </Snackbar>
-        </div>
-      </div>
+        </ScannerBackdrop>
+      </Container>
     );
   }
 }
