@@ -92,8 +92,6 @@ class QRCodeScanner extends Component {
       return null;
     }
 
-    // alert("renter portrait ", this.state.isPortrait)
-
     return (
       <LazyLoad>
         <div className="error">

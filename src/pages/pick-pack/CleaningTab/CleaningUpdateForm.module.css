@@ -1,0 +1,15 @@
+.FormRoot {
+  min-width: 6rem;
+}
+
+.container {
+  padding: 2rem;
+}
+
+.buttonContainer {
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.25rem 1.5rem;
+}

@@ -123,6 +123,8 @@ function Routes({ store }) {
         path="/manage/co-packing/runs/:runId"
         component={ManageCoPackingRunsSpecific}
       />
+      <Route exact path="/pick-pack-returns/" component={PickPackReturnsOverview} />
+      <Route exact path="/pick-pack-returns/order-fulfillment/:orderId" component={OrderFulfillment} />
       {/* Ambassador Routes (NOT CRAWLED) */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}
