@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
-import routes from './routes';
+import Routes from './routes';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 
 import TopNav from 'common/TopNav';
@@ -50,7 +50,9 @@ ReactDOM.render(
               <div className="app">
                 <Backdrop />
                 <TopNav />
-                <main className="aw-main aw-home">{routes}</main>
+                <main className="aw-main aw-home">
+                  <Routes store={store} />
+                </main>
                 <Footer />
                 <RootModal />
                 <LoadingSpinner />
