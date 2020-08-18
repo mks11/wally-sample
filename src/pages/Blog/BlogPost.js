@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { LazyLoadComponent } from "react-lazy-load-image-component";
 import styled from "styled-components";
-
+import "./BlogPost.module.css";
 import { logPageView, logEvent } from "services/google-analytics";
 import { connect } from "utils";
 
@@ -73,10 +73,14 @@ class BlogPost extends Component {
           alignItems="center"
           component="article"
         >
-          <ResponsiveText variant="h1" align="center" gutterBottom>
-            {post.title}
-          </ResponsiveText>
-          <BlogPostSubtitle author={author} postDate={posted_date} />
+          <Grid item xs={12}>
+            <ResponsiveText variant="h1" align="center" gutterBottom>
+              {post.title}
+            </ResponsiveText>
+          </Grid>
+          <Grid item xs={12}>
+            <BlogPostSubtitle author={author} postDate={posted_date} />
+          </Grid>
           <br />
           {post.body.length
             ? post.body.map((section) => {
@@ -166,11 +170,13 @@ function PostSection({ title, image, body }) {
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         <ResponsiveText variant="h2">{title}</ResponsiveText>
       </Grid>
-      <SectionImageMobile image={image} />
+      {image && <SectionImageMobile image={image} />}
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        <LazyLoadComponent>
-          <SectionImageFloated src={image.src} alt={image.alt} />
-        </LazyLoadComponent>
+        {image && (
+          <LazyLoadComponent>
+            <SectionImageFloated src={image.src} alt={image.alt} />
+          </LazyLoadComponent>
+        )}
         <ResponsiveText
           variant="body1"
           dangerouslySetInnerHTML={{ __html: body }}

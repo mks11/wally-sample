@@ -1,0 +1,6 @@
+@media only screen and (max-width: 566px) {
+  ul,
+  ol {
+    padding-left: 1rem;
+  }
+}
