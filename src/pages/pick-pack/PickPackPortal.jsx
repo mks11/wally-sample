@@ -68,11 +68,6 @@ function StatusText({ status }) {
   );
 }
 
-const CardHeaderWrapper = styled(Grid)`
-  ${'' /* padding: 1rem;
-  background-color: #97adff; */}
-`;
-
 const CardHeaderLink = styled(Link)`
   padding: 1rem;
   background-color: #97adff;
@@ -94,13 +89,13 @@ const StatusTextWrapper = styled(Grid)`
 function CardHeader({ orderId, status }) {
   return (
     <>
-      <CardHeaderWrapper container alignItems="center" justify="center">
+      <Grid container alignItems="center" justify="center">
         <CardHeaderLink to={`/pick-pack/${orderId}`}>
           <CardHeaderLinkText variant="h4" component="span">
             Order {orderId}
           </CardHeaderLinkText>
         </CardHeaderLink>
-      </CardHeaderWrapper>
+      </Grid>
       <StatusTextWrapper
         container
         justify="center"
@@ -207,33 +202,41 @@ class PickPackPortal extends Component {
 
   render() {
     const { isOpsLead } = this.userStore;
-
+    const { ordersAndLabels } = this.state;
     return (
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="lg">
         <Typography variant="h1" align="center" gutterBottom>
           Pick/Pack Orders
         </Typography>
         <Grid container justify="flex-start">
-          {this.state.ordersAndLabels.sort(sortOrders).map((orderDetails) => {
-            return (
-              <Grid
-                key={orderDetails.orderId}
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={4}
-                xl={4}
-              >
-                <OrderCard
-                  orderDetails={orderDetails}
-                  highlight={this.isHighlightedOrder(orderDetails.orderId)}
-                />
-              </Grid>
-            );
-          })}
+          {ordersAndLabels.length ? (
+            ordersAndLabels.sort(sortOrders).map((orderDetails) => {
+              return (
+                <Grid
+                  key={orderDetails.orderId}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={4}
+                  xl={4}
+                >
+                  <OrderCard
+                    orderDetails={orderDetails}
+                    highlight={this.isHighlightedOrder(orderDetails.orderId)}
+                  />
+                </Grid>
+              );
+            })
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="h2" align="center">
+                No orders have been received today.
+              </Typography>
+            </Grid>
+          )}
         </Grid>
-        {isOpsLead ? (
+        {isOpsLead && ordersAndLabels.length ? (
           <Grid container justify="center">
             <Grid item>
               <Button
