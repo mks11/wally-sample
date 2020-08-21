@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { Paper, Button, Grid, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 export const ScanQRButton = styled(Button)`
-  background-color: ${(props) => (props.disabled ? '#079d72' : '#97adff')};
+  min-width: 125px;
+  background-color: ${(props) => (props.disabled ? '#42E2B8' : '#2D82B7')};
   opacity: ${(props) => (props.disabled ? '0.7' : '1')};
   color: #fff;
   border-radius: 50px;

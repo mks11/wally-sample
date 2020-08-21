@@ -1,28 +1,32 @@
 import React, { useState, useCallback } from 'react';
 
 // Components
-import { Paper, Button, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid, Typography } from '@material-ui/core';
 import { ScanQRButton } from './PickPackComponents';
 
-import ScannerQR from 'common/ScannerQR';
+import QRScanner from 'common/QRScanner';
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
 
 function InputShippingTote({ field, ...props }) {
-  const [qrOpened, setQrOpened] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const openScanner = () => {
+    setIsScannerOpen(true);
+  };
 
-  const handleQRScan = useCallback((value) => {
+  const closeScanner = () => {
+    setIsScannerOpen(false);
+  };
+
+  const handleQRScan = (value) => {
     if (value) {
       // formik setFieldValue method
       props.onScan(field.name, value);
+      setScanProgress(scanProgress + 1);
     }
-    setQrOpened(false);
-  }, []);
-
-  const handleQROpen = useCallback(() => {
-    setQrOpened(true);
-  }, []);
+  };
 
   const disabled = field.value.includes('thewallyshop.co/packaging');
 
@@ -31,25 +35,29 @@ function InputShippingTote({ field, ...props }) {
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
           <Typography variant="body1">Tote {props.fieldIndex + 1}</Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            {scanProgress}/1 Scanned
+          </Typography>
         </Grid>
         <Grid item>
           <ScanQRButton
-            onClick={handleQROpen}
+            onClick={openScanner}
             disabled={disabled}
             variant="contained"
           >
             <Typography variant="body1">
-              {disabled ? 'QR Scanned' : 'Scan QR Code'}
+              {disabled ? 'Scanned' : 'Scan'}
             </Typography>
           </ScanQRButton>
         </Grid>
       </Grid>
-      <ScannerQR
-        dataId={null} // new parameter to handle specific input
-        isOpen={qrOpened}
-        onClose={handleQRScan}
-        messageSuccess="QR Scanned"
-        messageError="QR Scan error"
+      <QRScanner
+        isOpen={isScannerOpen}
+        closeScanner={closeScanner}
+        onScan={handleQRScan}
+        progressText={`Tote ${
+          props.fieldIndex + 1
+        } - ${scanProgress}/1 Scanned`}
       />
     </Paper>
   );

@@ -70,7 +70,7 @@ function StatusText({ status }) {
 
 const CardHeaderLink = styled(Link)`
   padding: 1rem;
-  background-color: #97adff;
+  background-color: #2d82b7;
   width: 100%;
   text-decoration: none;
 `;
@@ -246,7 +246,7 @@ class PickPackPortal extends Component {
                 style={{
                   margin: '1rem 0',
                   borderRadius: '50px',
-                  color: '#fff',
+                  color: '#07004D',
                 }}
               >
                 <Typography variant="body1">Validate Orders</Typography>
