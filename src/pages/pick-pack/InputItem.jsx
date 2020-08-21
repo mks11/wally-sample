@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 
 // Components
 import { Paper, Grid, Typography } from '@material-ui/core';
-import { ScanQRButton, ResetButton, ScanUPCButton } from './PickPackComponents';
+import { ScanQRButton, ResetButton } from './PickPackComponents';
 
 import QRScanner from 'common/QRScanner';
-import ScannerBarcode from 'common/ScannerBarcode';
+// import ScannerBarcode from 'common/ScannerBarcode';
 
 // CSS
 import styles from './OrderFulfillmentPage.module.css';
@@ -16,6 +16,7 @@ function InputItem({ field, ...props }) {
     name,
     packaging_urls,
     warehouse_location,
+    sku_id,
   } = field.value;
 
   // UPC State Management
@@ -142,9 +143,8 @@ function InputItem({ field, ...props }) {
             isOpen={isQRScannerOpen}
             onClose={closeQRScanner}
             onScan={handleQRScan}
-            scanMultiple
-            isScanningComplete={isScanningComplete()}
             progressText={`${productName} - ${qrScanProgress}/${customer_quantity}`}
+            expectedSku={sku_id}
             cameraDirection="user"
           />
         </Grid>
@@ -164,41 +164,3 @@ function InputItem({ field, ...props }) {
 }
 
 export default InputItem;
-
-// function InputCustomerJar({ index, onScan, value }) {
-//   const [qrOpened, setQrOpened] = useState(false);
-
-//   const handleQRScan = useCallback((v) => {
-//     if (v) {
-//       // formik setFieldValue method
-//       onScan(`packaging_urls.${index}`, v);
-//     }
-//     setQrOpened(false);
-//   }, []);
-
-//   const handleQROpen = useCallback(() => {
-//     setQrOpened(true);
-//   }, []);
-
-//   const disabled = value && value.includes('thewallyshop.co/packaging');
-
-//   return (
-//     <Grid item xs={12}>
-//       <ScanQRButton
-//         onClick={handleQROpen}
-//         variant="contained"
-//         disabled={disabled}
-//       >
-//         <Typography variant="body1">
-//           {disabled ? `Jar ${index + 1} Scanned` : `Scan Jar ${index + 1}`}
-//         </Typography>
-//       </ScanQRButton>
-//       <QRScanner
-//         isOpen={qrOpened}
-//         onClose={handleQRScan}
-//         messageSuccess="QR Scanned"
-//         messageError="QR Scan error"
-//       />
-//     </Grid>
-//   );
-// }

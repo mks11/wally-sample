@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import QrReader from 'react-qr-reader';
 import LazyLoad from 'react-lazyload';
@@ -13,6 +15,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import { Close } from '@material-ui/icons';
 import styled from 'styled-components';
+import { API_GET_PACKAGING_UNIT } from 'config';
 
 const ScannerContainer = styled(Container)`
   height: 100vh;
@@ -46,6 +49,7 @@ export default function QRScanner({
   onScan,
   onError,
   progressText,
+  expectedSku,
   cameraDirection = 'environment',
 }) {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
@@ -60,6 +64,15 @@ export default function QRScanner({
   const closeSnackbar = () => {
     setSnackbarMessage('');
     setIsSnackbarOpen(false);
+  };
+
+  const isProductExpired = (expDate) => {
+    const now = moment().utc().toDate();
+    return moment(expDate).isBefore(now);
+  };
+
+  const isIncorrectSku = (scannedSku, correctSku) => {
+    return scannedSku !== correctSku;
   };
 
   const handleScan = (qr) => {
@@ -77,10 +90,31 @@ export default function QRScanner({
       }
 
       if (packagingId) {
-        onScan(url);
-        // Reset error state
-        setEncounteredError(false);
-        openSnackbar(`Code ${packagingId} scanned successfully!`);
+        axios
+          .get(`${API_GET_PACKAGING_UNIT}${packagingId}`)
+          .then((res) => {
+            console.log(res);
+            const {
+              data: { expiration_date, sku_id },
+            } = res;
+            // Check expiration date
+            if (expiration_date && isProductExpired(expiration_date)) {
+              setEncounteredError(true);
+              openSnackbar('This Jar is expired, discard immediately! 🗑️');
+            } else if (sku_id && isIncorrectSku(sku_id, expectedSku)) {
+              setEncounteredError(true);
+              openSnackbar('This is not the correct product. 😕');
+            } else {
+              onScan(url);
+              // Reset error state
+              setEncounteredError(false);
+              openSnackbar(`Code ${packagingId} scanned successfully!`);
+            }
+          })
+          .catch((error) => {
+            // console.error(error);
+            handleError(error);
+          });
       }
     }
   };
