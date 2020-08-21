@@ -42,14 +42,12 @@ const Scanner = styled(Paper)`
 
 export default function QRScanner({
   isOpen,
-  closeScanner,
+  onClose,
   onScan,
   onError,
-  scanMultipleQrs,
   progressText,
   cameraDirection = 'environment',
 }) {
-  const [hasFinishedScanning, setHasFinishedScanning] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [encounteredError, setEncounteredError] = useState(false);
@@ -78,17 +76,11 @@ export default function QRScanner({
         openSnackbar("The code you scanned doesn't belong to The Wally Shop");
       }
 
-      if (packagingId && !hasFinishedScanning) {
+      if (packagingId) {
         onScan(url);
         // Reset error state
         setEncounteredError(false);
         openSnackbar(`Code ${packagingId} scanned successfully!`);
-        if (!scanMultipleQrs) {
-          setHasFinishedScanning(true);
-          setTimeout(() => {
-            closeScanner();
-          }, 2000);
-        }
       }
     }
   };
@@ -103,7 +95,7 @@ export default function QRScanner({
     <Drawer
       anchor="top"
       open={isOpen}
-      onClose={closeScanner}
+      onClose={onClose}
       ModalProps={{
         BackdropProps: { style: { backgroundColor: 'rgba(0, 0, 0, 0.85)' } },
       }}
@@ -124,7 +116,7 @@ export default function QRScanner({
         >
           <Close
             fontSize="inherit"
-            onClick={closeScanner}
+            onClick={onClose}
             style={{ color: '#fff' }}
           />
         </Grid>
@@ -146,7 +138,7 @@ export default function QRScanner({
                   <QrReader
                     onScan={handleScan}
                     onError={handleError}
-                    facingMode
+                    facingMode={cameraDirection}
                   />
                 </LazyLoad>
               </Scanner>

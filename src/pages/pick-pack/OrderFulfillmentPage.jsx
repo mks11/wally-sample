@@ -121,26 +121,29 @@ function OrderFulfillmentForm({
       // }}
       onSubmit={() => alert('foo')}
     >
-      {({ isSubmitting, setFieldValue }) => (
+      {({ isSubmitting, setFieldValue, values }) => (
         <Form>
-          {shipping_totes.map((_, idx) => (
-            <Field
-              key={`tote-${idx}`}
-              name={`shipping_totes.${idx}.packaging_url`}
-              component={InputShippingTote}
-              onScan={setFieldValue}
-              fieldIndex={idx}
-            />
-          ))}
-          {items.map((_, idx) => (
-            <Field
-              key={`item-${idx}`}
-              name={`items.${idx}`}
-              component={InputItem}
-              onScan={setFieldValue}
-              fieldIndex={idx}
-            />
-          ))}
+          {values.shipping_totes &&
+            values.shipping_totes.length > 0 &&
+            values.shipping_totes.map((_, idx) => (
+              <Field
+                key={`tote-${idx}`}
+                name={`shipping_totes.${idx}.packaging_url`}
+                component={InputShippingTote}
+                onScan={setFieldValue}
+                fieldIndex={idx}
+              />
+            ))}
+          {values.items &&
+            values.items.length &&
+            values.items.map((_, idx) => (
+              <Field
+                key={`item-${idx}`}
+                name={`items.${idx}`}
+                component={InputItem}
+                fieldIndex={idx}
+              />
+            ))}
           <Grid container justify="center" alignItems="center" spacing={4}>
             <Grid item>
               <Button
