@@ -86,6 +86,13 @@ class UserStore {
     return false;
   }
 
+  get userId() {
+    if (this.user) {
+      return this.user._id;
+    }
+    return undefined;
+  }
+
   togglePromoModal() {
     this.promoModal = !this.promoModal;
   }

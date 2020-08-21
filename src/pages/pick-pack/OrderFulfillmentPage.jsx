@@ -16,52 +16,116 @@ import { connect } from 'utils';
 import InputShippingTote from './InputShippingTote';
 import InputItem from './InputItem';
 
-function OrderFulfillmentForm({
-  fulfillmentOrder,
-  isWarehouseAssociate,
-  userId,
-  onSubmit,
-}) {
-  if (!fulfillmentOrder) return null;
+class OrderFulfillment extends Component {
+  constructor(props) {
+    super(props);
 
-  const { shipping_totes = [], items = [] } = fulfillmentOrder;
+    this.state = {
+      isWarehouseAssociate: false,
+      orderFulfillment: undefined,
+      userId: '',
+    };
+
+    const { orderId } = props.match.params;
+
+    this.orderId = orderId;
+    this.loadingStore = props.store.loading;
+    this.modalStore = props.store.modal;
+    this.userStore = props.store.user;
+  }
+
+  componentDidMount() {
+    const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${this.orderId}`;
+    this.loadingStore.toggle();
+    axios
+      .get(url)
+      .then((res) => {
+        const {
+          data: { orderFulfillmentDetails },
+        } = res;
+
+        this.setState({
+          isWarehouseAssociate: this.userStore.isOps,
+          orderFulfillment: orderFulfillmentDetails,
+          userId: this.userStore.userId,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        const { message } = err;
+        if (message) {
+          this.modalStore.toggleModal('error', message);
+        } else {
+          this.modalStore.toggleModal('error');
+        }
+      })
+      .finally(() => setTimeout(() => this.loadingStore.toggle(), 300));
+  }
+
+  render() {
+    return (
+      <Container maxWidth="md">
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            <Typography variant="h1" align="center" gutterBottom>
+              Order {this.orderId}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            {this.state.orderFulfillment ? (
+              <OrderFulfillmentForm {...this.state} />
+            ) : null}
+          </Grid>
+        </Grid>
+      </Container>
+    );
+  }
+}
+
+export default connect('store')(OrderFulfillment);
+
+function OrderFulfillmentForm({
+  isWarehouseAssociate,
+  orderFulfillment,
+  userId,
+}) {
+  // TODO REMOVE WHEN FINISHED DEBUGGING
+  console.log(isWarehouseAssociate, orderFulfillment, userId);
+  const { shipping_totes, items } = orderFulfillment;
 
   return (
     <Formik
       initialValues={{
-        shipping_totes: shipping_totes,
-        items: items,
+        shipping_totes,
+        items,
       }}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit();
-
-        const requestUrl = isWarehouseAssociate
-          ? `${API_UPDATE_ORDER_FULFILLMENT_DETAILS}${fulfillmentOrder.id}`
-          : `${API_VERIFY_ORDER_FULFILLMENT}${fulfillmentOrder.id}`;
-
-        axios
-          .patch(requestUrl, {
-            orderFulfillmentDetails: {
-              ...fulfillmentOrder,
-              ...values,
-              ...(isWarehouseAssociate
-                ? { warehouse_associate_id: userId }
-                : { shift_lead_id: userId }),
-            },
-          })
-          .then((res) => {
-            // all good
-          })
-          .finally(() => {
-            setSubmitting(false);
-          });
-      }}
+      //TODO REFACTOR INTO SEPARATE FUNCTION FOR CLARITY
+      // onSubmit={(values, { setSubmitting }) => {
+      //   const url = getOnSubmitEndpoint(isWarehouseAssociate, orderFulfillment.id);
+      //   axios
+      //     .patch(url, {
+      //       orderFulfillmentDetails: {
+      //         ...orderFulfillment,
+      //         ...values,
+      //         ...(isWarehouseAssociate
+      //           ? { warehouse_associate_id: userId }
+      //           : { shift_lead_id: userId }),
+      //       },
+      //     })
+      //     .then((res) => {
+      //       // all good
+      //     })
+      //     .finally(() => {
+      //       setSubmitting(false);
+      //     });
+      // }}
+      onSubmit={() => alert('foo')}
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form>
           {shipping_totes.map((_, idx) => (
             <Field
-              key={idx}
+              key={`tote-${idx}`}
               name={`shipping_totes.${idx}.packaging_url`}
               component={InputShippingTote}
               onScan={setFieldValue}
@@ -70,7 +134,7 @@ function OrderFulfillmentForm({
           ))}
           {items.map((_, idx) => (
             <Field
-              key={idx}
+              key={`item-${idx}`}
               name={`items.${idx}`}
               component={InputItem}
               onScan={setFieldValue}
@@ -102,74 +166,8 @@ function OrderFulfillmentForm({
   );
 }
 
-class OrderFulfillment extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      fulfillmentOrder: undefined,
-    };
-
-    this.userStore = props.store.user;
-    this.routing = props.store.routing;
-  }
-
-  componentDidMount() {
-    this.userStore
-      .getStatus(true)
-      .then(() => {
-        this.setState({
-          userId: this.userStore.user._id,
-          isWarehouseAssociate: this.userStore.isOps,
-        });
-        this.fetchOrder();
-      })
-      .catch((error) => {
-        console.error(error);
-        this.routing.push('/');
-      });
-  }
-
-  fetchOrder = async () => {
-    const { orderId } = this.props.match.params;
-    const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${orderId}`;
-    const res = await axios.get(url);
-    this.setState({ fulfillmentOrder: res.data.orderFulfillmentDetails });
-  };
-
-  handleSubmit = () => {
-    this.setState({
-      fulfillmentOrder: {
-        ...this.state.fulfillmentOrder,
-        status: this.state.isWarehouseAssociate
-          ? 'pending_quality_assurance'
-          : 'packaged',
-      },
-    });
-  };
-
-  render() {
-    const { orderId } = this.props.match.params;
-    return (
-      <Container maxWidth="md">
-        <Grid container justify="center">
-          <Grid item xs={12}>
-            <Typography variant="h1" align="center" gutterBottom>
-              Order {orderId}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <OrderFulfillmentForm
-              fulfillmentOrder={this.state.fulfillmentOrder}
-              isWarehouseAssociate={this.state.isWarehouseAssociate}
-              userId={this.state.userId}
-              onSubmit={this.handleSubmit}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    );
-  }
+function getOnSubmitEndpoint(isWarehouseAssociate, orderFulfillmentId) {
+  return isWarehouseAssociate
+    ? `${API_UPDATE_ORDER_FULFILLMENT_DETAILS}${orderFulfillmentId}`
+    : `${API_VERIFY_ORDER_FULFILLMENT}${orderFulfillmentId}`;
 }
-
-export default connect('store')(OrderFulfillment);
