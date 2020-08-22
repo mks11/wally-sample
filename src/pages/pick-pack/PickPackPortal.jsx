@@ -53,7 +53,7 @@ function StatusText({ status }) {
       break;
     case 'pending_quality_assurance':
       className = styles.pendingQA;
-      text = 'Pending Quality Assurance';
+      text = 'Pending Q/A';
       break;
     default:
       className = styles.received;
@@ -62,7 +62,7 @@ function StatusText({ status }) {
   }
 
   return (
-    <Typography variant="body1" className={className}>
+    <Typography variant="body1" className={className} align="center">
       {text}
     </Typography>
   );
@@ -119,12 +119,22 @@ function OrderCardContent({ orderLabel, returnLabel }) {
     <CardContent className={styles.cardContent}>
       <Grid container justify="space-evenly" alignItems="center">
         <Grid item className={styles.labelLink}>
-          <a href={orderLabel} alt="Order Label">
+          <a
+            href={orderLabel}
+            alt="Order Label"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Typography variant="body2">Order Label</Typography>
           </a>
         </Grid>
         <Grid item className={styles.labelLink}>
-          <a href={returnLabel} alt="Return Label">
+          <a
+            href={returnLabel}
+            alt="Return Label"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Typography variant="body2">Return Label</Typography>
           </a>
         </Grid>
@@ -168,32 +178,62 @@ class PickPackPortal extends Component {
 
   componentDidMount() {
     this.loadingStore.toggle();
-    this.fetchTodaysOrders().then(() => {
-      this.loadingStore.toggle();
-    });
+    this.fetchTodaysOrders()
+      .then((res) => {
+        const {
+          data: { ordersAndLabels },
+        } = res;
+
+        if (ordersAndLabels.length) {
+          this.setState({ ordersAndLabels });
+        }
+      })
+      .catch((err) => {
+        this.modalStore.toggleModal(
+          'error',
+          err.message ? err.message : undefined,
+        );
+      })
+      .finally(() => {
+        setTimeout(() => this.loadingStore.toggle(), 300);
+      });
   }
 
   fetchTodaysOrders = async () => {
-    const url = API_GET_TODAYS_ORDERS;
-    const res = await axios.get(url);
-    const { ordersAndLabels } = res.data;
-    this.setState({ ordersAndLabels });
+    return axios.get(API_GET_TODAYS_ORDERS, this.userStore.getHeaderAuth());
   };
 
   validateOrders = async () => {
-    const url = API_VALIDATE_PICK_PACK_ORDERS;
-    const res = await axios.get(url);
-    const { incompleteOrders } = res.data;
+    this.loadingStore.toggle();
+    const res = axios
+      .get(API_VALIDATE_PICK_PACK_ORDERS, this.userStore.getHeaderAuth())
+      .then((res) => {
+        const {
+          data: { incompleteOrders },
+        } = res;
 
-    if (incompleteOrders.length) {
-      this.modalStore.toggleModal(
-        'error',
-        'Some orders still need to be packed',
-      );
-      this.setState({ highlightedOrders: incompleteOrders });
-    } else {
-      this.setState({ showValidateOrders: false });
-    }
+        if (incompleteOrders && incompleteOrders.length) {
+          const numIncompleteOrders = incompleteOrders.length;
+          this.modalStore.toggleModal(
+            'error',
+            `${numIncompleteOrders} orders still need to be packed`,
+          );
+          this.setState({ highlightedOrders: incompleteOrders });
+        } else {
+          this.setState({
+            showValidateOrders: false,
+          });
+        }
+      })
+      .catch((err) => {
+        this.modalStore.toggleModal(
+          'error',
+          err.message ? err.message : undefined,
+        );
+      })
+      .finally(() => {
+        setTimeout(() => this.loadingStore.toggle(), 300);
+      });
   };
 
   isHighlightedOrder = (orderId) => {
@@ -203,6 +243,7 @@ class PickPackPortal extends Component {
   render() {
     const { isOpsLead } = this.userStore;
     const { ordersAndLabels } = this.state;
+
     return (
       <Container maxWidth="lg">
         <Typography variant="h1" align="center" gutterBottom>
@@ -236,7 +277,7 @@ class PickPackPortal extends Component {
             </Grid>
           )}
         </Grid>
-        {isOpsLead && ordersAndLabels.length ? (
+        {isOpsLead && ordersAndLabels.length && (
           <Grid container justify="center">
             <Grid item>
               <Button
@@ -253,7 +294,7 @@ class PickPackPortal extends Component {
               </Button>
             </Grid>
           </Grid>
-        ) : null}
+        )}
       </Container>
     );
   }
