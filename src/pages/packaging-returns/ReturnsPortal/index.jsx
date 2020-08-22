@@ -84,7 +84,7 @@ function ReturnsPortal({
       {() => (
         <Tab title="Returns" maxWidth="sm">
           <Grid container justify="center" spacing={4}>
-            {userStore.user && userStore.isOpsLead && returnItems.length && (
+            {userStore.user && userStore.isOpsLead && returnItems.length > 0 && (
               <Grid item xs={6}>
                 <FetchButton
                   title={'Submit Returns'}
