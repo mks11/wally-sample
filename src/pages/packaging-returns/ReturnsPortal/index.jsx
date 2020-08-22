@@ -35,23 +35,18 @@ function sortItemsByStatus(items) {
   }
 }
 
-function ReturnsPortal({ store: { user: userStore, loading: loadingStore } }) {
+function ReturnsPortal({
+  store: { user: userStore, loading: loadingStore, modal: modalStore },
+}) {
   const [returnItems, setReturnItems] = useState([]);
-  const [error, setError] = useState();
   const [successMsgOnReturnSubmit, setSuccessMsgOnReturnSubmit] = useState('');
   const { token } = userStore;
 
   const fetchTodaysPackagingReturns = async () => {
-    const url = API_GET_TODAYS_PACKAGING_RETURNS;
-    const {
-      data: { details },
-    } = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-      },
-    });
-
-    return details;
+    return axios.get(
+      API_GET_TODAYS_PACKAGING_RETURNS,
+      userStore.getHeaderAuth(),
+    );
   };
 
   const handleCompletionReturns = ({ status, data: { message } }) => {
@@ -61,112 +56,89 @@ function ReturnsPortal({ store: { user: userStore, loading: loadingStore } }) {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        loadingStore.toggle();
-        userStore.getStatus();
-        const returnItems = await fetchTodaysPackagingReturns();
-        if (returnItems.length) {
+    loadingStore.toggle();
+    fetchTodaysPackagingReturns()
+      .then((res) => {
+        const {
+          data: { details },
+        } = res;
+
+        if (details.length) {
           setReturnItems(sortItemsByStatus(returnItems));
         }
-      } catch (e) {
-        console.error(e);
-        setError('Failed to get packaging returns');
-      } finally {
-        loadingStore.toggle();
-      }
-    })();
+      })
+      .catch((err) => {
+        modalStore.toggleModal('error', err.message ? err.message : undefined);
+      })
+      .finally(() => setTimeout(() => loadingStore.toggle(), 300));
   }, []);
-
-  const Status = () => {
-    if (error) {
-      return <OnError error={error} />;
-    }
-    return <OnEmpty />;
-  };
 
   return (
     <Observer>
       {() => (
         <Tab title="Returns" className={styles.tabContainer} maxWidth="sm">
-          {returnItems.length === 0 ? (
-            <Grid container justify="center">
-              <Status />
+          <Grid container justify="center" spacing={4}>
+            <Grid item>
+              <Button
+                to={{
+                  pathname: '/packaging-returns/new',
+                  state: { token: token.accessToken },
+                }}
+                variant="contained"
+                color="primary"
+                style={{ color: '#fff' }}
+                fullWidth={true}
+                component={Link}
+                startIcon={<AddCircle />}
+                size={'large'}
+              >
+                <Typography variant="body1">New Return</Typography>
+              </Button>
             </Grid>
-          ) : (
-            <div className={styles.contentContainer}>
-              <Grid container justify="center">
-                <Button
-                  to={{
-                    pathname: '/packaging-returns/new',
-                    state: { token: token.accessToken },
-                  }}
-                  variant="contained"
-                  color="primary"
-                  style={{ color: '#fff' }}
-                  fullWidth={true}
-                  component={Link}
-                  startIcon={<AddCircle />}
-                  size={'large'}
-                >
-                  <Typography variant="body1">New Return</Typography>
-                </Button>
+            {userStore.user && userStore.isOpsLead && returnItems.length && (
+              <Grid item>
+                <FetchButton
+                  title={'Submit Returns'}
+                  loadTitle={'Submitting ... '}
+                  onCompletion={handleCompletionReturns}
+                  onErrorMsg={'Submission failed!'}
+                  onSuccessMsg={successMsgOnReturnSubmit}
+                  url={API_GET_PACKAGING_RETURNS_JOB}
+                  userStore={userStore}
+                />
               </Grid>
-              <div className={styles.listContainer}>
-                <AutoSizer>
-                  {({ height, width }) => {
-                    return (
-                      <FixedSizeList
-                        height={height}
-                        width={width}
-                        itemSize={80}
-                        itemCount={returnItems.length}
-                        itemData={returnItems}
-                      >
-                        {Row}
-                      </FixedSizeList>
-                    );
-                  }}
-                </AutoSizer>
+            )}
+            {returnItems.length ? (
+              <div className={styles.contentContainer}>
+                <div className={styles.listContainer}>
+                  <AutoSizer>
+                    {({ height, width }) => {
+                      return (
+                        <FixedSizeList
+                          height={height}
+                          width={width}
+                          itemSize={80}
+                          itemCount={returnItems.length}
+                          itemData={returnItems}
+                        >
+                          {Row}
+                        </FixedSizeList>
+                      );
+                    }}
+                  </AutoSizer>
+                </div>
               </div>
-            </div>
-          )}
-          {userStore.user && userStore.isOpsLead && (
-            <Grid
-              container
-              justify="center"
-              className={styles.submitButtonContainer}
-            >
-              <FetchButton
-                title={'Submit Returns'}
-                loadTitle={'Submitting ... '}
-                onCompletion={handleCompletionReturns}
-                onErrorMsg={'Submission failed!'}
-                onSuccessMsg={successMsgOnReturnSubmit}
-                url={API_GET_PACKAGING_RETURNS_JOB}
-                userStore={userStore}
-              />
-            </Grid>
-          )}
+            ) : (
+              <Grid item>
+                <Typography variant="body1">
+                  No returns have been processed today.
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
         </Tab>
       )}
     </Observer>
-  );
-}
-
-function OnEmpty() {
-  return (
-    <Typography variant="body1">
-      No returns have been processed today.
-    </Typography>
-  );
-}
-
-function OnError({ error }) {
-  return (
-    <Typography color="error" variant="body1">
-      {error}
-    </Typography>
   );
 }
 
