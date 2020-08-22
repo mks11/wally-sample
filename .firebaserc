@@ -7,6 +7,9 @@
       "hosting": {
         "staging": [
           "the-wally-shop-test"
+        ],
+        "production": [
+          "the-wally-shop"
         ]
       }
     }
