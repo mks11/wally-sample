@@ -48,6 +48,7 @@ export default function QRScanner({
   onClose,
   onScan,
   onError,
+  shouldCheckPackagingDetails,
   progressText,
   expectedSku,
   cameraDirection = 'environment',
@@ -89,7 +90,7 @@ export default function QRScanner({
         openSnackbar("The code you scanned doesn't belong to The Wally Shop");
       }
 
-      if (packagingId) {
+      if (packagingId && shouldCheckPackagingDetails) {
         axios
           .get(`${API_GET_PACKAGING_UNIT}${packagingId}`)
           .then((res) => {
@@ -107,7 +108,7 @@ export default function QRScanner({
             } else {
               onScan(url);
               // Reset error state
-              setEncounteredError(false);
+              encounteredError && setEncounteredError(false);
               openSnackbar(`Code ${packagingId} scanned successfully!`);
             }
           })
@@ -115,6 +116,11 @@ export default function QRScanner({
             // console.error(error);
             handleError(error);
           });
+      } else if (packagingId) {
+        onScan(url);
+        // Reset error state
+        encounteredError && setEncounteredError(false);
+        openSnackbar(`Code ${packagingId} scanned successfully!`);
       }
     }
   };

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -15,7 +15,7 @@ import {
 import { Delete as DeleteIcon } from '@material-ui/icons';
 
 import SelectOneDialog from './OnMissingOptions.dialog';
-import ScannerQR from 'common/ScannerQR';
+import QRScanner from 'common/QRScanner';
 
 // CSS
 import styled from 'styled-components';
@@ -23,18 +23,19 @@ import styles from './index.module.css';
 
 export default function ScanInputContainer({
   remove,
-  unshift,
+  push,
   form: {
     values: { packaging_urls },
     isSubmitting,
   },
+  modalStore,
 }) {
   const [showOptionsOnMissing, setShowOptionsOnMissing] = useState(false);
 
   const handleClose = (v) => {
     setShowOptionsOnMissing(false);
     if (v) {
-      unshift(v);
+      push(v);
     }
   };
 
@@ -42,8 +43,10 @@ export default function ScanInputContainer({
     setShowOptionsOnMissing(true);
   };
 
-  const handleScanCompletion = (urls) => {
-    urls.forEach((url) => unshift(url));
+  const handleScan = (qr) => {
+    if (!packaging_urls.includes(qr)) {
+      push(qr);
+    }
   };
 
   return (
@@ -97,7 +100,7 @@ export default function ScanInputContainer({
           <MissingQR onClick={handleMissingQRCode} />
         </Grid>
         <Grid container item xs={6} justify="center">
-          <ScanQRCode onScanCompletion={handleScanCompletion} />
+          <ScanQRCode handleScan={handleScan} modalStoore={modalStore} />
         </Grid>
       </Grid>
     </>
@@ -130,30 +133,14 @@ function MissingQR({ onClick }) {
     </MissingQRButton>
   );
 }
-
-function makeURLFromId(id) {
-  return `https://thewallyshop.co/packaging/${id}`;
-}
-
-function ScanQRCode({ onScanCompletion }) {
-  const [qrOpened, setQrOpened] = useState(false);
-
-  const handleQROpen = useCallback(() => {
-    setQrOpened(true);
-  }, []);
-
-  const handleQRScan = useCallback((packaging_ids = []) => {
-    if (packaging_ids) {
-      const urls = packaging_ids.map((id) => makeURLFromId(id));
-      onScanCompletion(urls);
-    }
-    setQrOpened(false);
-  });
+function ScanQRCode({ handleScan, modalStore }) {
+  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
+  const toggleQrScanner = () => setIsQrScannerOpen(!isQrScannerOpen);
 
   return (
     <Grid item xs={12}>
       <ScanQRButton
-        onClick={handleQROpen}
+        onClick={toggleQrScanner}
         variant="contained"
         fullWidth={true}
         color={'primary'}
@@ -161,12 +148,12 @@ function ScanQRCode({ onScanCompletion }) {
       >
         <Typography variant="body1">Scan QR</Typography>
       </ScanQRButton>
-      <ScannerQR
-        dataId={null} // new parameter to handle specific input
-        isOpen={qrOpened}
-        onClose={handleQRScan}
-        messageSuccess="QR Scanned"
-        messageError="QR Scan error"
+      <QRScanner
+        isOpen={isQrScannerOpen}
+        onClose={toggleQrScanner}
+        onScan={handleScan}
+        onError={() => modalStore.toggleModal('error')}
+        cameraDirection="user"
       />
     </Grid>
   );

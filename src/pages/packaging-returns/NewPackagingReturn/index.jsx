@@ -6,7 +6,7 @@ import styles from './index.module.css';
 import { Observer } from 'mobx-react';
 
 function NewPackagingReturn({
-  store: { user: userStore, loading: loadingStore },
+  store: { user: userStore, loading: loadingStore, modal: modalStore },
 }) {
   const user_id = userStore.user && userStore.user._id;
 
@@ -22,6 +22,7 @@ function NewPackagingReturn({
             user_id={user_id}
             loadingStore={loadingStore}
             userStore={userStore}
+            modalStore={modalStore}
           />
         </Page>
       )}

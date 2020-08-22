@@ -11,7 +11,13 @@ import { withRouter } from 'react-router-dom';
 import FormikScanInputComponent from './FormikScanInputComponent';
 import styles from './index.module.css';
 
-function NewReturnForm({ user_id, history, loadingStore, userStore }) {
+function NewReturnForm({
+  user_id,
+  history,
+  loadingStore,
+  modalStore,
+  userStore,
+}) {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
@@ -114,6 +120,7 @@ function NewReturnForm({ user_id, history, loadingStore, userStore }) {
             <FieldArray
               name="packaging_urls"
               component={FormikScanInputComponent}
+              modalStore={modalStore}
             />
             <ErrorMessage
               name="packaging_urls"
