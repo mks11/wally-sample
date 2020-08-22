@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 import axios from 'axios';
 import {
   Button,
@@ -15,6 +16,7 @@ import Cancel from '@material-ui/icons/Cancel';
 import styled from 'styled-components';
 
 import { connect } from 'utils';
+import { getEndOfDay } from 'services/date';
 import { API_GET_TODAYS_ORDERS, API_VALIDATE_PICK_PACK_ORDERS } from 'config';
 
 // Styles
@@ -165,15 +167,17 @@ function sortOrders(a, b) {
 class PickPackPortal extends Component {
   constructor(props) {
     super(props);
-
+    const { cookies } = props;
     this.state = {
       ordersAndLabels: [],
       highlightedOrders: [],
+      ordersWereValidated: cookies.get('ordersWereValidated') || false,
     };
 
     this.modalStore = props.store.modal;
     this.userStore = props.store.user;
     this.loadingStore = props.store.loading;
+    this.cookies = cookies;
   }
 
   componentDidMount() {
@@ -205,7 +209,7 @@ class PickPackPortal extends Component {
 
   validateOrders = async () => {
     this.loadingStore.toggle();
-    const res = axios
+    axios
       .get(API_VALIDATE_PICK_PACK_ORDERS, this.userStore.getHeaderAuth())
       .then((res) => {
         const {
@@ -220,9 +224,19 @@ class PickPackPortal extends Component {
           );
           this.setState({ highlightedOrders: incompleteOrders });
         } else {
+          this.cookies.set('ordersWereValidated', true, {
+            expires: getEndOfDay(),
+          });
+
           this.setState({
             showValidateOrders: false,
+            ordersWereValidated: true,
           });
+
+          this.modalStore.toggleModal(
+            'success',
+            'Todays were completed successfully!',
+          );
         }
       })
       .catch((err) => {
@@ -242,7 +256,7 @@ class PickPackPortal extends Component {
 
   render() {
     const { isOpsLead } = this.userStore;
-    const { ordersAndLabels } = this.state;
+    const { ordersAndLabels, ordersWereValidated } = this.state;
 
     return (
       <Container maxWidth="lg">
@@ -284,10 +298,11 @@ class PickPackPortal extends Component {
                 color="secondary"
                 variant="contained"
                 onClick={this.validateOrders}
+                disabled={ordersWereValidated}
                 style={{
                   margin: '1rem 0',
                   borderRadius: '50px',
-                  color: '#07004D',
+                  color: ordersWereValidated ? '#a6a6a6' : '#07004D',
                 }}
               >
                 <Typography variant="body1">Validate Orders</Typography>
@@ -300,4 +315,4 @@ class PickPackPortal extends Component {
   }
 }
 
-export default connect('store')(PickPackPortal);
+export default withCookies(connect('store')(PickPackPortal));

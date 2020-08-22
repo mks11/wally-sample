@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import Routes from './routes';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-
+import { CookiesProvider } from 'react-cookie';
 import TopNav from 'common/TopNav';
 import Footer from './common/Footer';
 import ScrollToTop from './common/ScrollToTop';
@@ -45,20 +45,22 @@ ReactDOM.render(
     <StylesProvider injectFirst>
       <Provider store={store}>
         <Router history={history}>
-          <ScrollSpy>
-            <ScrollToTop>
-              <div className="app">
-                <Backdrop />
-                <TopNav />
-                <main className="aw-main aw-home">
-                  <Routes store={store} />
-                </main>
-                <Footer />
-                <RootModal />
-                <LoadingSpinner />
-              </div>
-            </ScrollToTop>
-          </ScrollSpy>
+          <CookiesProvider>
+            <ScrollSpy>
+              <ScrollToTop>
+                <div className="app">
+                  <Backdrop />
+                  <TopNav />
+                  <main className="aw-main aw-home">
+                    <Routes store={store} />
+                  </main>
+                  <Footer />
+                  <RootModal />
+                  <LoadingSpinner />
+                </div>
+              </ScrollToTop>
+            </ScrollSpy>
+          </CookiesProvider>
         </Router>
       </Provider>
     </StylesProvider>
