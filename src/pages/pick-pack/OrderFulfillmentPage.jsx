@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import axios from 'axios';
 
 // Components
@@ -64,7 +64,7 @@ class OrderFulfillment extends Component {
 
   render() {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         <Grid container justify="center">
           <Grid item xs={12}>
             <Typography variant="h1" align="center" gutterBottom>
@@ -73,7 +73,11 @@ class OrderFulfillment extends Component {
           </Grid>
           <Grid item xs={12}>
             {this.state.orderFulfillment ? (
-              <OrderFulfillmentForm {...this.state} />
+              <OrderFulfillmentForm
+                {...this.state}
+                loadingStore={this.loadingStore}
+                modalStore={this.modalStore}
+              />
             ) : null}
           </Grid>
         </Grid>
@@ -88,10 +92,13 @@ function OrderFulfillmentForm({
   isWarehouseAssociate,
   orderFulfillment,
   userId,
+  loadingStore,
+  modalStore,
 }) {
-  // TODO REMOVE WHEN FINISHED DEBUGGING
-  console.log(isWarehouseAssociate, orderFulfillment, userId);
-  const { shipping_totes, items } = orderFulfillment;
+  const { shipping_totes, items, status } = orderFulfillment;
+  const [orderWasVerified, setOrderWasVerified] = useState(
+    status === 'packaged' || false,
+  );
 
   return (
     <Formik
@@ -100,31 +107,46 @@ function OrderFulfillmentForm({
         items,
       }}
       //TODO REFACTOR INTO SEPARATE FUNCTION FOR CLARITY
-      // onSubmit={(values, { setSubmitting }) => {
-      //   const url = getOnSubmitEndpoint(isWarehouseAssociate, orderFulfillment.id);
-      //   axios
-      //     .patch(url, {
-      //       orderFulfillmentDetails: {
-      //         ...orderFulfillment,
-      //         ...values,
-      //         ...(isWarehouseAssociate
-      //           ? { warehouse_associate_id: userId }
-      //           : { shift_lead_id: userId }),
-      //       },
-      //     })
-      //     .then((res) => {
-      //       // all good
-      //     })
-      //     .finally(() => {
-      //       setSubmitting(false);
-      //     });
-      // }}
-      onSubmit={() => alert('foo')}
+      onSubmit={(values, { setSubmitting }) => {
+        const url = getOnSubmitEndpoint(
+          isWarehouseAssociate,
+          orderFulfillment.id,
+        );
+        loadingStore.toggle();
+        axios
+          .patch(url, {
+            orderFulfillmentDetails: {
+              ...orderFulfillment,
+              ...values,
+              ...(isWarehouseAssociate
+                ? { warehouse_associate_id: userId }
+                : { shift_lead_id: userId }),
+              status: isWarehouseAssociate
+                ? 'pending_quality_assurance'
+                : 'packaged',
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              modalStore.toggleModal('success');
+              if (!isWarehouseAssociate) {
+                setOrderWasVerified(true);
+              }
+            }
+          })
+          .catch((err) => {
+            modalStore.toggleModal('error');
+          })
+          .finally(() => {
+            setSubmitting(false);
+            setTimeout(() => loadingStore.toggle(), 300);
+          });
+      }}
     >
       {({ isSubmitting, setFieldValue, values }) => (
         <Form>
           {values.shipping_totes &&
-            values.shipping_totes.length > 0 &&
+            values.shipping_totes.length &&
             values.shipping_totes.map((_, idx) => (
               <Field
                 key={`tote-${idx}`}
@@ -132,6 +154,7 @@ function OrderFulfillmentForm({
                 component={InputShippingTote}
                 onScan={setFieldValue}
                 fieldIndex={idx}
+                modalStore={modalStore}
               />
             ))}
           {values.items &&
@@ -142,6 +165,7 @@ function OrderFulfillmentForm({
                 name={`items.${idx}`}
                 component={InputItem}
                 fieldIndex={idx}
+                modalStore={modalStore}
               />
             ))}
           <Grid container justify="center" alignItems="center" spacing={4}>
@@ -149,7 +173,7 @@ function OrderFulfillmentForm({
               <Button
                 color="secondary"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || orderWasVerified}
                 variant="contained"
                 style={{
                   margin: '1rem 0',
