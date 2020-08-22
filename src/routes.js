@@ -59,7 +59,7 @@ import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
 // Packaging Inventory
 import PackagingInventoryPortal from 'pages/packaging-inventory/';
 
-function Routes({ store }) {
+function Routes({ store, ...props }) {
   const { user } = store;
   return (
     <Switch>
@@ -112,6 +112,19 @@ function Routes({ store }) {
         component={PackagingInventoryPortal}
         userStore={user}
       />
+      {/* Copacking */}
+      <OpsRoute
+        exact
+        path="/manage/co-packing/runs"
+        component={ManageCoPackingRuns}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/manage/co-packing/runs/:runId"
+        component={ManageCoPackingRunsSpecific}
+        userStore={user}
+      />
       {/* Old Copacker Routes */}
       <Route
         exact
@@ -122,16 +135,6 @@ function Routes({ store }) {
         exact
         path="/manage/co-packing/inbound"
         component={InboundShipments}
-      />
-      <Route
-        exact
-        path="/manage/co-packing/runs"
-        component={ManageCoPackingRuns}
-      />
-      <Route
-        exact
-        path="/manage/co-packing/runs/:runId"
-        component={ManageCoPackingRunsSpecific}
       />
       {/* Ambassador Routes (NOT CRAWLED) */}
       <Route exact path="/packaging/:id" component={Mainpage} />
@@ -197,13 +200,14 @@ function Routes({ store }) {
 }
 
 function OpsRoute({ component: Component, userStore, ...rest }) {
-  const { isOps, isOpsLead } = userStore;
+  userStore.getStatus();
+  const { isOps, isOpsLead, isAdmin } = userStore;
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (isOps || isOpsLead) {
+        if (isOps || isOpsLead || isAdmin) {
           return <Component {...rest} {...props} />;
         } else {
           return (
