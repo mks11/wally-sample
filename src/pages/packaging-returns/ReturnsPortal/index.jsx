@@ -56,7 +56,11 @@ function ReturnsPortal({
     );
   };
 
-  const handleCompletionReturns = ({ status, data: { message } }) => {
+  const handleCompletionReturns = (response) => {
+    const {
+      status,
+      data: { message },
+    } = response;
     if (status === 200) {
       setSuccessMsgOnReturnSubmit(message);
     }
@@ -77,7 +81,7 @@ function ReturnsPortal({
         modalStore.toggleModal('error', err.message ? err.message : undefined);
       })
       .finally(() => setTimeout(() => loadingStore.toggle(), 300));
-  }, []);
+  }, [successMsgOnReturnSubmit]);
 
   return (
     <Observer>
@@ -94,6 +98,7 @@ function ReturnsPortal({
                   onSuccessMsg={successMsgOnReturnSubmit}
                   url={API_GET_PACKAGING_RETURNS_JOB}
                   userStore={userStore}
+                  loadingStore={loadingStore}
                 />
               </Grid>
             )}

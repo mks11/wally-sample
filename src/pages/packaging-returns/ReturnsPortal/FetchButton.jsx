@@ -14,6 +14,7 @@ export default function FetchButton({
   url,
   autoHideDuration = 3000,
   userStore,
+  loadingStore,
 }) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -21,27 +22,24 @@ export default function FetchButton({
 
   const loadingTitle = loadTitle || title;
 
-  const { token } = userStore;
-
-  const makeRequest = async (URL) => {
-    const response = await axios.get(URL, {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-      },
-    });
-    return response;
+  const runReturnsJob = async (URL) => {
+    return axios.get(URL, userStore.getHeaderAuth());
   };
 
   const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const response = await makeRequest(url);
-      onCompletion(response);
-    } catch (e) {
-      setShowError(true);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    loadingStore.toggle();
+    runReturnsJob(url)
+      .then((res) => {
+        onCompletion(res);
+      })
+      .catch((err) => {
+        setShowError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+        loadingStore.toggle();
+      });
   };
 
   useEffect(() => {
