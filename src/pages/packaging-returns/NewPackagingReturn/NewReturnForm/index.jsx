@@ -63,7 +63,7 @@ function NewReturnForm({
           openSnackbar('Packaging return submitted successfully!', 'success');
           setTimeout(() => {
             history.push('/packaging-returns');
-          }, 2400);
+          }, 1500);
         } else if (messageLC && messageLC.includes('tracking')) {
           setShowTrackingInputDialog(true);
         } else if (messageLC && messageLC.includes('report')) {
@@ -71,6 +71,9 @@ function NewReturnForm({
             "Packaging return couldn't be completed. Report sent to Ops team.",
             'info',
           );
+          setTimeout(() => {
+            history.push('/packaging-returns');
+          }, 1500);
         }
       })
       .catch((error) => {
