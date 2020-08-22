@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { Snackbar, Grid, Button, Typography } from '@material-ui/core';
+import { Snackbar, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
-
+import { SecondaryWallyButton } from 'styled-component-lib/Buttons';
 export default function FetchButton({
   title,
   loadTitle,
@@ -74,17 +74,16 @@ export default function FetchButton({
             </Alert>
           </Snackbar>
           <Grid container justify="center">
-            <Button
-              color="primary"
-              variant="contained"
+            <SecondaryWallyButton
               disabled={loading}
               onClick={handleSubmit}
-              style={{ color: '#fff', borderRadius: '50px', margin: '1rem 0' }}
+              fullWidth
+              size="large"
             >
               <Typography variant="body1">
                 {loading ? loadingTitle : title}
               </Typography>
-            </Button>
+            </SecondaryWallyButton>
           </Grid>
         </Fragment>
       )}

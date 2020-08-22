@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Observer } from 'mobx-react';
-import styles from './ReturnsTab.module.css';
-import Tab from './../shared/Tab';
-import FetchButton from './FetchButton';
-import { Typography, Button, Grid } from '@material-ui/core';
+import { groupBy } from 'lodash-es';
+import axios from 'axios';
+
+// Packaged Components
 import { Link } from 'react-router-dom';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { groupBy } from 'lodash-es';
-
+import { Typography, Grid } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
-import axios from 'axios';
+
+// Wally Components
+import Tab from './../shared/Tab';
+import FetchButton from './FetchButton';
+import Row from './Row';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Routes
 import {
   API_GET_TODAYS_PACKAGING_RETURNS,
   API_GET_PACKAGING_RETURNS_JOB,
 } from '../../../config';
+
+// Utilities
 import { connect } from 'utils';
-import Row from './Row';
 import { sortByTimestampDes } from 'utils';
 export const STATUS_RECEIVED = 'received';
 export const STATUS_RETURNED = 'returned';
@@ -62,9 +69,8 @@ function ReturnsPortal({
         const {
           data: { details },
         } = res;
-
         if (details.length) {
-          setReturnItems(sortItemsByStatus(returnItems));
+          setReturnItems(sortItemsByStatus(details));
         }
       })
       .catch((err) => {
@@ -76,27 +82,10 @@ function ReturnsPortal({
   return (
     <Observer>
       {() => (
-        <Tab title="Returns" className={styles.tabContainer} maxWidth="sm">
+        <Tab title="Returns" maxWidth="sm">
           <Grid container justify="center" spacing={4}>
-            <Grid item>
-              <Button
-                to={{
-                  pathname: '/packaging-returns/new',
-                  state: { token: token.accessToken },
-                }}
-                variant="contained"
-                color="primary"
-                style={{ color: '#fff' }}
-                fullWidth={true}
-                component={Link}
-                startIcon={<AddCircle />}
-                size={'large'}
-              >
-                <Typography variant="body1">New Return</Typography>
-              </Button>
-            </Grid>
             {userStore.user && userStore.isOpsLead && returnItems.length && (
-              <Grid item>
+              <Grid item xs={6}>
                 <FetchButton
                   title={'Submit Returns'}
                   loadTitle={'Submitting ... '}
@@ -108,26 +97,38 @@ function ReturnsPortal({
                 />
               </Grid>
             )}
+            <Grid item xs={userStore.isOpsLead ? 6 : 12}>
+              <PrimaryWallyButton
+                to={{
+                  pathname: '/packaging-returns/new',
+                  state: { token: token.accessToken },
+                }}
+                fullWidth={true}
+                component={Link}
+                startIcon={<AddCircle />}
+                size={'large'}
+              >
+                <Typography variant="body1">New Return</Typography>
+              </PrimaryWallyButton>
+            </Grid>
             {returnItems.length ? (
-              <div className={styles.contentContainer}>
-                <div className={styles.listContainer}>
-                  <AutoSizer>
-                    {({ height, width }) => {
-                      return (
-                        <FixedSizeList
-                          height={height}
-                          width={width}
-                          itemSize={80}
-                          itemCount={returnItems.length}
-                          itemData={returnItems}
-                        >
-                          {Row}
-                        </FixedSizeList>
-                      );
-                    }}
-                  </AutoSizer>
-                </div>
-              </div>
+              <Grid item xs={12} style={{ height: '80vh' }}>
+                <AutoSizer>
+                  {({ height, width }) => {
+                    return (
+                      <FixedSizeList
+                        height={height}
+                        width={width}
+                        itemSize={80}
+                        itemCount={returnItems.length}
+                        itemData={returnItems}
+                      >
+                        {Row}
+                      </FixedSizeList>
+                    );
+                  }}
+                </AutoSizer>
+              </Grid>
             ) : (
               <Grid item>
                 <Typography variant="body1">
