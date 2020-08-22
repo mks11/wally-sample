@@ -38,7 +38,7 @@ class OrderFulfillment extends Component {
     const url = `${API_GET_ORDER_FULFILLMENT_DETAILS}${this.orderId}`;
     this.loadingStore.toggle();
     axios
-      .get(url)
+      .get(url, this.userStore.getHeaderAuth())
       .then((res) => {
         const {
           data: { orderFulfillmentDetails },
@@ -75,6 +75,7 @@ class OrderFulfillment extends Component {
             {this.state.orderFulfillment ? (
               <OrderFulfillmentForm
                 {...this.state}
+                userStore={this.userStore}
                 loadingStore={this.loadingStore}
                 modalStore={this.modalStore}
               />
@@ -94,6 +95,7 @@ function OrderFulfillmentForm({
   userId,
   loadingStore,
   modalStore,
+  userStore,
 }) {
   const { shipping_totes, items, status } = orderFulfillment;
   const [orderWasVerified, setOrderWasVerified] = useState(
@@ -114,18 +116,22 @@ function OrderFulfillmentForm({
         );
         loadingStore.toggle();
         axios
-          .patch(url, {
-            orderFulfillmentDetails: {
-              ...orderFulfillment,
-              ...values,
-              ...(isWarehouseAssociate
-                ? { warehouse_associate_id: userId }
-                : { shift_lead_id: userId }),
-              status: isWarehouseAssociate
-                ? 'pending_quality_assurance'
-                : 'packaged',
+          .patch(
+            url,
+            {
+              orderFulfillmentDetails: {
+                ...orderFulfillment,
+                ...values,
+                ...(isWarehouseAssociate
+                  ? { warehouse_associate_id: userId }
+                  : { shift_lead_id: userId }),
+                status: isWarehouseAssociate
+                  ? 'pending_quality_assurance'
+                  : 'packaged',
+              },
             },
-          })
+            userStore.getHeaderAuth(),
+          )
           .then((res) => {
             if (res.status === 200) {
               modalStore.toggleModal('success');
@@ -135,7 +141,10 @@ function OrderFulfillmentForm({
             }
           })
           .catch((err) => {
-            modalStore.toggleModal('error');
+            modalStore.toggleModal(
+              'error',
+              err.message ? err.message : undefined,
+            );
           })
           .finally(() => {
             setSubmitting(false);
