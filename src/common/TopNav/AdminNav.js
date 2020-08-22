@@ -1,17 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   MobileNavLinkText,
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
-} from "./MobileStyledComponents";
+} from './MobileStyledComponents';
 
 import {
   DesktopDropdownMenuItem,
   DesktopDropdownMenuLink,
-} from "./DesktopNavComponents";
+} from './DesktopNavComponents';
 
 export function MobileAdminNav({ hideNav, handleSignout, userName }) {
   return (
@@ -25,6 +25,11 @@ export function MobileAdminNav({ hideNav, handleSignout, userName }) {
       <li>
         <Link to="/manage/retail" onClick={hideNav}>
           <MobileNavLinkText>Retail</MobileNavLinkText>
+        </Link>
+      </li>
+      <li>
+        <Link to="/manage/co-packing/runs" onClick={hideNav}>
+          <MobileNavLinkText>Manage Co-packing Runs</MobileNavLinkText>
         </Link>
       </li>
       <li>
@@ -90,6 +95,14 @@ export function DesktopAdminNav({ handleSignout, hideDropdown }) {
       <DesktopDropdownMenuItem>
         <DesktopDropdownMenuLink onClick={hideDropdown} to="/manage/retail">
           Retail
+        </DesktopDropdownMenuLink>
+      </DesktopDropdownMenuItem>
+      <DesktopDropdownMenuItem>
+        <DesktopDropdownMenuLink
+          onClick={hideDropdown}
+          to="/manage/co-packing/runs"
+        >
+          Manage Co-packing Runs
         </DesktopDropdownMenuLink>
       </DesktopDropdownMenuItem>
       <DesktopDropdownMenuItem>
