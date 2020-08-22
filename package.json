@@ -36,6 +36,7 @@
     "react-bootstrap": "^0.32.4",
     "react-bootstrap-typeahead": "^3.2.1",
     "react-click-outside": "github:tj/react-click-outside",
+    "react-cookie": "^4.0.3",
     "react-csv": "^1.1.1",
     "react-currency-input": "^1.3.6",
     "react-datepicker": "^1.7.0",
