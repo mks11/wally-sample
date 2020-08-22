@@ -18,7 +18,11 @@ function NewPackagingReturn({
           className={styles.pageContainer}
           maxWidth="sm"
         >
-          <NewReturnForm user_id={user_id} loadingStore={loadingStore} />
+          <NewReturnForm
+            user_id={user_id}
+            loadingStore={loadingStore}
+            userStore={userStore}
+          />
         </Page>
       )}
     </Observer>

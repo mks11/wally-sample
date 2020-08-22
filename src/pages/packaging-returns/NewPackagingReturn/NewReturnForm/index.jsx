@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Grid, Snackbar, FormHelperText } from '@material-ui/core';
@@ -11,111 +11,77 @@ import { withRouter } from 'react-router-dom';
 import FormikScanInputComponent from './FormikScanInputComponent';
 import styles from './index.module.css';
 
-const SUCCESS_COMPLETED = 'successType1';
-const SUCCESS_REQUIRES_TRACKING = 'successType2';
-const SUCCESS_NOT_COMPLETED = 'successType3';
-
-const COMPLETED_MESSAGE = 'Packaging return submitted successfully!';
-const NOT_COMPLETED_MESSAGE =
-  "Packaging return couldn't be completed. Report sent to Ops team.";
-const ERROR_MESSAGE = 'Submission failed, something went wrong!';
-
-const getCorrectTypeOfSuccess = (data = {}) => {
-  const { packagingReturn, message = '' } = data;
-  const messageLC = message.toLowerCase();
-  if (packagingReturn) {
-    return SUCCESS_COMPLETED;
-  } else if (
-    // Expected Message: 'Enter the tracking number to complete the return.'
-    messageLC.includes('enter') &&
-    messageLC.includes('tracking')
-  ) {
-    return SUCCESS_REQUIRES_TRACKING;
-  } else if (
-    //Expected Message: "Packaging return couldn't be completed. Report sent to Ops team."
-    messageLC.includes('report') &&
-    messageLC.includes('ops')
-  ) {
-    return SUCCESS_NOT_COMPLETED;
-  }
-};
-
-function NewReturnForm({ user_id, history, location, loadingStore }) {
-  const [successType, setSuccessType] = useState();
-  const [isErrorOnSubmit, setErrorOnSubmit] = useState(false);
+function NewReturnForm({ user_id, history, loadingStore, userStore }) {
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
   const [showTrackingInputDialog, setShowTrackingInputDialog] = useState(false);
-  const [showNotCompletedAlert, setShowNotCompletedAlert] = useState(false);
-  const [showCompletedAlert, setShowCompletedAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const { token } = location.state || {};
 
-  useEffect(() => {
-    if (successType === SUCCESS_REQUIRES_TRACKING) {
-      setShowTrackingInputDialog(true);
-    } else {
-      if (successType === SUCCESS_NOT_COMPLETED) {
-        setShowNotCompletedAlert(true);
-      }
-      if ([SUCCESS_NOT_COMPLETED, SUCCESS_COMPLETED].includes(successType)) {
-        setShowCompletedAlert(true);
-        setTimeout(() => {
-          history.push('/packaging-returns');
-        }, 2400);
-      }
-    }
-  }, [history, successType]);
+  const openSnackbar = (message, severity) => {
+    setIsSnackbarOpen(true);
+    setSnackbarText(message);
+    setSnackbarSeverity(severity);
+  };
 
-  useEffect(() => {
-    if (isErrorOnSubmit) {
-      setShowErrorAlert(true);
-    } else {
-      setShowErrorAlert(false);
-    }
-  }, [isErrorOnSubmit]);
+  const closeSnackbar = () => setIsSnackbarOpen(false);
 
-  const submitNewReturn = async ({
-    tracking_number = '',
-    packaging_urls,
-    warehouse_associate_id,
-  }) => {
-    const url = API_POST_PACKAGING_RETURNS;
-    const response = await axios.post(
-      url,
+  const submitNewReturn = async (packagingReturn) => {
+    const {
+      tracking_number = '',
+      packaging_urls,
+      warehouse_associate_id,
+    } = packagingReturn;
+
+    return axios.post(
+      API_POST_PACKAGING_RETURNS,
       {
         tracking_number,
         packaging_urls,
         warehouse_associate_id,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      userStore.getHeaderAuth(),
     );
-    return response;
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      loadingStore.toggle();
-      setErrorOnSubmit(false);
-      const { status, data } = await submitNewReturn(values);
-      if (status === 200) {
-        const successType = getCorrectTypeOfSuccess(data);
-        if (successType !== SUCCESS_REQUIRES_TRACKING) {
+    loadingStore.toggle();
+    submitNewReturn(values)
+      .then((res) => {
+        const {
+          data: { packagingReturn, message },
+        } = res;
+
+        const messageLC = message ? message.toLowerCase() : undefined;
+
+        if (packagingReturn) {
+          openSnackbar('Packaging return submitted successfully!', 'success');
+          setTimeout(() => {
+            history.push('/packaging-returns');
+          }, 2400);
+        } else if (messageLC && messageLC.includes('tracking')) {
+          setShowTrackingInputDialog(true);
           resetForm({
             tracking_number: [],
           });
+        } else if (messageLC && messageLC.includes('report')) {
+          openSnackbar(
+            "Packaging return couldn't be completed. Report sent to Ops team.",
+            'info',
+          );
         }
-        setSuccessType(successType);
-      }
-    } catch (e) {
-      setErrorOnSubmit(true);
-    } finally {
-      setSubmitting(false);
-      setSuccessType(null);
-      loadingStore.toggle();
-    }
+      })
+      .catch((error) => {
+        openSnackbar(
+          error.message
+            ? error.message
+            : 'Submission failed, something went wrong!',
+          'error',
+        );
+      })
+      .finally(() => {
+        setSubmitting(false);
+        setTimeout(() => loadingStore.toggle(), 300);
+      });
   };
 
   return (
@@ -123,29 +89,6 @@ function NewReturnForm({ user_id, history, location, loadingStore }) {
       <Typography variant={'h2'} gutterBottom>
         Packaging
       </Typography>
-      <Snackbar
-        open={showCompletedAlert}
-        autoHideDuration={6000}
-        onClose={() => setShowCompletedAlert(false)}
-      >
-        <Alert onClose={() => setShowCompletedAlert(false)} severity="success">
-          {COMPLETED_MESSAGE}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={showNotCompletedAlert}
-        autoHideDuration={6000}
-        onClose={() => setShowNotCompletedAlert(false)}
-      >
-        <Alert onClose={() => setShowNotCompletedAlert(false)} severity="info">
-          {NOT_COMPLETED_MESSAGE}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={showErrorAlert} onClose={() => setShowErrorAlert(false)}>
-        <Alert onClose={() => setShowErrorAlert(false)} severity="error">
-          {ERROR_MESSAGE}
-        </Alert>
-      </Snackbar>
       <Grid item container xs={12} justify="center">
         <Formik
           initialValues={{
@@ -180,6 +123,15 @@ function NewReturnForm({ user_id, history, location, loadingStore }) {
           </Form>
         </Formik>
       </Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity={snackbarSeverity}>
+          {snackbarText}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 }
