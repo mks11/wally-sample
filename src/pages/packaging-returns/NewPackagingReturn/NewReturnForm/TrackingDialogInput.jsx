@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   TextField,
@@ -8,19 +8,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@material-ui/core";
-import { useFormikContext } from "formik";
+} from '@material-ui/core';
+import { useFormikContext } from 'formik';
 
 export default function FormDialog({ show, setShow }) {
   const { values, submitForm, setFieldValue } = useFormikContext();
-  const [trackId, setTrackId] = useState(values["tracking_number"]);
+  const [trackId, setTrackId] = useState(values.tracking_number);
 
   const handleClose = () => {
     setShow(false);
   };
 
   const handleSubmit = () => {
-    setFieldValue("tracking_number", trackId, (v) => !v);
+    setFieldValue('tracking_number', trackId, (v) => !v);
   };
 
   const handleChange = (e) => {
@@ -28,11 +28,11 @@ export default function FormDialog({ show, setShow }) {
   };
 
   useEffect(() => {
-    if (values["tracking_number"]) {
+    if (values.tracking_number) {
       submitForm();
       setShow(false);
     }
-  }, [submitForm, values["tracking_number"]]); //once we know the value has updated submit
+  }, [values.tracking_number]); //once we know the value has updated submit
 
   return (
     <div>

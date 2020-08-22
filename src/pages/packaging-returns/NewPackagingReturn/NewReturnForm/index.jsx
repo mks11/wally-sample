@@ -66,9 +66,6 @@ function NewReturnForm({
           }, 2400);
         } else if (messageLC && messageLC.includes('tracking')) {
           setShowTrackingInputDialog(true);
-          resetForm({
-            tracking_number: [],
-          });
         } else if (messageLC && messageLC.includes('report')) {
           openSnackbar(
             "Packaging return couldn't be completed. Report sent to Ops team.",
