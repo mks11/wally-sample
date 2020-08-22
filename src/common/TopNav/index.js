@@ -22,6 +22,7 @@ class TopNav extends Component {
     this.uiStore = this.props.store.ui;
     this.routing = this.props.store.routing;
     this.productStore = this.props.store.product;
+    this.userStore.getStatus();
   }
 
   handleLogin = () => {
