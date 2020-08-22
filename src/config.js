@@ -179,9 +179,9 @@ export const API_VALIDATE_PICK_PACK_ORDERS =
 export const API_GET_ORDER_FULFILLMENT_DETAILS =
   BASE_URL + '/api/pick-pack/order-fulfillment/';
 export const API_UPDATE_ORDER_FULFILLMENT_DETAILS =
-  BASE_URL + '/api/pick-pack/order-fulfillment/:id';
+  BASE_URL + '/api/pick-pack/order-fulfillment/';
 export const API_VERIFY_ORDER_FULFILLMENT =
-  BASE_URL + '/api/pick-pack/order-fulfillment/verify/:id';
+  BASE_URL + '/api/pick-pack/order-fulfillment/verify/';
 
 // Packaging Returns Portal
 export const API_GET_TODAYS_PACKAGING_RETURNS =

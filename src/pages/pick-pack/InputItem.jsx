@@ -88,10 +88,13 @@ function InputItem({ field, ...props }) {
 
   return (
     <Paper className={styles.itemBlock}>
-      <Grid container justify="center" alignItems="flex-start" spacing={2}>
-        <Grid item xs={6}>
+      <Grid container justify="center" alignItems="center" spacing={2}>
+        <Grid item xs={12}>
           <Typography variant="h4" component="h2">
             {productName}
+          </Typography>
+          <Typography variant="body1" component="p">
+            {packaging_urls.length}/{customer_quantity} jars scanned
           </Typography>
           <Typography variant="subtitle1">
             {packagingType.replace(' - ', '')}
@@ -109,11 +112,6 @@ function InputItem({ field, ...props }) {
             Shelf: {warehouse_location?.shelf || 'N/A'}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="body1" component="p">
-            {packaging_urls.length}/{customer_quantity} jars scanned
-          </Typography>
-        </Grid>
         {/* <Grid item>
           <ScanUPCButton onClick={handleToggleBarscan} variant="contained">
             <Typography variant="body1">Scan UPC</Typography>
@@ -125,13 +123,11 @@ function InputItem({ field, ...props }) {
       ) : null} */}
       <br />
       <br />
-      <Grid container justify="center" alignItems="center" spacing={4}>
-        <Grid item xs={6}>
+      <Grid item xs={12}>
+        <Grid container justify="space-evenly">
           <ResetButton onClick={resetQRScan}>
             <Typography variant="body1">Reset</Typography>
           </ResetButton>
-        </Grid>
-        <Grid item xs={6}>
           <ScanQRButton
             onClick={openQRScanner}
             variant="contained"
@@ -143,6 +139,7 @@ function InputItem({ field, ...props }) {
             isOpen={isQRScannerOpen}
             onClose={closeQRScanner}
             onScan={handleQRScan}
+            onError={() => props.modalStore.toggleModal('error')}
             progressText={`${productName} - ${qrScanProgress}/${customer_quantity}`}
             expectedSku={sku_id}
             cameraDirection="user"

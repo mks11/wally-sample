@@ -10,9 +10,8 @@ import QRScanner from 'common/QRScanner';
 import styles from './OrderFulfillmentPage.module.css';
 
 function InputShippingTote({ field, ...props }) {
-  const [scanProgress, setScanProgress] = useState(0);
+  const [scanProgress, setScanProgress] = useState(field.value ? 1 : 0);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-
   const openScanner = () => {
     setIsScannerOpen(true);
   };
@@ -22,7 +21,11 @@ function InputShippingTote({ field, ...props }) {
   };
 
   const handleQRScan = (qrCode) => {
-    if (qrCode && qrCode.includes('thewallyshop.co/packaging')) {
+    if (
+      qrCode &&
+      qrCode.includes('thewallyshop.co/packaging') &&
+      scanProgress == 0
+    ) {
       // formik setFieldValue method
       props.onScan(field.name, qrCode);
       setScanProgress(scanProgress + 1);
@@ -40,36 +43,35 @@ function InputShippingTote({ field, ...props }) {
   return (
     <Paper className={styles.toteItem}>
       <Grid container justify="center" alignItems="center" spacing={4}>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography variant="h4" component="h2">
             Tote {props.fieldIndex + 1}
           </Typography>
-        </Grid>
-        <Grid item xs={6}>
           <Typography variant="body1">{scanProgress}/1 Scanned</Typography>
         </Grid>
         <br />
-        <Grid item xs={6}>
-          <ResetButton onClick={resetQRScan}>
-            <Typography variant="body1">Reset</Typography>
-          </ResetButton>
-        </Grid>
-        <Grid item xs={6}>
-          <ScanQRButton
-            onClick={openScanner}
-            disabled={scanProgress}
-            variant="contained"
-          >
-            <Typography variant="body1">
-              {scanProgress ? 'Scanned' : 'Scan'}
-            </Typography>
-          </ScanQRButton>
+        <Grid item xs={12}>
+          <Grid container justify="space-evenly">
+            <ResetButton onClick={resetQRScan}>
+              <Typography variant="body1">Reset</Typography>
+            </ResetButton>
+            <ScanQRButton
+              onClick={openScanner}
+              disabled={scanProgress ? true : false}
+              variant="contained"
+            >
+              <Typography variant="body1">
+                {scanProgress ? 'Scanned' : 'Scan'}
+              </Typography>
+            </ScanQRButton>
+          </Grid>
         </Grid>
       </Grid>
       <QRScanner
         isOpen={isScannerOpen}
         onClose={closeScanner}
         onScan={handleQRScan}
+        onError={() => props.modalStore.toggleModal('error')}
         progressText={`Tote ${
           props.fieldIndex + 1
         } - ${scanProgress}/1 Scanned`}
