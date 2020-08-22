@@ -224,9 +224,11 @@ class PickPackPortal extends Component {
           );
           this.setState({ highlightedOrders: incompleteOrders });
         } else {
-          this.cookies.set('ordersWereValidated', true, {
-            expires: getEndOfDay(),
-          });
+          if (!this.cookies.get('ordersWereValidated')) {
+            this.cookies.set('ordersWereValidated', true, {
+              expires: getEndOfDay(),
+            });
+          }
 
           this.setState({
             showValidateOrders: false,
