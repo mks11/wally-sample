@@ -142,7 +142,8 @@ function InputItem({ field, ...props }) {
             onError={() => props.modalStore.toggleModal('error')}
             progressText={`${productName} - ${qrScanProgress}/${customer_quantity}`}
             expectedSku={sku_id}
-            cameraDirection="user"
+            shouldCheckPackagingDetails
+            cameraDirection="environment"
           />
         </Grid>
       </Grid>

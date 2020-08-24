@@ -153,7 +153,7 @@ function ScanQRCode({ handleScan, modalStore }) {
         onClose={toggleQrScanner}
         onScan={handleScan}
         onError={() => modalStore.toggleModal('error')}
-        cameraDirection="user"
+        cameraDirection="environment"
       />
     </Grid>
   );
