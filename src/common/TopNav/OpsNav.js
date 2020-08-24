@@ -21,22 +21,22 @@ export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
         <MobileNavDivider />
       </li>
       <li>
-        <Link to="/pick-pack">
+        <Link to="/pick-pack" onClick={hideNav}>
           <MobileNavLinkText>Pick/Pack</MobileNavLinkText>
         </Link>
       </li>
       <li>
-        <Link to="/packaging-returns">
+        <Link to="/packaging-returns" onClick={hideNav}>
           <MobileNavLinkText>Packaging Returns</MobileNavLinkText>
         </Link>
       </li>
       <li>
-        <Link to="/packaging-inventory">
+        <Link to="/packaging-inventory" onClick={hideNav}>
           <MobileNavLinkText>Packaging Inventory</MobileNavLinkText>
         </Link>
       </li>
       <li>
-        <Link to="/manage/co-packing/runs">
+        <Link to="/manage/co-packing/runs" onClick={hideNav}>
           <MobileNavLinkText>Manage Copacking Round</MobileNavLinkText>
         </Link>
       </li>
