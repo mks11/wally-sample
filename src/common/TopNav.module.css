@@ -1,0 +1,11 @@
+.logo{
+  height: 35px;
+  transition: 300ms all;
+}
+
+@media (max-width: 767px){
+  .logo{
+    display: inline-block;
+    width: 180px;
+  }
+}

@@ -60,15 +60,11 @@ class HowItWorks extends Component {
                   </p>
                 </div>
               </div>
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home6_hd.png" alt="" />
-              </div>
+              <OrderPhoto />
             </div>
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                <img src="images/home7_hd.png" alt="" />
-              </div>
+              <TotePhoto />
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
                   <h1>Receive</h1>
@@ -96,9 +92,7 @@ class HowItWorks extends Component {
                   </p>
                 </div>
               </div>
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/home8_hd.png" alt="" />
-              </div>
+              <ReturnPackagingPhoto />
             </div>
           </div>
 
@@ -111,3 +105,42 @@ class HowItWorks extends Component {
 }
 
 export default connect("store")(HowItWorks);
+
+function OrderPhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+      <img srcset="images/order-hd-450.jpg 450w,
+                   images/order-hd-600.jpg 600w"
+                   sizes="(max-width: 767px) 450px,
+                   600px"
+                   src="images/order-hd-600.jpg"
+                   alt="Man giving money in exchange for a jar of pasta." />
+    </div>
+  )
+}
+
+function TotePhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+      <img srcset="images/tote-hd-450.jpg 450w,
+                   images/tote-hd-600.jpg 600w"
+                   sizes="(max-width: 767px) 450px,
+                   600px"
+                   src="images/tote-hd-600.jpg"
+                   alt="The Wally Shop's reusable tote." />
+    </div>
+  )
+}
+
+function ReturnPackagingPhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+      <img srcset="images/return-packaging-hd-450.jpg 450w,
+                   images/return-packaging-hd-600.jpg 600w"
+                   sizes="(max-width: 767px) 450px,
+                   600px"
+                   src="images/return-packaging-hd-600.jpg"
+                   alt="Returning an empty jar." />
+      </div>
+  )
+}

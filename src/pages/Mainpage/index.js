@@ -350,12 +350,8 @@ class Mainpage extends Component {
               <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
-                    <div className="mb-4 text-center">
-                      <img
-                        src="/images/sidepanel_sticker.png"
-                        width="70%"
-                        alt=""
-                      />
+                    <div className="mb-4">
+                      <img src="/images/sidepanel_sticker.png"/>
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />

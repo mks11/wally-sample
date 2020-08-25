@@ -262,9 +262,8 @@ class Homepage extends Component {
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-                <img src="images/cradle_6.jpg" alt="" />
-              </div>
+
+              <IntroPhoto />
 
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
                 <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
@@ -318,15 +317,11 @@ class Homepage extends Component {
                   </p>
                 </div>
               </div>
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <img src="images/jar_3.jpg" alt="" />
-              </div>
+              <OrderPhoto />
             </div>
 
             <div className="row d-flex justify-content-center align-items-center mt-5">
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-                <img src="images/tote.jpg" alt="" />
-              </div>
+              <TotePhoto />
               <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
                 <div className="receive-item w-75 pull-right">
                   <h1>Receive</h1>
@@ -354,10 +349,7 @@ class Homepage extends Component {
                   </p>
                 </div>
               </div>
-              <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                {/* <img src="images/home8_hd.png" alt=""/> */}
-                <img src="images/jar_2.jpg" alt="" />
-              </div>
+              <ReturnPackagingPhoto />
             </div>
 
             <div className="row mt-5">
@@ -390,3 +382,55 @@ class Homepage extends Component {
 }
 
 export default connect("store")(Homepage);
+
+function IntroPhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
+      <img srcset="images/intro-450.jpg 450w,
+                   images/intro-600.jpg 600w"
+           sizes="(max-width: 767px) 450px,
+                  600px"
+           src="images/intro-600.jpg"
+           alt="Man holding jar of green lentils." />
+    </div>
+  );
+}
+
+function OrderPhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+      <img srcset="images/order-450.jpg 450w,
+                   images/order-600.jpg 600w"
+           sizes="(max-width: 767px) 450px,
+                  600px"
+           src="images/order-600.jpg"
+           alt="Man giving money in exchange for a jar of pasta." />
+    </div>
+  )
+}
+
+function TotePhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
+      <img srcset="images/tote-450.jpg 450w,
+                   images/tote-600.jpg 600w"
+           sizes="(max-width: 767px) 450px,
+                  600px"
+           src="images/tote-600.jpg"
+           alt="The Wally Shop's reusable tote." />
+    </div>
+  )
+}
+
+function ReturnPackagingPhoto(){
+  return (
+    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
+      <img srcset="images/return-packaging-450.jpg 450w,
+                   images/return-packaging-600.jpg 600w"
+           sizes="(max-width: 767px) 450px,
+                  600px"
+           src="images/return-packaging-600.jpg"
+           alt="Returning an empty jar." />
+    </div>
+  )
+}

@@ -1128,20 +1128,6 @@ body {
   z-index: 1;
 }
 
-.aw-process--left {
-  background-color: #f8f8f8;
-  background-image: url("../images/Process1.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
-.aw-process--right {
-  background-color: #ececec;
-  background-image: url("../images/Process2.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
 .aw-list--checked {
   font-family: "Aleo", sans-serif;
   list-style-type: none;
