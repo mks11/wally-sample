@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import moment from "moment";
-import { Input } from "reactstrap";
-import Title from "common/page/Title";
-import PaymentSelect from "common/PaymentSelect";
+import React, { Component } from 'react';
+import moment from 'moment';
+import { Input } from 'reactstrap';
+import Title from 'common/page/Title';
+import PaymentSelect from 'common/PaymentSelect';
 
-import { logPageView, logEvent } from "services/google-analytics";
-import { connect, formatMoney, datesEqual } from "utils";
+import { logPageView, logEvent } from 'services/google-analytics';
+import { connect, formatMoney, datesEqual } from 'utils';
 
-import DeliveryAddressOptions from "common/DeliveryAddressOptions";
-import DeliveryChangeModal from "common/DeliveryChangeModal";
+import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
+import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
-import PackagingSummary from "./PackagingSummary";
-import PromoSummary from "./PromoSummary";
-import ShippingOption from "../../common/ShippingOption";
+import PackagingSummary from './PackagingSummary';
+import PromoSummary from './PromoSummary';
+import ShippingOption from '../../common/ShippingOption';
 
 class Checkout extends Component {
   constructor(props) {
@@ -58,20 +58,20 @@ class Checkout extends Component {
 
       addressError: false,
 
-      invalidText: "",
-      successText: "",
-      invalidSelectAddress: "",
+      invalidText: '',
+      successText: '',
+      invalidSelectAddress: '',
 
-      invalidAddressText: "",
-      newStreetAddress: "",
-      newAptNo: "",
-      newZip: "",
-      newContactName: "",
-      newPhoneNumber: "",
-      newDeliveryNotes: "",
-      newState: "",
-      newCity: "",
-      newCountry: "",
+      invalidAddressText: '',
+      newStreetAddress: '',
+      newAptNo: '',
+      newZip: '',
+      newContactName: '',
+      newPhoneNumber: '',
+      newDeliveryNotes: '',
+      newState: '',
+      newCity: '',
+      newCountry: '',
       newPreferedAddress: false,
 
       deliveryTimes: this.checkoutStore.deliveryTimes,
@@ -79,7 +79,7 @@ class Checkout extends Component {
       placeOrderRequest: false,
 
       hasReturns: false,
-      pickupNotes: "",
+      pickupNotes: '',
     };
   }
 
@@ -94,7 +94,7 @@ class Checkout extends Component {
           this.userStore.selectedDeliveryAddress ||
           (this.userStore.user
             ? this.userStore.getAddressById(
-                this.userStore.user.preferred_address
+                this.userStore.user.preferred_address,
               )
             : null);
         if (selectedAddress) {
@@ -105,7 +105,7 @@ class Checkout extends Component {
         this.loadData();
         if (this.userStore.user.addresses.length > 0) {
           const selectedAddress = this.userStore.user.addresses.find(
-            (d) => d._id === this.userStore.user.preferred_address
+            (d) => d._id === this.userStore.user.preferred_address,
           );
           this.setState({ selectedAddress: selectedAddress._id });
         } else {
@@ -114,15 +114,15 @@ class Checkout extends Component {
 
         if (this.userStore.user.payment.length > 0) {
           const selectedPayment = this.userStore.user.payment.find(
-            (d) => d._id === this.userStore.user.preferred_payment
+            (d) => d._id === this.userStore.user.preferred_payment,
           );
           this.setState({ selectedPayment: selectedPayment._id });
         }
 
         const { checkoutFirst } = this.userStore.flags || {};
-        !checkoutFirst && this.modalStore.toggleModal("checkoutfirst");
+        !checkoutFirst && this.modalStore.toggleModal('checkoutfirst');
       } else {
-        this.routing.push("/main");
+        this.routing.push('/main');
       }
     });
   }
@@ -132,14 +132,14 @@ class Checkout extends Component {
     const deliveryData = this.userStore.getDeliveryParams();
     const address_id = this.userStore.selectedDeliveryAddress
       ? this.userStore.selectedDeliveryAddress.address_id
-      : "";
+      : '';
     const tip = this.parseAppliedTip();
     this.checkoutStore
       .getOrderSummary(
         this.userStore.getHeaderAuth(),
         deliveryData,
         tip,
-        address_id
+        address_id,
       )
       .then((data) => {
         this.setState({
@@ -160,9 +160,9 @@ class Checkout extends Component {
           return this.checkoutStore.getDeliveryTimes().then(() => {
             this.userStore.adjustDeliveryTimes(
               dataOrder.delivery_date,
-              this.state.deliveryTimes
+              this.state.deliveryTimes,
             );
-            this.setState({ invalidText: "Please select delivery time" });
+            this.setState({ invalidText: 'Please select delivery time' });
           });
         }
         return null;
@@ -177,13 +177,13 @@ class Checkout extends Component {
     const tip = this.parseAppliedTip();
     const address_id = this.userStore.selectedDeliveryAddress
       ? this.userStore.selectedDeliveryAddress.address_id
-      : "";
+      : '';
     this.checkoutStore
       .getOrderSummary(
         this.userStore.getHeaderAuth(),
         deliveryData,
         tip,
-        address_id
+        address_id,
       )
       .then((data) => {
         this.setState({
@@ -200,8 +200,8 @@ class Checkout extends Component {
     const { appliedTipAmount } = this.state;
     let tipValue = appliedTipAmount;
 
-    if (typeof appliedTipAmount === "string") {
-      tipValue = appliedTipAmount.replace("$", "");
+    if (typeof appliedTipAmount === 'string') {
+      tipValue = appliedTipAmount.replace('$', '');
     }
 
     return (parseFloat(tipValue) * 100).toFixed();
@@ -274,7 +274,7 @@ class Checkout extends Component {
   };
 
   handleSubmitPayment = (lock, selectedPayment) => {
-    logEvent({ category: "Checkout", action: "SubmitPayment" });
+    logEvent({ category: 'Checkout', action: 'SubmitPayment' });
     this.setState({
       selectedPayment,
       lockPayment: lock,
@@ -282,8 +282,8 @@ class Checkout extends Component {
   };
 
   handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange("time", selectedTime);
-    this.setState({ invalidText: "" });
+    this.modalStore.showDeliveryChange('time', selectedTime);
+    this.setState({ invalidText: '' });
   };
 
   handleChangeDelivery = () => {
@@ -294,16 +294,16 @@ class Checkout extends Component {
     this.productStore
       .showModal(id, quantity, this.userStore.getDeliveryParams())
       .then(() => {
-        this.modalStore.toggleModal("product");
+        this.modalStore.toggleModal('product');
       });
   }
 
   handleDelete(data) {
     const id = {
       product_id: data.product_id,
-      inventory_id: data.inventory[0]._id,
+      inventory_id: data.inventory_id,
     };
-    this.modalStore.toggleModal("delete", id);
+    this.modalStore.toggleModal('delete', id);
   }
 
   handlePlaceOrder() {
@@ -313,10 +313,10 @@ class Checkout extends Component {
       return;
     }
 
-    this.setState({ invalidText: "", placeOrderRequest: true });
+    this.setState({ invalidText: '', placeOrderRequest: true });
     if (!this.userStore.selectedDeliveryAddress) {
       this.setState({
-        invalidText: "Please select address",
+        invalidText: 'Please select address',
         placeOrderRequest: false,
       });
       return;
@@ -324,20 +324,20 @@ class Checkout extends Component {
 
     if (!this.state.lockPayment) {
       this.setState({
-        invalidText: "Please select payment",
+        invalidText: 'Please select payment',
         placeOrderRequest: false,
       });
       return;
     }
     this.loading.toggle();
-    logEvent({ category: "Checkout", action: "ConfirmCheckout" });
-    const deliveryTime = "UPS Ground (1-5 Days)";
+    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
+    const deliveryTime = 'UPS Ground (1-5 Days)';
 
     this.checkoutStore
       .submitOrder(
         {
           store_credit: this.state.appliedStoreCreditAmount > 0,
-          user_time: moment().format("YYYY-MM-DD HH:mm:ss"),
+          user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           address_id: this.userStore.selectedDeliveryAddress.address_id,
           payment_id: this.state.selectedPayment,
           delivery_time: deliveryTime,
@@ -345,21 +345,21 @@ class Checkout extends Component {
           has_returns: this.state.hasReturns,
           pickup_notes: this.state.pickupNotes,
         },
-        this.userStore.getHeaderAuth()
+        this.userStore.getHeaderAuth(),
       )
       .then((data) => {
         logEvent({
-          category: "Order",
-          action: "Submit Order",
+          category: 'Order',
+          action: 'Submit Order',
         });
-        this.routing.push("/orders/" + data.order._id);
+        this.routing.push('/orders/' + data.order._id);
         this.checkoutStore.clearCart(this.userStore.getHeaderAuth());
         this.userStore.setDeliveryTime(null);
         this.loading.toggle();
         this.setState({ placeOrderRequest: false });
       })
       .catch((e) => {
-        console.error("Failed to submit order", e);
+        console.error('Failed to submit order', e);
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg, placeOrderRequest: false });
         this.loading.toggle();
@@ -377,38 +377,38 @@ class Checkout extends Component {
     const subTotal = this.checkoutStore.order.subtotal;
 
     if (!promoCode) {
-      this.setState({ invalidText: "Promo code empty" });
+      this.setState({ invalidText: 'Promo code empty' });
       return;
     }
-    logEvent({ category: "Checkout", action: "AddPromo", label: promoCode });
+    logEvent({ category: 'Checkout', action: 'AddPromo', label: promoCode });
     this.checkoutStore
       .checkPromo(
         {
           subTotal,
           promoCode,
         },
-        this.userStore.getHeaderAuth()
+        this.userStore.getHeaderAuth(),
       )
       .then((data) => {
         if (data.valid) {
           this.setState({
             appliedPromo: true,
             appliedPromoCode: promoCode,
-            successText: "Promo applied successfully",
+            successText: 'Promo applied successfully',
           });
           this.userStore.getUser().then(() => {
             this.loadData();
           });
         } else {
-          this.setState({ invalidText: "Invalid promo code" });
+          this.setState({ invalidText: 'Invalid promo code' });
         }
       })
       .catch((e) => {
         if (!e.response.data.error) {
-          this.setState({ invalidText: "Check promo failed" });
+          this.setState({ invalidText: 'Check promo failed' });
           return;
         }
-        console.error("Failed to check promo", e);
+        console.error('Failed to check promo', e);
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg });
       });
@@ -428,13 +428,13 @@ class Checkout extends Component {
     this.setState({
       tipApplyEdited: false,
       appliedTipAmount: e.target.value,
-      invalidText: "",
+      invalidText: '',
     });
   };
 
   handleAddPayment = (data) => {
     if (data) {
-      logEvent({ category: "Checkout", action: "SubmitNewPayment" });
+      logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
       this.userStore.setUserData(data);
       this.setState({
         selectedPayment: this.userStore.user.preferred_payment,
@@ -444,7 +444,7 @@ class Checkout extends Component {
   };
 
   handleConfirmHome = () => {
-    logEvent({ category: "Checkout", action: "ConfirmAtHome" });
+    logEvent({ category: 'Checkout', action: 'ConfirmAtHome' });
     this.setState({
       confirmHome: !this.state.confirmHome,
       confirmHomeError: !!this.state.confirmHome,
@@ -470,7 +470,7 @@ class Checkout extends Component {
   };
 
   handlePackagingDepositClick = () => {
-    this.modalStore.toggleModal("packagingdeposit");
+    this.modalStore.toggleModal('packagingdeposit');
   };
 
   updateTotal() {
@@ -509,17 +509,17 @@ class Checkout extends Component {
       ? this.state.applicableStoreCreditAmount / 100
       : 0;
 
-    let buttonPlaceOrderClass = "btn btn-main";
+    let buttonPlaceOrderClass = 'btn btn-main';
     if (
       this.userStore.selectedDeliveryAddress &&
       this.state.lockPayment &&
       this.userStore.selectedDeliveryTime &&
       !this.state.placeOrderRequest
     ) {
-      buttonPlaceOrderClass += " active";
+      buttonPlaceOrderClass += ' active';
     }
     if (this.userStore.selectedDeliveryAddress) {
-      buttonPlaceOrderClass += " active";
+      buttonPlaceOrderClass += ' active';
     }
 
     const cart_items = order && order.cart_items ? order.cart_items : [];
@@ -532,7 +532,7 @@ class Checkout extends Component {
         <div className="container">
           <div className="checkout-wrap">
             <div className="">
-              <div style={{ maxWidth: "440px" }}>
+              <div style={{ maxWidth: '440px' }}>
                 {this.userStore.user && (
                   <DeliveryAddressOptions
                     lock={this.state.lockAddress}
@@ -597,7 +597,7 @@ class Checkout extends Component {
             <div className="">
               <section
                 className="order-summary mb-5"
-                style={{ maxWidth: "440px" }}
+                style={{ maxWidth: '440px' }}
               >
                 <div className="card1 card-shadow">
                   <div className="card-body">
@@ -606,7 +606,7 @@ class Checkout extends Component {
                     {cart_items.map((c, i) => {
                       const unit_type = c.unit_type || c.price_unit;
                       const showType =
-                        unit_type === "packaging"
+                        unit_type === 'packaging'
                           ? c.packaging_name
                           : unit_type;
 
@@ -614,25 +614,25 @@ class Checkout extends Component {
                         <div className="item mt-3 pb-2" key={i}>
                           <div className="item-left">
                             <h4 className="item-name">
-                              {c.product_id !== "prod_pckging" ? (
+                              {c.product_id !== 'prod_pckging' ? (
                                 c.product_name
                               ) : (
                                 <PackagingSummary title={c.product_name} />
                               )}
                             </h4>
-                            {unit_type !== "packaging" &&
-                              c.product_id !== "prod_pckging" && (
+                            {unit_type !== 'packaging' &&
+                              c.product_id !== 'prod_pckging' && (
                                 <span className="item-detail mt-2 mb-1">
                                   {c.packaging_name}
                                 </span>
                               )}
-                            {c.product_id !== "prod_pckging" && (
+                            {c.product_id !== 'prod_pckging' && (
                               <div className="item-link">
                                 <a
                                   onClick={(e) =>
                                     this.handleEdit(
                                       c.product_id,
-                                      c.customer_quantity
+                                      c.customer_quantity,
                                     )
                                   }
                                   className="text-blue mr-2"
@@ -678,10 +678,10 @@ class Checkout extends Component {
                         <span>
                           <strong>
                             <a onClick={this.handlePackagingDepositClick}>
-                              {" "}
-                              Packaging Deposit{" "}
+                              {' '}
+                              Packaging Deposit{' '}
                             </a>
-                          </strong>{" "}
+                          </strong>{' '}
                           (You'll get this back ;) )
                         </span>
                         <span>
@@ -786,4 +786,4 @@ class Checkout extends Component {
   }
 }
 
-export default connect("store")(Checkout);
+export default connect('store')(Checkout);
