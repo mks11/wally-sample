@@ -61,8 +61,7 @@ class BlogPost extends Component {
     if (!slug || !post) {
       return <Redirect to="/blog"></Redirect>;
     }
-
-    const { author, posted_date, metadescription } = post;
+    const { author, post_date, metadescription } = post;
 
     return (
       <Container maxWidth="lg" component={"section"}>
@@ -79,7 +78,7 @@ class BlogPost extends Component {
             </ResponsiveText>
           </Grid>
           <Grid item xs={12}>
-            <BlogPostSubtitle author={author} postDate={posted_date} />
+            <BlogPostSubtitle author={author} postDate={post_date} />
           </Grid>
           <br />
           {post.body.length

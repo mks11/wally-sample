@@ -126,7 +126,7 @@ function BlogPostCard({ post }) {
         <BlogPostTitle>
           <ReadMore to={postPath}>{post.title}</ReadMore>
         </BlogPostTitle>
-        <BlogPostSubtitle author={post.author} postDate={post.posted_date} />
+        <BlogPostSubtitle author={post.author} postDate={post.post_date} />
       </Grid>
       <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
         <BlogPostImage src={intro.image.src} alt={intro.image.alt} />
