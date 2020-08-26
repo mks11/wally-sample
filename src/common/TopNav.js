@@ -381,13 +381,13 @@ class TopNav extends Component {
                               Order History
                             </a>
                           </li>
-                          <li>
+                          {/* <li>
                             {" "}
                             <a onClick={this.handleMobileNavSchedulePickup}>
                               {" "}
                               Schedule Pickup{" "}
                             </a>{" "}
-                          </li>
+                          </li> */}
                           <li>
                             <a onClick={() => this.handleNavMobile("/user")}>
                               Account Settings
@@ -793,13 +793,13 @@ class TopNav extends Component {
                                   >
                                     Order History
                                   </Link>
-                                  <a
+                                  {/* <a
                                     onClick={this.handleSchedulePickup}
                                     className="dropdown-item"
                                   >
                                     {" "}
                                     Schedule Pickup
-                                  </a>
+                                  </a> */}
                                   <Link
                                     onClick={this.hideAccountDropdown}
                                     to="/user"
