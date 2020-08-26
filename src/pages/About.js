@@ -120,15 +120,17 @@ class About extends Component {
 
 export default connect("store")(About);
 
-function AboutPhoto(){
+function AboutPhoto() {
   return (
     <div className="tagline howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcset="images/about-450.jpg 450w,
+      <img
+        srcSet="images/about-450.jpg 450w,
                    images/about-600.jpg 600w"
-           sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                   600px"
-           src="images/about-600.jpg"
-           alt="About page" />
+        src="images/about-600.jpg"
+        alt="About page"
+      />
     </div>
-  )
+  );
 }

@@ -36,7 +36,6 @@ class InviteFriends extends Component {
       <section id="nav-hero" className={heroClass}>
         <div className="container-fluid">
           <div className="row justify-content-center align-items-center">
-
             <InviteFriendsPhoto />
 
             <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -69,15 +68,17 @@ class InviteFriends extends Component {
 
 export default connect("store")(InviteFriends);
 
-function InviteFriendsPhoto(){
+function InviteFriendsPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-      <img srcset="images/invite-friends-450.jpg 450w,
+      <img
+        srcSet="images/invite-friends-450.jpg 450w,
                    images/invite-friends-600.jpg 600w"
-                   sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                    600px"
-                   src="images/invite-friends-600.jpg"
-                   alt="Man giving money in exchange for a jar of pasta." />
+        src="images/invite-friends-600.jpg"
+        alt="Man giving money in exchange for a jar of pasta."
+      />
     </div>
-  )
+  );
 }

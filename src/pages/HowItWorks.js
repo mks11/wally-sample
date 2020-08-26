@@ -109,7 +109,7 @@ export default connect("store")(HowItWorks);
 function OrderPhoto(){
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcset="images/order-hd-450.jpg 450w,
+      <img srcSet="images/order-hd-450.jpg 450w,
                    images/order-hd-600.jpg 600w"
                    sizes="(max-width: 767px) 450px,
                    600px"
@@ -122,7 +122,7 @@ function OrderPhoto(){
 function TotePhoto(){
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-      <img srcset="images/tote-hd-450.jpg 450w,
+      <img srcSet="images/tote-hd-450.jpg 450w,
                    images/tote-hd-600.jpg 600w"
                    sizes="(max-width: 767px) 450px,
                    600px"
@@ -135,7 +135,7 @@ function TotePhoto(){
 function ReturnPackagingPhoto(){
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcset="images/return-packaging-hd-450.jpg 450w,
+      <img srcSet="images/return-packaging-hd-450.jpg 450w,
                    images/return-packaging-hd-600.jpg 600w"
                    sizes="(max-width: 767px) 450px,
                    600px"

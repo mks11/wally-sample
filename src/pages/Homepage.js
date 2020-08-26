@@ -262,7 +262,6 @@ class Homepage extends Component {
         <section id="nav-hero" className={heroClass}>
           <div className="container-fluid">
             <div className="row justify-content-center align-items-center">
-
               <IntroPhoto />
 
               <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
@@ -383,54 +382,62 @@ class Homepage extends Component {
 
 export default connect("store")(Homepage);
 
-function IntroPhoto(){
+function IntroPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-      <img srcset="images/intro-450.jpg 450w,
+      <img
+        srcSet="images/intro-450.jpg 450w,
                    images/intro-600.jpg 600w"
-           sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                   600px"
-           src="images/intro-600.jpg"
-           alt="Man holding jar of green lentils." />
+        src="images/intro-600.jpg"
+        alt="Man holding jar of green lentils."
+      />
     </div>
   );
 }
 
-function OrderPhoto(){
+function OrderPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcset="images/order-450.jpg 450w,
+      <img
+        srcSet="images/order-450.jpg 450w,
                    images/order-600.jpg 600w"
-           sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                   600px"
-           src="images/order-600.jpg"
-           alt="Man giving money in exchange for a jar of pasta." />
+        src="images/order-600.jpg"
+        alt="Man giving money in exchange for a jar of pasta."
+      />
     </div>
-  )
+  );
 }
 
-function TotePhoto(){
+function TotePhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-      <img srcset="images/tote-450.jpg 450w,
+      <img
+        srcSet="images/tote-450.jpg 450w,
                    images/tote-600.jpg 600w"
-           sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                   600px"
-           src="images/tote-600.jpg"
-           alt="The Wally Shop's reusable tote." />
+        src="images/tote-600.jpg"
+        alt="The Wally Shop's reusable tote."
+      />
     </div>
-  )
+  );
 }
 
-function ReturnPackagingPhoto(){
+function ReturnPackagingPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcset="images/return-packaging-450.jpg 450w,
+      <img
+        srcSet="images/return-packaging-450.jpg 450w,
                    images/return-packaging-600.jpg 600w"
-           sizes="(max-width: 767px) 450px,
+        sizes="(max-width: 767px) 450px,
                   600px"
-           src="images/return-packaging-600.jpg"
-           alt="Returning an empty jar." />
+        src="images/return-packaging-600.jpg"
+        alt="Returning an empty jar."
+      />
     </div>
-  )
+  );
 }
