@@ -51,7 +51,11 @@ class ReferralModal extends Component {
           </small>
         </span>
         <div className="mb-2 text-center">
-          <img src="/images/ripenready.png" alt="The Wally Shop Ripe 'n Ready tote bag." width="70%"/>
+          <img
+            src="/images/ripenready.jpg"
+            alt="The Wally Shop Ripe 'n Ready tote bag."
+            width="70%"
+          />
         </div>
         <div className="referral-wrap p-2">
           <input
