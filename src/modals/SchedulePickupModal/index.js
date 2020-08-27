@@ -1,12 +1,9 @@
 // Node Modules
-import React, { PureComponent, Component } from "react";
+import React, { Component } from "react";
 import moment from "moment";
 import axios from "axios";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
-// API
-import { API_SCHEDULE_PICKUP } from "config";
 
 // Utilities
 import { connect, isValidTimeOrder, genTimePoints } from "../../utils";
@@ -16,6 +13,7 @@ import { Container, Grid, Typography } from "@material-ui/core";
 import DatePicker from "react-datepicker";
 import TimeOnlyOptions from "../../common/TimeOnlyOptions";
 import AddressOptionsManaged from "./AddressOptionsManaged";
+import SchedulePickupForm from "./SchedulePickupForm";
 
 const ErrorInfo = (props) => {
   return props.invalidText ? (
@@ -45,12 +43,13 @@ const InputErrors = ({ errors }) => {
   );
 };
 
-class SchedulePickupModal extends PureComponent {
+class SchedulePickupModal extends Component {
   constructor(props) {
     super(props);
 
     this.userStore = props.store.user;
     this.modalStore = props.store.modal;
+    this.loadingStore = props.store.loading;
 
     const selectedAddressId =
       (this.userStore.selectedDeliveryAddress &&
@@ -254,71 +253,11 @@ class SchedulePickupModal extends PureComponent {
 
     return (
       <Container maxWidth="md">
-        <Grid container justify="center" spacing={4}>
-          <Typography variant="h1" gutterBottom>
-            Schedule Pickup
-          </Typography>
-
-          <ErrorInfo invalidText={this.state.requestFailedText} />
-          {this.state.showIncompleteFieldErrors && (
-            <InputErrors errors={this.getRequiredFieldsErrors()} />
-          )}
-          <Grid item xs={12}>
-            <Typography variant="h2" gutterBottom>
-              Date
-            </Typography>
-            <DatePicker
-              dateFormat={"MM / DD / YYYY"}
-              selected={this.state.pickupDate}
-              onChange={this.handleOnDatePick}
-              minDate={moment().add(1, "d")}
-              filterDate={isWeekday}
-              placeholderText="Click to pick a date"
-              className={`form-control p-4 util-font-size-16`}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TimeOnlyOptions
-              title={"Earliest pickup time"}
-              lock={false}
-              placeholderText="Pick an earliest pickup time"
-              data={genTimePoints(
-                this.props.earliestTime,
-                this.props.latestTime,
-                60
-              ).map((p) => ({ time: p }))}
-              onSelectTime={this.handleSelectEarliestTime}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TimeOnlyOptions
-              title={"Latest pickup time"}
-              lock={false}
-              placeholderText="Pick a latest pickup time"
-              data={genTimePoints(
-                this.state.earliestTime,
-                this.props.latestTime,
-                60
-              ).map((p) => ({ time: p }))}
-              onSelectTime={this.handleSelectLatestTime}
-              invalidText={this.state.invalidLatestTime && INVALID_TIME}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <AddressOptionsManaged
-              title={"Pickup Address"}
-              store={this.props.store}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <button
-              class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}
-              onClick={this.handleConfirmPickup}
-            >
-              Confirm Pickup
-            </button>
-          </Grid>
-        </Grid>
+        <SchedulePickupForm
+          userStore={this.userStore}
+          modalStore={this.modalStore}
+          loadingStore={this.loadingStore}
+        />
       </Container>
     );
   }
