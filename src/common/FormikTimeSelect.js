@@ -8,7 +8,7 @@ import { InputLabel, MenuItem, Select } from "@material-ui/core";
 import { BrowserView, MobileView } from "react-device-detect";
 
 const StyledSelect = styled(Select)`
-  min-width: 150px;
+  min-width: 300px;
 `;
 
 export default function FormikTimeSelect({
@@ -39,10 +39,7 @@ export default function FormikTimeSelect({
           onChange={handleChange}
         >
           {pickupTimes.map((time, idx) => (
-            <option
-              key={`${labelId}-${idx}`}
-              value={moment(time).format("HHmm")}
-            >
+            <option key={`${labelId}-${idx}`} value={time}>
               {time}
             </option>
           ))}
@@ -55,10 +52,7 @@ export default function FormikTimeSelect({
           onChange={handleChange}
         >
           {pickupTimes.map((time, idx) => (
-            <MenuItem
-              key={`${labelId}-${idx}`}
-              value={moment(time, "hh:mm a").format("HHmm")}
-            >
+            <MenuItem key={`${labelId}-${idx}`} value={time}>
               {time}
             </MenuItem>
           ))}
@@ -73,8 +67,8 @@ FormikTimeSelect.propTypes = {
   handleSelectTime: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   labelId: PropTypes.string.isRequired,
-  earliestTime: PropTypes.string.isRequired,
-  latestTime: PropTypes.string.isRequired,
+  earliestTime: PropTypes.object.isRequired,
+  latestTime: PropTypes.object.isRequired,
   interval: PropTypes.number,
 };
 
@@ -86,8 +80,8 @@ FormikTimeSelect.propTypes = {
  * @param {Number} intervalInMins - interval between times.
  */
 function getPickupTimes(startTime, endTime, intervalInMins = 60) {
-  const start = moment(startTime, "hh:mm a");
-  const end = moment(endTime, "hh:mm a");
+  const start = moment(startTime);
+  const end = moment(endTime);
   const result = [start.format("LT")];
 
   var currentTime = start;
