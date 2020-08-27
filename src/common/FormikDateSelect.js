@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import { InputLabel } from "@material-ui/core";
 
 export default function FormikDateSelect({
   field,
@@ -25,14 +26,17 @@ export default function FormikDateSelect({
   const earliestDate = moment().add(1, "d").toDate();
 
   return (
-    <DatePicker
-      dateFormat={"MM / dd / yyyy"}
-      selected={field.value || undefined}
-      minDate={earliestDate}
-      onSelect={selectDate}
-      filterDate={isValidPickupDay}
-      placeholderText="Select a pickup date."
-      className={`form-control p-4 util-font-size-16`}
-    />
+    <>
+      <InputLabel>Date</InputLabel>
+      <DatePicker
+        dateFormat={"MM / dd / yyyy"}
+        selected={field.value || undefined}
+        minDate={earliestDate}
+        onSelect={selectDate}
+        filterDate={isValidPickupDay}
+        placeholderText="Select a pickup date."
+        className={`form-control p-4 util-font-size-16`}
+      />
+    </>
   );
 }
