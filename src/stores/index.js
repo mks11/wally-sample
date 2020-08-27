@@ -11,7 +11,6 @@ import AdminStore from "./AdminStore";
 import PackagingUnitStore from "./PackagingUnitStore";
 import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
-import ScheduleUserPickupStore from "./ScheduleUserPickupStore";
 import MetricStore from "./MetricStore";
 import LoadingSpinnerStore from "./LoadingSpinnerStore";
 import { RouterStore } from "mobx-react-router";
@@ -32,7 +31,6 @@ const store = {
   backer: BackerStore,
   vendor: VendorProfileStore,
   products: VendorProfileStore,
-  schedulePickup: ScheduleUserPickupStore,
   metric: MetricStore,
   loading: LoadingSpinnerStore,
   routing: new RouterStore(),
