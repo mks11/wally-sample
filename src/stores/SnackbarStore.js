@@ -1,21 +1,21 @@
-import { observable, decorate, action } from "mobx";
+import { observable, decorate, action, reaction } from "mobx";
 
 class SnackbarStore {
   isOpen = false;
   message = "";
   severity = "info";
 
-  openSnackbar(message = "", severity = "info") {
+  openSnackbar = (message = "", severity = "info") => {
     this.isOpen = true;
     this.message = message;
     this.severity = severity;
-  }
+  };
 
-  closeSnackbar() {
+  closeSnackbar = () => {
     this.isOpen = false;
     this.message = "";
     this.severity = "info";
-  }
+  };
 }
 
 decorate(SnackbarStore, {
