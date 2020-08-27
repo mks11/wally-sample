@@ -79,18 +79,12 @@ class Mainpage extends Component {
         if (!status) {
           this.routing.push("/");
         } else {
-          if (window.location.pathname.split("/")[1] === "schedule-pickup") {
-            this.modalStore.toggleModal("schedulepickup");
-          } else {
-            this.userStore.giftCardPromo && this.processGiftCardPromo(status);
-            this.checkoutStore.getDeliveryTimes();
-            this.loadData();
-            const { mainFirst, mainSecond } = this.userStore.flags || {};
-            !mainFirst && this.modalStore.toggleModal("mainFirst");
-            mainFirst &&
-              !mainSecond &&
-              this.modalStore.toggleModal("mainSecond");
-          }
+          this.userStore.giftCardPromo && this.processGiftCardPromo(status);
+          this.checkoutStore.getDeliveryTimes();
+          this.loadData();
+          const { mainFirst, mainSecond } = this.userStore.flags || {};
+          !mainFirst && this.modalStore.toggleModal("mainFirst");
+          mainFirst && !mainSecond && this.modalStore.toggleModal("mainSecond");
         }
       }
     });
@@ -351,7 +345,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src="/images/sidepanel_sticker.png"/>
+                      <img src="/images/sidepanel_sticker.png" />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />
