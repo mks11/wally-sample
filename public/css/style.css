@@ -4673,7 +4673,7 @@ a {
 .modal-body {
   min-height: 200px;
   padding: 3rem 0;
-  overflow: scroll;
+  overflow-y: auto;
   -webkit-transition: height 1s;
   transition: height 1s;
 }

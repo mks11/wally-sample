@@ -1,16 +1,23 @@
+// Node Modules
 import React, { PureComponent, Component } from "react";
-import {
-  connect,
-  isValidTimeOrder,
-  genTimePoints
-} from "../../utils";
-import PropTypes from "prop-types";
 import moment from "moment";
+import axios from "axios";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+
+// API
+import { API_SCHEDULE_PICKUP } from "config";
+
+// Utilities
+import { connect, isValidTimeOrder, genTimePoints } from "../../utils";
+
+// Components
+import { Container, Grid, Typography } from "@material-ui/core";
 import DatePicker from "react-datepicker";
 import TimeOnlyOptions from "../../common/TimeOnlyOptions";
 import AddressOptionsManaged from "./AddressOptionsManaged";
 
-const ErrorInfo = props => {
+const ErrorInfo = (props) => {
   return props.invalidText ? (
     <div className="container">
       <span className="text-error text-center my-3">{props.invalidText}</span>
@@ -38,15 +45,10 @@ const InputErrors = ({ errors }) => {
   );
 };
 
-function Container(props) {
-  return <div className="mt-4" {...props} />;
-}
-
-class SchedulePickup extends PureComponent {
+class SchedulePickupModal extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.schedulePickupStore = props.store.schedulePickup;
     this.userStore = props.store.user;
     this.modalStore = props.store.modal;
 
@@ -66,7 +68,7 @@ class SchedulePickup extends PureComponent {
 
       invalidLatestTime: false,
       requestFailedText: null, // on submit if error occurred
-      showIncompleteFieldErrors: false // if any field is invalid, before submission
+      showIncompleteFieldErrors: false, // if any field is invalid, before submission
     };
   }
 
@@ -77,18 +79,18 @@ class SchedulePickup extends PureComponent {
     );
     if (!isValid) {
       this.setState({
-        invalidLatestTime: true // only make the latest time invalid
+        invalidLatestTime: true, // only make the latest time invalid
       });
     } else {
       this.setState({
-        invalidLatestTime: false
+        invalidLatestTime: false,
       });
     }
   };
 
   clearRequestFailText = () => {
     this.setState({
-      requestFailedText: null
+      requestFailedText: null,
     });
   };
 
@@ -96,7 +98,7 @@ class SchedulePickup extends PureComponent {
     this.setState(
       {
         // lockEarliestTime: true,
-        earliestTime: time
+        earliestTime: time,
       },
       () => {
         this.checkValidityTime();
@@ -108,7 +110,7 @@ class SchedulePickup extends PureComponent {
     this.setState(
       {
         // lockLatestTime: true,
-        latestTime: time
+        latestTime: time,
       },
       () => {
         this.checkValidityTime();
@@ -117,10 +119,10 @@ class SchedulePickup extends PureComponent {
     );
   };
 
-  handleOnDatePick = d => {
+  handleOnDatePick = (d) => {
     this.setState(
       {
-        pickupDate: d
+        pickupDate: d,
       },
       () => {
         this.clearRequestFailText();
@@ -128,10 +130,10 @@ class SchedulePickup extends PureComponent {
     );
   };
 
-  handlePreferredLocation = pref => {
+  handlePreferredLocation = (pref) => {
     this.setState(
       {
-        preferredLocation: pref
+        preferredLocation: pref,
       },
       () => {
         this.clearRequestFailText();
@@ -145,7 +147,7 @@ class SchedulePickup extends PureComponent {
       latestTime,
       earliestTime,
       pickupDate,
-      invalidLatestTime
+      invalidLatestTime,
     } = this.state;
 
     const errors = [];
@@ -172,12 +174,33 @@ class SchedulePickup extends PureComponent {
 
     var startTime = moment(earliestTime, "h:mm a");
     var endTime = moment(latestTime, "h:mm a");
-    if (endTime.diff(startTime, 'minutes') < 120) {
+    if (endTime.diff(startTime, "minutes") < 120) {
       errors.push("At least a two hour window is required");
     }
 
     return errors;
   };
+
+  // schedulePickup() {
+  //   const {
+  //     selectedAddressId,
+  //     latestTime,
+  //     earliestTime,
+  //     pickupDate,
+  //     invalidLatestTime,
+  //   } = this.state;
+  //   return axios.post(
+  //     API_SCHEDULE_PICKUP,
+  //     {
+  //       address_id,
+  //       scheduled_date,
+  //       earliest_time,
+  //       latest_time,
+  //       pickup_notes,
+  //     },
+  //     this.userStore.getHeaderAuth()
+  //   );
+  // }
 
   handleConfirmPickup = async () => {
     if (this.state.isFetching) {
@@ -188,7 +211,7 @@ class SchedulePickup extends PureComponent {
 
     if (incompletes.length > 0) {
       this.setState({
-        showIncompleteFieldErrors: true
+        showIncompleteFieldErrors: true,
       });
       return;
     }
@@ -204,11 +227,11 @@ class SchedulePickup extends PureComponent {
             e.response.data &&
             e.response.data.error &&
             e.response.data.error.message,
-          isFetching: false
+          isFetching: false,
         });
       }
       this.setState({
-        requestFailedText: "Something went wrong."
+        requestFailedText: "Something went wrong.",
       });
     }
   };
@@ -219,44 +242,42 @@ class SchedulePickup extends PureComponent {
       selectedAddressId,
       latestTime,
       earliestTime,
-      pickupDate
+      pickupDate,
     } = this.state;
     const isReadyToSubmit =
       selectedAddressId && latestTime && earliestTime && pickupDate;
 
-    const isWeekday = date => {
+    const isWeekday = (date) => {
       const day = date.day();
       return day !== 0 && day !== 6;
     };
 
     return (
-      <React.Fragment>
-        <div className="container">
-          <div className="page-header">
-            <div className="page-title">
-              <h1 className="mb-1"> Schedule Pickup </h1>
-            </div>
-          </div>
-        </div>
+      <Container maxWidth="md">
+        <Grid container justify="center" spacing={4}>
+          <Typography variant="h1" gutterBottom>
+            Schedule Pickup
+          </Typography>
 
-        <ErrorInfo invalidText={this.state.requestFailedText} />
-        {this.state.showIncompleteFieldErrors && (
-          <InputErrors errors={this.getRequiredFieldsErrors()} />
-        )}
-        <div class="container">
-          <Container>
-            <h3 class="m-0 mb-3 p-r">Date</h3>
+          <ErrorInfo invalidText={this.state.requestFailedText} />
+          {this.state.showIncompleteFieldErrors && (
+            <InputErrors errors={this.getRequiredFieldsErrors()} />
+          )}
+          <Grid item xs={12}>
+            <Typography variant="h2" gutterBottom>
+              Date
+            </Typography>
             <DatePicker
               dateFormat={"MM / DD / YYYY"}
               selected={this.state.pickupDate}
               onChange={this.handleOnDatePick}
-              minDate={moment().add(1, 'd')}
-              filterDate = {isWeekday} 
+              minDate={moment().add(1, "d")}
+              filterDate={isWeekday}
               placeholderText="Click to pick a date"
               className={`form-control p-4 util-font-size-16`}
             />
-          </Container>
-          <Container>
+          </Grid>
+          <Grid item xs={12}>
             <TimeOnlyOptions
               title={"Earliest pickup time"}
               lock={false}
@@ -265,11 +286,11 @@ class SchedulePickup extends PureComponent {
                 this.props.earliestTime,
                 this.props.latestTime,
                 60
-              ).map(p => ({ time: p }))}
+              ).map((p) => ({ time: p }))}
               onSelectTime={this.handleSelectEarliestTime}
             />
-          </Container>
-          <Container>
+          </Grid>
+          <Grid item xs={12}>
             <TimeOnlyOptions
               title={"Latest pickup time"}
               lock={false}
@@ -278,53 +299,42 @@ class SchedulePickup extends PureComponent {
                 this.state.earliestTime,
                 this.props.latestTime,
                 60
-              ).map(p => ({ time: p }))}
+              ).map((p) => ({ time: p }))}
               onSelectTime={this.handleSelectLatestTime}
               invalidText={this.state.invalidLatestTime && INVALID_TIME}
             />
-          </Container>
-          <Container>
+          </Grid>
+          <Grid item xs={12}>
             <AddressOptionsManaged
               title={"Pickup Address"}
               store={this.props.store}
             />
-          </Container>
-          <Container>
+          </Grid>
+          <Grid item xs={12}>
             <button
               class={`btn btn-main ${isReadyToSubmit ? "active" : "inactive"}`}
               onClick={this.handleConfirmPickup}
             >
               Confirm Pickup
             </button>
-          </Container>
-        </div>
-      </React.Fragment>
+          </Grid>
+        </Grid>
+      </Container>
     );
   }
 }
 
-SchedulePickup.defaultProps = {
+SchedulePickupModal.defaultProps = {
   earliestTime: "9:00 AM",
-  latestTime: "9:00 PM"
+  latestTime: "9:00 PM",
 };
 
-SchedulePickup.propTypes = {
+SchedulePickupModal.propTypes = {
   earliestTime: PropTypes.string.isRequired,
   latestTime: PropTypes.string.isRequired,
   onConfirmPickup: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired,
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
 };
-
-
-class SchedulePickupModal extends Component {
-  render() {
-    return (
-      <div>
-        <SchedulePickup store={this.props.store} toggle={this.props.toggle} />
-      </div>
-    );
-  }
-}
 
 export default connect("store")(SchedulePickupModal);
