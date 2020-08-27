@@ -56,36 +56,10 @@ const isValidTimeOrder = (begin, end) => {
   return beginTime.isSameOrBefore(endTime);
 };
 
-// takes 'HH:MM AM' or 'HH:MM PM' as first argument
-/**
- *
- * @param {*} start_time
- * @param {*} end_time
- * @param {*} intervalInMins
- * @param {*} limit
- */
-function genTimePoints(start_time, end_time, intervalInMins = 0, limit = 60) {
-  const result = [];
-  const start = moment(start_time, "hh:mm a");
-  const end = moment(end_time, "hh:mm a");
-  result.push(start.format("LT"));
-  for (let i = 0; i < limit; i++) {
-    start.add(intervalInMins, "minutes").format("LT");
-    if (start.isSameOrBefore(end)) {
-      result.push(start.format("LT"));
-    } else {
-      break;
-    }
-  }
-
-  return result;
-}
-
 export {
   connect,
   validateEmail,
   formatMoney,
   capitalizeFirstLetter,
-  genTimePoints,
   isValidTimeOrder,
 };
