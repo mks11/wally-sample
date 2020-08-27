@@ -6,8 +6,7 @@ import styled from "styled-components";
 import { Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 
 const StyledSelect = styled(Select)`
-  min-width: 300px;
-  max-width: 80vw;
+  min-width: 100%;
 `;
 
 export default function FormikAddressSelect({

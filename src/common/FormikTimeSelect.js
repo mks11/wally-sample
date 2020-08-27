@@ -8,7 +8,7 @@ import { InputLabel, MenuItem, Select } from "@material-ui/core";
 import { BrowserView, MobileView } from "react-device-detect";
 
 const StyledSelect = styled(Select)`
-  min-width: 300px;
+  min-width: 100%;
 `;
 
 export default function FormikTimeSelect({
