@@ -5,7 +5,8 @@ import { logPageView } from "services/google-analytics";
 import { connect, datesEqual } from "utils";
 
 import CarbonBar from "common/CarbonBar";
-import Product from "./Mainpage/Product";
+import Product from "../Mainpage/Product";
+import EmptyCartMessage from "./EmptyCartMessage";
 
 class SimilarProducts extends Component {
   constructor(props) {
@@ -162,40 +163,47 @@ class SimilarProducts extends Component {
 
     return (
       <div className="App">
-        <div className="container">
-          <div className="row justify-content-md-center mt-2">
-            <div className="col col-lg-9">
-              <h1>Customers also bought:</h1>
-            </div>
-            <hr />
-            <div className="col col-lg-3 similar-products-checkout">
-              <h3 className="text-right">
-                <Link to="/checkout" className="color-purple">
-                  Continue To Checkout
-                </Link>
-              </h3>
-            </div>
-            <br />
+        {cartItems.length < 1 ? (
+          <div className="container">
+            <EmptyCartMessage />
           </div>
-          <CarbonBar value={cartItems.length % 10} />
-        </div>
-
-        <div className="container">
-          <div className="col-12">
-            <div className="row">
-              {this.productStore.impulse_products
-                ? this.productStore.impulse_products.map((product) => (
-                    <Product
-                      key={product.product_id}
-                      product={product}
-                      deliveryTimes={this.state.deliveryTimes}
-                      onProductClick={this.handleProductModal}
-                    />
-                  ))
-                : null}
+        ) : (
+          <>
+            <div className="container">
+              <div className="row justify-content-md-center mt-2">
+                <div className="col col-lg-9">
+                  <h1>Customers also bought:</h1>
+                </div>
+                <hr />
+                <div className="col col-lg-3 similar-products-checkout">
+                  <h3 className="text-right">
+                    <Link to="/checkout" className="color-purple">
+                      Continue To Checkout
+                    </Link>
+                  </h3>
+                </div>
+                <br />
+              </div>
+              <CarbonBar value={cartItems.length % 10} />
             </div>
-          </div>
-        </div>
+            <div className="container">
+              <div className="col-12">
+                <div className="row">
+                  {this.productStore.impulse_products
+                    ? this.productStore.impulse_products.map((product) => (
+                        <Product
+                          key={product.product_id}
+                          product={product}
+                          deliveryTimes={this.state.deliveryTimes}
+                          onProductClick={this.handleProductModal}
+                        />
+                      ))
+                    : null}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   }
