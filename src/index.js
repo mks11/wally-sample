@@ -11,6 +11,7 @@ import ScrollSpy from "common/ScrollSpy";
 import RootModal from "./modals/RootModal";
 import LoadingSpinner from "modals/LoadingSpinner";
 import Backdrop from "./common/Backdrop";
+import RootSnackbar from "./snackbars/RootSnackbar";
 
 //router
 import { Router } from "react-router-dom";
@@ -53,6 +54,7 @@ ReactDOM.render(
                 <main className="aw-main aw-home">{routes}</main>
                 <Footer />
                 <RootModal />
+                <RootSnackbar />
                 <LoadingSpinner />
               </div>
             </ScrollToTop>

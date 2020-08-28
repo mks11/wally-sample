@@ -14,6 +14,7 @@ import VendorProfileStore from "./VendorProfileStore";
 import ScheduleUserPickupStore from "./ScheduleUserPickupStore";
 import MetricStore from "./MetricStore";
 import LoadingSpinnerStore from "./LoadingSpinnerStore";
+import SnackbarStore from "./SnackbarStore";
 import { RouterStore } from "mobx-react-router";
 
 const store = {
@@ -35,6 +36,7 @@ const store = {
   schedulePickup: ScheduleUserPickupStore,
   metric: MetricStore,
   loading: LoadingSpinnerStore,
+  snackbar: SnackbarStore,
   routing: new RouterStore(),
 };
 
