@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-import { HelperText, Label } from 'styled-component-lib/HelperText';
+import { HelperText } from 'styled-component-lib/HelperText';
+import { Label } from 'styled-component-lib/InputLabel';
 
 export default function FormikDateSelect({
   field,

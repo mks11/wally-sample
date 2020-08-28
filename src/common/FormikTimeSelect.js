@@ -6,7 +6,8 @@ import styled from 'styled-components';
 // Components
 import { MenuItem, Select } from '@material-ui/core';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { HelperText, Label } from 'styled-component-lib/InputLabel';
+import { HelperText } from 'styled-component-lib/HelperText';
+import { Label } from 'styled-component-lib/InputLabel';
 
 const StyledSelect = styled(Select)`
   min-width: 100%;

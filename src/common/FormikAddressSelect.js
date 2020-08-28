@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 // Components
 import { Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { HelperText, Label } from 'styled-component-lib/HelperText';
+import { HelperText } from 'styled-component-lib/HelperText';
+import { Label } from 'styled-component-lib/InputLabel';
 
 const StyledSelect = styled(Select)`
   min-width: 100%;

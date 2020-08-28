@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 // Components
 import { TextField } from '@material-ui/core';
-import { HelperText, Label } from 'styled-component-lib/InputLabel';
+import { HelperText } from 'styled-component-lib/HelperText';
+import { Label } from 'styled-component-lib/InputLabel';
 
 export default function FormikTextInput({
   field,
