@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { HelperText } from "styled-components-lib/HelperText";
 
 // Components
 import { Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
@@ -40,6 +41,7 @@ export default function FormikAddressSelect({
           </MenuItem>
         ))}
       </StyledSelect>
+      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
     </>
   );
 }

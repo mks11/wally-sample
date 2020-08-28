@@ -7,7 +7,7 @@ import moment from "moment";
 import { API_SCHEDULE_PICKUP } from "config";
 
 // Components
-import { Formik, Form, Field } from "formik";
+import { ErrorMessage, Formik, Form, Field } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
 import FormikDateSelect from "common/FormikDateSelect";
 import FormikTimeSelect from "common/FormikTimeSelect";
@@ -31,6 +31,7 @@ export default function SchedulePickupForm({
         latestTime: "",
         deliveryInstructions: "",
       }}
+      validate={validate}
       onSubmit={(values) => {
         console.log(values);
         // const {
@@ -53,7 +54,7 @@ export default function SchedulePickupForm({
         //   );
       }}
     >
-      {({ setFieldValue }) => (
+      {({ errors, isSubmitting, setFieldValue, touched, validateField }) => (
         <Form>
           <Grid container justify="center" spacing={4}>
             <Typography variant="h1" gutterBottom>
@@ -64,6 +65,8 @@ export default function SchedulePickupForm({
                 name="scheduledDate"
                 component={FormikDateSelect}
                 handleSelectDate={setFieldValue}
+                touched={touched.scheduledDate}
+                error={errors.scheduledDate}
               />
             </Grid>
             <Grid item xs={12} lg={6}>
@@ -76,6 +79,8 @@ export default function SchedulePickupForm({
                 earliestTime={earliestTime}
                 latestTime={latestTime}
                 interval={60}
+                touched={touched.earliestTime}
+                error={errors.earliestTime}
               />
             </Grid>
             <Grid item xs={12} lg={6}>
@@ -88,6 +93,8 @@ export default function SchedulePickupForm({
                 earliestTime={earliestTime}
                 latestTime={latestTime}
                 interval={60}
+                touched={touched.latestTime}
+                error={errors.latestTime}
               />
             </Grid>
             <Grid item xs={12}>
@@ -98,6 +105,8 @@ export default function SchedulePickupForm({
                 label="Pickup Address"
                 labelId="pickup-address"
                 userStore={userStore}
+                touched={touched.addressId}
+                error={errors.addressId}
               />
             </Grid>
             <Grid item xs={12}>
@@ -107,10 +116,20 @@ export default function SchedulePickupForm({
                 handleInput={setFieldValue}
                 label="Delivery Notes"
                 labelId="delivery-notes"
+                error={errors.deliveryInstructions ? true : false}
+                helperText={errors.deliveryInstructions}
+                validate={validateDeliveryInstructions}
+                validateField={validateField}
+                placeholder="Any special instructions for UPS?"
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="secondary">
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                disabled={isSubmitting}
+              >
                 Confirm Pickup
               </Button>
             </Grid>
@@ -121,34 +140,43 @@ export default function SchedulePickupForm({
   );
 }
 
-function ErrorInfo(props) {
-  return props.invalidText ? (
-    <div className="container">
-      <span className="text-error text-center my-3">{props.invalidText}</span>
-    </div>
-  ) : null;
-}
-
-function InputErrors({ errors }) {
-  if (errors && errors.length < 1) {
-    return null;
+function validate(values) {
+  const errors = {};
+  if (!values.scheduledDate) {
+    errors.scheduledDate = "You forgot to select a pickup date!";
   }
-  return (
-    <div className="container">
-      <span className="text-error text-center my-3">{`Invalid ${
-        errors.length > 1 ? "inputs" : "input"
-      }`}</span>
-      <ul>
-        {errors.map((msg, i) => (
-          <li key={i} className="text-error util-font-size-14">
-            {msg}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+
+  if (!values.earliestTime) {
+    errors.earliestTime = "You forgot to select an earliest pickup time!";
+  }
+
+  if (!values.latestTime) {
+    errors.latestTime = "You forgot to select a latest pickup time!";
+  } else if (
+    latestTimeIsBeforeEarliestTime(values.earliestTime, values.latestTime)
+  ) {
+    errors.latestTime =
+      "Your latest pickup time must come after your earliest pickup time.";
+  }
+
+  if (!values.addressId) {
+    errors.addressId = "You forgot to select a pickup address!";
+  }
+
+  return errors;
 }
 
-// function getUPSFormattedDate(date) {
-//   return moment(date).format("YYYYMMDD");
-// }
+function validateDeliveryInstructions(value) {
+  let error;
+  if (value && value.length > 57) {
+    error = "Your delivery instructions can't be longer than 57 characters.";
+  }
+  return error;
+}
+
+function latestTimeIsBeforeEarliestTime(earliestTime, latestTime) {
+  const earliest = moment(earliestTime, "hh:mm a");
+  const latest = moment(latestTime, "hh:mm a");
+
+  return latest.isBefore(earliest);
+}

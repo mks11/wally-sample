@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+
+import { HelperText } from "styled-components-lib/HelperText";
 
 // Components
 import { InputLabel, TextField } from "@material-ui/core";
 
-export default function FormikTimeSelect({
+export default function FormikTextInput({
   field,
+  error,
   handleInput,
   label,
   labelId,
@@ -18,22 +20,23 @@ export default function FormikTimeSelect({
 
   return (
     <>
-      <InputLabel id={labelId}>{label}</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <TextField
-        labelId={labelId}
         value={field.value || ""}
         onChange={handleChange}
         fullWidth
         multiline
-        placeholder="Any special instructions for UPS?`"
+        placeholder={props.placeholder}
+        error={error}
       />
+      <HelperText>{props.helperText || ""}</HelperText>
     </>
   );
 }
 
-FormikTimeSelect.propTypes = {
+FormikTextInput.propTypes = {
   field: PropTypes.object.isRequired,
-  handleSelectTime: PropTypes.func.isRequired,
+  handleInput: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   labelId: PropTypes.string.isRequired,
 };

@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { InputLabel } from "@material-ui/core";
+import { HelperText } from "styled-components-lib/HelperText";
 
 export default function FormikDateSelect({
   field,
@@ -37,6 +38,7 @@ export default function FormikDateSelect({
         placeholderText="Select a pickup date."
         className={`form-control p-4 util-font-size-16`}
       />
+      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
     </>
   );
 }

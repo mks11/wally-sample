@@ -6,6 +6,7 @@ import styled from "styled-components";
 // Components
 import { InputLabel, MenuItem, Select } from "@material-ui/core";
 import { BrowserView, MobileView } from "react-device-detect";
+import { HelperText } from "styled-components-lib/HelperText";
 
 const StyledSelect = styled(Select)`
   min-width: 100%;
@@ -58,6 +59,7 @@ export default function FormikTimeSelect({
           ))}
         </StyledSelect>
       </BrowserView>
+      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
     </>
   );
 }
