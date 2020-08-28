@@ -24,7 +24,14 @@ export default function FormikDateSelect({
     }
   };
 
-  const earliestDate = moment().add(1, "d").toDate();
+  let earliestDate = moment().add(1, "d");
+
+  // On Fridays, earliestDate will be set to saturday, which is invalid.
+  // Automatically move it to Monday.
+  while (!isValidPickupDay(earliestDate)) {
+    earliestDate = earliestDate.add(1, "d");
+  }
+  earliestDate = earliestDate.toDate();
 
   return (
     <>
