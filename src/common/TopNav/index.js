@@ -1,11 +1,19 @@
+// Node Modules
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Typography } from '@material-ui/core';
-import ClickOutside from 'react-click-outside';
-
 import moment from 'moment';
+
+// Utilities
 import { logModalView } from 'services/google-analytics';
 import { connect } from '../../utils';
+
+// Components
+import ClickOutside from 'react-click-outside';
+import { Link } from 'react-router-dom';
+import { Grid, Typography } from '@material-ui/core';
+import ToggleIcon from 'common/ToggleIcon';
+
+// Styles
+import styles from './TopNav.module.css';
 
 // Nav Menus
 import { MobileGuestNav, DesktopGuestNav } from 'common/TopNav/GuestNav';
@@ -175,8 +183,8 @@ class TopNav extends Component {
     const isProductPage = this.routing.location.pathname.includes('/main');
 
     return (
-      // Mobile Nav Modal
       <div className={headerWrapClass}>
+        {/* // Mobile Nav Modal */}
         <div className="aw-nav--mobile d-lg-none">
           <div className="center-middle">
             <div className="container-fluid">
@@ -243,39 +251,23 @@ class TopNav extends Component {
           {(this.userStore.status && isUser) || !this.userStore.status ? (
             <div className={topBarClass}>
               <div className="container">
-                <div onClick={this.handleBannerClick}>{bannerText}</div>
-                <button
-                  className="close-top-bar"
-                  onClick={this.handleCloseTopBar}
-                >
-                  <i className="fa fa-times-circle" aria-hidden="true"></i>
-                </button>
+                <div onClick={this.handleBannerClick}>
+                  {bannerText}
+                  <button
+                    className="close-top-bar"
+                    onClick={this.handleCloseTopBar}
+                  >
+                    <i className="fa fa-times-circle" aria-hidden="true"></i>
+                  </button>
+                </div>
               </div>
             </div>
           ) : null}
 
+          {/* Desktop Nav */}
           <div className="container">
             <div className="row align-items-center mobile-top-nav top-nav">
-              {/* Logo */}
-              <div className="d-none col-auto d-lg-block">
-                <a
-                  className="aw-logo d-block text-center"
-                  onClick={this.handleLogo}
-                >
-                  <img
-                    className="logo-text-desktop"
-                    src="/images/TheWallyShop_Logo_Horizontal.svg"
-                    alt="The Wally Shop"
-                  />
-                  <img
-                    className="logo-text-mobile"
-                    src="/images/TheWallyShop_Logo_Horizontal.svg"
-                    alt="The Wally Shop"
-                  />
-                </a>
-              </div>
-
-              {/* Desktop Nav */}
+              <DesktopLogo onClick={this.handleLogo} />
               <div className="col-auto ml-auto d-none d-lg-block">
                 <nav id="main-nav" className="navbar px-0 aw-nav text-center">
                   {/* Check if the user is logged in, then check their role. */}
@@ -369,41 +361,9 @@ class TopNav extends Component {
                   )}
                 </nav>
               </div>
-
-              {/* Mobile Nav Toggle Button */}
-              {this.userStore.status || true ? (
-                <button
-                  onClick={(e) => this.uiStore.toggleNavMobile()}
-                  className="navbar-toggler aw-nav--toggle d-lg-none"
-                  type="button"
-                >
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-              ) : (
-                <button
-                  onClick={(e) => this.handleLogin()}
-                  className="btn btn-outline-black btn-login text-caps d-md-none d-lg-none"
-                >
-                  Log in
-                </button>
-              )}
+              <MobileNavbar uiStore={this.uiStore} />
             </div>
-
-            {/* Desktop Logo */}
-            <div className="row d-lg-none  d-sm-block">
-              <div className="col-sm-12">
-                <a
-                  className="aw-logo d-block text-center"
-                  onClick={this.handleLogo}
-                >
-                  <img
-                    className="logo-text-mobile util-relative util-offset-top--30"
-                    src="/images/TheWallyShop_Logo_Horizontal.svg"
-                    alt="The Wally Shop"
-                  />
-                </a>
-              </div>
-            </div>
+            <MobileLogo onClick={this.handleLogo} />
           </div>
         </header>
       </div>
@@ -412,3 +372,48 @@ class TopNav extends Component {
 }
 
 export default connect('store')(TopNav);
+
+function DesktopLogo({ onClick }) {
+  return (
+    <div className="d-none col-auto d-md-block">
+      <a className="aw-logo d-flex align-items-center" onClick={onClick}>
+        <img
+          className={styles.logo}
+          src="/images/TheWallyShop_Logo_Horizontal.svg"
+          alt="The Wally Shop"
+        />
+      </a>
+    </div>
+  );
+}
+
+function MobileLogo({ onClick }) {
+  return (
+    <div className="row d-md-none d-sm-block">
+      <div className="col-sm-12">
+        <a
+          className="aw-logo d-flex align-items-center justify-content-center"
+          onClick={onClick}
+        >
+          <img
+            className={`${styles.logo} util-relative util-offset-top--30`}
+            src="/images/TheWallyShop_Logo_Horizontal.svg"
+            alt="The Wally Shop"
+          />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function MobileNavbar({ uiStore }) {
+  return (
+    <button
+      onClick={(e) => uiStore.toggleNavMobile()}
+      className="navbar-toggler d-md-none"
+      type="button"
+    >
+      <ToggleIcon isOpen={uiStore.navMobile} />
+    </button>
+  );
+}
