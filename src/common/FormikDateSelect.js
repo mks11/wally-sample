@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import { InputLabel } from "@material-ui/core";
+import { Label } from "styled-components-lib/InputLabel";
 import { HelperText } from "styled-components-lib/HelperText";
 
 export default function FormikDateSelect({
@@ -35,9 +35,9 @@ export default function FormikDateSelect({
 
   return (
     <>
-      <InputLabel>Date</InputLabel>
+      <Label>Pickup Date</Label>
       <DatePicker
-        dateFormat={"MM / dd / yyyy"}
+        dateFormat={"MM/dd/yyyy"}
         selected={field.value || undefined}
         minDate={earliestDate}
         onSelect={selectDate}

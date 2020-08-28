@@ -20,9 +20,6 @@ export default function SchedulePickupForm({
   loadingStore,
   modalStore,
 }) {
-  const earliestTime = moment({ hour: 9 }).add(1, "d").toDate();
-  const latestTime = moment({ hour: 17 }).add(1, "d").toDate();
-
   return (
     <Formik
       initialValues={{
@@ -38,7 +35,7 @@ export default function SchedulePickupForm({
         axios
           .post(API_SCHEDULE_PICKUP, values, userStore.getHeaderAuth())
           .then((res) => {
-            console.log(res.status);
+            console.log(res.data);
           })
           .catch((error) => {
             // Handle Error
@@ -50,90 +47,206 @@ export default function SchedulePickupForm({
           });
       }}
     >
-      {({ errors, isSubmitting, setFieldValue, touched, validateField }) => (
-        <Form>
-          <Grid container justify="center" spacing={4}>
-            <Typography variant="h1" gutterBottom>
-              Schedule Pickup
-            </Typography>
-            <Grid item xs={12}>
-              <Field
-                name="scheduledDate"
-                component={FormikDateSelect}
-                handleSelectDate={setFieldValue}
-                touched={touched.scheduledDate}
-                error={errors.scheduledDate}
-              />
+      {({
+        errors,
+        isSubmitting,
+        setFieldValue,
+        touched,
+        validateField,
+        values,
+      }) => {
+        {
+          /* Calculate range of earliest availabilities */
+        }
+        const lowerEarliestTimeBound = getLowerEarliestTimeBound(
+          values.scheduledDate
+        );
+        const upperEarliestTimeBound = getUpperEarliestTimeBound(
+          values.scheduledDate
+        );
+        const earliestRange = getPickupTimes(
+          lowerEarliestTimeBound,
+          upperEarliestTimeBound,
+          60
+        );
+
+        {
+          /* Calculate range of latest availabilities */
+        }
+        const lowerLatestTimeBound = getLowerLatestTimeBound(
+          values.earliestTime
+        );
+        const upperLatestTimeBound = getUpperLatestTimeBound(
+          values.earliestTime
+        );
+        const latestRange = getPickupTimes(
+          lowerLatestTimeBound,
+          upperLatestTimeBound,
+          60
+        );
+
+        return (
+          <Form>
+            <Grid container justify="center" spacing={4}>
+              <Typography variant="h1" gutterBottom>
+                Schedule Pickup
+              </Typography>
+              <Grid item xs={12}>
+                <Field
+                  name="scheduledDate"
+                  component={FormikDateSelect}
+                  handleSelectDate={setFieldValue}
+                  touched={touched.scheduledDate}
+                  error={errors.scheduledDate}
+                />
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                <Field
+                  name="earliestTime"
+                  component={FormikTimeSelect}
+                  handleSelectTime={setFieldValue}
+                  labelId="earliest-pickup-time"
+                  label="Earliest Pickup Time"
+                  timeRange={earliestRange}
+                  touched={touched.earliestTime}
+                  error={errors.earliestTime}
+                  disabled={values.scheduledDate ? false : true}
+                />
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                <Field
+                  name="latestTime"
+                  component={FormikTimeSelect}
+                  handleSelectTime={setFieldValue}
+                  labelId="latest-pickup-time"
+                  label="Latest Pickup Time"
+                  timeRange={latestRange}
+                  touched={touched.latestTime}
+                  error={errors.latestTime}
+                  disabled={values.earliestTime ? false : true}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  name="addressId"
+                  component={FormikAddressSelect}
+                  handleSelectAddress={setFieldValue}
+                  label="Pickup Address"
+                  labelId="pickup-address"
+                  userStore={userStore}
+                  touched={touched.addressId}
+                  error={errors.addressId}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  name="deliveryInstructions"
+                  component={FormikTextInput}
+                  handleInput={setFieldValue}
+                  label="Delivery Notes"
+                  labelId="delivery-notes"
+                  error={errors.deliveryInstructions ? true : false}
+                  helperText={errors.deliveryInstructions}
+                  validate={validateDeliveryInstructions}
+                  validateField={validateField}
+                  placeholder="Any special instructions for UPS?"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  disabled={isSubmitting}
+                >
+                  Confirm Pickup
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} lg={6}>
-              <Field
-                name="earliestTime"
-                component={FormikTimeSelect}
-                handleSelectTime={setFieldValue}
-                labelId="earliest-pickup-time"
-                label="Earliest Pickup Time"
-                earliestTime={earliestTime}
-                latestTime={latestTime}
-                interval={60}
-                touched={touched.earliestTime}
-                error={errors.earliestTime}
-              />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <Field
-                name="latestTime"
-                component={FormikTimeSelect}
-                handleSelectTime={setFieldValue}
-                labelId="latest-pickup-time"
-                label="Latest Pickup Time"
-                earliestTime={earliestTime}
-                latestTime={latestTime}
-                interval={60}
-                touched={touched.latestTime}
-                error={errors.latestTime}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Field
-                name="addressId"
-                component={FormikAddressSelect}
-                handleSelectAddress={setFieldValue}
-                label="Pickup Address"
-                labelId="pickup-address"
-                userStore={userStore}
-                touched={touched.addressId}
-                error={errors.addressId}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Field
-                name="deliveryInstructions"
-                component={FormikTextInput}
-                handleInput={setFieldValue}
-                label="Delivery Notes"
-                labelId="delivery-notes"
-                error={errors.deliveryInstructions ? true : false}
-                helperText={errors.deliveryInstructions}
-                validate={validateDeliveryInstructions}
-                validateField={validateField}
-                placeholder="Any special instructions for UPS?"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                disabled={isSubmitting}
-              >
-                Confirm Pickup
-              </Button>
-            </Grid>
-          </Grid>
-        </Form>
-      )}
+          </Form>
+        );
+      }}
     </Formik>
   );
+}
+
+/**
+ * Return the lower bound of the earliest available time - 9:00 AM wherever the user is located.
+ *
+ * @param {Date} date - Scheduled date of pickup
+ */
+function getLowerEarliestTimeBound(date) {
+  if (date) {
+    return moment(date).hour(9);
+  }
+
+  return;
+}
+
+/**
+ * Return the upper bound of the earliest available time - 3:00 PM wherever the user is located.
+ *
+ * @param {Date} date - Scheduled date of pickup
+ */
+function getUpperEarliestTimeBound(date) {
+  if (date) {
+    return moment(date).hour(15);
+  }
+
+  return;
+}
+
+/**
+ * Return the lower bound of the latest available time - earliestTime + 2 hours wherever the user is located.
+ *
+ * @param {Date} earliestTime - Earliest availability of pickup
+ */
+function getLowerLatestTimeBound(earliestTime) {
+  if (earliestTime) {
+    return moment(earliestTime).add(2, "h");
+  }
+
+  return;
+}
+
+/**
+ * Return the upper bound of the latest available time - upper earliestTime + 2 hours wherever the user is located.
+ *
+ * @param {Date} earliestTime - Earliest availability of pickup
+ */
+function getUpperLatestTimeBound(earliestTime) {
+  if (earliestTime) {
+    return moment(earliestTime).hour(17);
+  }
+
+  return;
+}
+
+/**
+ * Generate a range of pickup times between the start and end time.
+ *
+ * @param {Moment} startTime - first time point - moment object
+ * @param {Moment} endTime - last time point - moment object
+ * @param {Number} intervalInMins - interval between times.
+ */
+function getPickupTimes(startTime, endTime, intervalInMins = 60) {
+  if (startTime && endTime) {
+    const result = [startTime.toISOString(true)];
+
+    var currentTime = startTime.toISOString(true);
+    while (
+      moment(currentTime).add(intervalInMins, "m").isSameOrBefore(endTime)
+    ) {
+      currentTime = moment(currentTime)
+        .add(intervalInMins, "m")
+        .toISOString(true);
+      result.push(currentTime);
+    }
+
+    return result;
+  }
+
+  return [];
 }
 
 function validate(values) {

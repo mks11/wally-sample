@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { HelperText } from "styled-components-lib/HelperText";
 
 // Components
 import { Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { HelperText } from "styled-components-lib/HelperText";
+import { Label } from "styled-components-lib/InputLabel";
 
 const StyledSelect = styled(Select)`
   min-width: 100%;
@@ -28,7 +29,9 @@ export default function FormikAddressSelect({
 
   return (
     <>
-      <InputLabel id={labelId}>{label}</InputLabel>
+      <Label id={labelId} disabled={props.disabled}>
+        {label}
+      </Label>
       <StyledSelect
         labelId={labelId}
         defaultValue={preferredAddress.address_id}
@@ -52,6 +55,7 @@ FormikAddressSelect.propTypes = {
   label: PropTypes.string.isRequired,
   labelId: PropTypes.string.isRequired,
   userStore: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
 };
 
 function Address({ address }) {

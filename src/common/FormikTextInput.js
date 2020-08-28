@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { HelperText } from "styled-components-lib/HelperText";
-
 // Components
-import { InputLabel, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
+import { HelperText } from "styled-components-lib/HelperText";
+import { Label } from "styled-components-lib/InputLabel";
 
 export default function FormikTextInput({
   field,
@@ -20,7 +20,7 @@ export default function FormikTextInput({
 
   return (
     <>
-      <InputLabel>{label}</InputLabel>
+      <Label disabled={props.disabled}>{label}</Label>
       <TextField
         value={field.value || ""}
         onChange={handleChange}
@@ -39,4 +39,5 @@ FormikTextInput.propTypes = {
   handleInput: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   labelId: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };
