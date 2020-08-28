@@ -19,6 +19,7 @@ export default function SchedulePickupForm({
   userStore,
   loadingStore,
   modalStore,
+  ...props
 }) {
   return (
     <Formik
@@ -35,11 +36,19 @@ export default function SchedulePickupForm({
         axios
           .post(API_SCHEDULE_PICKUP, values, userStore.getHeaderAuth())
           .then((res) => {
-            console.log(res.data);
+            const { earliestTime, latestTime } = res.data;
+            props.toggle();
           })
           .catch((error) => {
             // Handle Error
-            console.log(error);
+            setTimeout(
+              () =>
+                modalStore.switchModal(
+                  "error",
+                  "Oops! A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup."
+                ),
+              400
+            );
           })
           .finally(() => {
             setTimeout(() => loadingStore.toggle(), 300);

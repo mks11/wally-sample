@@ -25,6 +25,7 @@ class SchedulePickupModal extends Component {
           userStore={this.userStore}
           loadingStore={this.loadingStore}
           modalStore={this.modalStore}
+          toggle={this.props.toggle}
         />
       </Container>
     );
