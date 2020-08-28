@@ -1,0 +1,14 @@
+.tableHeadRow {
+  background-color: #e0e0e0;
+}
+
+.headlineCard {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 767px) {
+  th[class^='MuiTableCell-root'].tableHead {
+    text-align: start !important;
+  }
+}

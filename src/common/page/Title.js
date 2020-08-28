@@ -15,5 +15,5 @@ const Title = ({ content, center = false }) => (
 export default Title;
 
 export const PageTitle = styled(Typography)`
-  margin-top: 0.75rem;
+  margin-top: 0.75em;
 `;

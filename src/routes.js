@@ -1,55 +1,67 @@
-import React, { Fragment } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import Homepage from "./pages/Homepage";
-import Mainpage from "./pages/Mainpage";
-import About from "./pages/About";
-import LatestNews from "./pages/LatestNews";
-import HowItWorks from "./pages/HowItWorks";
-import Account from "./pages/Account";
-import Help from "./pages/Help";
-import HelpSingle from "./pages/HelpSingle";
-import HelpSingleAnswer from "./pages/HelpSingleAnswer";
-import HelpAnswer from "./pages/HelpAnswer";
-import ResetPassword from "./pages/ResetPassword";
-import EmailVerification from "./pages/EmailVerification";
-import Orders from "./pages/Orders";
-import ManageOrders from "./pages/ManageOrders";
-import OrderConfirmation from "./pages/OrderConfirmation";
-import SimilarProducts from "./pages/SimilarProducts";
-import Checkout from "./pages/Checkout";
-import GiftCheckout from "./pages/GiftCheckout";
-import InviteFriends from "./pages/InviteFriends";
-import Backers from "./pages/Backers";
-import Tnc from "./pages/Tnc";
-import Privacy from "./pages/Privacy";
-import Blog from "./pages/Blog/Blog";
-import BlogPost from "./pages/Blog/BlogPost";
-import CartAdd from "./pages/CartAdd";
-import ReferFriend from "./pages/ReferFriend";
-import ManageShopper from "./pages/ManageShopper";
-import ManagePackaging from "./pages/ManagePackaging";
-import ManageDelivery from "./pages/ManageDelivery";
-import ManageBlog from "./pages/ManageBlog";
-import ManageShipping from "./pages/ManageShipping";
-import ManagePrinting from "./pages/ManagePrinting";
-import ManageProducts from "./pages/ManageProducts";
-import ShoppingAppStep1 from "./pages/manage/ShoppingAppStep1";
-import ShoppingAppStep2 from "./pages/manage/ShoppingAppStep2";
-import ShoppingAppStep3 from "./pages/manage/ShoppingAppStep3";
-import ManageCoPackingRuns from "./pages/manage/copacking/CoPackingRuns";
-import ManageCoPackingRunsSpecific from "./pages/manage/copacking/CoPackingRunsSpecific";
-import Signup from "./pages/Signup";
-import Feedback from "./pages/Feedback";
-import Receipts from "./pages/manage/receipt/Receipts";
-import CourierRouting from "./pages/courier/CourierRouting";
-import VendorProfile from "./pages/vendor/VendorProfile";
-import OutboundShipments from "./pages/manage/shipments/OutboundShipments";
-import InboundShipments from "./pages/manage/shipments/InboundShipments";
-import ManageRetail from "./pages/manage/retail/ManageRetail";
+import Homepage from './pages/Homepage';
+import Mainpage from './pages/Mainpage';
+import About from './pages/About';
+import LatestNews from './pages/LatestNews';
+import HowItWorks from './pages/HowItWorks';
+import Account from './pages/Account';
+import Help from './pages/Help';
+import HelpSingle from './pages/HelpSingle';
+import HelpSingleAnswer from './pages/HelpSingleAnswer';
+import HelpAnswer from './pages/HelpAnswer';
+import ResetPassword from './pages/ResetPassword';
+import EmailVerification from './pages/EmailVerification';
+import Orders from './pages/Orders';
+import ManageOrders from './pages/ManageOrders';
+import OrderConfirmation from './pages/OrderConfirmation';
+import SimilarProducts from './pages/SimilarProducts';
+import Checkout from './pages/Checkout';
+import GiftCheckout from './pages/GiftCheckout';
+import InviteFriends from './pages/InviteFriends';
+import Backers from './pages/Backers';
+import Tnc from './pages/Tnc';
+import Privacy from './pages/Privacy';
+import Blog from './pages/Blog/Blog';
+import BlogPost from './pages/Blog/BlogPost';
+import CartAdd from './pages/CartAdd';
+import ReferFriend from './pages/ReferFriend';
+import ManageShopper from './pages/ManageShopper';
+import ManagePackaging from './pages/ManagePackaging';
+import ManageDelivery from './pages/ManageDelivery';
+import ManageBlog from './pages/ManageBlog';
+import ManageShipping from './pages/ManageShipping';
+import ManagePrinting from './pages/ManagePrinting';
+import ManageProducts from './pages/ManageProducts';
+import ShoppingAppStep1 from './pages/manage/ShoppingAppStep1';
+import ShoppingAppStep2 from './pages/manage/ShoppingAppStep2';
+import ShoppingAppStep3 from './pages/manage/ShoppingAppStep3';
+import ManageCoPackingRuns from './pages/manage/copacking/CoPackingRuns';
+import ManageCoPackingRunsSpecific from './pages/manage/copacking/CoPackingRunsSpecific';
+import Signup from './pages/Signup';
+import Feedback from './pages/Feedback';
+import Receipts from './pages/manage/receipt/Receipts';
+import CourierRouting from './pages/courier/CourierRouting';
+import VendorProfile from './pages/vendor/VendorProfile';
+import OutboundShipments from './pages/manage/shipments/OutboundShipments';
+import InboundShipments from './pages/manage/shipments/InboundShipments';
+import ManageRetail from './pages/manage/retail/ManageRetail';
 
-export default (
-  <Fragment>
+// Pick/Pack
+import PickPackPortal from 'pages/pick-pack/PickPackPortal';
+import OrderFulfillment from 'pages/pick-pack/OrderFulfillmentPage';
+
+// Packaging Returns
+import PackagingReturnsPortal from 'pages/packaging-returns/ReturnsPortal';
+import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
+
+// Packaging Inventory
+import PackagingInventoryPortal from 'pages/packaging-inventory/';
+
+function Routes({ store, ...props }) {
+  const { user } = store;
+  return (
     <Switch>
       {/* Admin Routes (NOT CRAWLED) */}
       <Route exact path="/manage/retail" component={ManageRetail} />
@@ -66,7 +78,54 @@ export default (
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/manage/products" component={ManageProducts} />
-      {/* Copacker Routes (NOT CRAWLED) */}
+      {/* Ops Routes (NOT CRAWLED) */}
+      {/* Pick/Pack */}
+      <OpsRoute
+        exact
+        path="/pick-pack"
+        component={PickPackPortal}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/pick-pack/:orderId"
+        component={OrderFulfillment}
+        userStore={user}
+      />
+      {/* Packaging Returns */}
+      <OpsRoute
+        exact
+        path="/packaging-returns"
+        component={PackagingReturnsPortal}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/packaging-returns/new"
+        component={NewPackagingReturn}
+        userStore={user}
+      />
+      {/* Packaging Inventory */}
+      <OpsRoute
+        exact
+        path="/packaging-inventory"
+        component={PackagingInventoryPortal}
+        userStore={user}
+      />
+      {/* Copacking */}
+      <OpsRoute
+        exact
+        path="/manage/co-packing/runs"
+        component={ManageCoPackingRuns}
+        userStore={user}
+      />
+      <OpsRoute
+        exact
+        path="/manage/co-packing/runs/:runId"
+        component={ManageCoPackingRunsSpecific}
+        userStore={user}
+      />
+      {/* Old Copacker Routes */}
       <Route
         exact
         path="/manage/co-packing/outbound"
@@ -76,16 +135,6 @@ export default (
         exact
         path="/manage/co-packing/inbound"
         component={InboundShipments}
-      />
-      <Route
-        exact
-        path="/manage/co-packing/runs"
-        component={ManageCoPackingRuns}
-      />
-      <Route
-        exact
-        path="/manage/co-packing/runs/:runId"
-        component={ManageCoPackingRunsSpecific}
       />
       {/* Ambassador Routes (NOT CRAWLED) */}
       <Route exact path="/packaging/:id" component={Mainpage} />
@@ -144,8 +193,30 @@ export default (
         }}
       />
       <Route exact path="/" component={Homepage} />
-      <Route component={Homepage} />{" "}
+      <Route component={Homepage} />{' '}
       {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
-  </Fragment>
-);
+  );
+}
+
+function OpsRoute({ component: Component, userStore, ...rest }) {
+  userStore.getStatus();
+  const { isOps, isOpsLead, isAdmin } = userStore;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isOps || isOpsLead || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+}
+
+export default Routes;

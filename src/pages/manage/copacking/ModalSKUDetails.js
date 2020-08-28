@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 
 import { connect } from 'utils'
-import QrCodeScanner from './QRCodeScanner'
+import ScannerQR from 'common/ScannerQR'
 
 const DEFAULT_ERROR = 'Error: Calibrate Unit Weight'
 
@@ -285,9 +285,12 @@ class ModalSKUDetails extends Component {
               </TableBody>
             </Table>
           </Container>
-          <QrCodeScanner
+          <ScannerQR
             isOpen={isQROpen}
             onClose={this.handleQRClose}
+            messageSuccess="QR Scanned"
+            messageError="QR Already Scanned"
+            multiple
           />
         </ModalBody>
       </Modal>

@@ -1,20 +1,20 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView, logEvent, logModalView } from "services/google-analytics";
-import { formatMoney, connect, datesEqual } from "utils";
-import { APP_URL } from "config";
+import { logPageView, logEvent, logModalView } from 'services/google-analytics';
+import { formatMoney, connect, datesEqual } from 'utils';
+import { APP_URL } from 'config';
 
-import AddonFirstModal from "common/AddonFirstModal";
-import CarbonBar from "common/CarbonBar";
+import AddonFirstModal from 'common/AddonFirstModal';
+import CarbonBar from 'common/CarbonBar';
 
-import Product from "./Product";
-import ProductList from "./ProductList";
-import ProductTop from "./ProductTop";
-import MobileSearch from "./MobileSearch";
-import MobileCartBtn from "./MobileCartBtn";
-import CategoryCard from "./CategoryCard";
-import CategoriesList from "./CategoriesList";
-import ProductWithPackaging from "../ProductWithPackaging";
+import Product from './Product';
+import ProductList from './ProductList';
+import ProductTop from './ProductTop';
+import MobileSearch from './MobileSearch';
+import MobileCartBtn from './MobileCartBtn';
+import CategoryCard from './CategoryCard';
+import CategoriesList from './CategoriesList';
+import ProductWithPackaging from '../ProductWithPackaging';
 
 class Mainpage extends Component {
   constructor(props) {
@@ -32,10 +32,10 @@ class Mainpage extends Component {
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
-      categoryTypeMode: "limit",
+      categoryTypeMode: 'limit',
       showMobileSearch: false,
       filters: [],
-      sortType: "times_bought",
+      sortType: 'times_bought',
     };
 
     this.id = this.props.match.params.id;
@@ -47,13 +47,13 @@ class Mainpage extends Component {
     logPageView(location.pathname);
 
     this.userStore.getStatus(true).then((status) => {
-      if (window.location.pathname.split("/")[1] === "packaging") {
+      if (window.location.pathname.split('/')[1] === 'packaging') {
         if (
           [
-            "5e0e488c3f26046cc60195f6",
-            "5e0e488c3f26046cc60195f4",
-            "5e0e488c3f26046cc60195f3",
-            "5e0e488c3f26046cc60195f2",
+            '5e0e488c3f26046cc60195f6',
+            '5e0e488c3f26046cc60195f4',
+            '5e0e488c3f26046cc60195f3',
+            '5e0e488c3f26046cc60195f2',
           ].includes(this.props.match.params.id)
         ) {
           window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/${this.props.match.params.id}.pdf`;
@@ -61,7 +61,7 @@ class Mainpage extends Component {
           this.packagingUnitStore
             .getPackagingUnit(this.props.match.params.id)
             .then((unit) => {
-              if (unit.packaging_type_id === "5e0e45220ec2446bcfeed983") {
+              if (unit.packaging_type_id === '5e0e45220ec2446bcfeed983') {
                 window.location.href = `https://the-wally-shop-app.s3.us-east-2.amazonaws.com/ambassador-pdf/welcome-letter.pdf?qr_ref=${this.props.match.params.id}`;
               } else {
                 if (unit.product_id) {
@@ -72,24 +72,24 @@ class Mainpage extends Component {
               }
             })
             .catch((e) =>
-              console.error("Failed to load product displayed: ", e)
+              console.error('Failed to load product displayed: ', e),
             );
         }
       } else {
         if (!status) {
-          this.routing.push("/");
+          this.routing.push('/');
         } else {
-          if (window.location.pathname.split("/")[1] === "schedule-pickup") {
-            this.modalStore.toggleModal("schedulepickup");
+          if (window.location.pathname.split('/')[1] === 'schedule-pickup') {
+            this.modalStore.toggleModal('schedulepickup');
           } else {
             this.userStore.giftCardPromo && this.processGiftCardPromo(status);
             this.checkoutStore.getDeliveryTimes();
             this.loadData();
             const { mainFirst, mainSecond } = this.userStore.flags || {};
-            !mainFirst && this.modalStore.toggleModal("mainFirst");
+            !mainFirst && this.modalStore.toggleModal('mainFirst');
             mainFirst &&
               !mainSecond &&
-              this.modalStore.toggleModal("mainSecond");
+              this.modalStore.toggleModal('mainSecond');
           }
         }
       }
@@ -100,12 +100,12 @@ class Mainpage extends Component {
     const id = this.props.match.params.id;
     this.id = id;
 
-    if (this.id === "buyagain") {
+    if (this.id === 'buyagain') {
       this.productStore
         .getHistoricalProducts(this.userStore.getHeaderAuth())
-        .catch((e) => console.error("Failed to load historical products: ", e));
+        .catch((e) => console.error('Failed to load historical products: ', e));
     } else {
-      let categoryTypeMode = "all";
+      let categoryTypeMode = 'all';
 
       this.setState({ categoryTypeMode });
 
@@ -118,11 +118,11 @@ class Mainpage extends Component {
         .then((data) => {
           this.userStore.adjustDeliveryTimes(
             data.delivery_date,
-            this.state.deliveryTimes
+            this.state.deliveryTimes,
           );
           this.setState({ sidebar: this.productStore.sidebar });
         })
-        .catch((e) => console.error("Failed to load product displayed: ", e));
+        .catch((e) => console.error('Failed to load product displayed: ', e));
 
       this.checkoutStore
         .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -144,7 +144,7 @@ class Mainpage extends Component {
           data &&
             this.userStore.adjustDeliveryTimes(
               data.delivery_date,
-              this.state.deliveryTimes
+              this.state.deliveryTimes,
             );
 
           if (this.userStore.cameFromCartUrl) {
@@ -168,7 +168,7 @@ class Mainpage extends Component {
           }
         })
         .catch((e) => {
-          console.error("Failed to load current cart", e);
+          console.error('Failed to load current cart', e);
         });
     }
   }
@@ -178,30 +178,30 @@ class Mainpage extends Component {
       this.checkoutStore
         .checkPromo(
           { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth()
+          this.userStore.getHeaderAuth(),
         )
         .then((data) => {
-          let msg = "";
+          let msg = '';
           if (data.valid) {
-            msg = "Store Credit Redeemed";
+            msg = 'Store Credit Redeemed';
             this.userStore.getUser().then(() => {
               this.loadData();
             });
           } else {
-            msg = "Invalid Promo-code";
+            msg = 'Invalid Promo-code';
           }
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         })
         .catch((e) => {
           const msg = !e.response.data.error
-            ? "Check Promo failed"
+            ? 'Check Promo failed'
             : e.response.data.error.message;
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         });
     } else {
-      this.modalStore.toggleModal("login");
+      this.modalStore.toggleModal('login');
     }
   }
 
@@ -213,20 +213,20 @@ class Mainpage extends Component {
   }
 
   handleCheckoutMobile() {
-    logEvent({ category: "Cart", action: "ClickCheckoutMobile" });
+    logEvent({ category: 'Cart', action: 'ClickCheckoutMobile' });
     if (this.userStore.status) {
       this.uiStore.toggleCartMobile(false);
-      this.routing.push("/main/similar-products");
+      this.routing.push('/main/similar-products');
     } else {
       this.uiStore.toggleCartMobile(false);
-      this.modalStore.toggleModal("login");
+      this.modalStore.toggleModal('login');
     }
   }
 
   handleDeleteMobile(id) {
-    logEvent({ category: "Cart", action: "ClickDeleteProductMobile" });
+    logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
     this.uiStore.toggleCartMobile();
-    this.modalStore.toggleModal("delete", id);
+    this.modalStore.toggleModal('delete', id);
   }
 
   toggleSearchCheck(id) {
@@ -255,13 +255,13 @@ class Mainpage extends Component {
   };
 
   handleOpenCartMobile = () => {
-    logModalView("/cart-mobile");
+    logModalView('/cart-mobile');
     this.uiStore.toggleCartMobile(true);
   };
 
   handleProductModal = (product_id) => {
     this.productStore.showModal(product_id, null).then((data) => {
-      this.modalStore.toggleModal("product");
+      this.modalStore.toggleModal('product');
     });
   };
 
@@ -272,11 +272,11 @@ class Mainpage extends Component {
       this.productStore.resetSearch();
       return;
     }
-    logEvent({ category: "Search", action: "SearchKeyword", label: keyword });
+    logEvent({ category: 'Search', action: 'SearchKeyword', label: keyword });
     this.productStore.searchKeyword(
       keyword,
       this.userStore.getDeliveryParams(),
-      this.userStore.getHeaderAuth()
+      this.userStore.getHeaderAuth(),
     );
   };
 
@@ -310,11 +310,11 @@ class Mainpage extends Component {
 
   sortByType = (a, b) => {
     switch (this.state.sortType) {
-      case "times_bought":
+      case 'times_bought':
         return b.times_bought - a.times_bought;
-      case "last_ordered":
+      case 'last_ordered':
         return Date(a.last_ordered) <= Date(b.last_ordered);
-      case "by_name":
+      case 'by_name':
         return a.product_name.localeCompare(b.product_name);
       default:
         return 0;
@@ -363,7 +363,7 @@ class Mainpage extends Component {
                 </div>
               </div>
 
-              {id === "buyagain" && !this.productStore.search.state ? (
+              {id === 'buyagain' && !this.productStore.search.state ? (
                 <div className="col-xl-10 col-md-9 col-sm-12">
                   <div className="product-content-right">
                     <div className="product-breadcrumb">
@@ -374,27 +374,27 @@ class Mainpage extends Component {
                           <ul>
                             <li
                               className={
-                                this.state.sortType === "times_bought" &&
-                                "active"
+                                this.state.sortType === 'times_bought' &&
+                                'active'
                               }
-                              onClick={() => this.handleSort("times_bought")}
+                              onClick={() => this.handleSort('times_bought')}
                             >
                               Most Bought
                             </li>
                             <li
                               className={
-                                this.state.sortType === "last_ordered" &&
-                                "active"
+                                this.state.sortType === 'last_ordered' &&
+                                'active'
                               }
-                              onClick={() => this.handleSort("last_ordered")}
+                              onClick={() => this.handleSort('last_ordered')}
                             >
                               Recently Ordered
                             </li>
                             <li
                               className={
-                                this.state.sortType === "by_name" && "active"
+                                this.state.sortType === 'by_name' && 'active'
                               }
-                              onClick={() => this.handleSort("by_name")}
+                              onClick={() => this.handleSort('by_name')}
                             >
                               A-Z
                             </li>
@@ -442,14 +442,14 @@ class Mainpage extends Component {
                           filters.length
                             ? !filters.some((f) => {
                                 if (p.allergens && p.tags) {
-                                  let [t, v] = f.split(",");
-                                  if (t === "allergen")
+                                  let [t, v] = f.split(',');
+                                  if (t === 'allergen')
                                     return p.allergens.includes(v);
-                                  if (t === "tag") return !p.tags.includes(v);
+                                  if (t === 'tag') return !p.tags.includes(v);
                                 }
                                 return true;
                               })
-                            : true
+                            : true,
                         )
                         .map((product, index) => (
                           <Product
@@ -463,11 +463,11 @@ class Mainpage extends Component {
                   </div>
                 </div>
               ) : (
-                id !== "buyagain" && (
+                id !== 'buyagain' && (
                   <div className="col-xl-10 col-md-9 col-sm-12">
                     <div className="product-content-right">
-                      {this.props.location.pathname.split("/")[1] ===
-                      "packaging-blank" ? (
+                      {this.props.location.pathname.split('/')[1] ===
+                      'packaging-blank' ? (
                         <ProductWithPackaging
                           packagingId={this.props.match.params.id}
                         />
@@ -485,7 +485,7 @@ class Mainpage extends Component {
                             <CarbonBar value={count % 12} />
                           </div>
 
-                          {this.state.categoryTypeMode === "limit" ? (
+                          {this.state.categoryTypeMode === 'limit' ? (
                             <div className="row">
                               {this.productStore.main_display.map(
                                 (category, index) => (
@@ -493,7 +493,7 @@ class Mainpage extends Component {
                                     key={index}
                                     category={category}
                                   />
-                                )
+                                ),
                               )}
                             </div>
                           ) : (
@@ -507,7 +507,7 @@ class Mainpage extends Component {
                                   deliveryTimes={this.state.deliveryTimes}
                                   onProductClick={this.handleProductModal}
                                 />
-                              )
+                              ),
                             )
                           )}
                         </React.Fragment>
@@ -525,7 +525,7 @@ class Mainpage extends Component {
         />
         <div
           className={`cart-mobile d-md-none ${
-            this.uiStore.cartMobile ? "open" : ""
+            this.uiStore.cartMobile ? 'open' : ''
           }`}
         >
           <button
@@ -549,7 +549,7 @@ class Mainpage extends Component {
                           <br />
                           <span>{c.packaging_name}</span>
                         </td>
-                        <td style={{ width: 46, color: "#e07f82" }}>
+                        <td style={{ width: 46, color: '#e07f82' }}>
                           {formatMoney(c.total / 100)}
                         </td>
                         <td
@@ -601,4 +601,4 @@ class Mainpage extends Component {
   }
 }
 
-export default connect("store")(Mainpage);
+export default connect('store')(Mainpage);

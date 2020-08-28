@@ -1,0 +1,45 @@
+.title {
+  text-align: center;
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  margin: 1rem;
+}
+
+.cardHeader {
+  padding: 1rem;
+  background-color: #ede9ed;
+}
+
+.subTitle {
+  padding: 1rem;
+}
+
+.complete {
+  color: #079d72;
+}
+
+.pendingQA {
+  color: #e0ac00;
+}
+
+.received {
+  color: #ba3b46;
+}
+
+.statusText {
+  padding: 1rem;
+  padding-top: 0;
+  background-color: #ede9ed;
+}
+
+.highlight {
+  border: 1px solid red;
+}
+
+.labelLink {
+  padding: 1rem 0;
+  font-size: 1rem;
+}

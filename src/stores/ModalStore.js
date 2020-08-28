@@ -1,102 +1,104 @@
-import {observable, decorate, action} from 'mobx'
+import { observable, decorate, action } from 'mobx';
 
 class ModalStore {
-  modalPull = []
+  modalPull = [];
 
-  isOpen = false
-  modalId = null
-  msg = null
-  modalData = null
+  isOpen = false;
+  modalId = null;
+  msg = null;
+  modalData = null;
+  childrenComponent = null;
 
-  product = false
-  productId = null
+  product = false;
+  productId = null;
 
-  changeProduct = false
-  changeFarm = false
-  changePrice = false
+  changeProduct = false;
+  changeFarm = false;
+  changePrice = false;
 
-  delivery = false
-  deliveryChange = false
-  deliveryChangeType = null
-  deliveryChangeData = null
+  delivery = false;
+  deliveryChange = false;
+  deliveryChangeType = null;
+  deliveryChangeData = null;
 
-  addonsFirst = false
+  addonsFirst = false;
 
-  packaging = false
-  missing = false
+  packaging = false;
+  missing = false;
 
   toggleDelivery() {
-    this.delivery = !this.delivery
+    this.delivery = !this.delivery;
   }
 
   showDeliveryChange(type, data) {
-    this.deliveryChange = true
-    this.deliveryChangeType = type
-    this.deliveryChangeData = data
+    this.deliveryChange = true;
+    this.deliveryChangeType = type;
+    this.deliveryChangeData = data;
   }
 
   hideDeliveryChange() {
-    this.deliveryChange = false
-    this.deliveryChangeType = null
-    this.deliveryChangeData = null
+    this.deliveryChange = false;
+    this.deliveryChangeType = null;
+    this.deliveryChangeData = null;
   }
 
-  toggleModal(modalId, msg = null, data = null) {
+  toggleModal(modalId, msg = null, data = null, childrenComponent = null) {
     if (!this.modalPull.length) {
-      this.switchModal(modalId)
-      this.isOpen = !this.isOpen
+      this.switchModal(modalId);
+      this.isOpen = !this.isOpen;
     }
 
-    if(modalId && !this.modalPull.includes(modalId)) {
-      this.modalPull.push(modalId)
+    if (modalId && !this.modalPull.includes(modalId)) {
+      this.modalPull.push(modalId);
     }
-    this.msg = msg
-    this.modalData = data
+    this.msg = msg;
+    this.modalData = data;
+    this.childrenComponent = childrenComponent;
   }
 
   switchModal(modalId, msg, data) {
-    this.modalId = modalId || null
+    this.modalId = modalId || null;
 
     if (msg) {
-      this.msg = msg
+      this.msg = msg;
     }
     if (data) {
-      this.modalData = data
+      this.modalData = data;
     }
   }
 
   toggleProduct(id) {
-    this.product = !this.product
+    this.product = !this.product;
     if (id) {
-      this.productId = id
+      this.productId = id;
     } else {
-      this.productId = null
+      this.productId = null;
     }
   }
 
   toggleChangeProduct() {
-    this.changeProduct = !this.changeProduct
+    this.changeProduct = !this.changeProduct;
   }
 
   toggleChangeFarm() {
-    this.changeFarm = !this.changeFarm
+    this.changeFarm = !this.changeFarm;
   }
 
   toggleChangePrice() {
-    this.changePrice = !this.changePrice
+    this.changePrice = !this.changePrice;
   }
 
   toggleAddonsFirst() {
-    this.addonsFirst = !this.addonsFirst
+    this.addonsFirst = !this.addonsFirst;
   }
 
   togglePackaging = () => {
-    this.packaging = !this.packaging
-  }
+    this.packaging = !this.packaging;
+  };
 
   toggleMissing = () => {
-    this.missing = !this.missing
-  }
+    this.missing = !this.missing;
+  };
 }
 
 decorate(ModalStore, {
@@ -129,7 +131,8 @@ decorate(ModalStore, {
   toggleDelivery: action,
   togglePackaging: action,
   toggleMissing: action,
-})
 
+  closeModal: action,
+});
 
-export default new ModalStore()
+export default new ModalStore();

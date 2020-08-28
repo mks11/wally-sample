@@ -1,39 +1,37 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-import {
-  Row,
-  Col,
-  Container,
-} from 'reactstrap'
+import React, { Component } from "react";
+import moment from "moment";
+import { Row, Col, Container } from "reactstrap";
 
-import Title from '../common/page/Title'
-import { BASE_URL } from "../config"
-import { connect } from '../utils'
+import Title from "../common/page/Title";
+import { BASE_URL } from "../config";
+import { connect } from "../utils";
 
 class ManagePrinting extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.userStore = props.store.user
-    this.adminStore = props.store.admin
-    this.contentStore = props.store.content
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
+    this.contentStore = props.store.content;
   }
 
   componentDidMount() {
-    // this.userStore.getStatus(true)
-    //   .then((status) => {
-    //     const user = this.userStore.user
-    //     if (!status || user.type !== 'admin') {
-    //       this.props.store.routing.push('/')
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.props.store.routing.push('/')
-    //   })
+    this.userStore
+      .getStatus()
+      .then((status) => {
+        const { isAdmin } = this.userStore;
+        if (!status || !isAdmin) {
+          this.props.store.routing.push("/");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        this.props.store.routing.push("/");
+      });
   }
 
   render() {
-    const currentDate = moment().format('YYYY-MM-DD');
+    const currentDate = moment().format("YYYY-MM-DD");
 
     return (
       <div className="App">
@@ -62,8 +60,8 @@ class ManagePrinting extends Component {
           </Container>
         }
       </div>
-    )
+    );
   }
 }
 
-export default connect("store")(ManagePrinting)
+export default connect("store")(ManagePrinting);

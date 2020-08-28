@@ -17,6 +17,7 @@ class About extends Component {
     // Store page view in google analytics
     const { location } = this.routing;
     logPageView(location.pathname);
+    this.userStore.getStatus();
   }
 
   handleLogin = () => {

@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Input } from "reactstrap";
+import React, { Component } from 'react';
+import { Input } from 'reactstrap';
 
-import { logModalView } from "services/google-analytics";
-import { validateEmail } from "../../utils";
-import FBLogin from "../../common/FBLogin";
+import { logModalView } from 'services/google-analytics';
+import { validateEmail } from '../../utils';
+import FBLogin from '../../common/FBLogin';
 
 const ErrorInfo = (props) => {
   return props.invalidText ? (
@@ -18,19 +18,19 @@ class LoginModal extends Component {
     super(props);
     this.state = {
       step: 1,
-      email: "",
-      password: "",
-      invalidText: "",
+      email: '',
+      password: '',
+      invalidText: '',
     };
   }
 
   handleSubmit = (e) => {
-    this.setState({ invalidText: "" });
+    this.setState({ invalidText: '' });
     const { email, password } = this.state;
     const { user, routing } = this.props.stores;
 
     if (!password) {
-      this.setState({ invalidText: "Password cannot be empty" });
+      this.setState({ invalidText: 'Password cannot be empty' });
       return;
     }
 
@@ -38,10 +38,17 @@ class LoginModal extends Component {
       .login(email, password)
       .then(() => {
         this.props.toggle();
-        routing.push("/main");
+        const { isUser, isOps, isOpsLead, isAdmin } = user;
+        if (isUser) {
+          routing.push('/main');
+        } else if (isOps || isOpsLead) {
+          routing.push('/pick-pack');
+        } else if (isAdmin) {
+          routing.push('/manage/retail');
+        }
       })
       .catch((e) => {
-        console.error("Failed to login", e);
+        console.error('Failed to login', e);
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg });
       });
@@ -52,10 +59,10 @@ class LoginModal extends Component {
     const { email } = this.state;
 
     if (!email) {
-      this.setState({ invalidText: "Email cannot be empty" });
+      this.setState({ invalidText: 'Email cannot be empty' });
       return;
     } else if (!validateEmail(email)) {
-      this.setState({ invalidText: "Email not valid" });
+      this.setState({ invalidText: 'Email not valid' });
       return;
     }
 
@@ -66,32 +73,32 @@ class LoginModal extends Component {
   handlePrev = (e) => {
     const { step } = this.state;
     this.setState({
-      invalidText: "",
-      password: "",
+      invalidText: '',
+      password: '',
       step: step - 1,
     });
     e.preventDefault();
   };
 
   handleLogin = (e) => {
-    logModalView("/signup-zip");
-    this.props.switchTo("signup");
+    logModalView('/signup-zip');
+    this.props.switchTo('signup');
   };
 
   handleInputChange = (e) => {
     const value =
-      e.target.name === "email" ? e.target.value.toLowerCase() : e.target.value;
+      e.target.name === 'email' ? e.target.value.toLowerCase() : e.target.value;
 
     this.setState({
       [e.target.name]: value,
-      invalidText: "",
+      invalidText: '',
     });
     e.preventDefault();
   };
 
   handleEnter = (e) => {
     if (e.keyCode === 13) {
-      e.target.name === "email" ? this.handleNext(e) : this.handleSubmit(e);
+      e.target.name === 'email' ? this.handleNext(e) : this.handleSubmit(e);
     }
   };
 
@@ -105,7 +112,7 @@ class LoginModal extends Component {
         this.setState({ step: 3 });
       })
       .catch((e) => {
-        console.error("Failed to login", e);
+        console.error('Failed to login', e);
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg });
       });
@@ -143,7 +150,7 @@ class LoginModal extends Component {
               <ErrorInfo invalidText={invalidText} />
               <button
                 type="button"
-                className={`btn btn-main mt-5 ${email ? "active" : ""}`}
+                className={`btn btn-main mt-5 ${email ? 'active' : ''}`}
                 onClick={this.handleNext}
               >
                 SUBMIT
@@ -174,7 +181,7 @@ class LoginModal extends Component {
               <ErrorInfo invalidText={invalidText} />
               <button
                 type="button"
-                className={`btn btn-main ${password ? "active" : ""}`}
+                className={`btn btn-main ${password ? 'active' : ''}`}
                 onClick={this.handleSubmit}
               >
                 SUBMIT

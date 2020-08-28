@@ -1,9 +1,5 @@
-import React, { Component } from 'react'
-import {
-  Modal,
-  ModalBody,
-  Container,
-} from 'reactstrap'
+import React, { Component } from 'react';
+import { Modal, ModalBody, Container } from 'reactstrap';
 import {
   Paper,
   Table,
@@ -11,21 +7,21 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core'
+} from '@material-ui/core';
 
-import Title from 'common/page/Title'
-import { connect } from 'utils'
+import Title from 'common/page/Title';
+import { connect } from 'utils';
 
-import ScanUPCFooter from './ScanUPCFooter'
+import ScanUPCFooter from './ScanUPCFooter';
 
 class ManageCoPackingRuns extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.userStore = props.store.user
-    this.adminStore = props.store.admin
-    this.routing = props.store.routing
-    this.modalStore = props.store.modal
+    this.userStore = props.store.user;
+    this.adminStore = props.store.admin;
+    this.routing = props.store.routing;
+    this.modalStore = props.store.modal;
 
     this.state = {
       copackingruns: [],
@@ -35,37 +31,34 @@ class ManageCoPackingRuns extends Component {
       copacking_process: '',
       product_id: '',
       sku_id: '',
-    }
+    };
   }
 
   componentDidMount() {
-    this.userStore.getStatus(true)
+    this.userStore
+      .getStatus(true)
       .then((status) => {
-        const user = this.userStore.user
-        if (!status || !['admin', 'co-packer'].includes(user.type)) {
-          this.props.store.routing.push('/')
-        } else {
-          this.loadCoPackingRunsData()
-        }
+        this.loadCoPackingRunsData();
       })
       .catch((error) => {
-        this.props.store.routing.push('/')
-      })
+        this.props.store.routing.push('/');
+      });
   }
 
   loadCoPackingRunsData = () => {
-    this.adminStore.getCopackingRuns()
-      .then(data => {
-        this.setState({ copackingruns: data })
+    this.adminStore
+      .getCopackingRuns()
+      .then((data) => {
+        this.setState({ copackingruns: data });
       })
-      .catch(error => {
-        this.modalStore.toggleModal('error', 'Can\'t get co-packing runs')
-      })
-  }
+      .catch((error) => {
+        this.modalStore.toggleModal('error', "Can't get co-packing runs");
+      });
+  };
 
-  handleRowClick = id => {
-    this.routing.push(`/manage/co-packing/runs/${id}`)
-  }
+  handleRowClick = (id) => {
+    this.routing.push(`/manage/co-packing/runs/${id}`);
+  };
 
   toggleBarResult = () => {
     if (this.state.isBarResultOpen) {
@@ -75,22 +68,22 @@ class ManageCoPackingRuns extends Component {
         copacking_process: '',
         product_id: '',
         sku_id: '',
-      })
+      });
     } else {
       this.setState({
         isBarResultOpen: true,
-      })
+      });
     }
-  }
+  };
 
-  handleUPCGet = res => {
+  handleUPCGet = (res) => {
     this.setState({
       name: res.name,
       copacking_process: res.copacking_process,
       product_id: res.product_id,
       sku_id: res.sku_id,
-    })
-  }
+    });
+  };
 
   render() {
     const {
@@ -99,7 +92,7 @@ class ManageCoPackingRuns extends Component {
 
       name,
       copacking_process,
-    } = this.state
+    } = this.state;
 
     return (
       <div className="App co-packing-page">
@@ -109,14 +102,16 @@ class ManageCoPackingRuns extends Component {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="left" style={{ width: '60%' }}>Co-Packing Process</TableCell>
+                  <TableCell align="left" style={{ width: '60%' }}>
+                    Co-Packing Process
+                  </TableCell>
                   <TableCell># SKUs</TableCell>
                   <TableCell>Est. # Jars</TableCell>
                   <TableCell>Est. Time (mins)</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {copackingruns.map(run => (
+                {copackingruns.map((run) => (
                   <TableRow
                     key={run._id}
                     className="clickable-row"
@@ -135,17 +130,14 @@ class ManageCoPackingRuns extends Component {
           <ScanUPCFooter onUPCGet={this.handleUPCGet} />
         </Container>
 
-        <Modal
-          autoFocus={false}
-          isOpen={isBarResultOpen}
-          centered
-        >
+        <Modal autoFocus={false} isOpen={isBarResultOpen} centered>
           <ModalBody>
-            <button className="btn-icon btn-icon--close" onClick={this.toggleBarResult}></button>
+            <button
+              className="btn-icon btn-icon--close"
+              onClick={this.toggleBarResult}
+            ></button>
             <div className="login-wrap">
-              <p className="info-popup">
-                {`Product Name: ${name}`}
-              </p>
+              <p className="info-popup">{`Product Name: ${name}`}</p>
               <p className="info-popup">
                 {`Co-packing Process: ${copacking_process}`}
               </p>
@@ -153,8 +145,8 @@ class ManageCoPackingRuns extends Component {
           </ModalBody>
         </Modal>
       </div>
-    )
+    );
   }
 }
 
-export default connect("store")(ManageCoPackingRuns)
+export default connect('store')(ManageCoPackingRuns);
