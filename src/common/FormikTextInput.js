@@ -1,10 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // Components
-import { TextField } from "@material-ui/core";
-import { HelperText } from "styled-components-lib/HelperText";
-import { Label } from "styled-components-lib/InputLabel";
+import { TextField } from '@material-ui/core';
+import { HelperText, Label } from 'styled-component-lib/InputLabel';
 
 export default function FormikTextInput({
   field,
@@ -22,14 +21,14 @@ export default function FormikTextInput({
     <>
       <Label disabled={props.disabled}>{label}</Label>
       <TextField
-        value={field.value || ""}
+        value={field.value || ''}
         onChange={handleChange}
         fullWidth
         multiline
         placeholder={props.placeholder}
         error={error}
       />
-      <HelperText>{props.helperText || ""}</HelperText>
+      <HelperText>{props.helperText || ''}</HelperText>
     </>
   );
 }

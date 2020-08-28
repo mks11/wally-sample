@@ -1,11 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 // Components
-import { Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
-import { HelperText } from "styled-components-lib/HelperText";
-import { Label } from "styled-components-lib/InputLabel";
+import { Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { HelperText, Label } from 'styled-component-lib/HelperText';
 
 const StyledSelect = styled(Select)`
   min-width: 100%;
@@ -35,7 +34,7 @@ export default function FormikAddressSelect({
       <StyledSelect
         labelId={labelId}
         defaultValue={preferredAddress.address_id}
-        value={field.value || ""}
+        value={field.value || ''}
         onChange={handleChange}
       >
         {addresses.map((address, idx) => (
@@ -44,7 +43,7 @@ export default function FormikAddressSelect({
           </MenuItem>
         ))}
       </StyledSelect>
-      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
+      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
     </>
   );
 }

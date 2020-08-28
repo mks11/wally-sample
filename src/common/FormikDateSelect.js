@@ -1,8 +1,7 @@
-import React from "react";
-import moment from "moment";
-import DatePicker from "react-datepicker";
-import { Label } from "styled-components-lib/InputLabel";
-import { HelperText } from "styled-components-lib/HelperText";
+import React from 'react';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import { HelperText, Label } from 'styled-component-lib/HelperText';
 
 export default function FormikDateSelect({
   field,
@@ -24,12 +23,12 @@ export default function FormikDateSelect({
     }
   };
 
-  let earliestDate = moment().add(1, "d");
+  let earliestDate = moment().add(1, 'd');
 
   // On Fridays, earliestDate will be set to saturday, which is invalid.
   // Automatically move it to Monday.
   while (!isValidPickupDay(earliestDate)) {
-    earliestDate = earliestDate.add(1, "d");
+    earliestDate = earliestDate.add(1, 'd');
   }
   earliestDate = earliestDate.toDate();
 
@@ -37,7 +36,7 @@ export default function FormikDateSelect({
     <>
       <Label>Pickup Date</Label>
       <DatePicker
-        dateFormat={"MM/dd/yyyy"}
+        dateFormat={'MM/dd/yyyy'}
         selected={field.value || undefined}
         minDate={earliestDate}
         onSelect={selectDate}
@@ -45,7 +44,7 @@ export default function FormikDateSelect({
         placeholderText="Select a pickup date."
         className={`form-control p-4 util-font-size-16`}
       />
-      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
+      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
     </>
   );
 }

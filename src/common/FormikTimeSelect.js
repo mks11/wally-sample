@@ -1,13 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import moment from "moment";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import styled from 'styled-components';
 
 // Components
-import { MenuItem, Select } from "@material-ui/core";
-import { BrowserView, MobileView } from "react-device-detect";
-import { HelperText } from "styled-components-lib/HelperText";
-import { Label } from "styled-components-lib/InputLabel";
+import { MenuItem, Select } from '@material-ui/core';
+import { BrowserView, MobileView } from 'react-device-detect';
+import { HelperText, Label } from 'styled-component-lib/InputLabel';
 
 const StyledSelect = styled(Select)`
   min-width: 100%;
@@ -33,12 +32,12 @@ export default function FormikTimeSelect({
         <StyledSelect
           labelId={labelId}
           native
-          value={field.value || ""}
+          value={field.value || ''}
           onChange={handleChange}
         >
           {props.timeRange.map((time, idx) => (
             <option key={`${labelId}-${idx}`} value={time}>
-              {moment(time).format("LT")}
+              {moment(time).format('LT')}
             </option>
           ))}
         </StyledSelect>
@@ -46,18 +45,18 @@ export default function FormikTimeSelect({
       <BrowserView>
         <StyledSelect
           labelId={labelId}
-          value={field.value || ""}
+          value={field.value || ''}
           disabled={props.disabled}
           onChange={handleChange}
         >
           {props.timeRange.map((time, idx) => (
             <MenuItem key={`${labelId}-${idx}`} value={time}>
-              {moment(time).format("LT")}
+              {moment(time).format('LT')}
             </MenuItem>
           ))}
         </StyledSelect>
       </BrowserView>
-      <HelperText>{props.touched && props.error ? props.error : ""}</HelperText>
+      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
     </>
   );
 }
