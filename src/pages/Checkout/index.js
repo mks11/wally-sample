@@ -336,6 +336,7 @@ class Checkout extends Component {
     this.checkoutStore
       .submitOrder(
         {
+          cart_id: this.checkoutStore.cart._id,
           store_credit: this.state.appliedStoreCreditAmount > 0,
           user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           address_id: this.userStore.selectedDeliveryAddress.address_id,
