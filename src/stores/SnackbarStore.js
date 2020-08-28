@@ -13,8 +13,6 @@ class SnackbarStore {
 
   closeSnackbar = () => {
     this.isOpen = false;
-    this.message = "";
-    this.severity = "info";
   };
 }
 
