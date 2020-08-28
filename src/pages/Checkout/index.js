@@ -756,6 +756,7 @@ class Checkout extends Component {
                     <button
                       onClick={(e) => this.handlePlaceOrder()}
                       className={buttonPlaceOrderClass}
+                      disabled={cart_items.length == 0}
                     >
                       PLACE ORDER
                     </button>
