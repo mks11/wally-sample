@@ -1,13 +1,14 @@
 // Node Modules
 import React from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import moment from "moment";
 
 // API
 import { API_SCHEDULE_PICKUP } from "config";
 
 // Components
-import { ErrorMessage, Formik, Form, Field } from "formik";
+import { Formik, Form, Field } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
 import FormikDateSelect from "common/FormikDateSelect";
 import FormikTimeSelect from "common/FormikTimeSelect";
@@ -32,26 +33,21 @@ export default function SchedulePickupForm({
         deliveryInstructions: "",
       }}
       validate={validate}
-      onSubmit={(values) => {
-        console.log(values);
-        // const {
-        //     selectedAddressId,
-        //     latestTime,
-        //     earliestTime,
-        //     pickupDate,
-        //     invalidLatestTime,
-        //   } = this.state;
-        //   return axios.post(
-        //     API_SCHEDULE_PICKUP,
-        //     {
-        //       address_id,
-        //       scheduled_date,
-        //       earliest_time,
-        //       latest_time,
-        //       pickup_notes,
-        //     },
-        //     this.userStore.getHeaderAuth()
-        //   );
+      onSubmit={(values, actions) => {
+        loadingStore.toggle();
+        axios
+          .post(API_SCHEDULE_PICKUP, values, userStore.getHeaderAuth())
+          .then((res) => {
+            console.log(res.status);
+          })
+          .catch((error) => {
+            // Handle Error
+            console.log(error);
+          })
+          .finally(() => {
+            setTimeout(() => loadingStore.toggle(), 300);
+            actions.setSubmitting(false);
+          });
       }}
     >
       {({ errors, isSubmitting, setFieldValue, touched, validateField }) => (
