@@ -27,7 +27,7 @@ export default function SchedulePickupForm({
         scheduledDate: "",
         earliestTime: "",
         latestTime: "",
-        deliveryInstructions: "",
+        pickupInstructions: "",
       }}
       validate={validate}
       onSubmit={(values, actions) => {
@@ -140,26 +140,33 @@ export default function SchedulePickupForm({
               </Grid>
               <Grid item xs={12}>
                 <Field
-                  name="deliveryInstructions"
+                  name="pickupInstructions"
                   component={FormikTextInput}
                   handleInput={setFieldValue}
-                  label="Delivery Notes"
-                  labelId="delivery-notes"
-                  error={errors.deliveryInstructions ? true : false}
-                  helperText={errors.deliveryInstructions}
+                  label="Pickup Instructions"
+                  labelId="pickup-instructions"
+                  error={errors.pickupInstructions ? true : false}
+                  helperText={errors.pickupInstructions}
                   validate={validateDeliveryInstructions}
                   validateField={validateField}
                   placeholder="Any special instructions for UPS?"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={8}>
                 <Button
                   type="submit"
                   variant="contained"
-                  color="secondary"
+                  color="primary"
+                  fullWidth
                   disabled={isSubmitting}
                 >
-                  Confirm Pickup
+                  <Typography
+                    variant="h3"
+                    component="span"
+                    style={{ color: "#fff" }}
+                  >
+                    Confirm Pickup
+                  </Typography>
                 </Button>
               </Grid>
             </Grid>
