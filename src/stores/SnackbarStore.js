@@ -1,4 +1,4 @@
-import { observable, decorate, action, reaction } from "mobx";
+import { observable, decorate, action } from "mobx";
 
 class SnackbarStore {
   isOpen = false;
