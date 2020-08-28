@@ -165,7 +165,6 @@ function Routes({ store, ...props }) {
       <Route exact path="/main" component={Mainpage} />
       <Route exact path="/orders" component={Orders} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
-      <Route exact path="/schedule-pickup" component={Mainpage} />
       <Route exact path="/user" component={Account} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />

@@ -95,7 +95,6 @@ export {
   validateEmail,
   formatMoney,
   capitalizeFirstLetter,
-  genTimePoints,
   isValidTimeOrder,
   sortByTimestampDes,
 };
