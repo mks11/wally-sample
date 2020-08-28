@@ -36,16 +36,11 @@ class Orders extends Component {
         this.snackbarStore.openSnackbar(
           err.message
             ? err.message
-            : "Oops, something went wrong while getting your order history 😧"
+            : "Oops, something went wrong while getting your order history 😧",
+          "error"
         );
       })
       .finally(() => {
-        this.snackbarStore.openSnackbar(
-          // err.message
-          // ? err.message
-          "Oops, something went wrong while getting your order history 😧",
-          "error"
-        );
         setTimeout(() => this.loadingStore.hide());
       });
   }
@@ -93,7 +88,6 @@ class Orders extends Component {
                           </th>
                           <th className="pr-4">Items</th>
                           <th className="pr-4">Total</th>
-                          <th className="pr-4">Tracking Number</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -130,13 +124,6 @@ class Orders extends Component {
                                 : "$0.00"}
                             </td>
                           )}
-                          {item.tracking_number ? (
-                            <td>
-                              <Link href={item.tracking_url}>
-                                {item.tracking_number}
-                              </Link>
-                            </td>
-                          ) : null}
                         </tr>
                       </tbody>
                     </table>
@@ -144,6 +131,16 @@ class Orders extends Component {
                     <div className="text-bold order-item-content">
                       {`${item.status === "returned" ? "Return" : "Order"}`} #:{" "}
                       {item._id}
+                    </div>
+                    <div className="text-bold order-item-content">
+                      {item.tracking_number ? (
+                        <>
+                          <span> Tracking Number </span> #:{" "}
+                          <Link href={item.tracking_url}>
+                            {item.tracking_number}
+                          </Link>
+                        </>
+                      ) : null}
                     </div>
                     <div className="order-item-content-wrapper">
                       {item.cart_items ? (
