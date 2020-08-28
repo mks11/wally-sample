@@ -41,7 +41,7 @@ class Orders extends Component {
         );
       })
       .finally(() => {
-        setTimeout(() => this.loadingStore.hide());
+        setTimeout(() => this.loadingStore.hide(), 300);
       });
   }
 
