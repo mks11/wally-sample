@@ -32,7 +32,6 @@ class SchedulePickupModal extends Component {
 }
 
 SchedulePickupModal.propTypes = {
-  onConfirmPickup: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired,
 };
