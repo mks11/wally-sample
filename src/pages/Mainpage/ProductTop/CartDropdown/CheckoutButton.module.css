@@ -1,23 +1,22 @@
-.product-cart-counter {
+.btn {
   cursor: pointer;
   border: 1px solid #ececec;
   border-radius: 10px;
   padding: 7px 10px;
-  line-height: 24px;
-  font-size: 16px;
+  /* line-height: 24px; */
 }
-.product-cart-counter.active {
+
+.btn.active {
   background: #97adff;
   color: #fff;
   border: none;
 }
-.product-cart-counter.active span {
-  border-left: 1px solid #fff;
-}
-.product-cart-counter i {
+
+.icon {
   margin-right: 10px;
 }
-.product-cart-counter span {
+
+.items {
   border-left: 1px solid #ececec;
   padding-left: 10px;
 }

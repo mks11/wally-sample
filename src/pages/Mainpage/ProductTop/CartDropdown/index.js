@@ -54,12 +54,14 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
   return (
     <div className="dropdown-cart-wrapper">
       <div className="btn-group dropdown-cart">
-        <CheckoutButton
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleCheckout}
-          count={count}
-        />
+        <div className="product-cart-counter">
+          <CheckoutButton
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onCheckout={handleCheckout}
+            count={count}
+          />
+        </div>
         <div
           className="dropdown-wrapper"
           onMouseEnter={handleMouseEnterWithoutLog}
