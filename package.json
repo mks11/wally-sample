@@ -84,9 +84,9 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "generate-robotstxt": "^8.0.3",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react": "^7.20.6",
+    "generate-robotstxt": "^8.0.3",
     "prettier": "^2.0.5",
     "stylelint": "^13.6.1",
     "stylelint-config-prettier": "^8.0.2",
