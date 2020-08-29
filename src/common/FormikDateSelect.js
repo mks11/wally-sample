@@ -38,6 +38,7 @@ export default function FormikDateSelect({
       <Label>Pickup Date</Label>
       <DatePicker
         dateFormat={'MM/dd/yyyy'}
+        closeOnScroll={false}
         selected={field.value || undefined}
         minDate={earliestDate}
         onSelect={selectDate}
