@@ -1,22 +1,20 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-class MainError extends Component {
-  handleClose = () => {
-    this.props.toggle()
-  }
+// Components
+import { ErrorText } from 'styled-component-lib/Typography';
+import { Typography } from '@material-ui/core';
+export default function ErrorModal({ stores, ...props }) {
+  const { modal } = stores;
 
-  render() {
-    const { modal } = this.props.stores
-
-    return (
-      <div className="login-wrap">
-        <h3 className="m-0 mb-2 text-error">{modal.msg ? 'Error' : 'Oops!'}</h3>
-        <p className="mb-5 info-popup">
-          {modal.msg || 'Something went wrong during your request. Please try again later.'}
-        </p>
-      </div>
-    )
-  }
+  return (
+    <div className="login-wrap">
+      <ErrorText variant="h2" component="h1" gutterBottom>
+        Oops!
+      </ErrorText>
+      <p className="mb-5 info-popup">
+        {modal.msg ||
+          'Something went wrong during your request. Please try again later.'}
+      </p>
+    </div>
+  );
 }
-
-export default MainError

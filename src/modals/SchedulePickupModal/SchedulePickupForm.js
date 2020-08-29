@@ -46,15 +46,15 @@ export default function SchedulePickupForm({
               600,
             );
           })
-          .catch((error) => {
+          .catch(() => {
             // Handle Error
             setTimeout(
               () =>
                 modalStore.switchModal(
                   'error',
-                  'Oops! A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
+                  'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
                 ),
-              400,
+              600,
             );
           })
           .finally(() => {

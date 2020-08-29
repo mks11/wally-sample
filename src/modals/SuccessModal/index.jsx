@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import { SuccessText } from 'styled-component-lib/ModalTypography';
+import { SuccessText } from 'styled-component-lib/Typography';
 
 export default function Success({ stores, ...props }) {
   const { modal } = stores;
