@@ -1,24 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Success extends Component {
-  handleClose = () => {
-    this.props.toggle();
-  };
+// Components
+import { SuccessText } from 'styled-component-lib/ModalTypography';
 
-  render() {
-    const { modal } = this.props.stores;
+export default function Success({ stores, ...props }) {
+  const { modal } = stores;
 
-    return (
-      <div className="login-wrap">
-        <h3 className="m-0 mb-2 text-success">
-          {modal.msg ? modal.msg : 'Success'}
-        </h3>
-        <p className="mb-5 info-popup">
-          {modal.msg || 'Your request was successful!'}
-        </p>
-      </div>
-    );
-  }
+  return (
+    <div className="login-wrap">
+      <SuccessText variant="h2" component="h1" gutterBottom>
+        Success!
+      </SuccessText>
+      <p className="mb-5 info-popup">
+        {modal.msg || 'Your request was successful!'}
+      </p>
+    </div>
+  );
 }
-
-export default Success;

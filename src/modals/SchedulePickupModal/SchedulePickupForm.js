@@ -1,19 +1,19 @@
 // Node Modules
-import React from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
-import moment from "moment";
+import React from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import moment from 'moment';
 
 // API
-import { API_SCHEDULE_PICKUP } from "config";
+import { API_SCHEDULE_PICKUP } from 'config';
 
 // Components
-import { Formik, Form, Field } from "formik";
-import { Button, Grid, Typography } from "@material-ui/core";
-import FormikDateSelect from "common/FormikDateSelect";
-import FormikTimeSelect from "common/FormikTimeSelect";
-import FormikAddressSelect from "common/FormikAddressSelect";
-import FormikTextInput from "common/FormikTextInput";
+import { Formik, Form, Field } from 'formik';
+import { Button, Grid, Typography } from '@material-ui/core';
+import FormikDateSelect from 'common/FormikDateSelect';
+import FormikTimeSelect from 'common/FormikTimeSelect';
+import FormikAddressSelect from 'common/FormikAddressSelect';
+import FormikTextInput from 'common/FormikTextInput';
 
 export default function SchedulePickupForm({
   userStore,
@@ -24,11 +24,11 @@ export default function SchedulePickupForm({
   return (
     <Formik
       initialValues={{
-        addressId: "",
-        scheduledDate: "",
-        earliestTime: "",
-        latestTime: "",
-        pickupInstructions: "",
+        addressId: '',
+        scheduledDate: '',
+        earliestTime: '',
+        latestTime: '',
+        pickupInstructions: '',
       }}
       validate={validate}
       onSubmit={(values, actions) => {
@@ -37,17 +37,24 @@ export default function SchedulePickupForm({
           .post(API_SCHEDULE_PICKUP, values, userStore.getHeaderAuth())
           .then((res) => {
             const { earliestTime, latestTime } = res.data;
-            props.toggle();
+            const date = moment(earliestTime).format('dddd, MMMM Do');
+            const start = moment(earliestTime).format('h:mm A');
+            const end = moment(latestTime).format('h:mm A');
+            const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
+            setTimeout(
+              () => modalStore.switchModal('success', successMsg),
+              600,
+            );
           })
           .catch((error) => {
             // Handle Error
             setTimeout(
               () =>
                 modalStore.switchModal(
-                  "error",
-                  "Oops! A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup."
+                  'error',
+                  'Oops! A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
                 ),
-              400
+              400,
             );
           })
           .finally(() => {
@@ -68,30 +75,30 @@ export default function SchedulePickupForm({
           /* Calculate range of earliest availabilities */
         }
         const lowerEarliestTimeBound = getLowerEarliestTimeBound(
-          values.scheduledDate
+          values.scheduledDate,
         );
         const upperEarliestTimeBound = getUpperEarliestTimeBound(
-          values.scheduledDate
+          values.scheduledDate,
         );
         const earliestRange = getPickupTimes(
           lowerEarliestTimeBound,
           upperEarliestTimeBound,
-          60
+          60,
         );
 
         {
           /* Calculate range of latest availabilities */
         }
         const lowerLatestTimeBound = getLowerLatestTimeBound(
-          values.earliestTime
+          values.earliestTime,
         );
         const upperLatestTimeBound = getUpperLatestTimeBound(
-          values.earliestTime
+          values.earliestTime,
         );
         const latestRange = getPickupTimes(
           lowerLatestTimeBound,
           upperLatestTimeBound,
-          60
+          60,
         );
 
         return (
@@ -172,7 +179,7 @@ export default function SchedulePickupForm({
                   <Typography
                     variant="h3"
                     component="span"
-                    style={{ color: "#fff" }}
+                    style={{ color: '#fff' }}
                   >
                     Confirm Pickup
                   </Typography>
@@ -219,7 +226,7 @@ function getUpperEarliestTimeBound(date) {
  */
 function getLowerLatestTimeBound(earliestTime) {
   if (earliestTime) {
-    return moment(earliestTime).add(2, "h");
+    return moment(earliestTime).add(2, 'h');
   }
 
   return;
@@ -251,10 +258,10 @@ function getPickupTimes(startTime, endTime, intervalInMins = 60) {
 
     var currentTime = startTime.toISOString(true);
     while (
-      moment(currentTime).add(intervalInMins, "m").isSameOrBefore(endTime)
+      moment(currentTime).add(intervalInMins, 'm').isSameOrBefore(endTime)
     ) {
       currentTime = moment(currentTime)
-        .add(intervalInMins, "m")
+        .add(intervalInMins, 'm')
         .toISOString(true);
       result.push(currentTime);
     }
@@ -268,24 +275,24 @@ function getPickupTimes(startTime, endTime, intervalInMins = 60) {
 function validate(values) {
   const errors = {};
   if (!values.scheduledDate) {
-    errors.scheduledDate = "You forgot to select a pickup date!";
+    errors.scheduledDate = 'You forgot to select a pickup date!';
   }
 
   if (!values.earliestTime) {
-    errors.earliestTime = "You forgot to select an earliest pickup time!";
+    errors.earliestTime = 'You forgot to select an earliest pickup time!';
   }
 
   if (!values.latestTime) {
-    errors.latestTime = "You forgot to select a latest pickup time!";
+    errors.latestTime = 'You forgot to select a latest pickup time!';
   } else if (
     latestTimeIsBeforeEarliestTime(values.earliestTime, values.latestTime)
   ) {
     errors.latestTime =
-      "Your latest pickup time must come after your earliest pickup time.";
+      'Your latest pickup time must come after your earliest pickup time.';
   }
 
   if (!values.addressId) {
-    errors.addressId = "You forgot to select a pickup address!";
+    errors.addressId = 'You forgot to select a pickup address!';
   }
 
   return errors;
@@ -300,8 +307,8 @@ function validateDeliveryInstructions(value) {
 }
 
 function latestTimeIsBeforeEarliestTime(earliestTime, latestTime) {
-  const earliest = moment(earliestTime, "hh:mm a");
-  const latest = moment(latestTime, "hh:mm a");
+  const earliest = moment(earliestTime, 'hh:mm a');
+  const latest = moment(latestTime, 'hh:mm a');
 
   return latest.isBefore(earliest);
 }
