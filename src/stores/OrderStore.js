@@ -14,7 +14,7 @@ class OrderStore {
   reportSuccessModal = false;
   activeOrder = null;
 
-  async getOrders(auth) {
+  getOrders(auth) {
     return axios.get(API_GET_ORDERS, auth).then((res) =>
       runInAction(() => {
         this.orders = res.data;
