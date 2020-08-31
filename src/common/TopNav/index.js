@@ -78,6 +78,10 @@ class TopNav extends Component {
     this.uiStore.hideNavMobile();
   };
 
+  hideNavMobile = () => {
+    this.uiStore.hideNavMobile();
+  };
+
   handleMobileNavLogin = () => {
     this.uiStore.hideNavMobile();
     this.handleLogin();
@@ -150,7 +154,6 @@ class TopNav extends Component {
     const isLoggedIn = this.userStore.status;
     let storeCredit, name;
     const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
-    const { hideNavMobile } = this.uiStore;
     let bannerText =
       'We’re working hard to restock - try next week if you don’t see something!';
 
@@ -195,7 +198,7 @@ class TopNav extends Component {
                       {/* ADMIN */}
                       {this.userStore.status && isAdmin && (
                         <MobileAdminNav
-                          hideNav={hideNavMobile}
+                          hideNav={this.hideNavMobile}
                           handleSignout={this.handleMobileNavLogout}
                           userName={name}
                         />
@@ -204,7 +207,7 @@ class TopNav extends Component {
                       {/* OPS */}
                       {this.userStore.status && (isOps || isOpsLead) && (
                         <MobileOpsNav
-                          hideNav={hideNavMobile}
+                          hideNav={this.hideNavMobile}
                           handleSignout={this.handleMobileNavLogout}
                           userName={name}
                           isOpsLead={isOpsLead}
@@ -214,7 +217,7 @@ class TopNav extends Component {
                       {/* USER */}
                       {this.userStore.status && isUser && (
                         <MobileUserNav
-                          hideNav={hideNavMobile}
+                          hideNav={this.hideNavMobile}
                           handleSignout={this.handleMobileNavLogout}
                           handleSchedulePickup={
                             this.handleMobileNavSchedulePickup
@@ -227,7 +230,7 @@ class TopNav extends Component {
                       {/* GUEST */}
                       {!this.userStore.status && (
                         <MobileGuestNav
-                          hideNav={hideNavMobile}
+                          hideNav={this.hideNavMobile}
                           handleLogin={this.handleMobileNavLogin}
                           handleSignup={this.handleMobileNavSignUp}
                         />
