@@ -46,7 +46,9 @@ export default function FormikAddressSelect({
           </MenuItem>
         ))}
       </StyledSelect>
-      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
+      <HelperText>
+        {props.touched && props.error ? props.error : ' '}
+      </HelperText>
     </>
   );
 }

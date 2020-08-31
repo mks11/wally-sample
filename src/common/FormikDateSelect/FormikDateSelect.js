@@ -48,7 +48,9 @@ export default function FormikDateSelect({
         onSelect={selectDate}
         filterDate={isValidPickupDay}
       />
-      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
+      <HelperText>
+        {props.touched && props.error ? props.error : ' '}
+      </HelperText>
     </>
   );
 }

@@ -47,7 +47,9 @@ export default function FormikTimeSelect({
           </MenuItem>
         ))}
       </StyledSelect>
-      <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
+      <HelperText>
+        {props.touched && props.error ? props.error : ' '}
+      </HelperText>
     </>
   );
 }

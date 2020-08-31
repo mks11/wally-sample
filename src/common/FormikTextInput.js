@@ -29,7 +29,7 @@ export default function FormikTextInput({
         placeholder={props.placeholder}
         error={error}
       />
-      <HelperText>{props.helperText || ''}</HelperText>
+      <HelperText>{props.helperText || ' '}</HelperText>
     </>
   );
 }
