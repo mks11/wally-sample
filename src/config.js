@@ -6,7 +6,7 @@
 
 export let BASE_URL = 'http://localhost:4001';
 if (process.env.NODE_ENV === 'production') {
-  BASE_URL = 'https://evening-bayou-13995.herokuapp.com';
+  BASE_URL = 'https://the-wally-shop.herokuapp.com/';
 }
 
 export const API_GET_USER = BASE_URL + '/api/user';
@@ -60,7 +60,7 @@ export const API_SUBMIT_ISSUE = BASE_URL + '/api/issue';
 export const API_SUBMIT_FEEDBACK = BASE_URL + '/api/order/feedback';
 export const API_SUBMIT_SERVICE_FEEDBACK = BASE_URL + '/api/service/feedback';
 
-export const API_SCHEDULE_PICKUP = BASE_URL + "/api/shipping-pickup";
+export const API_SCHEDULE_PICKUP = BASE_URL + '/api/shipping-pickup';
 
 export const API_ADMIN_GET_TIME_FRAMES = BASE_URL + '/api/admin/timeframes';
 export const API_ADMIN_GET_SHOP_LOCATIONS =
