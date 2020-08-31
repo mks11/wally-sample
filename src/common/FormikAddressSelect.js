@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 // Components
-import { Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Grid, MenuItem, Select } from '@material-ui/core';
 import { HelperText } from 'styled-component-lib/HelperText';
 import { Label } from 'styled-component-lib/InputLabel';
 
@@ -34,7 +34,9 @@ export default function FormikAddressSelect({
       </Label>
       <StyledSelect
         labelId={labelId}
-        defaultValue={preferredAddress.address_id}
+        defaultValue={
+          preferredAddress ? preferredAddress.address_id : undefined
+        }
         value={field.value || ''}
         onChange={handleChange}
       >
