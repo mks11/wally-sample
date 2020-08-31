@@ -10,7 +10,7 @@ import { API_SCHEDULE_PICKUP } from 'config';
 // Components
 import { Formik, Form, Field } from 'formik';
 import { Button, Grid, Typography } from '@material-ui/core';
-import FormikDateSelect from 'common/FormikDateSelect';
+import FormikDateSelect from 'common/FormikDateSelect/FormikDateSelect';
 import FormikTimeSelect from 'common/FormikTimeSelect';
 import FormikAddressSelect from 'common/FormikAddressSelect';
 import FormikTextInput from 'common/FormikTextInput';
@@ -111,6 +111,7 @@ export default function SchedulePickupForm({
                 <Field
                   name="scheduledDate"
                   component={FormikDateSelect}
+                  customInput={<DateInput />}
                   handleSelectDate={setFieldValue}
                   touched={touched.scheduledDate}
                   error={errors.scheduledDate}
@@ -190,6 +191,16 @@ export default function SchedulePickupForm({
         );
       }}
     </Formik>
+  );
+}
+
+function DateInput({ value, onClick }) {
+  return (
+    <Button variant="outlined" onClick={onClick} fullWidth>
+      <Typography variant="body1" color="textSecondary">
+        {value || 'Select a pickup date.'}
+      </Typography>
+    </Button>
   );
 }
 
