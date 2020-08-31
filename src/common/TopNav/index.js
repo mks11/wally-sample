@@ -152,8 +152,8 @@ class TopNav extends Component {
 
   render() {
     const isLoggedIn = this.userStore.status;
-    let storeCredit, name;
     const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
+    let storeCredit, name;
     let bannerText =
       'We’re working hard to restock - try next week if you don’t see something!';
 
@@ -177,7 +177,7 @@ class TopNav extends Component {
     }
 
     let topBarClass = 'top-bar d-none';
-    if (this.uiStore.topBar) {
+    if (isUser && this.uiStore.topBar) {
       topBarClass = 'top-bar';
       headerWrapClass += ' top-bar-open';
     }
