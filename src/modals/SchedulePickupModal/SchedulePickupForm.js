@@ -169,13 +169,14 @@ export default function SchedulePickupForm({
                   placeholder="Any special instructions for UPS?"
                 />
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={10}>
                 <Button
                   type="submit"
                   variant="contained"
                   color="primary"
                   fullWidth
                   disabled={isSubmitting}
+                  style={{ padding: '1.5rem 2rem' }}
                 >
                   <Typography
                     variant="h3"
