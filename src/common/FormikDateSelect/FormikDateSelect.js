@@ -4,6 +4,9 @@ import DatePicker from 'react-datepicker';
 import { HelperText } from 'styled-component-lib/HelperText';
 import { Label } from 'styled-component-lib/InputLabel';
 
+// Styles
+import './FormikDateSelect.css';
+
 export default function FormikDateSelect({
   field,
   handleSelectDate,
@@ -37,14 +40,13 @@ export default function FormikDateSelect({
     <>
       <Label>Pickup Date</Label>
       <DatePicker
+        customInput={props.customInput}
         dateFormat={'MM/dd/yyyy'}
         closeOnScroll={false}
         selected={field.value || undefined}
         minDate={earliestDate}
         onSelect={selectDate}
         filterDate={isValidPickupDay}
-        placeholderText="Select a pickup date."
-        className={`form-control p-4 util-font-size-16`}
       />
       <HelperText>{props.touched && props.error ? props.error : ''}</HelperText>
     </>

@@ -1,0 +1,9 @@
+/* Need CSS file to edit wrapper styles */
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input,
+.react-datepicker__input-container button {
+  display: block;
+  width: 100%;
+}
