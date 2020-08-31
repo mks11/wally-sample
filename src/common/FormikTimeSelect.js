@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import styled from 'styled-components';
+import { isMobile } from 'react-device-detect';
 
 // Components
 import { MenuItem, Select } from '@material-ui/core';
@@ -41,6 +42,7 @@ export default function FormikTimeSelect({
             style={{
               borderBottom:
                 idx < props.timeRange.length - 1 ? '1px solid #e2e2e2' : '',
+              padding: isMobile ? '1.5rem 2rem' : undefined,
             }}
           >
             {moment(time).format('LT')}

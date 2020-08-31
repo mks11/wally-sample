@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import moment from 'moment';
+import { isMobile } from 'react-device-detect';
 
 // API
 import { API_SCHEDULE_PICKUP } from 'config';
@@ -176,7 +177,7 @@ export default function SchedulePickupForm({
                   color="primary"
                   fullWidth
                   disabled={isSubmitting}
-                  style={{ padding: '1.5rem 2rem' }}
+                  style={{ padding: isMobile ? '1.5rem 2rem' : undefined }}
                 >
                   <Typography
                     variant="h3"
@@ -197,7 +198,12 @@ export default function SchedulePickupForm({
 
 function DateInput({ value, onClick }) {
   return (
-    <Button variant="outlined" onClick={onClick} fullWidth>
+    <Button
+      variant="outlined"
+      onClick={onClick}
+      fullWidth
+      style={{ padding: isMobile ? '1.5rem 2rem' : undefined }}
+    >
       <Typography variant="body1" color="textSecondary">
         {value || 'Select a pickup date.'}
       </Typography>
