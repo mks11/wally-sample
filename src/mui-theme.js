@@ -19,7 +19,7 @@ let theme = createMuiTheme({
   typography: {
     h1: {
       fontFamily: ["ClearFace"].join(","),
-      fontSize: "2rem",
+      fontSize: "2.25rem",
       fontWeight: "bold",
     },
     h2: {

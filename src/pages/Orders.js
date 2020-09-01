@@ -7,10 +7,11 @@ import styled from "styled-components";
 import { connect, formatMoney } from "../utils";
 
 // Components
-import Title from "../common/page/Title";
+import { PageTitle } from "../common/page/Title";
 import ReportModal from "./orders/ReportModal";
 import ReportSuccessModal from "./orders/ReportSuccessModal";
 import {
+  // Button,
   Container,
   Grid,
   Divider,
@@ -20,7 +21,7 @@ import {
 } from "@material-ui/core";
 
 const Order = styled(Paper)`
-  padding: 2rem;
+  padding: 2rem 1rem;
 `;
 
 class Orders extends Component {
@@ -89,74 +90,63 @@ class Orders extends Component {
   render() {
     return (
       <div className="App">
-        <Title content="Orders" />
-        <section className="page-section aw--orders">
-          <Container maxdWidth="lg">
-            <Grid container spacing={4}>
-              {this.orderStore.orders && this.orderStore.orders.length > 0
-                ? this.orderStore.orders.map((item, idx) => (
-                    <Grid item xs={12} md={6} xl={4}>
-                      <Order key={`${item._id}-${idx}`} elevation={3}>
-                        <Typography variant="h2" gutterBottom>
-                          {`${item.status === "returned" ? "Return" : "Order"}`}{" "}
-                          {item._id}
-                        </Typography>
-                        <Grid container>
-                          <Grid item xs={12}>
-                            <Typography variant="body1" color="textSecondary">
-                              {item.cart_items ? "Placed" : "Returned"}{" "}
-                              {item.createdAt
-                                ? moment(
-                                    item.createdAt.substring(0, 10)
-                                  ).format("MMM DD, YYYY")
-                                : moment(
-                                    item.return_date &&
-                                      item.return_date.substring(0, 10)
-                                  ).format("MMM DD, YYYY")}
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Typography
-                              variant="body1"
-                              color="textSecondary"
-                              gutterBottom
-                            >
-                              {item.total && formatMoney(item.total / 100)}
-                              {item.total_credit &&
-                                formatMoney(item.total_credit / 100)}
-                            </Typography>
-                          </Grid>
+        <Container maxdWidth="lg">
+          <PageTitle variant="h1" gutterBottom>
+            Order History
+          </PageTitle>
+          <Grid container spacing={4}>
+            {this.orderStore.orders && this.orderStore.orders.length > 0
+              ? this.orderStore.orders.map((item, idx) => (
+                  <Grid item xs={12}>
+                    <Order key={`${item._id}-${idx}`} elevation={3}>
+                      <Typography variant="h2" gutterBottom>
+                        {`${item.status === "returned" ? "Return" : "Order"}`}{" "}
+                        {item.status !== "returned" && item._id}
+                      </Typography>
+                      <Grid container>
+                        {item.status === "returned" && (
+                          <Typography variant="body1" color="textSecondary">
+                            Ref #: {item._id}
+                          </Typography>
+                        )}
+                        <Grid item xs={12}>
+                          <Typography variant="body1" color="textSecondary">
+                            {item.cart_items ? "Placed" : "Returned"}{" "}
+                            {item.createdAt
+                              ? moment(item.createdAt.substring(0, 10)).format(
+                                  "MMM DD, YYYY"
+                                )
+                              : moment(
+                                  item.return_date &&
+                                    item.return_date.substring(0, 10)
+                                ).format("MMM DD, YYYY")}
+                          </Typography>
                         </Grid>
-                        <Divider />
-                        {/* <table>
-                          <thead>
-                            <tr>
-                              <th className="pr-4"></th>
-                              <th className="pr-4">Items</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              {item.cart_items ? (
-                                <td>{item.cart_items.length}</td>
-                              ) : (
-                                <td>
-                                  {item.returns ? item.returns.length : 0}
-                                </td>
-                              )}
-                            </tr>
-                          </tbody>
-                        </table> */}
-                        <br></br>
-                        <div className="text-bold order-item-content">
-                          {item.tracking_number ? (
-                            <>
+                        <Grid item xs={12}>
+                          <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            gutterBottom
+                          >
+                            {item.total && formatMoney(item.total / 100)}
+                            {item.total_credit &&
+                              formatMoney(item.total_credit / 100)}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12} style={{ marginBottom: "1rem" }}>
+                          <Divider />
+                        </Grid>
+                        {item.tracking_number ? (
+                          <>
+                            <Grid item xs={12}>
                               <Typography variant="h3" gutterBottom>
                                 {item.tracking_number.length === 1
                                   ? "Tracking Number"
                                   : "Tracking Numbers"}
                                 :
                               </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
                               <Grid container>
                                 {item.tracking_number.map(
                                   (trackingNumber, idx) => {
@@ -199,33 +189,57 @@ class Orders extends Component {
                                   }
                                 )}
                               </Grid>
-                            </>
-                          ) : null}
-                        </div>
-                        <div className="order-item-content-wrapper">
-                          {item.cart_items ? (
-                            <div className="order-item-content">
-                              {this.printItems(item.cart_items)}
-                            </div>
-                          ) : (
-                            <div className="order-item-content">
-                              {this.printPackaging(item.returns)}
-                            </div>
+                            </Grid>
+                          </>
+                        ) : null}
+                        <Grid item xs={12}>
+                          {item.cart_items && (
+                            <Typography variant="h3" gutterBottom>
+                              {item.cart_items.length}{" "}
+                              {item.cart_items.length === 1 ? "Item" : "Items"}:
+                            </Typography>
                           )}
-                          <a
-                            onClick={(e) => this.orderStore.toggleReport(item)}
-                            className="text-report text-blue"
-                          >
-                            Report a Problem
-                          </a>
-                        </div>
-                      </Order>
-                    </Grid>
-                  ))
-                : null}
-            </Grid>
-          </Container>
-        </section>
+                          {item.returns && (
+                            <Typography variant="h3" gutterBottom>
+                              {item.returns.length}{" "}
+                              {item.returns.length === 1
+                                ? "Package"
+                                : "Packages"}
+                              :
+                            </Typography>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={12}>
+                        {item.cart_items ? (
+                          <Typography variant="body1" gutterBottom>
+                            {this.printItems(item.cart_items)}
+                          </Typography>
+                        ) : (
+                          <Typography variant="body1" gutterBottom>
+                            {this.printPackaging(item.returns)}
+                          </Typography>
+                        )}
+                      </Grid>
+                      {/* <Grid container justify="flex-end">
+                          <Grid item>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={(e) =>
+                                this.orderStore.toggleReport(item)
+                              }
+                            >
+                              Report a Problem
+                            </Button>
+                          </Grid>
+                        </Grid> */}
+                    </Order>
+                  </Grid>
+                ))
+              : null}
+          </Grid>
+        </Container>
         <ReportModal />
         <ReportSuccessModal />
       </div>
