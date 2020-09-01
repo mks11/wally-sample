@@ -8,6 +8,7 @@ import {
   CardContent,
   Container,
   Grid,
+  Divider,
   Typography,
 } from '@material-ui/core';
 import CheckCircle from '@material-ui/icons/CheckCircle';
@@ -41,7 +42,7 @@ function StatusIcon({ status }) {
       break;
   }
 
-  return <Icon className={className} />;
+  return <Icon className={className} fontSize="small" />;
 }
 
 function StatusText({ status }) {
@@ -64,54 +65,44 @@ function StatusText({ status }) {
   }
 
   return (
-    <Typography variant="body1" className={className} align="center">
+    <Typography
+      variant="body2"
+      className={className}
+      style={{ display: 'inline-block', marginRight: '.5rem' }}
+    >
       {text}
     </Typography>
   );
 }
 
-const CardHeaderLink = styled(Link)`
-  padding: 1rem;
-  background-color: #2d82b7;
-  width: 100%;
-  text-decoration: none;
-`;
-
-const CardHeaderLinkText = styled(Typography)`
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  color: #fff;
-`;
-
-const StatusTextWrapper = styled(Grid)`
+const CardHeaderWrapper = styled(Grid)`
   padding: 1rem;
 `;
 
-function CardHeader({ orderId, status }) {
+function CardHeader({ orderId, name, status }) {
   return (
     <>
-      <Grid container alignItems="center" justify="center">
-        <CardHeaderLink to={`/pick-pack/${orderId}`}>
-          <CardHeaderLinkText variant="h4" component="span">
-            Order {orderId}
-          </CardHeaderLinkText>
-        </CardHeaderLink>
-      </Grid>
-      <StatusTextWrapper
-        container
-        justify="center"
-        alignItems="center"
-        spacing={2}
-      >
-        <Grid item>
-          <StatusText status={status} />
+      <CardHeaderWrapper container spacing={2}>
+        <Grid item xs={12}>
+          <Link to={`/pick-pack/${orderId}`}>
+            <Typography variant="h4" component="span">
+              Order {orderId}
+            </Typography>
+          </Link>
         </Grid>
-
-        <Grid item>
-          <StatusIcon status={status} />
+        <Grid item xs={12}>
+          <Typography variant="subtitle2" color="textSecondary">
+            {name}
+          </Typography>
         </Grid>
-      </StatusTextWrapper>
+        <Grid item xs={12}>
+          <Grid container alignItems="center">
+            <StatusText status={status} />
+            <StatusIcon status={status} />
+          </Grid>
+        </Grid>
+      </CardHeaderWrapper>
+      <Divider />
     </>
   );
 }
@@ -146,11 +137,11 @@ function OrderCardContent({ orderLabel, returnLabel }) {
 }
 
 function OrderCard({ orderDetails, highlight = false }) {
-  const { orderId, inboundLabel, outboundLabel, status } = orderDetails;
+  const { name, orderId, inboundLabel, outboundLabel, status } = orderDetails;
 
   return (
     <Card className={`${styles.card} ${highlight ? styles.highlight : ''}`}>
-      <CardHeader orderId={orderId} status={status} />
+      <CardHeader orderId={orderId} name={name} status={status} />
       <OrderCardContent returnLabel={inboundLabel} orderLabel={outboundLabel} />
     </Card>
   );

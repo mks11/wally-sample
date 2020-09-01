@@ -55,7 +55,11 @@ let theme = createMuiTheme({
       fontSize: '0.85rem',
       color: '#6B6D76',
     },
-    subtitle2: {},
+    subtitle2: {
+      fontFamily: ['Sofia Pro'].join(','),
+      fontSize: '1rem',
+      color: '#6B6D76',
+    },
     body1: {
       fontFamily: ['Sofia Pro'].join(','),
       fontSize: '1.25rem',
