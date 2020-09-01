@@ -1,49 +1,51 @@
-import {observable, decorate, action} from 'mobx'
+import { observable, decorate, action, runInAction } from "mobx";
 import {
   API_GET_ORDERS,
   API_SUBMIT_ISSUE,
   API_SUBMIT_FEEDBACK,
   API_SUBMIT_SERVICE_FEEDBACK,
-} from '../config'
-import axios from 'axios'
-import moment from 'moment'
+} from "../config";
+import axios from "axios";
+import moment from "moment";
 
 class OrderStore {
-  orders  = []
-  reportModal = false
-  reportSuccessModal = false
-  activeOrder = null
+  orders = [];
+  reportModal = false;
+  reportSuccessModal = false;
+  activeOrder = null;
 
-  async getOrders(auth) {
-    const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(API_GET_ORDERS + '?time='+ time, auth)
-    this.orders = res.data
+  getOrders(auth) {
+    return axios.get(API_GET_ORDERS, auth).then((res) =>
+      runInAction(() => {
+        this.orders = res.data;
+      })
+    );
   }
 
   toggleReport(order) {
-    this.reportModal = !this.reportModal
+    this.reportModal = !this.reportModal;
     if (this.reportModal) {
-      this.activeOrder = order
+      this.activeOrder = order;
     }
   }
 
   toggleReportSuccess() {
-    this.reportSuccessModal = !this.reportSuccessModal
+    this.reportSuccessModal = !this.reportSuccessModal;
   }
 
   async submitIssue(data, auth) {
-    const res = await axios.post(API_SUBMIT_ISSUE, data, auth)
-    return res
+    const res = await axios.post(API_SUBMIT_ISSUE, data, auth);
+    return res;
   }
 
   async submitFeedback(data) {
-    const res = await axios.post(API_SUBMIT_FEEDBACK, data)
-    return res
+    const res = await axios.post(API_SUBMIT_FEEDBACK, data);
+    return res;
   }
 
   async submitServiceFeedback(data) {
-    const res = await axios.post(API_SUBMIT_SERVICE_FEEDBACK, data)
-    return res
+    const res = await axios.post(API_SUBMIT_SERVICE_FEEDBACK, data);
+    return res;
   }
 }
 
@@ -54,8 +56,7 @@ decorate(OrderStore, {
   reportSuccessModal: observable,
   getOrders: action,
   toggleReport: action,
-  toggleReportSuccess: action
-})
+  toggleReportSuccess: action,
+});
 
-
-export default new OrderStore()
+export default new OrderStore();

@@ -13,6 +13,7 @@ import BackerStore from "./BackerStore";
 import VendorProfileStore from "./VendorProfileStore";
 import MetricStore from "./MetricStore";
 import LoadingSpinnerStore from "./LoadingSpinnerStore";
+import SnackbarStore from "./SnackbarStore";
 import { RouterStore } from "mobx-react-router";
 
 const store = {
@@ -33,6 +34,7 @@ const store = {
   products: VendorProfileStore,
   metric: MetricStore,
   loading: LoadingSpinnerStore,
+  snackbar: SnackbarStore,
   routing: new RouterStore(),
 };
 

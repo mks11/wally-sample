@@ -4,6 +4,7 @@ import ReactGA from 'react-ga';
 import Routes from './routes';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { CookiesProvider } from 'react-cookie';
+
 import TopNav from 'common/TopNav';
 import Footer from './common/Footer';
 import ScrollToTop from './common/ScrollToTop';
@@ -11,6 +12,7 @@ import ScrollSpy from 'common/ScrollSpy';
 import RootModal from './modals/RootModal';
 import LoadingSpinner from 'modals/LoadingSpinner';
 import Backdrop from './common/Backdrop';
+import RootSnackbar from './snackbars/RootSnackbar';
 
 //router
 import { Router } from 'react-router-dom';
@@ -56,6 +58,7 @@ ReactDOM.render(
                   </main>
                   <Footer />
                   <RootModal />
+                  <RootSnackbar />
                   <LoadingSpinner />
                 </div>
               </ScrollToTop>
