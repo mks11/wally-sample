@@ -52,9 +52,7 @@ class Orders extends Component {
       .getOrders(this.userStore.getHeaderAuth())
       .catch((err) => {
         this.snackbarStore.openSnackbar(
-          err.message
-            ? err.message
-            : "Oops, something went wrong while getting your order history 😧",
+          "Oops, something went wrong while getting your order history 😧",
           "error"
         );
       })
