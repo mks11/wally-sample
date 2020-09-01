@@ -1,10 +1,27 @@
+// Node Modules
 import React, { Component } from "react";
-import Title from "../common/page/Title";
-import { connect, formatMoney } from "../utils";
 import moment from "moment";
-import { Link } from "@material-ui/core";
+import styled from "styled-components";
+
+// Utilities
+import { connect, formatMoney } from "../utils";
+
+// Components
+import Title from "../common/page/Title";
 import ReportModal from "./orders/ReportModal";
 import ReportSuccessModal from "./orders/ReportSuccessModal";
+import {
+  Container,
+  Grid,
+  Divider,
+  Link,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+
+const Order = styled(Paper)`
+  padding: 2rem;
+`;
 
 class Orders extends Component {
   constructor(props) {
@@ -74,95 +91,140 @@ class Orders extends Component {
       <div className="App">
         <Title content="Orders" />
         <section className="page-section aw--orders">
-          <div className="container">
-            {this.orderStore.orders && this.orderStore.orders.length > 0
-              ? this.orderStore.orders.map((item, key) => (
-                  <div className="order-item mt-2 mb-5" key={key}>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th className="pr-4">
-                            {item.cart_items
-                              ? "Order Placed"
-                              : "Packaging Returned"}
-                          </th>
-                          <th className="pr-4">Items</th>
-                          <th className="pr-4">Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          {item.createdAt ? (
-                            <td>
-                              {moment(item.createdAt.substring(0, 10)).format(
-                                "MMM DD, YYYY"
+          <Container maxdWidth="lg">
+            <Grid container spacing={4}>
+              {this.orderStore.orders && this.orderStore.orders.length > 0
+                ? this.orderStore.orders.map((item, idx) => (
+                    <Grid item xs={12} md={6} xl={4}>
+                      <Order key={`${item._id}-${idx}`} elevation={3}>
+                        <Typography variant="h2" gutterBottom>
+                          {`${item.status === "returned" ? "Return" : "Order"}`}{" "}
+                          {item._id}
+                        </Typography>
+                        <Grid container>
+                          <Grid item xs={12}>
+                            <Typography variant="body1" color="textSecondary">
+                              {item.cart_items ? "Placed" : "Returned"}{" "}
+                              {item.createdAt
+                                ? moment(
+                                    item.createdAt.substring(0, 10)
+                                  ).format("MMM DD, YYYY")
+                                : moment(
+                                    item.return_date &&
+                                      item.return_date.substring(0, 10)
+                                  ).format("MMM DD, YYYY")}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography
+                              variant="body1"
+                              color="textSecondary"
+                              gutterBottom
+                            >
+                              {item.total && formatMoney(item.total / 100)}
+                              {item.total_credit &&
+                                formatMoney(item.total_credit / 100)}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Divider />
+                        {/* <table>
+                          <thead>
+                            <tr>
+                              <th className="pr-4"></th>
+                              <th className="pr-4">Items</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              {item.cart_items ? (
+                                <td>{item.cart_items.length}</td>
+                              ) : (
+                                <td>
+                                  {item.returns ? item.returns.length : 0}
+                                </td>
                               )}
-                            </td>
-                          ) : (
-                            <td>
-                              {moment(
-                                item.return_date &&
-                                  item.return_date.substring(0, 10)
-                              ).format("MMM DD, YYYY")}
-                            </td>
-                          )}
+                            </tr>
+                          </tbody>
+                        </table> */}
+                        <br></br>
+                        <div className="text-bold order-item-content">
+                          {item.tracking_number ? (
+                            <>
+                              <Typography variant="h3" gutterBottom>
+                                {item.tracking_number.length === 1
+                                  ? "Tracking Number"
+                                  : "Tracking Numbers"}
+                                :
+                              </Typography>
+                              <Grid container>
+                                {item.tracking_number.map(
+                                  (trackingNumber, idx) => {
+                                    let trackingUrl;
+                                    if (
+                                      item.tracking_number.length ===
+                                      item.tracking_url.length
+                                    ) {
+                                      trackingUrl = item.tracking_url[idx];
+                                    }
+                                    return (
+                                      <Grid
+                                        key={`order-${item._id}-${idx}`}
+                                        item
+                                        xs={12}
+                                      >
+                                        {trackingUrl ? (
+                                          <Link
+                                            href={trackingUrl}
+                                            target="_blank"
+                                            rel="noopenner noreferrer"
+                                          >
+                                            <Typography
+                                              variant="body1"
+                                              gutterBottom
+                                            >
+                                              {trackingNumber}
+                                            </Typography>
+                                          </Link>
+                                        ) : (
+                                          <Typography
+                                            variant="body1"
+                                            gutterBottom
+                                          >
+                                            {trackingNumber}
+                                          </Typography>
+                                        )}
+                                      </Grid>
+                                    );
+                                  }
+                                )}
+                              </Grid>
+                            </>
+                          ) : null}
+                        </div>
+                        <div className="order-item-content-wrapper">
                           {item.cart_items ? (
-                            <td>{item.cart_items.length}</td>
+                            <div className="order-item-content">
+                              {this.printItems(item.cart_items)}
+                            </div>
                           ) : (
-                            <td>{item.returns ? item.returns.length : 0}</td>
+                            <div className="order-item-content">
+                              {this.printPackaging(item.returns)}
+                            </div>
                           )}
-                          {item.total ? (
-                            <td>
-                              {item.total
-                                ? formatMoney(item.total / 100)
-                                : "$0.00"}
-                            </td>
-                          ) : (
-                            <td>
-                              {item.total_credit
-                                ? formatMoney(item.total_credit / 100)
-                                : "$0.00"}
-                            </td>
-                          )}
-                        </tr>
-                      </tbody>
-                    </table>
-                    <hr className="my-1" />
-                    <div className="text-bold order-item-content">
-                      {`${item.status === "returned" ? "Return" : "Order"}`} #:{" "}
-                      {item._id}
-                    </div>
-                    <div className="text-bold order-item-content">
-                      {item.tracking_number ? (
-                        <>
-                          <span> Tracking Number </span> #:{" "}
-                          <Link href={item.tracking_url}>
-                            {item.tracking_number}
-                          </Link>
-                        </>
-                      ) : null}
-                    </div>
-                    <div className="order-item-content-wrapper">
-                      {item.cart_items ? (
-                        <div className="order-item-content">
-                          {this.printItems(item.cart_items)}
+                          <a
+                            onClick={(e) => this.orderStore.toggleReport(item)}
+                            className="text-report text-blue"
+                          >
+                            Report a Problem
+                          </a>
                         </div>
-                      ) : (
-                        <div className="order-item-content">
-                          {this.printPackaging(item.returns)}
-                        </div>
-                      )}
-                      <a
-                        onClick={(e) => this.orderStore.toggleReport(item)}
-                        className="text-report text-blue"
-                      >
-                        Report a Problem
-                      </a>
-                    </div>
-                  </div>
-                ))
-              : null}
-          </div>
+                      </Order>
+                    </Grid>
+                  ))
+                : null}
+            </Grid>
+          </Container>
         </section>
         <ReportModal />
         <ReportSuccessModal />
