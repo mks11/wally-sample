@@ -10,25 +10,12 @@ import moment from 'moment'
 
 class OrderStore {
   orders  = []
-  reportModal = false
-  reportSuccessModal = false
   activeOrder = null
 
   async getOrders(auth) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss')
     const res = await axios.get(API_GET_ORDERS + '?time='+ time, auth)
     this.orders = res.data
-  }
-
-  toggleReport(order) {
-    this.reportModal = !this.reportModal
-    if (this.reportModal) {
-      this.activeOrder = order
-    }
-  }
-
-  toggleReportSuccess() {
-    this.reportSuccessModal = !this.reportSuccessModal
   }
 
   async submitIssue(data, auth) {
@@ -50,11 +37,7 @@ class OrderStore {
 decorate(OrderStore, {
   orders: observable,
   activeOrder: observable,
-  reportModal: observable,
-  reportSuccessModal: observable,
   getOrders: action,
-  toggleReport: action,
-  toggleReportSuccess: action
 })
 
 

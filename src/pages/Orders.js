@@ -3,9 +3,6 @@ import Title from '../common/page/Title'
 import { connect, formatMoney } from '../utils'
 import moment from 'moment'
 
-import  ReportModal from './orders/ReportModal'
-import  ReportSuccessModal from './orders/ReportSuccessModal'
-
 class Orders extends Component {
   constructor(props) {
     super(props)
@@ -88,14 +85,12 @@ class Orders extends Component {
               <div className="text-bold order-item-content">{`${item.status === 'returned' ? 'Return' : 'Order'}`} #: {item._id}</div>
               <div className="order-item-content-wrapper">
                 {item.cart_items ? (<div className="order-item-content">{this.printItems(item.cart_items)}</div>) : (<div className="order-item-content">{this.printPackaging(item.returns)}</div>)}
-                <a onClick={e => this.orderStore.toggleReport(item)} className="text-report text-blue">Report a Problem</a>
+                <a onClick={e => this.modalStore.toggleModal("reportIssue")} className="text-report text-blue">Report a Problem</a>
               </div>
             </div>
             ))}
           </div>
       </section>
-      <ReportModal/>
-      <ReportSuccessModal/>
     </div>
     );
   }
