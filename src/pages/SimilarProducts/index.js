@@ -184,7 +184,7 @@ class SimilarProducts extends Component {
                 </div>
                 <br />
               </div>
-              <CarbonBar value={cartItems.length % 10} />
+              <CarbonBar nCartItems={cartItems.length} />
             </div>
             <div className="container">
               <div className="col-12">
