@@ -85,7 +85,7 @@ class Orders extends Component {
               <div className="text-bold order-item-content">{`${item.status === 'returned' ? 'Return' : 'Order'}`} #: {item._id}</div>
               <div className="order-item-content-wrapper">
                 {item.cart_items ? (<div className="order-item-content">{this.printItems(item.cart_items)}</div>) : (<div className="order-item-content">{this.printPackaging(item.returns)}</div>)}
-                <a onClick={e => this.modalStore.toggleModal("reportIssue")} className="text-report text-blue">Report a Problem</a>
+                <a onClick={e => this.modalStore.toggleModal("reportIssue",null,item._id)} className="text-report text-blue">Report a Problem</a>
               </div>
             </div>
             ))}

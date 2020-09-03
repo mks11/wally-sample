@@ -111,7 +111,7 @@ class Help extends Component {
   }
 
   handleReportOrder = (item) => {
-    this.modalStore.toggleModal('reportIssue',item); //Todo
+    this.modalStore.toggleModal('reportIssue', null, item._id);
   };
 
   render() {

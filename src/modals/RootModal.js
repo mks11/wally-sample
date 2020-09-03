@@ -74,7 +74,7 @@ class RootModal extends Component {
       this.modalStore.toggleModal();
     }
 
-    e && e.preventDefault();
+    e && e.preventDefault && e.preventDefault();
   };
 
   switchModal = (modalId) => {
