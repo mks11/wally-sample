@@ -5,7 +5,6 @@ import { HelperText } from 'styled-component-lib/HelperText';
 
 const FormikTextInput = (props) => {
   const [field, meta] = useField(props);
-  console.log('meta', meta);
   return (
     <>
       <TextField error={!!(meta.touched && meta.error)} {...field} {...props} />
