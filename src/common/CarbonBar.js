@@ -25,7 +25,7 @@ class CarbonBar extends Component {
   };
 
   getWidthInPercent = (nItems) => {
-    let percent = (nItems % 12) * (100 / 12);
+    const percent = (nItems % 12) * (100 / 12);
     return `${percent}%`;
   };
 
