@@ -3711,9 +3711,11 @@ span.dropdown-item.lg {
   margin-bottom: 40px;
   cursor: pointer;
 }
+
 .product-thumbnail img {
   display: block;
-  height: 180px;
+  width: 100%;
+  height: auto;
 }
 
 .product-detail {
