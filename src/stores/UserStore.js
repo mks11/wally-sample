@@ -190,8 +190,8 @@ class UserStore {
 
   async makeDefaultAddress(address_id) {
     const res = await axios.patch(
-      API_ADDRESS_EDIT,
-      { address_id },
+      API_EDIT_USER,
+      { preferred_address: address_id },
       this.getHeaderAuth(),
     );
     return res.data;
