@@ -13,9 +13,13 @@ function AddressDeleteModal({
   };
   const handleDelete = async (address_id) => {
     try {
-      await axios.delete(API_ADDRESS_REMOVE, userStore.getHeaderAuth());
+      await axios.delete(
+        API_ADDRESS_REMOVE + address_id,
+        userStore.getHeaderAuth(),
+      );
     } catch (e) {
       console.error(e);
+    } finally {
     }
   };
 
