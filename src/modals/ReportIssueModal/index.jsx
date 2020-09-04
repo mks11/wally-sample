@@ -1,40 +1,43 @@
-import React, { Component } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 import ReportIssueForm from './ReportIssueForm';
-import { Typography, Box, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 
-class ReportIssueModal extends Component {
-  constructor(props) {
-    super(props);
-    this.modalStore = this.props.stores.modal;
-  }
+const ModalWrapper = styled(Grid)`
+  padding: 0 2rem;
+`;
 
-  render() {
-    const order_id = this.modalStore.modalData;
-    return (
-      <>
-        <Grid container xs={12} justify="center">
-          <div className="order-wrap pb-5">
-            <Box marginY={3}>
-              <Typography variant="h3" className="m-0 mb-2">
-                Order Issue
-              </Typography>
-              <Typography component="span" className="text-order mb-3">
-                Order: #{order_id}
-              </Typography>
-            </Box>
-            <Typography className="text-order text-bold mt-2">
-              Describe your issue below:
-            </Typography>
-            <ReportIssueForm
-              store={this.props.stores}
-              toggle={this.props.toggle}
-              orderId={order_id}
-            />
-          </div>
-        </Grid>
-      </>
-    );
-  }
+function ReportIssueModal({ stores, toggle, ...props }) {
+  const { modal } = stores;
+  const { orderId, packagingReturnId } = modal.modalData;
+
+  return (
+    <ModalWrapper container justify="center">
+      <Grid item xs={12}>
+        <Typography variant="h1" gutterBottom>
+          Report a problem
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        {orderId && (
+          <Typography variant="h2" gutterBottom>
+            Order #: {orderId}
+          </Typography>
+        )}
+        {packagingReturnId && (
+          <Typography variant="h2" gutterBottom>
+            Ref #: {packagingReturnId}
+          </Typography>
+        )}
+      </Grid>
+      <ReportIssueForm
+        store={stores}
+        toggle={toggle}
+        orderId={orderId}
+        packagingReturnId={packagingReturnId}
+      />
+    </ModalWrapper>
+  );
 }
 
 export default ReportIssueModal;
