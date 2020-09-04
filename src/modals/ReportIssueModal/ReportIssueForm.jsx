@@ -1,34 +1,37 @@
 import React from 'react';
-import { Form, Formik, Field } from 'formik';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import {
   TextInput,
   MultiSelect,
 } from 'common/FormikComponents/NonRenderPropAPI';
 import { PrimaryWallyButton } from './../../styled-component-lib/Buttons';
-import { Box, Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+
+const IssueTypes = [
+  'Damaged Order',
+  'Incorrect Items',
+  'Lost Shipment',
+  'Missing Items',
+  'Packaging Deposit',
+];
 
 export default function ReportIssueForm({
   store: {
     user: userStore,
     order: orderStore,
     loading: loadingStore,
-    modal: modalStore,
+    snackbar: snackbarStore,
   },
   orderId,
+  packagingReturnId,
   toggle,
 }) {
-  const IssueTypes = [
-    'Damaged Order',
-    'Packaging Deposit',
-    'Incorrect Items',
-    'Lost Shipment',
-  ];
-
   return (
     <Formik
       initialValues={{
         orderId,
+        packagingReturnId,
         description: '',
         tags: [],
       }}
@@ -36,51 +39,57 @@ export default function ReportIssueForm({
         description: Yup.string().required('Issue can not be empty'),
         tags: Yup.array(Yup.mixed().oneOf([...IssueTypes])),
       })}
-      onSubmit={({ orderId, description, tags }, { setSubmitting }) => {
+      onSubmit={({ orderId, description, tags }, actions) => {
         loadingStore.toggle();
         orderStore
           .submitIssue(
             {
               orderId,
               description,
+              packagingReturnId,
               tags,
             },
             userStore.getHeaderAuth(),
           )
-          .then((data) => {
-            //
-            toggle(); // close the modal .. issue: modalStore.toggleModal() doesn't actually close the modal
+          .then((res) => {
+            snackbarStore.openSnackbar(
+              "We've received your issue and will get back to you as soon as possible with a solution!",
+              'success',
+            );
           })
           .catch((e) => {
-            // TODO add snackbarStore to this branch
+            snackbarStore.openSnackbar(
+              'Oops, an error occured while submitting your issue! Please contact us at info@thewallyshop.co for support with this issue.',
+              'error',
+            );
           })
           .finally(() => {
-            loadingStore.toggle();
-            setSubmitting(false);
+            actions.setSubmitting(false);
+            toggle();
+            setTimeout(loadingStore.toggle(), 300);
           });
       }}
     >
-      <Form>
-        <Grid container justify="center">
+      <Form style={{ width: '100%' }}>
+        <Grid container justify="center" spacing={2}>
           <Grid item xs={12}>
-            <Box marginY={2}>
-              <TextInput
-                name="description"
-                label={'Describe'}
-                type={'text'}
-                placeholder={'Describe the issue ...'}
-                fullWidth={true}
-                multiline={true}
-                rows={2}
-              />
-            </Box>
+            <TextInput
+              name="description"
+              label={'Describe your issue'}
+              type={'text'}
+              fullWidth
+              multiline
+            />
           </Grid>
           <Grid item xs={12}>
-            <Box marginY={2}>
-              <MultiSelect name="tags" label="Issue Type" values={IssueTypes} />
-            </Box>
+            <MultiSelect name="tags" label="Issue Type" values={IssueTypes} />
           </Grid>
-          <PrimaryWallyButton type="submit"> Submit Report </PrimaryWallyButton>
+          <br></br>
+          <Grid item xs={8}>
+            <PrimaryWallyButton type="submit" fullWidth>
+              <Typography variant="body1">Submit Report</Typography>
+            </PrimaryWallyButton>
+          </Grid>
         </Grid>
       </Form>
     </Formik>
