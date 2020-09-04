@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {
-  Input,
-  MenuItem,
-  FormControl,
-  ListItemText,
-  Select,
-  Checkbox,
-  Chip,
-} from '@material-ui/core';
+import { Input, MenuItem, Select, Chip, Typography } from '@material-ui/core';
 import { Label } from 'styled-component-lib/InputLabel';
 import { HelperText } from 'styled-component-lib/HelperText';
 
@@ -26,16 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ITEM_HEIGHT = 60;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
-
 function getStyles(value, selectedValues, theme) {
   return {
     fontWeight:
@@ -50,23 +32,11 @@ export default function MultiSelect({ label, values, ...props }) {
   const theme = useTheme();
   const [selectedValues, setSelectedValues] = useState([]);
 
-  const [field, meta] = useField(props);
+  const [meta] = useField(props);
   const { setFieldValue } = useFormikContext();
 
   const handleChange = (event) => {
     setSelectedValues(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const arr = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        arr.push(options[i].value);
-      }
-    }
-
-    setSelectedValues(arr);
   };
 
   useEffect(() => {
@@ -76,6 +46,9 @@ export default function MultiSelect({ label, values, ...props }) {
   return (
     <>
       <Label htmlFor={props.id || props.name}>{label} </Label>
+      <Typography variant="subtitle1" gutterBottom>
+        Select multiple if applicable
+      </Typography>
       <Select
         multiple
         value={selectedValues}
