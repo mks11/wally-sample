@@ -426,7 +426,7 @@ class Mainpage extends Component {
                     )}
 
                     <div className="product-breadcrumb">
-                      <CarbonBar value={count % 12} />
+                      <CarbonBar nCartItems={count} />
                       <hr />
                     </div>
 
@@ -476,7 +476,7 @@ class Mainpage extends Component {
                           )}
 
                           <div className="product-breadcrumb">
-                            <CarbonBar value={count % 12} />
+                            <CarbonBar nCartItems={count} />
                           </div>
 
                           {this.state.categoryTypeMode === 'limit' ? (
