@@ -1,38 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import PlacesAutocomplete, {
   geocodeByAddress,
-  // getLatLng,
 } from 'react-places-autocomplete';
 import { useFormikContext } from 'formik';
 
-export default function PlacesAutoComplete({ name, mode = 'edit' }) {
-  const [address, setAddress] = useState({});
-  const { values, setFieldValue } = useFormikContext();
+export default function PlacesAutoComplete({ names, mode = 'edit' }) {
+  const [address, setAddress] = useState('');
+  const { values: formikValues, setFieldValue } = useFormikContext();
 
   const handleChange = (address) => {
     setAddress(address);
   };
 
-  const handleSelect = ({ address }) => {
+  const encodeAddressFromValues = () => {
+    const { streetAddress, unit, city, state, country } = formikValues;
+    if (unit) {
+      return `${streetAddress}, ${unit}, ${city}, ${state} ${country}`;
+    } else {
+      return `${streetAddress}, ${city}, ${state} ${country}`;
+    }
+  };
+
+  useEffect(() => {
+    setAddress(encodeAddressFromValues());
+  }, []);
+
+  const setFormikValuesByName = (address) => {
+    names.forEach((name) => {
+      setFieldValue(name, address[name]);
+    });
+  };
+
+  const handleSelect = (address) => {
     setAddress(address);
     geocodeByAddress(address)
-      .then((result) => {
-        const { city, state, country, zip } = getAddressComponents(results[0]);
+      .then((results) => {
+        const address = getAddressComponents(results[0]);
+        setFormikValuesByName(address);
       })
-      .catch((err) => console.error('Error', err)); //todo handle properly
+      .catch((err) => console.error('Error', err));
   };
 
   return (
     <PlacesAutocomplete
-      value={values.address}
+      value={address}
       onChange={handleChange}
       onSelect={handleSelect}
+      debounce={600}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div style={{ position: 'relative' }}>
           <input
             {...getInputProps({
-              readOnly: mode === 'edit',
+              // readOnly: mode === 'edit',
               autoComplete: 'off',
               placeholder: 'Delivery to...',
               className:
@@ -91,6 +112,11 @@ function getAddressComponents(place) {
   const state = address.administrative_area_level_1;
   const country = address.country;
   const zip = address.postal_code || '';
+  const streetAddress = `${address.street_number} ${address.route}`; //TODO more testing
 
-  return { city, state, country, zip };
+  return { city, state, country, zip, streetAddress };
 }
+
+PlacesAutoComplete.propTypes = {
+  names: PropTypes.oneOf[('city', 'state', 'country', 'zip', 'streetAddress')],
+};
