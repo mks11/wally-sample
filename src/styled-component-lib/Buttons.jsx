@@ -19,3 +19,7 @@ export const SecondaryWallyButton = styled(Button).attrs({
   color: #133063;
   border-radius: 50px;
 `;
+
+export const DangerButton = styled(Button)`
+  color: #f45246;
+`;
