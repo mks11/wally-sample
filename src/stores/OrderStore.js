@@ -1,36 +1,21 @@
-import { observable, decorate, action, runInAction } from "mobx";
+import { observable, decorate, action, runInAction } from 'mobx';
 import {
   API_GET_ORDERS,
   API_SUBMIT_ISSUE,
   API_SUBMIT_FEEDBACK,
   API_SUBMIT_SERVICE_FEEDBACK,
-} from "../config";
-import axios from "axios";
-import moment from "moment";
+} from '../config';
+import axios from 'axios';
+import moment from 'moment';
 
 class OrderStore {
   orders = [];
-  reportModal = false;
-  reportSuccessModal = false;
   activeOrder = null;
 
-  getOrders(auth) {
-    return axios.get(API_GET_ORDERS, auth).then((res) =>
-      runInAction(() => {
-        this.orders = res.data;
-      })
-    );
-  }
-
-  toggleReport(order) {
-    this.reportModal = !this.reportModal;
-    if (this.reportModal) {
-      this.activeOrder = order;
-    }
-  }
-
-  toggleReportSuccess() {
-    this.reportSuccessModal = !this.reportSuccessModal;
+  async getOrders(auth) {
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
+    const res = await axios.get(API_GET_ORDERS + '?time=' + time, auth);
+    this.orders = res.data;
   }
 
   async submitIssue(data, auth) {
@@ -52,11 +37,7 @@ class OrderStore {
 decorate(OrderStore, {
   orders: observable,
   activeOrder: observable,
-  reportModal: observable,
-  reportSuccessModal: observable,
   getOrders: action,
-  toggleReport: action,
-  toggleReportSuccess: action,
 });
 
 export default new OrderStore();

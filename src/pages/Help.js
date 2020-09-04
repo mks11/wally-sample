@@ -8,8 +8,6 @@ import { connect, formatMoney } from "../utils";
 import BoxOrder from "../common/page/help/BoxOrder";
 import Head from "../common/Head";
 import Title from "../common/page/Title";
-import ReportModal from "./orders/ReportModal";
-import ReportSuccessModal from "./orders/ReportSuccessModal";
 
 class Help extends Component {
   state = {
@@ -113,7 +111,7 @@ class Help extends Component {
   }
 
   handleReportOrder = (item) => {
-    this.orderStore.toggleReport(item);
+    this.modalStore.toggleModal('reportIssue', null, item._id);
   };
 
   render() {
@@ -390,8 +388,6 @@ class Help extends Component {
             </div>
           </div>
         </section>
-        <ReportModal />
-        <ReportSuccessModal />
       </div>
     );
   }

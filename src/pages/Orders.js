@@ -8,8 +8,6 @@ import { connect, formatMoney } from '../utils';
 
 // Components
 import { PageTitle } from '../common/page/Title';
-import ReportModal from './orders/ReportModal';
-import ReportSuccessModal from './orders/ReportSuccessModal';
 import {
   // Button,
   Container,
@@ -219,19 +217,21 @@ class Orders extends Component {
                           </Typography>
                         )}
                       </Grid>
-                      {/* <Grid container justify="flex-end">
-                          <Grid item>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={(e) =>
-                                this.orderStore.toggleReport(item)
-                              }
-                            >
-                              Report a Problem
-                            </Button>
-                          </Grid>
-                        </Grid> */}
+                      <Grid container justify="flex-end">
+                        <Grid item>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this.modalStore.toggleModal(
+                              'reportIssue',
+                              null,
+                              item._id,
+                            )}
+                          >
+                            Report a Problem
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Order>
                   </Grid>
                 ))
