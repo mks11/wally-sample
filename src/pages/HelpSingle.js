@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { logPageView } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView } from 'services/google-analytics';
+import { connect } from '../utils';
 
-import BoxOrder from "../common/page/help/BoxOrder";
-import Head from "../common/Head";
-import Title from "../common/page/Title";
+import BoxOrder from '../common/page/help/BoxOrder';
+import Head from '../common/Head';
+import Title from '../common/page/Title';
 
 class HelpSingle extends Component {
   state = {
@@ -19,6 +19,7 @@ class HelpSingle extends Component {
 
     this.helpStore = this.props.store.help;
     this.userStore = this.props.store.user;
+    this.routing = this.props.store.routing;
   }
 
   componentDidMount() {
@@ -32,7 +33,7 @@ class HelpSingle extends Component {
 
   loadData() {
     this.setState({ fetch: true });
-    const id = this.props.match.params.id ? this.props.match.params.id : "all";
+    const id = this.props.match.params.id ? this.props.match.params.id : 'all';
     this.helpStore.getQuestions(id).then((data) => {
       this.setState({ fetch: false, questions: data });
     });
@@ -59,7 +60,7 @@ class HelpSingle extends Component {
 
   render() {
     let qClass =
-      "list-bordered list-group-item d-flex justify-content-between align-items-center";
+      'list-bordered list-group-item d-flex justify-content-between align-items-center';
     return (
       <div className="app">
         <Head
@@ -88,19 +89,16 @@ class HelpSingle extends Component {
                       key={key}
                       className={
                         qClass +
-                        (key === this.state.activeQuestion ? " active" : "")
+                        (key === this.state.activeQuestion ? ' active' : '')
                       }
                       onClick={(e) => this.handleToggleQuestion(key)}
                     >
                       <div className="row w-100">
-                        <div className="col-md-11">
+                        <div className="col-md-12">
                           <a className="list-link">
                             <h4> {item.question_text} </h4>
                           </a>
                         </div>
-                        <span className="badge badge-pill col-md-1">
-                          <i className="fa fa-chevron-right fa-2x"></i>
-                        </span>
                         <div className="answer ml-3">{item.answer_text}</div>
                       </div>
                     </li>
@@ -119,4 +117,4 @@ HelpSingle.propTypes = {
   title: PropTypes.string,
 };
 
-export default connect("store")(HelpSingle);
+export default connect('store')(HelpSingle);
