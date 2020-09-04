@@ -1,20 +1,23 @@
-import React, { Component } from "react";
-import { Input } from "reactstrap";
-import Title from "../common/page/Title";
-import AddressModal from "./account/AddressModal";
-import PaymentModal from "./account/PaymentModal";
-import PromoModal from "./account/PromoModal";
-import PromoSuccessModal from "./account/PromoSuccessModal";
+import React, { Component } from 'react';
+import { Input } from 'reactstrap';
+import Title from '../common/page/Title';
+import AddressModal from './account/AddressModal';
+import PaymentModal from './account/PaymentModal';
+import PromoModal from './account/PromoModal';
+import PromoSuccessModal from './account/PromoSuccessModal';
+import { DangerButton } from 'styled-component-lib/Buttons';
+import { Button } from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 
-import { connect } from "../utils";
+import { connect } from '../utils';
 
 class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      telephone: "",
-      email: "",
+      name: '',
+      telephone: '',
+      email: '',
       editName: true,
       editTelephone: true,
     };
@@ -27,7 +30,7 @@ class Account extends Component {
   componentDidMount() {
     this.userStore.getStatus(true).then((status) => {
       if (!status) {
-        this.props.store.routing.push("/");
+        this.props.store.routing.push('/');
       } else {
         const user = this.userStore.user;
         this.setState({
@@ -42,7 +45,7 @@ class Account extends Component {
   toggleEditName(s) {
     this.setState({ editName: s });
     if (this.state.editName) {
-      const $el = window.$("#inputName");
+      const $el = window.$('#inputName');
       $el.focus();
     }
   }
@@ -50,7 +53,7 @@ class Account extends Component {
   toggleEditTelephone(s) {
     this.setState({ editTelephone: s });
     if (this.state.editTelephone) {
-      const $el = window.$("#inputTelephone");
+      const $el = window.$('#inputTelephone');
       $el.focus();
     }
   }
@@ -67,7 +70,7 @@ class Account extends Component {
       .catch((e) => {
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg });
-        console.error("Failed to delete address", e);
+        console.error('Failed to delete address', e);
       });
   }
 
@@ -85,7 +88,7 @@ class Account extends Component {
     if (!this.userStore.user) return null;
 
     const name = this.state.name;
-    const telephone = this.state.telephone ? this.state.telephone : "";
+    const telephone = this.state.telephone ? this.state.telephone : '';
 
     const addresses = this.userStore.user.addresses;
     const payments = this.userStore.user.payment;
@@ -176,21 +179,38 @@ class Account extends Component {
                   <span className="addresses--address">
                     {data.street_address} {data.unit}, {data.state} {data.zip}
                   </span>
+
                   <span className="addresses--info">{data.name}</span>
                   <span className="addresses--info">{data.telephone}</span>
+                  <Button
+                    color="primary"
+                    startIcon={<Edit />}
+                    onClick={() =>
+                      this.modalStore.toggleModal(
+                        'addressUpdate',
+                        null,
+                        data.address_id,
+                      )
+                    }
+                  >
+                    Update
+                  </Button>
+                  <DangerButton
+                    onClick={() =>
+                      this.modalStore.toggleModal(
+                        'addressDelete',
+                        null,
+                        data.address_id,
+                      )
+                    }
+                  >
+                    Delete
+                  </DangerButton>
                   <span className="addresses--default button">
                     {data.address_id ===
                     this.userStore.user.preferred_address ? (
-                      <span
-                        onClick={(e) => this.userStore.showAddressModal(data)}
-                      >
-                        DEFAULT
-                      </span>
+                      <span>DEFAULT</span>
                     ) : null}
-                    <i
-                      className="ico ico-arrow-right ml-3 button"
-                      onClick={(e) => this.userStore.showAddressModal(data)}
-                    ></i>
                   </span>
                 </li>
               ))}
@@ -250,4 +270,4 @@ class Account extends Component {
   }
 }
 
-export default connect("store")(Account);
+export default connect('store')(Account);
