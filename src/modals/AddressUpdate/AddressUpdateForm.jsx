@@ -13,7 +13,13 @@ import axios from 'axios';
 import { API_ADDRESS_EDIT } from 'config';
 
 export default function UpdateAddressForm({
-  store: { user: userStore, modal: modalStore, loading: loadingStore },
+  store: {
+    user: userStore,
+    modal: modalStore,
+    loading: loadingStore,
+    snackbar,
+  },
+  ...props
 }) {
   const passedAddrId = modalStore.modalData;
 
@@ -28,19 +34,29 @@ export default function UpdateAddressForm({
     zip,
     country,
     delivery_notes,
-    shippoAddressId,
   } = userStore.getAddressById(passedAddrId) || {};
 
   const handleFormSubmit = (values, { setSubmitting }) => {
-    try {
-      loadingStore.toggle();
-      axios.patch(API_ADDRESS_EDIT, userStore.getHeaderAuth());
-    } catch (e) {
-      //todo handle with snackbar
-    } finally {
-      loadingStore.toggle();
-      toggle(); // close the modal
-    }
+    loadingStore.toggle();
+    axios
+      .patch(API_ADDRESS_EDIT, values, userStore.getHeaderAuth())
+      .then(() => {
+        snackbar.openSnackbar(
+          'Your address was updated successfully!',
+          'success',
+        );
+      })
+      .catch((err) => {
+        snackbar.openSnackbar(
+          'There was an error updating your address. Please contact info@thewallyshop.co for assistance.',
+          'error',
+        );
+      })
+      .finally(() => {
+        setSubmitting(false);
+        props.toggle(); // close the modal
+        setTimeout(loadingStore.toggle(), 300);
+      });
   };
 
   return (
@@ -56,14 +72,15 @@ export default function UpdateAddressForm({
         zip,
         country,
         deliveryNotes: delivery_notes, //optional
-        shippoAddressId, //optional
       }}
       validationSchema={Yup.object({
         addressId: Yup.string().required('Address'),
         name: Yup.string().required("Name can't be blank"),
-        telephone: Yup.string().required("Telephone can't be blank"),
+        telephone: Yup.string()
+          .required("Telephone can't be blank")
+          .min(10, 'Phone Number must be 10 characters')
+          .max(10, 'Phone Number must be 10 characters'),
         streetAddress: Yup.string().required('An address must be provided'),
-        unit: Yup.string().required("Unit can't be blank"),
         city: Yup.string().required("City can't be blank"),
         state: Yup.string().required("State can't be blank"),
         zip: Yup.string().required("Zip can't be blank"),
@@ -75,27 +92,27 @@ export default function UpdateAddressForm({
       onSubmit={handleFormSubmit}
     >
       <Form>
-        <Grid container spacing={3} justify="center">
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={12}>
+            <TextInput
+              name="name"
+              placeholder="Enter your name"
+              label="Name"
+              fullWidth={true}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextInput
+              name="telephone"
+              placeholder="Enter your telephone"
+              label="Telephone"
+              fullWidth={true}
+            />
+          </Grid>
           <Grid item xs={12}>
             <FormikPlacesAutoComplete
               names={['city', 'zip', 'state', 'country', 'streetAddress']}
               mode={'edit'}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextInput
-              name="unit"
-              label="Unit"
-              placeholder="Apt number or company"
-              fullWidth={true}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextInput
-              name="zip"
-              label="Zip"
-              placeholder="Zip"
-              fullWidth={true}
             />
           </Grid>
           <Grid item xs={12}>
@@ -103,6 +120,14 @@ export default function UpdateAddressForm({
               name="streetAddress"
               label="Street Address"
               placeholder="Street Address"
+              fullWidth={true}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextInput
+              name="unit"
+              label="Unit"
+              placeholder="Apt number or company"
               fullWidth={true}
             />
           </Grid>
@@ -122,19 +147,11 @@ export default function UpdateAddressForm({
               fullWidth={true}
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={6}>
             <TextInput
-              name="name"
-              placeholder="Enter your name"
-              label="Name"
-              fullWidth={true}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <TextInput
-              name="telephone"
-              placeholder="Enter your telephone"
-              label="Telephone"
+              name="zip"
+              label="Zip"
+              placeholder="Zip"
               fullWidth={true}
             />
           </Grid>
