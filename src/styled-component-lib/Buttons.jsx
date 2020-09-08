@@ -22,4 +22,7 @@ export const SecondaryWallyButton = styled(Button).attrs({
 
 export const DangerButton = styled(Button)`
   color: #f45246;
+  &:hover {
+    background-color: rgba(244, 82, 70, 0.1);
+  }
 `;
