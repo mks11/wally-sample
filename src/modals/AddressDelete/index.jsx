@@ -14,6 +14,7 @@ function AddressDeleteModal({
     userStore
       .deleteAddress(address_id)
       .then(() => {
+        userStore.getUser();
         snackbar.openSnackbar(
           'Your address was deleted successfully.',
           'success',
