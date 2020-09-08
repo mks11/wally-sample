@@ -6,7 +6,7 @@ import PaymentModal from './account/PaymentModal';
 import PromoModal from './account/PromoModal';
 import PromoSuccessModal from './account/PromoSuccessModal';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
-import { Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 
 import { connect } from '../utils';
@@ -25,6 +25,8 @@ class Account extends Component {
     this.userStore = this.props.store.user;
     this.uiStore = this.props.store.ui;
     this.modalStore = this.props.store.modal;
+    this.loading = this.props.store.loading;
+    this.snackbar = this.props.store.snackbar;
   }
 
   componentDidMount() {
@@ -176,15 +178,53 @@ class Account extends Component {
             <ul className="list-addresses">
               {addresses.map((data, index) => (
                 <li key={index}>
-                  <Grid container>
-                    <Grid item>
+                  <Grid container justify="space-between">
+                    <Grid item xs={12} lg={3}>
                       <Typography variant="h4" component="h3">
                         {data.street_address} {data.unit}, {data.state}{' '}
                         {data.zip}
                       </Typography>
                       <Typography variant="body1">{data.name}</Typography>
-                      <Typography variant="body1">{data.telephone}</Typography>
+                      <Typography variant="body1" gutterBottom>
+                        {data.telephone}
+                      </Typography>
                     </Grid>
+                    {data.address_id ===
+                    this.userStore.user.preferred_address ? (
+                      <Grid item>
+                        <Typography variant="h5" component="span">
+                          DEFAULT
+                        </Typography>
+                      </Grid>
+                    ) : (
+                      <Grid item xs={12} md={6} lg={3}>
+                        <Button
+                          variant="outlined"
+                          fullWidth
+                          onClick={async () => {
+                            this.loading.show();
+                            this.userStore
+                              .makeDefaultAddress(data.address_id)
+                              .then(() => {
+                                setTimeout(() => {
+                                  this.userStore.getUser();
+                                  this.snackbar.openSnackbar(
+                                    'Default address updated successfully!',
+                                    'success',
+                                  );
+                                }, 200);
+                              })
+                              .finally(() => {
+                                setTimeout(() => this.loading.hide(), 300);
+                              });
+                          }}
+                        >
+                          <Typography variant="body1">
+                            Use as Default Address
+                          </Typography>
+                        </Button>
+                      </Grid>
+                    )}
                   </Grid>
                   <br />
                   <br />
@@ -221,12 +261,6 @@ class Account extends Component {
                       </PrimaryWallyButton>
                     </Grid>
                   </Grid>
-                  <span className="addresses--default button">
-                    {data.address_id ===
-                    this.userStore.user.preferred_address ? (
-                      <span>DEFAULT</span>
-                    ) : null}
-                  </span>
                 </li>
               ))}
             </ul>
