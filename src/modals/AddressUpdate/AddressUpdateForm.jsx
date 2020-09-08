@@ -1,9 +1,7 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Grid, TextField, FormHelperText, Box } from '@material-ui/core';
-import { props } from 'bluebird';
-import { Container } from 'reactstrap';
+import { Grid, Box, Typography } from '@material-ui/core';
 import {
   TextInput,
   FormikPlacesAutoComplete,
@@ -168,7 +166,9 @@ export default function UpdateAddressForm({
         </Grid>
         <Grid container justify="center">
           <Box margin={2}>
-            <PrimaryWallyButton type="submit">Submit</PrimaryWallyButton>
+            <PrimaryWallyButton type="submit">
+              <Typography variant="body1">Submit</Typography>
+            </PrimaryWallyButton>
           </Box>
         </Grid>
       </Form>
