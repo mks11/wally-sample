@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { withCookies } from 'react-cookie';
 import axios from 'axios';
 import {
   Button,
@@ -20,7 +19,6 @@ import Cancel from '@material-ui/icons/Cancel';
 import styled from 'styled-components';
 
 import { connect } from 'utils';
-import { getEndOfDay } from 'services/date';
 import { API_GET_TODAYS_ORDERS, API_VALIDATE_PICK_PACK_ORDERS } from 'config';
 
 // Styles
@@ -161,17 +159,14 @@ function sortOrders(a, b) {
 class PickPackPortal extends Component {
   constructor(props) {
     super(props);
-    const { cookies } = props;
     this.state = {
       ordersAndLabels: [],
       highlightedOrders: [],
-      ordersWereValidated: cookies.get('ordersWereValidated') || false,
     };
 
     this.modalStore = props.store.modal;
     this.userStore = props.store.user;
     this.loadingStore = props.store.loading;
-    this.cookies = cookies;
     // Unpack selected order date to pass through fetchTodaysOrders
     this.selectedDate = props.store.pickPack.selectedDate;
     this.setSelectedDate = props.store.pickPack.setSelectedDate;
@@ -210,7 +205,10 @@ class PickPackPortal extends Component {
   validateOrders = async () => {
     this.loadingStore.toggle();
     axios
-      .get(API_VALIDATE_PICK_PACK_ORDERS, this.userStore.getHeaderAuth())
+      .get(
+        API_VALIDATE_PICK_PACK_ORDERS + this.selectedDate,
+        this.userStore.getHeaderAuth(),
+      )
       .then((res) => {
         const {
           data: { incompleteOrders },
@@ -224,15 +222,8 @@ class PickPackPortal extends Component {
           );
           this.setState({ highlightedOrders: incompleteOrders });
         } else {
-          if (!this.cookies.get('ordersWereValidated')) {
-            this.cookies.set('ordersWereValidated', true, {
-              expires: getEndOfDay(),
-            });
-          }
-
           this.setState({
             showValidateOrders: false,
-            ordersWereValidated: true,
           });
 
           this.modalStore.toggleModal(
@@ -370,7 +361,7 @@ class PickPackPortal extends Component {
   }
 }
 
-export default withCookies(connect('store')(PickPackPortal));
+export default connect('store')(PickPackPortal);
 
 function SelectButton({ value, onClick }) {
   return (
