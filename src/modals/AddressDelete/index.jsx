@@ -1,8 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Button } from '@material-ui/core';
 import { DangerButton } from 'styled-component-lib/Buttons';
-import axios from 'axios';
-import { API_ADDRESS_REMOVE } from 'config';
 
 function AddressDeleteModal({
   stores: { user: userStore, modal: modalStore, loading, snackbar },
@@ -16,11 +14,14 @@ function AddressDeleteModal({
     userStore
       .deleteAddress(address_id)
       .then(() => {
-        snackbar.openSnackbar('The address was deleted!', 'success');
-      })
-      .catch((err) => {
         snackbar.openSnackbar(
-          'There was an error in deleting the address. Please contact info@thewallyshop.co for assistance.',
+          'Your address was deleted successfully.',
+          'success',
+        );
+      })
+      .catch(() => {
+        snackbar.openSnackbar(
+          'An error occured while deleting your address. Please contact us at info@thewallyshop.co for assistance.',
           'error',
         );
       })
