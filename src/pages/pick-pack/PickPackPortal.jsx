@@ -12,6 +12,7 @@ import {
   Divider,
   Typography,
 } from '@material-ui/core';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import DatePicker from 'react-datepicker';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
@@ -287,46 +288,63 @@ class PickPackPortal extends Component {
     const selectedDate = addUTCOffset(this.selectedDate);
 
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Typography variant="h1" align="center" gutterBottom>
           Pick/Pack Orders
         </Typography>
-        <Grid container justify="flex-end">
-          <Grid item xs={12} md={4}>
-            <DatePicker
-              selected={selectedDate}
-              onSelect={this.handleSelectOrderDate}
-              maxDate={moment().toDate()}
-            />
-          </Grid>
-        </Grid>
-        <Grid container justify="flex-start">
-          {ordersAndLabels.length ? (
-            ordersAndLabels.sort(sortOrders).map((orderDetails) => {
-              return (
-                <Grid
-                  key={orderDetails.orderId}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  lg={4}
-                  xl={4}
-                >
-                  <OrderCard
-                    orderDetails={orderDetails}
-                    highlight={this.isHighlightedOrder(orderDetails.orderId)}
-                  />
-                </Grid>
-              );
-            })
-          ) : (
-            <Grid item xs={12}>
-              <Typography variant="h2" align="center">
-                No orders have been received today.
-              </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={3}>
+            <Grid container direction="column">
+              <Grid item xs={12}>
+                <br />
+                <Typography variant="h2" gutterBottom>
+                  Sort & Filter
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
+                <br />
+              </Grid>
+              <Typography variant="body1">Filter By Date</Typography>
+              <DatePicker
+                selected={selectedDate}
+                onSelect={this.handleSelectOrderDate}
+                maxDate={moment().toDate()}
+                customInput={<SelectButton />}
+              />
             </Grid>
-          )}
+          </Grid>
+          <Grid item xs={12} lg={9}>
+            <Grid container>
+              {ordersAndLabels.length ? (
+                ordersAndLabels.sort(sortOrders).map((orderDetails) => {
+                  return (
+                    <Grid
+                      key={orderDetails.orderId}
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={4}
+                    >
+                      <OrderCard
+                        orderDetails={orderDetails}
+                        highlight={this.isHighlightedOrder(
+                          orderDetails.orderId,
+                        )}
+                      />
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h2" align="center">
+                    No orders have been received today.
+                  </Typography>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
         </Grid>
         {isOpsLead && ordersAndLabels.length && (
           <Grid container justify="center">
@@ -353,6 +371,14 @@ class PickPackPortal extends Component {
 }
 
 export default withCookies(connect('store')(PickPackPortal));
+
+function SelectButton({ value, onClick }) {
+  return (
+    <PrimaryWallyButton onClick={onClick}>
+      <Typography variant="body1">{value}</Typography>
+    </PrimaryWallyButton>
+  );
+}
 
 /**
  * Convert ISO formatted date string to local JS Date object
