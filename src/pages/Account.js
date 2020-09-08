@@ -182,11 +182,14 @@ class Account extends Component {
 
                   <span className="addresses--info">{data.name}</span>
                   <span className="addresses--info">{data.telephone}</span>
+                  <br />
+                  <br />
                   <Grid container justify="flex-end" spacing={2}>
-                    <Grid item>
+                    <Grid item xs={6} lg={2}>
                       <DangerButton
                         variant="outlined"
                         startIcon={<DeleteOutline fontSize="large" />}
+                        fullWidth
                         onClick={() =>
                           this.modalStore.toggleModal(
                             'addressDelete',
@@ -198,9 +201,10 @@ class Account extends Component {
                         <Typography variant="body1">Remove</Typography>
                       </DangerButton>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={6} lg={2}>
                       <PrimaryWallyButton
                         startIcon={<Edit fontSize="large" />}
+                        fullWidth
                         onClick={() =>
                           this.modalStore.toggleModal(
                             'addressUpdate',
