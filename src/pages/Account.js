@@ -5,8 +5,8 @@ import AddressModal from './account/AddressModal';
 import PaymentModal from './account/PaymentModal';
 import PromoModal from './account/PromoModal';
 import PromoSuccessModal from './account/PromoSuccessModal';
-import { DangerButton } from 'styled-component-lib/Buttons';
-import { Button } from '@material-ui/core';
+import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
+import { Grid, Typography } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
 
 import { connect } from '../utils';
@@ -182,30 +182,35 @@ class Account extends Component {
 
                   <span className="addresses--info">{data.name}</span>
                   <span className="addresses--info">{data.telephone}</span>
-                  <Button
-                    color="primary"
-                    startIcon={<Edit />}
-                    onClick={() =>
-                      this.modalStore.toggleModal(
-                        'addressUpdate',
-                        null,
-                        data.address_id,
-                      )
-                    }
-                  >
-                    Update
-                  </Button>
-                  <DangerButton
-                    onClick={() =>
-                      this.modalStore.toggleModal(
-                        'addressDelete',
-                        null,
-                        data.address_id,
-                      )
-                    }
-                  >
-                    Delete
-                  </DangerButton>
+                  <Grid container justify="flex-end" spacing={2}>
+                    <Grid item>
+                      <PrimaryWallyButton
+                        startIcon={<Edit fontSize="large" />}
+                        onClick={() =>
+                          this.modalStore.toggleModal(
+                            'addressUpdate',
+                            null,
+                            data.address_id,
+                          )
+                        }
+                      >
+                        <Typography variant="body1">Update</Typography>
+                      </PrimaryWallyButton>
+                    </Grid>
+                    <Grid item>
+                      <DangerButton
+                        onClick={() =>
+                          this.modalStore.toggleModal(
+                            'addressDelete',
+                            null,
+                            data.address_id,
+                          )
+                        }
+                      >
+                        Delete
+                      </DangerButton>
+                    </Grid>
+                  </Grid>
                   <span className="addresses--default button">
                     {data.address_id ===
                     this.userStore.user.preferred_address ? (
