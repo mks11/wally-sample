@@ -1,20 +1,21 @@
-import UiStore from "./UiStore";
-import ModalStore from "./ModalStore";
-import ProductStore from "./ProductStore";
-import CheckoutStore from "./CheckoutStore";
-import UserStore from "./UserStore";
-import OrderStore from "./OrderStore";
-import ZipStore from "./ZipStore";
-import ContentStore from "./ContentStore";
-import HelpStore from "./HelpStore";
-import AdminStore from "./AdminStore";
-import PackagingUnitStore from "./PackagingUnitStore";
-import BackerStore from "./BackerStore";
-import VendorProfileStore from "./VendorProfileStore";
-import MetricStore from "./MetricStore";
-import LoadingSpinnerStore from "./LoadingSpinnerStore";
-import SnackbarStore from "./SnackbarStore";
-import { RouterStore } from "mobx-react-router";
+import UiStore from './UiStore';
+import ModalStore from './ModalStore';
+import ProductStore from './ProductStore';
+import CheckoutStore from './CheckoutStore';
+import UserStore from './UserStore';
+import OrderStore from './OrderStore';
+import ZipStore from './ZipStore';
+import ContentStore from './ContentStore';
+import HelpStore from './HelpStore';
+import AdminStore from './AdminStore';
+import PackagingUnitStore from './PackagingUnitStore';
+import BackerStore from './BackerStore';
+import VendorProfileStore from './VendorProfileStore';
+import MetricStore from './MetricStore';
+import LoadingSpinnerStore from './LoadingSpinnerStore';
+import SnackbarStore from './SnackbarStore';
+import { RouterStore } from 'mobx-react-router';
+import PickPackStore from './PickPackStore';
 
 const store = {
   ui: UiStore,
@@ -31,6 +32,7 @@ const store = {
   admin: AdminStore,
   backer: BackerStore,
   vendor: VendorProfileStore,
+  pickPack: PickPackStore,
   products: VendorProfileStore,
   metric: MetricStore,
   loading: LoadingSpinnerStore,
