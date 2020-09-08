@@ -190,7 +190,6 @@ class AddressModal extends Component {
     this.userStore
       .deleteAddress(this.state.address_id)
       .then((data) => {
-        this.userStore.setUserData(data);
         this.userStore.hideAddressModal();
       })
       .catch((e) => {

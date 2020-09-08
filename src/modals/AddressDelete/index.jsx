@@ -5,22 +5,29 @@ import axios from 'axios';
 import { API_ADDRESS_REMOVE } from 'config';
 
 function AddressDeleteModal({
-  stores: { user: userStore, modal: modalStore },
+  stores: { user: userStore, modal: modalStore, loading, snackbar },
   toggle,
 }) {
   const handleCancel = () => {
     toggle && toggle();
   };
-  const handleDelete = async (address_id) => {
-    try {
-      await axios.delete(
-        API_ADDRESS_REMOVE + address_id,
-        userStore.getHeaderAuth(),
-      );
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
+  const handleDelete = (address_id) => {
+    loading.toggle();
+    userStore
+      .deleteAddress(address_id)
+      .then(() => {
+        snackbar.openSnackbar('The address was deleted!', 'success');
+      })
+      .catch((err) => {
+        snackbar.openSnackbar(
+          'There was an error in deleting the address. Please contact info@thewallyshop.co for assistance.',
+          'error',
+        );
+      })
+      .finally(() => {
+        toggle && toggle(); // close the modal
+        setTimeout(loading.toggle(), 300);
+      });
   };
 
   const address_id = modalStore.modalData;
