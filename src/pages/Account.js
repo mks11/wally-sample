@@ -7,7 +7,7 @@ import PromoModal from './account/PromoModal';
 import PromoSuccessModal from './account/PromoSuccessModal';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
 import { Grid, Typography } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
+import { Edit, DeleteOutline } from '@material-ui/icons';
 
 import { connect } from '../utils';
 
@@ -184,6 +184,21 @@ class Account extends Component {
                   <span className="addresses--info">{data.telephone}</span>
                   <Grid container justify="flex-end" spacing={2}>
                     <Grid item>
+                      <DangerButton
+                        variant="outlined"
+                        startIcon={<DeleteOutline fontSize="large" />}
+                        onClick={() =>
+                          this.modalStore.toggleModal(
+                            'addressDelete',
+                            null,
+                            data.address_id,
+                          )
+                        }
+                      >
+                        <Typography variant="body1">Remove</Typography>
+                      </DangerButton>
+                    </Grid>
+                    <Grid item>
                       <PrimaryWallyButton
                         startIcon={<Edit fontSize="large" />}
                         onClick={() =>
@@ -196,19 +211,6 @@ class Account extends Component {
                       >
                         <Typography variant="body1">Update</Typography>
                       </PrimaryWallyButton>
-                    </Grid>
-                    <Grid item>
-                      <DangerButton
-                        onClick={() =>
-                          this.modalStore.toggleModal(
-                            'addressDelete',
-                            null,
-                            data.address_id,
-                          )
-                        }
-                      >
-                        Delete
-                      </DangerButton>
                     </Grid>
                   </Grid>
                   <span className="addresses--default button">

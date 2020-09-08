@@ -20,9 +20,13 @@ export const SecondaryWallyButton = styled(Button).attrs({
   border-radius: 50px;
 `;
 
-export const DangerButton = styled(Button)`
+export const DangerButton = styled(PrimaryWallyButton).attrs({
+  variant: 'outlined',
+})`
+  border-color: #f45246;
   color: #f45246;
   &:hover {
+    border-color: #f45246;
     background-color: rgba(244, 82, 70, 0.1);
   }
 `;
