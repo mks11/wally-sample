@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import {
   Divider,
   Typography,
 } from '@material-ui/core';
+import DatePicker from 'react-datepicker';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
@@ -28,17 +30,17 @@ function StatusIcon({ status }) {
   let Icon;
 
   switch (status) {
-    case 'packaged':
-      Icon = CheckCircle;
-      className = styles.complete;
+    case 'submitted' || 'pending_packing':
+      Icon = Cancel;
+      className = styles.received;
       break;
     case 'pending_quality_assurance':
       Icon = Error;
       className = styles.pendingQA;
       break;
     default:
-      Icon = Cancel;
-      className = styles.received;
+      Icon = CheckCircle;
+      className = styles.complete;
       break;
   }
 
@@ -50,17 +52,17 @@ function StatusText({ status }) {
   let text;
 
   switch (status) {
-    case 'packaged':
-      className = styles.complete;
-      text = 'Complete';
+    case 'submitted' || 'pending_packing':
+      className = styles.received;
+      text = 'Not Started';
       break;
     case 'pending_quality_assurance':
       className = styles.pendingQA;
       text = 'Pending Q/A';
       break;
     default:
-      className = styles.received;
-      text = 'Not Started';
+      className = styles.complete;
+      text = status.toUpperCase();
       break;
   }
 
@@ -168,15 +170,15 @@ class PickPackPortal extends Component {
     this.modalStore = props.store.modal;
     this.userStore = props.store.user;
     this.loadingStore = props.store.loading;
-    this.pickPackStore = props.store.pickPack;
     this.cookies = cookies;
+    // Unpack selected order date to pass through fetchTodaysOrders
+    this.selectedDate = props.store.pickPack.selectedDate;
+    this.setSelectedDate = props.store.pickPack.setSelectedDate;
   }
 
   componentDidMount() {
-    // Unpack selected order date to pass through fetchTodaysOrders
-    const { selectedDate } = this.pickPackStore;
     this.loadingStore.toggle();
-    this.fetchTodaysOrders(selectedDate)
+    this.fetchTodaysOrders(this.selectedDate)
       .then((res) => {
         const {
           data: { ordersAndLabels },
@@ -253,15 +255,51 @@ class PickPackPortal extends Component {
     return !!this.state.highlightedOrders.find((o) => o.orderId === orderId);
   };
 
+  handleSelectOrderDate = (date) => {
+    // Convert back to UTC from local string.
+    const selectedDate = subtractUTCOffset(date);
+    this.setSelectedDate(selectedDate);
+    this.loadingStore.toggle();
+    this.fetchTodaysOrders(this.selectedDate)
+      .then((res) => {
+        const {
+          data: { ordersAndLabels },
+        } = res;
+
+        if (ordersAndLabels.length) {
+          this.setState({ ordersAndLabels });
+        }
+      })
+      .catch((err) => {
+        this.modalStore.toggleModal(
+          'error',
+          err.message ? err.message : undefined,
+        );
+      })
+      .finally(() => {
+        setTimeout(() => this.loadingStore.toggle(), 300);
+      });
+  };
+
   render() {
     const { isOpsLead } = this.userStore;
     const { ordersAndLabels, ordersWereValidated } = this.state;
+    const selectedDate = addUTCOffset(this.selectedDate);
 
     return (
       <Container maxWidth="lg">
         <Typography variant="h1" align="center" gutterBottom>
           Pick/Pack Orders
         </Typography>
+        <Grid container justify="flex-end">
+          <Grid item xs={12} md={4}>
+            <DatePicker
+              selected={selectedDate}
+              onSelect={this.handleSelectOrderDate}
+              maxDate={moment().toDate()}
+            />
+          </Grid>
+        </Grid>
         <Grid container justify="flex-start">
           {ordersAndLabels.length ? (
             ordersAndLabels.sort(sortOrders).map((orderDetails) => {
@@ -315,3 +353,39 @@ class PickPackPortal extends Component {
 }
 
 export default withCookies(connect('store')(PickPackPortal));
+
+/**
+ * Convert ISO formatted date string to local JS Date object
+ * @param {String} isoDate
+ */
+function addUTCOffset(isoDate) {
+  const selectedDateUTCOffset = moment(isoDate).utcOffset();
+  let selectedDate;
+  if (selectedDateUTCOffset < 0) {
+    selectedDate = moment(isoDate)
+      .add(-selectedDateUTCOffset, 'minutes')
+      .toDate();
+  } else {
+    selectedDate = moment(isoDate)
+      .subtract(selectedDateUTCOffset, 'minutes')
+      .toDate();
+  }
+  return selectedDate;
+}
+
+/**
+ * Subtract UTC offset from date to convert from local Date to UTC date
+ * @param {Date} date
+ */
+function subtractUTCOffset(date) {
+  const selectedDateUTCOffset = moment(date).utcOffset();
+  let selectedDate;
+  if (selectedDateUTCOffset < 0) {
+    selectedDate = moment(date)
+      .subtract(-selectedDateUTCOffset, 'minutes')
+      .toDate();
+  } else {
+    selectedDate = moment(date).add(selectedDateUTCOffset, 'minutes').toDate();
+  }
+  return selectedDate;
+}
