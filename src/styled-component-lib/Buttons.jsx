@@ -26,6 +26,7 @@ export const DangerButton = styled(PrimaryWallyButton).attrs({
   border-color: #f45246;
   color: #f45246;
   &:hover {
+    color: #f45246;
     border-color: #f45246;
     background-color: rgba(244, 82, 70, 0.1);
   }
