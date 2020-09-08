@@ -173,9 +173,9 @@ export const PACKAGING_BASE_URL =
   'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/';
 
 // Pick Pack Portal
-export const API_GET_TODAYS_ORDERS = BASE_URL + '/api/pick-pack/orders';
+export const API_GET_TODAYS_ORDERS = BASE_URL + '/api/pick-pack/orders/';
 export const API_VALIDATE_PICK_PACK_ORDERS =
-  BASE_URL + '/api/pick-pack/validate-orders';
+  BASE_URL + '/api/pick-pack/validate-orders/';
 export const API_GET_ORDER_FULFILLMENT_DETAILS =
   BASE_URL + '/api/pick-pack/order-fulfillment/';
 export const API_UPDATE_ORDER_FULFILLMENT_DETAILS =
