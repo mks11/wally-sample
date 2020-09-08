@@ -39,6 +39,7 @@ export default function UpdateAddressForm({
     axios
       .patch(API_ADDRESS_EDIT, values, userStore.getHeaderAuth())
       .then(() => {
+        userStore.getUser();
         snackbar.openSnackbar(
           'Your address was updated successfully!',
           'success',
