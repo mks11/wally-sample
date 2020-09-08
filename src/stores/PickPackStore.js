@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { decorate, observable, action } from 'mobx';
 import moment from 'moment';
 
 class PickPackStore {

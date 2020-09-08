@@ -168,12 +168,15 @@ class PickPackPortal extends Component {
     this.modalStore = props.store.modal;
     this.userStore = props.store.user;
     this.loadingStore = props.store.loading;
+    this.pickPackStore = props.store.pickPack;
     this.cookies = cookies;
   }
 
   componentDidMount() {
+    // Unpack selected order date to pass through fetchTodaysOrders
+    const { selectedDate } = this.pickPackStore;
     this.loadingStore.toggle();
-    this.fetchTodaysOrders()
+    this.fetchTodaysOrders(selectedDate)
       .then((res) => {
         const {
           data: { ordersAndLabels },
@@ -194,8 +197,11 @@ class PickPackPortal extends Component {
       });
   }
 
-  fetchTodaysOrders = async () => {
-    return axios.get(API_GET_TODAYS_ORDERS, this.userStore.getHeaderAuth());
+  fetchTodaysOrders = async (orderPlacedDate) => {
+    return axios.get(
+      API_GET_TODAYS_ORDERS + orderPlacedDate,
+      this.userStore.getHeaderAuth(),
+    );
   };
 
   validateOrders = async () => {
