@@ -46,18 +46,18 @@ function AddressDeleteModal({
         </Typography>
         <Box marginTop={3}>
           <Grid container justify="flex-end">
-            <Grid item xs={6} lg={3} container justify="center">
+            <Grid item xs={6} lg={4} container justify="center">
               <Button size="large" fullWidth onClick={handleCancel}>
-                Cancel
+                <Typography variant="body1">Cancel</Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} lg={3} container justify="center">
+            <Grid item xs={6} lg={4} container justify="center">
               <DangerButton
                 size="large"
                 fullWidth
                 onClick={() => handleDelete(address_id)}
               >
-                Yes, I’m sure
+                <Typography variant="body1">Yes, I’m sure</Typography>
               </DangerButton>
             </Grid>
           </Grid>
