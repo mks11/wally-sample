@@ -172,16 +172,20 @@ class Account extends Component {
 
         <section className="page-section aw-account--address pt-2">
           <div className="container">
-            <h2>Addresses</h2>
+            <Typography variant="h2">Addresses</Typography>
             <ul className="list-addresses">
               {addresses.map((data, index) => (
                 <li key={index}>
-                  <span className="addresses--address">
-                    {data.street_address} {data.unit}, {data.state} {data.zip}
-                  </span>
-
-                  <span className="addresses--info">{data.name}</span>
-                  <span className="addresses--info">{data.telephone}</span>
+                  <Grid container>
+                    <Grid item>
+                      <Typography variant="h4" component="h3">
+                        {data.street_address} {data.unit}, {data.state}{' '}
+                        {data.zip}
+                      </Typography>
+                      <Typography variant="body1">{data.name}</Typography>
+                      <Typography variant="body1">{data.telephone}</Typography>
+                    </Grid>
+                  </Grid>
                   <br />
                   <br />
                   <Grid container justify="flex-end" spacing={2}>
