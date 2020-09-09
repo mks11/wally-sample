@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { Button, Container, Grid, Typography } from "@material-ui/core";
-import { LazyLoadComponent } from "react-lazy-load-image-component";
-import styled from "styled-components";
-import "./BlogPost.module.css";
-import { logPageView, logEvent } from "services/google-analytics";
-import { connect } from "utils";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Button, Container, Grid, Typography } from '@material-ui/core';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
+import styled from 'styled-components';
+import './BlogPost.module.css';
+import { logPageView, logEvent } from 'services/google-analytics';
+import { connect } from 'utils';
 
-import Head from "common/Head";
-import { ResponsiveText } from "common/ResponsiveText";
-import { BlogPostSubtitle } from "./Blog";
+import Head from 'common/Head';
+import { ResponsiveText } from 'common/ResponsiveText';
+import { BlogPostSubtitle } from './Blog';
 
 const PostContainer = styled(Grid)`
   @media only screen and (max-width: 767px) {
@@ -50,8 +50,8 @@ class BlogPost extends Component {
   }
 
   handleGetStarted(e) {
-    logEvent({ category: "BlogPost", action: "GetStarted" });
-    this.routing.push("/");
+    logEvent({ category: 'BlogPost', action: 'GetStarted' });
+    this.routing.push('/');
     e.preventDefault();
   }
 
@@ -64,7 +64,7 @@ class BlogPost extends Component {
     const { author, post_date, metadescription } = post;
 
     return (
-      <Container maxWidth="lg" component={"section"}>
+      <Container maxWidth="lg" component={'section'}>
         <Head title={post.title} description={metadescription} />
         <PostContainer
           container
@@ -111,6 +111,7 @@ const SectionContainer = styled(Grid)`
     justify-content: flex-start;
     align-items: flex-start;
   }
+
   margin-bottom: 1rem;
 `;
 
@@ -143,7 +144,7 @@ const SectionImageFloated = styled.img`
     float: right;
     margin: 1rem;
     &::after {
-      content: "";
+      content: '';
       display: block;
       clear: both;
     }
@@ -151,7 +152,7 @@ const SectionImageFloated = styled.img`
 
   width: 100%;
   &::after {
-    content: "";
+    content: '';
     display: block;
     clear: both;
   }
@@ -166,9 +167,11 @@ function PostSection({ title, image, body }) {
       spacing={4}
       component="section"
     >
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        <ResponsiveText variant="h2">{title}</ResponsiveText>
-      </Grid>
+      {title && (
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <ResponsiveText variant="h2">{title}</ResponsiveText>
+        </Grid>
+      )}
       {image && <SectionImageMobile image={image} />}
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         {image && (
@@ -185,4 +188,4 @@ function PostSection({ title, image, body }) {
   );
 }
 
-export default connect("store")(BlogPost);
+export default connect('store')(BlogPost);
