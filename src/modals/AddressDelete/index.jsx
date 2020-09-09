@@ -45,8 +45,8 @@ function AddressDeleteModal({
         <Typography align="center">
           Are you sure you want to remove this address?
         </Typography>
-        <Box marginTop={3}>
-          <Grid container justify="flex-end">
+        <Box marginTop={6}>
+          <Grid container justify="center" spacing={2}>
             <Grid item xs={6} lg={4} container justify="center">
               <Button size="large" fullWidth onClick={handleCancel}>
                 <Typography variant="body1">Cancel</Typography>
