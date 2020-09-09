@@ -4398,15 +4398,7 @@ button.btn.btn-danger.btn-add-cart.inactive {
 .product-top.fixed + .product-content .product-content-right {
   margin-top: 0;
 }
-::-webkit-scrollbar {
-  right: 0;
-  width: 0px; /* remove scrollbar space */
-  background: transparent; /* optional: just make scrollbar invisible */
-}
-/* optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-  background: #ff0000;
-}
+
 .aw-input--location.aw-input--small {
   background-size: 15px;
   background-position: 0% 53%;
