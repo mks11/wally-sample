@@ -4377,10 +4377,9 @@ li.no-underline a:hover::after {
 }
 
 .modal-open {
-  padding-right: 0 !important;
-  /* overflow-y: auto; */
-  overflow-y: hidden;
+  padding-right: 15px;
 }
+
 button.btn.btn-danger.btn-add-cart {
   height: 50px;
   border-radius: 10px;
