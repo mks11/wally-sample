@@ -1,20 +1,23 @@
-import React, { Component } from "react";
-import { Input } from "reactstrap";
-import Title from "../common/page/Title";
-import AddressModal from "./account/AddressModal";
-import PaymentModal from "./account/PaymentModal";
-import PromoModal from "./account/PromoModal";
-import PromoSuccessModal from "./account/PromoSuccessModal";
+import React, { Component } from 'react';
+import { Input } from 'reactstrap';
+import Title from '../common/page/Title';
+import AddressModal from './account/AddressModal';
+import PaymentModal from './account/PaymentModal';
+import PromoModal from './account/PromoModal';
+import PromoSuccessModal from './account/PromoSuccessModal';
+import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
+import { Button, Grid, Typography } from '@material-ui/core';
+import { Edit, DeleteOutline } from '@material-ui/icons';
 
-import { connect } from "../utils";
+import { connect } from '../utils';
 
 class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      telephone: "",
-      email: "",
+      name: '',
+      telephone: '',
+      email: '',
       editName: true,
       editTelephone: true,
     };
@@ -22,12 +25,14 @@ class Account extends Component {
     this.userStore = this.props.store.user;
     this.uiStore = this.props.store.ui;
     this.modalStore = this.props.store.modal;
+    this.loading = this.props.store.loading;
+    this.snackbar = this.props.store.snackbar;
   }
 
   componentDidMount() {
     this.userStore.getStatus(true).then((status) => {
       if (!status) {
-        this.props.store.routing.push("/");
+        this.props.store.routing.push('/');
       } else {
         const user = this.userStore.user;
         this.setState({
@@ -42,7 +47,7 @@ class Account extends Component {
   toggleEditName(s) {
     this.setState({ editName: s });
     if (this.state.editName) {
-      const $el = window.$("#inputName");
+      const $el = window.$('#inputName');
       $el.focus();
     }
   }
@@ -50,7 +55,7 @@ class Account extends Component {
   toggleEditTelephone(s) {
     this.setState({ editTelephone: s });
     if (this.state.editTelephone) {
-      const $el = window.$("#inputTelephone");
+      const $el = window.$('#inputTelephone');
       $el.focus();
     }
   }
@@ -67,7 +72,7 @@ class Account extends Component {
       .catch((e) => {
         const msg = e.response.data.error.message;
         this.setState({ invalidText: msg });
-        console.error("Failed to delete address", e);
+        console.error('Failed to delete address', e);
       });
   }
 
@@ -85,7 +90,7 @@ class Account extends Component {
     if (!this.userStore.user) return null;
 
     const name = this.state.name;
-    const telephone = this.state.telephone ? this.state.telephone : "";
+    const telephone = this.state.telephone ? this.state.telephone : '';
 
     const addresses = this.userStore.user.addresses;
     const payments = this.userStore.user.payment;
@@ -169,29 +174,95 @@ class Account extends Component {
 
         <section className="page-section aw-account--address pt-2">
           <div className="container">
-            <h2>Addresses</h2>
+            <Typography variant="h2">Addresses</Typography>
             <ul className="list-addresses">
               {addresses.map((data, index) => (
                 <li key={index}>
-                  <span className="addresses--address">
-                    {data.street_address} {data.unit}, {data.state} {data.zip}
-                  </span>
-                  <span className="addresses--info">{data.name}</span>
-                  <span className="addresses--info">{data.telephone}</span>
-                  <span className="addresses--default button">
+                  <Grid container justify="space-between">
+                    <Grid item xs={12} lg={3}>
+                      <Typography variant="h4" component="h3">
+                        {data.street_address} {data.unit}, {data.state}{' '}
+                        {data.zip}
+                      </Typography>
+                      <Typography variant="body1">{data.name}</Typography>
+                      <Typography variant="body1" gutterBottom>
+                        {data.telephone}
+                      </Typography>
+                    </Grid>
                     {data.address_id ===
                     this.userStore.user.preferred_address ? (
-                      <span
-                        onClick={(e) => this.userStore.showAddressModal(data)}
+                      <Grid item>
+                        <br />
+                        <Typography variant="h5" component="span">
+                          DEFAULT
+                        </Typography>
+                      </Grid>
+                    ) : (
+                      <Grid item xs={12} md={6} lg={3}>
+                        <br />
+                        <Button
+                          variant="outlined"
+                          fullWidth
+                          onClick={async () => {
+                            this.loading.show();
+                            this.userStore
+                              .makeDefaultAddress(data.address_id)
+                              .then(() => {
+                                setTimeout(() => {
+                                  this.userStore.getUser();
+                                  this.snackbar.openSnackbar(
+                                    'Default address updated successfully!',
+                                    'success',
+                                  );
+                                }, 200);
+                              })
+                              .finally(() => {
+                                setTimeout(() => this.loading.hide(), 300);
+                              });
+                          }}
+                        >
+                          <Typography variant="body1">
+                            Use as Default Address
+                          </Typography>
+                        </Button>
+                      </Grid>
+                    )}
+                  </Grid>
+                  <br />
+                  <br />
+                  <Grid container justify="flex-end" spacing={2}>
+                    <Grid item xs={6} lg={2}>
+                      <DangerButton
+                        variant="outlined"
+                        startIcon={<DeleteOutline fontSize="large" />}
+                        fullWidth
+                        onClick={() =>
+                          this.modalStore.toggleModal(
+                            'addressDelete',
+                            null,
+                            data.address_id,
+                          )
+                        }
                       >
-                        DEFAULT
-                      </span>
-                    ) : null}
-                    <i
-                      className="ico ico-arrow-right ml-3 button"
-                      onClick={(e) => this.userStore.showAddressModal(data)}
-                    ></i>
-                  </span>
+                        <Typography variant="body1">Remove</Typography>
+                      </DangerButton>
+                    </Grid>
+                    <Grid item xs={6} lg={2}>
+                      <PrimaryWallyButton
+                        startIcon={<Edit fontSize="large" />}
+                        fullWidth
+                        onClick={() =>
+                          this.modalStore.toggleModal(
+                            'addressUpdate',
+                            null,
+                            data.address_id,
+                          )
+                        }
+                      >
+                        <Typography variant="body1">Update</Typography>
+                      </PrimaryWallyButton>
+                    </Grid>
+                  </Grid>
                 </li>
               ))}
             </ul>
@@ -250,4 +321,4 @@ class Account extends Component {
   }
 }
 
-export default connect("store")(Account);
+export default connect('store')(Account);

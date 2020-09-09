@@ -7,11 +7,9 @@ import styled from 'styled-components';
 import { connect, formatMoney } from '../utils';
 
 // Components
-import { PageTitle } from '../common/page/Title';
-import ReportModal from './orders/ReportModal';
-import ReportSuccessModal from './orders/ReportSuccessModal';
+import { PageTitle } from 'common/page/Title';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import {
-  // Button,
   Container,
   Grid,
   Divider,
@@ -88,15 +86,15 @@ class Orders extends Component {
   render() {
     return (
       <div className="App">
-        <Container maxdWidth="lg" style={{ marginBottom: '1rem' }}>
+        <Container maxWidth="lg" style={{ marginBottom: '1rem' }}>
           <PageTitle variant="h1" gutterBottom>
             Order History
           </PageTitle>
           <Grid container spacing={4}>
             {this.orderStore.orders && this.orderStore.orders.length > 0
               ? this.orderStore.orders.map((item, idx) => (
-                  <Grid item xs={12}>
-                    <Order key={`${item._id}-${idx}`} elevation={3}>
+                  <Grid key={`${item._id}-${idx}`} item xs={12}>
+                    <Order elevation={3}>
                       <Typography variant="h2" gutterBottom>
                         {`${item.status === 'returned' ? 'Return' : 'Order'}`}{' '}
                         {item.status !== 'returned' && item._id}
@@ -219,30 +217,46 @@ class Orders extends Component {
                           </Typography>
                         )}
                       </Grid>
-                      {/* <Grid container justify="flex-end">
-                          <Grid item>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={(e) =>
-                                this.orderStore.toggleReport(item)
-                              }
-                            >
+                      <Grid container justify="flex-end">
+                        <Grid item>
+                          <PrimaryWallyButton
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              this.modalStore.toggleModal(
+                                'reportIssue',
+                                null,
+                                getReportModalData(item),
+                              )
+                            }
+                          >
+                            <Typography variant="body1">
                               Report a Problem
-                            </Button>
-                          </Grid>
-                        </Grid> */}
+                            </Typography>
+                          </PrimaryWallyButton>
+                        </Grid>
+                      </Grid>
                     </Order>
                   </Grid>
                 ))
               : null}
           </Grid>
         </Container>
-        <ReportModal />
-        <ReportSuccessModal />
       </div>
     );
   }
 }
 
 export default connect('store')(Orders);
+
+function getReportModalData(item) {
+  if (item.returns && item.returns.length) {
+    return {
+      packagingReturnId: item._id,
+    };
+  } else {
+    return {
+      orderId: item._id,
+    };
+  }
+}

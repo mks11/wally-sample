@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Button } from '@material-ui/core';
-import { ShoppingCart } from '@material-ui/icons';
+import { ShoppingBasket } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import styles from './CheckoutButton.module.css';
 import cx from 'classnames';
@@ -13,7 +13,7 @@ export default function CheckoutButton({ count, onCheckout, ...rest }) {
       onClick={onCheckout}
       {...rest}
     >
-      <ShoppingCart className={styles.icon} />
+      <ShoppingBasket className={styles.icon} />
       <Typography className={styles.items} variant="h5" component="span">
         {count} {count === 1 ? 'Item' : 'Items'}
       </Typography>

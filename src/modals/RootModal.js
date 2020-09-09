@@ -26,7 +26,10 @@ import JoinWaitlistModal from './JoinWaitlistModal';
 import RedeemDepositModal from './RedeemDepositModal';
 import SchedulePickupModal from './SchedulePickupModal';
 import PackagingDepositModal from './PackagingDepositModal';
+import AddressUpdateModal from './AddressUpdate';
+import AddressDeleteModal from './AddressDelete';
 import SuccessModal from './SuccessModal';
+import ReportIssueModal from './ReportIssueModal';
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -54,6 +57,9 @@ const ModalRoutes = {
   redeemdeposit: RedeemDepositModal,
   packagingdeposit: PackagingDepositModal,
   success: SuccessModal,
+  reportIssue: ReportIssueModal,
+  addressUpdate: AddressUpdateModal,
+  addressDelete: AddressDeleteModal,
 };
 
 class RootModal extends Component {
@@ -72,7 +78,7 @@ class RootModal extends Component {
       this.modalStore.toggleModal();
     }
 
-    e && e.preventDefault();
+    e && e.preventDefault && e.preventDefault();
   };
 
   switchModal = (modalId) => {

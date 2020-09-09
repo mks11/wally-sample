@@ -2962,11 +2962,7 @@ ul.list-payments.list-payments--noborder li {
 ul.list-addresses li,
 ul.list-payments li {
   position: relative;
-  background: url('../images/location_icon_filled.png') no-repeat;
-  background-size: 17px 22px;
-  background-position: left 30%;
-  padding: 33px 0;
-  padding-left: 50px;
+  padding: 2rem 1rem;
   border-bottom: 1px solid #cecece;
 }
 
@@ -3711,12 +3707,11 @@ span.dropdown-item.lg {
   margin-bottom: 40px;
   cursor: pointer;
 }
+
 .product-thumbnail img {
   display: block;
-  max-width: 100%;
   width: 100%;
-  width: 200px;
-  height: 180px;
+  height: auto;
 }
 
 .product-detail {

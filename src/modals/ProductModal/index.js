@@ -1,17 +1,28 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Row, Col } from "reactstrap";
+// Node Modules
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { logModalView, logEvent } from "services/google-analytics";
-import { formatMoney, connect } from "utils";
+// API
+import { PRODUCT_BASE_URL, NUTRITIONAL_INFO_BASE_URL } from 'config';
 
-import { PRODUCT_BASE_URL, NUTRITIONAL_INFO_BASE_URL } from "config";
-import AmountGroup from "common/AmountGroup";
+// Services and Utilities
+import { logModalView, logEvent } from 'services/google-analytics';
+import { formatMoney, connect } from 'utils';
 
-import QuantitySelect from "../../common/QuantitySelect";
-import Product from "../../pages/Mainpage/Product/index";
-import ProductRatingForm from "../../common/ProductRatingForm";
-import ProductRatingStars from "../../common/ProductRatingStars";
+// Components
+import { Typography } from '@material-ui/core';
+import { Row, Col } from 'reactstrap';
+import AmountGroup from 'common/AmountGroup';
+import QuantitySelect from '../../common/QuantitySelect';
+import Product from '../../pages/Mainpage/Product/index';
+import ProductRatingForm from '../../common/ProductRatingForm';
+import ProductRatingStars from '../../common/ProductRatingStars';
+
+const SimilarProducts = styled(Row)`
+  flex-wrap: nowrap;
+  overflow-x: auto;
+`;
 
 class ProductModal extends Component {
   constructor(props) {
@@ -20,7 +31,7 @@ class ProductModal extends Component {
       qty: 1,
       infoPackage: false,
       slick: false,
-      packagingAddon: "",
+      packagingAddon: '',
       quantityAddon: 0,
       outOfStock: false,
       available: true,
@@ -52,7 +63,7 @@ class ProductModal extends Component {
       outOfStock: product.activeProduct.out_of_stock,
       available: true,
     });
-    logModalView("/product/" + product.activeProductId);
+    logModalView('/product/' + product.activeProductId);
 
     if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
       const { addonsFirst } = user.flags || {};
@@ -70,7 +81,7 @@ class ProductModal extends Component {
       $prod.slick({
         slidesToShow: 1,
         slidesToScroll: 1,
-        asNavFor: "#thumbnailproduct-carousel",
+        asNavFor: '#thumbnailproduct-carousel',
         dots: false,
         infinite: false,
         arrows: false,
@@ -90,14 +101,14 @@ class ProductModal extends Component {
       $thumb.slick({
         slidesToShow: 3,
         slidesToScroll: 3,
-        asNavFor: "#product-carousel",
+        asNavFor: '#product-carousel',
         dots: false,
         infinite: false,
         variableWidth: true,
       });
 
-      $thumb.find(".slick-item").click(function () {
-        $prod.slick("slickGoTo", window.$(this).index());
+      $thumb.find('.slick-item').click(function () {
+        $prod.slick('slickGoTo', window.$(this).index());
       });
     }
   }
@@ -127,8 +138,8 @@ class ProductModal extends Component {
     }
 
     logEvent({
-      category: "Product",
-      action: "AddToCart",
+      category: 'Product',
+      action: 'AddToCart',
       value: this.state.qty,
       label: product.activeProductId,
     });
@@ -136,7 +147,7 @@ class ProductModal extends Component {
     const inventory = activeProduct.available_inventory[0]
       ? activeProduct.available_inventory[0]
       : null;
-    const order_summary = routing.location.pathname.indexOf("checkout") !== -1;
+    const order_summary = routing.location.pathname.indexOf('checkout') !== -1;
 
     const finalUnitType = activeProduct.unit_type;
 
@@ -151,7 +162,7 @@ class ProductModal extends Component {
 
     if (quantityAddon > 0) {
       const addonProduct = activeProduct.add_ons.find(
-        (p) => p.product_id === packagingAddon
+        (p) => p.product_id === packagingAddon,
       );
 
       items.push({
@@ -167,20 +178,20 @@ class ProductModal extends Component {
         { items },
         user.getHeaderAuth(),
         order_summary,
-        user.getDeliveryParams()
+        user.getDeliveryParams(),
       )
       .then((data) => {
         data &&
           user.adjustDeliveryTimes(
             data.delivery_date,
-            this.state.deliveryTimes
+            this.state.deliveryTimes,
           );
       })
       .catch((e) => {
         if (e.response) {
           const msg = e.response.data.error.message;
           this.setState({ invalidText: msg });
-          console.error("Failed to add to cart", e);
+          console.error('Failed to add to cart', e);
         }
       });
 
@@ -217,14 +228,14 @@ class ProductModal extends Component {
 
   handleProductClick = (product_id) => {
     this.productStore.showModal(product_id);
-    this.modalStore.toggleModal("product");
+    this.modalStore.toggleModal('product');
   };
 
   truncate = (text, length) => {
     if (text.length <= length) {
       return text;
     }
-    return text.slice(0, length) + "...";
+    return text.slice(0, length) + '...';
   };
 
   render() {
@@ -266,11 +277,11 @@ class ProductModal extends Component {
     if (available_inventory[0])
       shipMessage = `Sold and fulfilled by The Wally Shop`;
     if (fbw)
-      shipMessage = "Sold by " + vendor + ", fulfilled by The Wally Shop.";
+      shipMessage = 'Sold by ' + vendor + ', fulfilled by The Wally Shop.';
 
-    let infoPackageClass = "package-info";
+    let infoPackageClass = 'package-info';
     if (this.state.infoPackage) {
-      infoPackageClass += " open";
+      infoPackageClass += ' open';
     }
 
     const inventory = available_inventory[0] ? available_inventory[0] : null;
@@ -289,20 +300,20 @@ class ProductModal extends Component {
 
     let totalPrice = price * this.state.qty * this.state.priceMultiplier;
 
-    var price_unit = "";
-    if (["ea"].includes(unit_type)) {
+    var price_unit = '';
+    if (['ea'].includes(unit_type)) {
       if (subcat_name) {
         price_unit = subcat_name;
       } else {
-        price_unit = "jar";
+        price_unit = 'jar';
       }
     } else {
       price_unit += unit_type;
     }
 
-    var weight_unit = "lbs";
+    var weight_unit = 'lbs';
     if (unit_weight && unit_weight < 0.05) {
-      weight_unit = "oz";
+      weight_unit = 'oz';
       unit_weight = unit_weight * 16;
     }
 
@@ -340,7 +351,7 @@ class ProductModal extends Component {
             alt="Packaging size 25 oz"
             width="26"
           />
-          <div>{packaging_size === 16 ? "16 oz" : "25 oz"}</div>
+          <div>{packaging_size === 16 ? '16 oz' : '25 oz'}</div>
         </div>
         <div>
           <img
@@ -375,7 +386,9 @@ class ProductModal extends Component {
           <Col sm="6">
             <div className="row mb-3">
               <div className="col-sm-6">
-                <h3 className="mb-0">{name}</h3>
+                <Typography variant="h2" component="h1">
+                  {name}
+                </Typography>
               </div>
               <div className="col-sm-6">
                 <div
@@ -422,7 +435,7 @@ class ProductModal extends Component {
             </div>
             <div>{shipMessage}</div>
             <div>Sold by the jar.</div>
-            {["ea", "bunch", "pint"].includes(unit_type) && unit_weight && (
+            {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
               <div>
                 Unit weight is {unit_weight} {weight_unit}.
               </div>
@@ -430,7 +443,7 @@ class ProductModal extends Component {
             <hr />
 
             <div className={infoPackageClass}>
-              <strong>Packaged in:</strong>{" "}
+              <strong>Packaged in:</strong>{' '}
               <i
                 onClick={this.toggleInfoPackage}
                 className="fa fa-info-circle"
@@ -470,21 +483,21 @@ class ProductModal extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={buy_by_packaging ? "" : price_unit}
+              price_unit={buy_by_packaging ? '' : price_unit}
             />
             <hr />
             <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
             <button
               onClick={this.handleAddToCart}
               className={`btn btn-danger btn-add-cart mb-2 ${
-                this.state.outOfStock || !this.state.available ? "inactive" : ""
+                this.state.outOfStock || !this.state.available ? 'inactive' : ''
               }`}
             >
               {this.state.outOfStock
-                ? "Out of Stock"
+                ? 'Out of Stock'
                 : this.state.available
-                ? "Add to cart"
-                : "Unavailable"}
+                ? 'Add to cart'
+                : 'Unavailable'}
             </button>
             <br />
 
@@ -494,26 +507,24 @@ class ProductModal extends Component {
             </div>
           </Col>
         </Row>
+        <hr />
+        <Typography variant="h2" gutterBottom>
+          More Products Like This
+        </Typography>
         {similar_products && similar_products.length > 0 && (
-          <Row>
-            <Col>
-              <hr />
-              <h3 className="mb-3">More Products Like This</h3>
-              <Row className="similar-products-container">
-                {similar_products.map((product, key) => {
-                  return (
-                    <Product
-                      key={key}
-                      product={product}
-                      onProductClick={() =>
-                        this.handleProductClick(product.product_id)
-                      }
-                    />
-                  );
-                })}
-              </Row>
-            </Col>
-          </Row>
+          <SimilarProducts>
+            {similar_products.map((product) => {
+              return (
+                <Product
+                  key={product.name}
+                  product={product}
+                  onProductClick={() =>
+                    this.handleProductClick(product.product_id)
+                  }
+                />
+              );
+            })}
+          </SimilarProducts>
         )}
         <Row>
           <Col>
@@ -526,7 +537,7 @@ class ProductModal extends Component {
                     <span className="font-weight-bold">Producer: </span>
                     <Link
                       onClick={this.modalStore.toggleModal}
-                      to={"/vendor/" + manufacturer_url_name}
+                      to={'/vendor/' + manufacturer_url_name}
                     >
                       {manufacturer}
                     </Link>
@@ -541,19 +552,19 @@ class ProductModal extends Component {
                 {ingredients && ingredients.length > 0 && (
                   <div>
                     <span className="font-weight-bold">Ingredients: </span>
-                    {ingredients.join(", ")}
+                    {ingredients.join(', ')}
                   </div>
                 )}
                 {allergens && allergens.length > 0 && (
                   <div>
                     <span className="font-weight-bold">Allergens: </span>
-                    {allergens.join(", ")}
+                    {allergens.join(', ')}
                   </div>
                 )}
                 {tags && tags.length > 0 && (
                   <div>
                     <span className="font-weight-bold">Tags: </span>
-                    {tags.join(", ")}
+                    {tags.join(', ')}
                   </div>
                 )}
               </div>
@@ -576,12 +587,12 @@ class ProductModal extends Component {
             <h3 className="mb-3">Product Ratings</h3>
             <div className="product-ratings-container">
               <span className="product-rating-label font-weight-bold">
-                Product Rating:{" "}
+                Product Rating:{' '}
               </span>
               {avg_rating ? (
                 <ProductRatingStars rating={avg_rating} />
               ) : (
-                "No Ratings Yet"
+                'No Ratings Yet'
               )}
             </div>
             {recentThreeComments && recentThreeComments.length > 0 && (
@@ -589,8 +600,8 @@ class ProductModal extends Component {
                 <div className="font-weight-bold">Comments:</div>
                 <div className="comments-container">
                   {recentThreeComments.map((comment, key) => (
-                    <div key={"comment-" + key} className="comment">
-                      "{this.truncate(comment.comment, 200)}" -{" "}
+                    <div key={'comment-' + key} className="comment">
+                      "{this.truncate(comment.comment, 200)}" -{' '}
                       {comment.user_name}
                     </div>
                   ))}
@@ -605,4 +616,4 @@ class ProductModal extends Component {
   }
 }
 
-export default connect("store")(ProductModal);
+export default connect('store')(ProductModal);

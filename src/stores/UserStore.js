@@ -1,4 +1,4 @@
-import { observable, decorate, action, computed } from 'mobx';
+import { observable, decorate, action, computed, runInAction } from 'mobx';
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -190,18 +190,26 @@ class UserStore {
 
   async makeDefaultAddress(address_id) {
     const res = await axios.patch(
-      API_ADDRESS_EDIT,
-      { address_id },
+      API_EDIT_USER,
+      { preferred_address: address_id },
       this.getHeaderAuth(),
     );
     return res.data;
   }
 
   async deleteAddress(address_id) {
-    const res = await axios.delete(
-      API_ADDRESS_REMOVE + address_id,
-      this.getHeaderAuth(),
-    );
+    const res = await axios
+      .delete(API_ADDRESS_REMOVE + address_id, this.getHeaderAuth())
+      .then((_res) => {
+        runInAction(() => {
+          const addresses = (this.user && this.user.addresses) || [];
+          this.user.addresses = addresses.filter(
+            (addr) => addr._id !== address_id,
+          );
+          this.setUserData(this.user);
+        });
+        return _res;
+      });
     return res.data;
   }
 

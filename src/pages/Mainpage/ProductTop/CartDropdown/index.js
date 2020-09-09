@@ -69,7 +69,7 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
         >
           <div className="dropdown-menu dropdown-menu-right">
             <div className="px-3">
-              <CarbonBar value={count % 10} />
+              <CarbonBar nCartItems={count} />
             </div>
             {items && count > 0 ? (
               <>
