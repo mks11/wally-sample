@@ -6,8 +6,6 @@ import PlacesAutocomplete, {
 import { useFormikContext } from 'formik';
 
 // Components
-import { Grid } from '@material-ui/core';
-import { Info } from '@material-ui/icons';
 import { Label } from 'styled-component-lib/InputLabel';
 
 export default function FormikPlacesAutoComplete({ names, mode = 'edit' }) {
@@ -35,14 +33,7 @@ export default function FormikPlacesAutoComplete({ names, mode = 'edit' }) {
 
   return (
     <>
-      <Grid container alignItems="center">
-        <Grid item style={{ marginRight: '0.5rem' }}>
-          <Label>Search for an address</Label>
-        </Grid>
-        <Grid item>
-          <Info />
-        </Grid>
-      </Grid>
+      <Label>Search for an address</Label>
       <PlacesAutocomplete
         value={address}
         onChange={handleChange}
