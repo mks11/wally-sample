@@ -63,7 +63,7 @@ function Routes({ store, ...props }) {
   const { user } = store;
   return (
     <Switch>
-      {/* Admin Routes (NOT CRAWLED) */}
+      {/* ==================== Admin Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/manage/retail" component={ManageRetail} />
       <Route exact path="/manage/printing" component={ManagePrinting} />
       <Route exact path="/manage/shipping" component={ManageShipping} />
@@ -78,7 +78,7 @@ function Routes({ store, ...props }) {
       <Route exact path="/manage/orders" component={ManageOrders} />
       <Route exact path="/manage/courier-routing" component={CourierRouting} />
       <Route exact path="/manage/products" component={ManageProducts} />
-      {/* Ops Routes (NOT CRAWLED) */}
+      {/* ==================== Ops Routes (NOT CRAWLED) ==================== */}
       {/* Pick/Pack */}
       <OpsRoute
         exact
@@ -136,7 +136,10 @@ function Routes({ store, ...props }) {
         path="/manage/co-packing/inbound"
         component={InboundShipments}
       />
-      {/* Ambassador Routes (NOT CRAWLED) */}
+      {/* ==================== Retail Routes (NOT CRAWLED) ==================== */}
+      {/* EXAMPLE RETAIL ROUTE*/}
+      <RetailRoute exact path="/foo" component={Tnc} userStore={user} />
+      {/* ==================== Ambassador Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}
       <Route exact path="/" component={Homepage} />
@@ -153,7 +156,7 @@ function Routes({ store, ...props }) {
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>
-      {/* User Routes (NOT CRAWLED) */}
+      {/* ==================== User Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/help" component={Help} />
@@ -199,14 +202,40 @@ function Routes({ store, ...props }) {
 }
 
 function OpsRoute({ component: Component, userStore, ...rest }) {
-  userStore.getStatus();
   const { isOps, isOpsLead, isAdmin } = userStore;
+
+  useEffect(() => {
+    userStore.getStatus();
+  }, []);
 
   return (
     <Route
       {...rest}
       render={(props) => {
         if (isOps || isOpsLead || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+}
+
+function RetailRoute({ component: Component, userStore, ...rest }) {
+  const { isRetail, isAdmin } = userStore;
+
+  useEffect(() => {
+    userStore.getStatus();
+  }, []);
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isRetail || isAdmin) {
           return <Component {...rest} {...props} />;
         } else {
           return (
