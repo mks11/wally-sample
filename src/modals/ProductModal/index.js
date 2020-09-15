@@ -11,9 +11,9 @@ import { logModalView, logEvent } from 'services/google-analytics';
 import { formatMoney, connect } from 'utils';
 
 // Components
-import { Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { Row, Col } from 'reactstrap';
-import AmountGroup from 'common/AmountGroup';
+// import AmountGroup from 'common/AmountGroup';
 import QuantitySelect from '../../common/QuantitySelect';
 import Product from '../../pages/Mainpage/Product/index';
 import ProductRatingForm from '../../common/ProductRatingForm';
@@ -382,35 +382,11 @@ class ProductModal extends Component {
 
     return (
       <div className="product-modal-wrap">
-        <Row>
-          <Col sm="6">
-            <div className="row mb-3">
-              <div className="col-sm-6">
-                <Typography variant="h2" component="h1">
-                  {name}
-                </Typography>
-              </div>
-              <div className="col-sm-6">
-                <div
-                  id="thumbnailproduct-carousel"
-                  ref={(el) => (this.thumb = el)}
-                >
-                  {image_refs.map((item, key) => (
-                    <div key={key} className="slick-item">
-                      <img src={PRODUCT_BASE_URL + item} alt="" />
-                    </div>
-                  ))}
-                  {nutritional_info_url && (
-                    <div className="slick-item">
-                      <img
-                        src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url}
-                        alt="Nutritional info"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+        <Typography variant="h1">{name}</Typography>
+        <Typography variant="subtitle1">{shipMessage}</Typography>
+        <Grid container>
+          {/* Image Carousel */}
+          <Grid item xs={12} md={6}>
             <div className="carousel-mobile-flex">
               <div id="product-carousel" ref={(el) => (this.prod = el)}>
                 {image_refs.map((item, key) => (
@@ -428,21 +404,43 @@ class ProductModal extends Component {
                 )}
               </div>
             </div>
-          </Col>
-          <Col sm="6">
-            <div className="modal-product-price">
-              Price: <span>{formatMoney(price)}</span> / {price_unit}
+
+            {/* Carousel thumbnails */}
+            <div id="thumbnailproduct-carousel" ref={(el) => (this.thumb = el)}>
+              {image_refs.map((item, key) => (
+                <div key={key} className="slick-item">
+                  <img src={PRODUCT_BASE_URL + item} alt="" />
+                </div>
+              ))}
+              {nutritional_info_url && (
+                <div className="slick-item">
+                  <img
+                    src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url}
+                    alt="Nutritional info"
+                  />
+                </div>
+              )}
             </div>
-            <div>{shipMessage}</div>
-            <div>Sold by the jar.</div>
-            {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
+          </Grid>
+          <Grid item md={6}>
+            <Typography
+              variant="h2"
+              component="span"
+              style={{ color: '#6060a8' }}
+            >
+              {formatMoney(price)}
+            </Typography>
+
+            {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
+            {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
               <div>
                 Unit weight is {unit_weight} {weight_unit}.
               </div>
-            )}
+            )} */}
             <hr />
 
-            <div className={infoPackageClass}>
+            {/* PACKAGING ICONS - NOT USED AT THE MOMENT */}
+            {/* <div className={infoPackageClass}>
               <strong>Packaged in:</strong>{' '}
               <i
                 onClick={this.toggleInfoPackage}
@@ -454,9 +452,10 @@ class ProductModal extends Component {
                 <p>{packaging_description}</p>
                 <p>More sizes coming soon!</p>
               </div>
-            </div>
-            <div className="mb-3">{packaging_type}</div>
-            {buy_by_packaging && (
+            </div> */}
+            {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
+            {/* <div className="mb-3">{packaging_type}</div> */}
+            {/* {buy_by_packaging && (
               <React.Fragment>
                 <div>
                   <strong>Size:</strong>
@@ -474,19 +473,19 @@ class ProductModal extends Component {
                   product={true}
                 />
               </React.Fragment>
-            )}
-
-            <div>
-              <strong>Choose your quantity</strong>
-            </div>
+            )} */}
+            <Typography variant="h3" gutterBottom>
+              Quantity:
+            </Typography>
             <QuantitySelect
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
               price_unit={buy_by_packaging ? '' : price_unit}
             />
-            <hr />
-            <div className="mb-2">Total: {formatMoney(totalPrice)}</div>
+            <Typography variant="body1" gutterBottom>
+              Total: {formatMoney(totalPrice)}
+            </Typography>
             <button
               onClick={this.handleAddToCart}
               className={`btn btn-danger btn-add-cart mb-2 ${
@@ -500,13 +499,119 @@ class ProductModal extends Component {
                 : 'Unavailable'}
             </button>
             <br />
+            <br />
+            <Typography variant="subtitle1" gutterBottom>
+              *Packed in a facility that processes dairy, gluten, peanuts and
+              tree nuts.
+            </Typography>
+          </Grid>
+        </Grid>
+        <hr />
+        <Box padding={1}>
+          <Typography variant="h2" gutterBottom>
+            Product Info
+          </Typography>
 
-            <div className="text-muted">
-              **Product packaged in a facility that processes dairy, gluten,
-              peanuts and tree nuts.
-            </div>
-          </Col>
-        </Row>
+          {manufacturer && (
+            <>
+              <Typography variant="h4" component="span" gutterBottom>
+                Producer:{' '}
+              </Typography>
+              <Link
+                onClick={this.modalStore.toggleModal}
+                to={'/vendor/' + manufacturer_url_name}
+              >
+                <Typography variant="body1" component="span">
+                  {manufacturer}
+                </Typography>
+              </Link>
+              <br />
+              <br />
+            </>
+          )}
+          {description && (
+            <>
+              <Typography variant="h4" component="p" gutterBottom>
+                Description:
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {description}
+              </Typography>
+            </>
+          )}
+          {ingredients && ingredients.length > 0 && (
+            <>
+              <Typography variant="h4" component="p" gutterBottom>
+                Ingredients:
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {ingredients.join(', ')}
+              </Typography>
+            </>
+          )}
+          {allergens && allergens.length > 0 && (
+            <>
+              <Typography variant="h4" component="p" gutterBottom>
+                Allergens:
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {allergens.join(', ')}
+              </Typography>
+            </>
+          )}
+          {tags && tags.length > 0 && (
+            <>
+              <Typography variant="h4" component="p" gutterBottom>
+                Tags:
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {tags.join(', ')}
+              </Typography>
+            </>
+          )}
+        </Box>
+
+        {a_plus_url && (
+          <Row>
+            <Col>
+              <hr />
+              <div className="a-plus-image">
+                <img src={a_plus_url} alt="A+" />
+              </div>
+            </Col>
+          </Row>
+        )}
+        <hr />
+        <Box padding={1}>
+          <Typography variant="h2" gutterBottom>
+            Ratings
+          </Typography>
+          <Typography variant="h4" gutterBottom>
+            Product Rating:{' '}
+          </Typography>
+          {avg_rating ? (
+            <ProductRatingStars rating={avg_rating} />
+          ) : (
+            <Typography variant="body1" gutterBottom>
+              No Ratings Yet
+            </Typography>
+          )}
+          {recentThreeComments && recentThreeComments.length > 0 && (
+            <React.Fragment>
+              <div className="font-weight-bold">Comments:</div>
+              <div className="comments-container">
+                {recentThreeComments.map((comment, key) => (
+                  <div key={'comment-' + key} className="comment">
+                    "{this.truncate(comment.comment, 200)}" -{' '}
+                    {comment.user_name}
+                  </div>
+                ))}
+              </div>
+            </React.Fragment>
+          )}
+        </Box>
+        <hr />
+        {localStorage.user && <ProductRatingForm product_id={product_id} />}
         <hr />
         <Typography variant="h2" gutterBottom>
           More Products Like This
@@ -526,91 +631,6 @@ class ProductModal extends Component {
             })}
           </SimilarProducts>
         )}
-        <Row>
-          <Col>
-            <hr />
-            <h3 className="mb-3">Product Info</h3>
-            <div className="media media-xs">
-              <div className="media-body">
-                {manufacturer && (
-                  <div>
-                    <span className="font-weight-bold">Producer: </span>
-                    <Link
-                      onClick={this.modalStore.toggleModal}
-                      to={'/vendor/' + manufacturer_url_name}
-                    >
-                      {manufacturer}
-                    </Link>
-                  </div>
-                )}
-                {description && (
-                  <div>
-                    <span className="font-weight-bold">Description: </span>
-                    {description}
-                  </div>
-                )}
-                {ingredients && ingredients.length > 0 && (
-                  <div>
-                    <span className="font-weight-bold">Ingredients: </span>
-                    {ingredients.join(', ')}
-                  </div>
-                )}
-                {allergens && allergens.length > 0 && (
-                  <div>
-                    <span className="font-weight-bold">Allergens: </span>
-                    {allergens.join(', ')}
-                  </div>
-                )}
-                {tags && tags.length > 0 && (
-                  <div>
-                    <span className="font-weight-bold">Tags: </span>
-                    {tags.join(', ')}
-                  </div>
-                )}
-              </div>
-            </div>
-          </Col>
-        </Row>
-        {a_plus_url && (
-          <Row>
-            <Col>
-              <hr />
-              <div className="a-plus-image">
-                <img src={a_plus_url} alt="A+" />
-              </div>
-            </Col>
-          </Row>
-        )}
-        <Row>
-          <Col>
-            <hr />
-            <h3 className="mb-3">Product Ratings</h3>
-            <div className="product-ratings-container">
-              <span className="product-rating-label font-weight-bold">
-                Product Rating:{' '}
-              </span>
-              {avg_rating ? (
-                <ProductRatingStars rating={avg_rating} />
-              ) : (
-                'No Ratings Yet'
-              )}
-            </div>
-            {recentThreeComments && recentThreeComments.length > 0 && (
-              <React.Fragment>
-                <div className="font-weight-bold">Comments:</div>
-                <div className="comments-container">
-                  {recentThreeComments.map((comment, key) => (
-                    <div key={'comment-' + key} className="comment">
-                      "{this.truncate(comment.comment, 200)}" -{' '}
-                      {comment.user_name}
-                    </div>
-                  ))}
-                </div>
-              </React.Fragment>
-            )}
-          </Col>
-        </Row>
-        {localStorage.user && <ProductRatingForm product_id={product_id} />}
       </div>
     );
   }
