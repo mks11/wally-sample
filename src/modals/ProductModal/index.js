@@ -261,6 +261,8 @@ class ProductModal extends Component {
       manufacturer_url_name,
       max_qty,
       name,
+      netWeight,
+      pricePerOz,
       nutritional_info_url,
       packaging_vol,
       packagings,
@@ -384,7 +386,8 @@ class ProductModal extends Component {
       <div className="product-modal-wrap">
         <Typography variant="h1">{name}</Typography>
         <Typography variant="subtitle1">{shipMessage}</Typography>
-        <Grid container>
+        <br />
+        <Grid container spacing={2}>
           {/* Image Carousel */}
           <Grid item xs={12} md={6}>
             <div className="carousel-mobile-flex">
@@ -423,14 +426,22 @@ class ProductModal extends Component {
             </div>
           </Grid>
           <Grid item md={6}>
-            <Typography
-              variant="h2"
-              component="span"
-              style={{ color: '#6060a8' }}
-            >
+            <Typography variant="h2" component="p" style={{ color: '#6060a8' }}>
               {formatMoney(price)}
             </Typography>
-
+            <Typography
+              variant="subtitle1"
+              component="span"
+              gutterBottom
+              style={{ fontWeight: 'bold' }}
+            >
+              Net weight {netWeight} oz{' '}
+            </Typography>
+            <Typography variant="subtitle1" component="span" gutterBottom>
+              {typeof pricePerOz === 'number'
+                ? `(${formatMoney(pricePerOz)} / oz)`
+                : pricePerOz}
+            </Typography>
             {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
             {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
               <div>
