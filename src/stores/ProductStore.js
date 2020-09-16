@@ -1,4 +1,4 @@
-import { observable, decorate, action } from "mobx";
+import { observable, decorate, action } from 'mobx';
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
@@ -8,10 +8,10 @@ import {
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
-} from "../config";
+} from '../config';
 import UserStore from './UserStore';
-import axios from "axios";
-import moment from "moment";
+import axios from 'axios';
+import moment from 'moment';
 
 class ProductStore {
   main_display = [];
@@ -36,36 +36,38 @@ class ProductStore {
     all: true,
     result: [],
     display: [],
-    term: "",
-    filters: []
+    term: '',
+    filters: [],
   };
 
   currentSearchFilter = [];
-  currentSearchCategory = "All Categories";
+  currentSearchCategory = 'All Categories';
 
   async showModal(product_id, customer_quantity) {
-    this.activeProductId = product_id
+    this.activeProductId = product_id;
 
-    const time = moment().format('YYYY-MM-DD HH:mm:ss')
-    const res = await axios.get(`${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`)
-    this.activeProductComments = await this.getComments(product_id)
-    this.activeProduct = res.data
-    var min_size = 1
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
+    const res = await axios.get(
+      `${API_GET_PRODUCT_DETAIL}${product_id}?time=${time}`,
+    );
+    this.activeProductComments = await this.getComments(product_id);
+    this.activeProduct = res.data;
+    var min_size = 1;
 
-    this.customer_quantity = customer_quantity ? customer_quantity : min_size
+    this.customer_quantity = customer_quantity ? customer_quantity : min_size;
 
-    return res.data
+    return res.data;
   }
 
   getAdvertisements() {
     axios
       .get(API_GET_ADVERTISEMENTS)
-      .then(resp => {
+      .then((resp) => {
         this.ads1 = resp.data.ads1;
         this.ads2 = resp.data.ads2;
       })
-      .catch(e => {
-        console.error("Failed to load advertisement", e);
+      .catch((e) => {
+        console.error('Failed to load advertisement', e);
       });
   }
 
@@ -74,17 +76,17 @@ class ProductStore {
     this.main_display = [];
 
     this.fetch = true;
-    const time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
     const url = id ? API_GET_PRODUCT_DISPLAYED + id : API_GET_PRODUCT_DISPLAYED;
 
-    if (auth && auth.headers.Authorization !== "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
       res = await axios.get(
         `${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
-        auth
+        auth,
       );
     } else {
       res = await axios.get(
-        `${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
+        `${url}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
       );
     }
     const data = res.data;
@@ -104,7 +106,7 @@ class ProductStore {
 
     this.fetch = true;
 
-    if (auth && auth.headers.Authorization !== "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
       res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth);
     } else {
       res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`);
@@ -122,72 +124,74 @@ class ProductStore {
 
   async getHistoricalProducts(auth) {
     let res;
-    if (auth && auth.headers.Authorization !== "Bearer undefined") {
-      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth)
+    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS, auth);
     } else {
-      res = await axios.get(API_GET_HISTORICAL_PRODUCTS)
+      res = await axios.get(API_GET_HISTORICAL_PRODUCTS);
     }
     this.historical_products = res.data.products;
     return res.data.products;
   }
 
   async getProductDetails(id, delivery) {
-    const time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
     this.fetch = true;
     const res = await axios.get(
-      `${API_GET_PRODUCT_DETAIL}${id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
+      `${API_GET_PRODUCT_DETAIL}${id}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
     );
     this.fetch = false;
     return res.data;
   }
 
   async getComments(id) {
-    if (!id) return null
-    this.fetch = true
-    const url = API_GET_PRODUCT_DISPLAYED + id + '/comments'
-    const res = await axios.get(url)
-    this.fetch = false
-    return res.data.comments
+    if (!id) return null;
+    this.fetch = true;
+    const url = API_GET_PRODUCT_DISPLAYED + id + '/comments';
+    const res = await axios.get(url);
+    this.fetch = false;
+    return res.data.comments;
   }
 
   async rateProduct(product_id, rating, comment) {
-    const url = API_RATE_PRODUCT + product_id + '/rating'
-    const payload = { rating, comment }
-    const auth = {headers: {Authorization: "Bearer " + UserStore.token.accessToken}}
+    const url = API_RATE_PRODUCT + product_id + '/rating';
+    const payload = { rating, comment };
+    const auth = {
+      headers: { Authorization: 'Bearer ' + UserStore.token.accessToken },
+    };
 
-    const res = await axios.post(url, payload, auth)
+    const res = await axios.post(url, payload, auth);
     return res.data;
   }
 
   updateRatingComments(rating, comments) {
-    this.activeProduct = { ...this.activeProduct, avg_rating: rating }
-    this.activeProductComments = comments
+    this.activeProduct = { ...this.activeProduct, avg_rating: rating };
+    this.activeProductComments = comments;
   }
 
-  getCategories() {
-    axios
-      .get(API_GET_CATEGORIES)
-      .then(resp => {
-        const data = resp.data;
-        this.categories = data;
-      })
-      .catch(e => console.error("Failed to load categories: ", e));
-  }
+  // getCategories() {
+  //   axios
+  //     .get(API_GET_CATEGORIES)
+  //     .then(resp => {
+  //       const data = resp.data;
+  //       this.categories = data;
+  //     })
+  //     .catch(e => console.error("Failed to load categories: ", e));
+  // }
 
   async searchKeyword(keyword, delivery, auth) {
     let res;
     const term = keyword;
-    const time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
     keyword = encodeURIComponent(keyword);
 
-    if (auth && auth.headers.Authorization !== "Bearer undefined") {
+    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
       res = await axios.get(
         `${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
-        auth
+        auth,
       );
     } else {
       res = await axios.get(
-        `${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`
+        `${API_SEARCH_KEYWORD}?keyword=${keyword}&time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}`,
       );
     }
 
@@ -197,10 +201,13 @@ class ProductStore {
       result: res.data.products || [],
       display: res.data.products || [],
       term,
-      filters: res.data.filters || []
+      filters: res.data.filters || [],
     };
-    this.currentSearchFilter = res.data && res.data.filters && res.data.filters.map(filter => filter.cat_id);
-    this.currentSearchCategory = "All Categories";
+    this.currentSearchFilter =
+      res.data &&
+      res.data.filters &&
+      res.data.filters.map((filter) => filter.cat_id);
+    this.currentSearchCategory = 'All Categories';
 
     return res.data;
   }
@@ -212,7 +219,7 @@ class ProductStore {
       ? this.currentSearchFilter.push(id)
       : this.currentSearchFilter.splice(index, 1);
 
-    const filteredSearchResult = this.search.result.filter(d => {
+    const filteredSearchResult = this.search.result.filter((d) => {
       return this.currentSearchFilter.indexOf(d.cat_id) !== -1;
     });
 
@@ -223,12 +230,12 @@ class ProductStore {
       return sum;
     }, []);
 
-    let currentSearchCategory = currentCategory.join(", ");
+    let currentSearchCategory = currentCategory.join(', ');
     this.search.all = false;
 
     if (this.currentSearchFilter.length === this.search.filters.length) {
       this.search.all = true;
-      currentSearchCategory = "All Categories";
+      currentSearchCategory = 'All Categories';
     }
 
     this.search.display = filteredSearchResult;
@@ -238,12 +245,12 @@ class ProductStore {
   searchAll() {
     if (!this.search.all) {
       this.currentSearchFilter = this.search.filters.map(
-        filter => filter.cat_id
+        (filter) => filter.cat_id,
       );
-      this.search.display = this.search.result.filter(d => {
+      this.search.display = this.search.result.filter((d) => {
         return this.currentSearchFilter.indexOf(d.cat_id) !== -1;
       });
-      this.currentSearchCategory = "All Categories";
+      this.currentSearchCategory = 'All Categories';
     }
     this.search.all = !this.search.all;
   }
@@ -254,12 +261,12 @@ class ProductStore {
       all: true,
       result: [],
       display: [],
-      term: "",
-      filters: []
+      term: '',
+      filters: [],
     };
 
     this.currentSearchFilter = [];
-    this.currentSearchCategory = "All Categories";
+    this.currentSearchCategory = 'All Categories';
   }
 }
 
@@ -288,7 +295,7 @@ decorate(ProductStore, {
   rateProduct: action,
   updateRatingComments: action,
   getHistoricalProducts: action,
-  getProductComments: action
+  getProductComments: action,
 });
 
 export default new ProductStore();
