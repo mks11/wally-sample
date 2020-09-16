@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView } from "services/google-analytics";
-import { connect, datesEqual } from "utils";
+import { logPageView } from 'services/google-analytics';
+import { connect, datesEqual } from 'utils';
 
-import Product from "../Mainpage/Product";
+import Product from '../Mainpage/Product';
 
 class VendorProfile extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class VendorProfile extends Component {
       this.loadData();
 
       const { mainFirst } = this.userStore.flags || {};
-      !mainFirst && this.modalStore.toggleModal("mainFirst");
+      !mainFirst && this.modalStore.toggleModal('mainFirst');
     });
   }
 
@@ -46,14 +46,14 @@ class VendorProfile extends Component {
     const name = this.props.match.params.vendor_name;
 
     this.vendorProfileStore.loadVendorProfile(name).catch((e) => {
-      console.error("Failed to load vendor profile", e);
-      this.modalStore.toggleModal("error");
+      console.error('Failed to load vendor profile', e);
+      this.modalStore.toggleModal('error');
     });
 
     const deliveryData = this.userStore.getDeliveryParams();
 
     this.productStore.getAdvertisements();
-    this.productStore.getCategories();
+    // this.productStore.getCategories();
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -75,7 +75,7 @@ class VendorProfile extends Component {
         data &&
           this.userStore.adjustDeliveryTimes(
             data.delivery_date,
-            this.state.deliveryTimes
+            this.state.deliveryTimes,
           );
 
         if (this.userStore.cameFromCartUrl) {
@@ -99,7 +99,7 @@ class VendorProfile extends Component {
         }
       })
       .catch((e) => {
-        console.error("Failed to load current cart", e);
+        console.error('Failed to load current cart', e);
       });
   }
 
@@ -108,30 +108,30 @@ class VendorProfile extends Component {
       this.checkoutStore
         .checkPromo(
           { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth()
+          this.userStore.getHeaderAuth(),
         )
         .then((data) => {
-          let msg = "";
+          let msg = '';
           if (data.valid) {
-            msg = "Store Credit Redeemed";
+            msg = 'Store Credit Redeemed';
             this.userStore.getUser().then(() => {
               this.loadData();
             });
           } else {
-            msg = "Invalid Promo-code";
+            msg = 'Invalid Promo-code';
           }
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         })
         .catch((e) => {
           const msg = !e.response.data.error
-            ? "Check Promo failed"
+            ? 'Check Promo failed'
             : e.response.data.error.message;
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         });
     } else {
-      this.modalStore.toggleModal("login");
+      this.modalStore.toggleModal('login');
     }
   }
 
@@ -140,7 +140,7 @@ class VendorProfile extends Component {
       .showModal(product_id, null, this.userStore.getDeliveryParams())
       .then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
-        this.modalStore.toggleModal("product");
+        this.modalStore.toggleModal('product');
       });
   };
 
@@ -161,7 +161,7 @@ class VendorProfile extends Component {
                 <h1>{vendor.name}</h1>
                 {vendor.city && (
                   <h2>
-                    {vendor.shipping_address.city} |{" "}
+                    {vendor.shipping_address.city} |{' '}
                     {vendor.shipping_address.state}
                   </h2>
                 )}
@@ -193,4 +193,4 @@ class VendorProfile extends Component {
   }
 }
 
-export default connect("store")(VendorProfile);
+export default connect('store')(VendorProfile);

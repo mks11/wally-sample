@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import { logPageView } from "services/google-analytics";
-import { connect, datesEqual } from "utils";
+import { logPageView } from 'services/google-analytics';
+import { connect, datesEqual } from 'utils';
 
-import CarbonBar from "common/CarbonBar";
-import Product from "../Mainpage/Product";
-import EmptyCartMessage from "./EmptyCartMessage";
+import CarbonBar from 'common/CarbonBar';
+import Product from '../Mainpage/Product';
+import EmptyCartMessage from './EmptyCartMessage';
 
 class SimilarProducts extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class SimilarProducts extends Component {
     this.state = {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
-      categoryTypeMode: "limit",
+      categoryTypeMode: 'limit',
       showMobileSearch: false,
     };
 
@@ -41,7 +41,7 @@ class SimilarProducts extends Component {
       this.loadData();
 
       const { mainFirst } = this.userStore.flags || {};
-      !mainFirst && this.modalStore.toggleModal("mainFirst");
+      !mainFirst && this.modalStore.toggleModal('mainFirst');
     });
   }
 
@@ -49,9 +49,9 @@ class SimilarProducts extends Component {
     const id = this.props.match.params.id;
     this.id = id;
 
-    let categoryTypeMode = "all";
+    let categoryTypeMode = 'all';
     if (!this.id) {
-      categoryTypeMode = "limit";
+      categoryTypeMode = 'limit';
     }
 
     this.setState({ categoryTypeMode });
@@ -59,13 +59,13 @@ class SimilarProducts extends Component {
     const deliveryData = this.userStore.getDeliveryParams();
 
     this.productStore.getAdvertisements();
-    this.productStore.getCategories();
+    // this.productStore.getCategories();
     this.productStore
       .getImpulseProducts(this.userStore.getHeaderAuth())
       .then((data) => {
         this.setState({ sidebar: this.productStore.sidebar });
       })
-      .catch((e) => console.error("Failed to load similar products: ", e));
+      .catch((e) => console.error('Failed to load similar products: ', e));
 
     this.checkoutStore
       .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
@@ -87,7 +87,7 @@ class SimilarProducts extends Component {
         data &&
           this.userStore.adjustDeliveryTimes(
             data.delivery_date,
-            this.state.deliveryTimes
+            this.state.deliveryTimes,
           );
 
         if (this.userStore.cameFromCartUrl) {
@@ -111,7 +111,7 @@ class SimilarProducts extends Component {
         }
       })
       .catch((e) => {
-        console.error("Failed to load current cart", e);
+        console.error('Failed to load current cart', e);
       });
   }
 
@@ -120,30 +120,30 @@ class SimilarProducts extends Component {
       this.checkoutStore
         .checkPromo(
           { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth()
+          this.userStore.getHeaderAuth(),
         )
         .then((data) => {
-          let msg = "";
+          let msg = '';
           if (data.valid) {
-            msg = "Store Credit Redeemed";
+            msg = 'Store Credit Redeemed';
             this.userStore.getUser().then(() => {
               this.loadData();
             });
           } else {
-            msg = "Invalid Promo-code";
+            msg = 'Invalid Promo-code';
           }
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         })
         .catch((e) => {
           const msg = !e.response.data.error
-            ? "Check Promo failed"
+            ? 'Check Promo failed'
             : e.response.data.error.message;
-          this.modalStore.toggleModal("referralresult", msg);
+          this.modalStore.toggleModal('referralresult', msg);
           this.userStore.giftCardPromo = null;
         });
     } else {
-      this.modalStore.toggleModal("login");
+      this.modalStore.toggleModal('login');
     }
   }
 
@@ -152,7 +152,7 @@ class SimilarProducts extends Component {
       .showModal(product_id, null, this.userStore.getDeliveryParams())
       .then((data) => {
         this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
-        this.modalStore.toggleModal("product");
+        this.modalStore.toggleModal('product');
       });
   };
 
@@ -209,4 +209,4 @@ class SimilarProducts extends Component {
   }
 }
 
-export default connect("store")(SimilarProducts);
+export default connect('store')(SimilarProducts);

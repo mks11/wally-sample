@@ -435,12 +435,14 @@ class ProductModal extends Component {
               gutterBottom
               style={{ fontWeight: 'bold' }}
             >
-              Net weight {netWeight} oz{' '}
+              {typeof netWeight === 'number'
+                ? `Net weight ${netWeight} oz `
+                : `${netWeight} `}
             </Typography>
             <Typography variant="subtitle1" component="span" gutterBottom>
               {typeof pricePerOz === 'number'
                 ? `(${formatMoney(pricePerOz)} / oz)`
-                : pricePerOz}
+                : `(${pricePerOz})`}
             </Typography>
             {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
             {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
@@ -597,7 +599,7 @@ class ProductModal extends Component {
           <Typography variant="h2" gutterBottom>
             Ratings
           </Typography>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" component="p" gutterBottom>
             Product Rating:{' '}
           </Typography>
           {avg_rating ? (
@@ -607,17 +609,24 @@ class ProductModal extends Component {
               No Ratings Yet
             </Typography>
           )}
+          <br />
           {recentThreeComments && recentThreeComments.length > 0 && (
             <React.Fragment>
-              <div className="font-weight-bold">Comments:</div>
-              <div className="comments-container">
+              <Typography variant="h4" component="p" gutterBottom>
+                Comments:{' '}
+              </Typography>
+              <Box>
                 {recentThreeComments.map((comment, key) => (
-                  <div key={'comment-' + key} className="comment">
+                  <Typography
+                    key={'comment-' + key}
+                    variant="body1"
+                    gutterBottom
+                  >
                     "{this.truncate(comment.comment, 200)}" -{' '}
                     {comment.user_name}
-                  </div>
+                  </Typography>
                 ))}
-              </div>
+              </Box>
             </React.Fragment>
           )}
         </Box>

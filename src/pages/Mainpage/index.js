@@ -83,8 +83,8 @@ class Mainpage extends Component {
           this.checkoutStore.getDeliveryTimes();
           this.loadData();
           const { mainFirst, mainSecond } = this.userStore.flags || {};
-          !mainFirst && this.modalStore.toggleModal("mainFirst");
-          mainFirst && !mainSecond && this.modalStore.toggleModal("mainSecond");
+          !mainFirst && this.modalStore.toggleModal('mainFirst');
+          mainFirst && !mainSecond && this.modalStore.toggleModal('mainSecond');
         }
       }
     });
@@ -106,7 +106,7 @@ class Mainpage extends Component {
       const deliveryData = this.userStore.getDeliveryParams();
 
       this.productStore.getAdvertisements();
-      this.productStore.getCategories();
+      // this.productStore.getCategories();
       this.productStore
         .getProductDisplayed(id, deliveryData, this.userStore.getHeaderAuth())
         .then((data) => {
