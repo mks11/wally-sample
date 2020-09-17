@@ -47,6 +47,7 @@ import VendorProfile from './pages/vendor/VendorProfile';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
+import RetailHomePage from './pages/retail';
 
 // Pick/Pack
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';
@@ -137,8 +138,12 @@ function Routes({ store, ...props }) {
         component={InboundShipments}
       />
       {/* ==================== Retail Routes (NOT CRAWLED) ==================== */}
-      {/* EXAMPLE RETAIL ROUTE*/}
-      <RetailRoute exact path="/foo" component={Tnc} userStore={user} />
+      <RetailRoute
+        exact
+        path="/retail"
+        component={RetailHomePage}
+        userStore={user}
+      />
       {/* ==================== Ambassador Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}

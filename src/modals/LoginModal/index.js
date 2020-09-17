@@ -46,8 +46,7 @@ class LoginModal extends Component {
         } else if (isAdmin) {
           routing.push('/manage/retail');
         } else if (isRetail) {
-          // TODO REPLACE THIS PATH WITH THE RETAIL PORTAL HOME PAGE
-          routing.push('/main');
+          routing.push('/retail');
         }
       })
       .catch((e) => {
