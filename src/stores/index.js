@@ -16,6 +16,7 @@ import LoadingSpinnerStore from './LoadingSpinnerStore';
 import SnackbarStore from './SnackbarStore';
 import { RouterStore } from 'mobx-react-router';
 import PickPackStore from './PickPackStore';
+import RetailStore from './RetailStore';
 
 const store = {
   ui: UiStore,
@@ -38,6 +39,7 @@ const store = {
   loading: LoadingSpinnerStore,
   snackbar: SnackbarStore,
   routing: new RouterStore(),
+  retail: RetailStore,
 };
 
 export default store;
