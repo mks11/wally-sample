@@ -11,7 +11,7 @@ import {
   DesktopDropdownMenuLink,
 } from './DesktopNavComponents';
 
-export function MobileOpsNav({ hideNav, handleSignout, userName, isOpsLead }) {
+export function MobileOpsNav({ hideNav, handleSignout, userName }) {
   return (
     <>
       <li>
