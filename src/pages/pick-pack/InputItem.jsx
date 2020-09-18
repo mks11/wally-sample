@@ -14,11 +14,12 @@ function InputItem({ field, ...props }) {
   const {
     customer_quantity,
     name,
+    packaging,
     packaging_urls,
     warehouse_location,
     sku_id,
   } = field.value;
-
+  console.log(packaging);
   // UPC State Management
   // TODO
   // const [barscanOpened, setBarscanOpened] = useState(false);
@@ -83,22 +84,17 @@ function InputItem({ field, ...props }) {
     setQrScanProgress(0);
   };
 
-  let packagingType = name.match(/ - [\d]+ oz Wally Jar/).pop();
-  const productName = name.replace(packagingType, '');
-
   return (
     <Paper className={styles.itemBlock}>
       <Grid container justify="center" alignItems="center" spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h4" component="h2">
-            {productName}
+            {name}
           </Typography>
           <Typography variant="body1" component="p">
             {packaging_urls.length}/{customer_quantity} jars scanned
           </Typography>
-          <Typography variant="subtitle1">
-            {packagingType.replace(' - ', '')}
-          </Typography>
+          <Typography variant="subtitle1">{packaging}</Typography>
           <Typography
             variant="subtitle1"
             style={{ display: 'inline', marginRight: '0.5rem' }}
@@ -140,7 +136,7 @@ function InputItem({ field, ...props }) {
             onClose={closeQRScanner}
             onScan={handleQRScan}
             onError={() => props.modalStore.toggleModal('error')}
-            progressText={`${productName} - ${qrScanProgress}/${customer_quantity}`}
+            progressText={`${name} - ${qrScanProgress}/${customer_quantity}`}
             expectedSku={sku_id}
             shouldCheckPackagingDetails
             cameraDirection="environment"
