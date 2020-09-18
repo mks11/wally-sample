@@ -47,7 +47,7 @@ import VendorProfile from './pages/vendor/VendorProfile';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
-import RetailHomePage from './pages/retail';
+import RetailManagementPortal from './pages/retail';
 
 // Pick/Pack
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';
@@ -141,7 +141,7 @@ function Routes({ store, ...props }) {
       <RetailRoute
         exact
         path="/retail"
-        component={RetailHomePage}
+        component={RetailManagementPortal}
         userStore={user}
       />
       {/* ==================== Ambassador Routes (NOT CRAWLED) ==================== */}
