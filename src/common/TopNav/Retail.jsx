@@ -12,7 +12,7 @@ import {
   MobileNavDivider,
 } from './MobileStyledComponents';
 
-export function MobileRetailNav({ hideNav, userName }) {
+export function MobileRetailNav({ hideNav, handleSignout, userName }) {
   return (
     <>
       <li>
@@ -27,6 +27,9 @@ export function MobileRetailNav({ hideNav, userName }) {
       <Link to="/main" onClick={hideNav}>
         Shop
       </Link>
+      <li>
+        <MobileNavButton onClick={handleSignout}>Sign Out</MobileNavButton>
+      </li>
     </>
   );
 }
@@ -35,7 +38,7 @@ MobileRetailNav.propTypes = {
   hideNav: PropTypes.func.isRequired,
 };
 
-export function DesktopRetailNav({ hideDropdown }) {
+export function DesktopRetailNav({ hideDropdown, handleSignout }) {
   return (
     <>
       <LinkDesktop to="/retail" onClick={hideDropdown}>
@@ -44,6 +47,11 @@ export function DesktopRetailNav({ hideDropdown }) {
       <LinkDesktop to="/main" onClick={hideDropdown}>
         Shop
       </LinkDesktop>
+      <DesktopDropdownMenuItem>
+        <a onClick={handleSignout} className="dropdown-item">
+          Sign Out
+        </a>
+      </DesktopDropdownMenuItem>
     </>
   );
 }

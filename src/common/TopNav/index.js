@@ -242,6 +242,7 @@ class TopNav extends Component {
                         <MobileRetailNav
                           userName={name}
                           hideNav={this.hideNavMobile}
+                          handleSignout={this.handleMobileNavLogout}
                         />
                       )}
                     </ul>
@@ -363,6 +364,7 @@ class TopNav extends Component {
                               {isRetail && (
                                 <DesktopRetailNav
                                   hideDropdown={this.hideAccountDropdown}
+                                  handleSignout={this.handleLogout}
                                 />
                               )}
                             </Grid>
