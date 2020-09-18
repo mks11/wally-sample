@@ -25,7 +25,7 @@ import axios from 'axios';
 import moment from 'moment';
 import uuid from 'uuid';
 
-const TYPES = ['admin', 'ops_lead', 'user', 'ops'];
+const TYPES = ['admin', 'ops_lead', 'user', 'ops', 'retail'];
 
 class UserStore {
   user = null;
@@ -82,6 +82,13 @@ class UserStore {
   get isOps() {
     if (this.user) {
       return this.user.type === TYPES[3];
+    }
+    return false;
+  }
+
+  get isRetail() {
+    if (this.user) {
+      return this.user.type === TYPES[4];
     }
     return false;
   }
@@ -571,6 +578,7 @@ decorate(UserStore, {
   isOpsLead: computed,
   isOps: computed,
   isUser: computed,
+  isRetail: computed,
 
   login: action,
   getUser: action,

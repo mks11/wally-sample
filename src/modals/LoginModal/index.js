@@ -38,13 +38,15 @@ class LoginModal extends Component {
       .login(email, password)
       .then(() => {
         this.props.toggle();
-        const { isUser, isOps, isOpsLead, isAdmin } = user;
+        const { isUser, isOps, isOpsLead, isAdmin, isRetail } = user;
         if (isUser) {
           routing.push('/main');
         } else if (isOps || isOpsLead) {
           routing.push('/pick-pack');
         } else if (isAdmin) {
           routing.push('/manage/retail');
+        } else if (isRetail) {
+          routing.push('/retail');
         }
       })
       .catch((e) => {

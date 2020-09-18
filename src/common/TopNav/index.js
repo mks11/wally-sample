@@ -20,6 +20,7 @@ import { MobileGuestNav, DesktopGuestNav } from 'common/TopNav/GuestNav';
 import { MobileUserNav, DesktopUserNav } from 'common/TopNav/UserNav';
 import { MobileOpsNav, DesktopOpsNav } from 'common/TopNav/OpsNav';
 import { MobileAdminNav, DesktopAdminNav } from 'common/TopNav/AdminNav';
+import { MobileRetailNav, DesktopRetailNav } from 'common/TopNav/Retail';
 
 class TopNav extends Component {
   constructor(props) {
@@ -152,7 +153,7 @@ class TopNav extends Component {
 
   render() {
     const isLoggedIn = this.userStore.status;
-    const { isAdmin, isOpsLead, isUser, isOps } = this.userStore;
+    const { isAdmin, isOpsLead, isUser, isOps, isRetail } = this.userStore;
     let storeCredit, name;
     let bannerText =
       'We’re working hard to restock - try next week if you don’t see something!';
@@ -233,6 +234,14 @@ class TopNav extends Component {
                           hideNav={this.hideNavMobile}
                           handleLogin={this.handleMobileNavLogin}
                           handleSignup={this.handleMobileNavSignUp}
+                        />
+                      )}
+
+                      {/* RETAIL */}
+                      {this.userStore.status && isRetail && (
+                        <MobileRetailNav
+                          userName={name}
+                          hideNav={this.hideNavMobile}
                         />
                       )}
                     </ul>
@@ -348,6 +357,12 @@ class TopNav extends Component {
                                 <DesktopOpsNav
                                   hideDropdown={this.hideAccountDropdown}
                                   handleSignout={this.handleLogout}
+                                />
+                              )}
+
+                              {isRetail && (
+                                <DesktopRetailNav
+                                  hideDropdown={this.hideAccountDropdown}
                                 />
                               )}
                             </Grid>
