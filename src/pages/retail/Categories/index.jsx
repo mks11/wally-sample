@@ -60,6 +60,9 @@ function Categories({
 
   return (
     <Box>
+      <Typography variant="h1" gutterBottom>
+        Categories
+      </Typography>
       <Header
         onAdd={handleAddCategory}
         title="Add Category"
@@ -70,8 +73,8 @@ function Categories({
           <TableHead>
             <TableRow>
               <TableCell> Name </TableCell>
-              <TableCell align="right"> Id </TableCell>
-              <TableCell align="right"> Subcategories </TableCell>
+              <TableCell align="left"> Id </TableCell>
+              <TableCell align="left"> Subcategories </TableCell>
               <TableCell align="center"> Actions </TableCell>
             </TableRow>
           </TableHead>
@@ -81,8 +84,8 @@ function Categories({
                 <TableCell component="th" scope="row">
                   {cat.name}
                 </TableCell>
-                <TableCell align="right">{cat.category_id}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{cat.category_id}</TableCell>
+                <TableCell align="left">
                   <Dropdown
                     title="Subcategories"
                     collection={cat.child_names}
