@@ -40,7 +40,7 @@ export const API_GET_PACKAGING_UNIT = BASE_URL + '/api/packaging/';
 export const API_RATE_PRODUCT = BASE_URL + '/api/products/';
 
 export const API_GET_CATEGORIES = BASE_URL + '/api/categories';
-export const API_POST_CATEGORIES = BASE_URL + '/api/categories';
+export const API_POST_CATEGORIES = BASE_URL + '/api/category';
 export const API_UPDATE_CATEGORIES = BASE_URL + '/api/categories';
 
 export const API_GET_SUBCATEGORIES = BASE_URL + '/api/subcategories';
