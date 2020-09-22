@@ -58,37 +58,35 @@ function Subcategories({
         title="Add Subcategory"
         placeholder="search subcategories"
       />
-      <Box>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell> Name </TableCell>
-              <TableCell align="right"> Id </TableCell>
-              <TableCell align="right"> Categories </TableCell>
-              <TableCell align="center"> Actions </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {categoriesPopulated.map((cat) => (
-              <StyledTableRow key={cat.name}>
-                <TableCell component="th" scope="row">
-                  {cat.name}
-                </TableCell>
-                <TableCell align="right">{cat.category_id}</TableCell>
-                <TableCell align="right">
-                  <Dropdown title="Categories" collection={cat.parent_names} />
-                </TableCell>
-                <TableCell>
-                  <CRUDButtonGroup
-                    onUpdate={() => handleEdit(cat)}
-                    onDelete={() => handleRemove(cat)}
-                  />
-                </TableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell> Name </TableCell>
+            <TableCell align="right"> Id </TableCell>
+            <TableCell align="right"> Categories </TableCell>
+            <TableCell align="center"> Actions </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {categoriesPopulated.map((cat) => (
+            <StyledTableRow key={cat.name}>
+              <TableCell component="th" scope="row">
+                {cat.name}
+              </TableCell>
+              <TableCell align="right">{cat.category_id}</TableCell>
+              <TableCell align="right">
+                <Dropdown title="Categories" collection={cat.parent_names} />
+              </TableCell>
+              <TableCell>
+                <CRUDButtonGroup
+                  onUpdate={() => handleEdit(cat)}
+                  onDelete={() => handleRemove(cat)}
+                />
+              </TableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Box>
   );
 }
