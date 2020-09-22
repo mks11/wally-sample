@@ -27,7 +27,12 @@ function getStyles(value, selectedValues, theme) {
   };
 }
 
-export default function MultiSelect({ label, values, ...props }) {
+export default function MultiSelect({
+  label,
+  values,
+  valueToDisplayMap,
+  ...props
+}) {
   const classes = useStyles();
   const theme = useTheme();
   const [selectedValues, setSelectedValues] = useState([]);
@@ -57,7 +62,11 @@ export default function MultiSelect({ label, values, ...props }) {
         renderValue={(selected) => (
           <div className={classes.chips}>
             {selected.map((value) => (
-              <Chip key={value} label={value} className={classes.chip} />
+              <Chip
+                key={value}
+                label={valueToDisplayMap ? valueToDisplayMap[value] : value}
+                className={classes.chip}
+              />
             ))}
           </div>
         )}
@@ -71,7 +80,7 @@ export default function MultiSelect({ label, values, ...props }) {
             value={val}
             style={getStyles(val, selectedValues, theme)}
           >
-            {val}
+            {valueToDisplayMap ? valueToDisplayMap[val] : val}
           </MenuItem>
         ))}
       </Select>

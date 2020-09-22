@@ -30,6 +30,7 @@ import AddressUpdateModal from './AddressUpdate';
 import AddressDeleteModal from './AddressDelete';
 import SuccessModal from './SuccessModal';
 import ReportIssueModal from './ReportIssueModal';
+import Retail from './RetailModals';
 
 const ModalRoutes = {
   welcome: WelcomeModal,
@@ -60,6 +61,15 @@ const ModalRoutes = {
   reportIssue: ReportIssueModal,
   addressUpdate: AddressUpdateModal,
   addressDelete: AddressDeleteModal,
+  retailCategoryAdd: Retail.CategoryAdd,
+  retailCategoryDelete: Retail.CategoryDelete,
+  retailCategoryUpdate: Retail.CategoryUpdate,
+  retailSubcategoryAdd: Retail.SubcategoryAdd,
+  retailSubcategoryDelete: Retail.SubcategoryDelete,
+  retailSubcategoryUpdate: Retail.SubcategoryUpdate,
+  retailPackagingAdd: Retail.PackagingAdd,
+  retailPackagingDelete: Retail.PackagingDelete,
+  retailPackagingUpdate: Retail.PackagingUpdate,
 };
 
 class RootModal extends Component {
