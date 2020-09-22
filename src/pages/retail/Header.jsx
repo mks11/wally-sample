@@ -7,7 +7,7 @@ export default function Header({ onAdd, title, placeholder }) {
     <Box display={'flex'} m={2} alignItems="center">
       <Box flex={1}>
         <PrimaryWallyButton startIcon={<Add />} onClick={onAdd}>
-          {title}
+          <Typography variant="body1">{title}</Typography>
         </PrimaryWallyButton>
       </Box>
       <Box flexGrow={1}>
