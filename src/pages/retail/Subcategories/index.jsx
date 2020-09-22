@@ -53,6 +53,9 @@ function Subcategories({
 
   return (
     <Box>
+      <Typography variant="h1" gutterBottom>
+        Subcategories
+      </Typography>
       <Header
         onAdd={handleAddCategory}
         title="Add Subcategory"
