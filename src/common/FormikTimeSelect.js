@@ -23,7 +23,6 @@ export default function FormikTimeSelect({
   const handleChange = (event) => {
     handleSelectTime(field.name, event.target.value);
   };
-  console.log(field.value);
   return (
     <>
       <Label id={labelId} disabled={props.disabled}>
