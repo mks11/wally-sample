@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import './BlogPost.module.css';
 import { logPageView, logEvent } from 'services/google-analytics';
 import { connect } from 'utils';
-
+import axios from 'axios';
 import Head from 'common/Head';
 import { ResponsiveText } from 'common/ResponsiveText';
 import { BlogPostSubtitle } from './Blog';
+import { API_GET_BLOG_POST } from 'config';
 
 const PostContainer = styled(Grid)`
   @media only screen and (max-width: 767px) {
@@ -34,19 +35,32 @@ const StartShopping = styled(Button)`
 class BlogPost extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      post: props.location.state,
-    };
-
     this.userStore = this.props.store.user;
     this.contentStore = this.props.store.content;
     this.routing = this.props.store.routing;
+    this.loading = this.props.store.loading;
+    this.snackbar = this.props.store.snackbar;
     this.handleGetStarted = this.handleGetStarted.bind(this);
+    this.getBlogPost = this.getBlogPost.bind(this);
+    this.slug = this.props.match.params.slug;
+    this.state = {
+      post: this.props.location.state,
+    };
   }
+
   componentDidMount() {
     // Store page view in google analytics
     const { location } = this.routing;
     logPageView(location.pathname);
+    if (!this.state.post) {
+      this.loading.show();
+      this.getBlogPost()
+        .then(({ data }) => {
+          this.setState({ post: data });
+        })
+        .catch((err) => {})
+        .finally(setTimeout(() => this.loading.hide(), 1200));
+    }
   }
 
   handleGetStarted(e) {
@@ -55,50 +69,60 @@ class BlogPost extends Component {
     e.preventDefault();
   }
 
-  render() {
-    const { slug } = this.props.match.params;
-    const { post } = this.state;
-    if (!slug || !post) {
-      return <Redirect to="/blog"></Redirect>;
-    }
-    const { author, post_date, metadescription } = post;
+  getBlogPost() {
+    return axios.get(`${API_GET_BLOG_POST}/${this.slug}`);
+  }
 
-    return (
-      <Container maxWidth="lg" component={'section'}>
-        <Head title={post.title} description={metadescription} />
-        <PostContainer
-          container
-          justify="center"
-          alignItems="center"
-          component="article"
-        >
-          <Grid item xs={12}>
-            <ResponsiveText variant="h1" align="center" gutterBottom>
-              {post.title}
-            </ResponsiveText>
+  render() {
+    const { post } = this.state;
+    if (post) {
+      const { title, author, post_date, metadescription } = post;
+      return (
+        <Container maxWidth="lg" component={'section'}>
+          <Head title={title} description={metadescription} />
+          <PostContainer
+            container
+            justify="center"
+            alignItems="center"
+            component="article"
+          >
+            <Grid item xs={12}>
+              <ResponsiveText variant="h1" align="center" gutterBottom>
+                {title}
+              </ResponsiveText>
+            </Grid>
+            <Grid item xs={12}>
+              <BlogPostSubtitle author={author} postDate={post_date} />
+            </Grid>
+            <br />
+            {post.body.length
+              ? post.body.map((section) => {
+                  const { title, image, body } = section;
+                  return (
+                    <PostSection
+                      key={`${title}`}
+                      title={title}
+                      image={image}
+                      body={body}
+                    />
+                  );
+                })
+              : null}
+          </PostContainer>
+          <Grid container justify="center">
+            <Grid item>
+              <StartShopping onClick={this.handleGetStarted}>
+                <Typography variant="h3" component="span">
+                  Start Shopping
+                </Typography>
+              </StartShopping>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <BlogPostSubtitle author={author} postDate={post_date} />
-          </Grid>
-          <br />
-          {post.body.length
-            ? post.body.map((section) => {
-                const { title, image, body } = section;
-                return <PostSection title={title} image={image} body={body} />;
-              })
-            : null}
-        </PostContainer>
-        <Grid container justify="center">
-          <Grid item>
-            <StartShopping onClick={this.handleGetStarted}>
-              <Typography variant="h3" component="span">
-                Start Shopping
-              </Typography>
-            </StartShopping>
-          </Grid>
-        </Grid>
-      </Container>
-    );
+        </Container>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
