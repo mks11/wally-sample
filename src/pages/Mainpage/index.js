@@ -44,9 +44,13 @@ class Mainpage extends Component {
   componentDidMount() {
     // Store page view in google analytics
     const { location } = this.routing;
+    const { match } = this.props;
     logPageView(location.pathname);
-
     this.userStore.getStatus(true).then((status) => {
+      if (match && match.path === '/schedule-pickup') {
+        this.modalStore.toggleModal('schedulepickup');
+      }
+
       if (window.location.pathname.split('/')[1] === 'packaging') {
         if (
           [

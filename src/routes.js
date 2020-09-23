@@ -183,6 +183,7 @@ function Routes({ store, ...props }) {
       <Route exact path="/checkout" component={Checkout} />
       <Route exact path="/main/similar-products" component={SimilarProducts} />
       <Route path="/main/:id" component={Mainpage} />
+      <Route exact path="/schedule-pickup" component={Mainpage} />
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
       <Route exact path="/invitefriends" component={InviteFriends} />
       {/* Redirects to the above route */}
