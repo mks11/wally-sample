@@ -337,26 +337,25 @@ class PickPackPortal extends Component {
             </Grid>
           </Grid>
         </Grid>
-        {isOpsLead ||
-          (isAdmin && ordersAndLabels.length && (
-            <Grid container justify="center">
-              <Grid item>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  onClick={this.validateOrders}
-                  disabled={ordersWereValidated}
-                  style={{
-                    margin: '1rem 0',
-                    borderRadius: '50px',
-                    color: ordersWereValidated ? '#a6a6a6' : '#07004D',
-                  }}
-                >
-                  <Typography variant="body1">Validate Orders</Typography>
-                </Button>
-              </Grid>
+        {(isOpsLead || isAdmin) && ordersAndLabels.length && (
+          <Grid container justify="center">
+            <Grid item>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.validateOrders}
+                disabled={ordersWereValidated}
+                style={{
+                  margin: '1rem 0',
+                  borderRadius: '50px',
+                  color: ordersWereValidated ? '#a6a6a6' : '#07004D',
+                }}
+              >
+                <Typography variant="body1">Validate Orders</Typography>
+              </Button>
             </Grid>
-          ))}
+          </Grid>
+        )}
       </Container>
     );
   }
