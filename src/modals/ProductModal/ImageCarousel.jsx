@@ -21,7 +21,7 @@ const BackSlideControl = styled(ButtonBack)`
   top: calc(50% - 24px);
   left: 0;
   border-radius: 50%;
-  padding: 1rem;
+  padding: 0;
   -webkit-appearance: none;
   background: rgba(0, 0, 0, 0.2);
   border: none;
@@ -37,7 +37,7 @@ const NextSlideControl = styled(ButtonNext)`
   top: calc(50% - 24px);
   right: 0;
   border-radius: 50%;
-  padding: 1rem;
+  padding: 0;
   -webkit-appearance: none;
   background: rgba(0, 0, 0, 0.2);
   border: none;
