@@ -167,9 +167,7 @@ export const STRIPE_API_KEY = 'pk_live_QV08YsHEj9zFZeHcx3O6X5Wn';
 export const FB_KEY = '1634254033370820';
 
 export const PRODUCT_BASE_URL =
-  'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images-flat/';
-export const NUTRITIONAL_INFO_BASE_URL =
-  'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/nutritional-info-images/';
+  'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/product-images/';
 export const PACKAGING_BASE_URL =
   'https://s3.us-east-2.amazonaws.com/the-wally-shop-app/packaging-images/';
 

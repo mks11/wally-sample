@@ -18,7 +18,7 @@ const Product = (props) => {
     >
       <LazyLoadImage
         alt={product.product_name || product.name}
-        src={`${PRODUCT_BASE_URL}${product.image_refs[0]}`}
+        src={`${PRODUCT_BASE_URL}${product.product_id}/${product.image_refs[0]}`}
       />
       <div className="row product-detail">
         <div className="col-3 product-price">{formatMoney(price)}</div>

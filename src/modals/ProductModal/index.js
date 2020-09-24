@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-// API
-import { PRODUCT_BASE_URL, NUTRITIONAL_INFO_BASE_URL } from 'config';
-
 // Services and Utilities
 import { logModalView, logEvent } from 'services/google-analytics';
 import { formatMoney, connect } from 'utils';
@@ -13,11 +10,11 @@ import { formatMoney, connect } from 'utils';
 // Components
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Row, Col } from 'reactstrap';
-// import AmountGroup from 'common/AmountGroup';
 import QuantitySelect from '../../common/QuantitySelect';
 import Product from '../../pages/Mainpage/Product/index';
 import ProductRatingForm from '../../common/ProductRatingForm';
 import ProductRatingStars from '../../common/ProductRatingStars';
+import ImageCarousel from 'modals/ProductModal/ImageCarousel';
 
 const SimilarProducts = styled(Row)`
   flex-wrap: nowrap;
@@ -30,7 +27,7 @@ class ProductModal extends Component {
     this.state = {
       qty: 1,
       infoPackage: false,
-      slick: false,
+      // slick: false,
       packagingAddon: '',
       quantityAddon: 0,
       outOfStock: false,
@@ -68,48 +65,6 @@ class ProductModal extends Component {
     if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
       const { addonsFirst } = user.flags || {};
       !addonsFirst && modal.toggleAddonsFirst();
-    }
-  }
-
-  componentDidUpdate() {
-    const { product } = this.props.stores;
-
-    if (!this.state.slick) {
-      this.setState({ slick: true, qty: product.customer_quantity });
-      const $thumb = window.$(this.thumb);
-      const $prod = window.$(this.prod);
-      $prod.slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        asNavFor: '#thumbnailproduct-carousel',
-        dots: false,
-        infinite: false,
-        arrows: false,
-        responsive: [
-          {
-            breakpoint: 576,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              dots: false,
-              infinite: false,
-              arrows: true,
-            },
-          },
-        ],
-      });
-      $thumb.slick({
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        asNavFor: '#product-carousel',
-        dots: false,
-        infinite: false,
-        variableWidth: true,
-      });
-
-      $thumb.find('.slick-item').click(function () {
-        $prod.slick('slickGoTo', window.$(this).index());
-      });
     }
   }
 
@@ -256,6 +211,8 @@ class ProductModal extends Component {
       description,
       fbw,
       image_refs,
+      nutrition_facts,
+      ingredient_labels,
       ingredients,
       manufacturer,
       manufacturer_url_name,
@@ -263,7 +220,6 @@ class ProductModal extends Component {
       name,
       netWeight,
       pricePerOz,
-      nutritional_info_url,
       packaging_vol,
       packagings,
       product_id,
@@ -388,42 +344,14 @@ class ProductModal extends Component {
         <Typography variant="subtitle1">{shipMessage}</Typography>
         <br />
         <Grid container spacing={2}>
-          {/* Image Carousel */}
           <Grid item xs={12} md={6}>
-            <div className="carousel-mobile-flex">
-              <div id="product-carousel" ref={(el) => (this.prod = el)}>
-                {image_refs.map((item, key) => (
-                  <div key={key} className="slick-item">
-                    <img src={PRODUCT_BASE_URL + item} alt="" />
-                  </div>
-                ))}
-                {nutritional_info_url && (
-                  <div className="slick-item">
-                    <img
-                      src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url}
-                      alt="Nutritional info"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Carousel thumbnails */}
-            <div id="thumbnailproduct-carousel" ref={(el) => (this.thumb = el)}>
-              {image_refs.map((item, key) => (
-                <div key={key} className="slick-item">
-                  <img src={PRODUCT_BASE_URL + item} alt="" />
-                </div>
-              ))}
-              {nutritional_info_url && (
-                <div className="slick-item">
-                  <img
-                    src={NUTRITIONAL_INFO_BASE_URL + nutritional_info_url}
-                    alt="Nutritional info"
-                  />
-                </div>
-              )}
-            </div>
+            <ImageCarousel
+              imageRefs={image_refs}
+              ingredientLabels={ingredient_labels}
+              name={name}
+              nutritionFacts={nutrition_facts}
+              productId={product_id}
+            />
           </Grid>
           <Grid item md={6}>
             <Typography variant="h2" component="p" style={{ color: '#6060a8' }}>

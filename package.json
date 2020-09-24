@@ -30,6 +30,7 @@
     "multiparty": "^4.2.1",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
+    "pure-react-carousel": "^1.27.3",
     "qs": "^6.5.2",
     "quagga": "^0.12.1",
     "react": "^16.4.1",
