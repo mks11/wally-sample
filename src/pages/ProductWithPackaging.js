@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Row, Col } from "reactstrap";
+import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap';
 
-import { logPageView, logEvent } from "services/google-analytics";
-import { formatMoney, connect } from "utils";
-import { PRODUCT_BASE_URL } from "config";
-import AmountGroup from "common/AmountGroup";
+import { logPageView, logEvent } from 'services/google-analytics';
+import { formatMoney, connect } from 'utils';
+import { PRODUCT_BASE_URL } from 'config';
+import AmountGroup from 'common/AmountGroup';
 
-import QuantitySelect from "../common/QuantitySelect";
-import Addons from "../common/ProductAddons";
+import QuantitySelect from '../common/QuantitySelect';
+import Addons from '../common/ProductAddons';
 
 class ProductWithPackaging extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class ProductWithPackaging extends Component {
       slick: false,
       subtitutes: [],
       selectedSubtitute: 0,
-      packagingAddon: "",
+      packagingAddon: '',
       quantityAddon: 0,
       outOfStock: false,
       available: true,
@@ -34,11 +34,11 @@ class ProductWithPackaging extends Component {
     const subtitutes = [
       {
         id: 0,
-        text: "Substitute with Wally Shop recommendation",
+        text: 'Substitute with Wally Shop recommendation',
       },
       {
         id: 1,
-        text: "Remove item",
+        text: 'Remove item',
       },
     ];
 
@@ -50,12 +50,12 @@ class ProductWithPackaging extends Component {
     } = this.props.store;
     const packagingUnitId = this.props.packagingId;
     const packagingUnit = await packagingStore.getPackagingUnit(
-      packagingUnitId
+      packagingUnitId,
     );
     const deliveryParams = userStore.getDeliveryParams();
     const product = await productStore.getProductDetails(
       packagingUnit.product_id,
-      deliveryParams
+      deliveryParams,
     );
 
     this.setState({
@@ -76,18 +76,18 @@ class ProductWithPackaging extends Component {
     if (product.organic) {
       subtitutes.unshift({
         id: 2,
-        text: "Substitute for organic only",
+        text: 'Substitute for organic only',
       });
     }
 
     const daysOfWeek = {
-      0: "Sun",
-      1: "Mon",
-      2: "Tue",
-      3: "Wed",
-      4: "Thu",
-      5: "Fri",
-      6: "Sat",
+      0: 'Sun',
+      1: 'Mon',
+      2: 'Tue',
+      3: 'Wed',
+      4: 'Thu',
+      5: 'Fri',
+      6: 'Sat',
     };
     let availableDays = product.available_days.sort();
     availableDays = availableDays.map((d) => daysOfWeek[d]);
@@ -99,41 +99,11 @@ class ProductWithPackaging extends Component {
       availableDays: availableDays,
     });
 
-    logPageView("/packaging/" + packagingUnit.product_id);
+    logPageView('/packaging/' + packagingUnit.product_id);
 
     if (product.add_ons && product.add_ons.length) {
       const { addonsFirst } = userStore.flags || {};
       !addonsFirst && modalStore.toggleAddonsFirst();
-    }
-  }
-
-  componentDidUpdate() {
-    const { product } = this.props.store;
-
-    if (!this.state.slick) {
-      this.setState({ slick: true, qty: product.customer_quantity });
-      const $thumb = window.$(this.thumb);
-      const $prod = window.$(this.prod);
-      $prod.slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        asNavFor: "#thumbnailproduct-carousel",
-        dots: false,
-        infinite: false,
-        arrows: false,
-      });
-      $thumb.slick({
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        asNavFor: "#product-carousel",
-        dots: false,
-        infinite: false,
-
-        variableWidth: true,
-      });
-      $thumb.find(".slick-item").click(function () {
-        $prod.slick("slickGoTo", window.$(this).index());
-      });
     }
   }
 
@@ -148,7 +118,7 @@ class ProductWithPackaging extends Component {
   };
 
   handleSelectSubtitute(id) {
-    logEvent({ category: "Product", action: "ChooseSubstitute" });
+    logEvent({ category: 'Product', action: 'ChooseSubstitute' });
     this.setState({ selectedSubtitute: id });
   }
 
@@ -180,8 +150,8 @@ class ProductWithPackaging extends Component {
     }
 
     logEvent({
-      category: "Product",
-      action: "AddToCart",
+      category: 'Product',
+      action: 'AddToCart',
       value: this.state.qty,
       label: productStore.activeProductId,
     });
@@ -189,11 +159,11 @@ class ProductWithPackaging extends Component {
     const inventory = product.available_inventory[0]
       ? product.available_inventory[0]
       : null;
-    const order_summary = routing.location.pathname.indexOf("checkout") !== -1;
+    const order_summary = routing.location.pathname.indexOf('checkout') !== -1;
     const unit_type = product.unit_type || product.price_unit;
 
     const finalUnitType =
-      product.buy_by_packaging && packagingType ? "packaging" : unit_type;
+      product.buy_by_packaging && packagingType ? 'packaging' : unit_type;
     const packaging = product.packagings[0] ? product.packagings[0] : null;
     const defaultPackagingId = packaging ? packaging.id : null;
     const customPackaging = packagingType
@@ -214,7 +184,7 @@ class ProductWithPackaging extends Component {
 
     if (quantityAddon > 0) {
       const addonProduct = product.add_ons.find(
-        (p) => p.product_id === packagingAddon
+        (p) => p.product_id === packagingAddon,
       );
 
       items.push({
@@ -230,20 +200,20 @@ class ProductWithPackaging extends Component {
         { items },
         user.getHeaderAuth(),
         order_summary,
-        user.getDeliveryParams()
+        user.getDeliveryParams(),
       )
       .then((data) => {
         data &&
           user.adjustDeliveryTimes(
             data.delivery_date,
-            this.state.deliveryTimes
+            this.state.deliveryTimes,
           );
       })
       .catch((e) => {
         if (e.response) {
           const msg = e.response.data.error.message;
           this.setState({ invalidText: msg });
-          console.error("Failed to add to cart", e);
+          console.error('Failed to add to cart', e);
         }
       });
 
@@ -288,11 +258,11 @@ class ProductWithPackaging extends Component {
       shipMessage = `Sold by ${product.available_inventory[0].shop}, fulfilled by The Wally Shop`;
     if (product.fbw)
       shipMessage =
-        "Sold by " + product.vendor + ", fulfilled by The Wally Shop.";
+        'Sold by ' + product.vendor + ', fulfilled by The Wally Shop.';
 
-    let infoPackageClass = "package-info";
+    let infoPackageClass = 'package-info';
     if (this.state.infoPackage) {
-      infoPackageClass += " open";
+      infoPackageClass += ' open';
     }
 
     const inventory = product.available_inventory[0]
@@ -317,21 +287,21 @@ class ProductWithPackaging extends Component {
     let totalPrice = price * this.state.qty * this.state.priceMultiplier;
 
     const unit_type = product.unit_type;
-    var price_unit = "";
-    if (["ea"].includes(unit_type)) {
+    var price_unit = '';
+    if (['ea'].includes(unit_type)) {
       if (product.subcat_name) {
         price_unit = product.subcat_name;
       } else {
-        price_unit = "unit";
+        price_unit = 'unit';
       }
     } else {
       price_unit += unit_type;
     }
 
-    var weight_unit = "lbs";
+    var weight_unit = 'lbs';
     var unit_weight = product.unit_weight;
     if (unit_weight && product.unit_weight && unit_weight < 0.05) {
-      weight_unit = "oz";
+      weight_unit = 'oz';
       unit_weight = unit_weight * 16;
     }
 
@@ -345,9 +315,14 @@ class ProductWithPackaging extends Component {
         : null;
     const packaging_type = product.std_packaging;
     const packaging_description = packaging ? packaging.description : null;
-
+    const {
+      image_refs,
+      nutrition_facts,
+      ingredient_labels,
+      product_id,
+    } = product;
     return (
-      <div className={"container"}>
+      <div className={'container'}>
         <Row>
           <Col sm="6">
             <div className="row mb-3">
@@ -355,24 +330,14 @@ class ProductWithPackaging extends Component {
                 <h3 className="mb-0">{product.name}</h3>
               </div>
               <div className="col-sm-6">
-                <div
-                  id="thumbnailproduct-carousel"
-                  ref={(el) => (this.thumb = el)}
-                >
-                  {product.image_refs.map((item, key) => (
-                    <div key={key} className="slick-item">
-                      <img src={PRODUCT_BASE_URL + item} alt="" />
-                    </div>
-                  ))}
-                </div>
+                <ImageCarousel
+                  imageRefs={image_refs}
+                  ingredientLabels={ingredient_labels}
+                  name={name}
+                  nutritionFacts={nutrition_facts}
+                  productId={product_id}
+                />
               </div>
-            </div>
-            <div id="product-carousel" ref={(el) => (this.prod = el)}>
-              {product.image_refs.map((item, key) => (
-                <div key={key} className="slick-item">
-                  <img src={PRODUCT_BASE_URL + item} alt="" />
-                </div>
-              ))}
             </div>
           </Col>
           <Col sm="6">
@@ -381,7 +346,7 @@ class ProductWithPackaging extends Component {
             </div>
             <div>{shipMessage}</div>
             <div>Sold by the {price_unit}.</div>
-            {["ea", "bunch", "pint"].includes(unit_type) &&
+            {['ea', 'bunch', 'pint'].includes(unit_type) &&
               product.unit_weight && (
                 <div>
                   Average weight is {product.unit_weight} {weight_unit}.
@@ -390,7 +355,7 @@ class ProductWithPackaging extends Component {
             <hr />
 
             <div className={infoPackageClass}>
-              <strong>Packaged in:</strong>{" "}
+              <strong>Packaged in:</strong>{' '}
               <i
                 onClick={this.toggleInfoPackage}
                 className="fa fa-info-circle"
@@ -438,7 +403,7 @@ class ProductWithPackaging extends Component {
               value={this.state.qty}
               onSelectChange={this.handleSelectQuantity}
               options={qtyOptions}
-              price_unit={product.buy_by_packaging ? "" : price_unit}
+              price_unit={product.buy_by_packaging ? '' : price_unit}
             />
             <hr />
             <div>
@@ -447,8 +412,8 @@ class ProductWithPackaging extends Component {
             {this.state.subtitutes.map((sub, key) => (
               <div
                 className={
-                  "custom-control red custom-radio " +
-                  (sub.id === this.state.selectedSubtitute ? " active" : "")
+                  'custom-control red custom-radio ' +
+                  (sub.id === this.state.selectedSubtitute ? ' active' : '')
                 }
                 key={key}
               >
@@ -475,7 +440,7 @@ class ProductWithPackaging extends Component {
                     ></i>
                     <div
                       className={`${
-                        this.state.substituteRecommendation ? "open" : ""
+                        this.state.substituteRecommendation ? 'open' : ''
                       }`}
                     >
                       <div className="package-info-popover substitue-popover">
@@ -505,36 +470,36 @@ class ProductWithPackaging extends Component {
             <button
               onClick={this.handleAddToCart}
               className={`btn btn-danger btn-add-cart mb-2 ${
-                this.state.outOfStock || !this.state.available ? "inactive" : ""
+                this.state.outOfStock || !this.state.available ? 'inactive' : ''
               }`}
             >
               {this.state.outOfStock
-                ? "Out of Stock"
+                ? 'Out of Stock'
                 : this.state.available
-                ? "Add to cart"
-                : "Unavailable"}
+                ? 'Add to cart'
+                : 'Unavailable'}
             </button>
             <br />
             <div
               className={`${
-                this.state.available ? "text-muted" : "text-muted-alert"
+                this.state.available ? 'text-muted' : 'text-muted-alert'
               }`}
             >
               {this.state.available
-                ? "Final total subject to measured weights and at-location prices"
+                ? 'Final total subject to measured weights and at-location prices'
                 : `Available days for delivery: ${this.state.availableDays.join(
-                    ", "
+                    ', ',
                   )}.`}
             </div>
 
             <div
               className={`${
-                this.state.available ? "text-muted" : "text-muted-alert"
+                this.state.available ? 'text-muted' : 'text-muted-alert'
               }`}
             >
               {this.state.available
-                ? ""
-                : "Click on clock icon next to categories to change delivery date."}
+                ? ''
+                : 'Click on clock icon next to categories to change delivery date.'}
             </div>
           </Col>
         </Row>
@@ -547,30 +512,30 @@ class ProductWithPackaging extends Component {
                 <div className="row">
                   <div className="col-sm-6">
                     <div>
-                      <span className="font-weight-bold">Local:</span>{" "}
-                      {product.local ? "Yes" : "No"}
+                      <span className="font-weight-bold">Local:</span>{' '}
+                      {product.local ? 'Yes' : 'No'}
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div>
-                      <span className="font-weight-bold">Organic:</span>{" "}
-                      {product.organic ? "Yes" : "No"}
+                      <span className="font-weight-bold">Organic:</span>{' '}
+                      {product.organic ? 'Yes' : 'No'}
                     </div>
                   </div>
                 </div>
                 <div>
-                  <span className="font-weight-bold">Farms:</span>{" "}
-                  {product.farms && product.farms.join(", ")}
+                  <span className="font-weight-bold">Farms:</span>{' '}
+                  {product.farms && product.farms.join(', ')}
                 </div>
                 {product.fbw && product.description && (
                   <div>
-                    <span className="font-weight-bold">Description:</span>{" "}
+                    <span className="font-weight-bold">Description:</span>{' '}
                     {product.description}
                   </div>
                 )}
                 {product.fbw && product.instruction && (
                   <div>
-                    <span className="font-weight-bold">Instructions:</span>{" "}
+                    <span className="font-weight-bold">Instructions:</span>{' '}
                     {product.instruction}
                   </div>
                 )}
@@ -583,4 +548,4 @@ class ProductWithPackaging extends Component {
   }
 }
 
-export default connect("store")(ProductWithPackaging);
+export default connect('store')(ProductWithPackaging);
