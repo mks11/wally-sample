@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { MobxProviderContext } from 'mobx-react';
 
 export default function usePost(
   API,
@@ -15,7 +16,13 @@ export default function usePost(
     setLoading(true);
     loadingStore.show();
     axios
-      .post(API, payload, userStore.getHeaderAuth())
+      .post(
+        API,
+        {
+          data: payload,
+        },
+        userStore.getHeaderAuth(),
+      )
       .then(({ data }) => {
         setData(data);
         snackbar.openSnackbar(onSuccessMsg, 'success');
