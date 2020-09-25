@@ -9,25 +9,24 @@ import {
 } from 'common/FormikComponents/NonRenderPropAPI';
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import { API_POST_CATEGORIES } from 'config';
-import useRequest from '../useRequest';
-import usePost from '../usePost';
+import { API_CATEGORIES_POST } from 'config';
+import useRequest from 'common/hooks/useRequest';
+import usePost from 'common/hooks/usePost';
 
-function Add({ stores: store }, ...props) {
-  const subc = useRequest(store, async () => store.retail.getCategories());
-
-  const [addCategory, { loading: formLoading, error: submitError }] = usePost(
-    API_POST_CATEGORIES,
+function Add({ stores: store }, toggle, ...props) {
+  const subc = useRequest(store, async () => store.retail.getSubcategories());
+  const [addCategory, { loading: posting, error: postError }] = usePost(
+    API_CATEGORIES_POST,
     store,
   );
 
   const handleSubmit = async (values, { setSubmitting }) => {
     addCategory(values);
-    if (!formLoading) {
+    if (!posting) {
       setSubmitting(false);
     }
-    if (!formLoading && !submitError) {
-      props.toggle(); // close the modal
+    if (!posting && !postError) {
+      toggle && toggle(); // close the modal
     }
   };
 
@@ -65,8 +64,10 @@ function Add({ stores: store }, ...props) {
               valueToDisplayMap={getIdNamePair(subc)}
             />
           </Grid>
-          <Grid item xs={12}>
-            <PrimaryWallyButton type="submit">Create</PrimaryWallyButton>
+          <Grid item xs={12} container justify="center">
+            <PrimaryWallyButton type="submit">
+              <Typography>Create</Typography>
+            </PrimaryWallyButton>
           </Grid>
         </Form>
       </Formik>
