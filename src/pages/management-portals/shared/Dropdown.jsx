@@ -19,7 +19,7 @@ export default function Dropdown({ title, collection = [] }) {
       </Button>
       <Menu
         keepMounted
-        open={anchorEl}
+        open={!!anchorEl}
         anchorEl={anchorEl}
         onClose={handleClose}
       >
