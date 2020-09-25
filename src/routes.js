@@ -60,8 +60,10 @@ import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
 // Packaging Inventory
 import PackagingInventoryPortal from 'pages/packaging-inventory/';
 
-function Routes({ store, ...props }) {
-  const { user } = store;
+// Hooks
+import { useStores } from 'hooks/mobx';
+
+function Routes(props) {
   return (
     <Switch>
       {/* ==================== Admin Routes (NOT CRAWLED) ==================== */}
@@ -81,50 +83,35 @@ function Routes({ store, ...props }) {
       <Route exact path="/manage/products" component={ManageProducts} />
       {/* ==================== Ops Routes (NOT CRAWLED) ==================== */}
       {/* Pick/Pack */}
-      <OpsRoute
-        exact
-        path="/pick-pack"
-        component={PickPackPortal}
-        userStore={user}
-      />
-      <OpsRoute
-        exact
-        path="/pick-pack/:orderId"
-        component={OrderFulfillment}
-        userStore={user}
-      />
+      <OpsRoute exact path="/pick-pack" component={PickPackPortal} />
+      <OpsRoute exact path="/pick-pack/:orderId" component={OrderFulfillment} />
       {/* Packaging Returns */}
       <OpsRoute
         exact
         path="/packaging-returns"
         component={PackagingReturnsPortal}
-        userStore={user}
       />
       <OpsRoute
         exact
         path="/packaging-returns/new"
         component={NewPackagingReturn}
-        userStore={user}
       />
       {/* Packaging Inventory */}
       <OpsRoute
         exact
         path="/packaging-inventory"
         component={PackagingInventoryPortal}
-        userStore={user}
       />
       {/* Copacking */}
       <OpsRoute
         exact
         path="/manage/co-packing/runs"
         component={ManageCoPackingRuns}
-        userStore={user}
       />
       <OpsRoute
         exact
         path="/manage/co-packing/runs/:runId"
         component={ManageCoPackingRunsSpecific}
-        userStore={user}
       />
       {/* Old Copacker Routes */}
       <Route
@@ -138,12 +125,7 @@ function Routes({ store, ...props }) {
         component={InboundShipments}
       />
       {/* ==================== Retail Routes (NOT CRAWLED) ==================== */}
-      <RetailRoute
-        exact
-        path="/retail"
-        component={RetailManagementPortal}
-        userStore={user}
-      />
+      <RetailRoute exact path="/retail" component={RetailManagementPortal} />
       {/* ==================== Ambassador Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}
@@ -207,12 +189,11 @@ function Routes({ store, ...props }) {
   );
 }
 
-function OpsRoute({ component: Component, userStore, ...rest }) {
-  const { isOps, isOpsLead, isAdmin } = userStore;
-
-  useEffect(() => {
-    userStore.getStatus();
-  }, []);
+function OpsRoute({ component: Component, ...rest }) {
+  const {
+    store: { user },
+  } = useStores();
+  const { isOps, isOpsLead, isAdmin } = user;
 
   return (
     <Route
@@ -230,12 +211,11 @@ function OpsRoute({ component: Component, userStore, ...rest }) {
   );
 }
 
-function RetailRoute({ component: Component, userStore, ...rest }) {
-  const { isRetail, isAdmin } = userStore;
-
-  useEffect(() => {
-    userStore.getStatus();
-  }, []);
+function RetailRoute({ component: Component, ...rest }) {
+  const {
+    store: { user },
+  } = useStores();
+  const { isRetail, isAdmin } = user;
 
   return (
     <Route
