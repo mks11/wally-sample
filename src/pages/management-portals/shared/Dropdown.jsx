@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import { ArrowDropDown } from '@material-ui/icons';
 
-export default function Dropdown({ title, collection }) {
+export default function Dropdown({ title, collection = [] }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
