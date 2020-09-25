@@ -6,20 +6,24 @@ import { Grid, Typography } from '@material-ui/core';
 import {
   TextInput,
   MultiSelect,
+  Select,
 } from 'common/FormikComponents/NonRenderPropAPI';
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import { API_POST_SUBCATEGORIES } from 'config';
-import useRequest from '../useRequest';
-import usePost from '../usePost';
+import { API_SUBCATEGORIES_POST, API_PACKAGING_LIST } from 'config';
+import useRequest from 'common/hooks/useRequest';
+import usePost from 'common/hooks/usePost';
+import useGet from 'common/hooks/useGet';
+import getIdNamePair from './../getIdNamePair';
 
-function Add({ stores: store }, ...props) {
+function Add({ stores: store, ...props }) {
   const cats = useRequest(store, async () => store.retail.getCategories());
+  const { data: packaging } = useGet(API_PACKAGING_LIST, store);
 
   const [
     addSubcategory,
     { loading: formLoading, error: submitError },
-  ] = usePost(API_POST_SUBCATEGORIES, store);
+  ] = usePost(API_SUBCATEGORIES_POST, store);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     addSubcategory(values);
@@ -29,14 +33,6 @@ function Add({ stores: store }, ...props) {
     if (!formLoading && !submitError) {
       props.toggle();
     }
-  };
-
-  const getIdNamePair = (collection) => {
-    const map = {};
-    collection.forEach((col) => {
-      map[col._id] = col.name;
-    });
-    return map;
   };
 
   const cat_ids = cats.map((v) => v._id);
@@ -56,20 +52,31 @@ function Add({ stores: store }, ...props) {
         onSubmit={handleSubmit}
       >
         <Form>
-          <Grid item xs={12}>
-            <TextInput name="name" label={'Name'} type={'text'} fullWidth />
-          </Grid>
-          <Grid item xs={12}>
-            <MultiSelect
-              name="parent_ids"
-              label="Categories"
-              values={cat_ids}
-              valueToDisplayMap={getIdNamePair(cats)}
-            />
-          </Grid>
-          <Grid item xs={12}></Grid>
-          <Grid item xs={12}>
-            <PrimaryWallyButton type="submit">Create</PrimaryWallyButton>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextInput name="name" label={'Name'} type={'text'} fullWidth />
+            </Grid>
+            <Grid item xs={12} gutterBottom>
+              <MultiSelect
+                name="parent_ids"
+                label="Categories"
+                values={cat_ids}
+                valueToDisplayMap={getIdNamePair(cats)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Select
+                name="default_packaging_type"
+                label="Default Packaging Type"
+                values={packaging && packaging.map((v) => v._id)}
+                valueToDisplayMap={getIdNamePair(packaging, '_id', 'type')}
+              />
+            </Grid>
+            <Grid item xs={12} container justify={'center'}>
+              <PrimaryWallyButton type="submit">
+                <Typography>Create</Typography>
+              </PrimaryWallyButton>
+            </Grid>
           </Grid>
         </Form>
       </Formik>

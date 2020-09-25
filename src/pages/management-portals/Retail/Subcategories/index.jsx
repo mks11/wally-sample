@@ -38,6 +38,9 @@ function Subcategories({ store: { modal, retail, ...store } }) {
 
   return (
     <Box>
+      <Typography variant="h1" gutterBottom>
+        Subcategories
+      </Typography>
       <Header
         onAdd={handleAddCategory}
         buttonText="Add Subcategory"
@@ -48,8 +51,8 @@ function Subcategories({ store: { modal, retail, ...store } }) {
           <TableHead>
             <TableRow>
               <TableCell> Name </TableCell>
-              <TableCell align="right"> Id </TableCell>
-              <TableCell align="right"> Categories </TableCell>
+              <TableCell align="left"> Id </TableCell>
+              <TableCell align="left"> Categories </TableCell>
               <TableCell align="center"> Actions </TableCell>
             </TableRow>
           </TableHead>
@@ -59,8 +62,8 @@ function Subcategories({ store: { modal, retail, ...store } }) {
                 <TableCell component="th" scope="row">
                   {cat.name}
                 </TableCell>
-                <TableCell align="right">{cat.category_id}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{cat.category_id}</TableCell>
+                <TableCell align="left">
                   <Dropdown
                     title="Categories"
                     collection={

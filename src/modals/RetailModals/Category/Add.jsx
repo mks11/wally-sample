@@ -12,8 +12,9 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { API_CATEGORIES_POST } from 'config';
 import useRequest from 'common/hooks/useRequest';
 import usePost from 'common/hooks/usePost';
+import getIdNamePair from './../getIdNamePair';
 
-function Add({ stores: store }, toggle, ...props) {
+function Add({ stores: store, ...props }) {
   const subc = useRequest(store, async () => store.retail.getSubcategories());
   const [addCategory, { loading: posting, error: postError }] = usePost(
     API_CATEGORIES_POST,
@@ -26,19 +27,11 @@ function Add({ stores: store }, toggle, ...props) {
       setSubmitting(false);
     }
     if (!posting && !postError) {
-      toggle && toggle(); // close the modal
+      props.toggle(); // close the modal
     }
   };
 
-  const getIdNamePair = (collection) => {
-    const map = {};
-    collection.forEach((col) => {
-      map[col._id] = col.name;
-    });
-    return map;
-  };
-
-  const subc_ids = subc.map((v) => v._id);
+  const subc_ids = subc.map((v) => v.category_id);
 
   return (
     <FormWrapper title="Add Category">
@@ -61,7 +54,7 @@ function Add({ stores: store }, toggle, ...props) {
               name="child_ids"
               label="Subcategories"
               values={subc_ids}
-              valueToDisplayMap={getIdNamePair(subc)}
+              valueToDisplayMap={getIdNamePair(subc, 'category_id', 'name')}
             />
           </Grid>
           <Grid item xs={12} container justify="center">

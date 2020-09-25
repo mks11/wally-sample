@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Delete(props) {
-  return <div></div>;
+  return <div>delete</div>;
 }
 
 Delete.propTypes = {};

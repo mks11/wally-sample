@@ -31,11 +31,11 @@ function Categories({ store: { modal, retail, ...store } }) {
   const categories =
     useRequest(store, async () => retail.getCategories()) || [];
 
-  const handleEdit = () => {
-    modal.toggleModal('retailCategoryUpdate');
+  const handleEdit = (cat) => {
+    modal.toggleModal('retailCategoryUpdate', null, cat._id);
   };
-  const handleRemove = () => {
-    modal.toggleModal('retailCategoryDelete');
+  const handleRemove = (cat) => {
+    modal.toggleModal('retailCategoryDelete', null, cat._id);
   };
 
   const handleAddCategory = () => {
@@ -44,6 +44,9 @@ function Categories({ store: { modal, retail, ...store } }) {
 
   return (
     <Box>
+      <Typography variant="h1" gutterBottom>
+        Categories
+      </Typography>
       <Header
         onAdd={handleAddCategory}
         buttonText="Add Category"
@@ -54,8 +57,8 @@ function Categories({ store: { modal, retail, ...store } }) {
           <TableHead>
             <TableRow>
               <TableCell> Name </TableCell>
-              <TableCell align="right"> Id </TableCell>
-              <TableCell align="right"> Subcategories </TableCell>
+              <TableCell align="left"> Id </TableCell>
+              <TableCell align="left"> Subcategories </TableCell>
               <TableCell align="center"> Actions </TableCell>
             </TableRow>
           </TableHead>
@@ -65,8 +68,8 @@ function Categories({ store: { modal, retail, ...store } }) {
                 <TableCell component="th" scope="row">
                   {cat.name}
                 </TableCell>
-                <TableCell align="right">{cat.category_id}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{cat.category_id}</TableCell>
+                <TableCell align="left">
                   <Dropdown
                     title="Subcategories"
                     collection={

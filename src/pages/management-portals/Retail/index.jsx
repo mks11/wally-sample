@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'utils';
-import ManagementPortal, { SidebarItem } from 'pages/management-portals/shared';
+import ManagementPortal, {
+  SidebarItem,
+} from 'pages/management-portals/ManagementPortal';
 import Typography from '@material-ui/core/Typography';
 import Categories from './Categories';
 import Subcategories from './Subcategories';

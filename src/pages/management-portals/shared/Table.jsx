@@ -4,7 +4,7 @@ import { Table, TableContainer, Paper, Box } from '@material-ui/core';
 
 function _Table({ children }) {
   return (
-    <TableContainer component={Paper} style={{ maxHeight: '75vh' }}>
+    <TableContainer component={Paper} style={{ height: '100%' }}>
       <Table size="small" stickyHeader>
         {children}
       </Table>

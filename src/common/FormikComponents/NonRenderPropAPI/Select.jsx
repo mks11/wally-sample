@@ -44,7 +44,7 @@ function Select({ label, values = [], valueToDisplayMap, ...props }) {
 
 Select.propTypes = {
   name: PropTypes.string.isRequired,
-  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  values: PropTypes.arrayOf(PropTypes.string),
   valueToDisplayMap: PropTypes.object,
 };
 
