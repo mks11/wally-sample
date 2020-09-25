@@ -45,14 +45,14 @@ function Update({ stores: store, ...props }) {
     this_cat.subcategories && this_cat.subcategories.map((v) => v.category_id);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    // updateCategory(values);
-    // if (!posting) {
-    //   setSubmitting(false);
-    // }
-    // if (!posting && !postError) {
-    //   props.toggle(); // close the modal
-    // }
-    alert(JSON.stringify(values));
+    updateCategory(values);
+    if (!posting) {
+      setSubmitting(false);
+    }
+    if (!posting && !postError) {
+      props.toggle(); // close the modal
+    }
+    // alert(JSON.stringify(values));
   };
 
   return (
