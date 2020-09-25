@@ -1,7 +1,14 @@
-import styled from 'styled-components';
+import React from 'react';
 
+// Node Modules
+import PropTypes from 'prop-types';
+
+// npm Packaged Components
+import { Box, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
+
+// Styles
+import styled from 'styled-components';
 
 export const DesktopNavLink = styled(Link)`
   display: block;
@@ -28,6 +35,21 @@ export const DesktopNavLinkText = styled(Typography).attrs({
     color: #222;
   }
 `;
+
+export function DesktopNavItem({ to, text }) {
+  return (
+    <Box px={1} py={2}>
+      <DesktopNavLink to={to}>
+        <DesktopNavLinkText>{text}</DesktopNavLinkText>
+      </DesktopNavLink>
+    </Box>
+  );
+}
+
+DesktopNavItem.propTypes = {
+  to: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+};
 
 export const DesktopDropdownMenuItem = styled.li`
   && {
