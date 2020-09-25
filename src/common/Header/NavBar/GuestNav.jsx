@@ -8,8 +8,12 @@ import { useStores } from 'hooks/mobx';
 // Services
 import { logModalView } from 'services/google-analytics';
 
-// Custom Components
+// npm Package Components
 import { Box, Typography } from '@material-ui/core';
+
+// Custom Components
+import LoginForm from 'forms/authentication/LoginForm';
+import SignupForm from 'forms/authentication/SignupForm';
 
 // Styled components
 import {
@@ -17,11 +21,8 @@ import {
   MobileNavButton,
   MobileNavDivider,
 } from 'common/Header/NavBar/MobileStyledComponents';
-import {
-  DesktopNavLink,
-  DesktopNavLinkText,
-} from 'common/Header/NavBar/DesktopNavComponents';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
+import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
 
 function MobileGuestNav({ hideNav, handleLogin, handleSignup }) {
   return (
@@ -89,28 +90,15 @@ export function DesktopGuestNav() {
       <DesktopNavItem to="/blog" text="Blog" />
       <LogInButton />
       <SignUpButton />
-      <Link to="/backers">
-        <span role="img" aria-label="Sparkle">
-          ✨
-        </span>
-      </Link>
+      <DesktopNavItem
+        to="/backers"
+        text={
+          <span role="img" aria-label="Sparkle">
+            ✨
+          </span>
+        }
+      />
     </>
-  );
-}
-
-DesktopGuestNav.propTypes = {
-  handleSignup: PropTypes.func.isRequired,
-  handleLogin: PropTypes.func.isRequired,
-  handleBackers: PropTypes.func.isRequired,
-};
-
-function DesktopNavItem({ to, text }) {
-  return (
-    <Box px={1} py={2}>
-      <DesktopNavLink to={to}>
-        <DesktopNavLinkText>{text}</DesktopNavLinkText>
-      </DesktopNavLink>
-    </Box>
   );
 }
 
@@ -119,14 +107,14 @@ function SignUpButton() {
 
   function handleSignup() {
     logModalView('/signup-zip');
-    store.modal.toggleModal('signup');
+    store.modalV2.open(<SignupForm />);
   }
 
   return (
     <Box px={1} py={2}>
-      <PrimaryWallyButton onClick={handleSignup}>
+      <ColorfulWallyButton onClick={handleSignup} bgColor={'#000'}>
         <Typography variant="body1">Sign Up</Typography>
-      </PrimaryWallyButton>
+      </ColorfulWallyButton>
     </Box>
   );
 }
@@ -136,14 +124,19 @@ function LogInButton() {
 
   function handleLogin() {
     logModalView('/login');
-    store.modal.toggleModal('login');
+    store.modalV2.open(<LoginForm />);
   }
 
   return (
     <Box px={1} py={2}>
-      <PrimaryWallyButton onClick={handleLogin}>
+      <ColorfulWallyButton
+        onClick={handleLogin}
+        color={'#000'}
+        bordercolor={'#000'}
+        bgColor={'transparent'}
+      >
         <Typography variant="body1">Log In</Typography>
-      </PrimaryWallyButton>
+      </ColorfulWallyButton>
     </Box>
   );
 }
