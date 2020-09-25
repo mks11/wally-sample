@@ -23,11 +23,17 @@ export default function Dropdown({ title, collection = [] }) {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
-        {collection.map((col) => (
-          <MenuItem onClick={handleClose} key={col}>
-            {col}
+        {collection.length > 0 ? (
+          collection.map((col) => (
+            <MenuItem onClick={handleClose} key={col}>
+              {col}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem>
+            <em> Not Found </em>
           </MenuItem>
-        ))}
+        )}
       </Menu>
     </>
   );
