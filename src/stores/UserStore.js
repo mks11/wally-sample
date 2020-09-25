@@ -145,6 +145,8 @@ class UserStore {
 
   async signup(data) {
     const res = await axios.post(API_SIGNUP, data);
+    this.setUserData(res.data.user);
+    this.setToken(res.data.token);
     return res.data;
   }
 
@@ -332,6 +334,7 @@ class UserStore {
 
   async getStatus(update) {
     this.readStorage();
+
     if (!this.token && !this.token.accessToken) {
       this.status = false;
       return this.status;
