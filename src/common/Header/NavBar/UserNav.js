@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { formatMoney } from '../../utils';
+import { formatMoney } from 'utils';
+
+// Hooks
+import { useStores } from 'hooks/mobx';
+
+// npm Package Components
+import { Box, Typography } from '@material-ui/core';
 
 import {
   MobileNavLinkText,
@@ -13,7 +19,9 @@ import {
 import {
   DesktopDropdownMenuItem,
   DesktopDropdownMenuLink,
-} from './DesktopNavComponents';
+  DesktopNavItem,
+} from 'common/Header/NavBar/DesktopNavComponents';
+import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
 
 export function MobileUserNav({
   hideNav,
@@ -98,7 +106,6 @@ export function DesktopUserNav({
   balance,
   handleRedeemDeposit,
   handleSchedulePickup,
-  handleSignout,
   hideDropdown,
 }) {
   return (
@@ -164,10 +171,30 @@ export function DesktopUserNav({
         </a>
       </DesktopDropdownMenuItem>
       <DesktopDropdownMenuItem>
-        <a onClick={handleSignout} className="dropdown-item">
-          Sign Out
-        </a>
+        <SignOutButton />
       </DesktopDropdownMenuItem>
     </>
+  );
+}
+
+function SignOutButton() {
+  const { store } = useStores();
+
+  function handleLogout() {
+    store.checkout.cart = null;
+    store.checkout.order = null;
+    store.user.logout();
+    store.routing.push('/');
+  }
+
+  return (
+    <ColorfulWallyButton
+      onClick={handleLogout}
+      color={'#000'}
+      bordercolor={'#000'}
+      bgColor={'transparent'}
+    >
+      <Typography variant="body1">Sign Out</Typography>
+    </ColorfulWallyButton>
   );
 }
