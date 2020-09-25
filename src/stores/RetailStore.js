@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_GET_CATEGORIES, API_GET_SUBCATEGORIES } from 'config';
+import { API_CATEGORIES_GET, API_SUBCATEGORIES_GET } from 'config';
 import { observable, decorate, action, runInAction } from 'mobx';
 import userStore from './UserStore';
 // import
@@ -17,7 +17,7 @@ class RetailStore {
   async getCategories({ refetch = false } = {}) {
     if (refetch || this.categories.length === 0) {
       const { data } = await axios.get(
-        API_GET_CATEGORIES,
+        API_CATEGORIES_GET,
         userStore.getHeaderAuth(),
       );
       runInAction(() => {
@@ -31,7 +31,7 @@ class RetailStore {
   async getSubcategories({ refetch = false } = {}) {
     if (refetch || this.subcategories.length === 0) {
       const { data } = await axios.get(
-        API_GET_SUBCATEGORIES,
+        API_SUBCATEGORIES_GET,
         userStore.getHeaderAuth(),
       );
       runInAction(() => {

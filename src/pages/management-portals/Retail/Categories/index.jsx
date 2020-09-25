@@ -15,37 +15,21 @@ import {
   Box,
   Typography,
 } from '@material-ui/core';
-import Header from './../Header';
-import Table from './../Table';
-import StyledTableRow from './../StyledTableRow';
-import { PrimaryWallyButton } from './../../../styled-component-lib/Buttons';
+import Header from '../../shared/Header';
+import Table from '../../shared/Table';
+import StyledTableRow from 'common/table/StyledTableRow';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 import axios from 'axios';
 import { API_GET_CATEGORIES } from 'config';
 import { ArrowDropDown, Edit, Delete } from '@material-ui/icons';
-import CRUDButtonGroup from '../CRUDButtonGroup';
-import Dropdown from './../Dropdown';
+import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
+import Dropdown from '../../shared/Dropdown';
+import useRequest from 'common/hooks/useRequest';
 
-function Categories({
-  store: { user: userStore, modal, loading, snackbar, retail: retailStore },
-}) {
-  const [categoriesPopulated, setCategoriesPopulated] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        loading.show();
-        const categories = await retailStore.getCategories();
-        const subcategories = await retailStore.getSubcategories();
-        const filled = populateChildren(categories, subcategories);
-        setCategoriesPopulated(filled);
-      } catch (e) {
-        //Todo
-      } finally {
-        loading.hide();
-      }
-    })();
-  }, []);
+function Categories({ store: { modal, retail, ...store } }) {
+  const categories =
+    useRequest(store, async () => retail.getCategories()) || [];
 
   const handleEdit = () => {
     modal.toggleModal('retailCategoryUpdate');
@@ -62,7 +46,7 @@ function Categories({
     <Box>
       <Header
         onAdd={handleAddCategory}
-        title="Add Category"
+        buttonText="Add Category"
         placeholder="search categories"
       />
       <Box>
@@ -76,7 +60,7 @@ function Categories({
             </TableRow>
           </TableHead>
           <TableBody>
-            {categoriesPopulated.map((cat) => (
+            {categories.map((cat) => (
               <StyledTableRow key={cat.name}>
                 <TableCell component="th" scope="row">
                   {cat.name}
@@ -85,7 +69,9 @@ function Categories({
                 <TableCell align="right">
                   <Dropdown
                     title="Subcategories"
-                    collection={cat.child_names}
+                    collection={
+                      cat.subcategories && cat.subcategories.map((v) => v.name)
+                    }
                   />
                 </TableCell>
                 <TableCell>
@@ -101,21 +87,6 @@ function Categories({
       </Box>
     </Box>
   );
-}
-
-function getNameFromCatId(cat_id, collection) {
-  const i = findIndex(collection, (s) => s.category_id === cat_id);
-  if (i > -1) {
-    return collection[i].name;
-  }
-}
-function populateChildren(categories, subcat) {
-  const filled = categories.map(({ child_ids, ...c }) => {
-    const child_names = child_ids.map((c_id) => getNameFromCatId(c_id, subcat));
-    return { ...c, child_names };
-  });
-
-  return filled;
 }
 
 class _Categories extends React.Component {

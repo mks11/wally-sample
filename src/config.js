@@ -39,13 +39,17 @@ export const API_GET_PRODUCT_DETAIL = BASE_URL + '/api/product/';
 export const API_GET_PACKAGING_UNIT = BASE_URL + '/api/packaging/';
 export const API_RATE_PRODUCT = BASE_URL + '/api/products/';
 
-export const API_GET_CATEGORIES = BASE_URL + '/api/categories';
-export const API_POST_CATEGORIES = BASE_URL + '/api/categories';
-export const API_UPDATE_CATEGORIES = BASE_URL + '/api/categories';
+export const API_CATEGORIES_GET = BASE_URL + '/api/categories';
+export const API_CATEGORIES_POST = BASE_URL + '/api/category';
+export const API_CATEGORIES_UPDATE = BASE_URL + '/api/category';
+export const API_CATEGORIES_DELETE = BASE_URL + '/api/category';
 
-export const API_GET_SUBCATEGORIES = BASE_URL + '/api/subcategories';
-export const API_POST_SUBCATEGORIES = BASE_URL + '/api/subcategories';
-export const API_UPDATE_SUBCATEGORIES = BASE_URL + '/api/subcategories';
+export const API_SUBCATEGORIES_GET = BASE_URL + '/api/subcategories';
+export const API_SUBCATEGORIES_POST = BASE_URL + '/api/category';
+export const API_SUBCATEGORIES_UPDATE = BASE_URL + '/api/category';
+export const API_SUBCATEGORIES_DELETE = BASE_URL + '/api/category';
+
+export const API_PACKAGING_LIST = BASE_URL + '/api/packagings';
 
 export const API_SEARCH_KEYWORD = BASE_URL + '/api/products/search';
 export const API_REFRESH_INVENTORY = BASE_URL + '/api/products/refresh';
