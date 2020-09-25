@@ -16,13 +16,7 @@ export default function usePost(
     setLoading(true);
     loadingStore.show();
     axios
-      .post(
-        API,
-        {
-          data: payload,
-        },
-        userStore.getHeaderAuth(),
-      )
+      .post(API, payload, userStore.getHeaderAuth())
       .then(({ data }) => {
         setData(data);
         snackbar.openSnackbar(onSuccessMsg, 'success');

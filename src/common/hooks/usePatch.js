@@ -15,7 +15,7 @@ export default function usePatch(
     setLoading(true);
     loadingStore.show();
     axios
-      .patch(API, { data: payload }, userStore.getHeaderAuth())
+      .patch(API, payload, userStore.getHeaderAuth())
       .then(({ data }) => {
         setData(data);
         snackbar.openSnackbar(onSuccessMsg, 'success');
