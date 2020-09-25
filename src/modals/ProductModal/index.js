@@ -415,7 +415,7 @@ class ProductModal extends Component {
                 />
               </React.Fragment>
             )} */}
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h2" gutterBottom>
               Quantity:
             </Typography>
             <QuantitySelect
@@ -455,7 +455,7 @@ class ProductModal extends Component {
 
           {manufacturer && (
             <>
-              <Typography variant="h4" component="span" gutterBottom>
+              <Typography variant="h5" component="span" gutterBottom>
                 Producer:{' '}
               </Typography>
               <Link
@@ -472,7 +472,7 @@ class ProductModal extends Component {
           )}
           {description && (
             <>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Description:
               </Typography>
               <Typography variant="body1" gutterBottom>
@@ -482,7 +482,7 @@ class ProductModal extends Component {
           )}
           {ingredients && ingredients.length > 0 && (
             <>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Ingredients:
               </Typography>
               <Typography variant="body1" gutterBottom>
@@ -492,7 +492,7 @@ class ProductModal extends Component {
           )}
           {allergens && allergens.length > 0 && (
             <>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Allergens:
               </Typography>
               <Typography variant="body1" gutterBottom>
@@ -502,7 +502,7 @@ class ProductModal extends Component {
           )}
           {tags && tags.length > 0 && (
             <>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Tags:
               </Typography>
               <Typography variant="body1" gutterBottom>
@@ -527,7 +527,7 @@ class ProductModal extends Component {
           <Typography variant="h2" gutterBottom>
             Ratings
           </Typography>
-          <Typography variant="h4" component="p" gutterBottom>
+          <Typography variant="h5" component="p" gutterBottom>
             Product Rating:{' '}
           </Typography>
           {avg_rating ? (
@@ -540,7 +540,7 @@ class ProductModal extends Component {
           <br />
           {recentThreeComments && recentThreeComments.length > 0 && (
             <React.Fragment>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Comments:{' '}
               </Typography>
               <Box>
