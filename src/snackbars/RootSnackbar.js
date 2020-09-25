@@ -1,20 +1,30 @@
-import React from "react";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { connect } from "utils";
+import React from 'react';
 
-function RootSnackbar({ store: { snackbar } }) {
+// mobx
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+// Material UI
+import { Snackbar, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+
+function RootSnackbar() {
+  const { store } = useStores();
   return (
     <Snackbar
-      open={snackbar.isOpen}
+      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+      open={store.snackbar.isOpen}
       autoHideDuration={6000}
-      onClose={snackbar.closeSnackbar}
+      onClose={store.snackbar.closeSnackbar}
     >
-      <Alert onClose={snackbar.closeSnackbar} severity={snackbar.severity}>
-        {snackbar.message}
+      <Alert
+        onClose={store.snackbar.closeSnackbar}
+        severity={store.snackbar.severity}
+      >
+        <Typography variant="body1">{store.snackbar.message}</Typography>
       </Alert>
     </Snackbar>
   );
 }
 
-export default connect("store")(RootSnackbar);
+export default observer(RootSnackbar);
