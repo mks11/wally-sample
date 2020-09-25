@@ -3,12 +3,13 @@ import { Button } from '@material-ui/core';
 
 export const PrimaryWallyButton = styled(Button).attrs({
   color: 'primary',
-  variant: 'contained',
+  variant: (props) => props.variant || 'contained',
 })`
-  color: #fff;
+  color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
   border-radius: 50px;
   &:hover {
-    color: #fff;
+    color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
+    background-color: '#97adff40';
   }
 `;
 
@@ -29,5 +30,20 @@ export const DangerButton = styled(PrimaryWallyButton).attrs({
     color: #f45246;
     border-color: #f45246;
     background-color: rgba(244, 82, 70, 0.1);
+  }
+`;
+
+export const ColorfulWallyButton = styled(Button)`
+  background-color: ${(props) => props.bgColor || '#97adff'};
+  border: ${(props) =>
+    props.bordercolor ? `1px solid ${props.bordercolor}` : 'none'};
+  border-color: ${(props) => props.bordercolor || '#97adff'};
+  color: ${(props) => props.color || '#fff'};
+  border-radius: 50px;
+  padding: 0.75em 1em;
+  min-width: 100px;
+  &:hover {
+    color: ${(props) => props.color || '#fff'};
+    background-color: ${(props) => `${props.bgColor}` || '#97adff40'};
   }
 `;
