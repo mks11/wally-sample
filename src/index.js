@@ -1,22 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
-import Routes from './routes';
-import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import { CookiesProvider } from 'react-cookie';
 
-import TopNav from 'common/TopNav';
-import Footer from './common/Footer';
+// Components
 import ScrollToTop from './common/ScrollToTop';
 import ScrollSpy from 'common/ScrollSpy';
-import RootModal from './modals/RootModal';
-import LoadingSpinner from 'modals/LoadingSpinner';
-import Backdrop from './common/Backdrop';
-import RootSnackbar from './snackbars/RootSnackbar';
+import Layout from 'templates/Layout';
+// Context
+import { CookiesProvider } from 'react-cookie';
+import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
+import { Provider } from 'mobx-react';
 
 //router
 import { Router } from 'react-router-dom';
-import { Provider } from 'mobx-react';
 import { createBrowserHistory } from 'history';
 import { syncHistoryWithStore } from 'mobx-react-router';
 
@@ -50,17 +46,7 @@ ReactDOM.render(
           <CookiesProvider>
             <ScrollSpy>
               <ScrollToTop>
-                <div className="app">
-                  <Backdrop />
-                  <TopNav />
-                  <main className="aw-main aw-home">
-                    <Routes store={store} />
-                  </main>
-                  <Footer />
-                  <RootModal />
-                  <RootSnackbar />
-                  <LoadingSpinner />
-                </div>
+                <Layout />
               </ScrollToTop>
             </ScrollSpy>
           </CookiesProvider>
