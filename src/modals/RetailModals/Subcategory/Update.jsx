@@ -26,8 +26,14 @@ function Update({ stores: { modal, ...store }, ...props }) {
 
   const [
     updateSubcategory,
-    { loading: updating, error: updateError },
+    { loading: updating, success: updateSuccess },
   ] = usePatch(API_SUBCATEGORIES_UPDATE, store);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      props.toggle();
+    }
+  }, [updateSuccess]);
 
   const { data: packaging } = useGet(API_PACKAGING_LIST, store);
 
@@ -53,9 +59,6 @@ function Update({ stores: { modal, ...store }, ...props }) {
     updateSubcategory(values);
     if (!updating) {
       setSubmitting(false);
-    }
-    if (!updating && !updateError) {
-      props.toggle(); // close modal
     }
   };
 
