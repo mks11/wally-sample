@@ -11,7 +11,18 @@ export default function usePatch(
   const [data, setData] = useState();
   const [error, setError] = useState();
 
+  // part that determines if the success
+  const [reqInitiated, setReqInitiated] = useState(false);
+  const [success, setSuccess] = useState();
+
+  useEffect(() => {
+    if (reqInitiated && !loading && !error) {
+      setSuccess(true);
+    }
+  }, [loading, error, reqInitiated]);
+
   const update = (payload) => {
+    setReqInitiated(true);
     setLoading(true);
     loadingStore.show();
     axios
@@ -30,5 +41,5 @@ export default function usePatch(
       });
   };
 
-  return [update, { data, error, loading }];
+  return [update, { data, error, loading, success }];
 }

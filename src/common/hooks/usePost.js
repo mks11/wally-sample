@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MobxProviderContext } from 'mobx-react';
 
@@ -12,7 +12,18 @@ export default function usePost(
   const [data, setData] = useState();
   const [error, setError] = useState();
 
+  // part that determines if the success
+  const [reqInitiated, setReqInitiated] = useState(false);
+  const [success, setSuccess] = useState();
+
+  useEffect(() => {
+    if (reqInitiated && !loading && !error) {
+      setSuccess(true);
+    }
+  }, [loading, error, reqInitiated]);
+
   const submit = (payload) => {
+    setReqInitiated(true);
     setLoading(true);
     loadingStore.show();
     axios
@@ -31,5 +42,5 @@ export default function usePost(
       });
   };
 
-  return [submit, { data, error, loading }];
+  return [submit, { data, error, loading, success }];
 }
