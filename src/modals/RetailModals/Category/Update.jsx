@@ -14,17 +14,12 @@ import usePost from 'common/hooks/usePost';
 import getIdNamePair from './../getIdNamePair';
 import { API_CATEGORIES_UPDATE } from 'config';
 import usePatch from 'common/hooks/usePatch';
+import { propTypes } from 'react-currency-input';
 
 const findById = (col, id) => col.find((v) => v._id === id);
 
 function Update({ stores: store, ...props }) {
   const id = store.modal.modalData;
-
-  if (!id) {
-    return (
-      <Typography color="error"> Sorry, we can't update this. </Typography>
-    );
-  }
 
   const all_possible_subcategories = useRequest(store, async () =>
     store.retail.getSubcategories(),
@@ -33,26 +28,27 @@ function Update({ stores: store, ...props }) {
     store.retail.getCategories(),
   );
 
-  const [updateCategory, { loading: posting, error: postError }] = usePatch(
-    API_CATEGORIES_UPDATE,
-    store,
-  );
+  const [
+    updateCategory,
+    { loading: updating, success: updateSuccess },
+  ] = usePatch(API_CATEGORIES_UPDATE, store);
 
-  const { name, child_ids = [] } = findById(all_categories, id) || {};
+  const { name, child_ids = [], subcategories = [] } =
+    findById(all_categories, id) || {};
 
-  const this_cat = findById(all_categories, id) || {};
-  const this_subcategories_ids =
-    this_cat.subcategories && this_cat.subcategories.map((v) => v.category_id);
+  const this_subcategories_ids = subcategories.map((v) => v.category_id);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      props.toggle(); // close the modal
+    }
+  }, [updateSuccess]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     updateCategory(values);
-    if (!posting) {
+    if (!updating) {
       setSubmitting(false);
     }
-    if (!posting && !postError) {
-      props.toggle(); // close the modal
-    }
-    // alert(JSON.stringify(values));
   };
 
   return (
