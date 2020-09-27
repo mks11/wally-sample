@@ -29,7 +29,7 @@ function Subcategories({ store: { modal, retail, ...store } }) {
     modal.toggleModal('retailSubcategoryUpdate', null, cat._id);
   };
   const handleRemove = (cat) => {
-    modal.toggleModal('retailSubcategoryDelete');
+    modal.toggleModal('retailSubcategoryDelete', null, cat._id);
   };
 
   const handleAddCategory = () => {
