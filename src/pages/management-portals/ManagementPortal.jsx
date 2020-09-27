@@ -9,9 +9,9 @@ export default function ManagementPortal({ sidebar, content }) {
   return (
     <Box mx={4} my={2} borderRadius="4px">
       <Paper elevation={1}>
-        <Box display="flex" height="84vh">
+        <Box display="flex" height="88vh">
           <Grid container>
-            <Grid item lg={2}>
+            <Grid item lg={2} style={{ maxHeight: '100%' }}>
               <SidebarContent>{sidebar}</SidebarContent>
             </Grid>
             <Grid item lg={10} className={styles.displayContent}>
