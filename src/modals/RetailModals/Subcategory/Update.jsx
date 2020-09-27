@@ -18,24 +18,26 @@ import getIdNamePair from './../getIdNamePair';
 
 const findById = (col, id) => col.find((v) => v._id === id);
 
-function Update({ stores: store, ...props }) {
-  // state intended to force re-render on default_packaging_type availability over
-  // the network (needed for Select Mui Component)
+function Update({ stores: { modal, ...store }, ...props }) {
+  // needed for Select Mui Component
   const [defaultPackagingType, setDefaultPackagingType] = useState('');
 
-  const id = store.modal.modalData;
+  const id = modal.modalData;
 
-  if (!id) {
-    return (
-      <Typography color="error"> Sorry, we can't update this. </Typography>
-    );
-  }
+  const [
+    updateSubcategory,
+    { loading: updating, error: updateError },
+  ] = usePatch(API_SUBCATEGORIES_UPDATE, store);
+
+  const { data: packaging } = useGet(API_PACKAGING_LIST, store);
 
   const all_subcategories = useRequest(store, async () =>
     store.retail.getSubcategories(),
   );
 
-  const { data: packaging } = useGet(API_PACKAGING_LIST, store);
+  const all_possible_parents = useRequest(store, async () =>
+    store.retail.getCategories(),
+  );
 
   const { name, parent_categories = [], default_packaging_type } =
     findById(all_subcategories, id) || {};
@@ -44,20 +46,8 @@ function Update({ stores: store, ...props }) {
     setDefaultPackagingType(default_packaging_type);
   }, [default_packaging_type]);
 
-  const all_possible_parents = useRequest(store, async () =>
-    store.retail.getCategories(),
-  );
-
-  const this_subcat = findById(all_subcategories, id) || {};
-
   const parent_ids =
-    this_subcat.parent_categories &&
-    this_subcat.parent_categories.map((v) => v.category_id);
-
-  const [
-    updateSubcategory,
-    { loading: updating, error: updateError },
-  ] = usePatch(API_SUBCATEGORIES_UPDATE, store);
+    parent_categories && parent_categories.map((v) => v.category_id);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     updateSubcategory(values);
@@ -65,7 +55,7 @@ function Update({ stores: store, ...props }) {
       setSubmitting(false);
     }
     if (!updating && !updateError) {
-      //TODO close the modal automatically - the available method is buggy when used with setTimeout
+      props.toggle(); // close modal
     }
   };
 
