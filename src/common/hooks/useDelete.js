@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function usePost(
+export default function useDelete(
   API,
   { user: userStore, loading: loadingStore, snackbar },
   onSuccessMsg = 'Request successful!',
@@ -11,11 +11,22 @@ export default function usePost(
   const [data, setData] = useState();
   const [error, setError] = useState();
 
-  const delete = (payload) => {
+  //
+  const [reqInit, setReqInit] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (reqInit && !loading && !error) {
+      setSuccess(true);
+    }
+  }, [error, reqInit, loading]);
+
+  const deleteRequest = () => {
     setLoading(true);
+    setReqInit(true);
     loadingStore.show();
     axios
-      .delete(API, {params: payload}, userStore.getHeaderAuth())
+      .delete(API, userStore.getHeaderAuth())
       .then(({ data }) => {
         setData(data);
         snackbar.openSnackbar(onSuccessMsg, 'success');
@@ -30,5 +41,5 @@ export default function usePost(
       });
   };
 
-  return [delete, { data, error, loading }];
+  return [deleteRequest, { data, error, loading, success }];
 }
