@@ -11,24 +11,16 @@ export default function useDelete(
   const [data, setData] = useState();
   const [error, setError] = useState();
 
-  //
-  const [reqInit, setReqInit] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    if (reqInit && !loading && !error) {
-      setSuccess(true);
-    }
-  }, [error, reqInit, loading]);
 
   const deleteRequest = () => {
     setLoading(true);
-    setReqInit(true);
     loadingStore.show();
     axios
       .delete(API, userStore.getHeaderAuth())
       .then(({ data }) => {
         setData(data);
+        setSuccess(true);
         snackbar.openSnackbar(onSuccessMsg, 'success');
       })
       .catch((e) => {

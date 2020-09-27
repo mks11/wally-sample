@@ -12,24 +12,16 @@ export default function usePost(
   const [data, setData] = useState();
   const [error, setError] = useState();
 
-  // part that determines if the success
-  const [reqInitiated, setReqInitiated] = useState(false);
-  const [success, setSuccess] = useState();
-
-  useEffect(() => {
-    if (reqInitiated && !loading && !error) {
-      setSuccess(true);
-    }
-  }, [loading, error, reqInitiated]);
+  const [success, setSuccess] = useState(false);
 
   const submit = (payload) => {
-    setReqInitiated(true);
     setLoading(true);
     loadingStore.show();
     axios
       .post(API, payload, userStore.getHeaderAuth())
       .then(({ data }) => {
         setData(data);
+        setSuccess(true);
         snackbar.openSnackbar(onSuccessMsg, 'success');
       })
       .catch((e) => {
