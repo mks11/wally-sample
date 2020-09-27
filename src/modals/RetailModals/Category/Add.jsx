@@ -16,18 +16,21 @@ import getIdNamePair from './../getIdNamePair';
 
 function Add({ stores: store, ...props }) {
   const subc = useRequest(store, async () => store.retail.getSubcategories());
-  const [addCategory, { loading: posting, error: postError }] = usePost(
+  const [addCategory, { success, loading: posting }] = usePost(
     API_CATEGORIES_POST,
     store,
   );
+
+  useEffect(() => {
+    if (success) {
+      props.toggle();
+    }
+  }, [success]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     addCategory(values);
     if (!posting) {
       setSubmitting(false);
-    }
-    if (!posting && !postError) {
-      props.toggle(); // close the modal
     }
   };
 
