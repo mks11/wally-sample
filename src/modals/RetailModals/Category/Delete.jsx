@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Confirmation from 'modals/shared/Confirmation';
-import useDelete from 'common/hooks/useDelete';
+import useDelete from 'hooks/useDelete';
 import { API_CATEGORIES_DELETE } from 'config';
 
 function Delete({ stores: { modal, ...store }, ...props }) {

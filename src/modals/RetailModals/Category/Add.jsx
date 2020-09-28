@@ -10,8 +10,8 @@ import {
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { API_CATEGORIES_POST } from 'config';
-import useRequest from 'common/hooks/useRequest';
-import usePost from 'common/hooks/usePost';
+import useRequest from 'hooks/useRequest';
+import usePost from 'hooks/usePost';
 import getIdNamePair from './../getIdNamePair';
 
 function Add({ stores: store, ...props }) {

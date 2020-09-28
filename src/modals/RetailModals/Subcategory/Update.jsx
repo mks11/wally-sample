@@ -11,9 +11,9 @@ import {
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { API_SUBCATEGORIES_UPDATE, API_PACKAGING_LIST } from 'config';
-import useRequest from 'common/hooks/useRequest';
-import useGet from 'common/hooks/useGet';
-import usePatch from 'common/hooks/usePatch';
+import useRequest from 'hooks/useRequest';
+import useGet from 'hooks/useGet';
+import usePatch from 'hooks/usePatch';
 import getIdNamePair from './../getIdNamePair';
 
 const findById = (col, id) => col.find((v) => v._id === id);

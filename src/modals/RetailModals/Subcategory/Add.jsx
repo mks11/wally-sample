@@ -11,9 +11,9 @@ import {
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { API_SUBCATEGORIES_POST, API_PACKAGING_LIST } from 'config';
-import useRequest from 'common/hooks/useRequest';
-import usePost from 'common/hooks/usePost';
-import useGet from 'common/hooks/useGet';
+import useRequest from 'hooks/useRequest';
+import usePost from 'hooks/usePost';
+import useGet from 'hooks/useGet';
 import getIdNamePair from './../getIdNamePair';
 
 function Add({ stores: store, ...props }) {

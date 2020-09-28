@@ -9,11 +9,11 @@ import {
 } from 'common/FormikComponents/NonRenderPropAPI';
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import useRequest from 'common/hooks/useRequest';
-import usePost from 'common/hooks/usePost';
+import useRequest from 'hooks/useRequest';
+import usePost from 'hooks/usePost';
 import getIdNamePair from './../getIdNamePair';
 import { API_CATEGORIES_UPDATE } from 'config';
-import usePatch from 'common/hooks/usePatch';
+import usePatch from 'hooks/usePatch';
 import { propTypes } from 'react-currency-input';
 
 const findById = (col, id) => col.find((v) => v._id === id);
