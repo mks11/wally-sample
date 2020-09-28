@@ -28,8 +28,8 @@ import Dropdown from '../../shared/Dropdown';
 import useRequest from 'common/hooks/useRequest';
 
 function Categories({ store: { modal, retail, ...store } }) {
-  const categories =
-    useRequest(store, async () => retail.getCategories()) || [];
+  const [categories, setCategories] = useState([]);
+  const all_cats = useRequest(store, async () => retail.getCategories()) || [];
 
   const handleEdit = (cat) => {
     modal.toggleModal('retailCategoryUpdate', null, cat._id);
@@ -37,9 +37,23 @@ function Categories({ store: { modal, retail, ...store } }) {
   const handleRemove = (cat) => {
     modal.toggleModal('retailCategoryDelete', null, cat._id);
   };
-
   const handleAddCategory = () => {
     modal.toggleModal('retailCategoryAdd');
+  };
+
+  useEffect(() => {
+    setCategories(all_cats);
+  }, [all_cats]);
+
+  const handleSearch = (txt) => {
+    setCategories(
+      all_cats.filter((c) => {
+        const regEx = new RegExp(txt, 'ig');
+        const name_matches = c.name && c.name.search(regEx);
+        const id_matches = c.category_id && c.category_id.search(regEx);
+        return name_matches > -1 || id_matches > -1;
+      }),
+    );
   };
 
   return (
@@ -50,7 +64,8 @@ function Categories({ store: { modal, retail, ...store } }) {
       <Header
         onAdd={handleAddCategory}
         buttonText="Add Category"
-        placeholder="search categories"
+        placeholder="search categories by name or id"
+        onSearch={handleSearch}
       />
       <Box>
         <Table>

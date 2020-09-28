@@ -22,8 +22,10 @@ import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import useRequest from 'common/hooks/useRequest';
 
 function Subcategories({ store: { modal, retail, ...store } }) {
-  const subcategories =
+  const all_subcats =
     useRequest(store, async () => retail.getSubcategories()) || [];
+
+  const [subcategories, setSubcategories] = useState([]);
 
   const handleEdit = (cat) => {
     modal.toggleModal('retailSubcategoryUpdate', null, cat._id);
@@ -36,6 +38,21 @@ function Subcategories({ store: { modal, retail, ...store } }) {
     modal.toggleModal('retailSubcategoryAdd');
   };
 
+  useEffect(() => {
+    setSubcategories(all_subcats);
+  }, [all_subcats]);
+
+  const handleSearch = (txt) => {
+    setSubcategories(
+      all_subcats.filter((c) => {
+        const regEx = new RegExp(txt, 'ig');
+        const name_matches = c.name && c.name.search(regEx);
+        const id_matches = c.category_id && c.category_id.search(regEx);
+        return name_matches > -1 || id_matches > -1;
+      }),
+    );
+  };
+
   return (
     <Box>
       <Typography variant="h1" gutterBottom>
@@ -44,7 +61,8 @@ function Subcategories({ store: { modal, retail, ...store } }) {
       <Header
         onAdd={handleAddCategory}
         buttonText="Add Subcategory"
-        placeholder="search subcategories"
+        placeholder="search subcategories by name or id"
+        onSearch={handleSearch}
       />
       <Box>
         <Table>

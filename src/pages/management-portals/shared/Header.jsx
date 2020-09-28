@@ -6,8 +6,13 @@ export default function Header({
   onAdd,
   buttonText,
   placeholder,
+  onSearch,
   showSearchbar = true,
 }) {
+  const handleChange = (e) => {
+    onSearch && onSearch(e.target.value);
+  };
+
   return (
     <Box display={'flex'} m={2} alignItems="center">
       <Box flex={1}>
@@ -27,6 +32,7 @@ export default function Header({
             placeholder={placeholder}
             fullWidth
             color="primary"
+            onChange={handleChange}
           />
         </Box>
       )}
