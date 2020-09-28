@@ -16,33 +16,32 @@ import { API_CATEGORIES_UPDATE } from 'config';
 import usePatch from 'hooks/usePatch';
 import { propTypes } from 'react-currency-input';
 
-const findById = (col, id) => col.find((v) => v._id === id);
-
 function Update({ stores: store, ...props }) {
-  const id = store.modal.modalData;
+  const { _id, categoryId } = store.modal.modalData;
 
   const all_possible_subcategories = useRequest(store, async () =>
     store.retail.getSubcategories(),
   );
-  const all_categories = useRequest(store, async () =>
-    store.retail.getCategories(),
-  );
 
   const [
     updateCategory,
-    { loading: updating, success: updateSuccess },
+    { data, loading: updating, success: updateSuccess },
   ] = usePatch(API_CATEGORIES_UPDATE, store);
 
   const { name, child_ids = [], subcategories = [] } =
-    findById(all_categories, id) || {};
+    store.retail.findCategoryById(categoryId) || {};
 
   const this_subcategories_ids = subcategories.map((v) => v.category_id);
 
   useEffect(() => {
+    if (data && data.category_id) {
+      store.retail.updateCategories(data);
+    }
+
     if (updateSuccess) {
       props.toggle(); // close the modal
     }
-  }, [updateSuccess]);
+  }, [data, updateSuccess]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     updateCategory(values);
@@ -55,7 +54,7 @@ function Update({ stores: store, ...props }) {
     <FormWrapper title="Update Category">
       <Formik
         initialValues={{
-          _id: id,
+          _id,
           name,
           child_ids,
         }}

@@ -35,7 +35,10 @@ function Categories() {
   useRequest(store, () => retail.getCategories());
 
   const handleEdit = (cat) => {
-    modal.toggleModal('retailCategoryUpdate', null, cat._id);
+    modal.toggleModal('retailCategoryUpdate', null, {
+      _id: cat._id,
+      categoryId: cat.category_id,
+    });
   };
   const handleRemove = (cat) => {
     modal.toggleModal('retailCategoryDelete', null, cat._id);
