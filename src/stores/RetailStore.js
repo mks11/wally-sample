@@ -18,8 +18,8 @@ class RetailStore {
     this.categories.push(category);
   }
 
-  isCategoryCached = (name) => {
-    return this.categories.find((c) => c.name === name);
+  isCategoryCached = (catId) => {
+    return this.categories.find((c) => c.category_id === catId);
   };
 
   async getCategories({ refetch = false } = {}) {

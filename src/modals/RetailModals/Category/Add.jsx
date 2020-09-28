@@ -31,7 +31,11 @@ function Add({ stores: store, ...props }) {
   const subc_ids = subc.map((v) => v.category_id);
 
   useEffect(() => {
-    if (data && data.name && !store.retail.isCategoryCached(data.name)) {
+    if (
+      data &&
+      data.category_id &&
+      !store.retail.isCategoryCached(data.category_id)
+    ) {
       store.retail.addCategory(data);
     }
 
