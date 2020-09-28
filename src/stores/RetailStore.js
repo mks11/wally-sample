@@ -14,13 +14,37 @@ class RetailStore {
     this.activeContent = content;
   }
 
+  findCategoryById(catId) {
+    return this.categories.find((c) => c.category_id === catId);
+  }
+
+  isCategoryCached = (catId) => {
+    if (this.findCategoryById(catId)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  getCachedCatIndex(catId) {
+    return this.categories.findIndex((c) => c.category_id === catId);
+  }
+
   addCategory(category) {
     this.categories.push(category);
   }
 
-  isCategoryCached = (catId) => {
-    return this.categories.find((c) => c.category_id === catId);
-  };
+  updateCategories(category) {
+    const { category_id } = category;
+    const idx = this.getCachedCatIndex(category_id);
+    if (idx > -1) {
+      this.categories.splice(idx, 1, category);
+    }
+  }
+
+  removeCategory(catId) {
+    this.categories = this.categories.filter((c) => c.category_id !== catId);
+  }
 
   async getCategories({ refetch = false } = {}) {
     if (refetch || this.categories.length === 0) {
@@ -54,8 +78,15 @@ class RetailStore {
 decorate(RetailStore, {
   activeContent: observable,
   categories: observable,
+
+  // ACTIONS THAT REGARD THE CATEGORIES PROPERTY
   setActiveContent: action,
+  isCategoryCached: action,
+  getCachedCatIndex: action,
   addCategory: action,
+  updateCategories: action,
+  removeCategory: action,
+  // API CALLS
   getCategories: action,
   getSubcategories: action,
 });
