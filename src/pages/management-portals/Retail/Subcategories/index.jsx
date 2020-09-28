@@ -19,7 +19,7 @@ import Table from '../../shared/Table';
 import Dropdown from '../../shared/Dropdown';
 import StyledTableRow from '../../../../common/table/StyledTableRow';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
-import useRequest from 'common/hooks/useRequest';
+import useRequest from 'hooks/useRequest';
 
 function Subcategories({ store: { modal, retail, ...store } }) {
   const all_subcats =
