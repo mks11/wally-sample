@@ -32,6 +32,7 @@ class RetailStore {
 
   addCategory(category) {
     this.categories.push(category);
+    this.categories = sort(this.categories);
   }
 
   updateCategories(category) {
@@ -39,6 +40,7 @@ class RetailStore {
     const idx = this.getCachedCatIndex(category_id);
     if (idx > -1) {
       this.categories.splice(idx, 1, category);
+      this.categories = sort(this.categories);
     }
   }
 
@@ -92,3 +94,14 @@ decorate(RetailStore, {
 });
 
 export default new RetailStore();
+
+function sort(list) {
+  return list.sort((a, b) => {
+    const aName = a.name;
+    const bName = b.name;
+
+    if (aName > bName) return 1;
+    else if (aName < bName) return -1;
+    else return 0;
+  });
+}
