@@ -14,6 +14,14 @@ class RetailStore {
     this.activeContent = content;
   }
 
+  addCategory(category) {
+    this.categories.push(category);
+  }
+
+  isCategoryCached = (name) => {
+    return this.categories.find((c) => c.name === name);
+  };
+
   async getCategories({ refetch = false } = {}) {
     if (refetch || this.categories.length === 0) {
       const { data } = await axios.get(
@@ -47,7 +55,7 @@ decorate(RetailStore, {
   activeContent: observable,
   categories: observable,
   setActiveContent: action,
-
+  addCategory: action,
   getCategories: action,
   getSubcategories: action,
 });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { findIndex } from 'lodash';
-import { Observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { connect } from 'utils';
 import {
   Button,
@@ -25,11 +25,14 @@ import { API_GET_CATEGORIES } from 'config';
 import { ArrowDropDown, Edit, Delete } from '@material-ui/icons';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import Dropdown from '../../shared/Dropdown';
-import useRequest from 'common/hooks/useRequest';
+import useRequest from 'hooks/useRequest';
+import { useStores } from 'hooks/mobx';
 
-function Categories({ store: { modal, retail, ...store } }) {
+function Categories() {
+  const store = useStores();
+  const { modal, retail } = store;
   const [categories, setCategories] = useState([]);
-  const all_cats = useRequest(store, async () => retail.getCategories()) || [];
+  useRequest(store, () => retail.getCategories());
 
   const handleEdit = (cat) => {
     modal.toggleModal('retailCategoryUpdate', null, cat._id);
@@ -42,12 +45,12 @@ function Categories({ store: { modal, retail, ...store } }) {
   };
 
   useEffect(() => {
-    setCategories(all_cats);
-  }, [all_cats]);
+    setCategories(retail.categories);
+  }, [retail.categories]);
 
   const handleSearch = (txt) => {
     setCategories(
-      all_cats.filter((c) => {
+      retail.categories.filter((c) => {
         const regEx = new RegExp(txt, 'ig');
         const name_matches = c.name && c.name.search(regEx);
         const id_matches = c.category_id && c.category_id.search(regEx);
@@ -107,10 +110,4 @@ function Categories({ store: { modal, retail, ...store } }) {
   );
 }
 
-class _Categories extends React.Component {
-  render() {
-    return <Categories store={this.props.store} />;
-  }
-}
-
-export default connect('store')(_Categories);
+export default observer(Categories);
