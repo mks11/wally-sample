@@ -6,23 +6,28 @@ import { API_CATEGORIES_DELETE } from 'config';
 
 function Delete({ stores: { modal, ...store }, ...props }) {
   const id = modal.modalData;
-  const [deleteCat, { success }] = useDelete(
+  const [deleteCat, { data, success }] = useDelete(
     `${API_CATEGORIES_DELETE}/${id}`,
     store,
   );
 
-  useEffect(() => {
-    if (success) {
-      props.toggle();
-    }
-  }, [success]);
-
   const handleConfirm = () => {
     deleteCat();
   };
+
   const handleCancel = () => {
     props.toggle(); // close the modal
   };
+
+  useEffect(() => {
+    if (data && data.category_id) {
+      store.retail.removeCategory(data.category_id);
+    }
+
+    if (success) {
+      props.toggle();
+    }
+  }, [data, success]);
 
   return (
     <Confirmation
