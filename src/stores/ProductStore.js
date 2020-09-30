@@ -8,6 +8,7 @@ import {
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
+  API_GET_PRODUCTS_MATCHING_FILTERS,
 } from '../config';
 import UserStore from './UserStore';
 import axios from 'axios';
@@ -22,8 +23,6 @@ class ProductStore {
   activeProduct = null;
   activeProductComments = [];
   categories = [];
-  fetch = false;
-
   fetch = false;
 
   customer_quantity = null;
@@ -42,6 +41,12 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
+
+  products = [];
+  filters = {
+    vendorIds: [],
+    vendorUrlNames: [],
+  };
 
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id;
@@ -268,6 +273,8 @@ class ProductStore {
     this.currentSearchFilter = [];
     this.currentSearchCategory = 'All Categories';
   }
+
+  getProductsMatchingFilters() {}
 }
 
 decorate(ProductStore, {
@@ -282,6 +289,8 @@ decorate(ProductStore, {
   activeProductId: observable,
   search: observable,
   currentSearchFilter: observable,
+  products: observable,
+  filters: observable,
 
   showModal: action,
   getAdvertisements: action,
@@ -296,6 +305,7 @@ decorate(ProductStore, {
   updateRatingComments: action,
   getHistoricalProducts: action,
   getProductComments: action,
+  getProductsMatchingFilters: action,
 });
 
 export default new ProductStore();
