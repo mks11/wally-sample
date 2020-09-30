@@ -26,10 +26,10 @@ import { ArrowDropDown, Edit, Delete } from '@material-ui/icons';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import Dropdown from '../../shared/Dropdown';
 import useRequest from 'hooks/useRequest';
-import { useStores } from 'hooks/mobx';
+import useStore from 'hooks/useStore';
 
 function Categories() {
-  const store = useStores();
+  const store = useStore();
   const { modal, retail } = store;
   const [categories, setCategories] = useState([]);
   useRequest(store, () => retail.getCategories());
