@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 export default function useDelete(
@@ -25,7 +25,7 @@ export default function useDelete(
       })
       .catch((e) => {
         setError(e);
-        snackbar.openSnackbar(e.message, 'error');
+        snackbar.openSnackbar(onErrorMsg, 'error');
       })
       .finally(() => {
         setTimeout(loadingStore.hide(), 300);

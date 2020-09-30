@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function useRequest(
   { loading, snackbar },
@@ -14,7 +14,7 @@ export default function useRequest(
         const data = await async_call();
         setData(data);
       } catch (e) {
-        snackbar.openSnackbar(e.message, 'error');
+        snackbar.openSnackbar(onErrorMsg, 'error');
       } finally {
         loading.hide();
       }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function useGet(
   API,
   { user: userStore, loading: loadingStore, snackbar },
-  onErrMsg = 'A problem occurred in loading this page.',
+  onErrorMsg = 'A problem occurred in loading this page.',
 ) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
@@ -19,7 +19,7 @@ export default function useGet(
       })
       .catch((e) => {
         setError(e);
-        snackbar.openSnackbar(e.message, 'error');
+        snackbar.openSnackbar(onErrorMsg, 'error');
       })
       .finally(() => {
         setTimeout(loadingStore.hide(), 300);

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { MobxProviderContext } from 'mobx-react';
 
 export default function usePost(
   API,
@@ -26,7 +25,7 @@ export default function usePost(
       })
       .catch((e) => {
         setError(e);
-        snackbar.openSnackbar(e.message, 'error');
+        snackbar.openSnackbar(onErrorMsg, 'error');
       })
       .finally(() => {
         setTimeout(loadingStore.hide(), 300);
