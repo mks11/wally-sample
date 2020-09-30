@@ -545,7 +545,7 @@ function Brand({ manufacturer, vendor, onClick }) {
   return vendor && vendor.name && vendor.fbw && vendor.url_name ? (
     <Link
       onClick={onClick}
-      to={'/vendor/' + vendor.url_name}
+      to={'/shop/brands/' + vendor.url_name}
       style={{ color: theme.palette.primary.main }}
     >
       <Typography variant="body1" component="span">

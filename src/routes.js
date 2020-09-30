@@ -176,7 +176,7 @@ function Routes({ store, ...props }) {
       <Route exact path="/user" component={Account} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
-      <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
+      <Route exact path="/shop/brands/:brandName" component={VendorProfile} />
       <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
