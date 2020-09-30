@@ -23,10 +23,10 @@ function Update({ stores: store, ...props }) {
     store.retail.getSubcategories(),
   );
 
-  const [
-    updateCategory,
-    { data, loading: updating, success: updateSuccess },
-  ] = usePatch(API_CATEGORIES_UPDATE, store);
+  const [updateCategory, { data, loading: updating }] = usePatch(
+    API_CATEGORIES_UPDATE,
+    store,
+  );
 
   const { name, child_ids = [], subcategories = [] } =
     store.retail.findCategoryById(categoryId) || {};
@@ -36,12 +36,9 @@ function Update({ stores: store, ...props }) {
   useEffect(() => {
     if (data && data.category_id) {
       store.retail.updateCategories(data);
-    }
-
-    if (updateSuccess) {
       props.toggle(); // close the modal
     }
-  }, [data, updateSuccess]);
+  }, [data]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     updateCategory(values);
