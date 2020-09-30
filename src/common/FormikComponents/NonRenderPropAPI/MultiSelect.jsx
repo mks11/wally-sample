@@ -36,11 +36,6 @@ export default function MultiSelect({
 }) {
   const classes = useStyles();
   const theme = useTheme();
-  // const selectedSet = new Set();
-
-  // preSelected.forEach((v) => {
-  //   selectedSet.add(v);
-  // });
 
   const [selectedValues, setSelectedValues] = useState(preSelected);
 
