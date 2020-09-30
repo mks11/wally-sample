@@ -14,7 +14,6 @@ import usePost from 'hooks/usePost';
 import getIdNamePair from './../getIdNamePair';
 import { API_CATEGORIES_UPDATE } from 'config';
 import usePatch from 'hooks/usePatch';
-import { propTypes } from 'react-currency-input';
 
 function Update({ stores: store, ...props }) {
   const { _id, categoryId } = store.modal.modalData;
