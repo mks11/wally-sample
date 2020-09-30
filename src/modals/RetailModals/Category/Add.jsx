@@ -16,7 +16,7 @@ import getIdNamePair from './../getIdNamePair';
 
 function Add({ stores: store, ...props }) {
   const subc = useRequest(store, async () => store.retail.getSubcategories());
-  const [addCategory, { data, success, loading: posting }] = usePost(
+  const [addCategory, { data, loading: posting }] = usePost(
     API_CATEGORIES_POST,
     store,
   );
@@ -31,18 +31,11 @@ function Add({ stores: store, ...props }) {
   const subc_ids = subc.map((v) => v.category_id);
 
   useEffect(() => {
-    if (
-      data &&
-      data.category_id &&
-      !store.retail.isCategoryCached(data.category_id)
-    ) {
+    if (data && data.category_id) {
       store.retail.addCategory(data);
-    }
-
-    if (success) {
       props.toggle();
     }
-  }, [data, success]);
+  }, [data]);
 
   return (
     <FormWrapper title="Add Category">

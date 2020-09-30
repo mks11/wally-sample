@@ -31,6 +31,9 @@ class RetailStore {
   }
 
   addCategory(category) {
+    if (this.isCategoryCached(category.category_id)) {
+      return;
+    }
     this.categories.push(category);
     this.categories = sort(this.categories);
   }
