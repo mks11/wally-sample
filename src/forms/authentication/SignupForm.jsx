@@ -28,7 +28,7 @@ import { InternalWallyLink } from 'styled-component-lib/Links';
 import * as Yup from 'yup';
 
 export default function SignupForm() {
-  const { store } = useStores();
+  const { checkout, modal, modalV2, routing, snackbar, user } = useStores();
 
   return (
     <Box>
@@ -126,30 +126,27 @@ export default function SignupForm() {
 
   function signup({ name, email, password }, { setSubmitting }) {
     logEvent({ category: 'Signup', action: 'SubmitInfo' });
-    store.user
+    user
       .signup({ name, email, password })
       .then(() => {
-        store.checkout.getCurrentCart(
-          store.user.getHeaderAuth(),
-          store.user.getDeliveryParams(),
-        );
-        store.modal.toggleModal('welcome');
-        store.routing.push('/main');
+        checkout.getCurrentCart(user.getHeaderAuth(), user.getDeliveryParams());
+        modal.toggleModal('welcome');
+        routing.push('/main');
       })
       .catch(() =>
-        store.snackbar.openSnackbar(
+        snackbar.openSnackbar(
           `Attempt to sign up failed. Please contact ${support} for support.`,
           'error',
         ),
       )
       .finally(() => {
         setSubmitting(false);
-        store.modalV2.close();
+        modalV2.close();
       });
   }
 
   function showLoginForm() {
     logModalView('/login');
-    store.modalV2.open(<LoginForm />);
+    modalV2.open(<LoginForm />);
   }
 }

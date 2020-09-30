@@ -9,19 +9,16 @@ import { Snackbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 function RootSnackbar() {
-  const { store } = useStores();
+  const { snackbar } = useStores();
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      open={store.snackbar.isOpen}
+      open={snackbar.isOpen}
       autoHideDuration={6000}
-      onClose={store.snackbar.closeSnackbar}
+      onClose={snackbar.closeSnackbar}
     >
-      <Alert
-        onClose={store.snackbar.closeSnackbar}
-        severity={store.snackbar.severity}
-      >
-        <Typography variant="body1">{store.snackbar.message}</Typography>
+      <Alert onClose={snackbar.closeSnackbar} severity={snackbar.severity}>
+        <Typography variant="body1">{snackbar.message}</Typography>
       </Alert>
     </Snackbar>
   );

@@ -178,13 +178,13 @@ export function DesktopUserNav({
 }
 
 function SignOutButton() {
-  const { store } = useStores();
+  const { checkout, routing, user } = useStores();
 
   function handleLogout() {
-    store.checkout.cart = null;
-    store.checkout.order = null;
-    store.user.logout();
-    store.routing.push('/');
+    checkout.cart = null;
+    checkout.order = null;
+    user.logout();
+    routing.push('/');
   }
 
   return (

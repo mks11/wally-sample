@@ -29,7 +29,7 @@ import ForgotPassword from 'forms/authentication/ForgotPassword';
 import SignupForm from 'forms/authentication/SignupForm';
 
 export default function LoginForm() {
-  const { store } = useStores();
+  const { modalV2, routing, snackbar, user } = useStores();
 
   return (
     <Box>
@@ -103,11 +103,11 @@ export default function LoginForm() {
   );
 
   function login({ email, password }, { setSubmitting }) {
-    store.user
+    user
       .login(email, password)
       .then(() => {
         let home = determineHome();
-        store.routing.push(home);
+        routing.push(home);
       })
       .catch((error) => {
         const { response } = error;
@@ -115,16 +115,16 @@ export default function LoginForm() {
         if (response && response.data && response.data.error) {
           msg = response.data.error.message;
         }
-        store.snackbar.openSnackbar(msg, 'error');
+        snackbar.openSnackbar(msg, 'error');
       })
       .finally(() => {
         setSubmitting(false);
-        store.modalV2.close();
+        modalV2.close();
       });
   }
 
   function determineHome() {
-    const { isOps, isOpsLead, isAdmin, isRetail } = store.user;
+    const { isOps, isOpsLead, isAdmin, isRetail } = user;
     var home = '/main';
 
     if (isOps || isOpsLead) {
@@ -140,11 +140,11 @@ export default function LoginForm() {
 
   function forgotPassword() {
     logModalView('/forgot-password');
-    store.modalV2.open(<ForgotPassword />);
+    modalV2.open(<ForgotPassword />);
   }
 
   function showSignupForm() {
     logModalView('/signup-zip');
-    store.modalV2.open(<SignupForm />);
+    modalV2.open(<SignupForm />);
   }
 }

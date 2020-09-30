@@ -20,7 +20,7 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import * as Yup from 'yup';
 
 export default function LoginForm() {
-  const { store } = useStores();
+  const { modalV2, snackbar, user } = useStores();
 
   return (
     <Formik
@@ -63,22 +63,22 @@ export default function LoginForm() {
   );
 
   function forgotPassword({ email }, { setSubmitting }) {
-    store.user
+    user
       .forgotPassword(email)
       .then(() =>
-        store.snackbar.openSnackbar(
+        snackbar.openSnackbar(
           `Instructions to reset your password have been sent to ${email}.`,
         ),
       )
       .catch(() =>
-        store.snackbar.openSnackbar(
+        snackbar.openSnackbar(
           `Reset password attempt failed. Please contact us at ${support} for support.`,
           'error',
         ),
       )
       .finally(() => {
         setSubmitting(false);
-        store.modalV2.close();
+        modalV2.close();
       });
   }
 }

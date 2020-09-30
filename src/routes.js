@@ -190,9 +190,7 @@ function Routes(props) {
 }
 
 function OpsRoute({ component: Component, ...rest }) {
-  const {
-    store: { user },
-  } = useStores();
+  const { user } = useStores();
   const { isOps, isOpsLead, isAdmin } = user;
 
   return (
@@ -212,9 +210,7 @@ function OpsRoute({ component: Component, ...rest }) {
 }
 
 function RetailRoute({ component: Component, ...rest }) {
-  const {
-    store: { user },
-  } = useStores();
+  const { user } = useStores();
   const { isRetail, isAdmin } = user;
 
   return (

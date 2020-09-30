@@ -12,9 +12,7 @@ import { DesktopGuestNav } from 'common/Header/NavBar/GuestNav';
 import DesktopNav from 'common/Header/NavBar/DesktopNav';
 
 function Navbar() {
-  const {
-    store: { user },
-  } = useStores();
+  const { user } = useStores();
   const isLoggedIn = user.status;
   console.log(isLoggedIn);
   return (

@@ -51,9 +51,7 @@ const LogoMobile = styled.img`
 `;
 
 function Logo() {
-  const {
-    store: { user, product },
-  } = useStores();
+  const { user, product } = useStores();
 
   var home = user.user ? '/main' : '/';
 

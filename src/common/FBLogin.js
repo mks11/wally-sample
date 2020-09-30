@@ -11,7 +11,7 @@ import { useStores } from 'hooks/mobx';
 import FacebookLogin from 'react-facebook-login';
 
 function FBLogin({ ...props }) {
-  const { store } = useStores();
+  const { modalV2, user, routing, snackbar } = useStores();
   const [isRequesting, setIsRequesting] = useState(false);
 
   const login = (responseData) => {
@@ -21,17 +21,17 @@ function FBLogin({ ...props }) {
       const { additionalData } = props;
       const data = { ...responseData, ...additionalData };
 
-      store.user
+      user
         .loginFacebook(data)
-        .then(() => store.routing.push('/main'))
+        .then(() => routing.push('/main'))
         .catch(() => {
-          store.snackbar.openSnackbar(
+          snackbar.openSnackbar(
             `Attempt to login via facebook failed. Contact us at ${support} for support.`,
           );
         })
         .finally(() => {
           setIsRequesting(false);
-          store.modalV2.close();
+          modalV2.close();
         });
     }
   };

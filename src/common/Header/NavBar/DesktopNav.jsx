@@ -21,8 +21,7 @@ import { DesktopUserNav } from './UserNav';
 
 function DesktopNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { store } = useStores();
-  const { user } = store.user;
+  const { user } = useStores();
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 

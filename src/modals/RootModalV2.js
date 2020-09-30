@@ -12,11 +12,11 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 function RootModalV2() {
-  const { store } = useStores();
-  const { isOpen, children } = store.modalV2;
+  const { modalV2 } = useStores();
+  const { isOpen, children } = modalV2;
 
   const handleClose = () => {
-    store.modalV2.close();
+    modalV2.close();
   };
 
   return (

@@ -14,9 +14,7 @@ import LoadingSpinner from 'modals/LoadingSpinner';
 import RootSnackbar from 'snackbars/RootSnackbar';
 
 export default function Layout() {
-  const {
-    store: { user },
-  } = useStores();
+  const { user } = useStores();
 
   useEffect(() => {
     user.getStatus();

@@ -103,11 +103,11 @@ export function DesktopGuestNav() {
 }
 
 function SignUpButton() {
-  const { store } = useStores();
+  const { modalV2 } = useStores();
 
   function handleSignup() {
     logModalView('/signup-zip');
-    store.modalV2.open(<SignupForm />);
+    modalV2.open(<SignupForm />);
   }
 
   return (
@@ -120,11 +120,11 @@ function SignUpButton() {
 }
 
 function LogInButton() {
-  const { store } = useStores();
+  const { modalV2 } = useStores();
 
   function handleLogin() {
     logModalView('/login');
-    store.modalV2.open(<LoginForm />);
+    modalV2.open(<LoginForm />);
   }
 
   return (
