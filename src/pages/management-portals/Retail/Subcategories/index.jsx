@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { findIndex } from 'lodash';
-import { connect } from 'utils';
 import {
   Button,
   TableBody,
@@ -20,10 +19,13 @@ import Dropdown from '../../shared/Dropdown';
 import StyledTableRow from '../../../../common/table/StyledTableRow';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import useRequest from 'hooks/useRequest';
+import { observer } from 'mobx-react';
+import useStore from 'hooks/useStore';
 
-function Subcategories({ store: { modal, retail, ...store } }) {
-  const all_subcats =
-    useRequest(store, async () => retail.getSubcategories()) || [];
+function Subcategories() {
+  const store = useStore();
+  const { retail, modal } = store;
+  useRequest(store, async () => retail.getSubcategories()) || [];
 
   const [subcategories, setSubcategories] = useState([]);
 
@@ -39,12 +41,12 @@ function Subcategories({ store: { modal, retail, ...store } }) {
   };
 
   useEffect(() => {
-    setSubcategories(all_subcats);
-  }, [all_subcats]);
+    setSubcategories(retail.subcategories);
+  }, [retail.subcategories]);
 
   const handleSearch = (txt) => {
     setSubcategories(
-      all_subcats.filter((c) => {
+      retail.subcategories.filter((c) => {
         const regEx = new RegExp(txt, 'ig');
         const name_matches = c.name && c.name.search(regEx);
         const id_matches = c.category_id && c.category_id.search(regEx);
@@ -105,10 +107,4 @@ function Subcategories({ store: { modal, retail, ...store } }) {
   );
 }
 
-class _Subcategories extends React.Component {
-  render() {
-    return <Subcategories store={this.props.store} />;
-  }
-}
-
-export default connect('store')(_Subcategories);
+export default observer(Subcategories);
