@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Config
 import { support } from 'config';
@@ -28,7 +28,9 @@ import { InternalWallyLink } from 'styled-component-lib/Links';
 import * as Yup from 'yup';
 
 export default function SignupForm() {
-  const { checkout, modal, modalV2, routing, snackbar, user } = useStores();
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const { checkout, modal, modalV2, routing, user } = useStores();
 
   return (
     <Box>
@@ -54,7 +56,7 @@ export default function SignupForm() {
               name="name"
               variant="outlined"
               color="primary"
-              placeholder="Full name."
+              placeholder="Full name"
             />
           </Box>
           <Box my={2}>
@@ -64,6 +66,8 @@ export default function SignupForm() {
               variant="outlined"
               color="primary"
               placeholder="Email Address"
+              errorMsg={emailError}
+              setErrorMsg={setEmailError}
             />
           </Box>
           <Box my={2}>
@@ -73,6 +77,8 @@ export default function SignupForm() {
               variant="outlined"
               color="primary"
               placeholder="Password"
+              errorMsg={passwordError}
+              setErrorMsg={setPasswordError}
             />
           </Box>
           <Box my={2}>
@@ -132,16 +138,25 @@ export default function SignupForm() {
         checkout.getCurrentCart(user.getHeaderAuth(), user.getDeliveryParams());
         modal.toggleModal('welcome');
         routing.push('/main');
+        modalV2.close();
       })
-      .catch(() =>
-        snackbar.openSnackbar(
-          `Attempt to sign up failed. Please contact ${support} for support.`,
-          'error',
-        ),
-      )
+      .catch((e) => {
+        const { response } = e;
+        if (reponse && response.data && response.data.error) {
+          const { name, message } = response.data.error;
+          if (name === 'NotFoundError') {
+            setEmailError(message);
+          } else {
+            setPasswordError(message);
+          }
+        } else {
+          setPasswordError(
+            `Attempt to sign up failed. Please contact ${support} for support.`,
+          );
+        }
+      })
       .finally(() => {
         setSubmitting(false);
-        modalV2.close();
       });
   }
 
