@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
@@ -9,9 +8,9 @@ import { observer } from 'mobx-react';
 
 // Custom Components
 import {
-  MobileNavLinkText,
-  MobileNavButton,
-  MobileNavDivider,
+  MobileNavItem,
+  MobileNavMenu,
+  SignOutButton,
   MobileUserGreeting,
 } from './MobileNavComponents';
 import {
@@ -20,69 +19,70 @@ import {
   DesktopDropdownMenuItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
-export function MobileOpsNav({ hideNav, handleSignout, userName }) {
+export function MobileOpsNav() {
+  const { user } = useStores();
+  return user.isOps || user.isOpsLead ? (
+    <MobileNavMenu>
+      <MobileOpsNavMenu />
+    </MobileNavMenu>
+  ) : null;
+}
+
+export const MobileOpsNavMenu = observer(() => {
+  const { user, modalV2 } = useStores();
   return (
     <>
-      <li>
-        <MobileUserGreeting userName={userName} />
-      </li>
-      <li>
-        <MobileNavDivider />
-      </li>
-      <li>
-        <Link to="/pick-pack" onClick={hideNav}>
-          <MobileNavLinkText>Pick/Pack</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/packaging-returns" onClick={hideNav}>
-          <MobileNavLinkText>Packaging Returns</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/packaging-inventory" onClick={hideNav}>
-          <MobileNavLinkText>Packaging Inventory</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/manage/co-packing/runs" onClick={hideNav}>
-          <MobileNavLinkText>Manage Copacking Round</MobileNavLinkText>
-        </Link>
-      </li>
+      <MobileUserGreeting />
+      <MobileNavItem to="/pick-pack" onClick={modalV2.close} hasDivider>
+        Pick/Pack
+      </MobileNavItem>
+      <MobileNavItem to="/packaging-returns" onClick={modalV2.close} hasDivider>
+        Packaging Returns
+      </MobileNavItem>
+      <MobileNavItem
+        to="/manage/co-packing/runs"
+        onClick={modalV2.close}
+        hasDivider
+      >
+        Copacking
+      </MobileNavItem>
+      <MobileNavItem
+        to="/packaging-inventory"
+        onClick={modalV2.close}
+        hasDivider
+      >
+        Packaging Inventory
+      </MobileNavItem>
+      {user && user.isOpsLead && (
+        <MobileNavItem
+          to="/manage/co-packing/inbound"
+          onClick={modalV2.close}
+          hasDivider
+        >
+          Inbound Shipments
+        </MobileNavItem>
+      )}
+      {user && user.isOpsLead && (
+        <MobileNavItem
+          to="/manage/co-packing/outbound"
+          onClick={modalV2.close}
+          hasDivider
+        >
+          Outbound Shipments
+        </MobileNavItem>
+      )}
       {/* TODO - ARE THESE STILL USED? */}
+      {/* <MobileNavItem to="/manage/shopping-app-1" onClick={modalV2.close} hasDivider>
+        Shopping App
+      </MobileNavItem> */}
+      {/* <MobileNavItem to="/manage/orders" onClick={modalV2.close} hasDivider>
+        Packing App
+      </MobileNavItem> */}
 
-      {/* <li>
-        <Link to="/manage/shopping-app-1" onClick={hideNav}>
-          <MobileNavLinkText>Shopping App</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/manage/orders" onClick={hideNav}>
-          <MobileNavLinkText>Packing App</MobileNavLinkText>
-        </Link>
-      </li> */}
-
-      {/* <li>
-        <Link to="/manage/co-packing/inbound" onClick={hideNav}>
-          <MobileNavLinkText>Inbound Shipments</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/manage/co-packing/outbound" onClick={hideNav}>
-          <MobileNavLinkText>Outbound Shipments</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/manage/co-packing/runs" onClick={hideNav}>
-          <MobileNavLinkText>Co-packing</MobileNavLinkText>
-        </Link>
-      </li> */}
-      <li>
-        <MobileNavButton onClick={handleSignout}>Sign Out</MobileNavButton>
-      </li>
+      <SignOutButton />
     </>
   );
-}
+});
 
 export const DesktopOpsNav = observer(() => {
   const { user } = useStores();

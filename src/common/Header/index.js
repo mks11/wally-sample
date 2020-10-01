@@ -20,7 +20,6 @@ import Navbar from 'common/Header/NavBar';
 export default function Header() {
   return (
     <Box
-      py={2}
       component="header"
       position="sticky"
       top="0"
