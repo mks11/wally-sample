@@ -7,16 +7,12 @@ import { useStores } from 'hooks/mobx';
 // mobx
 import { observer } from 'mobx-react';
 
-// npm Package Components
-import { Typography } from '@material-ui/core';
-
 // Custom Components
 import {
   MobileNavLinkText,
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
-  MobileUserPackagingBalance,
 } from './MobileStyledComponents';
 import {
   DesktopNavItem,
@@ -106,10 +102,7 @@ export const DesktopAdminNav = observer(() => {
   return user.isAdmin ? (
     <>
       <DesktopNavItem to="/manage/retail" text="Retail Management" />
-      <DesktopNavItem
-        to="/manage/co-packing/runs"
-        text="Copacking"
-      />
+      <DesktopNavItem to="/manage/co-packing/runs" text="Copacking" />
       <DesktopNavItem to="/pick-pack" text="Pick/Pack Portal" />
       <DesktopDropdownMenu>
         <DesktopDropdownMenuItem to="/manage/shopper">

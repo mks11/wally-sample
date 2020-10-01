@@ -13,7 +13,6 @@ import {
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
-  MobileUserPackagingBalance,
 } from './MobileStyledComponents';
 import {
   DesktopNavItem,

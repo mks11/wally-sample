@@ -17,7 +17,6 @@ import {
 import {
   DesktopNavItem,
   DesktopDropdownMenu,
-  DesktopDropdownMenuItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
 export function MobileRetailNav({ hideNav, handleSignout, userName }) {
