@@ -108,7 +108,7 @@ export const DesktopAdminNav = observer(() => {
       <DesktopNavItem to="/manage/retail" text="Retail Management" />
       <DesktopNavItem
         to="/manage/co-packing/runs"
-        text="Manage Copacking Runs"
+        text="Copacking"
       />
       <DesktopNavItem to="/pick-pack" text="Pick/Pack Portal" />
       <DesktopDropdownMenu>
