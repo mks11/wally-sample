@@ -15,14 +15,14 @@ function Confirmation({ title, message, onCancel, onConfirm }) {
         <Typography align="center">{message}</Typography>
         <Box marginTop={6}>
           <Grid container justify="center" spacing={2}>
-            <Grid item xs={6} lg={4} container justify="center">
+            <Grid item xs={6} lg={4} justify="center">
               <Button size="large" fullWidth onClick={onCancel}>
-                <Typography variant="body1">Cancel</Typography>
+                <Typography>Cancel</Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} lg={4} container justify="center">
+            <Grid item xs={6} lg={4} justify="center">
               <DangerButton size="large" fullWidth onClick={onConfirm}>
-                <Typography variant="body1">Yes, I’m sure</Typography>
+                <Typography>Yes, I’m sure</Typography>
               </DangerButton>
             </Grid>
           </Grid>

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Box, Grid, MenuItem, Paper } from '@material-ui/core';
 import DisplayContent from './DisplayContent';
 import SidebarContent from './SidebarContent';
-import styles from './ManagementPortal.module.css';
 
 export default function ManagementPortal({ sidebar, content }) {
   return (
@@ -14,7 +13,14 @@ export default function ManagementPortal({ sidebar, content }) {
             <Grid item lg={2} style={{ maxHeight: '100%' }}>
               <SidebarContent>{sidebar}</SidebarContent>
             </Grid>
-            <Grid item lg={10} className={styles.displayContent}>
+            <Grid
+              item
+              lg={10}
+              style={{
+                overflow: 'auto',
+                height: '100%',
+              }}
+            >
               <DisplayContent>{content}</DisplayContent>
             </Grid>
           </Grid>
