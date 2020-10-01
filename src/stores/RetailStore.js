@@ -126,6 +126,7 @@ class RetailStore {
 decorate(RetailStore, {
   activeContent: observable,
   categories: observable,
+  subcategories: observable,
   setActiveContent: action,
 
   // ACTIONS THAT REGARD THE CATEGORIES PROPERTY
