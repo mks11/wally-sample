@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { formatMoney } from 'utils';
 
@@ -9,10 +9,7 @@ import { useStores } from 'hooks/mobx';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import { Box, Button, Grid, Menu, Typography } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { IconContext } from 'react-icons';
-import { FaRegUserCircle } from 'react-icons/fa';
+import { Typography } from '@material-ui/core';
 
 // Custom Components
 import {
@@ -24,6 +21,7 @@ import {
 } from './MobileStyledComponents';
 import {
   DesktopNavItem,
+  DesktopDropdownMenu,
   DesktopDropdownMenuItem,
   DesktopDropdownMenuListItem,
   DesktopDropdownMenuBtn,
@@ -111,16 +109,7 @@ export function MobileUserNav({
 }
 
 export function DesktopUserNav() {
-  const [anchorEl, setAnchorEl] = useState(null);
   const { user } = useStores();
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return user.isUser ? (
     <>
       <DesktopNavItem to="/main" text="Shop" />
@@ -128,49 +117,25 @@ export function DesktopUserNav() {
       <DesktopNavItem to="/help" text="Help" />
       <DesktopNavItem to="/latest-news" text="COVID-19" />
       <DesktopNavItem to="/howitworks" text="How It Works" />
-      <Button aria-label="account" disableRipple onClick={handleClick}>
-        <Grid container justify="center">
-          <Grid item xs={12}>
-            <IconContext.Provider value={{ size: '2em' }}>
-              <FaRegUserCircle />
-            </IconContext.Provider>
-          </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="body1" component="span">
-                {user.user.name}
-              </Typography>
-              <ArrowDropDownIcon />
-            </Box>
-          </Grid>
-        </Grid>
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        keepMounted
-      >
-        <DesktopDropdownMenuItem onClick={handleClose} to="/user">
+      <DesktopDropdownMenu>
+        <DesktopDropdownMenuItem to="/user">
           Account Settings
         </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem onClick={handleClose} to="/orders">
+        <DesktopDropdownMenuItem to="/orders">
           Order History
         </DesktopDropdownMenuItem>
         <PackagingBalance />
-        <RedeemDepositButton onClick={handleClose} />
-        <SchedulePickupButton onClick={handleClose} />
-        <DesktopDropdownMenuItem onClick={handleClose} to="/giftcard">
+        <RedeemDepositButton />
+        <SchedulePickupButton />
+        <DesktopDropdownMenuItem to="/giftcard">
           Gift Cards
         </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem onClick={handleClose} to="/about">
-          About
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem onClick={handleClose} to="/backers">
+        <DesktopDropdownMenuItem to="/about">About</DesktopDropdownMenuItem>
+        <DesktopDropdownMenuItem to="/backers">
           Our Backers
         </DesktopDropdownMenuItem>
         <SignOutButton />
-      </Menu>
+      </DesktopDropdownMenu>
     </>
   ) : null;
 }

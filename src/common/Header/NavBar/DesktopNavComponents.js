@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+// Hooks
+import { useStores } from 'hooks/mobx';
 
 // Node Modules
 import PropTypes from 'prop-types';
 
 // npm Packaged Components
-import { Box, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Menu, Typography } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { IconContext } from 'react-icons';
+import { FaRegUserCircle } from 'react-icons/fa';
 import { useTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
@@ -51,6 +57,53 @@ DesktopNavItem.propTypes = {
   to: PropTypes.string.isRequired,
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
+
+export function DesktopDropdownMenu({ children, ...props }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { user } = useStores();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let elements = React.Children.toArray(children).map((c) =>
+    React.cloneElement(c, { onClick: handleClose }),
+  );
+
+  return (
+    <>
+      <Button aria-label="account" disableRipple onClick={handleClick}>
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            <IconContext.Provider value={{ size: '2em' }}>
+              <FaRegUserCircle />
+            </IconContext.Provider>
+          </Grid>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography variant="body1" component="span">
+                {user.user.name}
+              </Typography>
+              <ArrowDropDownIcon />
+            </Box>
+          </Grid>
+        </Grid>
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        keepMounted
+      >
+        {elements}
+      </Menu>
+    </>
+  );
+}
 
 export const DesktopDropdownMenuListItem = styled.li`
   && {
