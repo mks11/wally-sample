@@ -60,6 +60,9 @@ export const DesktopDropdownMenuListItem = styled.li`
     background-color: transparent;
     color: #212529;
     cursor: pointer;
+    &:hover {
+      background-color: rgba(153, 175, 255, 0.5);
+    }
   }
 `;
 
@@ -70,7 +73,6 @@ export const DesktopDropdownMenuLink = styled(Link)`
     width: 100%;
     color: #000;
     &:hover {
-      background-color: rgba(153, 175, 255, 0.5);
       text-decoration: none;
     }
   }
@@ -85,10 +87,6 @@ export const DesktopDropdownMenuButton = styled.button`
     -webkit-appearance: none;
     background-color: transparent;
     border: none;
-    &:hover {
-      background-color: rgba(153, 175, 255, 0.5);
-      text-decoration: none;
-    }
   }
 `;
 
