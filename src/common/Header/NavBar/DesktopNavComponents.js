@@ -48,7 +48,7 @@ export function DesktopNavItem({ to, text }) {
 
 DesktopNavItem.propTypes = {
   to: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
 
 export const DesktopDropdownMenuItem = styled.li`
