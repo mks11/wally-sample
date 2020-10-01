@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
@@ -9,7 +8,7 @@ import { useStores } from 'hooks/mobx';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import { Box, Typography } from '@material-ui/core';
+import { Box, List, Typography } from '@material-ui/core';
 
 // Custom Components
 import LoginForm from 'forms/authentication/LoginForm';
@@ -17,69 +16,91 @@ import SignupForm from 'forms/authentication/SignupForm';
 
 // Styled components
 import {
-  MobileNavLinkText,
-  MobileNavButton,
-  MobileNavDivider,
-} from 'common/Header/NavBar/MobileStyledComponents';
+  MobileNavItem,
+  MobileNavBtn,
+  MobileNavMenu,
+} from 'common/Header/NavBar/MobileNavComponents';
+import { BackButton } from 'common/ModalNavigation';
 import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
 import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
 
-function MobileGuestNav({ hideNav, handleLogin, handleSignup }) {
+export function MobileGuestNav() {
   return (
-    <>
-      <li>
-        <MobileNavButton onClick={handleLogin}>Log In</MobileNavButton>
-      </li>
-      <li>
-        <MobileNavButton onClick={handleSignup}>Sign Up</MobileNavButton>
-      </li>
-      <li>
-        <MobileNavDivider />
-      </li>
-      <li>
-        <Link to="/latest-news" onClick={hideNav}>
-          <MobileNavLinkText>COVID-19</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/about" onClick={hideNav}>
-          <MobileNavLinkText>About</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/howitworks" onClick={hideNav}>
-          <MobileNavLinkText>How It Works</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/blog" onClick={hideNav}>
-          <MobileNavLinkText>Blog</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/backers" onClick={hideNav}>
-          <MobileNavLinkText>Our Backers</MobileNavLinkText>
-        </Link>
-      </li>
-      {/* <li>
-        <Link to="/help" onClick={hideNav}>
-          <MobileNavLinkText>Help</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/giftcard" onClick={hideNav}>
-          <MobileNavLinkText>Gift Card</MobileNavLinkText>
-        </Link>
-      </li> */}
-    </>
+    <MobileNavMenu>
+      <MobileGuestNavMenu />
+    </MobileNavMenu>
   );
 }
 
-MobileGuestNav.propTypes = {
-  hideNav: PropTypes.func.isRequired,
-  handleLogin: PropTypes.func.isRequired,
-  handleSignup: PropTypes.func.isRequired,
-};
+function MobileGuestNavMenu() {
+  const { modalV2 } = useStores();
+
+  return (
+    <List>
+      <MobileLogInButton />
+      <MobileSignUpButton />
+      <MobileNavItem to="/latest-news" onClick={modalV2.close} hasDivider>
+        COVID-19
+      </MobileNavItem>
+      <MobileNavItem to="/about" onClick={modalV2.close} hasDivider>
+        About
+      </MobileNavItem>
+      <MobileNavItem to="/howitworks" onClick={modalV2.close} hasDivider>
+        How It Works
+      </MobileNavItem>
+      <MobileNavItem to="/blog" onClick={modalV2.close} hasDivider>
+        Blog
+      </MobileNavItem>
+      <MobileNavItem to="/backers" onClick={modalV2.close}>
+        Our Backers
+      </MobileNavItem>
+      {/* <MobileNavItem to="/help" onClick={modalV2.close} hasDivider>
+        Help
+      </MobileNavItem> */}
+      {/* <MobileNavItem to="/giftcard" onClick={modalV2.close}>
+        Gift Card
+      </MobileNavItem> */}
+    </List>
+  );
+}
+
+function MobileLogInButton() {
+  const { modalV2 } = useStores();
+  const login = () => {
+    modalV2.open(
+      <>
+        <BackButton>
+          <MobileGuestNavMenu />
+        </BackButton>
+        <LoginForm />
+      </>,
+    );
+  };
+  return (
+    <MobileNavBtn onClick={login} hasDivider>
+      Log In
+    </MobileNavBtn>
+  );
+}
+
+function MobileSignUpButton() {
+  const { modalV2 } = useStores();
+  const signup = () => {
+    modalV2.open(
+      <>
+        <BackButton>
+          <MobileGuestNavMenu />
+        </BackButton>
+        <SignupForm />
+      </>,
+    );
+  };
+  return (
+    <MobileNavBtn onClick={signup} hasDivider>
+      Sign Up
+    </MobileNavBtn>
+  );
+}
 
 export function DesktopGuestNav() {
   return (
