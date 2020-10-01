@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 // Hooks
 import { useStores } from 'hooks/mobx';
 
+// mobx
+import { observer } from 'mobx-react';
+
 // Node Modules
 import PropTypes from 'prop-types';
 
@@ -58,7 +61,7 @@ DesktopNavItem.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
 
-export function DesktopDropdownMenu({ children, ...props }) {
+export const DesktopDropdownMenu = observer(({ children, ...props }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { user } = useStores();
 
@@ -103,7 +106,7 @@ export function DesktopDropdownMenu({ children, ...props }) {
       </Menu>
     </>
   );
-}
+});
 
 export const DesktopDropdownMenuListItem = styled.li`
   && {

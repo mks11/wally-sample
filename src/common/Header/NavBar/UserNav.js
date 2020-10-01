@@ -5,6 +5,9 @@ import { formatMoney } from 'utils';
 // Hooks
 import { useStores } from 'hooks/mobx';
 
+// mobx
+import { observer } from 'mobx-react';
+
 // Services
 import { logModalView } from 'services/google-analytics';
 
@@ -108,7 +111,27 @@ export function MobileUserNav({
   );
 }
 
-export function DesktopUserNav() {
+const PackagingBalance = observer(() => {
+  const { user } = useStores();
+
+  if (user.user && typeof user.user.packaging_balance === 'number') {
+    const { packaging_balance } = user.user;
+    return (
+      <DesktopDropdownMenuListItem>
+        <Typography
+          align="left"
+          style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
+        >
+          Packaging Balance {formatMoney(packaging_balance)}
+        </Typography>
+      </DesktopDropdownMenuListItem>
+    );
+  }
+
+  return null;
+});
+
+export const DesktopUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
     <>
@@ -134,31 +157,10 @@ export function DesktopUserNav() {
         <DesktopDropdownMenuItem to="/backers">
           Our Backers
         </DesktopDropdownMenuItem>
-        <SignOutButton />
       </DesktopDropdownMenu>
     </>
   ) : null;
-}
-
-function PackagingBalance() {
-  const { user } = useStores();
-
-  if (user.user && typeof user.user.packaging_balance === 'number') {
-    const { packaging_balance } = user.user;
-    return (
-      <DesktopDropdownMenuListItem>
-        <Typography
-          align="left"
-          style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
-        >
-          Packaging Balance {formatMoney(packaging_balance)}
-        </Typography>
-      </DesktopDropdownMenuListItem>
-    );
-  }
-
-  return null;
-}
+});
 
 function SchedulePickupButton({ onClick }) {
   const { modalV2 } = useStores();
@@ -185,23 +187,6 @@ function RedeemDepositButton({ onClick }) {
   return (
     <DesktopDropdownMenuBtn onClick={redeemDeposit}>
       Redeem Packaging Deposit
-    </DesktopDropdownMenuBtn>
-  );
-}
-
-function SignOutButton() {
-  const { checkout, routing, user } = useStores();
-
-  function handleLogout() {
-    checkout.cart = null;
-    checkout.order = null;
-    user.logout();
-    routing.push('/');
-  }
-
-  return (
-    <DesktopDropdownMenuBtn onClick={handleLogout}>
-      Sign Out
     </DesktopDropdownMenuBtn>
   );
 }
