@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 // npm Packaged Components
 import { Box, Typography } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 // Styles
@@ -51,7 +52,7 @@ DesktopNavItem.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
 
-export const DesktopDropdownMenuItem = styled.li`
+export const DesktopDropdownMenuListItem = styled.li`
   && {
     position: relative;
     margin: 0;
@@ -59,30 +60,56 @@ export const DesktopDropdownMenuItem = styled.li`
     background-color: transparent;
     color: #212529;
     cursor: pointer;
-
-    &:before {
-      position: absolute;
-      content: '';
-      top: 0;
-      bottom: 0;
-      left: -15px;
-      border-left: 2px solid transparent;
-      border-left-color: transparent;
-    }
-
-    &:hover::before {
-      border-left-color: #6060a8;
-    }
   }
 `;
 
 export const DesktopDropdownMenuLink = styled(Link)`
   &&& {
     display: inline-block;
-    margin: 10px 0;
+    padding: 1.5em 3em;
     width: 100%;
-    &:hover::after {
-      border-bottom: 0.6px solid transparent;
+    color: #000;
+    &:hover {
+      background-color: rgba(153, 175, 255, 0.5);
+      text-decoration: none;
     }
   }
 `;
+
+export const DesktopDropdownMenuButton = styled.button`
+  &&& {
+    display: inline-block;
+    padding: 1.5em 3em;
+    width: 100%;
+    color: #000;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+    &:hover {
+      background-color: rgba(153, 175, 255, 0.5);
+      text-decoration: none;
+    }
+  }
+`;
+
+export function DesktopDropdownMenuItem({ onClick, children, to }) {
+  const theme = useTheme();
+  return (
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuLink onClick={onClick} to={to} theme={theme}>
+        <Typography>{children}</Typography>
+      </DesktopDropdownMenuLink>
+    </DesktopDropdownMenuListItem>
+  );
+}
+
+export function DesktopDropdownMenuBtn({ onClick, children }) {
+  const theme = useTheme();
+  return (
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuButton onClick={onClick} theme={theme}>
+        <Typography>{children}</Typography>
+      </DesktopDropdownMenuButton>
+    </DesktopDropdownMenuListItem>
+  );
+}

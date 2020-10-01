@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatMoney } from 'utils';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
 
+// Services
+import { logModalView } from 'services/google-analytics';
+
 // npm Package Components
-import { Box, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Grid,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { IconContext } from 'react-icons';
+import { FaRegUserCircle } from 'react-icons/fa';
 
 import {
   MobileNavLinkText,
@@ -17,11 +30,13 @@ import {
 } from './MobileStyledComponents';
 
 import {
-  DesktopDropdownMenuItem,
-  DesktopDropdownMenuLink,
   DesktopNavItem,
+  DesktopDropdownMenuItem,
+  DesktopDropdownMenuBtn,
 } from 'common/Header/NavBar/DesktopNavComponents';
 import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
+
+import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 
 export function MobileUserNav({
   hideNav,
@@ -102,78 +117,88 @@ export function MobileUserNav({
   );
 }
 
-export function DesktopUserNav({
-  balance,
-  handleRedeemDeposit,
-  handleSchedulePickup,
-  hideDropdown,
-}) {
-  return (
+export function DesktopUserNav({ balance, handleRedeemDeposit }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { user } = useStores();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return user.isUser ? (
     <>
-      <DesktopDropdownMenuItem>
-        <span className="dropdown-item">
-          Packaging Balance ({formatMoney(balance / 100)})
-        </span>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/orders">
-          Order History
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <a onClick={handleSchedulePickup} className="dropdown-item">
-          Schedule Pickup
-        </a>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/user">
+      <DesktopNavItem to="/main" text="Shop" />
+      <DesktopNavItem to="/blog" text="Blog" />
+      <DesktopNavItem to="/help" text="Help" />
+      <DesktopNavItem to="/latest-news" text="COVID-19" />
+      <DesktopNavItem to="/howitworks" text="How It Works" />
+      <Button aria-label="account" disableRipple onClick={handleClick}>
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            <IconContext.Provider value={{ size: '2em' }}>
+              <FaRegUserCircle />
+            </IconContext.Provider>
+          </Grid>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography variant="body1" component="span">
+                {user.user.name}
+              </Typography>
+              <ArrowDropDownIcon />
+            </Box>
+          </Grid>
+        </Grid>
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        keepMounted
+      >
+        <DesktopDropdownMenuItem onClick={handleClose} to="/user">
           Account Settings
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/latest-news">
-          COVID-19
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/about">
+        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuItem onClick={handleClose} to="/orders">
+          Order History
+        </DesktopDropdownMenuItem>
+        <SchedulePickupButton onClick={handleClose} />
+        <DesktopDropdownMenuItem onClick={handleClose} to="/about">
           About
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/howitworks">
-          How It Works
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/help">
-          Help
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/blog">
-          Blog
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/giftcard">
+        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuItem onClick={handleClose} to="/giftcard">
           Gift Card
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <DesktopDropdownMenuLink onClick={hideDropdown} to="/backers">
+        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuItem onClick={handleClose} to="/backers">
           Our Backers
-        </DesktopDropdownMenuLink>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <a onClick={handleRedeemDeposit} className="dropdown-item">
-          Redeem Deposit
-        </a>
-      </DesktopDropdownMenuItem>
-      <DesktopDropdownMenuItem>
-        <SignOutButton />
-      </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuItem>
+        {/* <DesktopDropdownMenuItem>
+          <a onClick={handleRedeemDeposit} className="dropdown-item">
+            Redeem Deposit
+          </a>
+        </DesktopDropdownMenuItem> */}
+        {/* <DesktopDropdownMenuItem>
+          <SignOutButton />
+        </DesktopDropdownMenuItem> */}
+      </Menu>
     </>
+  ) : null;
+}
+
+function SchedulePickupButton({ onClick }) {
+  const { modalV2 } = useStores();
+  const schedulePickup = () => {
+    logModalView('/schedulePickup');
+    onClick();
+    modalV2.open(<SchedulePickupForm />);
+  };
+  return (
+    <DesktopDropdownMenuBtn onClick={schedulePickup}>
+      Schedule Pickup
+    </DesktopDropdownMenuBtn>
   );
 }
 
