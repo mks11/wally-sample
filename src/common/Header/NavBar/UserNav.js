@@ -186,7 +186,7 @@ function RedeemDepositButton({ onClick }) {
 
   return (
     <DesktopDropdownMenuBtn onClick={redeemDeposit}>
-      Redeem Packaging Deposit
+      Redeem Packaging Balance
     </DesktopDropdownMenuBtn>
   );
 }

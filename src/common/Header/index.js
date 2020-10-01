@@ -8,7 +8,7 @@ import { useStores } from 'hooks/mobx';
 import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
-import { Box, Container, Grid, Typography } from '@material-ui/core';
+import { Box, Container, Grid } from '@material-ui/core';
 import { MobileView, BrowserView } from 'react-device-detect';
 
 // Styling
@@ -19,7 +19,14 @@ import Navbar from 'common/Header/NavBar';
 
 export default function Header() {
   return (
-    <Box py={4} component="header">
+    <Box
+      py={2}
+      component="header"
+      position="sticky"
+      top="0"
+      zIndex={10}
+      style={{ backgroundColor: '#fae1ff' }}
+    >
       <Container maxWidth="xl">
         <Grid container justify="space-between" alignItems="center">
           <Grid item>
