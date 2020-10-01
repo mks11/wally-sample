@@ -103,10 +103,28 @@ export const DesktopDropdownMenu = observer(({ children, ...props }) => {
         keepMounted
       >
         {elements}
+        <SignOutButton />
       </Menu>
     </>
   );
 });
+
+function SignOutButton() {
+  const { checkout, routing, user } = useStores();
+
+  function handleLogout() {
+    checkout.cart = null;
+    checkout.order = null;
+    user.logout();
+    routing.push('/');
+  }
+
+  return (
+    <DesktopDropdownMenuBtn onClick={handleLogout}>
+      Sign Out
+    </DesktopDropdownMenuBtn>
+  );
+}
 
 export const DesktopDropdownMenuListItem = styled.li`
   && {
