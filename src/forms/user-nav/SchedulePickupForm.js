@@ -20,7 +20,7 @@ import FormikAddressSelect from 'common/FormikAddressSelect';
 import FormikTextInput from 'common/FormikTextInput';
 
 export default function SchedulePickupForm() {
-  const { loading, user } = useStores();
+  const { loading, modalV2, snackbar, user } = useStores();
   return (
     <Formik
       initialValues={{
@@ -41,20 +41,14 @@ export default function SchedulePickupForm() {
             const start = moment(earliestTime).format('h:mm A');
             const end = moment(latestTime).format('h:mm A');
             const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
-            setTimeout(
-              () => modalStore.switchModal('success', successMsg),
-              600,
-            );
+            modalV2.close();
+            snackbar.openSnackbar(successMsg, 'success');
           })
           .catch(() => {
-            // Handle Error
-            setTimeout(
-              () =>
-                modalStore.switchModal(
-                  'error',
-                  'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
-                ),
-              600,
+            // TODO: HANDLE SPECIFIC UPS ERRORS
+            snackbar.openSnackbar(
+              'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
+              'error',
             );
           })
           .finally(() => {
@@ -104,7 +98,11 @@ export default function SchedulePickupForm() {
         return (
           <Form>
             <Grid container justify="center" spacing={4}>
-              <Typography variant="h1" gutterBottom>
+              <Typography
+                variant="h1"
+                gutterBottom
+                style={{ marginTop: '0.75em' }}
+              >
                 Schedule Pickup
               </Typography>
               <Grid item xs={12}>
@@ -176,7 +174,7 @@ export default function SchedulePickupForm() {
                   color="primary"
                   fullWidth
                   disabled={isSubmitting}
-                  style={{ padding: isMobile ? '1.5rem 2rem' : undefined }}
+                  style={{ padding: '0.75rem 1.5rem' }}
                 >
                   <Typography
                     variant="h3"
@@ -201,7 +199,7 @@ function DateInput({ value, onClick }) {
       variant="outlined"
       onClick={onClick}
       fullWidth
-      style={{ padding: isMobile ? '1.5rem 2rem' : undefined }}
+      style={{ padding: '0.75rem 1.5rem' }}
     >
       <Typography variant="body1" color="textSecondary">
         {value || 'Select a pickup date.'}
