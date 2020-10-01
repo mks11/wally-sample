@@ -32,7 +32,6 @@ function RootModalV2() {
       PaperProps={{
         square: false,
         style: {
-          minWidth: isMobile ? '100%' : '450px',
           top: 'unset',
           right: 'unset',
           left: 'unset',
@@ -41,12 +40,12 @@ function RootModalV2() {
       }}
     >
       <Box p={4}>
-        <Container maxWidth="sm">
-          <Grid container justify="flex-end">
+        <Container maxWidth="sm" disableGutters>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
             <Button onClick={handleClose}>
               <CloseIcon fontSize="large" />
             </Button>
-          </Grid>
+          </Box>
           {children}
         </Container>
       </Box>
