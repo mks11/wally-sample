@@ -108,7 +108,7 @@ export function DesktopDropdownMenuBtn({ onClick, children }) {
   return (
     <DesktopDropdownMenuListItem>
       <DesktopDropdownMenuButton onClick={onClick} theme={theme}>
-        <Typography>{children}</Typography>
+        <Typography align="left">{children}</Typography>
       </DesktopDropdownMenuButton>
     </DesktopDropdownMenuListItem>
   );
