@@ -1,16 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link as RLink } from 'react-router-dom';
+
+// Hooks
+import { useStores } from 'hooks/mobx';
+
+// mobx
+import { observer } from 'mobx-react';
+
+// Custom Components
 import {
-  DesktopDropdownMenuItem,
-  DesktopDropdownMenuLink,
-} from './DesktopNavComponents';
-import {
-  MobileNavButton,
   MobileNavLinkText,
-  MobileUserGreeting,
+  MobileNavButton,
   MobileNavDivider,
+  MobileUserGreeting,
 } from './MobileStyledComponents';
+import {
+  DesktopNavItem,
+  DesktopDropdownMenu,
+  DesktopDropdownMenuItem,
+} from 'common/Header/NavBar/DesktopNavComponents';
 
 export function MobileRetailNav({ hideNav, handleSignout, userName }) {
   return (
@@ -38,23 +46,19 @@ MobileRetailNav.propTypes = {
   hideNav: PropTypes.func.isRequired,
 };
 
-export function DesktopRetailNav({ hideDropdown, handleSignout }) {
-  return (
+export const DesktopRetailNav = observer(() => {
+  const { user } = useStores();
+
+  return user.isRetail ? (
     <>
-      <LinkDesktop to="/retail" onClick={hideDropdown}>
-        Home
-      </LinkDesktop>
-      <LinkDesktop to="/main" onClick={hideDropdown}>
-        Shop
-      </LinkDesktop>
-      <DesktopDropdownMenuItem>
-        <a onClick={handleSignout} className="dropdown-item">
-          Sign Out
-        </a>
-      </DesktopDropdownMenuItem>
+      <DesktopNavItem to="/retail" text="Home" />
+      <DesktopNavItem to="/main" text="Shop" />
+      <DesktopDropdownMenu>
+        {/* TODO: ADD LINKS AS NECESSARY */}
+      </DesktopDropdownMenu>
     </>
-  );
-}
+  ) : null;
+});
 
 function Link({ children, ...rest }) {
   return (
@@ -63,13 +67,5 @@ function Link({ children, ...rest }) {
         <MobileNavLinkText>{children}</MobileNavLinkText>
       </RLink>
     </li>
-  );
-}
-
-function LinkDesktop(props) {
-  return (
-    <DesktopDropdownMenuItem>
-      <DesktopDropdownMenuLink {...props} />
-    </DesktopDropdownMenuItem>
   );
 }
