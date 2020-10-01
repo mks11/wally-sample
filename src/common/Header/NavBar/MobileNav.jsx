@@ -4,7 +4,7 @@ import React from 'react';
 import { MobileUserNav } from './UserNav';
 import { MobileAdminNav } from './AdminNav';
 import { MobileOpsNav } from './OpsNav';
-// import { MobileRetailNav } from './Retail';
+import { MobileRetailNav } from './Retail';
 
 function MobileNav() {
   return (
@@ -12,7 +12,7 @@ function MobileNav() {
       <MobileUserNav />
       <MobileAdminNav />
       <MobileOpsNav />
-      {/* <MobileRetailNav /> */}
+      <MobileRetailNav />
     </>
   );
 }

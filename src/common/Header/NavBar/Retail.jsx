@@ -10,9 +10,9 @@ import { observer } from 'mobx-react';
 
 // Custom Components
 import {
-  MobileNavLinkText,
-  MobileNavButton,
-  MobileNavDivider,
+  MobileNavItem,
+  MobileNavMenu,
+  SignOutButton,
   MobileUserGreeting,
 } from './MobileNavComponents';
 import {
@@ -20,24 +20,28 @@ import {
   DesktopDropdownMenu,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
-export function MobileRetailNav({ hideNav, handleSignout, userName }) {
+export const MobileRetailNav = observer(() => {
+  const { user } = useStores();
+  return user.isRetail ? (
+    <MobileNavMenu>
+      <MobileRetailNavMenu />
+    </MobileNavMenu>
+  ) : null;
+});
+
+export function MobileRetailNavMenu() {
+  const { modalV2 } = useStores();
+
   return (
     <>
-      <li>
-        <MobileUserGreeting userName={userName} />
-      </li>
-      <li>
-        <MobileNavDivider />
-      </li>
-      <Link to="/retail" onClick={hideNav}>
+      <MobileUserGreeting />
+      <MobileNavItem to="/retail" onClick={modalV2.close} hasDivider>
         Home
-      </Link>
-      <Link to="/main" onClick={hideNav}>
+      </MobileNavItem>
+      <MobileNavItem to="/main" onClick={modalV2.close} hasDivider>
         Shop
-      </Link>
-      <li>
-        <MobileNavButton onClick={handleSignout}>Sign Out</MobileNavButton>
-      </li>
+      </MobileNavItem>
+      <SignOutButton />
     </>
   );
 }
