@@ -21,16 +21,17 @@ function Add({ stores: store, ...props }) {
     useRequest(store, async () => store.retail.getCategories()) || [];
   const { data: packaging } = useGet(API_PACKAGING_LIST, store);
 
-  const [addSubcategory, { success, loading: posting }] = usePost(
+  const [addSubcategory, { data, loading: posting }] = usePost(
     API_SUBCATEGORIES_POST,
     store,
   );
 
   useEffect(() => {
-    if (success) {
+    if (data && data.category_id) {
+      store.retail.addSubcategory(data);
       props.toggle();
     }
-  }, [success]);
+  }, [data]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     addSubcategory(values);

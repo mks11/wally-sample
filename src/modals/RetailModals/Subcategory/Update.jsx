@@ -19,21 +19,22 @@ import getIdNamePair from './../getIdNamePair';
 const findById = (col, id) => col.find((v) => v._id === id);
 
 function Update({ stores: { modal, ...store }, ...props }) {
+  const id = modal.modalData;
+
   // needed for Select Mui Component
   const [defaultPackagingType, setDefaultPackagingType] = useState('');
 
-  const id = modal.modalData;
-
-  const [
-    updateSubcategory,
-    { loading: updating, success: updateSuccess },
-  ] = usePatch(API_SUBCATEGORIES_UPDATE, store);
+  const [updateSubcategory, { loading: updating, data }] = usePatch(
+    API_SUBCATEGORIES_UPDATE,
+    store,
+  );
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (data && data.category_id) {
+      store.retail.updateSubcategory(data);
       props.toggle();
     }
-  }, [updateSuccess]);
+  }, [data]);
 
   const { data: packaging } = useGet(API_PACKAGING_LIST, store);
 

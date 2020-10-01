@@ -6,16 +6,17 @@ import { API_SUBCATEGORIES_DELETE } from 'config';
 
 function Delete({ stores: { modal, ...store }, ...props }) {
   const id = modal.modalData;
-  const [deleteCat, { success }] = useDelete(
+  const [deleteCat, { data }] = useDelete(
     `${API_SUBCATEGORIES_DELETE}/${id}`,
     store,
   );
 
   useEffect(() => {
-    if (success) {
+    if (data && data.category_id) {
+      store.retail.removeSubcategory(data.category_id);
       props.toggle();
     }
-  }, [success]);
+  }, [data]);
 
   const handleConfirm = () => {
     deleteCat();
