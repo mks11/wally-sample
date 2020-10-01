@@ -11,14 +11,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 // Styled Components
 import { HelperText } from 'styled-component-lib/HelperText';
 
-const PasswordInput = (props) => {
+const PasswordInput = ({ errorMsg, setErrorMsg, type, ...props }) => {
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     field.onChange(e);
-    if (props.setErrorMsg) {
-      props.setErrorMsg('');
+    if (setErrorMsg) {
+      setErrorMsg('');
     }
   };
 
@@ -33,9 +33,10 @@ const PasswordInput = (props) => {
   return (
     <>
       <TextField
-        error={(meta.touched && meta.error) || props.errorMsg}
+        error={(meta.touched && meta.error) || errorMsg ? true : false}
         type={showPassword ? 'text' : 'password'}
         {...field}
+        value={field.value || ''}
         onChange={handleChange}
         {...props}
         InputProps={{
@@ -52,9 +53,11 @@ const PasswordInput = (props) => {
           ),
         }}
       />
-      <HelperText error={(meta.touched && meta.error) || props.errorMsg}>
-        {(meta.touched && meta.error) || props.errorMsg
-          ? meta.error || props.errorMsg
+      <HelperText
+        error={(meta.touched && meta.error) || errorMsg ? true : false}
+      >
+        {(meta.touched && meta.error) || errorMsg
+          ? meta.error || errorMsg
           : ' '}
       </HelperText>
     </>

@@ -4,27 +4,30 @@ import { useField } from 'formik';
 import { TextField } from '@material-ui/core';
 import { HelperText } from 'styled-component-lib/HelperText';
 
-const FormikTextInput = (props) => {
+const FormikTextInput = ({ errorMsg, setErrorMsg, type, ...props }) => {
   const [field, meta] = useField(props);
   const handleChange = (e) => {
     field.onChange(e);
-    if (props.setErrorMsg) {
-      props.setErrorMsg('');
+    if (setErrorMsg) {
+      setErrorMsg('');
     }
   };
 
   return (
     <>
       <TextField
-        error={(meta.touched && meta.error) || props.errorMsg}
-        type={props.type || 'text'}
+        error={(meta.touched && meta.error) || errorMsg ? true : false}
+        type={type || 'text'}
         {...field}
+        value={field.value || ''}
         onChange={handleChange}
         {...props}
       />
-      <HelperText error={(meta.touched && meta.error) || props.errorMsg}>
-        {(meta.touched && meta.error) || props.errorMsg
-          ? meta.error || props.errorMsg
+      <HelperText
+        error={(meta.touched && meta.error) || errorMsg ? true : false}
+      >
+        {(meta.touched && meta.error) || errorMsg
+          ? meta.error || errorMsg
           : ' '}
       </HelperText>
     </>

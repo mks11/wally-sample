@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Config
 import { support } from 'config';
@@ -29,7 +29,9 @@ import ForgotPassword from 'forms/authentication/ForgotPassword';
 import SignupForm from 'forms/authentication/SignupForm';
 
 export default function LoginForm() {
-  const { modalV2, routing, snackbar, user } = useStores();
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const { modalV2, routing, user } = useStores();
 
   return (
     <Box>
@@ -55,6 +57,8 @@ export default function LoginForm() {
               variant="outlined"
               color="primary"
               placeholder="Email Address"
+              errorMsg={emailError}
+              setErrorMsg={setEmailError}
             />
           </Box>
           <Box my={2}>
@@ -71,6 +75,8 @@ export default function LoginForm() {
               variant="outlined"
               color="primary"
               placeholder="Password"
+              errorMsg={passwordError}
+              setErrorMsg={setPasswordError}
             />
           </Box>
           <Box my={2}>
@@ -108,18 +114,25 @@ export default function LoginForm() {
       .then(() => {
         let home = determineHome();
         routing.push(home);
+        modalV2.close();
       })
       .catch((error) => {
         const { response } = error;
-        let msg = `Attempt to log in failed. Please contact ${support} for support.`;
         if (response && response.data && response.data.error) {
-          msg = response.data.error.message;
+          const { name, message } = response.data.error;
+          if (name === 'NotFoundError') {
+            setEmailError(message);
+          } else {
+            setPasswordError(message);
+          }
+        } else {
+          setPasswordError(
+            `Attempt to log in failed. Please contact ${support} for support.`,
+          );
         }
-        snackbar.openSnackbar(msg, 'error');
       })
       .finally(() => {
         setSubmitting(false);
-        modalV2.close();
       });
   }
 
