@@ -4,7 +4,7 @@ import React from 'react';
 import { isMobile } from 'react-device-detect';
 
 // Material ui
-import { Box, Button, Drawer, Grid } from '@material-ui/core';
+import { Box, Button, Container, Drawer, Grid } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 // mobx
@@ -40,13 +40,15 @@ function RootModalV2() {
         },
       }}
     >
-      <Box px={4} py={2}>
-        <Grid container justify="flex-end">
-          <Button onClick={handleClose}>
-            <CloseIcon fontSize="large" />
-          </Button>
-        </Grid>
-        {children}
+      <Box p={4}>
+        <Container maxWidth="sm">
+          <Grid container justify="flex-end">
+            <Button onClick={handleClose}>
+              <CloseIcon fontSize="large" />
+            </Button>
+          </Grid>
+          {children}
+        </Container>
       </Box>
     </Drawer>
   );
