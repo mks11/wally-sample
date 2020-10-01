@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { formatMoney } from 'utils';
 
 // Hooks
@@ -16,12 +15,14 @@ import { Typography } from '@material-ui/core';
 
 // Custom Components
 import {
-  MobileNavLinkText,
-  MobileNavButton,
-  MobileNavDivider,
+  MobileNavItem,
+  MobileNavListItem,
+  MobileNavBtn,
+  MobileNavMenu,
+  SignOutButton,
   MobileUserGreeting,
-  MobileUserPackagingBalance,
 } from './MobileNavComponents';
+import { BackButton } from 'common/ModalNavigation';
 import {
   DesktopNavItem,
   DesktopDropdownMenu,
@@ -32,82 +33,119 @@ import {
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
-export function MobileUserNav({
-  hideNav,
-  handleSignout,
-  handleSchedulePickup,
-  userName,
-  userStoreCredit,
-}) {
+export function MobileUserNav() {
+  return (
+    <MobileNavMenu>
+      <MobileUserNavMenu />
+    </MobileNavMenu>
+  );
+}
+
+function MobileUserNavMenu() {
+  const { modalV2 } = useStores();
   return (
     <>
-      <li>
+      {/* <li>
         <MobileUserGreeting userName={userName} />
-      </li>
-      <li>
-        <MobileNavDivider />
-      </li>
-      <li style={{ padding: '15px 0' }}>
-        <MobileUserPackagingBalance balance={userStoreCredit} />
-      </li>
-      <li>
-        <Link to="/orders" onClick={hideNav}>
-          <MobileNavLinkText>Order History</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/user" onClick={hideNav}>
-          <MobileNavLinkText>Account Settings</MobileNavLinkText>
-        </Link>
-      </li>
+      </li> */}
+      <MobileNavItem to="/main" onClick={modalV2.close} hasDivider>
+        Shop
+      </MobileNavItem>
+      <MobileNavItem to="/blog" onClick={modalV2.close} hasDivider>
+        Blog
+      </MobileNavItem>
+      <MobileNavItem to="/help" onClick={modalV2.close} hasDivider>
+        Help
+      </MobileNavItem>
+      <MobileNavItem to="/latest-news" onClick={modalV2.close} hasDivider>
+        COVID-19
+      </MobileNavItem>
+      <MobileNavItem to="/howitworks" onClick={modalV2.close} hasDivider>
+        How It Works
+      </MobileNavItem>
+      <MobileNavItem to="/user" onClick={modalV2.close} hasDivider>
+        Account Settings
+      </MobileNavItem>
+      <MobileNavItem to="/orders" onClick={modalV2.close} hasDivider>
+        Order History
+      </MobileNavItem>
+      <MobilePackagingBalance />
+      <MobileRedeemPackagingBalance />
       {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
-      <li>
-        <MobileNavButton onClick={handleSchedulePickup}>
-          Schedule Pickup
-        </MobileNavButton>
-      </li>
-      <li>
-        <MobileNavButton onClick={handleSignout}>Sign Out</MobileNavButton>
-      </li>
-      <li>
-        <MobileNavDivider />
-      </li>
-      <li>
-        <Link to="/latest-news" onClick={hideNav}>
-          <MobileNavLinkText>COVID-19</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/about" onClick={hideNav}>
-          <MobileNavLinkText>About</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/howitworks" onClick={hideNav}>
-          <MobileNavLinkText>How It Works</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/help" onClick={hideNav}>
-          <MobileNavLinkText>Help</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/blog" onClick={hideNav}>
-          <MobileNavLinkText>Blog</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/giftcard" onClick={hideNav}>
-          <MobileNavLinkText>Gift Card</MobileNavLinkText>
-        </Link>
-      </li>
-      <li>
-        <Link to="/backers" onClick={hideNav}>
-          <MobileNavLinkText>Our Backers</MobileNavLinkText>
-        </Link>
-      </li>
+      <MobileSchedulePickupButton />
+      <MobileNavItem to="/about" onClick={modalV2.close} hasDivider>
+        About
+      </MobileNavItem>
+      <MobileNavItem to="/giftcard" onClick={modalV2.close} hasDivider>
+        Gift Cards
+      </MobileNavItem>
+      <MobileNavItem to="/backers" onClick={modalV2.close} hasDivider>
+        Our Backers
+      </MobileNavItem>
+      <SignOutButton />
     </>
+  );
+}
+
+const MobilePackagingBalance = observer(() => {
+  const { user } = useStores();
+
+  if (user.user && typeof user.user.packaging_balance === 'number') {
+    const { packaging_balance } = user.user;
+    const formattedBalance = formatMoney(packaging_balance / 100);
+    return (
+      <MobileNavListItem divider>
+        <Typography variant="h4" component="span" align="left">
+          Packaging Balance ({formattedBalance})
+        </Typography>
+      </MobileNavListItem>
+    );
+  }
+  return null;
+});
+
+function MobileRedeemPackagingBalance() {
+  const { modalV2 } = useStores();
+  const redeemDeposit = () => {
+    logModalView('/redeem-deposit');
+    modalV2.open(
+      <>
+        <BackButton>
+          <MobileUserNavMenu />
+        </BackButton>
+        <RedeemPackagingBalance />
+      </>,
+    );
+  };
+
+  return (
+    <MobileNavListItem onClick={redeemDeposit} divider>
+      <Typography variant="h4" component="span">
+        Redeem Packaging Balance
+      </Typography>
+    </MobileNavListItem>
+  );
+}
+
+function MobileSchedulePickupButton() {
+  const { modalV2 } = useStores();
+  const schedulePickup = () => {
+    logModalView('/schedulePickup');
+    modalV2.open(
+      <>
+        <BackButton>
+          <MobileUserNavMenu />
+        </BackButton>
+        <SchedulePickupForm />
+      </>,
+    );
+  };
+  return (
+    <MobileNavListItem onClick={schedulePickup} divider>
+      <Typography variant="h4" component="span">
+        Schedule Pickup
+      </Typography>
+    </MobileNavListItem>
   );
 }
 
@@ -116,13 +154,14 @@ const PackagingBalance = observer(() => {
 
   if (user.user && typeof user.user.packaging_balance === 'number') {
     const { packaging_balance } = user.user;
+    const formattedBalance = formatMoney(packaging_balance / 100);
     return (
       <DesktopDropdownMenuListItem>
         <Typography
           align="left"
           style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
         >
-          Packaging Balance {formatMoney(packaging_balance)}
+          Packaging Balance {formattedBalance}
         </Typography>
       </DesktopDropdownMenuListItem>
     );

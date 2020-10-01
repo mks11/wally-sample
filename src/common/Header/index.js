@@ -54,7 +54,7 @@ const LogoDesktop = styled.img`
 `;
 
 const LogoMobile = styled.img`
-  height: 48px;
+  height: 32px;
 `;
 
 function Logo() {
@@ -69,18 +69,15 @@ function Logo() {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <MobileView>
-          <LogoMobile
-            src="/images/logo-condensed.svg"
-            alt="The Wally Shop W logo."
-          />
-        </MobileView>
+        {/* <MobileView> */}
+        <LogoMobile src="/images/logo-full.svg" alt="The Wally Shop W logo." />
+        {/* </MobileView>
         <BrowserView>
           <LogoDesktop
             src="/images/logo-full.svg"
             alt="The Wally Shop W logo."
           />
-        </BrowserView>
+        </BrowserView> */}
       </Link>
     </Box>
   );

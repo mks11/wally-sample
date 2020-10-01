@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { formatMoney } from 'utils';
-
 // Hooks
 import { useStores } from 'hooks/mobx';
 
@@ -14,7 +12,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const MobileNavLink = styled(Link)`
-  padding: 1.5em 3em;
+  padding: 1.5em;
   width: 100%;
 `;
 
@@ -37,12 +35,16 @@ export function MobileNavItem({ children, hasDivider, onClick, to }) {
 
 export const MobileNavButton = styled.button`
   display: inline-block;
-  padding: 1.5em 3em;
+  padding: 1.5em;
   width: 100%;
   color: #000;
   -webkit-appearance: none;
   background-color: transparent;
   border: none;
+`;
+
+export const MobileNavListItem = styled(ListItem)`
+  padding: 2.5em 1.5em;
 `;
 
 export const MobileNavDivider = styled(Divider)`
@@ -61,6 +63,20 @@ export function MobileNavBtn({ onClick, children, hasDivider }) {
   );
 }
 
+export function SignOutButton() {
+  const { checkout, modalV2, routing, user } = useStores();
+
+  function handleLogout() {
+    checkout.cart = null;
+    checkout.order = null;
+    user.logout();
+    routing.push('/');
+    modalV2.close();
+  }
+
+  return <MobileNavBtn onClick={handleLogout}>Sign Out</MobileNavBtn>;
+}
+
 const WavingHand = styled.span`
   margin-left: 0.25rem;
 `;
@@ -72,15 +88,6 @@ export function MobileUserGreeting({ userName }) {
       <WavingHand role="img" aria-label="Waving Hand">
         👋
       </WavingHand>
-    </MobileNavLinkText>
-  );
-}
-
-export function MobileUserPackagingBalance({ balance }) {
-  const formattedBalance = formatMoney(balance / 100);
-  return (
-    <MobileNavLinkText>
-      Packaging Balance ({formattedBalance})
     </MobileNavLinkText>
   );
 }

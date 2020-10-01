@@ -8,7 +8,7 @@ import { useStores } from 'hooks/mobx';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import { Box, List, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // Custom Components
 import LoginForm from 'forms/authentication/LoginForm';
@@ -36,7 +36,7 @@ function MobileGuestNavMenu() {
   const { modalV2 } = useStores();
 
   return (
-    <List>
+    <>
       <MobileLogInButton />
       <MobileSignUpButton />
       <MobileNavItem to="/latest-news" onClick={modalV2.close} hasDivider>
@@ -60,7 +60,7 @@ function MobileGuestNavMenu() {
       {/* <MobileNavItem to="/giftcard" onClick={modalV2.close}>
         Gift Card
       </MobileNavItem> */}
-    </List>
+    </>
   );
 }
 
