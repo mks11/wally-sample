@@ -17,7 +17,6 @@ import { Typography } from '@material-ui/core';
 import {
   MobileNavItem,
   MobileNavListItem,
-  MobileNavBtn,
   MobileNavMenu,
   SignOutButton,
   MobileUserGreeting,
@@ -34,11 +33,12 @@ import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
 export function MobileUserNav() {
-  return (
+  const { user } = useStores();
+  return user.isUser ? (
     <MobileNavMenu>
       <MobileUserNavMenu />
     </MobileNavMenu>
-  );
+  ) : null;
 }
 
 function MobileUserNavMenu() {
