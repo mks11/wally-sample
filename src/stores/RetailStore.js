@@ -51,10 +51,9 @@ class RetailStore {
     this.categories = this.categories.filter((c) => c.category_id !== catId);
   }
 
-
-  / ** 
-      subcategory crud
-  ** /
+  /** 
+      subcategory cruds
+  **/
 
   findSubcategoryById(catId) {
     return this.subcategories.find((c) => c.category_id === catId);
@@ -90,7 +89,9 @@ class RetailStore {
   }
 
   removeSubcategory(catId) {
-    this.subcategories = this.subcategories.filter((c) => c.category_id !== catId);
+    this.subcategories = this.subcategories.filter(
+      (c) => c.category_id !== catId,
+    );
   }
 
   async getCategories({ refetch = false } = {}) {
@@ -126,7 +127,7 @@ decorate(RetailStore, {
   activeContent: observable,
   categories: observable,
   setActiveContent: action,
-  
+
   // ACTIONS THAT REGARD THE CATEGORIES PROPERTY
   addCategory: action,
   updateCategory: action,
