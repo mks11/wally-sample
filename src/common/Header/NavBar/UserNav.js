@@ -45,9 +45,7 @@ function MobileUserNavMenu() {
   const { modalV2 } = useStores();
   return (
     <>
-      {/* <li>
-        <MobileUserGreeting userName={userName} />
-      </li> */}
+      <MobileUserGreeting />
       <MobileNavItem to="/main" onClick={modalV2.close} hasDivider>
         Shop
       </MobileNavItem>

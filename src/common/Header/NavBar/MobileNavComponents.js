@@ -1,5 +1,8 @@
 import React from 'react';
 
+// mobx
+import { observer } from 'mobx-react';
+
 // Hooks
 import { useStores } from 'hooks/mobx';
 
@@ -63,6 +66,26 @@ export function MobileNavBtn({ onClick, children, hasDivider }) {
   );
 }
 
+export const MobileUserGreeting = observer(() => {
+  const { user } = useStores();
+  var firstName;
+  if (user.user && user.user.name) firstName = user.user.name.split(' ')[0];
+  return firstName ? (
+    <MobileNavListItem>
+      <Typography variant="h4" component="span">
+        Hello {firstName}
+      </Typography>
+      <span
+        role="img"
+        aria-label="Waving Hand"
+        style={{ marginLeft: '0.4em', fontSize: '1.6em' }}
+      >
+        👋
+      </span>
+    </MobileNavListItem>
+  ) : null;
+});
+
 export function SignOutButton() {
   const { checkout, modalV2, routing, user } = useStores();
 
@@ -75,21 +98,6 @@ export function SignOutButton() {
   }
 
   return <MobileNavBtn onClick={handleLogout}>Sign Out</MobileNavBtn>;
-}
-
-const WavingHand = styled.span`
-  margin-left: 0.25rem;
-`;
-
-export function MobileUserGreeting({ userName }) {
-  return (
-    <MobileNavLinkText>
-      Hello {userName}
-      <WavingHand role="img" aria-label="Waving Hand">
-        👋
-      </WavingHand>
-    </MobileNavLinkText>
-  );
 }
 
 export function MobileNavMenu({ children }) {
