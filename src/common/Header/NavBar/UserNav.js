@@ -25,6 +25,7 @@ import {
 import {
   DesktopNavItem,
   DesktopDropdownMenuItem,
+  DesktopDropdownMenuListItem,
   DesktopDropdownMenuBtn,
 } from 'common/Header/NavBar/DesktopNavComponents';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
@@ -109,7 +110,7 @@ export function MobileUserNav({
   );
 }
 
-export function DesktopUserNav({ balance, handleRedeemDeposit }) {
+export function DesktopUserNav() {
   const [anchorEl, setAnchorEl] = useState(null);
   const { user } = useStores();
 
@@ -120,7 +121,6 @@ export function DesktopUserNav({ balance, handleRedeemDeposit }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return user.isUser ? (
     <>
       <DesktopNavItem to="/main" text="Shop" />
@@ -157,21 +157,42 @@ export function DesktopUserNav({ balance, handleRedeemDeposit }) {
         <DesktopDropdownMenuItem onClick={handleClose} to="/orders">
           Order History
         </DesktopDropdownMenuItem>
+        <PackagingBalance />
+        <RedeemDepositButton onClick={handleClose} />
         <SchedulePickupButton onClick={handleClose} />
+        <DesktopDropdownMenuItem onClick={handleClose} to="/giftcard">
+          Gift Cards
+        </DesktopDropdownMenuItem>
         <DesktopDropdownMenuItem onClick={handleClose} to="/about">
           About
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem onClick={handleClose} to="/giftcard">
-          Gift Card
         </DesktopDropdownMenuItem>
         <DesktopDropdownMenuItem onClick={handleClose} to="/backers">
           Our Backers
         </DesktopDropdownMenuItem>
-        <RedeemDepositButton onClick={handleClose} />
         <SignOutButton />
       </Menu>
     </>
   ) : null;
+}
+
+function PackagingBalance() {
+  const { user } = useStores();
+
+  if (user.user && typeof user.user.packaging_balance === 'number') {
+    const { packaging_balance } = user.user;
+    return (
+      <DesktopDropdownMenuListItem>
+        <Typography
+          align="left"
+          style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
+        >
+          Packaging Balance {formatMoney(packaging_balance)}
+        </Typography>
+      </DesktopDropdownMenuListItem>
+    );
+  }
+
+  return null;
 }
 
 function SchedulePickupButton({ onClick }) {
