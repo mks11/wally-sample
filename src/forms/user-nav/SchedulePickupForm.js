@@ -5,6 +5,9 @@ import axios from 'axios';
 import moment from 'moment';
 import { isMobile } from 'react-device-detect';
 
+// Hooks
+import { useStores } from 'hooks/mobx';
+
 // API
 import { API_SCHEDULE_PICKUP } from 'config';
 
@@ -16,12 +19,8 @@ import FormikTimeSelect from 'common/FormikTimeSelect';
 import FormikAddressSelect from 'common/FormikAddressSelect';
 import FormikTextInput from 'common/FormikTextInput';
 
-export default function SchedulePickupForm({
-  userStore,
-  loadingStore,
-  modalStore,
-  ...props
-}) {
+export default function SchedulePickupForm() {
+  const { loading, user } = useStores();
   return (
     <Formik
       initialValues={{
@@ -33,9 +32,9 @@ export default function SchedulePickupForm({
       }}
       validate={validate}
       onSubmit={(values, actions) => {
-        loadingStore.toggle();
+        loading.show();
         axios
-          .post(API_SCHEDULE_PICKUP, values, userStore.getHeaderAuth())
+          .post(API_SCHEDULE_PICKUP, values, user.getHeaderAuth())
           .then((res) => {
             const { earliestTime, latestTime } = res.data;
             const date = moment(earliestTime).format('dddd, MMMM Do');
@@ -59,7 +58,7 @@ export default function SchedulePickupForm({
             );
           })
           .finally(() => {
-            setTimeout(() => loadingStore.toggle(), 300);
+            setTimeout(() => loading.hide(), 300);
             actions.setSubmitting(false);
           });
       }}
@@ -151,7 +150,7 @@ export default function SchedulePickupForm({
                   handleSelectAddress={setFieldValue}
                   label="Pickup Address"
                   labelId="pickup-address"
-                  userStore={userStore}
+                  userStore={user}
                   touched={touched.addressId}
                   error={errors.addressId}
                 />
