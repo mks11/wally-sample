@@ -1,17 +1,25 @@
-import React from "react";
-import styled from "styled-components";
-import { Button, Divider, Typography } from "@material-ui/core";
-import { formatMoney } from "utils";
+import React from 'react';
+import styled from 'styled-components';
+
+import { formatMoney } from 'utils';
+
+// Hooks
+import { useStores } from 'hooks/mobx';
+
+// npm Package Components
+import { Button, Divider, IconButton, Typography } from '@material-ui/core';
+import { IconContext } from 'react-icons';
+import { MdMenu } from 'react-icons/md';
 
 export const MobileNavLinkText = styled(Typography).attrs({
-  variant: "h4",
-  component: "span",
+  variant: 'h4',
+  component: 'span',
 })`
   color: #2d4058;
 `;
 
 export const MobileNavButtonWrapper = styled(Button).attrs({
-  variant: "contained",
+  variant: 'contained',
 })`
   text-align: center;
   min-width: 210px;
@@ -56,5 +64,17 @@ export function MobileUserPackagingBalance({ balance }) {
     <MobileNavLinkText>
       Packaging Balance ({formattedBalance})
     </MobileNavLinkText>
+  );
+}
+
+export function MobileNavMenu({ children }) {
+  const { modalV2 } = useStores();
+  const openNav = () => modalV2.open(children);
+  return (
+    <IconButton aria-label="menu" onClick={openNav}>
+      <IconContext.Provider value={{ size: '1.5em' }}>
+        <MdMenu />
+      </IconContext.Provider>
+    </IconButton>
   );
 }
