@@ -1,10 +1,7 @@
 import React from 'react';
 
-// Node Modlues
-import { isMobile } from 'react-device-detect';
-
 // Material ui
-import { Box, Button, Container, Drawer, Grid } from '@material-ui/core';
+import { Box, Button, Container, Drawer } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 // mobx
@@ -21,7 +18,7 @@ function RootModalV2() {
 
   return (
     <Drawer
-      anchor="top"
+      anchor="right"
       open={isOpen}
       onClose={handleClose}
       style={{
@@ -32,10 +29,8 @@ function RootModalV2() {
       PaperProps={{
         square: false,
         style: {
-          top: 'unset',
-          right: 'unset',
-          left: 'unset',
-          bottom: 'unset',
+          width: '100%',
+          maxWidth: '576px',
         },
       }}
     >
