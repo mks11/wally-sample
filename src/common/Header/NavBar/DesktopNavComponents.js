@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 // Hooks
 import { useStores } from 'hooks/mobx';
 
-// mobx
-import { observer } from 'mobx-react';
-
 // Node Modules
 import PropTypes from 'prop-types';
 
@@ -46,9 +43,15 @@ export const DesktopNavLinkText = styled(Typography).attrs({
   }
 `;
 
+const MenuButton = styled(Button)`
+  &:hover {
+    background-color: transparent;
+  }
+`;
+
 export function DesktopNavItem({ to, text }) {
   return (
-    <Box px={1} py={2}>
+    <Box px={1} py={2} mr={1}>
       <DesktopNavLink to={to}>
         <DesktopNavLinkText>{text}</DesktopNavLinkText>
       </DesktopNavLink>
@@ -61,10 +64,8 @@ DesktopNavItem.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
 
-export const DesktopDropdownMenu = observer(({ children, ...props }) => {
+export const DesktopDropdownMenu = ({ children, ...props }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user } = useStores();
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -79,23 +80,21 @@ export const DesktopDropdownMenu = observer(({ children, ...props }) => {
 
   return (
     <>
-      <Button aria-label="account" disableRipple onClick={handleClick}>
-        <Grid container justify="center">
-          <Grid item xs={12}>
-            <IconContext.Provider value={{ size: '2em' }}>
-              <FaRegUserCircle />
-            </IconContext.Provider>
-          </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="body1" component="span">
-                {user.user.name}
-              </Typography>
-              <ArrowDropDownIcon />
-            </Box>
-          </Grid>
-        </Grid>
-      </Button>
+      <MenuButton aria-label="account" disableRipple onClick={handleClick}>
+        <Box position="relative">
+          <IconContext.Provider value={{ size: '2em' }}>
+            <FaRegUserCircle />
+          </IconContext.Provider>
+          <ArrowDropDownIcon />
+          <Typography
+            variant="body1"
+            component="span"
+            style={{ position: 'absolute', bottom: '-16px', left: '0' }}
+          >
+            Menu
+          </Typography>
+        </Box>
+      </MenuButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -107,7 +106,7 @@ export const DesktopDropdownMenu = observer(({ children, ...props }) => {
       </Menu>
     </>
   );
-});
+};
 
 function SignOutButton() {
   const { checkout, routing, user } = useStores();
