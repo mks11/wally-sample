@@ -15,6 +15,7 @@ import MobileCartBtn from './MobileCartBtn';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
+import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 
 class Mainpage extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Mainpage extends Component {
     this.uiStore = this.props.store.ui;
     this.routing = this.props.store.routing;
     this.modalStore = this.props.store.modal;
+    this.modalV2 = this.props.store.modalV2;
     this.productStore = this.props.store.product;
     this.checkoutStore = this.props.store.checkout;
     this.zipStore = this.props.store.zip;
@@ -48,7 +50,7 @@ class Mainpage extends Component {
     logPageView(location.pathname);
     this.userStore.getStatus(true).then((status) => {
       if (match && match.path === '/schedule-pickup') {
-        this.modalStore.toggleModal('schedulepickup');
+        this.modalV2.open(<SchedulePickupForm />);
       }
 
       if (window.location.pathname.split('/')[1] === 'packaging') {
