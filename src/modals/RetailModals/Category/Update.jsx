@@ -34,7 +34,7 @@ function Update({ stores: store, ...props }) {
 
   useEffect(() => {
     if (data && data.category_id) {
-      store.retail.updateCategories(data);
+      store.retail.updateCategory(data);
       props.toggle(); // close the modal
     }
   }, [data]);

@@ -38,7 +38,7 @@ class RetailStore {
     this.categories = sort(this.categories);
   }
 
-  updateCategories(category) {
+  updateCategory(category) {
     const { category_id } = category;
     const idx = this.getCachedCatIndex(category_id);
     if (idx > -1) {
@@ -49,6 +49,48 @@ class RetailStore {
 
   removeCategory(catId) {
     this.categories = this.categories.filter((c) => c.category_id !== catId);
+  }
+
+
+  / ** 
+      subcategory crud
+  ** /
+
+  findSubcategoryById(catId) {
+    return this.subcategories.find((c) => c.category_id === catId);
+  }
+
+  isSubcategoryCached = (catId) => {
+    if (this.findSubcategoryById(catId)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  getCachedSubcatIndex(catId) {
+    return this.subcategories.findIndex((c) => c.category_id === catId);
+  }
+
+  addSubcategory(category) {
+    if (this.isSubcategoryCached(category.category_id)) {
+      return;
+    }
+    this.subcategories.push(category);
+    this.subcategories = sort(this.subcategories);
+  }
+
+  updateSubcategory(category) {
+    const { category_id } = category;
+    const idx = this.getCachedSubcatIndex(category_id);
+    if (idx > -1) {
+      this.subcategories.splice(idx, 1, category);
+      this.subcategories = sort(this.subcategories);
+    }
+  }
+
+  removeSubcategory(catId) {
+    this.subcategories = this.subcategories.filter((c) => c.category_id !== catId);
   }
 
   async getCategories({ refetch = false } = {}) {
@@ -83,14 +125,18 @@ class RetailStore {
 decorate(RetailStore, {
   activeContent: observable,
   categories: observable,
-
-  // ACTIONS THAT REGARD THE CATEGORIES PROPERTY
   setActiveContent: action,
-  isCategoryCached: action,
-  getCachedCatIndex: action,
+  
+  // ACTIONS THAT REGARD THE CATEGORIES PROPERTY
   addCategory: action,
-  updateCategories: action,
+  updateCategory: action,
   removeCategory: action,
+
+  // ACTIONS THAT REGARD THE SUBCATEGORIES
+  addSubcategory: action,
+  updateSubcategory: action,
+  removeSubcategory: action,
+
   // API CALLS
   getCategories: action,
   getSubcategories: action,
