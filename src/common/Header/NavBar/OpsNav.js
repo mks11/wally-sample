@@ -19,14 +19,14 @@ import {
   DesktopDropdownMenuItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
-export function MobileOpsNav() {
+export const MobileOpsNav = observer(() => {
   const { user } = useStores();
   return user.isOps || user.isOpsLead ? (
     <MobileNavMenu>
       <MobileOpsNavMenu />
     </MobileNavMenu>
   ) : null;
-}
+});
 
 export const MobileOpsNavMenu = observer(() => {
   const { user, modalV2 } = useStores();

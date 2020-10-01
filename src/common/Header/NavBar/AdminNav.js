@@ -19,14 +19,14 @@ import {
   DesktopDropdownMenuItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
-export function MobileAdminNav() {
+export const MobileAdminNav = observer(() => {
   const { user } = useStores();
   return user.isAdmin ? (
     <MobileNavMenu>
       <MobileAdminNavMenu />
     </MobileNavMenu>
   ) : null;
-}
+});
 
 export function MobileAdminNavMenu() {
   const { modalV2 } = useStores();

@@ -32,14 +32,14 @@ import {
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
-export function MobileUserNav() {
+export const MobileUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
     <MobileNavMenu>
       <MobileUserNavMenu />
     </MobileNavMenu>
   ) : null;
-}
+});
 
 function MobileUserNavMenu() {
   const { modalV2 } = useStores();
