@@ -15,6 +15,13 @@ const PasswordInput = (props) => {
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleChange = (e) => {
+    field.onChange(e);
+    if (props.setErrorMsg) {
+      props.setErrorMsg('');
+    }
+  };
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -26,9 +33,10 @@ const PasswordInput = (props) => {
   return (
     <>
       <TextField
-        error={!!(meta.touched && meta.error)}
+        error={(meta.touched && meta.error) || props.errorMsg}
         type={showPassword ? 'text' : 'password'}
         {...field}
+        onChange={handleChange}
         {...props}
         InputProps={{
           endAdornment: (
@@ -44,8 +52,10 @@ const PasswordInput = (props) => {
           ),
         }}
       />
-      <HelperText error={!!(meta.touched && meta.error)}>
-        {meta.touched && meta.error ? meta.error : ' '}
+      <HelperText error={(meta.touched && meta.error) || props.errorMsg}>
+        {(meta.touched && meta.error) || props.errorMsg
+          ? meta.error || props.errorMsg
+          : ' '}
       </HelperText>
     </>
   );

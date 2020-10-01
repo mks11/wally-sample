@@ -6,16 +6,26 @@ import { HelperText } from 'styled-component-lib/HelperText';
 
 const FormikTextInput = (props) => {
   const [field, meta] = useField(props);
+  const handleChange = (e) => {
+    field.onChange(e);
+    if (props.setErrorMsg) {
+      props.setErrorMsg('');
+    }
+  };
+
   return (
     <>
       <TextField
-        error={!!(meta.touched && meta.error)}
+        error={(meta.touched && meta.error) || props.errorMsg}
         type={props.type || 'text'}
         {...field}
+        onChange={handleChange}
         {...props}
       />
-      <HelperText error={!!(meta.touched && meta.error)}>
-        {meta.touched && meta.error ? meta.error : ' '}
+      <HelperText error={(meta.touched && meta.error) || props.errorMsg}>
+        {(meta.touched && meta.error) || props.errorMsg
+          ? meta.error || props.errorMsg
+          : ' '}
       </HelperText>
     </>
   );
