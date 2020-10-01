@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { findIndex } from 'lodash';
 import { observer } from 'mobx-react';
-import { connect } from 'utils';
 import {
   Button,
   TableBody,
