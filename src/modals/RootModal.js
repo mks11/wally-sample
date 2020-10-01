@@ -24,7 +24,6 @@ import WaitingListModal from './WaitingListModal';
 import EmailVerification from './EmailVerification';
 import JoinWaitlistModal from './JoinWaitlistModal';
 import RedeemDepositModal from './RedeemDepositModal';
-import SchedulePickupModal from './SchedulePickupModal';
 import PackagingDepositModal from './PackagingDepositModal';
 import AddressUpdateModal from './AddressUpdate';
 import AddressDeleteModal from './AddressDelete';
@@ -53,7 +52,6 @@ const ModalRoutes = {
   waitinglist: WaitingListModal,
   emailverification: EmailVerification,
   joinwaitlist: JoinWaitlistModal,
-  schedulepickup: SchedulePickupModal,
   redeemdeposit: RedeemDepositModal,
   packagingdeposit: PackagingDepositModal,
   success: SuccessModal,
