@@ -9,18 +9,12 @@ import { useStores } from 'hooks/mobx';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import {
-  Box,
-  Button,
-  Grid,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, Grid, Menu, Typography } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { IconContext } from 'react-icons';
 import { FaRegUserCircle } from 'react-icons/fa';
 
+// Custom Components
 import {
   MobileNavLinkText,
   MobileNavButton,
@@ -28,15 +22,13 @@ import {
   MobileUserGreeting,
   MobileUserPackagingBalance,
 } from './MobileStyledComponents';
-
 import {
   DesktopNavItem,
   DesktopDropdownMenuItem,
   DesktopDropdownMenuBtn,
 } from 'common/Header/NavBar/DesktopNavComponents';
-import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
-
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
+import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
 export function MobileUserNav({
   hideNav,
@@ -175,14 +167,8 @@ export function DesktopUserNav({ balance, handleRedeemDeposit }) {
         <DesktopDropdownMenuItem onClick={handleClose} to="/backers">
           Our Backers
         </DesktopDropdownMenuItem>
-        {/* <DesktopDropdownMenuItem>
-          <a onClick={handleRedeemDeposit} className="dropdown-item">
-            Redeem Deposit
-          </a>
-        </DesktopDropdownMenuItem> */}
-        {/* <DesktopDropdownMenuItem>
-          <SignOutButton />
-        </DesktopDropdownMenuItem> */}
+        <RedeemDepositButton onClick={handleClose} />
+        <SignOutButton />
       </Menu>
     </>
   ) : null;
@@ -202,6 +188,21 @@ function SchedulePickupButton({ onClick }) {
   );
 }
 
+function RedeemDepositButton({ onClick }) {
+  const { modalV2 } = useStores();
+  const redeemDeposit = () => {
+    logModalView('/redeem-deposit');
+    onClick();
+    modalV2.open(<RedeemPackagingBalance />);
+  };
+
+  return (
+    <DesktopDropdownMenuBtn onClick={redeemDeposit}>
+      Redeem Packaging Deposit
+    </DesktopDropdownMenuBtn>
+  );
+}
+
 function SignOutButton() {
   const { checkout, routing, user } = useStores();
 
@@ -213,13 +214,8 @@ function SignOutButton() {
   }
 
   return (
-    <ColorfulWallyButton
-      onClick={handleLogout}
-      color={'#000'}
-      bordercolor={'#000'}
-      bgColor={'transparent'}
-    >
-      <Typography variant="body1">Sign Out</Typography>
-    </ColorfulWallyButton>
+    <DesktopDropdownMenuBtn onClick={handleLogout}>
+      Sign Out
+    </DesktopDropdownMenuBtn>
   );
 }
