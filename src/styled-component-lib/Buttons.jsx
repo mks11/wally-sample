@@ -33,7 +33,7 @@ export const DangerButton = styled(PrimaryWallyButton).attrs({
   }
 `;
 
-export const ColorfulWallyButton = styled(Button)`
+export const ColorfulWallyButton = styled.button`
   background-color: ${(props) => props.bgColor || '#97adff'};
   border: ${(props) =>
     props.bordercolor ? `1px solid ${props.bordercolor}` : 'none'};
