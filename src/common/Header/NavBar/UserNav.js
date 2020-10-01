@@ -21,7 +21,7 @@ import {
   MobileNavDivider,
   MobileUserGreeting,
   MobileUserPackagingBalance,
-} from './MobileStyledComponents';
+} from './MobileNavComponents';
 import {
   DesktopNavItem,
   DesktopDropdownMenu,

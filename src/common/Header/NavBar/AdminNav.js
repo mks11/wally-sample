@@ -13,7 +13,7 @@ import {
   MobileNavButton,
   MobileNavDivider,
   MobileUserGreeting,
-} from './MobileStyledComponents';
+} from './MobileNavComponents';
 import {
   DesktopNavItem,
   DesktopDropdownMenu,
