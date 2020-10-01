@@ -4,6 +4,7 @@ import React from 'react';
 import { DesktopUserNav } from './UserNav';
 import { DesktopAdminNav } from './AdminNav';
 import { DesktopOpsNav } from './OpsNav';
+import { DesktopRetailNav } from './Retail';
 
 function DesktopNav() {
   return (
@@ -11,6 +12,7 @@ function DesktopNav() {
       <DesktopUserNav />
       <DesktopAdminNav />
       <DesktopOpsNav />
+      <DesktopRetailNav />
     </>
   );
 }

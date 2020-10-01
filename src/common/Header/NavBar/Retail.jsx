@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link as RLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
