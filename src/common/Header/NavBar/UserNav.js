@@ -185,7 +185,7 @@ const Cart = observer(() => {
 
   return (
     <DesktopNavItem
-      to="/howitworks"
+      to="/cart"
       text={
         <Badge
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
