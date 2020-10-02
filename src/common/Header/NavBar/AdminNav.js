@@ -30,58 +30,59 @@ export const MobileAdminNav = observer(() => {
 
 export function MobileAdminNavMenu() {
   const { modalV2 } = useStores();
+  const handleClose = () => modalV2.close();
   return (
     <>
       <MobileUserGreeting />
-      <MobileNavItem to="/manage/retail" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/retail" onClick={handleClose} hasDivider>
         Retail Management
       </MobileNavItem>
       <MobileNavItem
         to="/manage/co-packing/runs"
-        onClick={modalV2.close}
+        onClick={handleClose}
         hasDivider
       >
         Copacking
       </MobileNavItem>
-      <MobileNavItem to="/pick-pack" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/pick-pack" onClick={handleClose} hasDivider>
         Pick/Pack
       </MobileNavItem>
-      <MobileNavItem to="/manage/shopper" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/shopper" onClick={handleClose} hasDivider>
         Manage Shoppers
       </MobileNavItem>
-      <MobileNavItem to="/manage/packaging" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/packaging" onClick={handleClose} hasDivider>
         Manage Packaging
       </MobileNavItem>
-      <MobileNavItem to="/manage/delivery" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/delivery" onClick={handleClose} hasDivider>
         Manage Deliveries
       </MobileNavItem>
       <MobileNavItem
         to="/manage/courier-routing"
-        onClick={modalV2.close}
+        onClick={handleClose}
         hasDivider
       >
         Manage Courier Routes
       </MobileNavItem>
       <MobileNavItem
         to="/manage/shopping-app-1"
-        onClick={modalV2.close}
+        onClick={handleClose}
         hasDivider
       >
         Shopping App 1
       </MobileNavItem>
-      <MobileNavItem to="/manage/orders" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/orders" onClick={handleClose} hasDivider>
         Packing App
       </MobileNavItem>
-      <MobileNavItem to="/manage/products" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/products" onClick={handleClose} hasDivider>
         Products App
       </MobileNavItem>
-      <MobileNavItem to="/manage/shipping" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/shipping" onClick={handleClose} hasDivider>
         Shipping
       </MobileNavItem>
-      <MobileNavItem to="/manage/printing" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/printing" onClick={handleClose} hasDivider>
         Printing
       </MobileNavItem>
-      <MobileNavItem to="/manage/blog" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/manage/blog" onClick={handleClose} hasDivider>
         Manage Blog Posts
       </MobileNavItem>
       <SignOutButton />
