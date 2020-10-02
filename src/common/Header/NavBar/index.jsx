@@ -5,7 +5,8 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Npm Package Components
-import { Box, List, Typography } from '@material-ui/core';
+import { Box, List } from '@material-ui/core';
+import { MobileView, BrowserView } from 'react-device-detect';
 
 // Custom Components
 import { DesktopGuestNav, MobileGuestNav } from 'common/Header/NavBar/GuestNav';
@@ -14,11 +15,14 @@ import MobileNav from 'common/Header/NavBar/MobileNav';
 
 function Navbar() {
   const { user } = useStores();
-  const isLoggedIn = user.status;
+  const { status } = user;
+
   return (
     <Box display="flex" alignItems="center" component="nav">
-      {/* {isLoggedIn ? <DesktopNav /> : <DesktopGuestNav />} */}
-      <List>{isLoggedIn ? <MobileNav /> : <MobileGuestNav />}</List>
+      <MobileView>
+        <List>{status ? <MobileNav /> : <MobileGuestNav />}</List>
+      </MobileView>
+      <BrowserView>{status ? <DesktopNav /> : <DesktopGuestNav />}</BrowserView>
     </Box>
   );
 }
