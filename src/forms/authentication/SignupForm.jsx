@@ -135,14 +135,16 @@ export default function SignupForm() {
     user
       .signup({ name, email, password })
       .then(() => {
+        setSubmitting(false);
         checkout.getCurrentCart(user.getHeaderAuth(), user.getDeliveryParams());
         modal.toggleModal('welcome');
-        routing.push('/main');
         modalV2.close();
+        routing.push('/main');
       })
       .catch((e) => {
+        setSubmitting(false);
         const { response } = e;
-        if (reponse && response.data && response.data.error) {
+        if (response && response.data && response.data.error) {
           const { name, message } = response.data.error;
           if (name === 'NotFoundError') {
             setEmailError(message);
@@ -154,9 +156,6 @@ export default function SignupForm() {
             `Attempt to sign up failed. Please contact ${support} for support.`,
           );
         }
-      })
-      .finally(() => {
-        setSubmitting(false);
       });
   }
 

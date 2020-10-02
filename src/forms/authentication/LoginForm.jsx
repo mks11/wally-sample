@@ -112,11 +112,13 @@ export default function LoginForm() {
     user
       .login(email, password)
       .then(() => {
+        setSubmitting(false);
         let home = determineHome();
-        routing.push(home);
         modalV2.close();
+        routing.push(home);
       })
       .catch((error) => {
+        setSubmitting(false);
         const { response } = error;
         if (response && response.data && response.data.error) {
           const { name, message } = response.data.error;
@@ -130,9 +132,6 @@ export default function LoginForm() {
             `Attempt to log in failed. Please contact ${support} for support.`,
           );
         }
-      })
-      .finally(() => {
-        setSubmitting(false);
       });
   }
 
