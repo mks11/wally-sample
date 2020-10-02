@@ -31,14 +31,15 @@ export const MobileRetailNav = observer(() => {
 
 export function MobileRetailNavMenu() {
   const { modalV2 } = useStores();
+  const handleClose = () => modalV2.close();
 
   return (
     <>
       <MobileUserGreeting />
-      <MobileNavItem to="/retail" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/retail" onClick={handleClose} hasDivider>
         Home
       </MobileNavItem>
-      <MobileNavItem to="/main" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/main" onClick={handleClose} hasDivider>
         Shop
       </MobileNavItem>
       <SignOutButton />
