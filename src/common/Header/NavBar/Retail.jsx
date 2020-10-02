@@ -46,10 +46,6 @@ export function MobileRetailNavMenu() {
   );
 }
 
-MobileRetailNav.propTypes = {
-  hideNav: PropTypes.func.isRequired,
-};
-
 export const DesktopRetailNav = observer(() => {
   const { user } = useStores();
 
