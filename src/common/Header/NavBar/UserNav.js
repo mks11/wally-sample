@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatMoney } from 'utils';
 
 // Hooks
@@ -11,7 +11,8 @@ import { observer } from 'mobx-react';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import { Typography } from '@material-ui/core';
+import { Badge, Typography } from '@material-ui/core';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 // Custom Components
 import {
@@ -169,6 +170,39 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
+const Cart = observer(() => {
+  const { user, checkout } = useStores();
+  const items = checkout.cart ? checkout.cart.cart_items : [];
+  const numItems = getNumItems(items);
+
+  useEffect(() => {
+    const getCartData = async () => {
+      const auth = user.getHeaderAuth();
+      await checkout.getCurrentCart(auth);
+    };
+    getCartData();
+  }, []);
+
+  return (
+    <DesktopNavItem
+      to="/howitworks"
+      text={
+        <Badge
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          badgeContent={numItems}
+          color="primary"
+        >
+          <ShoppingBasketIcon fontSize="large" />
+        </Badge>
+      }
+    />
+  );
+
+  function getNumItems(items) {
+    return items.reduce((acc, item) => (acc += item.customer_quantity), 0);
+  }
+});
+
 export const DesktopUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
@@ -196,6 +230,7 @@ export const DesktopUserNav = observer(() => {
           Our Backers
         </DesktopDropdownMenuItem>
       </DesktopDropdownMenu>
+      <Cart />
     </>
   ) : null;
 });
