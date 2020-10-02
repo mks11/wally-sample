@@ -23,7 +23,6 @@ export default function Layout() {
   return (
     <div className="app">
       <Backdrop />
-      {/* <TopNav /> */}
       <Header />
       <main className="aw-main aw-home">
         <Routes />
