@@ -30,33 +30,31 @@ export const MobileOpsNav = observer(() => {
 
 export const MobileOpsNavMenu = observer(() => {
   const { user, modalV2 } = useStores();
+  const handleClose = () => modalV2.close();
+
   return (
     <>
       <MobileUserGreeting />
-      <MobileNavItem to="/pick-pack" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/pick-pack" onClick={handleClose} hasDivider>
         Pick/Pack
       </MobileNavItem>
-      <MobileNavItem to="/packaging-returns" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/packaging-returns" onClick={handleClose} hasDivider>
         Packaging Returns
       </MobileNavItem>
       <MobileNavItem
         to="/manage/co-packing/runs"
-        onClick={modalV2.close}
+        onClick={handleClose}
         hasDivider
       >
         Copacking
       </MobileNavItem>
-      <MobileNavItem
-        to="/packaging-inventory"
-        onClick={modalV2.close}
-        hasDivider
-      >
+      <MobileNavItem to="/packaging-inventory" onClick={handleClose} hasDivider>
         Packaging Inventory
       </MobileNavItem>
       {user && user.isOpsLead && (
         <MobileNavItem
           to="/manage/co-packing/inbound"
-          onClick={modalV2.close}
+          onClick={handleClose}
           hasDivider
         >
           Inbound Shipments
@@ -65,17 +63,17 @@ export const MobileOpsNavMenu = observer(() => {
       {user && user.isOpsLead && (
         <MobileNavItem
           to="/manage/co-packing/outbound"
-          onClick={modalV2.close}
+          onClick={handleClose}
           hasDivider
         >
           Outbound Shipments
         </MobileNavItem>
       )}
       {/* TODO - ARE THESE STILL USED? */}
-      {/* <MobileNavItem to="/manage/shopping-app-1" onClick={modalV2.close} hasDivider>
+      {/* <MobileNavItem to="/manage/shopping-app-1" onClick={handleClose} hasDivider>
         Shopping App
       </MobileNavItem> */}
-      {/* <MobileNavItem to="/manage/orders" onClick={modalV2.close} hasDivider>
+      {/* <MobileNavItem to="/manage/orders" onClick={handleClose} hasDivider>
         Packing App
       </MobileNavItem> */}
 
