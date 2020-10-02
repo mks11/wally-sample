@@ -34,30 +34,30 @@ export function MobileGuestNav() {
 
 function MobileGuestNavMenu() {
   const { modalV2 } = useStores();
-
+  const handleClose = () => modalV2.close();
   return (
     <>
       <MobileLogInButton />
       <MobileSignUpButton />
-      <MobileNavItem to="/latest-news" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/latest-news" onClick={handleClose} hasDivider>
         COVID-19
       </MobileNavItem>
-      <MobileNavItem to="/about" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/about" onClick={handleClose} hasDivider>
         About
       </MobileNavItem>
-      <MobileNavItem to="/howitworks" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/howitworks" onClick={handleClose} hasDivider>
         How It Works
       </MobileNavItem>
-      <MobileNavItem to="/blog" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/blog" onClick={handleClose} hasDivider>
         Blog
       </MobileNavItem>
-      <MobileNavItem to="/backers" onClick={modalV2.close}>
+      <MobileNavItem to="/backers" onClick={handleClose}>
         Our Backers
       </MobileNavItem>
-      {/* <MobileNavItem to="/help" onClick={modalV2.close} hasDivider>
+      {/* <MobileNavItem to="/help" onClick={handleClose} hasDivider>
         Help
       </MobileNavItem> */}
-      {/* <MobileNavItem to="/giftcard" onClick={modalV2.close}>
+      {/* <MobileNavItem to="/giftcard" onClick={handleClose}>
         Gift Card
       </MobileNavItem> */}
     </>

@@ -43,41 +43,42 @@ export const MobileUserNav = observer(() => {
 
 function MobileUserNavMenu() {
   const { modalV2 } = useStores();
+  const handleClose = () => modalV2.close();
   return (
     <>
       <MobileUserGreeting />
-      <MobileNavItem to="/main" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/main" onClick={handleClose} hasDivider>
         Shop
       </MobileNavItem>
-      <MobileNavItem to="/blog" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/blog" onClick={handleClose} hasDivider>
         Blog
       </MobileNavItem>
-      <MobileNavItem to="/help" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/help" onClick={handleClose} hasDivider>
         Help
       </MobileNavItem>
-      <MobileNavItem to="/latest-news" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/latest-news" onClick={handleClose} hasDivider>
         COVID-19
       </MobileNavItem>
-      <MobileNavItem to="/howitworks" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/howitworks" onClick={handleClose} hasDivider>
         How It Works
       </MobileNavItem>
-      <MobileNavItem to="/user" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/user" onClick={handleClose} hasDivider>
         Account Settings
       </MobileNavItem>
-      <MobileNavItem to="/orders" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/orders" onClick={handleClose} hasDivider>
         Order History
       </MobileNavItem>
       <MobilePackagingBalance />
       <MobileRedeemPackagingBalance />
       {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
       <MobileSchedulePickupButton />
-      <MobileNavItem to="/about" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/about" onClick={handleClose} hasDivider>
         About
       </MobileNavItem>
-      <MobileNavItem to="/giftcard" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/giftcard" onClick={handleClose} hasDivider>
         Gift Cards
       </MobileNavItem>
-      <MobileNavItem to="/backers" onClick={modalV2.close} hasDivider>
+      <MobileNavItem to="/backers" onClick={handleClose} hasDivider>
         Our Backers
       </MobileNavItem>
       <SignOutButton />
