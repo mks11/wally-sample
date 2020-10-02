@@ -4333,7 +4333,7 @@ a {
   }
   .product-top.fixed {
     position: fixed;
-    top: 0px;
+    top: 75px;
   }
 
   .search-form {
@@ -4380,12 +4380,6 @@ a {
     border: 0;
     float: right;
     padding: 20px 10px;
-  }
-  .header-wrap.top-bar-open + .aw-main .product-top.fixed {
-    top: 0px;
-  }
-  .header-wrap.top-bar-open + .aw-main {
-    padding-top: 115px;
   }
 
   .carousel-item {

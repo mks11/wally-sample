@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
 
 // Services
 import { logModalView } from 'services/google-analytics';
@@ -24,13 +25,15 @@ import { BackButton } from 'common/ModalNavigation';
 import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
 import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
 
-export function MobileGuestNav() {
-  return (
+export const MobileGuestNav = observer(() => {
+  const { user } = useStores();
+
+  return !user.status ? (
     <MobileNavMenu>
       <MobileGuestNavMenu />
     </MobileNavMenu>
-  );
-}
+  ) : null;
+});
 
 function MobileGuestNavMenu() {
   const { modalV2 } = useStores();
@@ -102,8 +105,10 @@ function MobileSignUpButton() {
   );
 }
 
-export function DesktopGuestNav() {
-  return (
+export const DesktopGuestNav = observer(() => {
+  const { user } = useStores();
+
+  return !user.status ? (
     <>
       <DesktopNavItem to="/latest-news" text="COVID-19" />
       <DesktopNavItem to="/about" text="About" />
@@ -120,8 +125,8 @@ export function DesktopGuestNav() {
         }
       />
     </>
-  );
-}
+  ) : null;
+});
 
 function SignUpButton() {
   const { modalV2 } = useStores();

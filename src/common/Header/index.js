@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
 import { Box, Container, Grid } from '@material-ui/core';
-import { MobileView, BrowserView } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 
 // Styling
 import styled from 'styled-components';
@@ -20,6 +20,7 @@ import Navbar from 'common/Header/NavBar';
 export default function Header() {
   return (
     <Box
+      py={isMobile ? 0 : 2}
       component="header"
       position="sticky"
       top="0"
@@ -40,7 +41,7 @@ export default function Header() {
   );
 }
 
-const LogoDesktop = styled.img`
+const LogoFull = styled.img`
   height: 48px;
 
   @media only screen and (width < 992px) {
@@ -50,10 +51,10 @@ const LogoDesktop = styled.img`
   @media only screen and (width < 768px) {
     height: 40px;
   }
-`;
 
-const LogoMobile = styled.img`
-  height: 32px;
+  @media only screen and (width < 567px) {
+    height: 32px;
+  }
 `;
 
 function Logo() {
@@ -68,18 +69,7 @@ function Logo() {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <MobileView>
-          <LogoMobile
-            src="/images/logo-full.svg"
-            alt="The Wally Shop W logo."
-          />
-        </MobileView>
-        <BrowserView>
-          <LogoDesktop
-            src="/images/logo-full.svg"
-            alt="The Wally Shop W logo."
-          />
-        </BrowserView>
+        <LogoFull src="/images/logo-full.svg" alt="The Wally Shop W logo." />
       </Link>
     </Box>
   );
