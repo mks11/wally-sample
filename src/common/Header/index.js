@@ -42,18 +42,18 @@ export default function Header() {
 }
 
 const LogoFull = styled.img`
-  height: 48px;
+  height: 32px;
 
-  @media only screen and (width < 992px) {
-    height: 44px;
-  }
-
-  @media only screen and (width < 768px) {
+  @media only screen and (width >= 567px) {
     height: 40px;
   }
 
-  @media only screen and (width < 567px) {
-    height: 32px;
+  @media only screen and (width >= 768px) {
+    height: 44px;
+  }
+
+  @media only screen and (width >= 992px) {
+    height: 48px;
   }
 `;
 
