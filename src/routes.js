@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Homepage from './pages/Homepage';
@@ -62,6 +62,48 @@ import PackagingInventoryPortal from 'pages/packaging-inventory/';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+const OpsRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isOps, isOpsLead, isAdmin } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isOps || isOpsLead || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else if (!isOps && !isOpsLead && !isAdmin && !isAuthenticating) {
+          console.log('Unauthorized');
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
+
+const RetailRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isRetail, isAdmin } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isRetail || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else if (!isRetail && !isAdmin && !isAuthenticating) {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
 
 function Routes(props) {
   return (
@@ -186,46 +228,6 @@ function Routes(props) {
       <Route component={Homepage} />{' '}
       {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
-  );
-}
-
-function OpsRoute({ component: Component, ...rest }) {
-  const { user } = useStores();
-  const { isOps, isOpsLead, isAdmin } = user;
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (isOps || isOpsLead || isAdmin) {
-          return <Component {...rest} {...props} />;
-        } else {
-          return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-          );
-        }
-      }}
-    />
-  );
-}
-
-function RetailRoute({ component: Component, ...rest }) {
-  const { user } = useStores();
-  const { isRetail, isAdmin } = user;
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (isRetail || isAdmin) {
-          return <Component {...rest} {...props} />;
-        } else {
-          return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-          );
-        }
-      }}
-    />
   );
 }
 

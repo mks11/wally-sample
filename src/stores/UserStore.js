@@ -58,6 +58,8 @@ class UserStore {
 
   flags = null;
 
+  isAuthenticating = true;
+
   get isAdmin() {
     if (this.user) {
       return this.user.type === TYPES[0];
@@ -283,18 +285,20 @@ class UserStore {
     const delivery = localStorage.getItem('delivery');
     const flags = localStorage.getItem('flags');
 
-    if (token && user) {
-      this.token = JSON.parse(token);
-      this.user = JSON.parse(user);
-    }
+    runInAction(() => {
+      if (token && user) {
+        this.token = JSON.parse(token);
+        this.user = JSON.parse(user);
+      }
 
-    if (delivery) {
-      const deliveryData = JSON.parse(delivery);
-      this.selectedDeliveryAddress = deliveryData.address;
-      this.selectedDeliveryTime = deliveryData.time;
-    }
+      if (delivery) {
+        const deliveryData = JSON.parse(delivery);
+        this.selectedDeliveryAddress = deliveryData.address;
+        this.selectedDeliveryTime = deliveryData.time;
+      }
 
-    this.flags = flags && JSON.parse(flags);
+      this.flags = flags && JSON.parse(flags);
+    });
   }
 
   setDeliveryData() {
@@ -333,37 +337,45 @@ class UserStore {
   }
 
   async getStatus(update) {
+    runInAction(() => (this.isAuthenticating = true));
     this.readStorage();
 
-    if (!this.token && !this.token.accessToken) {
-      this.status = false;
-      return this.status;
-    }
+    runInAction(() => {
+      if (!this.token && !this.token.accessToken) {
+        this.status = false;
+        return this.status;
+      }
+    });
 
     this.saveLocalAddresses();
 
     try {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
       let status = resp.data.status && localStorage.getItem('user');
-      if (resp.data.status && localStorage.getItem('user')) {
-        this.status = true;
-        // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-        this.user = JSON.parse(localStorage.getItem('user'));
-        if (update) {
-          this.getUser();
+
+      runInAction(() => {
+        if (resp.data.status && localStorage.getItem('user')) {
+          this.status = true;
+          // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
+          this.user = JSON.parse(localStorage.getItem('user'));
+          if (update) {
+            this.getUser();
+          }
+        } else {
+          status = false;
+          this.status = false;
+          this.user = null;
+          this.logout();
         }
-      } else {
-        status = false;
-        this.status = false;
-        this.user = null;
-        this.logout();
-      }
+      });
 
       return status;
     } catch (e) {
       this.logout();
       console.error('Error getstatus: ', e);
       return false;
+    } finally {
+      runInAction(() => (this.isAuthenticating = false));
     }
   }
 
@@ -577,6 +589,7 @@ decorate(UserStore, {
 
   flags: observable,
 
+  isAuthenticating: observable,
   isAdmin: computed,
   isOpsLead: computed,
   isOps: computed,
