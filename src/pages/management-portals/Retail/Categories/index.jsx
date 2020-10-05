@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { findIndex } from 'lodash';
 import { observer } from 'mobx-react';
 import {
-  Button,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Menu,
-  MenuItem,
   Box,
   Typography,
 } from '@material-ui/core';
 import Header from '../../shared/Header';
 import Table from '../../shared/Table';
 import StyledTableRow from 'common/table/StyledTableRow';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
-import axios from 'axios';
-import { API_GET_CATEGORIES } from 'config';
-import { ArrowDropDown, Edit, Delete } from '@material-ui/icons';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import Dropdown from '../../shared/Dropdown';
 import useRequest from 'hooks/useRequest';
