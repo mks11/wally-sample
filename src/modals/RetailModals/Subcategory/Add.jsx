@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -61,7 +61,7 @@ function Add({ stores: store, ...props }) {
             <Grid item xs={12}>
               <TextInput name="name" label={'Name'} type={'text'} fullWidth />
             </Grid>
-            <Grid item xs={12} gutterBottom>
+            <Grid item xs={12}>
               <MultiSelect
                 name="parent_ids"
                 label="Categories"
@@ -89,6 +89,9 @@ function Add({ stores: store, ...props }) {
   );
 }
 
-Add.propTypes = {};
+Add.propTypes = {
+  stores: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default Add;

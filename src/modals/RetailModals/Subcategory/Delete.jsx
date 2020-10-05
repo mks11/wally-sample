@@ -36,6 +36,9 @@ function Delete({ stores: { modal, ...store }, ...props }) {
   );
 }
 
-Delete.propTypes = {};
+Delete.propTypes = {
+  stores: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default Delete;

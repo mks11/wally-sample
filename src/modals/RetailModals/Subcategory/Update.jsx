@@ -85,7 +85,7 @@ function Update({ stores: { modal, ...store }, ...props }) {
             <Grid item xs={12}>
               <TextInput name="name" label={'Name'} type={'text'} fullWidth />
             </Grid>
-            <Grid item xs={12} gutterBottom>
+            <Grid item xs={12}>
               <MultiSelect
                 name="parent_ids"
                 label="Categories"
@@ -118,6 +118,9 @@ function Update({ stores: { modal, ...store }, ...props }) {
   );
 }
 
-Update.propTypes = {};
+Update.propTypes = {
+  stores: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default Update;
