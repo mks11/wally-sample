@@ -20,10 +20,10 @@ import StyledTableRow from '../../../../common/table/StyledTableRow';
 import CRUDButtonGroup from '../../shared/CRUDButtonGroup';
 import useRequest from 'hooks/useRequest';
 import { observer } from 'mobx-react';
-import useStore from 'hooks/useStore';
+import { useStores } from 'hooks/mobx';
 
 function Subcategories() {
-  const store = useStore();
+  const store = useStores();
   const { retail, modal } = store;
   useRequest(store, async () => retail.getSubcategories()) || [];
 
