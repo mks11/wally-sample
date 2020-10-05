@@ -30,7 +30,7 @@ FormikTextInput.defaultProps = {
 
 FormikTextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
   fullWidth: PropTypes.bool,
 };
