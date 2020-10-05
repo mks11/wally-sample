@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -10,7 +10,6 @@ import {
 import FormWrapper from '../FormWrapper';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import useRequest from 'hooks/useRequest';
-import usePost from 'hooks/usePost';
 import getIdNamePair from './../getIdNamePair';
 import { API_CATEGORIES_UPDATE } from 'config';
 import usePatch from 'hooks/usePatch';
@@ -88,6 +87,9 @@ function Update({ stores: store, ...props }) {
   );
 }
 
-Update.propTypes = {};
+Update.propTypes = {
+  stores: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default Update;
