@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid, Button } from '@material-ui/core';
-import { DangerButton } from 'styled-component-lib/Buttons';
+import Confirmation from '../shared/Confirmation';
 
 function AddressDeleteModal({
   stores: { user: userStore, modal: modalStore, loading, snackbar },
@@ -35,36 +34,12 @@ function AddressDeleteModal({
   const address_id = modalStore.modalData;
 
   return (
-    <>
-      <div className="modal-header">
-        <Typography variant="h2" color="error">
-          Delete Address
-        </Typography>
-      </div>
-      <Box padding={3} justifyContent="center">
-        <Typography align="center">
-          Are you sure you want to remove this address?
-        </Typography>
-        <Box marginTop={6}>
-          <Grid container justify="center" spacing={2}>
-            <Grid item xs={6} lg={4} container justify="center">
-              <Button size="large" fullWidth onClick={handleCancel}>
-                <Typography variant="body1">Cancel</Typography>
-              </Button>
-            </Grid>
-            <Grid item xs={6} lg={4} container justify="center">
-              <DangerButton
-                size="large"
-                fullWidth
-                onClick={() => handleDelete(address_id)}
-              >
-                <Typography variant="body1">Yes, I’m sure</Typography>
-              </DangerButton>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </>
+    <Confirmation
+      title="Delete Address"
+      message="Are you sure you want to remove this address?"
+      onCancel={handleCancel}
+      onConfirm={() => handleDelete(address_id)}
+    />
   );
 }
 
