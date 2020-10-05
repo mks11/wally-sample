@@ -20,8 +20,8 @@ function Select({ label, values = [], valueToDisplayMap, ...props }) {
         fullWidth
         id={props.id || props.name}
         error={!!(meta.touched && meta.error)}
-        value={selectedVal}
         {...field}
+        value={field.value || selectedVal}
         {...props}
       >
         <MenuItem key={'none'} value="">
