@@ -51,7 +51,7 @@ class RetailStore {
     this.categories = this.categories.filter((c) => c.category_id !== catId);
   }
 
-  /** 
+  /**
       subcategory cruds
   **/
 
