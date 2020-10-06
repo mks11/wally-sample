@@ -47,7 +47,7 @@ import VendorProfile from './pages/vendor/VendorProfile';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
-import RetailManagementPortal from './pages/retail';
+import RetailManagementPortal from './pages/management-portals/Retail';
 
 // Pick/Pack
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';

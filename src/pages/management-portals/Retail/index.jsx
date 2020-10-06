@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'utils';
-import ManagementPortal, { SidebarItem } from 'pages/management-portal';
+import ManagementPortal, {
+  SidebarItem,
+} from 'pages/management-portals/ManagementPortal';
 import Typography from '@material-ui/core/Typography';
+import Categories from './Categories';
+import Subcategories from './Subcategories';
+import Packaging from './Packaging';
 
 function RetailManagementPortal({ store: { retail: retailStore } }) {
   return (
@@ -29,14 +34,21 @@ function Sidebar({ store }) {
         setSelected={setSelected}
         store={store}
         title="Categories"
-        content={<Typography variant="body1">Categories</Typography>}
+        content={<Categories />}
+      />
+      <SidebarItem
+        selected={selected}
+        setSelected={setSelected}
+        store={store}
+        title="Subcategories"
+        content={<Subcategories />}
       />
       <SidebarItem
         selected={selected}
         setSelected={setSelected}
         store={store}
         title="Packaging"
-        content={<Typography variant="body1">Packaging</Typography>}
+        content={<Packaging />}
       />
     </>
   );

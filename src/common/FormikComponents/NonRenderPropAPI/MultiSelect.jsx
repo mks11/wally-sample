@@ -27,21 +27,40 @@ function getStyles(value, selectedValues, theme) {
   };
 }
 
-export default function MultiSelect({ label, values, ...props }) {
+export default function MultiSelect({
+  label,
+  values,
+  valueToDisplayMap,
+  preSelected = [],
+  ...props
+}) {
   const classes = useStyles();
   const theme = useTheme();
-  const [selectedValues, setSelectedValues] = useState([]);
+
+  const [selectedValues, setSelectedValues] = useState(preSelected);
 
   const [meta] = useField(props);
   const { setFieldValue } = useFormikContext();
 
-  const handleChange = (event) => {
-    setSelectedValues(event.target.value);
-  };
-
   useEffect(() => {
     setFieldValue(props.id || props.name, selectedValues);
   }, [selectedValues]);
+
+  useEffect(() => {
+    if (preSelected.length > 0) {
+      setSelectedValues(preSelected);
+    }
+  }, [preSelected]);
+
+  const handleClickMenuItem = (val) => {
+    setSelectedValues((prev) => {
+      if (prev.includes(val)) {
+        return prev.filter((v) => v !== val);
+      } else {
+        return [...prev, val];
+      }
+    });
+  };
 
   return (
     <>
@@ -52,17 +71,20 @@ export default function MultiSelect({ label, values, ...props }) {
       <Select
         multiple
         value={selectedValues}
-        onChange={handleChange}
         input={<Input fullWidth={true} />}
         renderValue={(selected) => (
           <div className={classes.chips}>
             {selected.map((value) => (
-              <Chip key={value} label={value} className={classes.chip} />
+              <Chip
+                key={value}
+                label={valueToDisplayMap ? valueToDisplayMap[value] : value}
+                className={classes.chip}
+              />
             ))}
           </div>
         )}
         error={!!(meta.touched && meta.error)}
-        fullWidth={true}
+        fullWidth
         {...props}
       >
         {values.map((val) => (
@@ -70,8 +92,9 @@ export default function MultiSelect({ label, values, ...props }) {
             key={val}
             value={val}
             style={getStyles(val, selectedValues, theme)}
+            onClick={() => handleClickMenuItem(val)}
           >
-            {val}
+            {valueToDisplayMap ? valueToDisplayMap[val] : val}
           </MenuItem>
         ))}
       </Select>

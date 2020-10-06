@@ -37,7 +37,7 @@ export default function FormikTextInput({
 FormikTextInput.propTypes = {
   field: PropTypes.object.isRequired,
   handleInput: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   labelId: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
 };

@@ -7,6 +7,7 @@ export const PrimaryWallyButton = styled(Button).attrs({
 })`
   color: #fff;
   border-radius: 50px;
+  white-space: nowrap;
   &:hover {
     color: #fff;
   }
@@ -18,6 +19,7 @@ export const SecondaryWallyButton = styled(Button).attrs({
 })`
   color: #133063;
   border-radius: 50px;
+  white-space: nowrap;
 `;
 
 export const DangerButton = styled(PrimaryWallyButton).attrs({
@@ -25,6 +27,7 @@ export const DangerButton = styled(PrimaryWallyButton).attrs({
 })`
   border-color: #f45246;
   color: #f45246;
+  white-space: nowrap;
   &:hover {
     color: #f45246;
     border-color: #f45246;

@@ -12,6 +12,7 @@ const FormikTextInput = (props) => {
         error={!!(meta.touched && meta.error)}
         type={props.type || 'text'}
         {...field}
+        value={field.value || ''}
         {...props}
       />
       <HelperText error={!!(meta.touched && meta.error)}>
@@ -29,7 +30,7 @@ FormikTextInput.defaultProps = {
 
 FormikTextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
   fullWidth: PropTypes.bool,
 };

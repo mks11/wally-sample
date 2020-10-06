@@ -5,7 +5,7 @@ import { Warning } from '@material-ui/icons';
 
 export default function DisplayContent({ children }) {
   return (
-    <Box flex={3} overflow="auto">
+    <Box overflow="auto" style={{ height: '100%' }}>
       <Box p={4}>
         {children ? (
           children
