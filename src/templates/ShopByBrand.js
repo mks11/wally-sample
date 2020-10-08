@@ -21,7 +21,7 @@ function getBrand(user, brandName) {
 function getProductAssortment(user, brandName) {
   return axios.get(API_GET_PRODUCTS_MATCHING_FILTERS, {
     ...user.getHeaderAuth(),
-    data: {
+    params: {
       brandUrlName: brandName,
     },
   });
@@ -29,19 +29,22 @@ function getProductAssortment(user, brandName) {
 
 function ShopByBrand({ match }) {
   const { user: userStore, snackbar, loading, product } = useStores();
-  const [brandData, setBrandData] = useState({});
+  const [brandData, setBrandData] = useState({
+    name: '',
+    logo_url: '',
+    description: '',
+  });
   const { brandName = '' } = match.params;
 
   useEffect(() => {
     async function load() {
       try {
         loading.show();
-        const [brand] = await Promise.all([
+        const [brand, productAssortment] = await Promise.all([
           getBrand(userStore, brandName),
-          // getProductAssortment(userStore, brandName),
+          getProductAssortment(userStore, brandName),
         ]);
-        console.log(brand);
-        // product.initializeProductAssortment(productAssortmentData);
+        product.initializeProductAssortment(productAssortment.data);
         setBrandData(brand.data);
       } catch (e) {
         snackbar.openSnackbar(
@@ -66,7 +69,7 @@ function ShopByBrand({ match }) {
           description={description}
         />
       )}
-      {/* <ProductAssortment /> */}
+      <ProductAssortment />
     </Container>
   );
 }
