@@ -43,7 +43,7 @@ import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
 import Receipts from './pages/manage/receipt/Receipts';
 import CourierRouting from './pages/courier/CourierRouting';
-import VendorProfile from './pages/vendor/VendorProfile';
+import VendorProfile from './templates/ShopByBrand';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';

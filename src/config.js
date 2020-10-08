@@ -51,6 +51,8 @@ export const API_SUBCATEGORIES_DELETE = BASE_URL + '/api/category';
 
 export const API_PACKAGING_LIST = BASE_URL + '/api/packagings';
 
+export const API_GET_BRAND = BASE_URL + '/api/vendor';
+
 export const API_SEARCH_KEYWORD = BASE_URL + '/api/products/search';
 export const API_REFRESH_INVENTORY = BASE_URL + '/api/products/refresh';
 
@@ -152,7 +154,8 @@ export const GET_ZIP_CODES = BASE_URL + '/api/service/zipcodes';
 
 export const API_GET_KICKSTARTER_BACKERS = BASE_URL + '/api/web/backers';
 
-export const API_GET_PRODUCTS_MATCHING_FILTERS = BASE_URL + '/api/vendor/';
+export const API_GET_PRODUCTS_MATCHING_FILTERS =
+  BASE_URL + '/api/products/filter';
 
 export const API_HELP_GET_QUESTION = BASE_URL + '/api/help/questions/';
 export const API_HELP_GET_QUESTION_SINGLE = BASE_URL + '/api/help/questions/';
