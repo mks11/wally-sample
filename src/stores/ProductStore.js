@@ -47,32 +47,34 @@ class ProductStore {
   /*** Vendor filters */
   availableLifestyles = [];
   selectedLifestyles = [];
+  availableValues = [];
+  selectedValues = [];
   availableSubcategories = [];
   selectedSubcategories = [];
   availableBrands = [];
   selectedBrands = [];
   /*** Ends Vendor filters */
 
-  filters = {
-    vendorIds: [],
-    vendorUrlNames: [],
-  };
-
   /***  Vendor computed properties  */
   get filteredProducts() {
     if (
       !this.selectedLifestyles.length &&
       !this.selectedSubcategories.length &&
-      !this.selectedBrands.length
+      !this.selectedBrands.length &&
+      !this.selectedValues.length
     ) {
       return this.products;
     }
 
     return this.products.filter(
-      ({ lifestyles = [], subcategory, vendorFull = {} }) => {
+      ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
         const inLifestyles =
           !this.selectedLifestyles.length ||
           this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+        const inValues =
+          !this.selectedValues.length ||
+          this.selectedValues.every((val) => values.includes(val));
 
         const inSubcategory =
           !this.selectedSubcategories.length ||
@@ -82,7 +84,7 @@ class ProductStore {
           !this.selectedBrands.length ||
           this.selectedBrands.includes[vendorFull.name];
 
-        return inLifestyles && inSubcategory && inBrands;
+        return inLifestyles && inValues && inSubcategory && inBrands;
       },
     );
   }
@@ -93,11 +95,13 @@ class ProductStore {
     const {
       products = [],
       lifestyles = [],
+      values = [],
       subcategories = [],
       brands = [],
     } = assortmentDetails;
     this.products = products;
     this.availableLifestyles = lifestyles;
+    this.availableValues = values;
     this.availableSubcategories = subcategories;
     this.availableBrands = brands;
   }
@@ -106,15 +110,18 @@ class ProductStore {
     this.availableBrands = [];
     this.availableLifestyles = [];
     this.availableSubcategories = [];
+    this.availableValues = [];
     this.selectedBrands = [];
     this.selectedLifestyles = [];
     this.selectedSubcategories = [];
+    this.selectedValues = [];
   }
 
   resetSelectedFilters() {
     this.selectedBrands = [];
     this.selectedLifestyles = [];
     this.selectedSubcategories = [];
+    this.selectedValues = [];
   }
 
   addSelectedLifestyle(lifestyle) {
@@ -149,6 +156,16 @@ class ProductStore {
 
   removeSelectedBrand(brand) {
     this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
+  }
+
+  addSelectedValue(value) {
+    if (!this.selectedValues.includes(value)) {
+      this.selectedValues.push(value);
+    }
+  }
+
+  removeSelectedValue(value) {
+    this.selectedValues = this.selectedValues.filter((v) => v !== value);
   }
   /*** Ends Vendor filtering actions */
 
@@ -404,6 +421,8 @@ decorate(ProductStore, {
   selectedSubcategories: observable,
   availableBrands: observable,
   selectedBrands: observable,
+  availableValues: observable,
+  selectedValues: observable,
   /*** Vendor computed */
   filteredProducts: computed,
   /*** Vendor actions */
@@ -416,6 +435,8 @@ decorate(ProductStore, {
   removeSelectedSubcategory: action,
   addSelectedBrand: action,
   removeSelectedBrand: action,
+  addSelectedValue: action,
+  removeSelectedValue: action,
   /** Ends Vendor */
 
   showModal: action,
