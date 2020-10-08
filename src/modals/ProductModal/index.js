@@ -194,6 +194,10 @@ class ProductModal extends Component {
     return text.slice(0, length) + '...';
   };
 
+  closeModal = () => {
+    this.props.toggle();
+  };
+
   render() {
     const { activeProduct, activeProductComments } = this.productStore;
     if (!activeProduct) return null;
@@ -358,7 +362,7 @@ class ProductModal extends Component {
               <Brand
                 manufacturer={manufacturer}
                 vendor={vendorFull}
-                onClick={this.modalStore.toggleModal}
+                onClick={this.closeModal}
               />
             )}
             <Typography variant="subtitle1">{shipMessage}</Typography>
