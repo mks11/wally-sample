@@ -1,4 +1,4 @@
-import { observable, decorate, action } from 'mobx';
+import { observable, decorate, action, computed } from 'mobx';
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
@@ -43,10 +43,114 @@ class ProductStore {
   currentSearchCategory = 'All Categories';
 
   products = [];
+
+  /*** Vendor filters */
+  availableLifestyles = [];
+  selectedLifestyles = [];
+  availableSubcategories = [];
+  selectedSubcategories = [];
+  availableBrands = [];
+  selectedBrands = [];
+  /*** Ends Vendor filters */
+
   filters = {
     vendorIds: [],
     vendorUrlNames: [],
   };
+
+  /***  Vendor computed properties  */
+  get filteredProducts() {
+    if (
+      !this.selectedLifestyles.length &&
+      !this.selectedSubcategories.length &&
+      !this.selectedBrands.length
+    ) {
+      return this.products;
+    }
+
+    return this.products.filter(
+      ({ lifestyles = [], subcategory, vendorFull = {} }) => {
+        const inLifestyles =
+          !this.selectedLifestyles.length ||
+          this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+        const inSubcategory =
+          !this.selectedSubcategories.length ||
+          this.selectedSubcategories.includes[subcategory];
+
+        const inBrands =
+          !this.selectedBrands.length ||
+          this.selectedBrands.includes[vendorFull.name];
+
+        return inLifestyles && inSubcategory && inBrands;
+      },
+    );
+  }
+  /*** Ends Vendor computed properties */
+
+  /*** Vendor filtering actions */
+  initializeProductAssortment(assortmentDetails = {}) {
+    const {
+      products = [],
+      lifestyles = [],
+      subcategories = [],
+      brands = [],
+    } = assortmentDetails;
+    this.products = products;
+    this.availableLifestyles = lifestyles;
+    this.availableSubcategories = subcategories;
+    this.availableBrands = brands;
+  }
+
+  resetProductAssortment() {
+    this.availableBrands = [];
+    this.availableLifestyles = [];
+    this.availableSubcategories = [];
+    this.selectedBrands = [];
+    this.selectedLifestyles = [];
+    this.selectedSubcategories = [];
+  }
+
+  resetSelectedFilters() {
+    this.selectedBrands = [];
+    this.selectedLifestyles = [];
+    this.selectedSubcategories = [];
+  }
+
+  addSelectedLifestyle(lifestyle) {
+    if (!this.selectedLifestyles.includes(lifestyle)) {
+      this.selectedLifestyles.push(lifestyle);
+    }
+  }
+
+  removeSelectedLifestyle(lifestyle) {
+    this.selectedLifestyles = this.selectedLifestyles.filter(
+      (style) => style !== lifestyle,
+    );
+  }
+
+  addSelectedSubcategory(subcategory) {
+    if (!this.selectedSubcategories.includes(subcategory)) {
+      this.selectedSubcategories.push(subcategory);
+    }
+  }
+
+  removeSelectedSubcategory(subcategory) {
+    this.selectedSubcategories = this.selectedSubcategories.filter(
+      (cat) => cat !== subcategory,
+    );
+  }
+
+  addSelectedBrand(brand) {
+    if (!this.selectedBrands.includes(brand)) {
+      this.selectedBrands.push(brand);
+    }
+  }
+
+  removeSelectedBrand(brand) {
+    this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
+  }
+  /*** Ends Vendor filtering actions */
 
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id;
@@ -289,8 +393,30 @@ decorate(ProductStore, {
   activeProductId: observable,
   search: observable,
   currentSearchFilter: observable,
-  products: observable,
   filters: observable,
+
+  /*** Vendor
+   * Vendor observables */
+  products: observable,
+  availableLifestyles: observable,
+  selectedLifestyles: observable,
+  availableSubcategories: observable,
+  selectedSubcategories: observable,
+  availableBrands: observable,
+  selectedBrands: observable,
+  /*** Vendor computed */
+  filteredProducts: computed,
+  /*** Vendor actions */
+  initializeProductAssortment: action,
+  resetProductAssortment: action,
+  resetSelectedFilters: action,
+  addSelectedLifestyle: action,
+  removeSelectedLifestyle: action,
+  addSelectedSubcategory: action,
+  removeSelectedSubcategory: action,
+  addSelectedBrand: action,
+  removeSelectedBrand: action,
+  /** Ends Vendor */
 
   showModal: action,
   getAdvertisements: action,
