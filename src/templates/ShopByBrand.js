@@ -12,7 +12,7 @@ import ProductAssortment from 'common/ProductAssortment';
 function getBrand(user, brandName) {
   return axios.get(API_GET_BRAND, {
     ...user.getHeaderAuth(),
-    data: {
+    params: {
       urlName: brandName,
     },
   });
@@ -33,19 +33,16 @@ function ShopByBrand({ match }) {
   const { brandName = '' } = match.params;
 
   useEffect(() => {
-    async () => {
+    async function load() {
       try {
         loading.show();
-        const [
-          { data: brand },
-          { data: productAssortmentData },
-        ] = await Promise.all([
+        const [brand] = await Promise.all([
           getBrand(userStore, brandName),
-          getProductAssortment(userStore, brandName),
+          // getProductAssortment(userStore, brandName),
         ]);
-
-        product.initializeProductAssortment(productAssortmentData);
-        setBrandData(brand);
+        console.log(brand);
+        // product.initializeProductAssortment(productAssortmentData);
+        setBrandData(brand.data);
       } catch (e) {
         snackbar.openSnackbar(
           'An error occurred while loading brand data. Brand data is unavailable',
@@ -54,21 +51,24 @@ function ShopByBrand({ match }) {
       } finally {
         setTimeout(loading.hide(), 300);
       }
-    };
+    }
+    load();
   }, []);
 
   const { name, logo_url, description } = brandData;
 
   return (
     <Container maxWidth="xl">
-      <ProductAssortmentDetails
-        title={name}
-        image={logo_url}
-        description={description}
-      />
-      <ProductAssortment />
+      {brandData && (
+        <ProductAssortmentDetails
+          title={name}
+          image={logo_url}
+          description={description}
+        />
+      )}
+      {/* <ProductAssortment /> */}
     </Container>
   );
 }
 
-export default observer(withRouter(ShopByBrand));
+export default withRouter(observer(ShopByBrand));
