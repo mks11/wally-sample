@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 import ProductList from './ProductList';
 
@@ -11,4 +12,4 @@ function ProductAssortment() {
   return <ProductList products={product.filteredProducts} />;
 }
 
-export default ProductAssortment;
+export default observer(ProductAssortment);
