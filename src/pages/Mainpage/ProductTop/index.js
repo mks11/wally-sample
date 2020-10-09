@@ -17,46 +17,7 @@ class ProductTop extends Component {
     this.checkoutStore = props.store.checkout;
     this.routing = props.store.routing;
     this.modalStore = props.store.modal;
-
-    this.state = {
-      sticky: 0,
-    };
   }
-
-  componentDidMount() {
-    const $ = window.$;
-    const self = this;
-    $(document).ready(function () {
-      self.calculateSticyPosition();
-    });
-    $(window).bind('scroll', this.handleFixedTop);
-    $(window).bind('resize', this.calculateSticyPosition);
-  }
-
-  componentWillUnmount() {
-    const $ = window.$;
-    $(window).unbind('scroll', this.handleFixedTop);
-    $(window).unbind('resize', this.calculateSticyPosition);
-  }
-
-  calculateSticyPosition = () => {
-    const element = document.getElementsByClassName('aw-header')[0];
-    const newSticky = element ? element.offsetHeight : 0;
-    this.setState({
-      sticky: newSticky,
-    });
-  };
-
-  handleFixedTop = () => {
-    const $ = window.$;
-    const { sticky } = this.state;
-    const stickyPos = sticky;
-    if (window.pageYOffset >= stickyPos) {
-      $('.product-top').addClass('fixed');
-    } else {
-      $('.product-top').removeClass('fixed');
-    }
-  };
 
   handleMobileSearchOpen = () => {
     const { onMobileSearchClick } = this.props;
