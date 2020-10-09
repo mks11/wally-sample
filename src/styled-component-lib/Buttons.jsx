@@ -13,6 +13,12 @@ export const PrimaryWallyButton = styled(Button).attrs({
   }
 `;
 
+export const PrimaryTextButton = styled(Button).attrs({
+  color: 'primary',
+})`
+  white-space: nowrap;
+`;
+
 export const SecondaryWallyButton = styled(Button).attrs({
   color: 'secondary',
   variant: 'contained',
@@ -31,6 +37,11 @@ export const DangerButton = styled(PrimaryWallyButton).attrs({
     border-color: #f45246;
     background-color: rgba(244, 82, 70, 0.1);
   }
+`;
+
+export const DangerTextButton = styled(Button)`
+  color: #f45246;
+  white-space: nowrap;
 `;
 
 export const ColorfulWallyButton = styled.button`

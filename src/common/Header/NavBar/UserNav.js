@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { formatMoney } from 'utils';
 
-// Hooks
+// MobX
 import { useStores } from 'hooks/mobx';
-
-// mobx
 import { observer } from 'mobx-react';
 
-// Services
-import { logModalView } from 'services/google-analytics';
+// Services & Utilities
+import { logEvent, logModalView } from 'services/google-analytics';
+import { formatMoney } from 'utils';
+import { isMobile } from 'react-device-detect';
 
 // npm Package Components
-import { Badge, IconButton, Typography } from '@material-ui/core';
+import {
+  Badge,
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Menu,
+  Typography,
+} from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 // Custom Components
+import CarbonBar from 'common/CarbonBar';
 import {
   MobileNavItem,
   MobileNavListItem,
@@ -32,6 +40,13 @@ import {
 } from 'common/Header/NavBar/DesktopNavComponents';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
+
+// Styled Components
+import {
+  PrimaryWallyButton,
+  PrimaryTextButton,
+  DangerTextButton,
+} from 'styled-component-lib/Buttons';
 
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
@@ -173,11 +188,167 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
-const Cart = observer(({ onClick }) => {
+const CartDropdown = observer(({ anchorEl, handleClose }) => {
+  const { checkout, modal, product, routing, ui, user } = useStores();
+  const { cart } = checkout;
+
+  const handleCheckout = () => {
+    logEvent({ category: 'Cart', action: 'ClickCheckout' });
+    ui.hideBackdrop();
+    handleClose();
+    if (user.status) {
+      routing.push('/main/similar-products');
+    } else {
+      modal.toggleModal('login');
+    }
+  };
+
+  const handleEdit = (data) => {
+    logEvent({ category: 'Cart', action: 'ClickEditProduct' });
+    handleClose();
+    product
+      .showModal(
+        data.product_id,
+        data.customer_quantity,
+        user.getDeliveryParams(),
+      )
+      .then((data) => {
+        user.adjustDeliveryTimes(data.delivery_date, checkout.deliveryTimes);
+        modal.toggleModal('product');
+      });
+  };
+
+  const handleDelete = (id) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    handleClose();
+    modal.toggleModal('delete', id);
+  };
+
+  const getItemsCount = (items) => {
+    let count = 0;
+    for (let i = items.length - 1; i >= 0; i--) {
+      count += items[i].customer_quantity;
+    }
+    return count;
+  };
+  const items = cart ? cart.cart_items : [];
+  const count = getItemsCount(items);
+  const subtotal = cart ? cart.subtotal / 100 : 0;
+
+  return isMobile ? null : (
+    <Menu
+      id="cart"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <Box p={3}>
+        {items && count > 0 ? (
+          <>
+            <Typography variant="h1">Cart</Typography>
+            <Box my={2}>
+              <CarbonBar nCartItems={count} />
+            </Box>
+            <Box mb={2}>
+              {items.map((item) => {
+                const {
+                  customer_quantity,
+                  _id,
+                  product_id,
+                  product_name,
+                } = item;
+                return (
+                  <>
+                    <Box key={product_name} my={2}>
+                      <Box my={1}>
+                        <Typography variant="h6">{product_name}</Typography>
+                        <Grid container alignItems="center">
+                          <Grid item>
+                            <Typography
+                              color="textSecondary"
+                              component="span"
+                              gutterBottom
+                            >
+                              Quantity: {item.customer_quantity}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <PrimaryTextButton
+                              onClick={() =>
+                                handleEdit({
+                                  product_id: item.product_id,
+                                  customer_quantity: item.customer_quantity,
+                                })
+                              }
+                            >
+                              <Typography>Edit</Typography>
+                            </PrimaryTextButton>
+                          </Grid>
+                          <Grid item>
+                            <DangerTextButton
+                              onClick={() =>
+                                handleDelete({
+                                  product_id: item.product_id,
+                                  inventory_id: item._id,
+                                })
+                              }
+                            >
+                              <Typography>Remove</Typography>
+                            </DangerTextButton>
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      <Grid container spacing={2} justify="space-between">
+                        <Grid item>
+                          <Typography component="span">Subtotal</Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography component="span">
+                            {formatMoney(item.total / 100)}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                    <Divider />
+                  </>
+                );
+              })}
+              <Box my={2}>
+                <Grid container justify="space-between" alignItems="center">
+                  <Typography variant="h6" component="span">
+                    Subtotal
+                  </Typography>
+                  <Typography variant="h6" component="span">
+                    {formatMoney(subtotal)}
+                  </Typography>
+                </Grid>
+              </Box>
+            </Box>
+            <PrimaryWallyButton onClick={handleCheckout} fullWidth>
+              <Typography>Checkout</Typography>
+            </PrimaryWallyButton>
+          </>
+        ) : (
+          <span className="px-3">No items in cart</span>
+        )}
+      </Box>
+    </Menu>
+  );
+});
+
+const Cart = observer(() => {
+  const [anchorEl, setAnchorEl] = useState(null);
   const { user, checkout } = useStores();
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
   const isDisabled = numItems < 1;
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const getCartData = async () => {
@@ -186,23 +357,25 @@ const Cart = observer(({ onClick }) => {
     };
     getCartData();
   }, []);
-  const handleClick = () => console.log('foo');
 
   return (
-    <IconButton
-      aria-label="menu"
-      onClick={handleClick}
-      disabled={isDisabled}
-      style={{ color: isDisabled ? 'rgba(0, 0, 0, 0.5)' : 'inherit' }}
-    >
-      <Badge
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        badgeContent={numItems}
-        color="primary"
+    <>
+      <IconButton
+        aria-label="menu"
+        onClick={handleClick}
+        disabled={isDisabled}
+        style={{ color: isDisabled ? 'rgba(0, 0, 0, 0.5)' : 'inherit' }}
       >
-        <ShoppingBasketIcon fontSize="large" />
-      </Badge>
-    </IconButton>
+        <Badge
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          badgeContent={numItems}
+          color="primary"
+        >
+          <ShoppingBasketIcon fontSize="large" />
+        </Badge>
+      </IconButton>
+      <CartDropdown anchorEl={anchorEl} handleClose={handleClose} />
+    </>
   );
 
   function getNumItems(items) {
