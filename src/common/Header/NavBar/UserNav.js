@@ -11,7 +11,7 @@ import { observer } from 'mobx-react';
 import { logModalView } from 'services/google-analytics';
 
 // npm Package Components
-import { Badge, Typography } from '@material-ui/core';
+import { Badge, IconButton, Typography } from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 // Custom Components
@@ -36,9 +36,12 @@ import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
-    <MobileNavMenu>
-      <MobileUserNavMenu />
-    </MobileNavMenu>
+    <>
+      <MobileNavMenu>
+        <MobileUserNavMenu />
+      </MobileNavMenu>
+      <Cart />
+    </>
   ) : null;
 });
 
@@ -170,10 +173,11 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
-const Cart = observer(() => {
+const Cart = observer(({ onClick }) => {
   const { user, checkout } = useStores();
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
+  const isDisabled = numItems < 1;
 
   useEffect(() => {
     const getCartData = async () => {
@@ -182,20 +186,23 @@ const Cart = observer(() => {
     };
     getCartData();
   }, []);
+  const handleClick = () => console.log('foo');
 
   return (
-    <DesktopNavItem
-      to="/cart"
-      text={
-        <Badge
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          badgeContent={numItems}
-          color="primary"
-        >
-          <ShoppingBasketIcon fontSize="large" />
-        </Badge>
-      }
-    />
+    <IconButton
+      aria-label="menu"
+      onClick={handleClick}
+      disabled={isDisabled}
+      style={{ color: isDisabled ? 'rgba(0, 0, 0, 0.5)' : 'inherit' }}
+    >
+      <Badge
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        badgeContent={numItems}
+        color="primary"
+      >
+        <ShoppingBasketIcon fontSize="large" />
+      </Badge>
+    </IconButton>
   );
 
   function getNumItems(items) {
