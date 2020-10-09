@@ -6,7 +6,6 @@ import { connect } from 'utils';
 
 import Filters from './Filters';
 import SearchBar from './SearchBar';
-import CartDropdown from './CartDropdown';
 
 class ProductTop extends Component {
   constructor(props) {
@@ -92,9 +91,6 @@ class ProductTop extends Component {
                 <Link className="d-none d-md-block ml-3" to="/main/buyagain">
                   <img src="/images/reorder.png" height="40" alt="" />
                 </Link>
-                <span className="d-none d-md-block">
-                  <CartDropdown />
-                </span>
               </div>
             </Col>
           </Row>
