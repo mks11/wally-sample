@@ -1,19 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { useStores } from 'hooks/mobx';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { PRODUCT_BASE_URL } from 'config';
 import { formatMoney } from 'utils';
+import styled from 'styled-components';
 
 function ProductList({ products }) {
+  const noProductsAvailable = () => {
+    return products.every((product) => {
+      const { image_refs, name, product_id, vendorFull, inventory } = product;
+      return (
+        !image_refs.length ||
+        !name ||
+        !product_id ||
+        !vendorFull ||
+        !inventory.length
+      );
+    });
+  };
+
   return (
     <Box py={2}>
-      <Grid container spacing={2}>
-        {products.map((product) => (
-          <ProductCard key={product.product_id} product={product} />
-        ))}
-      </Grid>
+      {noProductsAvailable() ? (
+        <Box display="flex" justifyContent="center">
+          <Typography variant="h2">No products available</Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={2}>
+          {products.map((product) => (
+            <ProductCard key={product.product_id} product={product} />
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 }
@@ -24,7 +45,17 @@ ProductList.propTypes = {
 
 export default ProductList;
 
+const ProductCardWrapper = styled(Card)`
+  border: 1px solid transparent;
+  &:hover {
+    border-color: ${(props) => props.color};
+    color: ${(props) => props.color};
+    transform: scale(1.0125);
+  }
+`;
+
 function ProductCard({ product }) {
+  const theme = useTheme();
   const { modal, product: productStore } = useStores();
   const { image_refs, name, product_id, vendorFull, inventory } = product;
   const openProductModal = () => {
@@ -32,9 +63,15 @@ function ProductCard({ product }) {
       modal.toggleModal('product');
     });
   };
-  return (
+  const SKU = inventory[0];
+
+  return !image_refs.length ||
+    !name ||
+    !product_id ||
+    !vendorFull ||
+    !inventory.length ? null : (
     <Grid item xs={6} md={4} sm={4} lg={3} onClick={openProductModal}>
-      <Card>
+      <ProductCardWrapper color={theme.palette.primary.main}>
         <CardContent>
           <Box mb={2}>
             <LazyLoadImage
@@ -55,20 +92,30 @@ function ProductCard({ product }) {
           </Typography>
           <Typography
             style={
-              !inventory[0].current_inventory && {
-                textDecoration: 'line-through',
-              }
+              isSoldOut()
+                ? {
+                    textDecoration: 'line-through',
+                  }
+                : undefined
             }
             variant="body2"
             component="span"
           >
-            {formatMoney(inventory[0].price)}
+            {formatMoney(SKU.price / 100)}
           </Typography>
-          <Typography variant="body2" component="span">
-            {!inventory[0].current_inventory && ' Sold Out'}
-          </Typography>
+          {isSoldOut() ? (
+            <Typography variant="body2" component="span">
+              {' '}
+              Sold Out
+            </Typography>
+          ) : null}
         </CardContent>
-      </Card>
+      </ProductCardWrapper>
     </Grid>
   );
+
+  function isSoldOut() {
+    if (SKU.current_inventory < 1) return true;
+    return false;
+  }
 }
