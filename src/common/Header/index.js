@@ -19,7 +19,11 @@ import styled from 'styled-components';
 import Navbar from 'common/Header/NavBar';
 
 const LogoFull = styled.img`
-  height: 32px;
+  height: 24px;
+
+  @media only screen and (width >= 375px) {
+    height: 32px;
+  }
 
   @media only screen and (width >= 567px) {
     height: 40px;
