@@ -89,7 +89,6 @@ function MobileUserNavMenu() {
       </MobileNavItem>
       <MobilePackagingBalance />
       <MobileRedeemPackagingBalance />
-      {/* <li><a onClick={this.handleMobileNavInvite}>Refer your friend, get a tote</a></li> */}
       <MobileSchedulePickupButton />
       <MobileNavItem to="/about" onClick={handleClose} hasDivider>
         About
@@ -188,6 +187,87 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
+const CartMenuMobile = observer(({ items }) => {
+  const { modal, routing, ui, user } = useStores();
+
+  const handleDeleteMobile = (id) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
+    ui.toggleCartMobile();
+    modal.toggleModal('delete', id);
+  };
+
+  const handleCheckoutMobile = () => {
+    logEvent({ category: 'Cart', action: 'ClickCheckoutMobile' });
+    if (user.status) {
+      ui.toggleCartMobile(false);
+      routing.push('/main/similar-products');
+    } else {
+      ui.toggleCartMobile(false);
+      modal.toggleModal('login');
+    }
+  };
+
+  return (
+    <div className={`cart-mobile d-md-none ${ui.cartMobile ? 'open' : ''}`}>
+      <button
+        className="btn-close-cart btn-transparent"
+        type="button"
+        onClick={(e) => ui.toggleCartMobile(false)}
+      >
+        <span className="navbar-toggler-icon close-icon"></span>
+      </button>
+      {items.length > 0 ? (
+        <React.Fragment>
+          <h2 className="ml-4 mb-2">Order</h2>
+          <div className="tbl-cart-mobile">
+            <table>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.product_name}>
+                    <td style={{ width: 42 }}>{item.customer_quantity}</td>
+                    <td>
+                      {item.product_name}
+                      <br />
+                      <span>{item.packaging_name}</span>
+                    </td>
+                    <td style={{ width: 46, color: '#e07f82' }}>
+                      {formatMoney(item.total / 100)}
+                    </td>
+                    <td
+                      style={{ width: 10 }}
+                      onClick={(e) =>
+                        handleDeleteMobile({
+                          product_id: item.product_id,
+                          inventory_id: item._id,
+                        })
+                      }
+                    >
+                      <button
+                        className="btn-close-cart btn-transparent"
+                        type="button"
+                      >
+                        <span className="navbar-toggler-icon close-icon-grey"></span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button
+            className="btn btn-main active btn-checkout-mobile"
+            onClick={(e) => handleCheckoutMobile(e)}
+          >
+            Checkout
+          </button>
+        </React.Fragment>
+      ) : (
+        <h5 className="text-center">No items in cart</h5>
+      )}
+    </div>
+  );
+});
+
 const CartDropdown = observer(({ anchorEl, handleClose }) => {
   const { checkout, modal, product, routing, ui, user } = useStores();
   const { cart } = checkout;
@@ -269,15 +349,15 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                               component="span"
                               gutterBottom
                             >
-                              Quantity: {item.customer_quantity}
+                              Quantity: {customer_quantity}
                             </Typography>
                           </Grid>
                           <Grid item>
                             <PrimaryTextButton
                               onClick={() =>
                                 handleEdit({
-                                  product_id: item.product_id,
-                                  customer_quantity: item.customer_quantity,
+                                  product_id,
+                                  customer_quantity,
                                 })
                               }
                             >
@@ -288,8 +368,8 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                             <DangerTextButton
                               onClick={() =>
                                 handleDelete({
-                                  product_id: item.product_id,
-                                  inventory_id: item._id,
+                                  product_id,
+                                  inventory_id: _id,
                                 })
                               }
                             >
@@ -330,22 +410,29 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
             </PrimaryWallyButton>
           </>
         ) : (
-          <span className="px-3">No items in cart</span>
+          <Typography>No items in cart</Typography>
         )}
       </Box>
     </Menu>
   );
 });
 
+// const CartMenu
 const Cart = observer(() => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user, checkout } = useStores();
+  const { ui, user, checkout } = useStores();
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
   const isDisabled = numItems < 1;
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleOpenCartMobile = () => {
+    logModalView('/cart-mobile');
+    ui.toggleCartMobile(true);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -362,7 +449,7 @@ const Cart = observer(() => {
     <>
       <IconButton
         aria-label="menu"
-        onClick={handleClick}
+        onClick={isMobile ? handleOpenCartMobile : handleClick}
         disabled={isDisabled}
         style={{ color: isDisabled ? 'rgba(0, 0, 0, 0.5)' : 'inherit' }}
       >
@@ -375,6 +462,7 @@ const Cart = observer(() => {
         </Badge>
       </IconButton>
       <CartDropdown anchorEl={anchorEl} handleClose={handleClose} />
+      <CartMenuMobile items={items} />
     </>
   );
 

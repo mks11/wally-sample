@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { logPageView, logEvent, logModalView } from 'services/google-analytics';
-import { formatMoney, connect, datesEqual } from 'utils';
+import { logPageView, logEvent } from 'services/google-analytics';
+import { connect, datesEqual } from 'utils';
 import { APP_URL } from 'config';
 
 import AddonFirstModal from 'common/AddonFirstModal';
@@ -11,7 +11,6 @@ import Product from './Product';
 import ProductList from './ProductList';
 import ProductTop from './ProductTop';
 import MobileSearch from './MobileSearch';
-import MobileCartBtn from './MobileCartBtn';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
@@ -211,53 +210,6 @@ class Mainpage extends Component {
       this.loadData();
     }
   }
-
-  handleCheckoutMobile() {
-    logEvent({ category: 'Cart', action: 'ClickCheckoutMobile' });
-    if (this.userStore.status) {
-      this.uiStore.toggleCartMobile(false);
-      this.routing.push('/main/similar-products');
-    } else {
-      this.uiStore.toggleCartMobile(false);
-      this.modalStore.toggleModal('login');
-    }
-  }
-
-  handleDeleteMobile(id) {
-    logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
-    this.uiStore.toggleCartMobile();
-    this.modalStore.toggleModal('delete', id);
-  }
-
-  toggleSearchCheck(id) {
-    this.productStore.searchCategory(id);
-  }
-
-  searchCheck(id) {
-    return this.productStore.currentSearchFilter.indexOf(id) !== -1;
-  }
-
-  toggleSearchAll = () => {
-    this.productStore.searchAll();
-  };
-
-  handleChangeDelivery = () => {
-    if (this.userStore.cameFromCartUrl) {
-      const delivery = this.userStore.getDeliveryParams();
-      if (delivery.zip && delivery.date) {
-        this.checkoutStore.updateCartItems(delivery);
-        this.userStore.cameFromCartUrl = false;
-      }
-    }
-
-    this.loadData();
-    this.checkoutStore.getDeliveryTimes();
-  };
-
-  handleOpenCartMobile = () => {
-    logModalView('/cart-mobile');
-    this.uiStore.toggleCartMobile(true);
-  };
 
   handleProductModal = (product_id) => {
     this.productStore.showModal(product_id, null).then((data) => {
@@ -518,71 +470,6 @@ class Mainpage extends Component {
               )}
             </div>
           </div>
-        </div>
-        <MobileCartBtn
-          onClick={this.handleOpenCartMobile}
-          items={cartItems.length}
-        />
-        <div
-          className={`cart-mobile d-md-none ${
-            this.uiStore.cartMobile ? 'open' : ''
-          }`}
-        >
-          <button
-            className="btn-close-cart btn-transparent"
-            type="button"
-            onClick={(e) => this.uiStore.toggleCartMobile(false)}
-          >
-            <span className="navbar-toggler-icon close-icon"></span>
-          </button>
-          {cartItems.length > 0 ? (
-            <React.Fragment>
-              <h2 className="ml-4 mb-2">Order</h2>
-              <div className="tbl-cart-mobile">
-                <table>
-                  <tbody>
-                    {cartItems.map((c, i) => (
-                      <tr key={i}>
-                        <td style={{ width: 42 }}>{c.customer_quantity}</td>
-                        <td>
-                          {c.product_name}
-                          <br />
-                          <span>{c.packaging_name}</span>
-                        </td>
-                        <td style={{ width: 46, color: '#e07f82' }}>
-                          {formatMoney(c.total / 100)}
-                        </td>
-                        <td
-                          style={{ width: 10 }}
-                          onClick={(e) =>
-                            this.handleDeleteMobile({
-                              product_id: c.product_id,
-                              inventory_id: c._id,
-                            })
-                          }
-                        >
-                          <button
-                            className="btn-close-cart btn-transparent"
-                            type="button"
-                          >
-                            <span className="navbar-toggler-icon close-icon-grey"></span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <button
-                className="btn btn-main active btn-checkout-mobile"
-                onClick={(e) => this.handleCheckoutMobile(e)}
-              >
-                Checkout
-              </button>
-            </React.Fragment>
-          ) : (
-            <h5 className="text-center">No items in cart</h5>
-          )}
         </div>
 
         <MobileSearch
