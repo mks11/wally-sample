@@ -59,34 +59,6 @@ class ProductTop extends Component {
     }
   };
 
-  handleCheckout = () => {
-    if (this.userStore.status) {
-      this.routing.push('/main/similar-products');
-    } else {
-      this.modalStore.toggleModal('login');
-    }
-  };
-
-  handleEdit = (data) => {
-    this.productStore
-      .showModal(
-        data.product_id,
-        data.customer_quantity,
-        this.userStore.getDeliveryParams(),
-      )
-      .then((data) => {
-        this.userStore.adjustDeliveryTimes(
-          data.delivery_date,
-          this.checkoutStore.deliveryTimes,
-        );
-        this.modalStore.toggleModal('product');
-      });
-  };
-
-  handleDelete = (id) => {
-    this.modalStore.toggleModal('delete', id);
-  };
-
   handleMobileSearchOpen = () => {
     const { onMobileSearchClick } = this.props;
     onMobileSearchClick && onMobileSearchClick();
@@ -121,13 +93,7 @@ class ProductTop extends Component {
                   <img src="/images/reorder.png" height="40" alt="" />
                 </Link>
                 <span className="d-none d-md-block">
-                  <CartDropdown
-                    ui={this.uiStore}
-                    cart={this.checkoutStore.cart}
-                    onCheckout={this.handleCheckout}
-                    onEdit={this.handleEdit}
-                    onDelete={this.handleDelete}
-                  />
+                  <CartDropdown />
                 </span>
               </div>
             </Col>
