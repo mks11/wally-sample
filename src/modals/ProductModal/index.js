@@ -524,17 +524,15 @@ class ProductModal extends Component {
         </Typography>
         {similar_products && similar_products.length > 0 && (
           <SimilarProducts>
-            {similar_products.map((product) => {
-              return (
-                <Product
-                  key={product.name}
-                  product={product}
-                  onProductClick={() =>
-                    this.handleProductClick(product.product_id)
-                  }
-                />
-              );
-            })}
+            {similar_products.map((product) => (
+              <Product
+                key={product.product_name}
+                product={product}
+                onProductClick={() =>
+                  this.handleProductClick(product.product_id)
+                }
+              />
+            ))}
           </SimilarProducts>
         )}
       </div>
