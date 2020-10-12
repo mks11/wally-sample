@@ -68,7 +68,7 @@ function Subcategories() {
               <TableCell> Name </TableCell>
               <TableCell align="left"> Id </TableCell>
               <TableCell align="left"> Categories </TableCell>
-              <TableCell align="center"> Actions </TableCell>
+              <TableCell align="left"> Actions </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -87,7 +87,7 @@ function Subcategories() {
                     }
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell align="left">
                   <CRUDButtonGroup
                     onUpdate={() => handleEdit(cat)}
                     onDelete={() => handleRemove(cat)}

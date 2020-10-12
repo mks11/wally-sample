@@ -69,7 +69,7 @@ function Categories() {
               <TableCell> Name </TableCell>
               <TableCell align="left"> Id </TableCell>
               <TableCell align="left"> Subcategories </TableCell>
-              <TableCell align="center"> Actions </TableCell>
+              <TableCell align="left"> Actions </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -87,7 +87,7 @@ function Categories() {
                     }
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell align="left">
                   <CRUDButtonGroup
                     onUpdate={() => handleEdit(cat)}
                     onDelete={() => handleRemove(cat)}

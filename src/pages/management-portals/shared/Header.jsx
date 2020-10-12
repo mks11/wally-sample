@@ -17,7 +17,7 @@ export default function Header({
     <Box display={'flex'} m={2} alignItems="center">
       <Box flex={1}>
         <PrimaryWallyButton startIcon={<Add />} onClick={onAdd}>
-          {buttonText}
+          <Typography>{buttonText}</Typography>
         </PrimaryWallyButton>
       </Box>
       {showSearchbar && (
