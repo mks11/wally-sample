@@ -43,13 +43,13 @@ function Sidebar({ store }) {
         title="Subcategories"
         content={<Subcategories />}
       />
-      <SidebarItem
+      {/* <SidebarItem
         selected={selected}
         setSelected={setSelected}
         store={store}
         title="Packaging"
         content={<Packaging />}
-      />
+      /> */}
     </>
   );
 }
