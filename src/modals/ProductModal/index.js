@@ -219,6 +219,7 @@ class ProductModal extends Component {
       nutrition_facts,
       ingredient_labels,
       ingredients,
+      instructions,
       manufacturer,
       manufacturer_url_name,
       max_qty,
@@ -465,6 +466,7 @@ class ProductModal extends Component {
           <ProductDetails
             description={description}
             ingredients={ingredients}
+            instructions={instructions}
             allergens={allergens}
             tags={tags}
           />
@@ -561,7 +563,13 @@ function Brand({ manufacturer, vendor, onClick }) {
   );
 }
 
-function ProductDetails({ description, ingredients, allergens, tags }) {
+function ProductDetails({
+  description,
+  ingredients,
+  instructions,
+  allergens,
+  tags,
+}) {
   return (
     <>
       <Typography variant="h2" gutterBottom>
@@ -579,6 +587,16 @@ function ProductDetails({ description, ingredients, allergens, tags }) {
           </Typography>
           <Typography variant="body1" gutterBottom>
             {ingredients.join(', ')}
+          </Typography>
+        </>
+      )}
+      {instructions && instructions.length > 0 && (
+        <>
+          <Typography style={{ fontWeight: 'bold' }} gutterBottom>
+            Instructions:
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {instructions.join(', ')}
           </Typography>
         </>
       )}
