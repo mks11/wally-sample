@@ -466,7 +466,7 @@ class ProductModal extends Component {
           <ProductDetails
             description={description}
             ingredients={ingredients}
-            instructions={instructions}
+            instructions={instruction}
             allergens={allergens}
             tags={tags}
           />
@@ -590,13 +590,13 @@ function ProductDetails({
           </Typography>
         </>
       )}
-      {instructions && instructions.length > 0 && (
+      {instructions && (
         <>
           <Typography style={{ fontWeight: 'bold' }} gutterBottom>
             Instructions:
           </Typography>
           <Typography variant="body1" gutterBottom>
-            {instructions.join(', ')}
+            {instructions}
           </Typography>
         </>
       )}
