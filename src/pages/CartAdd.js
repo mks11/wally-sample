@@ -1,6 +1,6 @@
-import LoginForm from 'forms/authentication/LoginForm';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from '../utils';
+import LoginForm from 'forms/authentication/LoginForm';
 
 class CartAdd extends Component {
   constructor(props) {
