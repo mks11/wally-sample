@@ -15,6 +15,7 @@ import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
+import LoginForm from 'forms/authentication/LoginForm';
 
 class Mainpage extends Component {
   constructor(props) {
@@ -200,7 +201,7 @@ class Mainpage extends Component {
           this.userStore.giftCardPromo = null;
         });
     } else {
-      this.modalStore.toggleModal('login');
+      this.modalV2.open(<LoginForm />);
     }
   }
 

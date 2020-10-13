@@ -40,6 +40,7 @@ import {
 } from 'common/Header/NavBar/DesktopNavComponents';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
+import LoginForm from 'forms/authentication/LoginForm';
 
 // Styled Components
 import {
@@ -188,7 +189,7 @@ const PackagingBalance = observer(() => {
 });
 
 const CartMenuMobile = observer(({ items }) => {
-  const { modal, routing, ui, user } = useStores();
+  const { modal, routing, ui, user, modalV2 } = useStores();
 
   const handleDeleteMobile = (id) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
@@ -203,7 +204,7 @@ const CartMenuMobile = observer(({ items }) => {
       routing.push('/main/similar-products');
     } else {
       ui.toggleCartMobile(false);
-      modal.toggleModal('login');
+      modalV2.open(<LoginForm />);
     }
   };
 
@@ -269,7 +270,7 @@ const CartMenuMobile = observer(({ items }) => {
 });
 
 const CartDropdown = observer(({ anchorEl, handleClose }) => {
-  const { checkout, modal, product, routing, ui, user } = useStores();
+  const { checkout, modal, product, routing, ui, user, modalV2 } = useStores();
   const { cart } = checkout;
 
   const handleCheckout = () => {
@@ -279,7 +280,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
     if (user.status) {
       routing.push('/main/similar-products');
     } else {
-      modal.toggleModal('login');
+      modalV2.open(<LoginForm />);
     }
   };
 

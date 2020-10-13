@@ -1,20 +1,22 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView, logEvent } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView, logEvent } from 'services/google-analytics';
+import { connect } from '../utils';
+
+import SignupForm from 'forms/authentication/SignupForm';
 
 class InviteFriends extends Component {
   constructor(props) {
     super(props);
 
-    this.modalStore = this.props.store.modal;
+    this.modalV2Store = this.props.store.modalV2;
     this.routing = this.props.store.routing;
   }
 
   handleSignup = () => {
-    logEvent({ category: "ReferSignup", action: "StartSignup" });
-    this.modalStore.toggleModal("signup");
-    this.routing.push("/main");
+    logEvent({ category: 'ReferSignup', action: 'StartSignup' });
+    this.modalV2Store.open(<SignupForm />);
+    this.routing.push('/main');
   };
 
   render() {
@@ -24,12 +26,12 @@ class InviteFriends extends Component {
 
     const isMobile = window.innerWidth <= 500;
     const isMobileHoriz = window.innerWidth > 500 && window.innerWidth <= 800;
-    let heroClass = "landing-section aw-hero homepage";
+    let heroClass = 'landing-section aw-hero homepage';
     if (isMobile) {
-      heroClass += " mobile";
+      heroClass += ' mobile';
     }
     if (isMobileHoriz) {
-      heroClass += " mobile-horiz";
+      heroClass += ' mobile-horiz';
     }
 
     return (
@@ -66,7 +68,7 @@ class InviteFriends extends Component {
   }
 }
 
-export default connect("store")(InviteFriends);
+export default connect('store')(InviteFriends);
 
 function InviteFriendsPhoto() {
   return (

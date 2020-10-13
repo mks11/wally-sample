@@ -1,16 +1,17 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView, logModalView } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView, logModalView } from 'services/google-analytics';
+import { connect } from '../utils';
 
-import Head from "../common/Head";
+import Head from '../common/Head';
+import LoginForm from 'forms/authentication/LoginForm';
 
 class About extends Component {
   constructor(props, context) {
     super(props, context);
     this.userStore = this.props.store.user;
     this.routing = this.props.store.routing;
-    this.modalStore = this.props.store.modal;
+    this.modalV2Store = this.props.store.modalV2;
   }
 
   componentDidMount() {
@@ -21,9 +22,9 @@ class About extends Component {
   }
 
   handleLogin = () => {
-    logModalView("/login");
-    this.routing.push("/main");
-    this.modalStore.toggleModal("login");
+    logModalView('/login');
+    this.routing.push('/main');
+    this.modalV2Store.open(<LoginForm />);
   };
 
   render() {
@@ -91,4 +92,4 @@ class About extends Component {
   }
 }
 
-export default connect("store")(About);
+export default connect('store')(About);

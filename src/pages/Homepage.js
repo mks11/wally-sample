@@ -38,6 +38,7 @@ class Homepage extends Component {
     this.zipStore = this.props.store.zip;
     this.userStore = this.props.store.user;
     this.modalStore = this.props.store.modal;
+    this.modalV2Store = this.props.store.modalV2;
     this.routing = this.props.store.routing;
     this.metricStore = this.props.store.metric;
   }
@@ -163,7 +164,7 @@ class Homepage extends Component {
 
   handleSignup(e) {
     logModalView('/signup-zip');
-    this.modalStore.toggleModal('signup');
+    this.modalV2Store.open(<SignupForm />);
   }
 
   handleZip(e) {
