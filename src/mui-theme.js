@@ -18,6 +18,15 @@ let theme = createMuiTheme({
     secondary: {
       main: '#42E2B8',
     },
+    red: {
+      main: '#F75E50',
+    },
+    orange: {
+      main: '#F58551',
+    },
+    yellow: {
+      main: '#F1D26A',
+    },
   },
   typography: {
     h1: {
