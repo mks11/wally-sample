@@ -38,6 +38,14 @@ var heroImages = [
     sm:
       'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
   },
+  {
+    lg:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+    md:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+    sm:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+  },
 ];
 
 var DesktopCarouselWrapper = styled(Box)`
@@ -536,6 +544,7 @@ class Mainpage extends Component {
                             {/* displayed from 568px and up */}
                             <DesktopCarouselWrapper my={2} zIndex={1}>
                               <ImageCarousel
+                                dots
                                 keyName={'featured-brands'}
                                 height={675}
                                 slides={slides}
@@ -545,6 +554,7 @@ class Mainpage extends Component {
                             {/* displayed from 567px and down */}
                             <MobileCarouselWrapper my={2} zIndex={1}>
                               <ImageCarousel
+                                dots
                                 keyName={'featured-brands'}
                                 height={640}
                                 slides={slides}
@@ -711,11 +721,18 @@ HeroSlide.propTypes = {
   url: PropTypes.string,
 };
 
+const SlideOverlayWrapper = styled(Box)`
+  @media only screen and (min-width: 992px) {
+    padding: 4.5rem;
+  }
+
+  padding: 2rem;
+`;
+
 function HeroSlideOverlay({ body, justify, title, url }) {
   const theme = useTheme();
   return (
-    <Box
-      p={2}
+    <SlideOverlayWrapper
       position="absolute"
       top="0"
       left="0"
@@ -724,7 +741,7 @@ function HeroSlideOverlay({ body, justify, title, url }) {
       overflow="hidden"
     >
       <Grid container justify={justify}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8} lg={6}>
           <Typography variant="h1" gutterBottom>
             {title}
           </Typography>
@@ -737,7 +754,7 @@ function HeroSlideOverlay({ body, justify, title, url }) {
           </Link>
         </Grid>
       </Grid>
-    </Box>
+    </SlideOverlayWrapper>
   );
 }
 

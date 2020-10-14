@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
@@ -30,6 +30,10 @@ const BackSlideControl = styled(ButtonBack)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media only screen and (max-width: 992px) {
+    display: none;
+  }
 `;
 
 const NextSlideControl = styled(ButtonNext)`
@@ -47,9 +51,23 @@ const NextSlideControl = styled(ButtonNext)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media only screen and (max-width: 992px) {
+    display: none;
+  }
 `;
 
+const SlideDot = styled(Dot)`
+  height: 1rem;
+  width: 1rem;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 50%;
+  margin: 0 0.25rem;
+`;
 export default function ImageCarousel({
+  autoPlay,
+  dots,
   keyName,
   height,
   slides,
@@ -60,15 +78,45 @@ export default function ImageCarousel({
   // Only allow 5 slides
   slides = slides.slice(0, 6);
 
+  const [x, setX] = useState(0);
+  const [selectedSlide, setSelectedSlide] = useState(0);
+  const minDistance = 0.1 * width;
+
+  // Touch handlers
+  const onTouchStart = (e) => {
+    const touch = e.touches[0];
+    setX(touch.clientX);
+  };
+
+  const onTouchEnd = (e) => {
+    const touch = e.changedTouches[0];
+    const xDiff = touch.clientX - x;
+    if (xDiff < x && Math.abs(xDiff) >= minDistance) {
+      setSelectedSlide(Math.min(slides.length - 1, selectedSlide + 1));
+    } else if (xDiff > x && Math.abs(xDiff) >= minDistance) {
+      setSelectedSlide(Math.max(0, selectedSlide - 1));
+    }
+  };
+
+  const handleDotClick = (slide) => {
+    setSelectedSlide(slide);
+  };
+
   return (
     <CarouselProvider
+      isPlaying={autoPlay}
       naturalSlideWidth={width}
       naturalSlideHeight={height}
       totalSlides={slides.length}
       style={{ backgroundColor: 'transparent' }}
     >
       <Box position={'relative'}>
-        <Slider>
+        <Slider
+          trayProps={{
+            onTouchStart: onTouchStart,
+            onTouchEnd: onTouchEnd,
+          }}
+        >
           {slides.map((slide, idx) => (
             <Slide key={`${keyName}-slide-${idx}`} index={idx}>
               {slide}
@@ -77,15 +125,40 @@ export default function ImageCarousel({
         </Slider>
         {slides && slides.length > 1 && (
           <>
-            <BackSlideControl>
+            <BackSlideControl
+              onClick={() => handleDotClick(Math.max(0, selectedSlide - 1))}
+            >
               <ChevronLeft fontSize="large" />
             </BackSlideControl>
-            <NextSlideControl>
+            <NextSlideControl
+              onClick={() =>
+                handleDotClick(Math.min(slides.length - 1, selectedSlide + 1))
+              }
+            >
               <ChevronRight fontSize="large" />
             </NextSlideControl>
           </>
         )}
       </Box>
+      {dots && (
+        <Box p={1} display="flex" justifyContent="center" alignItems="center">
+          {slides.map((slide, idx) => {
+            const isSelected = selectedSlide === idx;
+            return (
+              <SlideDot
+                key={`${keyName}-dot-${idx}`}
+                slide={idx}
+                onClick={() => handleDotClick(idx)}
+                style={{
+                  backgroundColor: isSelected
+                    ? 'rgba(0, 0, 0, 0.65)'
+                    : 'rgba(0, 0, 0, 0.25)',
+                }}
+              />
+            );
+          })}
+        </Box>
+      )}
       {thumbnails && thumbnails.length > 1 && (
         <ThumbnailSlideControls keyName={keyName} slides={thumbnails} />
       )}
@@ -94,6 +167,7 @@ export default function ImageCarousel({
 }
 
 ImageCarousel.propTypes = {
+  autoPlay: PropTypes.bool,
   height: PropTypes.number.isRequired,
   keyName: PropTypes.string.isRequired,
   slides: PropTypes.arrayOf(PropTypes.node.isRequired).isRequired,
