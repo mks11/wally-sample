@@ -14,7 +14,10 @@ import QuantitySelect from '../../common/QuantitySelect';
 import Product from '../../pages/Mainpage/Product/index';
 import ProductRatingForm from '../../common/ProductRatingForm';
 import ProductRatingStars from '../../common/ProductRatingStars';
-import ImageCarousel from 'modals/ProductModal/ImageCarousel';
+import { Image } from 'pure-react-carousel';
+import ImageCarousel from 'common/ImageCarousel';
+
+import { PRODUCT_BASE_URL } from 'config';
 
 const SimilarProducts = styled(Row)`
   flex-wrap: nowrap;
@@ -284,58 +287,12 @@ class ProductModal extends Component {
     const packaging_description = packaging ? packaging.description : null;
     const packaging_size =
       inventory && inventory.packaging && inventory.packaging.size;
-
-    let jarIcons = (
-      <div className="jar-icons">
-        <div>
-          <img
-            src={
-              packaging_size === 8
-                ? `/images/jar8_icon.png`
-                : `/images/jar8_grey_icon.png`
-            }
-            alt="Packaging size 8 oz"
-            width="22"
-          />
-          <div>8 oz</div>
-        </div>
-        <div>
-          <img
-            src={
-              packaging_size === 16 || packaging_size === 25
-                ? `/images/jar8_icon.png`
-                : `/images/jar8_grey_icon.png`
-            }
-            alt="Packaging size 25 oz"
-            width="26"
-          />
-          <div>{packaging_size === 16 ? '16 oz' : '25 oz'}</div>
-        </div>
-        <div>
-          <img
-            src={
-              packaging_size === 32
-                ? `/images/jar8_icon.png`
-                : `/images/jar8_grey_icon.png`
-            }
-            alt="Packaging size 32 oz"
-            width="30"
-          />
-          <div>32 oz</div>
-        </div>
-        <div>
-          <img
-            src={
-              packaging_size === 64
-                ? `/images/jar8_icon.png`
-                : `/images/jar8_grey_icon.png`
-            }
-            alt="Packaging size 64 oz"
-            width="34"
-          />
-          <div>64 oz</div>
-        </div>
-      </div>
+    const slides = createCarouselSlides(
+      image_refs,
+      ingredient_labels,
+      name,
+      nutrition_facts,
+      product_id,
     );
 
     return (
@@ -346,11 +303,11 @@ class ProductModal extends Component {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <ImageCarousel
-              imageRefs={image_refs}
-              ingredientLabels={ingredient_labels}
-              name={name}
-              nutritionFacts={nutrition_facts}
-              productId={product_id}
+              keyName={product_id}
+              hasThumbnailSlideControls
+              height={1}
+              slides={slides}
+              width={1}
             />
           </Grid>
           <Grid item md={6}>
@@ -585,3 +542,75 @@ class ProductModal extends Component {
 }
 
 export default connect('store')(ProductModal);
+
+function createCarouselSlides(
+  imageRefs,
+  ingredientLabels,
+  name,
+  nutritionFacts,
+  productId,
+) {
+  var slides = imageRefs;
+  if (nutritionFacts) slides = [...slides, ...nutritionFacts];
+  if (ingredientLabels) slides = [...slides, ...ingredientLabels];
+
+  return slides.map((slide) => {
+    const src = PRODUCT_BASE_URL + productId + '/' + slide;
+    return <Image src={src} alt={name} />;
+  });
+}
+
+function JarIcons({ packagingSize }) {
+  return (
+    <div className="jar-icons">
+      <div>
+        <img
+          src={
+            packagingSize === 8
+              ? `/images/jar8_icon.png`
+              : `/images/jar8_grey_icon.png`
+          }
+          alt="Packaging size 8 oz"
+          width="22"
+        />
+        <div>8 oz</div>
+      </div>
+      <div>
+        <img
+          src={
+            packagingSize === 16 || packagingSize === 25
+              ? `/images/jar8_icon.png`
+              : `/images/jar8_grey_icon.png`
+          }
+          alt="Packaging size 25 oz"
+          width="26"
+        />
+        <div>{packagingSize === 16 ? '16 oz' : '25 oz'}</div>
+      </div>
+      <div>
+        <img
+          src={
+            packagingSize === 32
+              ? `/images/jar8_icon.png`
+              : `/images/jar8_grey_icon.png`
+          }
+          alt="Packaging size 32 oz"
+          width="30"
+        />
+        <div>32 oz</div>
+      </div>
+      <div>
+        <img
+          src={
+            packagingSize === 64
+              ? `/images/jar8_icon.png`
+              : `/images/jar8_grey_icon.png`
+          }
+          alt="Packaging size 64 oz"
+          width="34"
+        />
+        <div>64 oz</div>
+      </div>
+    </div>
+  );
+}
