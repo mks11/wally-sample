@@ -14,7 +14,7 @@ import QuantitySelect from '../../common/QuantitySelect';
 import Product from '../../pages/Mainpage/Product/index';
 import ProductRatingForm from '../../common/ProductRatingForm';
 import ProductRatingStars from '../../common/ProductRatingStars';
-import { Image } from 'pure-react-carousel';
+import { Image, ImageWithZoom } from 'pure-react-carousel';
 import ImageCarousel from 'common/ImageCarousel';
 
 import { PRODUCT_BASE_URL } from 'config';
@@ -287,7 +287,7 @@ class ProductModal extends Component {
     const packaging_description = packaging ? packaging.description : null;
     const packaging_size =
       inventory && inventory.packaging && inventory.packaging.size;
-    const slides = createCarouselSlides(
+    const { slides, thumbnails } = createCarouselSlides(
       image_refs,
       ingredient_labels,
       name,
@@ -304,10 +304,10 @@ class ProductModal extends Component {
           <Grid item xs={12} md={6}>
             <ImageCarousel
               keyName={product_id}
-              hasThumbnailSlideControls
-              height={1}
+              height={250}
               slides={slides}
-              width={1}
+              thumbnails={thumbnails}
+              width={250}
             />
           </Grid>
           <Grid item md={6}>
@@ -550,14 +550,19 @@ function createCarouselSlides(
   nutritionFacts,
   productId,
 ) {
-  var slides = imageRefs;
-  if (nutritionFacts) slides = [...slides, ...nutritionFacts];
-  if (ingredientLabels) slides = [...slides, ...ingredientLabels];
+  var images = imageRefs;
+  if (nutritionFacts) images = [...images, ...nutritionFacts];
+  if (ingredientLabels) images = [...images, ...ingredientLabels];
+  var slides = [];
+  var thumbnails = [];
 
-  return slides.map((slide) => {
-    const src = PRODUCT_BASE_URL + productId + '/' + slide;
-    return <Image src={src} alt={name} />;
+  images.forEach((image) => {
+    const src = PRODUCT_BASE_URL + productId + '/' + image;
+    slides.push(<ImageWithZoom src={src} alt={name} />);
+    thumbnails.push(<Image src={src} alt={name} />);
   });
+
+  return { slides, thumbnails };
 }
 
 function JarIcons({ packagingSize }) {

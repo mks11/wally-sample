@@ -51,9 +51,9 @@ const NextSlideControl = styled(ButtonNext)`
 
 export default function ImageCarousel({
   keyName,
-  hasThumbnailSlideControls,
   height,
   slides,
+  thumbnails,
   width,
   ...props
 }) {
@@ -75,7 +75,7 @@ export default function ImageCarousel({
             </Slide>
           ))}
         </Slider>
-        {slides.length > 1 && (
+        {slides && slides.length > 1 && (
           <>
             <BackSlideControl>
               <ChevronLeft fontSize="large" />
@@ -86,18 +86,18 @@ export default function ImageCarousel({
           </>
         )}
       </Box>
-      {hasThumbnailSlideControls && slides.length > 1 && (
-        <ThumbnailSlideControls keyName={keyName} slides={slides} />
+      {thumbnails && thumbnails.length > 1 && (
+        <ThumbnailSlideControls keyName={keyName} slides={thumbnails} />
       )}
     </CarouselProvider>
   );
 }
 
 ImageCarousel.propTypes = {
-  hasThumbnailSlideControls: PropTypes.bool,
   height: PropTypes.number.isRequired,
   keyName: PropTypes.string.isRequired,
   slides: PropTypes.arrayOf(PropTypes.node.isRequired).isRequired,
+  thumbnails: PropTypes.arrayOf(PropTypes.node.isRequired),
   width: PropTypes.number.isRequired,
 };
 
