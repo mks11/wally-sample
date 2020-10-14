@@ -219,7 +219,7 @@ class ProductModal extends Component {
       nutrition_facts,
       ingredient_labels,
       ingredients,
-      instructions,
+      instruction,
       manufacturer,
       manufacturer_url_name,
       max_qty,
