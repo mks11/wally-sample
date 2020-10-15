@@ -18,7 +18,7 @@ import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 
 const BackSlideControl = styled(ButtonBack)`
   position: absolute;
-  top: calc(50% - 24px);
+  top: calc(50% - 60px);
   left: 0;
   border-radius: 50%;
   padding: 0;
@@ -34,7 +34,7 @@ const BackSlideControl = styled(ButtonBack)`
 
 const NextSlideControl = styled(ButtonNext)`
   position: absolute;
-  top: calc(50% - 24px);
+  top: calc(50% - 60px);
   right: 0;
   border-radius: 50%;
   padding: 0;
@@ -99,7 +99,7 @@ export default function ImageCarousel({
           {slides.map((imgRef, idx) => {
             const src = PRODUCT_BASE_URL + productId + '/' + imgRef;
             return (
-              <Box p={1} flex="20%" flexGrow={0} flexShrink={0}>
+              <Box key={imgRef} p={1} flex="20%" flexGrow={0} flexShrink={0}>
                 <Thumbnail slide={idx}>
                   <Image src={src} alt={name} />
                 </Thumbnail>

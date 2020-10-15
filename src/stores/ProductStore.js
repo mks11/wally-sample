@@ -1,4 +1,4 @@
-import { observable, decorate, action } from 'mobx';
+import { observable, decorate, action, computed } from 'mobx';
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
@@ -8,6 +8,7 @@ import {
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
+  API_GET_PRODUCTS_MATCHING_FILTERS,
 } from '../config';
 import UserStore from './UserStore';
 import axios from 'axios';
@@ -22,8 +23,6 @@ class ProductStore {
   activeProduct = null;
   activeProductComments = [];
   categories = [];
-  fetch = false;
-
   fetch = false;
 
   customer_quantity = null;
@@ -42,6 +41,133 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
+
+  products = [];
+
+  /*** Vendor filters */
+  availableLifestyles = [];
+  selectedLifestyles = [];
+  availableValues = [];
+  selectedValues = [];
+  availableSubcategories = [];
+  selectedSubcategories = [];
+  availableBrands = [];
+  selectedBrands = [];
+  /*** Ends Vendor filters */
+
+  /***  Vendor computed properties  */
+  get filteredProducts() {
+    if (
+      !this.selectedLifestyles.length &&
+      !this.selectedSubcategories.length &&
+      !this.selectedBrands.length &&
+      !this.selectedValues.length
+    ) {
+      return this.products;
+    }
+
+    return this.products.filter(
+      ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
+        const inLifestyles =
+          !this.selectedLifestyles.length ||
+          this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+        const inValues =
+          !this.selectedValues.length ||
+          this.selectedValues.every((val) => values.includes(val));
+
+        const inSubcategory =
+          !this.selectedSubcategories.length ||
+          this.selectedSubcategories.includes[subcategory];
+
+        const inBrands =
+          !this.selectedBrands.length ||
+          this.selectedBrands.includes[vendorFull.name];
+
+        return inLifestyles && inValues && inSubcategory && inBrands;
+      },
+    );
+  }
+  /*** Ends Vendor computed properties */
+
+  /*** Vendor filtering actions */
+  initializeProductAssortment(assortmentDetails = {}) {
+    const {
+      products = [],
+      lifestyles = [],
+      values = [],
+      subcategories = [],
+      brands = [],
+    } = assortmentDetails;
+    this.products = products;
+    this.availableLifestyles = lifestyles;
+    this.availableValues = values;
+    this.availableSubcategories = subcategories;
+    this.availableBrands = brands;
+  }
+
+  resetProductAssortment() {
+    this.availableBrands = [];
+    this.availableLifestyles = [];
+    this.availableSubcategories = [];
+    this.availableValues = [];
+    this.selectedBrands = [];
+    this.selectedLifestyles = [];
+    this.selectedSubcategories = [];
+    this.selectedValues = [];
+  }
+
+  resetSelectedFilters() {
+    this.selectedBrands = [];
+    this.selectedLifestyles = [];
+    this.selectedSubcategories = [];
+    this.selectedValues = [];
+  }
+
+  addSelectedLifestyle(lifestyle) {
+    if (!this.selectedLifestyles.includes(lifestyle)) {
+      this.selectedLifestyles.push(lifestyle);
+    }
+  }
+
+  removeSelectedLifestyle(lifestyle) {
+    this.selectedLifestyles = this.selectedLifestyles.filter(
+      (style) => style !== lifestyle,
+    );
+  }
+
+  addSelectedSubcategory(subcategory) {
+    if (!this.selectedSubcategories.includes(subcategory)) {
+      this.selectedSubcategories.push(subcategory);
+    }
+  }
+
+  removeSelectedSubcategory(subcategory) {
+    this.selectedSubcategories = this.selectedSubcategories.filter(
+      (cat) => cat !== subcategory,
+    );
+  }
+
+  addSelectedBrand(brand) {
+    if (!this.selectedBrands.includes(brand)) {
+      this.selectedBrands.push(brand);
+    }
+  }
+
+  removeSelectedBrand(brand) {
+    this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
+  }
+
+  addSelectedValue(value) {
+    if (!this.selectedValues.includes(value)) {
+      this.selectedValues.push(value);
+    }
+  }
+
+  removeSelectedValue(value) {
+    this.selectedValues = this.selectedValues.filter((v) => v !== value);
+  }
+  /*** Ends Vendor filtering actions */
 
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id;
@@ -268,6 +394,8 @@ class ProductStore {
     this.currentSearchFilter = [];
     this.currentSearchCategory = 'All Categories';
   }
+
+  getProductsMatchingFilters() {}
 }
 
 decorate(ProductStore, {
@@ -282,6 +410,34 @@ decorate(ProductStore, {
   activeProductId: observable,
   search: observable,
   currentSearchFilter: observable,
+  filters: observable,
+
+  /*** Vendor
+   * Vendor observables */
+  products: observable,
+  availableLifestyles: observable,
+  selectedLifestyles: observable,
+  availableSubcategories: observable,
+  selectedSubcategories: observable,
+  availableBrands: observable,
+  selectedBrands: observable,
+  availableValues: observable,
+  selectedValues: observable,
+  /*** Vendor computed */
+  filteredProducts: computed,
+  /*** Vendor actions */
+  initializeProductAssortment: action,
+  resetProductAssortment: action,
+  resetSelectedFilters: action,
+  addSelectedLifestyle: action,
+  removeSelectedLifestyle: action,
+  addSelectedSubcategory: action,
+  removeSelectedSubcategory: action,
+  addSelectedBrand: action,
+  removeSelectedBrand: action,
+  addSelectedValue: action,
+  removeSelectedValue: action,
+  /** Ends Vendor */
 
   showModal: action,
   getAdvertisements: action,
@@ -296,6 +452,7 @@ decorate(ProductStore, {
   updateRatingComments: action,
   getHistoricalProducts: action,
   getProductComments: action,
+  getProductsMatchingFilters: action,
 });
 
 export default new ProductStore();

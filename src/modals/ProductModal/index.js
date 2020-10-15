@@ -1,5 +1,5 @@
 // Node Modules
-import React, { Component } from 'react';
+import React, { useState, Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ import { formatMoney, connect } from 'utils';
 
 // Components
 import { Box, Grid, Typography } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { Row, Col } from 'reactstrap';
 import QuantitySelect from '../../common/QuantitySelect';
 import Product from '../../pages/Mainpage/Product/index';
@@ -193,6 +194,10 @@ class ProductModal extends Component {
     return text.slice(0, length) + '...';
   };
 
+  closeModal = () => {
+    this.props.toggle();
+  };
+
   render() {
     const { activeProduct, activeProductComments } = this.productStore;
     if (!activeProduct) return null;
@@ -214,6 +219,7 @@ class ProductModal extends Component {
       nutrition_facts,
       ingredient_labels,
       ingredients,
+      instruction,
       manufacturer,
       manufacturer_url_name,
       max_qty,
@@ -229,6 +235,7 @@ class ProductModal extends Component {
       tags,
       unit_type,
       vendor,
+      vendorFull,
     } = activeProduct;
     let { unit_weight } = activeProduct;
     let shipMessage = `Fulfilled by The Wally Shop.`;
@@ -340,9 +347,6 @@ class ProductModal extends Component {
 
     return (
       <div className="product-modal-wrap">
-        <Typography variant="h1">{name}</Typography>
-        <Typography variant="subtitle1">{shipMessage}</Typography>
-        <br />
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <ImageCarousel
@@ -354,6 +358,16 @@ class ProductModal extends Component {
             />
           </Grid>
           <Grid item md={6}>
+            <Typography variant="h1">{name}</Typography>
+            {manufacturer && (
+              <Brand
+                manufacturer={manufacturer}
+                vendor={vendorFull}
+                onClick={this.closeModal}
+              />
+            )}
+            <Typography variant="subtitle1">{shipMessage}</Typography>
+            <br />
             <Typography variant="h2" component="p" style={{ color: '#6060a8' }}>
               {formatMoney(price)}
             </Typography>
@@ -449,67 +463,13 @@ class ProductModal extends Component {
         </Grid>
         <hr />
         <Box padding={1}>
-          <Typography variant="h2" gutterBottom>
-            Product Info
-          </Typography>
-
-          {manufacturer && (
-            <>
-              <Typography variant="h4" component="span" gutterBottom>
-                Producer:{' '}
-              </Typography>
-              <Link
-                onClick={this.modalStore.toggleModal}
-                to={'/vendor/' + manufacturer_url_name}
-              >
-                <Typography variant="body1" component="span">
-                  {manufacturer}
-                </Typography>
-              </Link>
-              <br />
-              <br />
-            </>
-          )}
-          {description && (
-            <>
-              <Typography variant="h4" component="p" gutterBottom>
-                Description:
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {description}
-              </Typography>
-            </>
-          )}
-          {ingredients && ingredients.length > 0 && (
-            <>
-              <Typography variant="h4" component="p" gutterBottom>
-                Ingredients:
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {ingredients.join(', ')}
-              </Typography>
-            </>
-          )}
-          {allergens && allergens.length > 0 && (
-            <>
-              <Typography variant="h4" component="p" gutterBottom>
-                Allergens:
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {allergens.join(', ')}
-              </Typography>
-            </>
-          )}
-          {tags && tags.length > 0 && (
-            <>
-              <Typography variant="h4" component="p" gutterBottom>
-                Tags:
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {tags.join(', ')}
-              </Typography>
-            </>
-          )}
+          <ProductDetails
+            description={description}
+            ingredients={ingredients}
+            instructions={instruction}
+            allergens={allergens}
+            tags={tags}
+          />
         </Box>
 
         {a_plus_url && (
@@ -562,21 +522,19 @@ class ProductModal extends Component {
         {localStorage.user && <ProductRatingForm product_id={product_id} />}
         <hr />
         <Typography variant="h2" gutterBottom>
-          More Products Like This
+          You might also like
         </Typography>
         {similar_products && similar_products.length > 0 && (
           <SimilarProducts>
-            {similar_products.map((product) => {
-              return (
-                <Product
-                  key={product.name}
-                  product={product}
-                  onProductClick={() =>
-                    this.handleProductClick(product.product_id)
-                  }
-                />
-              );
-            })}
+            {similar_products.map((product) => (
+              <Product
+                key={product.product_name}
+                product={product}
+                onProductClick={() =>
+                  this.handleProductClick(product.product_id)
+                }
+              />
+            ))}
           </SimilarProducts>
         )}
       </div>
@@ -585,3 +543,89 @@ class ProductModal extends Component {
 }
 
 export default connect('store')(ProductModal);
+
+function Brand({ manufacturer, vendor, onClick }) {
+  const theme = useTheme();
+  return vendor && vendor.name && vendor.fbw && vendor.url_name ? (
+    <Link
+      onClick={onClick}
+      to={'/shop/brands/' + vendor.url_name}
+      style={{ color: theme.palette.primary.main }}
+    >
+      <Typography variant="body1" component="span">
+        {vendor.name}
+      </Typography>
+    </Link>
+  ) : (
+    <Typography variant="body1" component="span">
+      {manufacturer}
+    </Typography>
+  );
+}
+
+function ProductDetails({
+  description,
+  ingredients,
+  instructions,
+  allergens,
+  tags,
+}) {
+  return (
+    <>
+      <Typography variant="h2" gutterBottom>
+        About
+      </Typography>
+      {description && (
+        <Typography variant="body1" gutterBottom>
+          {description}
+        </Typography>
+      )}
+      {ingredients && ingredients.length > 0 && (
+        <>
+          <Typography style={{ fontWeight: 'bold' }} gutterBottom>
+            Ingredients:
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {ingredients.join(', ')}
+          </Typography>
+        </>
+      )}
+      {instructions && (
+        <>
+          <Typography style={{ fontWeight: 'bold' }} gutterBottom>
+            Instructions:
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {instructions}
+          </Typography>
+        </>
+      )}
+      {allergens && allergens.length > 0 && (
+        <>
+          <Typography style={{ fontWeight: 'bold' }} gutterBottom>
+            Allergens:
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {allergens.join(', ')}
+          </Typography>
+        </>
+      )}
+      {tags && tags.length > 0 && (
+        <>
+          <Typography style={{ fontWeight: 'bold' }} gutterBottom>
+            Product Highlights:
+          </Typography>
+          <ul aria-label="product highlights">
+            {tags.map((tag) => (
+              <li key={tag}>
+                <Typography variant="body1" gutterBottom>
+                  {tag}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </>
+  );
+}

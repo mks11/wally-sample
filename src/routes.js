@@ -43,7 +43,7 @@ import Signup from './pages/Signup';
 import Feedback from './pages/Feedback';
 import Receipts from './pages/manage/receipt/Receipts';
 import CourierRouting from './pages/courier/CourierRouting';
-import VendorProfile from './pages/vendor/VendorProfile';
+import ShopByBrand from './templates/ShopByBrand';
 import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
@@ -176,7 +176,7 @@ function Routes({ store, ...props }) {
       <Route exact path="/user" component={Account} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
-      <Route exact path="/vendor/:vendor_name" component={VendorProfile} />
+      <Route exact path="/shop/brands/:brandName" component={ShopByBrand} />
       <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
