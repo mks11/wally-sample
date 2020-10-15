@@ -41,7 +41,7 @@ const LogoFull = styled.img`
 const Logo = observer(() => {
   const { user, product } = useStores();
 
-  var home = user.status ? '/main' : '/';
+  var home = user.user ? '/main' : '/';
 
   const onLogoClick = () => {
     product.resetSearch();
