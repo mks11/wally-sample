@@ -52,7 +52,7 @@ const ProductCardWrapper = styled(Card)`
     border-color: ${(props) => props.color};
     color: ${(props) => props.color};
     transform: scale(1.0125);
-    box-shadow: 0px 5px 9px -8px black;
+    box-shadow: 0 5px 9px -8px black;
   }
 `;
 
