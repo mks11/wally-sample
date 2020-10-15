@@ -64,6 +64,26 @@ import PackagingInventoryPortal from 'pages/packaging-inventory/';
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
+const ProtectedRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isLoggedIn } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isLoggedIn) {
+          return <Component {...rest} {...props} />;
+        } else if (!isLoggedIn && !isAuthenticating) {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
+
 const OpsRoute = observer(({ component: Component, ...rest }) => {
   const { user } = useStores();
   const { isAuthenticating, isOps, isOpsLead, isAdmin } = user;
@@ -75,7 +95,6 @@ const OpsRoute = observer(({ component: Component, ...rest }) => {
         if (isOps || isOpsLead || isAdmin) {
           return <Component {...rest} {...props} />;
         } else if (!isOps && !isOpsLead && !isAdmin && !isAuthenticating) {
-          console.log('Unauthorized');
           return (
             <Redirect to={{ pathname: '/', state: { from: props.location } }} />
           );
