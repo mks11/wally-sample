@@ -17,7 +17,7 @@ export default function Layout() {
   const { user } = useStores();
 
   useEffect(() => {
-    user.getStatus();
+    user.readStorage();
   }, []);
 
   return (
