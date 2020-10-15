@@ -3,13 +3,12 @@ import { logPageView, logEvent, logModalView } from 'services/google-analytics';
 import qs from 'qs';
 import { Row, Col } from 'reactstrap';
 import { validateEmail, connect } from '../utils';
-
+import SignupForm from 'forms/authentication/SignupForm';
 class Homepage extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      heroStatus: 'start',
       // model
       zip: '',
       email: '',
@@ -22,18 +21,12 @@ class Homepage extends Component {
       invalidEmail: false,
       invalidZip: false,
 
-      fetching: true,
       width: window.innerWidth,
     };
 
     //input
-    this.handleZip = this.handleZip.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
-
-    this.handleValidateZip = this.handleValidateZip.bind(this);
     this.handleSubscribe = this.handleSubscribe.bind(this);
-    this.handleStart = this.handleStart.bind(this);
-    this.handleExplore = this.handleExplore.bind(this);
     this.handleSignup = this.handleSignup.bind(this);
     this.zipStore = this.props.store.zip;
     this.userStore = this.props.store.user;
@@ -59,64 +52,11 @@ class Homepage extends Component {
       }
     }
 
-    this.userStore
-      .getStatus()
-      .then((status) => {
-        if (status) {
-          const user = this.userStore.user;
-          console.log(user.type);
-          if (user.type === 'admin') {
-            this.routing.push('/manage/retail');
-          } else {
-            this.routing.push('/main');
-          }
-        }
-        this.setState({ fetching: false });
-      })
-      .catch((e) => {
-        console.error('Failed to get status', e);
-        this.setState({ fetching: false });
-      });
-
-    this.zipStore.loadZipCodes().catch((e) => {
-      console.error('Failed to load zipcodes: ', e);
-    });
-
     window.$('body').addClass('homepage-background');
   }
 
   componentWillUnmount() {
     window.$('body').removeClass('homepage-background');
-  }
-
-  handleValidateZip() {
-    if (!this.state.zip) {
-      this.setState({ invalidZip: true });
-      return;
-    }
-    this.setState({ invalidZip: false });
-
-    this.zipStore.selectedZip = this.state.zip;
-    logEvent({
-      category: 'Homepage',
-      action: 'SubmitZip',
-      label: this.state.zip,
-    });
-    if (this.zipStore.validateZipCode(this.state.zip)) {
-      this.zipStore.setZip(this.state.zip);
-      this.setState({
-        heroStatus: 'success',
-        heroText: "Huzzah! It looks like we're in your zip code.",
-        heroDescription: 'Click here to start shopping.',
-      });
-    } else {
-      this.setState({
-        heroStatus: 'invalid_zip',
-        heroText: 'Hope to be there soon!',
-        heroDescription:
-          "We're not in your zip code yet, but sign up and we'll send you a notification when we are.",
-      });
-    }
   }
 
   handleSubscribe() {
@@ -148,28 +88,9 @@ class Homepage extends Component {
       });
   }
 
-  handleStart(e) {
-    logEvent({ category: 'Homepage', action: 'StartShopping' });
-    this.routing.push('/main');
-    logModalView('/signup-info');
-    this.modalStore.toggleModal('joinwaitlist');
-    e.preventDefault();
-  }
-
-  handleExplore(e) {
-    logEvent({ category: 'Homepage', action: 'ExploreShopping' });
-    this.routing.push('/main');
-    e.preventDefault();
-  }
-
   handleSignup(e) {
     logModalView('/signup-zip');
     this.modalV2Store.open(<SignupForm />);
-  }
-
-  handleZip(e) {
-    this.setState({ zip: e.target.value });
-    e.preventDefault();
   }
 
   handleEmail(e) {
@@ -177,34 +98,8 @@ class Homepage extends Component {
     e.preventDefault();
   }
 
-  handleZipEnter = (e) => {
-    if (e.keyCode === 13) {
-      this.handleValidateZip();
-    }
-  };
-
-  handleEmailEnter = (e) => {
-    if (e.keyCode === 13) {
-      this.handleSubscribe();
-    }
-  };
-
   render() {
-    if (this.state.fetching) return null;
-
-    const ButtonStartShopping = () => (
-      <button
-        onClick={this.handleStart}
-        id="btn-hero--submit"
-        href="#nav-hero"
-        className="btn btn-block mx-auto btn-success btn-get--started"
-        data-submit="Submit"
-      >
-        START SHOPPING
-      </button>
-    );
-
-    const ButtonNotify = () => (
+    const StartShoppingButton = () => (
       <button
         onClick={this.handleSignup}
         id="btn-hero--submit"
@@ -213,18 +108,6 @@ class Homepage extends Component {
         data-submit="Submit"
       >
         START SHOPPING
-      </button>
-    );
-
-    const ButtonExplore = () => (
-      <button
-        onClick={this.handleExplore}
-        id="btn-hero--submit"
-        href="#nav-hero"
-        className="btn btn-block mx-auto btn-success btn-get--started"
-        data-submit="Submit"
-      >
-        EXPLORE
       </button>
     );
 
@@ -270,14 +153,8 @@ class Homepage extends Component {
                   {this.state.heroDescription}
                 </h2>
                 <div className="mt-5">
-                  <ButtonNotify />
+                  <StartShoppingButton />
                 </div>
-
-                {this.state.heroStatus === 'success' && <ButtonStartShopping />}
-
-                {this.state.heroStatus === 'invalid_zip_success' && (
-                  <ButtonExplore />
-                )}
               </div>
             </div>
           </div>
@@ -356,15 +233,7 @@ class Homepage extends Component {
                 <Row>
                   <Col>
                     <div className="text-center">
-                      <button
-                        onClick={this.handleSignup}
-                        id="btn-hero--submit"
-                        href="#nav-hero"
-                        className="btn btn-primary btn-explore"
-                        data-submit="Submit"
-                      >
-                        START SHOPPING
-                      </button>
+                      <StartShoppingButton />
                     </div>
                   </Col>
                 </Row>
