@@ -95,6 +95,11 @@ class UserStore {
     return false;
   }
 
+  get isLoggedIn() {
+    if (this.user) return true;
+    return false;
+  }
+
   get userId() {
     if (this.user) {
       return this.user._id;
@@ -595,6 +600,7 @@ decorate(UserStore, {
   isOps: computed,
   isUser: computed,
   isRetail: computed,
+  isLoggedIn: computed,
 
   login: action,
   getUser: action,
