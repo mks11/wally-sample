@@ -28,7 +28,7 @@ import { ColorfulWallyButton } from 'styled-component-lib/Buttons';
 export const MobileGuestNav = observer(() => {
   const { user } = useStores();
 
-  return !user.status ? (
+  return !user.user ? (
     <MobileNavMenu>
       <MobileGuestNavMenu />
     </MobileNavMenu>
@@ -108,7 +108,7 @@ function MobileSignUpButton() {
 export const DesktopGuestNav = observer(() => {
   const { user } = useStores();
 
-  return !user.status ? (
+  return !user.user ? (
     <>
       <DesktopNavItem to="/latest-news" text="COVID-19" />
       <DesktopNavItem to="/about" text="About" />
