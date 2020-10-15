@@ -43,11 +43,6 @@ class Help extends Component {
   loadData() {
     this.helpStore.getQuestions('top');
     this.helpStore.getHelpTopics();
-    // await this.helpStore.getContact();
-
-    if (this.userStore.status) {
-      this.orderStore.getOrders(this.userStore.getHeaderAuth());
-    }
   }
 
   handleToggleQuestion = (id) => {
@@ -76,41 +71,6 @@ class Help extends Component {
     this.routing.push('/help/topics');
     e.preventDefault();
   };
-
-  handleViewAllOrders = (e) => {
-    this.routing.push('/orders');
-    e.preventDefault();
-  };
-
-  countItems(data) {
-    let total = 0;
-    if (!data) return formatMoney(total);
-
-    for (const d of data) {
-      total += parseFloat(d.customer_quantity);
-    }
-    return formatMoney(total);
-  }
-
-  printItems(data) {
-    let items = [];
-    if (!data) return items;
-
-    for (const d of data) {
-      items.push(d.product_name);
-    }
-    return items.join(', ');
-  }
-
-  printPackaging(data) {
-    let items = [];
-    if (!data) return items;
-
-    for (const d of data) {
-      items.push(d.type);
-    }
-    return items.join(', ');
-  }
 
   goToTopics(id, name) {
     this.helpStore.activeTopics = name;

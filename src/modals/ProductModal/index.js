@@ -429,7 +429,7 @@ class ProductModal extends Component {
                 />
               </React.Fragment>
             )} */}
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h2" gutterBottom>
               Quantity:
             </Typography>
             <QuantitySelect
@@ -487,7 +487,7 @@ class ProductModal extends Component {
           <Typography variant="h2" gutterBottom>
             Ratings
           </Typography>
-          <Typography variant="h4" component="p" gutterBottom>
+          <Typography variant="h5" component="p" gutterBottom>
             Product Rating:{' '}
           </Typography>
           {avg_rating ? (
@@ -500,7 +500,7 @@ class ProductModal extends Component {
           <br />
           {recentThreeComments && recentThreeComments.length > 0 && (
             <React.Fragment>
-              <Typography variant="h4" component="p" gutterBottom>
+              <Typography variant="h5" component="p" gutterBottom>
                 Comments:{' '}
               </Typography>
               <Box>

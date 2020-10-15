@@ -1,5 +1,6 @@
 import UiStore from './UiStore';
 import ModalStore from './ModalStore';
+import ModalStoreV2 from './ModalStoreV2';
 import ProductStore from './ProductStore';
 import CheckoutStore from './CheckoutStore';
 import UserStore from './UserStore';
@@ -24,6 +25,7 @@ const store = {
   impulse_products: ProductStore,
   packagingUnit: PackagingUnitStore,
   modal: ModalStore,
+  modalV2: ModalStoreV2,
   user: UserStore,
   zip: ZipStore,
   checkout: CheckoutStore,

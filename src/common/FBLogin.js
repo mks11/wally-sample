@@ -1,53 +1,54 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+
+// Config
+import { FB_KEY } from 'config';
+import { support } from 'config';
+
+// mobx
+import { useStores } from 'hooks/mobx';
+
+// Custom Components
 import FacebookLogin from 'react-facebook-login';
 
-import { FB_KEY } from '../config'
+function FBLogin({ ...props }) {
+  const { modalV2, user, routing, snackbar } = useStores();
+  const [isRequesting, setIsRequesting] = useState(false);
 
-class FBLogin extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      facebookRequest: false,
+  const login = (responseData) => {
+    if (!isRequesting) {
+      setIsRequesting(true);
+
+      const { additionalData } = props;
+      const data = { ...responseData, ...additionalData };
+
+      user
+        .loginFacebook(data)
+        .then(() => routing.push('/main'))
+        .catch(() => {
+          snackbar.openSnackbar(
+            `Attempt to login via facebook failed. Contact us at ${support} for support.`,
+          );
+        })
+        .finally(() => {
+          setIsRequesting(false);
+          modalV2.close();
+        });
     }
-  }
+  };
 
-  responseFacebook = responseData => {
-    const { onSubmit, userStore } = this.props
-
-    if (!this.state.facebookRequest) {
-      this.setState({ facebookRequest: true })
-
-      const { additionalData } = this.props
-      const data = { ...responseData, ...additionalData }
-
-      userStore.loginFacebook(data).then(res => {
-        onSubmit && onSubmit()
-        this.setState({ facebookRequest: false })
-      }).catch(e => {
-        console.error('Failed to signup', e)
-        this.setState({ facebookRequest: false })
-      })
-    }
-  }
-
-  render() {
-    const { facebookRequest } = this.state
-    const { canSubmit = true } = this.props
-
-    return (
-      <FacebookLogin
-        appId={FB_KEY}
-        cssClass={`btn btn-blue-fb ${facebookRequest ? 'inactive' : ''}`}
-        autoLoad={false}
-        textButton="FACEBOOK"
-        fields="name,email,picture"
-        scope="public_profile,email"
-        callback={this.responseFacebook}
-        disableMobileRedirect={true}
-        isDisabled={!canSubmit}
-      />
-    )
-  }
+  return (
+    <FacebookLogin
+      appId={FB_KEY}
+      cssClass={`btn btn-blue-fb ${isRequesting ? 'inactive' : ''}`}
+      autoLoad={false}
+      textButton="Facebook"
+      fields="name,email,picture"
+      scope="public_profile,email"
+      callback={login}
+      disableMobileRedirect={true}
+      isDisabled={isRequesting}
+    />
+  );
 }
 
-export default FBLogin
+export default FBLogin;

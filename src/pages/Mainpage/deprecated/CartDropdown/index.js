@@ -1,18 +1,29 @@
-import React from "react";
-import CarbonBar from "common/CarbonBar";
-import CheckoutButton from "./CheckoutButton";
-import { logEvent, logModalView } from "services/google-analytics";
-import { formatMoney } from "utils";
+import React from 'react';
 
-function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+// Services & Utilities
+import { logEvent, logModalView } from 'services/google-analytics';
+import { formatMoney } from 'utils';
+
+// Custom Components
+import CarbonBar from 'common/CarbonBar';
+import CheckoutButton from './CheckoutButton';
+
+function CartDropdown() {
+  const { checkout, modal, product, routing, ui, user } = useStores();
+  const { cart } = checkout;
+
   const handleMouseEnter = () => {
     ui.showBackdrop();
-    logModalView("/cart");
+    logModalView('/cart');
   };
 
   const handleMouseLeave = () => {
     ui.hideBackdrop();
-    logEvent({ category: "Cart", action: "CloseCart" });
+    logEvent({ category: 'Cart', action: 'CloseCart' });
   };
 
   const handleMouseEnterWithoutLog = () => {
@@ -24,19 +35,32 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
   };
 
   const handleCheckout = () => {
-    logEvent({ category: "Cart", action: "ClickCheckout" });
+    logEvent({ category: 'Cart', action: 'ClickCheckout' });
     ui.hideBackdrop();
-    onCheckout && onCheckout();
+    if (user.status) {
+      routing.push('/main/similar-products');
+    } else {
+      modal.toggleModal('login');
+    }
   };
 
   const handleEdit = (data) => {
-    logEvent({ category: "Cart", action: "ClickEditProduct" });
-    onEdit && onEdit(data);
+    logEvent({ category: 'Cart', action: 'ClickEditProduct' });
+    product
+      .showModal(
+        data.product_id,
+        data.customer_quantity,
+        user.getDeliveryParams(),
+      )
+      .then((data) => {
+        user.adjustDeliveryTimes(data.delivery_date, checkout.deliveryTimes);
+        modal.toggleModal('product');
+      });
   };
 
   const handleDelete = (id) => {
-    logEvent({ category: "Cart", action: "ClickDeleteProduct" });
-    onDelete && onDelete(id);
+    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    modal.toggleModal('delete', id);
   };
 
   const getItemsCount = (items) => {
@@ -49,7 +73,6 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
   const items = cart ? cart.cart_items : [];
   const count = getItemsCount(items);
   const subtotal = cart ? cart.subtotal / 100 : 0;
-  const deliveryFeeInfo = null;
 
   return (
     <div className="dropdown-cart-wrapper">
@@ -73,20 +96,20 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
             </div>
             {items && count > 0 ? (
               <>
-                <h3 className="px-3">Orders: {deliveryFeeInfo}</h3>
+                <h3 className="px-3">Cart</h3>
                 <div className="order-summary">
                   <div className="order-scroll px-3">
                     {items.map((c, i) => {
                       const unit_type = c.unit_type || c.price_unit;
                       const showType =
-                        unit_type === "packaging"
+                        unit_type === 'packaging'
                           ? c.packaging_name
                           : unit_type;
                       return (
                         <div className="item mt-3 pb-2" key={i}>
                           <div className="item-left">
                             <h4 className="item-name">{c.product_name}</h4>
-                            {unit_type !== "packaging" && (
+                            {unit_type !== 'packaging' && (
                               <span className="item-detail mb-1">
                                 {c.packaging_name}
                               </span>
@@ -150,4 +173,4 @@ function CartDropdown({ ui, cart, onCheckout, onEdit, onDelete }) {
   );
 }
 
-export default CartDropdown;
+export default observer(CartDropdown);

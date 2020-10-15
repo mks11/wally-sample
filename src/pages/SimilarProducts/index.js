@@ -7,6 +7,7 @@ import { connect, datesEqual } from 'utils';
 import CarbonBar from 'common/CarbonBar';
 import Product from '../Mainpage/Product';
 import EmptyCartMessage from './EmptyCartMessage';
+import LoginForm from 'forms/authentication/LoginForm';
 
 class SimilarProducts extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class SimilarProducts extends Component {
     this.uiStore = this.props.store.ui;
     this.routing = this.props.store.routing;
     this.modalStore = this.props.store.modal;
+    this.modalV2Store = this.props.store.modalV2;
     this.productStore = this.props.store.product;
     this.checkoutStore = this.props.store.checkout;
     this.zipStore = this.props.store.zip;
@@ -143,7 +145,7 @@ class SimilarProducts extends Component {
           this.userStore.giftCardPromo = null;
         });
     } else {
-      this.modalStore.toggleModal('login');
+      this.modalV2Store.open(<LoginForm />);
     }
   }
 

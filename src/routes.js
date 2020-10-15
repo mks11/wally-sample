@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Homepage from './pages/Homepage';
@@ -60,8 +60,71 @@ import NewPackagingReturn from 'pages/packaging-returns/NewPackagingReturn';
 // Packaging Inventory
 import PackagingInventoryPortal from 'pages/packaging-inventory/';
 
-function Routes({ store, ...props }) {
-  const { user } = store;
+// Hooks
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+const ProtectedRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isLoggedIn } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isLoggedIn) {
+          return <Component {...rest} {...props} />;
+        } else if (!isLoggedIn && !isAuthenticating) {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
+
+const OpsRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isOps, isOpsLead, isAdmin } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isOps || isOpsLead || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else if (!isOps && !isOpsLead && !isAdmin && !isAuthenticating) {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
+
+const RetailRoute = observer(({ component: Component, ...rest }) => {
+  const { user } = useStores();
+  const { isAuthenticating, isRetail, isAdmin } = user;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isRetail || isAdmin) {
+          return <Component {...rest} {...props} />;
+        } else if (!isRetail && !isAdmin && !isAuthenticating) {
+          return (
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          );
+        }
+      }}
+    />
+  );
+});
+
+function Routes(props) {
   return (
     <Switch>
       {/* ==================== Admin Routes (NOT CRAWLED) ==================== */}
@@ -81,50 +144,35 @@ function Routes({ store, ...props }) {
       <Route exact path="/manage/products" component={ManageProducts} />
       {/* ==================== Ops Routes (NOT CRAWLED) ==================== */}
       {/* Pick/Pack */}
-      <OpsRoute
-        exact
-        path="/pick-pack"
-        component={PickPackPortal}
-        userStore={user}
-      />
-      <OpsRoute
-        exact
-        path="/pick-pack/:orderId"
-        component={OrderFulfillment}
-        userStore={user}
-      />
+      <OpsRoute exact path="/pick-pack" component={PickPackPortal} />
+      <OpsRoute exact path="/pick-pack/:orderId" component={OrderFulfillment} />
       {/* Packaging Returns */}
       <OpsRoute
         exact
         path="/packaging-returns"
         component={PackagingReturnsPortal}
-        userStore={user}
       />
       <OpsRoute
         exact
         path="/packaging-returns/new"
         component={NewPackagingReturn}
-        userStore={user}
       />
       {/* Packaging Inventory */}
       <OpsRoute
         exact
         path="/packaging-inventory"
         component={PackagingInventoryPortal}
-        userStore={user}
       />
       {/* Copacking */}
       <OpsRoute
         exact
         path="/manage/co-packing/runs"
         component={ManageCoPackingRuns}
-        userStore={user}
       />
       <OpsRoute
         exact
         path="/manage/co-packing/runs/:runId"
         component={ManageCoPackingRunsSpecific}
-        userStore={user}
       />
       {/* Old Copacker Routes */}
       <Route
@@ -138,12 +186,7 @@ function Routes({ store, ...props }) {
         component={InboundShipments}
       />
       {/* ==================== Retail Routes (NOT CRAWLED) ==================== */}
-      <RetailRoute
-        exact
-        path="/retail"
-        component={RetailManagementPortal}
-        userStore={user}
-      />
+      <RetailRoute exact path="/retail" component={RetailManagementPortal} />
       {/* ==================== Ambassador Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/packaging/:id" component={Mainpage} />
       {/* Guest Routes (CRAWLED) */}
@@ -204,52 +247,6 @@ function Routes({ store, ...props }) {
       <Route component={Homepage} />{' '}
       {/* This catchall will redirect any unidentified routes to the homepage */}
     </Switch>
-  );
-}
-
-function OpsRoute({ component: Component, userStore, ...rest }) {
-  const { isOps, isOpsLead, isAdmin } = userStore;
-
-  useEffect(() => {
-    userStore.getStatus();
-  }, []);
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (isOps || isOpsLead || isAdmin) {
-          return <Component {...rest} {...props} />;
-        } else {
-          return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-          );
-        }
-      }}
-    />
-  );
-}
-
-function RetailRoute({ component: Component, userStore, ...rest }) {
-  const { isRetail, isAdmin } = userStore;
-
-  useEffect(() => {
-    userStore.getStatus();
-  }, []);
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (isRetail || isAdmin) {
-          return <Component {...rest} {...props} />;
-        } else {
-          return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-          );
-        }
-      }}
-    />
   );
 }
 

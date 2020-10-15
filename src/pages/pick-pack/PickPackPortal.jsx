@@ -280,7 +280,12 @@ class PickPackPortal extends Component {
 
     return (
       <Container maxWidth="xl">
-        <Typography variant="h1" align="center" gutterBottom>
+        <Typography
+          variant="h1"
+          align="center"
+          gutterBottom
+          style={{ marginTop: '0.75em' }}
+        >
           Pick/Pack Orders
         </Typography>
         <Grid container spacing={2}>
@@ -337,7 +342,7 @@ class PickPackPortal extends Component {
             </Grid>
           </Grid>
         </Grid>
-        {(isOpsLead || isAdmin) && ordersAndLabels.length && (
+        {(isOpsLead || isAdmin) && ordersAndLabels.length ? (
           <Grid container justify="center">
             <Grid item>
               <Button
@@ -355,7 +360,7 @@ class PickPackPortal extends Component {
               </Button>
             </Grid>
           </Grid>
-        )}
+        ) : null}
       </Container>
     );
   }

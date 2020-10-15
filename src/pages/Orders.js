@@ -17,6 +17,7 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
+import LoginForm from './../forms/authentication/LoginForm';
 
 const Order = styled(Paper)`
   padding: 2rem 1rem;
@@ -31,13 +32,14 @@ class Orders extends Component {
     this.orderStore = this.props.store.order;
     this.loadingStore = this.props.store.loading;
     this.snackbarStore = this.props.store.snackbar;
+    this.modalV2Store = this.props.store.modalV2;
   }
 
   componentDidMount() {
     this.userStore.getStatus().then((status) => {
       if (!status) {
-        this.modalStore.toggleModal('login');
         this.props.store.routing.push('/main');
+        this.modalV2Store.open(<LoginForm />);
         return;
       }
       this.loadData();

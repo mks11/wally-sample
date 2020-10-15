@@ -22,22 +22,22 @@ let theme = createMuiTheme({
   typography: {
     h1: {
       fontFamily: ['ClearFace'].join(','),
-      fontSize: '2.25rem',
+      fontSize: '2.488rem',
       fontWeight: 'bold',
     },
     h2: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.8rem',
+      fontSize: '2.074rem',
       fontWeight: 'bold',
     },
     h3: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.6rem',
+      fontSize: '1.728rem',
       fontWeight: 'bold',
     },
     h4: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.4rem',
+      fontSize: '1.44rem',
       fontWeight: 'bold',
     },
     h5: {
@@ -52,21 +52,21 @@ let theme = createMuiTheme({
     },
     subtitle1: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '0.85rem',
+      fontSize: '0.833rem',
       color: '#6B6D76',
     },
     subtitle2: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1rem',
+      fontSize: '0.694rem',
       color: '#6B6D76',
     },
     body1: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.25rem',
+      fontSize: '1rem',
     },
     body2: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1rem',
+      fontSize: '0.833rem',
     },
     button: {},
     caption: {},
