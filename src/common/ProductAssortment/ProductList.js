@@ -47,10 +47,12 @@ export default ProductList;
 
 const ProductCardWrapper = styled(Card)`
   border: 1px solid transparent;
+  transition: all 0.15s ease-in-out;
   &:hover {
     border-color: ${(props) => props.color};
     color: ${(props) => props.color};
     transform: scale(1.0125);
+    box-shadow: 0px 5px 9px -8px black;
   }
 `;
 
