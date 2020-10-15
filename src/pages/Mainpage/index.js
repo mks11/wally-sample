@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
+// Services & utilities
 import { logPageView, logEvent } from 'services/google-analytics';
 import { connect, datesEqual } from 'utils';
+
+// Config
 import { APP_URL } from 'config';
 
+// npm components
+import { useTheme } from '@material-ui/core/styles';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
+import { ChevronRight } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
+import { Image } from 'pure-react-carousel';
+
+// Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
 import CarbonBar from 'common/CarbonBar';
-
 import Product from './Product';
 import ProductList from './ProductList';
 import ProductTop from './ProductTop';
@@ -16,6 +28,38 @@ import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import LoginForm from 'forms/authentication/LoginForm';
+import ImageCarousel from 'common/ImageCarousel';
+
+var heroImages = [
+  {
+    lg:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+    md:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+    sm:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+  },
+  {
+    lg:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+    md:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+    sm:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+  },
+];
+
+var DesktopCarouselWrapper = styled(Box)`
+  @media only screen and (max-width: 567px) {
+    display: none;
+  }
+`;
+
+var MobileCarouselWrapper = styled(Box)`
+  @media only screen and (min-width: 568px) {
+    display: none;
+  }
+`;
 
 class Mainpage extends Component {
   constructor(props) {
@@ -288,6 +332,18 @@ class Mainpage extends Component {
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null;
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null;
 
+    // Featured Brands
+    const slides = heroImages.map((img) => (
+      <HeroSlide
+        alt={'New Wild Lather Products'}
+        body={'Soaps by Wild Lather. Lather up & breathe deeply.'}
+        img={img}
+        justify="flex-start"
+        title={'New Arrivals'}
+        url="/shop/brands/wild-lather"
+      />
+    ));
+
     return (
       <div className="App">
         <ProductTop
@@ -438,6 +494,30 @@ class Mainpage extends Component {
                             <CarbonBar nCartItems={count} />
                           </div>
 
+                          {/* Featured Brands */}
+                          <Container maxWidth="lg" disableGutters>
+                            {/* displayed from 568px and up */}
+                            <DesktopCarouselWrapper my={2} zIndex={1}>
+                              <ImageCarousel
+                                dots
+                                keyName={'featured-brands'}
+                                height={675}
+                                slides={slides}
+                                width={1200}
+                              />
+                            </DesktopCarouselWrapper>
+                            {/* displayed from 567px and down */}
+                            <MobileCarouselWrapper my={2} zIndex={1}>
+                              <ImageCarousel
+                                dots
+                                keyName={'featured-brands'}
+                                height={640}
+                                slides={slides}
+                                width={480}
+                              />
+                            </MobileCarouselWrapper>
+                          </Container>
+
                           {this.state.categoryTypeMode === 'limit' ? (
                             <div className="row">
                               {this.productStore.main_display.map(
@@ -490,3 +570,87 @@ class Mainpage extends Component {
 }
 
 export default connect('store')(Mainpage);
+
+const LargeHeroImage = styled(Image)`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MediumHeroImage = styled(Image)`
+  @media only screen and (min-width: 568px) and (max-width: 768px) {
+    display: block;
+  }
+
+  display: none;
+`;
+
+const SmallHeroImage = styled(Image)`
+  @media only screen and (min-width: 568px) {
+    display: none;
+  }
+`;
+
+function HeroSlide({ alt, body, img, justify, title, url }) {
+  return (
+    <Box position="relative">
+      <LargeHeroImage src={img.lg} alt={alt} />
+      <MediumHeroImage src={img.md} alt={alt} />
+      <SmallHeroImage src={img.sm} alt={alt} />
+      <HeroSlideOverlay body={body} justify={justify} title={title} url={url} />
+    </Box>
+  );
+}
+
+HeroSlide.propTypes = {
+  alt: PropTypes.string,
+  body: PropTypes.string,
+  img: PropTypes.object.isRequired,
+  justify: PropTypes.string,
+  title: PropTypes.string,
+  url: PropTypes.string,
+};
+
+const SlideOverlayWrapper = styled(Box)`
+  @media only screen and (min-width: 992px) {
+    padding: 4.5rem;
+  }
+
+  padding: 2rem;
+`;
+
+function HeroSlideOverlay({ body, justify, title, url }) {
+  const theme = useTheme();
+  return (
+    <SlideOverlayWrapper
+      position="absolute"
+      top="0"
+      left="0"
+      width="100%"
+      maxHeight="100%"
+      overflow="hidden"
+    >
+      <Grid container justify={justify}>
+        <Grid item xs={12} md={8} lg={6}>
+          <Typography variant="h1" gutterBottom>
+            {title}
+          </Typography>
+          <Typography gutterBottom>{body}</Typography>
+          <Link to={url} style={{ color: theme.palette.red.main }}>
+            <Box display="flex" alignItems="center">
+              <Typography component="span">Shop Now</Typography>
+              <ChevronRight fontSize="large" />
+            </Box>
+          </Link>
+        </Grid>
+      </Grid>
+    </SlideOverlayWrapper>
+  );
+}
+
+HeroSlideOverlay.propTypes = {
+  body: PropTypes.string,
+  justify: PropTypes.string,
+  title: PropTypes.string,
+  url: PropTypes.string,
+};
