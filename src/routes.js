@@ -219,7 +219,11 @@ function Routes(props) {
       <Route exact path="/user" component={Account} />
       <Route exact path="/thankyou" component={OrderConfirmation} />
       <Route exact path="/api/user/reset-password" component={ResetPassword} />
-      <Route exact path="/shop/brands/:brandName" component={ShopByBrand} />
+      <ProtectedRoute
+        exact
+        path="/shop/brands/:brandName"
+        component={ShopByBrand}
+      />
       <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
