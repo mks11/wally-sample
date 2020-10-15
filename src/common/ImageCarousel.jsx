@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
@@ -9,11 +9,15 @@ import {
   ButtonBack,
   ButtonNext,
   Dot,
+  DotGroup,
 } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 // Icons
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
+
+// Custom CSS
+import styles from 'common/ImageCarousel.module.css';
 
 const BackSlideControl = styled(ButtonBack)`
   position: absolute;
@@ -57,14 +61,6 @@ const NextSlideControl = styled(ButtonNext)`
   }
 `;
 
-const SlideDot = styled(Dot)`
-  height: 1rem;
-  width: 1rem;
-  -webkit-appearance: none;
-  border: none;
-  border-radius: 50%;
-  margin: 0 0.25rem;
-`;
 export default function ImageCarousel({
   autoPlay,
   dots,
@@ -78,30 +74,6 @@ export default function ImageCarousel({
   // Only allow 5 slides
   slides = slides.slice(0, 6);
 
-  const [x, setX] = useState(0);
-  const [selectedSlide, setSelectedSlide] = useState(0);
-  const minDistance = 0.1 * width;
-
-  // Touch handlers
-  const onTouchStart = (e) => {
-    const touch = e.touches[0];
-    setX(touch.clientX);
-  };
-
-  const onTouchEnd = (e) => {
-    const touch = e.changedTouches[0];
-    const xDiff = touch.clientX - x;
-    if (xDiff < x && Math.abs(xDiff) >= minDistance) {
-      setSelectedSlide(Math.min(slides.length - 1, selectedSlide + 1));
-    } else if (xDiff > x && Math.abs(xDiff) >= minDistance) {
-      setSelectedSlide(Math.max(0, selectedSlide - 1));
-    }
-  };
-
-  const handleDotClick = (slide) => {
-    setSelectedSlide(slide);
-  };
-
   return (
     <CarouselProvider
       isPlaying={autoPlay}
@@ -111,12 +83,7 @@ export default function ImageCarousel({
       style={{ backgroundColor: 'transparent' }}
     >
       <Box position={'relative'}>
-        <Slider
-          trayProps={{
-            onTouchStart: onTouchStart,
-            onTouchEnd: onTouchEnd,
-          }}
-        >
+        <Slider>
           {slides.map((slide, idx) => (
             <Slide key={`${keyName}-slide-${idx}`} index={idx}>
               {slide}
@@ -125,16 +92,10 @@ export default function ImageCarousel({
         </Slider>
         {slides && slides.length > 1 && (
           <>
-            <BackSlideControl
-              onClick={() => handleDotClick(Math.max(0, selectedSlide - 1))}
-            >
+            <BackSlideControl>
               <ChevronLeft fontSize="large" />
             </BackSlideControl>
-            <NextSlideControl
-              onClick={() =>
-                handleDotClick(Math.min(slides.length - 1, selectedSlide + 1))
-              }
-            >
+            <NextSlideControl>
               <ChevronRight fontSize="large" />
             </NextSlideControl>
           </>
@@ -142,21 +103,10 @@ export default function ImageCarousel({
       </Box>
       {dots && (
         <Box p={1} display="flex" justifyContent="center" alignItems="center">
-          {slides.map((slide, idx) => {
-            const isSelected = selectedSlide === idx;
-            return (
-              <SlideDot
-                key={`${keyName}-dot-${idx}`}
-                slide={idx}
-                onClick={() => handleDotClick(idx)}
-                style={{
-                  backgroundColor: isSelected
-                    ? 'rgba(0, 0, 0, 0.65)'
-                    : 'rgba(0, 0, 0, 0.25)',
-                }}
-              />
-            );
-          })}
+          <DotGroup
+            showAsSelectedForCurrentSlideOnly
+            className={styles.dotGroup}
+          />
         </Box>
       )}
       {thumbnails && thumbnails.length > 1 && (
