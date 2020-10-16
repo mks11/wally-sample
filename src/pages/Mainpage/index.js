@@ -12,7 +12,6 @@ import { APP_URL } from 'config';
 // npm components
 import { useTheme } from '@material-ui/core/styles';
 import { Box, Container, Grid, Typography } from '@material-ui/core';
-import { ChevronRight } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { Image } from 'pure-react-carousel';
 
@@ -29,16 +28,9 @@ import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import LoginForm from 'forms/authentication/LoginForm';
 import ImageCarousel from 'common/ImageCarousel';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 var heroImages = [
-  {
-    lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
-    md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
-    sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
-  },
   {
     lg:
       'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
@@ -336,10 +328,10 @@ class Mainpage extends Component {
     const slides = heroImages.map((img) => (
       <HeroSlide
         alt={'New Wild Lather Products'}
-        body={'Soaps by Wild Lather. Lather up & breathe deeply.'}
+        body={'Lather up & breathe deeply.'}
         img={img}
         justify="flex-start"
-        title={'New Arrivals'}
+        title={'Soaps by Wild Lather'}
         url="/shop/brands/wild-lather"
       />
     ));
@@ -511,7 +503,7 @@ class Mainpage extends Component {
                               <ImageCarousel
                                 dots
                                 keyName={'featured-brands'}
-                                height={640}
+                                height={480}
                                 slides={slides}
                                 width={480}
                               />
@@ -630,18 +622,15 @@ function HeroSlideOverlay({ body, justify, title, url }) {
       maxHeight="100%"
       overflow="hidden"
     >
-      <Grid container justify={justify}>
-        <Grid item xs={12} md={8} lg={6}>
-          <Typography variant="h1" gutterBottom>
-            {title}
-          </Typography>
-          <Typography gutterBottom>{body}</Typography>
-          <Link to={url} style={{ color: theme.palette.red.main }}>
-            <Box display="flex" alignItems="center">
+      <Grid container justify={justify || 'flex-start'}>
+        <Grid item xs={12} md={8} lg={8}>
+          {title && <Typography variant="h1">{title}</Typography>}
+          {body && <Typography gutterBottom>{body}</Typography>}
+          {url && (
+            <PrimaryWallyButton component={Link} to={url} alt={title}>
               <Typography component="span">Shop Now</Typography>
-              <ChevronRight fontSize="large" />
-            </Box>
-          </Link>
+            </PrimaryWallyButton>
+          )}
         </Grid>
       </Grid>
     </SlideOverlayWrapper>
