@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
@@ -10,7 +9,6 @@ import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
 import { Box, Container, Grid } from '@material-ui/core';
-import { isMobile } from 'react-device-detect';
 
 // Styling
 import styled from 'styled-components';
@@ -56,10 +54,15 @@ const Logo = observer(() => {
   );
 });
 
+const HeaderWrapper = styled(Box)`
+  @media only screen and (min-width: 768px) {
+    padding: 1rem 0;
+  }
+`;
+
 export default function Header() {
   return (
-    <Box
-      py={isMobile ? 0 : 2}
+    <HeaderWrapper
       component="header"
       position="sticky"
       top="0"
@@ -76,6 +79,6 @@ export default function Header() {
           </Grid>
         </Grid>
       </Container>
-    </Box>
+    </HeaderWrapper>
   );
 }
