@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Config
 import { support } from 'config';
@@ -20,6 +20,7 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import * as Yup from 'yup';
 
 export default function LoginForm() {
+  const [emailError, setEmailError] = useState('');
   const { modalV2, snackbar, user } = useStores();
 
   return (
@@ -49,6 +50,8 @@ export default function LoginForm() {
             variant="outlined"
             color="primary"
             placeholder="Email Address"
+            errorMsg={emailError}
+            setErrorMsg={setEmailError}
           />
         </Box>
         <Box my={2}>
@@ -65,20 +68,22 @@ export default function LoginForm() {
   function forgotPassword({ email }, { setSubmitting }) {
     user
       .forgotPassword(email)
-      .then(() =>
-        snackbar.openSnackbar(
-          `Instructions to reset your password have been sent to ${email}.`,
-        ),
-      )
-      .catch(() =>
-        snackbar.openSnackbar(
-          `Reset password attempt failed. Please contact us at ${support} for support.`,
-          'error',
-        ),
-      )
-      .finally(() => {
+      .then(() => {
         setSubmitting(false);
         modalV2.close();
+        snackbar.openSnackbar(
+          `Instructions to reset your password have been sent to ${email}.`,
+        );
+      })
+      .catch((error) => {
+        setSubmitting(false);
+        const { response } = error;
+        if (response && response.data && response.data.error) {
+          const { name, message } = response.data.error;
+          if (name === 'NotFoundError') {
+            setEmailError(message);
+          }
+        }
       });
   }
 }

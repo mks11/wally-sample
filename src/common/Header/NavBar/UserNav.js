@@ -41,6 +41,7 @@ import {
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 import LoginForm from 'forms/authentication/LoginForm';
+import RemoveItemForm from 'forms/cart/RemoveItem';
 
 // Styled Components
 import {
@@ -76,12 +77,6 @@ function MobileUserNavMenu() {
       <MobileNavItem to="/help" onClick={handleClose} hasDivider>
         Help
       </MobileNavItem>
-      <MobileNavItem to="/latest-news" onClick={handleClose} hasDivider>
-        COVID-19
-      </MobileNavItem>
-      <MobileNavItem to="/howitworks" onClick={handleClose} hasDivider>
-        How It Works
-      </MobileNavItem>
       <MobileNavItem to="/user" onClick={handleClose} hasDivider>
         Account Settings
       </MobileNavItem>
@@ -91,14 +86,8 @@ function MobileUserNavMenu() {
       <MobilePackagingBalance />
       <MobileRedeemPackagingBalance />
       <MobileSchedulePickupButton />
-      <MobileNavItem to="/about" onClick={handleClose} hasDivider>
-        About
-      </MobileNavItem>
       <MobileNavItem to="/giftcard" onClick={handleClose} hasDivider>
         Gift Cards
-      </MobileNavItem>
-      <MobileNavItem to="/backers" onClick={handleClose} hasDivider>
-        Our Backers
       </MobileNavItem>
       <SignOutButton />
     </>
@@ -177,7 +166,7 @@ const PackagingBalance = observer(() => {
       <DesktopDropdownMenuListItem>
         <Typography
           align="left"
-          style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
+          style={{ width: '100%', padding: '1em 1.5em', cursor: 'default' }}
         >
           Packaging Balance {formattedBalance}
         </Typography>
@@ -191,10 +180,10 @@ const PackagingBalance = observer(() => {
 const CartMenuMobile = observer(({ items }) => {
   const { modal, routing, ui, user, modalV2 } = useStores();
 
-  const handleDeleteMobile = (id) => {
+  const handleDeleteMobile = (item) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
     ui.toggleCartMobile();
-    modal.toggleModal('delete', id);
+    modalV2.open(<RemoveItemForm item={item} />);
   };
 
   const handleCheckoutMobile = () => {
@@ -238,8 +227,9 @@ const CartMenuMobile = observer(({ items }) => {
                       style={{ width: 10 }}
                       onClick={(e) =>
                         handleDeleteMobile({
-                          product_id: item.product_id,
-                          inventory_id: item._id,
+                          inventoryId: item._id,
+                          name: item.product_name,
+                          productId: item.product_id,
                         })
                       }
                     >
@@ -299,10 +289,10 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
       });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
     handleClose();
-    modal.toggleModal('delete', id);
+    modalV2.open(<RemoveItemForm item={item} />);
   };
 
   const getItemsCount = (items) => {
@@ -323,7 +313,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <Box p={3}>
+      <Box p={3} minWidth="350px">
         {items && count > 0 ? (
           <>
             <Typography variant="h1">Cart</Typography>
@@ -339,8 +329,9 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                   product_name,
                 } = item;
                 return (
-                  <>
-                    <Box key={product_name} my={2}>
+                  <Box key={product_name}>
+                    <Box my={2}>
+                      {/* Cart Item Quantity Management*/}
                       <Box my={1}>
                         <Typography variant="h6">{product_name}</Typography>
                         <Grid container alignItems="center">
@@ -369,8 +360,9 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                             <DangerTextButton
                               onClick={() =>
                                 handleDelete({
-                                  product_id,
-                                  inventory_id: _id,
+                                  inventoryId: _id,
+                                  name: product_name,
+                                  productId: product_id,
                                 })
                               }
                             >
@@ -380,6 +372,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                         </Grid>
                       </Box>
 
+                      {/* Item subtotal */}
                       <Grid container spacing={2} justify="space-between">
                         <Grid item>
                           <Typography component="span">Subtotal</Typography>
@@ -392,7 +385,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                       </Grid>
                     </Box>
                     <Divider />
-                  </>
+                  </Box>
                 );
               })}
               <Box my={2}>
@@ -479,25 +472,25 @@ export const DesktopUserNav = observer(() => {
       <DesktopNavItem to="/main" text="Shop" />
       <DesktopNavItem to="/blog" text="Blog" />
       <DesktopNavItem to="/help" text="Help" />
-      <DesktopNavItem to="/latest-news" text="COVID-19" />
-      <DesktopNavItem to="/howitworks" text="How It Works" />
       <DesktopDropdownMenu>
-        <DesktopDropdownMenuItem to="/user">
-          Account Settings
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/orders">
-          Order History
-        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/user">
+            Account Settings
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/orders">
+            Order History
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
         <PackagingBalance />
         <RedeemDepositButton />
         <SchedulePickupButton />
-        <DesktopDropdownMenuItem to="/giftcard">
-          Gift Cards
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/about">About</DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/backers">
-          Our Backers
-        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/giftcard">
+            Gift Cards
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
       </DesktopDropdownMenu>
       <Cart />
     </>
@@ -512,9 +505,11 @@ function SchedulePickupButton({ onClick }) {
     modalV2.open(<SchedulePickupForm />);
   };
   return (
-    <DesktopDropdownMenuBtn onClick={schedulePickup}>
-      Schedule Pickup
-    </DesktopDropdownMenuBtn>
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuBtn onClick={schedulePickup}>
+        Schedule Pickup
+      </DesktopDropdownMenuBtn>
+    </DesktopDropdownMenuListItem>
   );
 }
 
@@ -527,8 +522,10 @@ function RedeemDepositButton({ onClick }) {
   };
 
   return (
-    <DesktopDropdownMenuBtn onClick={redeemDeposit}>
-      Redeem Packaging Balance
-    </DesktopDropdownMenuBtn>
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuBtn onClick={redeemDeposit}>
+        Redeem Packaging Balance
+      </DesktopDropdownMenuBtn>
+    </DesktopDropdownMenuListItem>
   );
 }

@@ -7,11 +7,10 @@ import { useStores } from 'hooks/mobx';
 import PropTypes from 'prop-types';
 
 // npm Packaged Components
-import { Box, Button, Grid, Menu, Typography } from '@material-ui/core';
+import { Box, Button, Menu, MenuItem, Typography } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { IconContext } from 'react-icons';
 import { FaRegUserCircle } from 'react-icons/fa';
-import { useTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 // Styles
@@ -51,7 +50,7 @@ const MenuButton = styled(Button)`
 
 export function DesktopNavItem({ to, text }) {
   return (
-    <Box px={1} py={2} mr={1}>
+    <Box px={1} py={2} mr={1} display="flex" alignItems="center">
       <DesktopNavLink to={to}>
         <DesktopNavLinkText>{text}</DesktopNavLinkText>
       </DesktopNavLink>
@@ -102,7 +101,9 @@ export const DesktopDropdownMenu = ({ children, ...props }) => {
         keepMounted
       >
         {elements}
-        <SignOutButton />
+        <DesktopDropdownMenuListItem>
+          <SignOutButton />
+        </DesktopDropdownMenuListItem>
       </Menu>
     </>
   );
@@ -125,10 +126,11 @@ function SignOutButton() {
   );
 }
 
-export const DesktopDropdownMenuListItem = styled.li`
+export const DesktopDropdownMenuListItem = styled(MenuItem)`
   && {
     position: relative;
     margin: 0;
+    padding: 0;
     text-transform: none;
     background-color: transparent;
     color: #212529;
@@ -142,7 +144,7 @@ export const DesktopDropdownMenuListItem = styled.li`
 export const DesktopDropdownMenuLink = styled(Link)`
   &&& {
     display: inline-block;
-    padding: 1.5em 3em;
+    padding: 1em 1.5em;
     width: 100%;
     color: #000;
     &:hover {
@@ -154,7 +156,7 @@ export const DesktopDropdownMenuLink = styled(Link)`
 export const DesktopDropdownMenuButton = styled.button`
   &&& {
     display: inline-block;
-    padding: 1.5em 3em;
+    padding: 1em 1.5em;
     width: 100%;
     color: #000;
     -webkit-appearance: none;
@@ -164,23 +166,17 @@ export const DesktopDropdownMenuButton = styled.button`
 `;
 
 export function DesktopDropdownMenuItem({ onClick, children, to }) {
-  const theme = useTheme();
   return (
-    <DesktopDropdownMenuListItem>
-      <DesktopDropdownMenuLink onClick={onClick} to={to} theme={theme}>
-        <Typography>{children}</Typography>
-      </DesktopDropdownMenuLink>
-    </DesktopDropdownMenuListItem>
+    <DesktopDropdownMenuLink onClick={onClick} to={to}>
+      <Typography>{children}</Typography>
+    </DesktopDropdownMenuLink>
   );
 }
 
 export function DesktopDropdownMenuBtn({ onClick, children }) {
-  const theme = useTheme();
   return (
-    <DesktopDropdownMenuListItem>
-      <DesktopDropdownMenuButton onClick={onClick} theme={theme}>
-        <Typography align="left">{children}</Typography>
-      </DesktopDropdownMenuButton>
-    </DesktopDropdownMenuListItem>
+    <DesktopDropdownMenuButton onClick={onClick}>
+      <Typography align="left">{children}</Typography>
+    </DesktopDropdownMenuButton>
   );
 }
