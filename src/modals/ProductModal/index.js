@@ -304,8 +304,19 @@ class ProductModal extends Component {
 
     return (
       <div className="product-modal-wrap">
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+        <Typography variant="h1">{name}</Typography>
+        {manufacturer && (
+          <Brand
+            manufacturer={manufacturer}
+            vendor={vendorFull}
+            onClick={this.closeModal}
+          />
+        )}
+        <Typography variant="subtitle1" gutterBottom>
+          {shipMessage}
+        </Typography>
+        <Grid container justify="center" alignItems="center" spacing={2}>
+          <Grid item xs={9} sm={6} md={6}>
             <ImageCarousel
               keyName={product_id}
               height={250}
@@ -314,18 +325,12 @@ class ProductModal extends Component {
               width={250}
             />
           </Grid>
-          <Grid item md={6}>
-            <Typography variant="h1">{name}</Typography>
-            {manufacturer && (
-              <Brand
-                manufacturer={manufacturer}
-                vendor={vendorFull}
-                onClick={this.closeModal}
-              />
-            )}
-            <Typography variant="subtitle1">{shipMessage}</Typography>
-            <br />
-            <Typography variant="h2" component="p" style={{ color: '#6060a8' }}>
+          <Grid item xs={12} sm={6} md={6}>
+            <Typography
+              variant="h4"
+              component="p"
+              style={{ fontWeight: 'bold', color: '#6060a8' }}
+            >
               {formatMoney(price)}
             </Typography>
             <Typography
@@ -386,7 +391,12 @@ class ProductModal extends Component {
                 />
               </React.Fragment>
             )} */}
-            <Typography variant="h2" gutterBottom>
+            <Typography
+              variant="h4"
+              component="p"
+              gutterBottom
+              style={{ fontWeight: 'bold' }}
+            >
               Quantity:
             </Typography>
             <QuantitySelect
