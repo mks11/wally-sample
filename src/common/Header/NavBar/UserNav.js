@@ -13,12 +13,10 @@ import { isMobile } from 'react-device-detect';
 import {
   Badge,
   Box,
-  Container,
   Divider,
   Grid,
   IconButton,
   Menu,
-  MenuItem,
   Typography,
 } from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
@@ -43,6 +41,7 @@ import {
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 import LoginForm from 'forms/authentication/LoginForm';
+import RemoveItemForm from 'forms/cart/RemoveItem';
 
 // Styled Components
 import {
@@ -301,10 +300,10 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
       });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
     handleClose();
-    modal.toggleModal('delete', id);
+    modalV2.open(<RemoveItemForm item={item} />);
   };
 
   const getItemsCount = (items) => {
@@ -372,8 +371,9 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                             <DangerTextButton
                               onClick={() =>
                                 handleDelete({
-                                  product_id,
-                                  inventory_id: _id,
+                                  inventoryId: _id,
+                                  name: product_name,
+                                  productId: product_id,
                                 })
                               }
                             >
