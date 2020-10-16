@@ -14,7 +14,12 @@ function ProductAssortmentDetails({ title, image, description }) {
     <Box py={2}>
       <Grid container justify="center" spacing={2}>
         <Grid xs={12} sm={3} md={3} lg={4} xl={4} item>
-          <Box display="flex" justifyContent="center">
+          <Box
+            display="flex"
+            height="100%"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Img src={image} alt={title} />
           </Box>
         </Grid>
@@ -22,7 +27,7 @@ function ProductAssortmentDetails({ title, image, description }) {
           <Typography variant="h1" gutterBottom>
             {title}
           </Typography>
-          <Typography gutterBottom> {description} </Typography>
+          {description && <Typography gutterBottom> {description} </Typography>}
         </Grid>
       </Grid>
     </Box>
