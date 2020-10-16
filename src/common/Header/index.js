@@ -21,19 +21,19 @@ import Navbar from 'common/Header/NavBar';
 const LogoFull = styled.img`
   height: 24px;
 
-  @media only screen and (width >= 375px) {
+  @media only screen and (min-width: 375px) {
     height: 32px;
   }
 
-  @media only screen and (width >= 567px) {
+  @media only screen and (min-width: 567px) {
     height: 40px;
   }
 
-  @media only screen and (width >= 768px) {
+  @media only screen and (min-width: 768px) {
     height: 44px;
   }
 
-  @media only screen and (width >= 992px) {
+  @media only screen and (min-width: 992px) {
     height: 48px;
   }
 `;
@@ -50,7 +50,7 @@ const Logo = observer(() => {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <LogoFull src="/images/logo-full.svg" alt="The Wally Shop W logo." />
+        <LogoFull src="/images/logo-full.svg" alt="The Wally Shop logo." />
       </Link>
     </Box>
   );
