@@ -18,6 +18,7 @@ import {
   Grid,
   IconButton,
   Menu,
+  MenuItem,
   Typography,
 } from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
@@ -178,7 +179,7 @@ const PackagingBalance = observer(() => {
       <DesktopDropdownMenuListItem>
         <Typography
           align="left"
-          style={{ width: '100%', padding: '1.25em 2.25em', cursor: 'default' }}
+          style={{ width: '100%', padding: '1em 1.5em', cursor: 'default' }}
         >
           Packaging Balance {formattedBalance}
         </Typography>
@@ -482,25 +483,25 @@ export const DesktopUserNav = observer(() => {
       <DesktopNavItem to="/main" text="Shop" />
       <DesktopNavItem to="/blog" text="Blog" />
       <DesktopNavItem to="/help" text="Help" />
-      <DesktopNavItem to="/latest-news" text="COVID-19" />
-      <DesktopNavItem to="/howitworks" text="How It Works" />
       <DesktopDropdownMenu>
-        <DesktopDropdownMenuItem to="/user">
-          Account Settings
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/orders">
-          Order History
-        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/user">
+            Account Settings
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/orders">
+            Order History
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
         <PackagingBalance />
         <RedeemDepositButton />
         <SchedulePickupButton />
-        <DesktopDropdownMenuItem to="/giftcard">
-          Gift Cards
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/about">About</DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/backers">
-          Our Backers
-        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/giftcard">
+            Gift Cards
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
       </DesktopDropdownMenu>
       <Cart />
     </>
@@ -515,9 +516,11 @@ function SchedulePickupButton({ onClick }) {
     modalV2.open(<SchedulePickupForm />);
   };
   return (
-    <DesktopDropdownMenuBtn onClick={schedulePickup}>
-      Schedule Pickup
-    </DesktopDropdownMenuBtn>
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuBtn onClick={schedulePickup}>
+        Schedule Pickup
+      </DesktopDropdownMenuBtn>
+    </DesktopDropdownMenuListItem>
   );
 }
 
@@ -530,8 +533,10 @@ function RedeemDepositButton({ onClick }) {
   };
 
   return (
-    <DesktopDropdownMenuBtn onClick={redeemDeposit}>
-      Redeem Packaging Balance
-    </DesktopDropdownMenuBtn>
+    <DesktopDropdownMenuListItem>
+      <DesktopDropdownMenuBtn onClick={redeemDeposit}>
+        Redeem Packaging Balance
+      </DesktopDropdownMenuBtn>
+    </DesktopDropdownMenuListItem>
   );
 }
