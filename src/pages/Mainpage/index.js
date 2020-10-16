@@ -10,7 +10,6 @@ import { connect, datesEqual } from 'utils';
 import { APP_URL } from 'config';
 
 // npm components
-import { useTheme } from '@material-ui/core/styles';
 import { Box, Container, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Image } from 'pure-react-carousel';
@@ -39,7 +38,16 @@ var heroImages = [
     sm:
       'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
   },
+  {
+    lg:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+    md:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+    sm:
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+  },
 ];
+const hasDots = heroImages.length > 1;
 
 var DesktopCarouselWrapper = styled(Box)`
   @media only screen and (max-width: 567px) {
@@ -491,7 +499,7 @@ class Mainpage extends Component {
                             {/* displayed from 568px and up */}
                             <DesktopCarouselWrapper my={2} zIndex={1}>
                               <ImageCarousel
-                                dots
+                                dots={hasDots}
                                 keyName={'featured-brands'}
                                 height={675}
                                 slides={slides}
@@ -501,7 +509,7 @@ class Mainpage extends Component {
                             {/* displayed from 567px and down */}
                             <MobileCarouselWrapper my={2} zIndex={1}>
                               <ImageCarousel
-                                dots
+                                dots={hasDots}
                                 keyName={'featured-brands'}
                                 height={480}
                                 slides={slides}
@@ -612,7 +620,6 @@ const SlideOverlayWrapper = styled(Box)`
 `;
 
 function HeroSlideOverlay({ body, justify, title, url }) {
-  const theme = useTheme();
   return (
     <SlideOverlayWrapper
       position="absolute"
