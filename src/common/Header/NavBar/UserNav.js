@@ -77,12 +77,6 @@ function MobileUserNavMenu() {
       <MobileNavItem to="/help" onClick={handleClose} hasDivider>
         Help
       </MobileNavItem>
-      <MobileNavItem to="/latest-news" onClick={handleClose} hasDivider>
-        COVID-19
-      </MobileNavItem>
-      <MobileNavItem to="/howitworks" onClick={handleClose} hasDivider>
-        How It Works
-      </MobileNavItem>
       <MobileNavItem to="/user" onClick={handleClose} hasDivider>
         Account Settings
       </MobileNavItem>
@@ -92,14 +86,8 @@ function MobileUserNavMenu() {
       <MobilePackagingBalance />
       <MobileRedeemPackagingBalance />
       <MobileSchedulePickupButton />
-      <MobileNavItem to="/about" onClick={handleClose} hasDivider>
-        About
-      </MobileNavItem>
       <MobileNavItem to="/giftcard" onClick={handleClose} hasDivider>
         Gift Cards
-      </MobileNavItem>
-      <MobileNavItem to="/backers" onClick={handleClose} hasDivider>
-        Our Backers
       </MobileNavItem>
       <SignOutButton />
     </>
@@ -192,10 +180,10 @@ const PackagingBalance = observer(() => {
 const CartMenuMobile = observer(({ items }) => {
   const { modal, routing, ui, user, modalV2 } = useStores();
 
-  const handleDeleteMobile = (id) => {
+  const handleDeleteMobile = (item) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
     ui.toggleCartMobile();
-    modal.toggleModal('delete', id);
+    modalV2.open(<RemoveItemForm item={item} />);
   };
 
   const handleCheckoutMobile = () => {
@@ -239,8 +227,9 @@ const CartMenuMobile = observer(({ items }) => {
                       style={{ width: 10 }}
                       onClick={(e) =>
                         handleDeleteMobile({
-                          product_id: item.product_id,
-                          inventory_id: item._id,
+                          inventoryId: item._id,
+                          name: item.product_name,
+                          productId: item.product_id,
                         })
                       }
                     >
