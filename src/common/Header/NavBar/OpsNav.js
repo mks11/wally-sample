@@ -17,6 +17,7 @@ import {
   DesktopNavItem,
   DesktopDropdownMenu,
   DesktopDropdownMenuItem,
+  DesktopDropdownMenuListItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
 export const MobileOpsNav = observer(() => {
@@ -51,7 +52,7 @@ export const MobileOpsNavMenu = observer(() => {
       <MobileNavItem to="/packaging-inventory" onClick={handleClose} hasDivider>
         Packaging Inventory
       </MobileNavItem>
-      {user && user.isOpsLead && (
+      {/* {user && user.isOpsLead && (
         <MobileNavItem
           to="/manage/co-packing/inbound"
           onClick={handleClose}
@@ -68,7 +69,7 @@ export const MobileOpsNavMenu = observer(() => {
         >
           Outbound Shipments
         </MobileNavItem>
-      )}
+      )} */}
       {/* TODO - ARE THESE STILL USED? */}
       {/* <MobileNavItem to="/manage/shopping-app-1" onClick={handleClose} hasDivider>
         Shopping App
@@ -91,19 +92,25 @@ export const DesktopOpsNav = observer(() => {
       <DesktopNavItem to="/packaging-returns" text="Packaging Returns" />
       <DesktopNavItem to="/manage/co-packing/runs" text="Copacking" />
       <DesktopDropdownMenu>
-        <DesktopDropdownMenuItem to="/packaging-inventory">
-          Packaging Inventory
-        </DesktopDropdownMenuItem>
-        {user.isOpsLead && (
-          <DesktopDropdownMenuItem to="/manage/co-packing/inbound">
-            Inbound Shipments
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/packaging-inventory">
+            Packaging Inventory
           </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        {/* {user.isOpsLead && (
+          <DesktopDropdownMenuListItem>
+            <DesktopDropdownMenuItem to="/manage/co-packing/inbound">
+              Inbound Shipments
+            </DesktopDropdownMenuItem>
+          </DesktopDropdownMenuListItem>
         )}
         {user.isOpsLead && (
-          <DesktopDropdownMenuItem to="/manage/co-packing/outbound">
-            Outbound Shipments
-          </DesktopDropdownMenuItem>
-        )}
+          <DesktopDropdownMenuListItem>
+            <DesktopDropdownMenuItem to="/manage/co-packing/outbound">
+              Outbound Shipments
+            </DesktopDropdownMenuItem>
+          </DesktopDropdownMenuListItem>
+        )} */}
 
         {/* Deprecated */}
 
