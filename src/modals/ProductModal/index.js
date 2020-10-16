@@ -584,6 +584,9 @@ function ProductDetails({
         </>
       )}
     </>
+  );
+}
+
 function createCarouselSlides(
   imageRefs,
   ingredientLabels,
