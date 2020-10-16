@@ -1,9 +1,7 @@
 // Node Modules
 import React from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import moment from 'moment';
-import { isMobile } from 'react-device-detect';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
