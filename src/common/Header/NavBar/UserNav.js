@@ -13,6 +13,7 @@ import { isMobile } from 'react-device-detect';
 import {
   Badge,
   Box,
+  Container,
   Divider,
   Grid,
   IconButton,
@@ -323,7 +324,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <Box p={3}>
+      <Box p={3} minWidth="350px">
         {items && count > 0 ? (
           <>
             <Typography variant="h1">Cart</Typography>
@@ -339,8 +340,9 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                   product_name,
                 } = item;
                 return (
-                  <>
-                    <Box key={product_name} my={2}>
+                  <Box key={product_name}>
+                    <Box my={2}>
+                      {/* Cart Item Quantity Management*/}
                       <Box my={1}>
                         <Typography variant="h6">{product_name}</Typography>
                         <Grid container alignItems="center">
@@ -380,6 +382,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                         </Grid>
                       </Box>
 
+                      {/* Item subtotal */}
                       <Grid container spacing={2} justify="space-between">
                         <Grid item>
                           <Typography component="span">Subtotal</Typography>
@@ -392,7 +395,7 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
                       </Grid>
                     </Box>
                     <Divider />
-                  </>
+                  </Box>
                 );
               })}
               <Box my={2}>
