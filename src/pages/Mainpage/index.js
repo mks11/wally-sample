@@ -682,22 +682,28 @@ class Mainpage extends Component {
 export default connect('store')(Mainpage);
 
 const LargeHeroImage = styled(Image)`
-  @media only screen and (max-width: 768px) {
-    display: none;
+  && {
+    @media only screen and (max-width: 768px) {
+      display: none;
+    }
   }
 `;
 
 const MediumHeroImage = styled(Image)`
-  @media only screen and (min-width: 568px) and (max-width: 768px) {
-    display: block;
-  }
+  && {
+    @media only screen and (min-width: 568px) and (max-width: 768px) {
+      display: block;
+    }
 
-  display: none;
+    display: none;
+  }
 `;
 
 const SmallHeroImage = styled(Image)`
-  @media only screen and (min-width: 568px) {
-    display: none;
+  && {
+    @media only screen and (min-width: 568px) {
+      display: none;
+    }
   }
 `;
 
