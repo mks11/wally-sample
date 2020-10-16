@@ -42,9 +42,6 @@ function MobileGuestNavMenu() {
     <>
       <MobileLogInButton />
       <MobileSignUpButton />
-      <MobileNavItem to="/latest-news" onClick={handleClose} hasDivider>
-        COVID-19
-      </MobileNavItem>
       <MobileNavItem to="/about" onClick={handleClose} hasDivider>
         About
       </MobileNavItem>
