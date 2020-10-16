@@ -50,7 +50,7 @@ const MenuButton = styled(Button)`
 
 export function DesktopNavItem({ to, text }) {
   return (
-    <Box px={1} py={2} mr={1}>
+    <Box px={1} py={2} mr={1} display="flex" alignItems="center">
       <DesktopNavLink to={to}>
         <DesktopNavLinkText>{text}</DesktopNavLinkText>
       </DesktopNavLink>
