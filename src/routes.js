@@ -76,7 +76,9 @@ const ProtectedRoute = observer(({ component: Component, ...rest }) => {
           return <Component {...rest} {...props} />;
         } else if (!isLoggedIn && !isAuthenticating) {
           return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+            <Redirect
+              to={{ pathname: '/main', state: { from: props.location } }}
+            />
           );
         }
       }}
@@ -96,7 +98,9 @@ const OpsRoute = observer(({ component: Component, ...rest }) => {
           return <Component {...rest} {...props} />;
         } else if (!isOps && !isOpsLead && !isAdmin && !isAuthenticating) {
           return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+            <Redirect
+              to={{ pathname: '/main', state: { from: props.location } }}
+            />
           );
         }
       }}
@@ -116,7 +120,9 @@ const RetailRoute = observer(({ component: Component, ...rest }) => {
           return <Component {...rest} {...props} />;
         } else if (!isRetail && !isAdmin && !isAuthenticating) {
           return (
-            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+            <Redirect
+              to={{ pathname: '/main', state: { from: props.location } }}
+            />
           );
         }
       }}
