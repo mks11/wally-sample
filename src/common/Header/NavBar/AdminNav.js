@@ -17,6 +17,7 @@ import {
   DesktopNavItem,
   DesktopDropdownMenu,
   DesktopDropdownMenuItem,
+  DesktopDropdownMenuListItem,
 } from 'common/Header/NavBar/DesktopNavComponents';
 
 export const MobileAdminNav = observer(() => {
@@ -99,36 +100,56 @@ export const DesktopAdminNav = observer(() => {
       <DesktopNavItem to="/manage/co-packing/runs" text="Copacking" />
       <DesktopNavItem to="/pick-pack" text="Pick/Pack" />
       <DesktopDropdownMenu>
-        <DesktopDropdownMenuItem to="/manage/shopper">
-          Manage Shoppers
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/packaging">
-          Manage Packaging
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/delivery">
-          Manage Deliveries
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/courier-routing">
-          Manage Courier Routes
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/shopping-app-1">
-          Shopping App 1
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/orders">
-          Packing App
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/products">
-          Products App
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/shipping">
-          Shipping
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/printing">
-          Printing
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/blog">
-          Manage Blog Posts
-        </DesktopDropdownMenuItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/shopper">
+            Manage Shoppers
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/packaging">
+            Manage Packaging
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/delivery">
+            Manage Deliveries
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/courier-routing">
+            Manage Courier Routes
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/shopping-app-1">
+            Shopping App 1
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/orders">
+            Packing App
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/products">
+            Products App
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/shipping">
+            Shipping
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/printing">
+            Printing
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
+        <DesktopDropdownMenuListItem>
+          <DesktopDropdownMenuItem to="/manage/blog">
+            Manage Blog Posts
+          </DesktopDropdownMenuItem>
+        </DesktopDropdownMenuListItem>
       </DesktopDropdownMenu>
     </>
   ) : null;
