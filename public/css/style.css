@@ -3506,11 +3506,11 @@ span.dropdown-item.lg {
   padding-top: 20px;
   font-size: 15px;
   position: sticky;
-  top: 195.5px;
+  top: 213px;
 }
 @media (max-width: 991px) {
   .product-content-left {
-    top: 71px;
+    top: 162px;
   }
 }
 .header-wrap.top-bar-open + .aw-main .product-content-left {
@@ -3566,7 +3566,7 @@ span.dropdown-item.lg {
     padding-left: 20px;
   }
   .product-content-left {
-    /* display:none; */
+    display: none;
   }
 }
 
