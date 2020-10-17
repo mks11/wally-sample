@@ -4,16 +4,20 @@ import { Box, Typography, Grid } from '@material-ui/core';
 import styled from 'styled-components';
 
 const Img = styled.img`
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 350px;
+  max-height: 350px;
   width: 100%;
+  @media only screen and (min-width: 992px) {
+    max-width: 250px;
+    max-height: 250px;
+  }
 `;
 
 function ProductAssortmentDetails({ title, image, description }) {
   return (
-    <Box py={2}>
+    <Box mt={2}>
       <Grid container justify="center" spacing={2}>
-        <Grid xs={12} sm={3} md={3} lg={4} xl={4} item>
+        <Grid xs={8} sm={4} lg={3} item>
           <Box
             display="flex"
             height="100%"
@@ -23,7 +27,7 @@ function ProductAssortmentDetails({ title, image, description }) {
             <Img src={image} alt={title} />
           </Box>
         </Grid>
-        <Grid xs={12} sm={9} md={9} lg={8} xl={8} item>
+        <Grid xs={12} sm={8} lg={9} item>
           <Typography variant="h1" gutterBottom>
             {title}
           </Typography>
