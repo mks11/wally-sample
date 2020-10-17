@@ -38,14 +38,6 @@ var heroImages = [
     sm:
       'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
   },
-  {
-    lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
-    md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
-    sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
-  },
 ];
 const hasDots = heroImages.length > 1;
 
@@ -625,6 +617,33 @@ const SlideOverlayWrapper = styled(Box)`
   padding: 2rem;
 `;
 
+const HeroOverline = styled.p`
+  font-family: 'Sofia Pro', sans-serif;
+  font-weight: bold;
+  font-size: 1.246rem;
+  @media only screen and (min-width: 768px) {
+    font-size: 1.4239rem;
+  }
+  @media only screen and (min-width: 992px) {
+    font-size: 1.602rem;
+  }
+
+  margin-bottom: 0;
+`;
+
+const HeroTitle = styled.h1`
+  font-family: 'Clearface', serif;
+  font-size: 1.416rem;
+  @media only screen and (min-width: 768px) {
+    font-size: 1.609rem;
+  }
+  @media only screen and (min-width: 992px) {
+    font-size: 1.802rem;
+  }
+
+  margin-bottom: 0.75rem;
+`;
+
 function HeroSlideOverlay({ body, justify, title, url }) {
   return (
     <SlideOverlayWrapper
@@ -637,7 +656,8 @@ function HeroSlideOverlay({ body, justify, title, url }) {
     >
       <Grid container justify={justify || 'flex-start'}>
         <Grid item xs={12} md={8} lg={8}>
-          {title && <Typography variant="h1">{title}</Typography>}
+          {title && <HeroOverline>Limited Release</HeroOverline>}
+          {title && <HeroTitle>{title}</HeroTitle>}
           {body && <Typography gutterBottom>{body}</Typography>}
           {url && (
             <PrimaryWallyButton component={Link} to={url} alt={title}>
