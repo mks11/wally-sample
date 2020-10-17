@@ -107,7 +107,6 @@ export const DesktopGuestNav = observer(() => {
 
   return !user.user ? (
     <>
-      <DesktopNavItem to="/latest-news" text="COVID-19" />
       <DesktopNavItem to="/about" text="About" />
       <DesktopNavItem to="/howitworks" text="How It Works" />
       <DesktopNavItem to="/blog" text="Blog" />
