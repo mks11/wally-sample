@@ -316,13 +316,13 @@ class ProductModal extends Component {
           {shipMessage}
         </Typography>
         <Grid container justify="center" alignItems="center" spacing={2}>
-          <Grid item xs={9} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={6}>
             <ImageCarousel
               keyName={product_id}
-              height={250}
+              height={500}
               slides={slides}
               thumbnails={thumbnails}
-              width={250}
+              width={500}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
