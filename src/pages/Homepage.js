@@ -4,6 +4,7 @@ import qs from 'qs';
 import { Row, Col } from 'reactstrap';
 import { validateEmail, connect } from '../utils';
 import SignupForm from 'forms/authentication/SignupForm';
+
 class Homepage extends Component {
   constructor(props, context) {
     super(props, context);
@@ -51,6 +52,25 @@ class Homepage extends Component {
         this.metricStore.triggerAudienceSource('ig');
       }
     }
+
+    this.userStore
+      .getStatus()
+      .then((status) => {
+        if (status) {
+          const user = this.userStore.user;
+          console.log(user.type);
+          if (user.type === 'admin') {
+            this.routing.push('/manage/retail');
+          } else {
+            this.routing.push('/main');
+          }
+        }
+        this.setState({ fetching: false });
+      })
+      .catch((e) => {
+        console.error('Failed to get status', e);
+        this.setState({ fetching: false });
+      });
 
     window.$('body').addClass('homepage-background');
   }
