@@ -27,7 +27,7 @@ import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import LoginForm from 'forms/authentication/LoginForm';
 import ImageCarousel from 'common/ImageCarousel';
-
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
@@ -649,26 +649,6 @@ const HeroBody = styled(Typography)`
   margin-bottom: 1.25rem;
 `;
 
-const HeroLink = styled(Link)`
-  &&& {
-    height: 1rem;
-    padding: 0.75rem 1.5rem;
-    color: #fff;
-    background: #97adff;
-    border-radius: 50px;
-    white-space: nowrap;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    &:hover {
-      color: #fff;
-      background-color: rgb(105, 121, 178);
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-        0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-      text-decoration: none;
-    }
-  }
-`;
-
 function HeroSlideOverlay({ body, justify, title, url }) {
   return (
     <SlideOverlayWrapper
@@ -685,9 +665,9 @@ function HeroSlideOverlay({ body, justify, title, url }) {
           {title && <HeroTitle>{title}</HeroTitle>}
           {body && <HeroBody>{body}</HeroBody>}
           {url && (
-            <HeroLink to={url} alt={title}>
+            <PrimaryWallyButton component={Link} to={url} alt={title}>
               <Typography component="span">Shop Now</Typography>
-            </HeroLink>
+            </PrimaryWallyButton>
           )}
         </Grid>
       </Grid>
