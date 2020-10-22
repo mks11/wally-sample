@@ -347,7 +347,7 @@ class Mainpage extends Component {
         />
 
         <div className="product-content">
-          <Container maxWidth="lg">
+          <Container maxWidth="xl">
             <div className="row ">
               <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
