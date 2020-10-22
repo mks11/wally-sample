@@ -10,7 +10,6 @@ export const PrimaryWallyButton = styled(Button).attrs({
   white-space: nowrap;
   &:hover {
     color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
-    background-color: '#97adff40';
   }
 `;
 
