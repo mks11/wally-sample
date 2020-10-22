@@ -32,11 +32,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -327,12 +327,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New Wild Lather Products'}
-        body={'Lather up & breathe deeply.'}
+        alt={'New Roses Natural Products'}
+        body={
+          'All-natural, vegan, cruelty-free, and kid-safe bath and home care.'
+        }
         img={img}
         justify="flex-start"
-        title={'Soaps by Wild Lather'}
-        url="/shop/brands/wild-lather"
+        title={'Roses Natural'}
+        url="/shop/brands/roses-natural"
       />
     ));
 
@@ -655,7 +657,7 @@ function HeroSlideOverlay({ body, justify, title, url }) {
       overflow="hidden"
     >
       <Grid container justify={justify || 'flex-start'}>
-        <Grid item xs={12} md={8} lg={8}>
+        <Grid item xs={12} md={9} lg={9}>
           {title && <HeroOverline>Limited Release</HeroOverline>}
           {title && <HeroTitle>{title}</HeroTitle>}
           {body && <Typography gutterBottom>{body}</Typography>}
