@@ -233,8 +233,7 @@ function Routes(props) {
       <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
-      <Route exact path="/checkout" component={Checkout} />
-      <Route exact path="/main/similar-products" component={SimilarProducts} />
+      <ProtectedRoute exact path="/cart" component={Checkout} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/schedule-pickup" component={Mainpage} />
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
