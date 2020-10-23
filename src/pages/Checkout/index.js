@@ -4,6 +4,8 @@ import { Input } from 'reactstrap';
 import Title from 'common/page/Title';
 import PaymentSelect from 'common/PaymentSelect';
 
+import RemoveItemForm from 'forms/cart/RemoveItem';
+
 import { logPageView, logEvent } from 'services/google-analytics';
 import { connect, formatMoney, datesEqual } from 'utils';
 
@@ -25,6 +27,7 @@ class Checkout extends Component {
     this.checkoutStore = this.props.store.checkout;
     this.routing = this.props.store.routing;
     this.loading = this.props.store.loading;
+    this.modalV2Store = this.props.store.modalV2;
 
     this.state = {
       timeDropdown: false,
@@ -298,12 +301,8 @@ class Checkout extends Component {
       });
   }
 
-  handleDelete(data) {
-    const id = {
-      product_id: data.product_id,
-      inventory_id: data.inventory_id,
-    };
-    this.modalStore.toggleModal('delete', id);
+  handleDelete(item) {
+    this.modalV2Store.open(<RemoveItemForm item={item} />);
   }
 
   handlePlaceOrder() {
