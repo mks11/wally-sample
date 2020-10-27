@@ -301,8 +301,18 @@ class Checkout extends Component {
       });
   }
 
-  handleDelete(item) {
-    this.modalV2Store.open(<RemoveItemForm item={item} />);
+  handleDelete({ product_name, product_id, inventory_id }) {
+    this.modalV2Store.open(
+      <RemoveItemForm
+        item={{
+          name: product_name,
+          productId: product_id,
+          inventoryId: inventory_id,
+        }}
+      />,
+    );
+
+    this.loadData();
   }
 
   handlePlaceOrder() {

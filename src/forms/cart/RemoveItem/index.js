@@ -16,7 +16,7 @@ function RemoveItemForm({ item }) {
   const handleDelete = () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
 
-    const orderSummary = routing.location.pathname.indexOf('checkout') !== -1;
+    const orderSummary = routing.location.pathname.indexOf('cart') !== -1;
 
     // TODO: ERROR HANDLING
     checkout
