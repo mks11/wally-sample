@@ -16,7 +16,6 @@ import EmailVerification from './pages/EmailVerification';
 import Orders from './pages/Orders';
 import ManageOrders from './pages/ManageOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
-import SimilarProducts from './pages/SimilarProducts';
 import Checkout from './pages/Checkout';
 import GiftCheckout from './pages/GiftCheckout';
 import InviteFriends from './pages/InviteFriends';
