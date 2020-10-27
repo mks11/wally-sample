@@ -328,7 +328,7 @@ class Mainpage extends Component {
       <HeroSlide
         alt={'New Roses Natural Products'}
         body={
-          'All-natural, vegan, cruelty-free, and kid-safe bath and home care.'
+          'All-natural, vegan, cruelty-free, and kid-safe bath & home care.'
         }
         img={img}
         justify="flex-start"
