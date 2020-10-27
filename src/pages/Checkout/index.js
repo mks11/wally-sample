@@ -30,8 +30,6 @@ class Checkout extends Component {
     this.modalV2Store = this.props.store.modalV2;
 
     this.state = {
-      timeDropdown: false,
-
       appliedStoreCredit: false,
       appliedStoreCreditAmount: 0,
       applicableStoreCreditAmount: 0,
@@ -40,32 +38,20 @@ class Checkout extends Component {
 
       appliedTipAmount: 0,
       appliedTipAmountChanged: false,
-      tipReadOnly: true,
-      tipApplyEdited: false,
       freezedTipAmount: null,
 
       selectedAddress: null,
       selectedPayment: null,
-      selectedDay: null,
-      selectedDate: null,
       selectedTime: null,
 
       lockAddress: true,
       lockPayment: false,
-      lockTime: false,
-      confirmHome: false,
-      confirmHomeError: false,
 
-      newAddress: false,
       newPayment: false,
-
-      addressError: false,
 
       invalidText: '',
       successText: '',
-      invalidSelectAddress: '',
 
-      invalidAddressText: '',
       newStreetAddress: '',
       newAptNo: '',
       newZip: '',
@@ -376,13 +362,6 @@ class Checkout extends Component {
       });
   }
 
-  handleReturnSet = (has_returns, pickup_notes) => {
-    this.setState({
-      hasReturns: has_returns,
-      pickupNotes: pickup_notes,
-    });
-  };
-
   handleCheckPromo = (promoCode) => {
     const subTotal = this.checkoutStore.order.subtotal;
 
@@ -424,24 +403,6 @@ class Checkout extends Component {
       });
   };
 
-  handleAddTip = () => {
-    if (!this.state.tipApplyEdited) {
-      this.setState({
-        tipApplyEdited: true,
-        freezedTipAmount: null,
-      });
-      this.updateData();
-    }
-  };
-
-  handleChangeTip = (e) => {
-    this.setState({
-      tipApplyEdited: false,
-      appliedTipAmount: e.target.value,
-      invalidText: '',
-    });
-  };
-
   handleAddPayment = (data) => {
     if (data) {
       logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
@@ -451,32 +412,6 @@ class Checkout extends Component {
         newPayment: false,
       });
     }
-  };
-
-  handleConfirmHome = () => {
-    logEvent({ category: 'Checkout', action: 'ConfirmAtHome' });
-    this.setState({
-      confirmHome: !this.state.confirmHome,
-      confirmHomeError: !!this.state.confirmHome,
-    });
-  };
-
-  handleTipAmountChange = (value, clickedByUser) => {
-    const order = this.checkoutStore.order;
-    const tipAmount = (value / 100) * order.subtotal;
-    this.setState({
-      appliedTipAmount: (tipAmount / 100).toFixed(2),
-      tipReadOnly: true,
-      appliedTipAmountChanged: clickedByUser,
-      freezedTipAmount: null,
-    });
-  };
-
-  handleTipCustomAmounClick = () => {
-    this.setState({
-      tipReadOnly: false,
-      freezedTipAmount: this.state.appliedTipAmount,
-    });
   };
 
   handlePackagingDepositClick = () => {
@@ -596,12 +531,6 @@ class Checkout extends Component {
                     }}
                   />
                 </React.Fragment>
-
-                {/* <Returns
-                  title="Returns"
-                  default={this.userStore.user.pickup_notes || null}
-                  onReturnChange={this.handleReturnSet}
-                /> */}
               </div>
             </div>
             <div className="">
