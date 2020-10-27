@@ -28,15 +28,14 @@ import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import LoginForm from 'forms/authentication/LoginForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/wild-lather/wild-lather-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -327,12 +326,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New Wild Lather Products'}
-        body={'Lather up & breathe deeply.'}
+        alt={'New Roses Natural Products'}
+        body={
+          'All-natural, vegan, cruelty-free, and kid-safe bath & home care.'
+        }
         img={img}
         justify="flex-start"
-        title={'Soaps by Wild Lather'}
-        url="/shop/brands/wild-lather"
+        title={'Roses Natural'}
+        url="/shop/brands/roses-natural"
       />
     ));
 
@@ -346,7 +347,7 @@ class Mainpage extends Component {
         />
 
         <div className="product-content">
-          <div className="container">
+          <Container maxWidth="xl">
             <div className="row ">
               <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
@@ -542,7 +543,7 @@ class Mainpage extends Component {
                 )
               )}
             </div>
-          </div>
+          </Container>
         </div>
 
         <MobileSearch
@@ -644,6 +645,10 @@ const HeroTitle = styled.h1`
   margin-bottom: 0.75rem;
 `;
 
+const HeroBody = styled(Typography)`
+  margin-bottom: 1.25rem;
+`;
+
 function HeroSlideOverlay({ body, justify, title, url }) {
   return (
     <SlideOverlayWrapper
@@ -655,10 +660,10 @@ function HeroSlideOverlay({ body, justify, title, url }) {
       overflow="hidden"
     >
       <Grid container justify={justify || 'flex-start'}>
-        <Grid item xs={12} md={8} lg={8}>
+        <Grid item xs={12} sm={8}>
           {title && <HeroOverline>Limited Release</HeroOverline>}
           {title && <HeroTitle>{title}</HeroTitle>}
-          {body && <Typography gutterBottom>{body}</Typography>}
+          {body && <HeroBody>{body}</HeroBody>}
           {url && (
             <PrimaryWallyButton component={Link} to={url} alt={title}>
               <Typography component="span">Shop Now</Typography>

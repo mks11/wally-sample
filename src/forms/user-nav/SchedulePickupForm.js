@@ -39,19 +39,21 @@ export default function SchedulePickupForm() {
             const start = moment(earliestTime).format('h:mm A');
             const end = moment(latestTime).format('h:mm A');
             const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
-            modalV2.close();
+            actions.setSubmitting(false);
             snackbar.openSnackbar(successMsg, 'success');
+            modalV2.close();
           })
           .catch(() => {
             // TODO: HANDLE SPECIFIC UPS ERRORS
+            actions.setSubmitting(false);
             snackbar.openSnackbar(
               'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
               'error',
             );
           })
           .finally(() => {
+            // setSubmitting not activated here, because if modal is closed the result is a memory leak.
             setTimeout(() => loading.hide(), 300);
-            actions.setSubmitting(false);
           });
       }}
     >
@@ -191,19 +193,28 @@ export default function SchedulePickupForm() {
   );
 }
 
-function DateInput({ value, onClick }) {
-  return (
-    <Button
-      variant="outlined"
-      onClick={onClick}
-      fullWidth
-      style={{ padding: '0.75rem 1.5rem' }}
-    >
-      <Typography variant="body1" color="textSecondary">
-        {value || 'Select a pickup date.'}
-      </Typography>
-    </Button>
-  );
+/**
+ * Leave as a class, causes errors otherwise.
+ */
+class DateInput extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <Button
+        variant="outlined"
+        onClick={this.props.onClick}
+        fullWidth
+        style={{ padding: '0.75rem 1.5rem' }}
+      >
+        <Typography variant="body1" color="textSecondary">
+          {this.props.value || 'Select a pickup date.'}
+        </Typography>
+      </Button>
+    );
+  }
 }
 
 /**
