@@ -42,7 +42,6 @@ class Checkout extends Component {
 
       selectedAddress: null,
       selectedPayment: null,
-      selectedTime: null,
 
       lockAddress: true,
       lockPayment: false,
@@ -52,23 +51,9 @@ class Checkout extends Component {
       invalidText: '',
       successText: '',
 
-      newStreetAddress: '',
-      newAptNo: '',
-      newZip: '',
-      newContactName: '',
-      newPhoneNumber: '',
-      newDeliveryNotes: '',
-      newState: '',
-      newCity: '',
-      newCountry: '',
-      newPreferedAddress: false,
-
       deliveryTimes: this.checkoutStore.deliveryTimes,
 
       placeOrderRequest: false,
-
-      hasReturns: false,
-      pickupNotes: '',
     };
   }
 
@@ -270,11 +255,6 @@ class Checkout extends Component {
     });
   };
 
-  handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange('time', selectedTime);
-    this.setState({ invalidText: '' });
-  };
-
   handleChangeDelivery = () => {
     this.updateData();
   };
@@ -338,8 +318,8 @@ class Checkout extends Component {
           payment_id: this.state.selectedPayment,
           delivery_time: deliveryTime,
           tip_amount: this.parseAppliedTip(),
-          has_returns: this.state.hasReturns,
-          pickup_notes: this.state.pickupNotes,
+          has_returns: false,
+          pickup_notes: '',
         },
         this.userStore.getHeaderAuth(),
       )
@@ -500,7 +480,6 @@ class Checkout extends Component {
                     lock={false}
                     data={this.state.deliveryTimes}
                     selected={this.userStore.selectedDeliveryTime}
-                    onSelectTime={this.handleSelectTime}
                     title="Shipping Option"
                     user={this.userStore.user}
                   />
