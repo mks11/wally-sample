@@ -27,6 +27,12 @@ let theme = createMuiTheme({
     yellow: {
       main: '#F1D26A',
     },
+    success: {
+      main: '#60A561',
+    },
+    error: {
+      main: '#CC2936',
+    },
   },
   typography: {
     h1: {

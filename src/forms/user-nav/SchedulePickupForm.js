@@ -16,9 +16,10 @@ import FormikDateSelect from 'common/FormikDateSelect/FormikDateSelect';
 import FormikTimeSelect from 'common/FormikTimeSelect';
 import FormikAddressSelect from 'common/FormikAddressSelect';
 import FormikTextInput from 'common/FormikTextInput';
+import RequestResult from 'modals/RequestResult';
 
 export default function SchedulePickupForm() {
-  const { loading, modalV2, snackbar, user } = useStores();
+  const { loading, modalV2, user } = useStores();
   return (
     <Formik
       initialValues={{
@@ -38,12 +39,31 @@ export default function SchedulePickupForm() {
             const date = moment(earliestTime).format('dddd, MMMM Do');
             const start = moment(earliestTime).format('h:mm A');
             const end = moment(latestTime).format('h:mm A');
-            const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
             setSubmitting(false);
-            snackbar.openSnackbar(successMsg, 'success');
-            modalV2.close();
+            modalV2.open(
+              <RequestResult title="Success!">
+                <Typography gutterBottom>
+                  Your packaging pickup was scheduled for{' '}
+                  <Typography variant="h6" component="span">
+                    {date}
+                  </Typography>
+                  , beginning at{' '}
+                  <Typography variant="h6" component="span">
+                    {start}
+                  </Typography>{' '}
+                  and ending at{' '}
+                  <Typography variant="h6" component="span">
+                    {end}.
+                  </Typography>
+                </Typography>
+                <Typography gutterBottom>
+                  Check your email for confirmation.
+                </Typography>
+              </RequestResult>,
+            );
           })
           .catch((err) => {
+            setSubmitting(false);
             if (
               err &&
               err.response &&
@@ -68,15 +88,27 @@ export default function SchedulePickupForm() {
                 ].includes(param)
               ) {
                 setFieldError(param, message);
-                setSubmitting(false);
-                return;
               }
+            } else {
+              modalV2.open(
+                <RequestResult title="Error" hasError>
+                  <Typography gutterBottom>
+                    An error occurred while scheduling your packaging pickup.
+                  </Typography>
+                  <Typography gutterBottom>
+                    Contact us at{' '}
+                    <a
+                      href="mailto:info@thewallyshop.co"
+                      target="__blank"
+                      rel="noopener noreferrer"
+                    >
+                      info@thewallyshop.co
+                    </a>{' '}
+                    for assistance.
+                  </Typography>
+                </RequestResult>,
+              );
             }
-            setSubmitting(false);
-            snackbar.openSnackbar(
-              'An error occurred while scheduling your packaging pickup. Contact us at info@thewallyshop.co for assistance.',
-              'error',
-            );
           })
           .finally(() => {
             // setSubmitting not activated here, because if modal is closed the result is a memory leak.
