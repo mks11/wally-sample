@@ -29,7 +29,7 @@ export default function SchedulePickupForm() {
         pickupInstructions: '',
       }}
       validate={validate}
-      onSubmit={(values, actions) => {
+      onSubmit={(values, { setSubmitting, setFieldError }) => {
         loading.show();
         axios
           .post(API_SCHEDULE_PICKUP, values, user.getHeaderAuth())
@@ -39,13 +39,40 @@ export default function SchedulePickupForm() {
             const start = moment(earliestTime).format('h:mm A');
             const end = moment(latestTime).format('h:mm A');
             const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
-            actions.setSubmitting(false);
+            setSubmitting(false);
             snackbar.openSnackbar(successMsg, 'success');
             modalV2.close();
           })
-          .catch(() => {
-            // TODO: HANDLE SPECIFIC UPS ERRORS
-            actions.setSubmitting(false);
+          .catch((err) => {
+            if (
+              err &&
+              err.response &&
+              err.response.data &&
+              err.response.data.error &&
+              err.response.data.error.fieldName &&
+              err.response.data.error.message
+            ) {
+              const {
+                response: {
+                  data: {
+                    error: { fieldName, message },
+                  },
+                },
+              } = err;
+              if (
+                [
+                  'scheduledDate',
+                  'earliestTime',
+                  'latestTime',
+                  'pickupInstructions',
+                ].includes(fieldName)
+              ) {
+                setFieldError(fieldName, message);
+                setSubmitting(false);
+                return;
+              }
+            }
+            setSubmitting(false);
             snackbar.openSnackbar(
               'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
               'error',
