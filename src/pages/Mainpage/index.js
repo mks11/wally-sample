@@ -620,12 +620,12 @@ const SlideOverlayWrapper = styled(Box)`
   }
 
   padding: 2rem;
-  background: rgb(255, 255, 255);
+  ${'' /* background: rgb(255, 255, 255);
   background: linear-gradient(
     0deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0.35) 100%
-  );
+  ); */}
 `;
 
 const HeroOverline = styled.p`
