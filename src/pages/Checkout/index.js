@@ -11,8 +11,8 @@ import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
 import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
 import PackagingSummary from './PackagingSummary';
-import PromoSummary from './PromoSummary';
 import ShippingOption from '../../common/ShippingOption';
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
 class Checkout extends Component {
   constructor(props) {
@@ -375,21 +375,13 @@ class Checkout extends Component {
   };
 
   handleCheckPromo = (promoCode) => {
-    const subTotal = this.checkoutStore.order.subtotal;
-
     if (!promoCode) {
       this.setState({ invalidText: 'Promo code empty' });
       return;
     }
     logEvent({ category: 'Checkout', action: 'AddPromo', label: promoCode });
     this.checkoutStore
-      .checkPromo(
-        {
-          subTotal,
-          promoCode,
-        },
-        this.userStore.getHeaderAuth(),
-      )
+      .checkPromo(promoCode, this.userStore.getHeaderAuth())
       .then((data) => {
         if (data.valid) {
           this.setState({
@@ -497,6 +489,17 @@ class Checkout extends Component {
         : formatMoney(customTip);
 
     return tipAmount;
+  }
+
+  handleApplyPromo() {
+    const { order } = this.checkoutStore;
+    if (order) {
+      this.setState({
+        applicableStoreCreditAmount: order.applicable_store_credit,
+        appliedPromo: true,
+        appliedPromoCode: order.promo_code,
+      });
+    }
   }
 
   render() {
@@ -745,7 +748,9 @@ class Checkout extends Component {
                       ) : null}
 
                       {!this.state.appliedPromo ? (
-                        <PromoSummary onApply={this.handleCheckPromo} />
+                        <ApplyPromoCodeForm
+                          onApply={() => this.handleApplyPromo}
+                        />
                       ) : null}
                     </div>
 
