@@ -49,13 +49,13 @@ export default function SchedulePickupForm() {
               err.response &&
               err.response.data &&
               err.response.data.error &&
-              err.response.data.error.fieldName &&
+              err.response.data.error.param &&
               err.response.data.error.message
             ) {
               const {
                 response: {
                   data: {
-                    error: { fieldName, message },
+                    error: { param, message },
                   },
                 },
               } = err;
@@ -65,9 +65,9 @@ export default function SchedulePickupForm() {
                   'earliestTime',
                   'latestTime',
                   'pickupInstructions',
-                ].includes(fieldName)
+                ].includes(param)
               ) {
-                setFieldError(fieldName, message);
+                setFieldError(param, message);
                 setSubmitting(false);
                 return;
               }
