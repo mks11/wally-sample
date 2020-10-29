@@ -22,6 +22,7 @@ export default function FormikTextInput({
     <>
       <Label disabled={props.disabled}>{label}</Label>
       <TextField
+        variant="outlined"
         value={field.value || ''}
         onChange={handleChange}
         fullWidth

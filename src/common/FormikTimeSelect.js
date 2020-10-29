@@ -29,6 +29,7 @@ export default function FormikTimeSelect({
         {label}
       </Label>
       <StyledSelect
+        variant="outlined"
         labelId={labelId}
         value={field.value || ''}
         disabled={props.disabled}
