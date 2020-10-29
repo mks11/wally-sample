@@ -326,15 +326,15 @@ function getPickupTimes(startTime, endTime, intervalInMins = 60) {
 function validate(values) {
   const errors = {};
   if (!values.scheduledDate) {
-    errors.scheduledDate = 'You forgot to select a pickup date!';
+    errors.scheduledDate = 'Please select a pickup date.';
   }
 
   if (!values.earliestTime) {
-    errors.earliestTime = 'You forgot to select an earliest pickup time!';
+    errors.earliestTime = 'Please select an earliest pickup time.';
   }
 
   if (!values.latestTime) {
-    errors.latestTime = 'You forgot to select a latest pickup time!';
+    errors.latestTime = 'Please select a latest pickup time.';
   } else if (
     latestTimeIsBeforeEarliestTime(values.earliestTime, values.latestTime)
   ) {
@@ -343,7 +343,7 @@ function validate(values) {
   }
 
   if (!values.addressId) {
-    errors.addressId = 'You forgot to select a pickup address!';
+    errors.addressId = 'Please select a pickup address.';
   }
 
   return errors;
@@ -352,7 +352,7 @@ function validate(values) {
 function validateDeliveryInstructions(value) {
   let error;
   if (value && value.length > 57) {
-    error = "Your delivery instructions can't be longer than 57 characters.";
+    error = "Delivery instructions can't be longer than 57 characters.";
   }
   return error;
 }
