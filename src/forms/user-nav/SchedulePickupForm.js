@@ -74,7 +74,7 @@ export default function SchedulePickupForm() {
             }
             setSubmitting(false);
             snackbar.openSnackbar(
-              'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
+              'An error occurred while scheduling your packaging pickup. Contact us at info@thewallyshop.co for assistance.',
               'error',
             );
           })
