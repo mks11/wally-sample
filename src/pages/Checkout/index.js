@@ -9,7 +9,7 @@ import RemoveItemForm from 'forms/cart/RemoveItem';
 import { logPageView, logEvent } from 'services/google-analytics';
 import { connect, formatMoney, datesEqual } from 'utils';
 
-import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
+import DeliveryAddressOptions from './DeliveryAddressOptions';
 import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
 import PackagingSummary from './PackagingSummary';
