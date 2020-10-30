@@ -74,7 +74,7 @@ class CheckoutStore {
 
     this.cart = res.data;
     if (order_summary) {
-      this.getOrderSummary(auth, delivery);
+      this.getOrderSummary(auth);
     }
   }
 
@@ -88,12 +88,8 @@ class CheckoutStore {
     return res.data;
   }
 
-  async getOrderSummary(auth, delivery, tip = 0, address_id) {
-    const time = moment().format('YYYY-MM-DD HH:mm:ss');
-    const res = await axios.get(
-      `${API_GET_ORDER_SUMMARY}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}&tip_amount=${tip}&address_id=${address_id}`,
-      auth,
-    );
+  async getOrderSummary(auth) {
+    const res = await axios.get(API_GET_ORDER_SUMMARY, auth);
     this.order = res.data;
     return res.data;
   }

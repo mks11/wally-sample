@@ -29,7 +29,7 @@ class Checkout extends Component {
     this.state = {
       timeDropdown: false,
 
-      appliedStoreCredit: false,
+      appliedStoreCredit: 0,
       appliedStoreCreditAmount: 0,
       applicableStoreCreditAmount: 0,
 
@@ -135,17 +135,12 @@ class Checkout extends Component {
       : '';
     const tip = this.parseAppliedTip();
     this.checkoutStore
-      .getOrderSummary(
-        this.userStore.getHeaderAuth(),
-        deliveryData,
-        tip,
-        address_id,
-      )
+      .getOrderSummary(this.userStore.getHeaderAuth())
       .then((data) => {
         this.setState({
           applicableStoreCreditAmount: this.checkoutStore.order
             .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_amount,
+          appliedPromo: this.checkoutStore.order.promo_discount,
           appliedPromoCode: this.checkoutStore.order.promo,
         });
 
@@ -173,18 +168,8 @@ class Checkout extends Component {
   }
 
   updateData() {
-    const deliveryData = this.userStore.getDeliveryParams();
-    const tip = this.parseAppliedTip();
-    const address_id = this.userStore.selectedDeliveryAddress
-      ? this.userStore.selectedDeliveryAddress.address_id
-      : '';
     this.checkoutStore
-      .getOrderSummary(
-        this.userStore.getHeaderAuth(),
-        deliveryData,
-        tip,
-        address_id,
-      )
+      .getOrderSummary(this.userStore.getHeaderAuth())
       .then((data) => {
         this.setState({
           applicableStoreCreditAmount: this.checkoutStore.order
@@ -493,9 +478,10 @@ class Checkout extends Component {
 
   handleApplyPromo() {
     const { order } = this.checkoutStore;
+
     if (order) {
       this.setState({
-        applicableStoreCreditAmount: order.applicable_store_credit,
+        appliedStoreCredit: order.applied_store_credit,
         appliedPromo: true,
         appliedPromoCode: order.promo_code,
       });
@@ -695,7 +681,7 @@ class Checkout extends Component {
 
                       {order.applied_packaging_balance === 0 ? null : (
                         <div className="summary">
-                          <span>Applied Packaging Deposit</span>
+                          <span>Applied packaging deposit balance</span>
                           <span>
                             -
                             {formatMoney(order.applied_packaging_balance / 100)}
@@ -714,7 +700,7 @@ class Checkout extends Component {
 
                       {order.applied_store_credit === 0 ? null : (
                         <div className="summary">
-                          <span>Applied Store Credit</span>
+                          <span>Applied store credit</span>
                           <span>
                             -{formatMoney(order.applied_store_credit / 100)}
                           </span>
@@ -723,7 +709,7 @@ class Checkout extends Component {
                     </div>
 
                     <div className="item-extras">
-                      {!this.state.appliedStoreCredit && 1 == 2 ? (
+                      {/* {!this.state.appliedStoreCredit && 1 == 2 ? (
                         <div className="form-group">
                           <span className="text-blue">
                             Apply your store credit?
@@ -745,13 +731,11 @@ class Checkout extends Component {
                             </button>
                           </div>
                         </div>
-                      ) : null}
+                      ) : null} */}
 
-                      {!this.state.appliedPromo ? (
-                        <ApplyPromoCodeForm
-                          onApply={() => this.handleApplyPromo}
-                        />
-                      ) : null}
+                      <ApplyPromoCodeForm
+                        onApply={() => this.handleApplyPromo()}
+                      />
                     </div>
 
                     <div className="item-total">
