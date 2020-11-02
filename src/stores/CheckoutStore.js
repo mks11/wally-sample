@@ -5,7 +5,6 @@ import {
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
   API_CREATE_ORDER,
-  API_CHECK_PROMO,
 } from '../config';
 import axios from 'axios';
 import moment from 'moment';
@@ -117,23 +116,6 @@ class CheckoutStore {
     return res.data;
   }
 
-  async checkPromo(data, auth) {
-    let res;
-    if (!data.subTotal) {
-      res = await axios.get(
-        `${API_CHECK_PROMO}/?promo_code=${data.promoCode}`,
-        auth,
-      );
-    } else {
-      res = await axios.get(
-        `${API_CHECK_PROMO}/?subtotal=${data.subTotal}&promo_code=${data.promoCode}`,
-        auth,
-      );
-    }
-    this.order = res.data;
-    return res.data;
-  }
-
   transformDeliveryTimes(data) {
     if (!data) return;
 
@@ -181,7 +163,6 @@ decorate(CheckoutStore, {
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
-  checkPromo: action,
 });
 
 export default new CheckoutStore();

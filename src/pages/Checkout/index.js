@@ -359,39 +359,6 @@ class Checkout extends Component {
     });
   };
 
-  handleCheckPromo = (promoCode) => {
-    if (!promoCode) {
-      this.setState({ invalidText: 'Promo code empty' });
-      return;
-    }
-    logEvent({ category: 'Checkout', action: 'AddPromo', label: promoCode });
-    this.checkoutStore
-      .checkPromo(promoCode, this.userStore.getHeaderAuth())
-      .then((data) => {
-        if (data.valid) {
-          this.setState({
-            appliedPromo: true,
-            appliedPromoCode: promoCode,
-            successText: 'Promo applied successfully',
-          });
-          this.userStore.getUser().then(() => {
-            this.loadData();
-          });
-        } else {
-          this.setState({ invalidText: 'Invalid promo code' });
-        }
-      })
-      .catch((e) => {
-        if (!e.response.data.error) {
-          this.setState({ invalidText: 'Check promo failed' });
-          return;
-        }
-        console.error('Failed to check promo', e);
-        const msg = e.response.data.error.message;
-        this.setState({ invalidText: msg });
-      });
-  };
-
   handleAddTip = () => {
     if (!this.state.tipApplyEdited) {
       this.setState({
@@ -709,30 +676,6 @@ class Checkout extends Component {
                     </div>
 
                     <div className="item-extras">
-                      {/* {!this.state.appliedStoreCredit && 1 == 2 ? (
-                        <div className="form-group">
-                          <span className="text-blue">
-                            Apply your store credit?
-                          </span>
-                          <div className="aw-input--group aw-input--group-sm">
-                            <Input
-                              className="aw-input--control aw-input--left aw-input--bordered"
-                              type="text"
-                              placeholder="Enter your store credit"
-                              readOnly={true}
-                              value={formatMoney(applicableStoreCreditAmount)}
-                            />
-                            <button
-                              onClick={(e) => this.applyStoreCredit()}
-                              type="button"
-                              className="btn btn-transparent"
-                            >
-                              APPLY
-                            </button>
-                          </div>
-                        </div>
-                      ) : null} */}
-
                       <ApplyPromoCodeForm
                         onApply={() => this.handleApplyPromo()}
                       />
