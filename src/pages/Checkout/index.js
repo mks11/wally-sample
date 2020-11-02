@@ -11,8 +11,8 @@ import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
 import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
 import PackagingSummary from './PackagingSummary';
-import PromoSummary from './PromoSummary';
 import ShippingOption from '../../common/ShippingOption';
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
 class Checkout extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class Checkout extends Component {
     this.state = {
       timeDropdown: false,
 
-      appliedStoreCredit: false,
+      appliedStoreCredit: 0,
       appliedStoreCreditAmount: 0,
       applicableStoreCreditAmount: 0,
 
@@ -135,17 +135,12 @@ class Checkout extends Component {
       : '';
     const tip = this.parseAppliedTip();
     this.checkoutStore
-      .getOrderSummary(
-        this.userStore.getHeaderAuth(),
-        deliveryData,
-        tip,
-        address_id,
-      )
+      .getOrderSummary(this.userStore.getHeaderAuth())
       .then((data) => {
         this.setState({
           applicableStoreCreditAmount: this.checkoutStore.order
             .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_amount,
+          appliedPromo: this.checkoutStore.order.promo_discount,
           appliedPromoCode: this.checkoutStore.order.promo,
         });
 
@@ -173,18 +168,8 @@ class Checkout extends Component {
   }
 
   updateData() {
-    const deliveryData = this.userStore.getDeliveryParams();
-    const tip = this.parseAppliedTip();
-    const address_id = this.userStore.selectedDeliveryAddress
-      ? this.userStore.selectedDeliveryAddress.address_id
-      : '';
     this.checkoutStore
-      .getOrderSummary(
-        this.userStore.getHeaderAuth(),
-        deliveryData,
-        tip,
-        address_id,
-      )
+      .getOrderSummary(this.userStore.getHeaderAuth())
       .then((data) => {
         this.setState({
           applicableStoreCreditAmount: this.checkoutStore.order
@@ -374,47 +359,6 @@ class Checkout extends Component {
     });
   };
 
-  handleCheckPromo = (promoCode) => {
-    const subTotal = this.checkoutStore.order.subtotal;
-
-    if (!promoCode) {
-      this.setState({ invalidText: 'Promo code empty' });
-      return;
-    }
-    logEvent({ category: 'Checkout', action: 'AddPromo', label: promoCode });
-    this.checkoutStore
-      .checkPromo(
-        {
-          subTotal,
-          promoCode,
-        },
-        this.userStore.getHeaderAuth(),
-      )
-      .then((data) => {
-        if (data.valid) {
-          this.setState({
-            appliedPromo: true,
-            appliedPromoCode: promoCode,
-            successText: 'Promo applied successfully',
-          });
-          this.userStore.getUser().then(() => {
-            this.loadData();
-          });
-        } else {
-          this.setState({ invalidText: 'Invalid promo code' });
-        }
-      })
-      .catch((e) => {
-        if (!e.response.data.error) {
-          this.setState({ invalidText: 'Check promo failed' });
-          return;
-        }
-        console.error('Failed to check promo', e);
-        const msg = e.response.data.error.message;
-        this.setState({ invalidText: msg });
-      });
-  };
-
   handleAddTip = () => {
     if (!this.state.tipApplyEdited) {
       this.setState({
@@ -497,6 +441,18 @@ class Checkout extends Component {
         : formatMoney(customTip);
 
     return tipAmount;
+  }
+
+  handleApplyPromo() {
+    const { order } = this.checkoutStore;
+
+    if (order) {
+      this.setState({
+        appliedStoreCredit: order.applied_store_credit,
+        appliedPromo: true,
+        appliedPromoCode: order.promo_code,
+      });
+    }
   }
 
   render() {
@@ -692,7 +648,7 @@ class Checkout extends Component {
 
                       {order.applied_packaging_balance === 0 ? null : (
                         <div className="summary">
-                          <span>Applied Packaging Deposit</span>
+                          <span>Applied packaging deposit balance</span>
                           <span>
                             -
                             {formatMoney(order.applied_packaging_balance / 100)}
@@ -711,7 +667,7 @@ class Checkout extends Component {
 
                       {order.applied_store_credit === 0 ? null : (
                         <div className="summary">
-                          <span>Applied Store Credit</span>
+                          <span>Applied store credit</span>
                           <span>
                             -{formatMoney(order.applied_store_credit / 100)}
                           </span>
@@ -720,33 +676,9 @@ class Checkout extends Component {
                     </div>
 
                     <div className="item-extras">
-                      {!this.state.appliedStoreCredit && 1 == 2 ? (
-                        <div className="form-group">
-                          <span className="text-blue">
-                            Apply your store credit?
-                          </span>
-                          <div className="aw-input--group aw-input--group-sm">
-                            <Input
-                              className="aw-input--control aw-input--left aw-input--bordered"
-                              type="text"
-                              placeholder="Enter your store credit"
-                              readOnly={true}
-                              value={formatMoney(applicableStoreCreditAmount)}
-                            />
-                            <button
-                              onClick={(e) => this.applyStoreCredit()}
-                              type="button"
-                              className="btn btn-transparent"
-                            >
-                              APPLY
-                            </button>
-                          </div>
-                        </div>
-                      ) : null}
-
-                      {!this.state.appliedPromo ? (
-                        <PromoSummary onApply={this.handleCheckPromo} />
-                      ) : null}
+                      <ApplyPromoCodeForm
+                        onApply={() => this.handleApplyPromo()}
+                      />
                     </div>
 
                     <div className="item-total">

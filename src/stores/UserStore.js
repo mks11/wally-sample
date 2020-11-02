@@ -7,13 +7,11 @@ import {
   API_SIGNUP,
   API_EDIT_USER,
   API_ADDRESS_NEW,
-  API_ADDRESS_EDIT,
   API_ADDRESS_REMOVE,
   API_PAYMENT_NEW,
   API_PAYMENT_EDIT,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
-  API_USER_ADD_PROMO,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
   API_PURCHASE_GIFTCARD,
@@ -42,9 +40,6 @@ class UserStore {
 
   selectedDeliveryAddress = null;
   selectedDeliveryTime = null;
-
-  promoModal = false;
-  promoSuccessModal = false;
 
   activePayment = null;
 
@@ -105,14 +100,6 @@ class UserStore {
       return this.user._id;
     }
     return undefined;
-  }
-
-  togglePromoModal() {
-    this.promoModal = !this.promoModal;
-  }
-
-  togglePromoSuccessModal() {
-    this.promoModal = !this.promoModal;
   }
 
   setUserData(user) {
@@ -412,14 +399,6 @@ class UserStore {
     return res.data;
   }
 
-  async addPromo(promoCode) {
-    const res = await axios.post(
-      `${API_USER_ADD_PROMO}?promo_code=${promoCode}`,
-      this.getHeaderAuth(),
-    );
-    return res.data;
-  }
-
   async purchaseGiftCard(data) {
     const auth = this.getHeaderAuth();
     const options =
@@ -579,10 +558,6 @@ decorate(UserStore, {
 
   selectedDeliveryAddress: observable,
   selectedDeliveryTime: observable,
-
-  addPromo: action,
-  togglePromoModal: action,
-  togglePromoSuccessModal: action,
 
   refPromo: observable,
   giftCardPromo: observable,

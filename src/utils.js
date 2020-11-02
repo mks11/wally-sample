@@ -65,6 +65,14 @@ function sortByTimestampDes(arr, field = 'timestamp') {
   });
 }
 
+function getItemsCount(items) {
+  let count = 0;
+  for (let i = items.length - 1; i >= 0; i--) {
+    count += items[i].customer_quantity;
+  }
+  return count;
+}
+
 export {
   connect,
   validateEmail,
@@ -72,4 +80,5 @@ export {
   capitalizeFirstLetter,
   isValidTimeOrder,
   sortByTimestampDes,
+  getItemsCount,
 };

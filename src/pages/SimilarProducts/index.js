@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { logPageView } from 'services/google-analytics';
-import { connect, datesEqual } from 'utils';
+import { connect, datesEqual, getItemsCount } from 'utils';
 
 import CarbonBar from 'common/CarbonBar';
 import Product from '../Mainpage/Product';
 import EmptyCartMessage from './EmptyCartMessage';
-import LoginForm from 'forms/authentication/LoginForm';
 
 class SimilarProducts extends Component {
   constructor(props) {
@@ -38,7 +37,6 @@ class SimilarProducts extends Component {
     logPageView(location.pathname);
 
     this.userStore.getStatus(true).then((status) => {
-      this.userStore.giftCardPromo && this.processGiftCardPromo(status);
       this.checkoutStore.getDeliveryTimes();
       this.loadData();
 
@@ -117,38 +115,6 @@ class SimilarProducts extends Component {
       });
   }
 
-  processGiftCardPromo(userStatus) {
-    if (userStatus) {
-      this.checkoutStore
-        .checkPromo(
-          { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth(),
-        )
-        .then((data) => {
-          let msg = '';
-          if (data.valid) {
-            msg = 'Store Credit Redeemed';
-            this.userStore.getUser().then(() => {
-              this.loadData();
-            });
-          } else {
-            msg = 'Invalid Promo-code';
-          }
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        })
-        .catch((e) => {
-          const msg = !e.response.data.error
-            ? 'Check Promo failed'
-            : e.response.data.error.message;
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        });
-    } else {
-      this.modalV2Store.open(<LoginForm />);
-    }
-  }
-
   handleProductModal = (product_id, deliveryTimes) => {
     this.productStore
       .showModal(product_id, null, this.userStore.getDeliveryParams())
@@ -159,13 +125,14 @@ class SimilarProducts extends Component {
   };
 
   render() {
-    const cartItems = this.checkoutStore.cart
+    const items = this.checkoutStore.cart
       ? this.checkoutStore.cart.cart_items
       : [];
+    const numCartItems = getItemsCount(items);
 
     return (
       <div className="App">
-        {cartItems.length < 1 ? (
+        {items.length < 1 ? (
           <div className="container">
             <EmptyCartMessage />
           </div>
@@ -186,7 +153,7 @@ class SimilarProducts extends Component {
                 </div>
                 <br />
               </div>
-              <CarbonBar nCartItems={cartItems.length} />
+              <CarbonBar nCartItems={numCartItems} />
             </div>
             <div className="container">
               <div className="col-12">

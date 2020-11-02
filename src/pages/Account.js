@@ -3,10 +3,9 @@ import { Input } from 'reactstrap';
 import Title from '../common/page/Title';
 import AddressModal from './account/AddressModal';
 import PaymentModal from './account/PaymentModal';
-import PromoModal from './account/PromoModal';
-import PromoSuccessModal from './account/PromoSuccessModal';
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 
 import { connect } from '../utils';
@@ -304,18 +303,15 @@ class Account extends Component {
             >
               <i className="ico ico-add-square mr-3"></i>Add new card
             </button>
-            <button
-              onClick={(e) => this.userStore.togglePromoModal()}
-              className="btn btn-icon-transparent btn-block mt-4"
-            >
-              <i className="ico ico-add-square mr-3"></i>Add promo or gift card
-            </button>
+            <br />
+            <br />
+            <Box maxWidth="567px">
+              <ApplyPromoCodeForm />
+            </Box>
           </div>
         </section>
         {this.userStore.addressModalOpen ? <AddressModal /> : null}
         {this.userStore.paymentModalOpen ? <PaymentModal /> : null}
-        <PromoModal />
-        <PromoSuccessModal />
       </div>
     );
   }
