@@ -52,6 +52,9 @@ function AddressOptions(props) {
       setLock(false);
     }
     const address = props.user.addresses.find((d) => d._id === selected);
+
+    // TODO: This probably isn't necessary anymore. Don't worry about it for now.
+    // When we convert this over to formik, we'll sort it out.
     props.onSubmit &&
       props.onSubmit(address).catch((e) => {
         if (e.response && e.response.data.error) {

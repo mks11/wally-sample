@@ -6,7 +6,7 @@ import PaymentSelect from 'common/PaymentSelect';
 import RemoveItemForm from 'forms/cart/RemoveItem';
 
 import { logPageView, logEvent } from 'services/google-analytics';
-import { connect, formatMoney, datesEqual } from 'utils';
+import { connect, formatMoney } from 'utils';
 
 import DeliveryAddressOptions from './DeliveryAddressOptions';
 
@@ -100,11 +100,6 @@ class Checkout extends Component {
 
   loadData() {
     let dataOrder;
-    const deliveryData = this.userStore.getDeliveryParams();
-    const address_id = this.userStore.selectedDeliveryAddress
-      ? this.userStore.selectedDeliveryAddress.address_id
-      : '';
-    const tip = this.parseAppliedTip();
     this.checkoutStore
       .getOrderSummary(this.userStore.getHeaderAuth())
       .then((data) => {
@@ -117,21 +112,6 @@ class Checkout extends Component {
 
         dataOrder = data;
         return data;
-      })
-      .then((data) => {
-        if (
-          !datesEqual(data.delivery_date, deliveryData.date) &&
-          deliveryData.date !== null
-        ) {
-          return this.checkoutStore.getDeliveryTimes().then(() => {
-            this.userStore.adjustDeliveryTimes(
-              dataOrder.delivery_date,
-              this.state.deliveryTimes,
-            );
-            this.setState({ invalidText: 'Please select delivery time' });
-          });
-        }
-        return null;
       })
       .catch((e) => {
         console.error(e);
@@ -171,40 +151,6 @@ class Checkout extends Component {
     } else {
       this.setState({ selectedAddressChanged: false });
     }
-  };
-
-  handleAddNewAddress = async (data) => {
-    const {
-      newContactName,
-      newState,
-      newDeliveryNotes,
-      newZip,
-      newAptNo,
-      newCity,
-      newCountry,
-      newPhoneNumber,
-      newStreetAddress,
-      newPreferedAddress,
-    } = data;
-
-    const dataMap = {
-      name: newContactName,
-      state: newState,
-      delivery_notes: newDeliveryNotes,
-      zip: newZip,
-      unit: newAptNo,
-      city: newCity,
-      country: newCountry,
-      telephone: newPhoneNumber,
-      street_address: newStreetAddress,
-      preferred_address: newPreferedAddress,
-    };
-
-    const response = await this.userStore.saveAddress(dataMap);
-    const address = this.userStore.selectedDeliveryAddress;
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-    return response;
   };
 
   handleSubmitAddress = async (address) => {
@@ -354,10 +300,6 @@ class Checkout extends Component {
 
     const order = this.checkoutStore.order;
 
-    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount
-      ? this.state.applicableStoreCreditAmount / 100
-      : 0;
-
     let buttonPlaceOrderClass = 'btn btn-main';
     if (
       this.userStore.selectedDeliveryAddress &&
@@ -391,7 +333,6 @@ class Checkout extends Component {
                         : null
                     }
                     user={this.userStore.user}
-                    onAddNew={this.handleAddNewAddress}
                     onSubmit={this.handleSubmitAddress}
                     onSelect={this.handleSelectAddress}
                     onUnlock={this.handleUnlockAddress}
