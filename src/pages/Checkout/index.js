@@ -461,7 +461,6 @@ class Checkout extends Component {
                 {this.userStore.user && (
                   <DeliveryAddressOptions
                     lock={this.state.lockAddress}
-                    editable={true}
                     selected={
                       this.userStore.selectedDeliveryAddress
                         ? this.userStore.selectedDeliveryAddress.address_id

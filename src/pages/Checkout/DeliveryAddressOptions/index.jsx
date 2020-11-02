@@ -74,25 +74,21 @@ function AddressOptions(props) {
   };
 
   const preferred_address = props.user ? props.user.preferred_address : null;
-  const editable = props.editable !== null ? props.editable : true;
 
-  const showTitle = typeof props.title !== 'undefined' ? props.title : true;
   const showButton = typeof props.button !== 'undefined' ? props.button : true;
 
   return (
     <>
-      {showTitle && (
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="h4" gutterBottom>
-            {props.title ? props.title : 'Delivery address'}
-          </Typography>
-          {lock && editable ? (
-            <Button onClick={unlock}>
-              <Typography variant="h6">CHANGE</Typography>
-            </Button>
-          ) : null}
-        </Box>
-      )}
+      <Box display="flex" justifyContent="space-between">
+        <Typography variant="h4" gutterBottom>
+          Shipping Address
+        </Typography>
+        {lock ? (
+          <Button onClick={unlock}>
+            <Typography variant="h6">Edit</Typography>
+          </Button>
+        ) : null}
+      </Box>
       <Box mb={4}>
         <Card>
           <Box p={2}>
@@ -139,9 +135,7 @@ AddressOptions.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   selected: PropTypes.string,
   lock: PropTypes.bool,
-  title: PropTypes.string,
   button: PropTypes.string,
-  editable: PropTypes.bool,
 };
 
 export default AddressOptions;
