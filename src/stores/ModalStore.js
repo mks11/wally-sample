@@ -17,9 +17,6 @@ class ModalStore {
   changePrice = false;
 
   delivery = false;
-  deliveryChange = false;
-  deliveryChangeType = null;
-  deliveryChangeData = null;
 
   addonsFirst = false;
 
@@ -28,18 +25,6 @@ class ModalStore {
 
   toggleDelivery() {
     this.delivery = !this.delivery;
-  }
-
-  showDeliveryChange(type, data) {
-    this.deliveryChange = true;
-    this.deliveryChangeType = type;
-    this.deliveryChangeData = data;
-  }
-
-  hideDeliveryChange() {
-    this.deliveryChange = false;
-    this.deliveryChangeType = null;
-    this.deliveryChangeData = null;
   }
 
   toggleModal(modalId, msg = null, data = null, childrenComponent = null) {
@@ -118,7 +103,6 @@ decorate(ModalStore, {
   changePrice: observable,
 
   delivery: observable,
-  deliveryChange: observable,
   addonsFirst: observable,
   packaging: observable,
   missing: observable,

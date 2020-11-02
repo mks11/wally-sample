@@ -9,7 +9,6 @@ import { logPageView, logEvent } from 'services/google-analytics';
 import { connect, formatMoney, datesEqual } from 'utils';
 
 import DeliveryAddressOptions from './DeliveryAddressOptions';
-import DeliveryChangeModal from 'common/DeliveryChangeModal';
 
 import PackagingSummary from './PackagingSummary';
 import ShippingOption from '../../common/ShippingOption';
@@ -20,7 +19,6 @@ class Checkout extends Component {
     super(props);
 
     this.userStore = this.props.store.user;
-    this.uiStore = this.props.store.ui;
     this.modalStore = this.props.store.modal;
     this.productStore = this.props.store.product;
     this.checkoutStore = this.props.store.checkout;
@@ -165,19 +163,6 @@ class Checkout extends Component {
     return (parseFloat(tipValue) * 100).toFixed();
   }
 
-  applyStoreCredit() {
-    if (this.state.applicableStoreCreditAmount) {
-      this.setState({
-        appliedStoreCredit: true,
-        appliedStoreCreditAmount: this.checkoutStore.order
-          .applicable_store_credit,
-      });
-      this.checkoutStore.order.total =
-        this.checkoutStore.order.total -
-        this.checkoutStore.order.applicable_store_credit;
-    }
-  }
-
   handleSelectAddress = (data) => {
     const selectedAddress = this.userStore.selectedDeliveryAddress;
     if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
@@ -237,10 +222,6 @@ class Checkout extends Component {
       selectedPayment,
       lockPayment: lock,
     });
-  };
-
-  handleChangeDelivery = () => {
-    this.updateData();
   };
 
   handleEdit(id, quantity) {
@@ -352,18 +333,6 @@ class Checkout extends Component {
       total = (order.total - currentTipAmount) / 100 + parseFloat(customTip);
     }
     return total;
-  }
-
-  updateTipAmount() {
-    const order = this.checkoutStore.order;
-    const customTip =
-      this.state.freezedTipAmount || this.state.appliedTipAmount;
-    const tipAmount =
-      order.tip_amount && !this.state.appliedTipAmountChanged
-        ? formatMoney(order.tip_amount / 100)
-        : formatMoney(customTip);
-
-    return tipAmount;
   }
 
   handleApplyPromo() {
@@ -629,7 +598,6 @@ class Checkout extends Component {
             </div>
           </div>
         </div>
-        <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
       </div>
     );
   }
