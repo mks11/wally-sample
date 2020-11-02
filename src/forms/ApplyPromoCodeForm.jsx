@@ -114,9 +114,12 @@ function ApplyPromoCodeForm({ onApply }) {
         ) {
           const { param, message } = error.response.data.error;
           setFieldError(param, message);
+        } else {
+          snackbarStore.openSnackbar(
+            "Your promo code couldn't be applied.",
+            'error',
+          );
         }
-
-        // TODO: Handle generic errors
       } finally {
         setSubmitting(false);
       }
