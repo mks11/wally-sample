@@ -25,12 +25,12 @@ export default function AddressCreateForm() {
   );
 
   const handleFormSubmit = (values, { setSubmitting }) => {
-    alert(JSON.stringify(values));
-    // submit(values);
-    // if (data) {
-    //   setSubmitting(false);
-    //   modalV2.close(); //todo check if it is still needed
-    // }
+    // alert(JSON.stringify(values));
+    submit(values);
+    if (data) {
+      setSubmitting(false);
+      modalV2.close(); //todo check if it is still needed
+    }
   };
 
   return (
