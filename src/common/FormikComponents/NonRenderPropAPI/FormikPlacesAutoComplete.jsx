@@ -4,6 +4,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
 } from 'react-places-autocomplete';
 import { useFormikContext } from 'formik';
+import { Box, InputAdornment, TextField } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 
 // Components
 import { Label } from 'styled-component-lib/InputLabel';
@@ -42,16 +44,33 @@ export default function FormikPlacesAutoComplete({ names, mode = 'edit' }) {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps }) => (
           <div style={{ position: 'relative' }}>
-            <input
+            <TextField
               {...getInputProps({
                 // readOnly: mode === 'edit',
                 autoComplete: 'off',
-                placeholder: 'Delivery to...',
-                className:
-                  'aw-input--control aw-input--control-large aw-input--left location-search-input  aw-input--location aw-input--bordered mt-3 form-control',
+                placeholder: 'Search US addresses',
               })}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              fullWidth
             />
-            <div className="autocomplete-dropdown-container">
+            <Box
+              position="absolute"
+              border={
+                suggestions && suggestions.length
+                  ? '1px solid rgb(118, 118, 118)'
+                  : 'none'
+              }
+              background="#fff"
+              width="100%"
+              zIndex={10}
+            >
               {suggestions.map((suggestion, idx) => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
@@ -75,7 +94,7 @@ export default function FormikPlacesAutoComplete({ names, mode = 'edit' }) {
                   </div>
                 );
               })}
-            </div>
+            </Box>
           </div>
         )}
       </PlacesAutocomplete>
