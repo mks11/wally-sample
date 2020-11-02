@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 
 // Utils
-import { logPageView, logEvent } from 'services/google-analytics';
+import { logEvent } from 'services/google-analytics';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -23,14 +23,13 @@ import { applyPromo } from 'api/promocode';
 function ApplyPromoCodeForm({ onApply }) {
   const {
     checkout: checkoutStore,
-    loading: loadingSpinnerStore,
     user: userStore,
     snackbar: snackbarStore,
   } = useStores();
   return (
     <>
-      <Typography variant="h4" component="label">
-        Have a promo code?
+      <Typography variant="h5" component="label">
+        Redeem a promo code or gift card
       </Typography>
       <Formik
         initialValues={{ promoCode: '' }}
@@ -49,7 +48,7 @@ function ApplyPromoCodeForm({ onApply }) {
                     color="primary"
                     disabled={isSubmitting}
                     name="promoCode"
-                    placeholder="Enter your promo code."
+                    placeholder="Promo code"
                     variant="outlined"
                   />
                 </Grid>
@@ -82,11 +81,10 @@ function ApplyPromoCodeForm({ onApply }) {
       try {
         logEvent({
           category: 'Checkout',
-          action: 'AddPromo',
+          action: 'ApplyPromo',
           label: promoCode,
         });
         const auth = userStore.getHeaderAuth();
-        // loadingSpinnerStore.show();
 
         const res = await applyPromo(promoCode, auth);
         onApply && onApply(promoCode);
@@ -117,9 +115,10 @@ function ApplyPromoCodeForm({ onApply }) {
           const { param, message } = error.response.data.error;
           setFieldError(param, message);
         }
+
+        // TODO: Handle generic errors
       } finally {
         setSubmitting(false);
-        // loadingSpinnerStore.hide();
       }
     }
   }
