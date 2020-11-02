@@ -33,6 +33,7 @@ export default function FormikAddressSelect({
         {label}
       </Label>
       <StyledSelect
+        variant="outlined"
         labelId={labelId}
         defaultValue={
           preferredAddress ? preferredAddress.address_id : undefined

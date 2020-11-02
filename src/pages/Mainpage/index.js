@@ -25,17 +25,17 @@ import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
-import LoginForm from 'forms/authentication/LoginForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/roses-natural/roses-natural-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -120,7 +120,6 @@ class Mainpage extends Component {
         if (!status) {
           this.routing.push('/');
         } else {
-          this.userStore.giftCardPromo && this.processGiftCardPromo(status);
           this.checkoutStore.getDeliveryTimes();
           this.loadData();
           const { mainFirst, mainSecond } = this.userStore.flags || {};
@@ -205,38 +204,6 @@ class Mainpage extends Component {
         .catch((e) => {
           console.error('Failed to load current cart', e);
         });
-    }
-  }
-
-  processGiftCardPromo(userStatus) {
-    if (userStatus) {
-      this.checkoutStore
-        .checkPromo(
-          { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth(),
-        )
-        .then((data) => {
-          let msg = '';
-          if (data.valid) {
-            msg = 'Store Credit Redeemed';
-            this.userStore.getUser().then(() => {
-              this.loadData();
-            });
-          } else {
-            msg = 'Invalid Promo-code';
-          }
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        })
-        .catch((e) => {
-          const msg = !e.response.data.error
-            ? 'Check Promo failed'
-            : e.response.data.error.message;
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        });
-    } else {
-      this.modalV2.open(<LoginForm />);
     }
   }
 
@@ -326,15 +293,17 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New Roses Natural Products'}
-        body={
-          'All-natural, vegan, cruelty-free, and kid-safe bath & home care.'
-        }
+        alt={'New Simplified Superfoods Products'}
         img={img}
         justify="flex-start"
-        title={'Roses Natural'}
-        url="/shop/brands/roses-natural"
-      />
+        title={'Simplified Superfoods'}
+        url="/shop/brands/simplified-superfoods"
+      >
+        <Typography>A smoothie mix that packs it all.</Typography>
+        <Typography gutterBottom>
+          Protein, fiber, & fat to fuel your day.
+        </Typography>
+      </HeroSlide>
     ));
 
     return (
@@ -590,13 +559,15 @@ const SmallHeroImage = styled(Image)`
   }
 `;
 
-function HeroSlide({ alt, body, img, justify, title, url }) {
+function HeroSlide({ alt, children, img, justify, title, url }) {
   return (
     <Box position="relative">
       <LargeHeroImage src={img.lg} alt={alt} />
       <MediumHeroImage src={img.md} alt={alt} />
       <SmallHeroImage src={img.sm} alt={alt} />
-      <HeroSlideOverlay body={body} justify={justify} title={title} url={url} />
+      <HeroSlideOverlay justify={justify} title={title} url={url}>
+        {children}
+      </HeroSlideOverlay>
     </Box>
   );
 }
@@ -616,6 +587,12 @@ const SlideOverlayWrapper = styled(Box)`
   }
 
   padding: 2rem;
+  ${'' /* background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.35) 100%
+  ); */}
 `;
 
 const HeroOverline = styled.p`
@@ -645,11 +622,7 @@ const HeroTitle = styled.h1`
   margin-bottom: 0.75rem;
 `;
 
-const HeroBody = styled(Typography)`
-  margin-bottom: 1.25rem;
-`;
-
-function HeroSlideOverlay({ body, justify, title, url }) {
+function HeroSlideOverlay({ children, justify, title, url }) {
   return (
     <SlideOverlayWrapper
       position="absolute"
@@ -663,7 +636,7 @@ function HeroSlideOverlay({ body, justify, title, url }) {
         <Grid item xs={12} sm={8}>
           {title && <HeroOverline>Limited Release</HeroOverline>}
           {title && <HeroTitle>{title}</HeroTitle>}
-          {body && <HeroBody>{body}</HeroBody>}
+          {children && children}
           {url && (
             <PrimaryWallyButton component={Link} to={url} alt={title}>
               <Typography component="span">Shop Now</Typography>

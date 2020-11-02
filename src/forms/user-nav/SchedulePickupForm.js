@@ -16,9 +16,10 @@ import FormikDateSelect from 'common/FormikDateSelect/FormikDateSelect';
 import FormikTimeSelect from 'common/FormikTimeSelect';
 import FormikAddressSelect from 'common/FormikAddressSelect';
 import FormikTextInput from 'common/FormikTextInput';
+import RequestResult from 'modals/RequestResult';
 
 export default function SchedulePickupForm() {
-  const { loading, modalV2, snackbar, user } = useStores();
+  const { loading, modalV2, user } = useStores();
   return (
     <Formik
       initialValues={{
@@ -29,7 +30,7 @@ export default function SchedulePickupForm() {
         pickupInstructions: '',
       }}
       validate={validate}
-      onSubmit={(values, actions) => {
+      onSubmit={(values, { setSubmitting, setFieldError }) => {
         loading.show();
         axios
           .post(API_SCHEDULE_PICKUP, values, user.getHeaderAuth())
@@ -38,18 +39,76 @@ export default function SchedulePickupForm() {
             const date = moment(earliestTime).format('dddd, MMMM Do');
             const start = moment(earliestTime).format('h:mm A');
             const end = moment(latestTime).format('h:mm A');
-            const successMsg = `Your packaging pickup was scheduled for ${date}, beginning at ${start} and ending at ${end}. Check your email for confirmation.`;
-            actions.setSubmitting(false);
-            snackbar.openSnackbar(successMsg, 'success');
-            modalV2.close();
-          })
-          .catch(() => {
-            // TODO: HANDLE SPECIFIC UPS ERRORS
-            actions.setSubmitting(false);
-            snackbar.openSnackbar(
-              'A problem occurred while your packaging pickup was being scheduled. Please contact us at info@thewallyshop.co so we can help you schedule your pickup.',
-              'error',
+            setSubmitting(false);
+            modalV2.open(
+              <RequestResult title="Success!">
+                <Typography gutterBottom>
+                  Your packaging pickup was scheduled for{' '}
+                  <Typography variant="h6" component="span">
+                    {date}
+                  </Typography>
+                  , beginning at{' '}
+                  <Typography variant="h6" component="span">
+                    {start}
+                  </Typography>{' '}
+                  and ending at{' '}
+                  <Typography variant="h6" component="span">
+                    {end}.
+                  </Typography>
+                </Typography>
+                <Typography gutterBottom>
+                  Check your email for confirmation.
+                </Typography>
+              </RequestResult>,
             );
+          })
+          .catch((err) => {
+            setSubmitting(false);
+            if (
+              err &&
+              err.response &&
+              err.response.data &&
+              err.response.data.error &&
+              err.response.data.error.param &&
+              err.response.data.error.message
+            ) {
+              const {
+                response: {
+                  data: {
+                    error: { param, message },
+                  },
+                },
+              } = err;
+              if (
+                [
+                  'scheduledDate',
+                  'earliestTime',
+                  'latestTime',
+                  'pickupInstructions',
+                ].includes(param)
+              ) {
+                setFieldError(param, message);
+              }
+            } else {
+              modalV2.open(
+                <RequestResult title="Error" hasError>
+                  <Typography gutterBottom>
+                    An error occurred while scheduling your packaging pickup.
+                  </Typography>
+                  <Typography gutterBottom>
+                    Contact us at{' '}
+                    <a
+                      href="mailto:info@thewallyshop.co"
+                      target="__blank"
+                      rel="noopener noreferrer"
+                    >
+                      info@thewallyshop.co
+                    </a>{' '}
+                    for assistance.
+                  </Typography>
+                </RequestResult>,
+              );
+            }
           })
           .finally(() => {
             // setSubmitting not activated here, because if modal is closed the result is a memory leak.
@@ -299,15 +358,15 @@ function getPickupTimes(startTime, endTime, intervalInMins = 60) {
 function validate(values) {
   const errors = {};
   if (!values.scheduledDate) {
-    errors.scheduledDate = 'You forgot to select a pickup date!';
+    errors.scheduledDate = 'Please select a pickup date.';
   }
 
   if (!values.earliestTime) {
-    errors.earliestTime = 'You forgot to select an earliest pickup time!';
+    errors.earliestTime = 'Please select an earliest pickup time.';
   }
 
   if (!values.latestTime) {
-    errors.latestTime = 'You forgot to select a latest pickup time!';
+    errors.latestTime = 'Please select a latest pickup time.';
   } else if (
     latestTimeIsBeforeEarliestTime(values.earliestTime, values.latestTime)
   ) {
@@ -316,7 +375,7 @@ function validate(values) {
   }
 
   if (!values.addressId) {
-    errors.addressId = 'You forgot to select a pickup address!';
+    errors.addressId = 'Please select a pickup address.';
   }
 
   return errors;
@@ -325,7 +384,7 @@ function validate(values) {
 function validateDeliveryInstructions(value) {
   let error;
   if (value && value.length > 57) {
-    error = "Your delivery instructions can't be longer than 57 characters.";
+    error = "Delivery instructions can't be longer than 57 characters.";
   }
   return error;
 }

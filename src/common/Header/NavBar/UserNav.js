@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 
 // Services & Utilities
 import { logModalView } from 'services/google-analytics';
-import { formatMoney } from 'utils';
+import { formatMoney, getItemsCount } from 'utils';
 
 // npm Package Components
 import { Badge, Box, Typography } from '@material-ui/core';

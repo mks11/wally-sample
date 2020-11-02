@@ -27,6 +27,12 @@ let theme = createMuiTheme({
     yellow: {
       main: '#F1D26A',
     },
+    success: {
+      main: '#60A561',
+    },
+    error: {
+      main: '#CC2936',
+    },
   },
   typography: {
     h1: {
@@ -77,7 +83,11 @@ let theme = createMuiTheme({
       fontFamily: ['Sofia Pro'].join(','),
       fontSize: '0.833rem',
     },
-    button: { fontFamily: ['Sofia Pro'].join(','), fontSize: '1.2rem' },
+    button: {
+      fontFamily: ['Sofia Pro'].join(','),
+      fontSize: '1.2rem',
+      fontWeight: 'bold',
+    },
     caption: {},
     overline: {},
   },

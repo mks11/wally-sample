@@ -5,7 +5,6 @@ import {
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
   API_CREATE_ORDER,
-  API_CHECK_PROMO,
 } from '../config';
 import axios from 'axios';
 import moment from 'moment';
@@ -74,7 +73,7 @@ class CheckoutStore {
 
     this.cart = res.data;
     if (order_summary) {
-      this.getOrderSummary(auth, delivery);
+      this.getOrderSummary(auth);
     }
   }
 
@@ -88,12 +87,8 @@ class CheckoutStore {
     return res.data;
   }
 
-  async getOrderSummary(auth, delivery, tip = 0, address_id) {
-    const time = moment().format('YYYY-MM-DD HH:mm:ss');
-    const res = await axios.get(
-      `${API_GET_ORDER_SUMMARY}?time=${time}&delivery_zip=${delivery.zip}&delivery_date=${delivery.date}&tip_amount=${tip}&address_id=${address_id}`,
-      auth,
-    );
+  async getOrderSummary(auth) {
+    const res = await axios.get(API_GET_ORDER_SUMMARY, auth);
     this.order = res.data;
     return res.data;
   }
@@ -118,23 +113,6 @@ class CheckoutStore {
       auth,
     );
     this.transformDeliveryTimes(res.data);
-    return res.data;
-  }
-
-  async checkPromo(data, auth) {
-    let res;
-    if (!data.subTotal) {
-      res = await axios.get(
-        `${API_CHECK_PROMO}/?promo_code=${data.promoCode}`,
-        auth,
-      );
-    } else {
-      res = await axios.get(
-        `${API_CHECK_PROMO}/?subtotal=${data.subTotal}&promo_code=${data.promoCode}`,
-        auth,
-      );
-    }
-    this.order = res.data;
     return res.data;
   }
 
@@ -185,7 +163,6 @@ decorate(CheckoutStore, {
   getCurrentCart: action,
   editCurrentCart: action,
   getOrderSummary: action,
-  checkPromo: action,
 });
 
 export default new CheckoutStore();

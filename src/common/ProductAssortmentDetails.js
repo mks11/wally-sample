@@ -15,8 +15,8 @@ const Img = styled.img`
 
 function ProductAssortmentDetails({ title, image, description }) {
   return (
-    <Box mt={2}>
-      <Grid container justify="center" spacing={2}>
+    <Box my={4}>
+      <Grid container justify="center" spacing={4}>
         <Grid xs={8} sm={4} lg={3} item>
           <Box
             display="flex"
