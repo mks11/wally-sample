@@ -1,60 +1,67 @@
-import { Box, Button, Typography } from '@material-ui/core';
 import React from 'react';
+import {
+  makeStyles,
+  Box,
+  Divider,
+  FormControlLabel,
+  Radio,
+  Typography,
+} from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%', // to make label clickable for the entire width
+    display: 'flex',
+    alignItems: 'flex-start',
+  },
+  label: {
+    width: '100%',
+  },
+}));
 
 export default function AddressRadioItem({
-  data,
-  index,
+  address,
   selected,
-  onChange,
   isPreferredAddress,
+  value,
 }) {
+  const classes = useStyles();
+  const { street_address, unit, state, zip, name, telephone } = address;
+
   return (
-    <Box
-      className={
-        'custom-control custom-radio bb1' +
-        (data.address_id === selected ? ' active' : '')
-      }
-    >
-      <input
-        type="radio"
-        id={'address-' + index}
-        name="customRadio"
-        checked={data.address_id === selected}
-        className="custom-control-input"
-        value={data.address_id}
-        onChange={(e) => onChange(data.address_id)}
-      />
-      <label
-        className="custom-control-label"
-        htmlFor={'address-' + index}
-        onClick={(e) => onChange(data.address_id)}
-        style={{ width: '100%' }}
-      >
-        <Box
-          display="flex"
-          flexWrap="nowrap"
-          alignItems="flex-start"
-          justifyContent="space-between"
-        >
-          <Box flexGrow={1}>
-            <Typography variant="body1">
-              {data.street_address} {data.unit}, {data.state} {data.zip}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {data.name}, {data.telephone}
-            </Typography>
-          </Box>
-          <Box flexShrink={1}>
-            {isPreferredAddress && (
-              <Button variant="text">
+    <Box>
+      <FormControlLabel
+        control={<Radio color="primary" />}
+        classes={{ root: classes.root, label: classes.label }}
+        value={value}
+        checked={value === selected}
+        label={
+          <Box
+            display="flex"
+            flexWrap="nowrap"
+            alignItems="flex-start"
+            justifyContent="space-between"
+            p={1}
+          >
+            <Box flexGrow={1} width="100%">
+              <Typography variant="body1">
+                {street_address} {unit}, {state} {zip}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {name}, {telephone}
+              </Typography>
+            </Box>
+            <Box flexShrink={1}>
+              {isPreferredAddress && (
                 <Typography variant="h6" component="span" color="primary">
                   DEFAULT
                 </Typography>
-              </Button>
-            )}
+              )}
+            </Box>
           </Box>
-        </Box>
-      </label>
+        }
+      />
+      <Divider />
     </Box>
   );
 }
