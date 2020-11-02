@@ -6,7 +6,7 @@ import {
   FormikPlacesAutoComplete,
   // Checkbox,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import { Grid, Box, Typography, FormControlLabel } from '@material-ui/core';
+import { Grid, Box, FormControlLabel } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { API_ADDRESS_NEW } from 'config';
@@ -44,7 +44,6 @@ export default function AddressCreateForm() {
         state: '',
         zip: '',
         country: '',
-        deliveryNotes: '',
         isPreferredAddress: false,
       }}
       validationSchema={Yup.object({
@@ -59,7 +58,6 @@ export default function AddressCreateForm() {
         state: Yup.string().required("State can't be blank"),
         zip: Yup.string().required("Zip can't be blank"),
         country: Yup.string().required("Country can't be blank"),
-        deliveryNotes: Yup.string(),
         isPreferredAddress: Yup.bool(),
       })}
       onSubmit={handleFormSubmit}
@@ -131,18 +129,6 @@ export default function AddressCreateForm() {
               name="zip"
               label="Zip"
               placeholder="Zip"
-              fullWidth={true}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextInput
-              name="deliveryNotes"
-              label="Delivery Notes"
-              placeholder="Leave any notes for delivery... "
-              type="text"
-              multiline={true}
-              rows={1}
               fullWidth={true}
               variant="outlined"
             />
