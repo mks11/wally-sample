@@ -9,27 +9,42 @@ import {
 import { Grid, Box, FormControlLabel } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import { API_ADDRESS_NEW } from 'config';
-import usePost from 'hooks/usePost';
+// import { API_ADDRESS_NEW } from 'config';
+// import usePost from 'hooks/usePost';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
+import { createAddress } from 'api/user';
 
 export default function AddressCreateForm() {
   const stores = useStores();
-  const { modalV2 } = stores;
+  const {
+    modalV2: modalV2Store,
+    snackbar: snackbarStore,
+    user: userStore,
+  } = stores;
 
-  const [submit, { data }] = usePost(
-    API_ADDRESS_NEW,
-    stores,
-    'New address added successfully!',
-    'There was an error in adding your address. Please contact info@thewallyshop.co for assistance.',
-  );
+  // const [submit, { data }] = usePost(
+  //   API_ADDRESS_NEW,
+  //   stores,
+  //   'New address added successfully!',
+  //   'There was an error in adding your address. Please contact info@thewallyshop.co for assistance.',
+  // );
 
-  const handleFormSubmit = (values, { setSubmitting }) => {
-    // alert(JSON.stringify(values));
-    submit(values);
-    if (data) {
-      setSubmitting(false);
-      modalV2.close(); //todo check if it is still needed
+  const handleFormSubmit = async (values, { setFieldError, setSubmitting }) => {
+    try {
+      const auth = userStore.getHeaderAuth();
+      let { data } = await createAddress(values, auth);
+      if (data) {
+        setSubmitting(false);
+        modalV2Store.close(); //todo check if it is still needed
+        snackbarStore.openSnackbar('Address created successfully!', 'success');
+      }
+    } catch ({ response: { data } }) {
+      if (data && data.error && data.error.message && data.error.param) {
+        const { message, param } = data.error;
+        setFieldError(param, message);
+      } else {
+        snackbarStore.openSnackbar('Failed to create new address.', 'error');
+      }
     }
   };
 
