@@ -80,7 +80,7 @@ function ApplyPromoCodeForm({ onApply }) {
     if (user) {
       try {
         logEvent({
-          category: 'Checkout',
+          category: 'Promotions & Gift Cards',
           action: 'ApplyPromo',
           label: promoCode,
         });
