@@ -155,13 +155,11 @@ export default function AddressCreateForm() {
             />
           </Grid>
         </Grid>
-        <Grid container justify="center">
-          <Box margin={2}>
-            <PrimaryWallyButton type="submit">
-              <Typography variant="body1">Submit</Typography>
-            </PrimaryWallyButton>
-          </Box>
-        </Grid>
+        <Box margin={2}>
+          <PrimaryWallyButton type="submit" fullWidth>
+            Submit
+          </PrimaryWallyButton>
+        </Box>
       </Form>
     </Formik>
   );
