@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 
 // Services & Utilities
 import { logEvent, logModalView } from 'services/google-analytics';
-import { formatMoney } from 'utils';
+import { formatMoney, getItemsCount } from 'utils';
 import { isMobile } from 'react-device-detect';
 
 // npm Package Components
@@ -295,13 +295,6 @@ const CartDropdown = observer(({ anchorEl, handleClose }) => {
     modalV2.open(<RemoveItemForm item={item} />);
   };
 
-  const getItemsCount = (items) => {
-    let count = 0;
-    for (let i = items.length - 1; i >= 0; i--) {
-      count += items[i].customer_quantity;
-    }
-    return count;
-  };
   const items = cart ? cart.cart_items : [];
   const count = getItemsCount(items);
   const subtotal = cart ? cart.subtotal / 100 : 0;

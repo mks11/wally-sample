@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { logPageView } from 'services/google-analytics';
-import { connect, datesEqual } from 'utils';
+import { connect, datesEqual, getItemsCount } from 'utils';
 
 import CarbonBar from 'common/CarbonBar';
 import Product from '../Mainpage/Product';
@@ -125,13 +125,14 @@ class SimilarProducts extends Component {
   };
 
   render() {
-    const cartItems = this.checkoutStore.cart
+    const items = this.checkoutStore.cart
       ? this.checkoutStore.cart.cart_items
       : [];
+    const numCartItems = getItemsCount(items);
 
     return (
       <div className="App">
-        {cartItems.length < 1 ? (
+        {items.length < 1 ? (
           <div className="container">
             <EmptyCartMessage />
           </div>
@@ -152,7 +153,7 @@ class SimilarProducts extends Component {
                 </div>
                 <br />
               </div>
-              <CarbonBar nCartItems={cartItems.length} />
+              <CarbonBar nCartItems={numCartItems} />
             </div>
             <div className="container">
               <div className="col-12">
