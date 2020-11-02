@@ -43,7 +43,6 @@ export default function AddressCreateForm() {
         city: '',
         state: '',
         zip: '',
-        country: '',
         isPreferredAddress: false,
       }}
       validationSchema={Yup.object({
@@ -57,7 +56,6 @@ export default function AddressCreateForm() {
         city: Yup.string().required("City can't be blank"),
         state: Yup.string().required("State can't be blank"),
         zip: Yup.string().required("Zip can't be blank"),
-        country: Yup.string().required("Country can't be blank"),
         isPreferredAddress: Yup.bool(),
       })}
       onSubmit={handleFormSubmit}
@@ -84,7 +82,7 @@ export default function AddressCreateForm() {
           </Grid>
           <Grid item xs={12}>
             <FormikPlacesAutoComplete
-              names={['city', 'zip', 'state', 'country', 'streetAddress']}
+              names={['city', 'zip', 'state', 'streetAddress']}
               mode={'edit'}
             />
           </Grid>
