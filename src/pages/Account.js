@@ -5,7 +5,7 @@ import AddressModal from './account/AddressModal';
 import PaymentModal from './account/PaymentModal';
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 
 import { connect } from '../utils';
@@ -305,7 +305,9 @@ class Account extends Component {
             </button>
             <br />
             <br />
-            <ApplyPromoCodeForm />
+            <Box maxWidth="567px">
+              <ApplyPromoCodeForm />
+            </Box>
           </div>
         </section>
         {this.userStore.addressModalOpen ? <AddressModal /> : null}
