@@ -25,9 +25,9 @@ import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
-import LoginForm from 'forms/authentication/LoginForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
 var heroImages = [
   {
     lg:
@@ -120,7 +120,6 @@ class Mainpage extends Component {
         if (!status) {
           this.routing.push('/');
         } else {
-          this.userStore.giftCardPromo && this.processGiftCardPromo(status);
           this.checkoutStore.getDeliveryTimes();
           this.loadData();
           const { mainFirst, mainSecond } = this.userStore.flags || {};
@@ -205,38 +204,6 @@ class Mainpage extends Component {
         .catch((e) => {
           console.error('Failed to load current cart', e);
         });
-    }
-  }
-
-  processGiftCardPromo(userStatus) {
-    if (userStatus) {
-      this.checkoutStore
-        .checkPromo(
-          { promoCode: this.userStore.giftCardPromo },
-          this.userStore.getHeaderAuth(),
-        )
-        .then((data) => {
-          let msg = '';
-          if (data.valid) {
-            msg = 'Store Credit Redeemed';
-            this.userStore.getUser().then(() => {
-              this.loadData();
-            });
-          } else {
-            msg = 'Invalid Promo-code';
-          }
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        })
-        .catch((e) => {
-          const msg = !e.response.data.error
-            ? 'Check Promo failed'
-            : e.response.data.error.message;
-          this.modalStore.toggleModal('referralresult', msg);
-          this.userStore.giftCardPromo = null;
-        });
-    } else {
-      this.modalV2.open(<LoginForm />);
     }
   }
 
