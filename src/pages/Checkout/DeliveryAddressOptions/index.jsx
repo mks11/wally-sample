@@ -99,8 +99,9 @@ function AddressOptions(props) {
               <PrimaryWallyButton
                 onClick={handleAddAddress}
                 style={{ width: '100%' }}
+                startIcon={<Add />}
               >
-                <Add /> Add New Address
+                Add New Address
               </PrimaryWallyButton>
             </Box>
             <Collapse in={!lock} collapsedHeight={80}>
