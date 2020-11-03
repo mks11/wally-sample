@@ -6,7 +6,7 @@ import {
   FormikPlacesAutoComplete,
   // Checkbox,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import { Grid, Box, FormControlLabel } from '@material-ui/core';
+import { Grid, Box, FormControlLabel, Typography } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 // import { API_ADDRESS_NEW } from 'config';
@@ -35,8 +35,9 @@ export default function AddressCreateForm() {
       let { data } = await createAddress(values, auth);
       if (data) {
         setSubmitting(false);
-        modalV2Store.close(); //todo check if it is still needed
+        modalV2Store.close();
         snackbarStore.openSnackbar('Address created successfully!', 'success');
+        userStore.getUser();
       }
     } catch ({ response: { data } }) {
       if (data && data.error && data.error.message && data.error.param) {
@@ -63,9 +64,11 @@ export default function AddressCreateForm() {
       validationSchema={Yup.object({
         name: Yup.string().required("Name can't be blank"),
         telephone: Yup.string()
-          .required("Telephone can't be blank")
-          .min(10, 'Phone Number must be 10 characters')
-          .max(10, 'Phone Number must be 10 characters'),
+          .matches(
+            /^[0-9]{10}$/,
+            'Telephone must be 10 digit (currently supported format - xxxxxxxxxx).',
+          )
+          .required("Telephone can't be blank"),
         streetAddress: Yup.string().required('An address must be provided'),
         unit: Yup.string(),
         city: Yup.string().required("City can't be blank"),
@@ -77,6 +80,9 @@ export default function AddressCreateForm() {
     >
       <Form>
         <Grid container spacing={3}>
+          <Typography variant="h1" gutterBottom>
+            Add new address
+          </Typography>
           <Grid item xs={12} sm={12}>
             <TextInput
               name="name"
