@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox as CheckboxMui, FormControlLabel } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import Product from 'pages/Mainpage/Product';
 
 function Checkbox({ label, name, ...rest }) {
   const [isSelected, setSelected] = useState(false);
