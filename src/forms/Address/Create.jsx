@@ -174,7 +174,7 @@ export default function AddressCreateForm({ allowDelivery }) {
           <Grid item xs={12} sm={allowDelivery ? 6 : 12}>
             <PrimaryWallyButton
               type="submit"
-              variant={allowDelivery ? 'outlined' : 'primary'}
+              variant={allowDelivery ? 'outlined' : 'contained'}
               fullWidth
             >
               Add Address
