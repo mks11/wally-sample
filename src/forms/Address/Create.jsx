@@ -1,20 +1,24 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import {
   TextInput,
   FormikPlacesAutoComplete,
-  // Checkbox,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import { Grid, Box, FormControlLabel, Typography } from '@material-ui/core';
+import {
+  Grid,
+  Box,
+  FormControlLabel,
+  Typography,
+  Button,
+} from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-// import { API_ADDRESS_NEW } from 'config';
-// import usePost from 'hooks/usePost';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
 import { createAddress } from 'api/user';
 
-export default function AddressCreateForm() {
+export default function AddressCreateForm({ allowDelivery }) {
+  const [createdAddr, setCreatedAddr] = useState();
   const stores = useStores();
   const {
     modalV2: modalV2Store,
@@ -22,12 +26,17 @@ export default function AddressCreateForm() {
     user: userStore,
   } = stores;
 
-  // const [submit, { data }] = usePost(
-  //   API_ADDRESS_NEW,
-  //   stores,
-  //   'New address added successfully!',
-  //   'There was an error in adding your address. Please contact info@thewallyshop.co for assistance.',
-  // );
+  const setAddress = (data) => {
+    //TODO verify if the created address is always the last one
+    // there is also a comparer function in store that could be refactored to use here
+    if (data.addresses) {
+      const n = data.addresses.length;
+      if (n > 0) {
+        //userStore.setDeliveryAddress(data.addresses[n - 1]);
+        setCreatedAddr(data.addresses[n - 1]);
+      }
+    }
+  };
 
   const handleFormSubmit = async (values, { setFieldError, setSubmitting }) => {
     try {
@@ -35,6 +44,7 @@ export default function AddressCreateForm() {
       let { data } = await createAddress(values, auth);
       if (data) {
         setSubmitting(false);
+        setAddress(data);
         modalV2Store.close();
         snackbarStore.openSnackbar('Address created successfully!', 'success');
         userStore.getUser();
@@ -65,7 +75,7 @@ export default function AddressCreateForm() {
         name: Yup.string().required("Name can't be blank"),
         telephone: Yup.string()
           .matches(
-            /^[0-9]{10}$/,
+            /^\d{10}$/,
             'Telephone must be 10 digit (currently supported format - xxxxxxxxxx).',
           )
           .required("Telephone can't be blank"),
@@ -80,7 +90,7 @@ export default function AddressCreateForm() {
     >
       <Form>
         <Grid container spacing={3}>
-          <Typography variant="h1" gutterBottom>
+          <Typography variant="h1" gutterBottom align="center">
             Add new address
           </Typography>
           <Grid item xs={12} sm={12}>
@@ -160,12 +170,49 @@ export default function AddressCreateForm() {
             />
           </Grid>
         </Grid>
-        <Box margin={2}>
-          <PrimaryWallyButton type="submit" fullWidth>
-            Submit
-          </PrimaryWallyButton>
-        </Box>
+        <Grid spacing={1} container>
+          <Grid item xs={12} sm={6}>
+            <PrimaryWallyButton
+              type="submit"
+              variant={allowDelivery ? 'outlined' : 'primary'}
+              fullWidth
+            >
+              Add Address
+            </PrimaryWallyButton>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {allowDelivery && <AllowDeliveryButton createdAddr={createdAddr} />}
+          </Grid>
+        </Grid>
       </Form>
     </Formik>
+  );
+}
+
+// needed to create this as a separate component to access the formikContext (to access submitForm)
+function AllowDeliveryButton({ createdAddr }) {
+  // state that makes sure the effect (that sets deliveryAddress effect in store)
+  // is only run when it is clicked and not just on mount
+  const [clicked, setClicked] = useState(false);
+
+  const { user: userStore } = useStores();
+  const { submitForm } = useFormikContext();
+
+  const handleAddAndDeliver = async () => {
+    setClicked(true);
+    await submitForm();
+  };
+
+  useEffect(() => {
+    if (createdAddr && clicked) {
+      userStore.setDeliveryAddress(createdAddr);
+      setClicked(false);
+    }
+  }, [createdAddr, clicked]);
+
+  return (
+    <PrimaryWallyButton onClick={handleAddAndDeliver} fullWidth>
+      Deliver to this address
+    </PrimaryWallyButton>
   );
 }
