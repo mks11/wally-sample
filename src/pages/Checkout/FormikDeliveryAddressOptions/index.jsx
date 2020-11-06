@@ -14,7 +14,7 @@ function AddressOptions({ name }) {
   const [lock, setLock] = useState(true);
   const [data, setData] = useState([]);
 
-  const { modalV2, user: userStore } = useStores();
+  const { modalV2: modalV2Store, user: userStore } = useStores();
   const { user = {} } = userStore;
   const { setFieldValue } = useFormikContext() || {};
   const selected = userStore.selectedDeliveryAddress;
@@ -56,7 +56,7 @@ function AddressOptions({ name }) {
   }, [selected]);
 
   const handleAdd = () => {
-    modalV2.open(<AddressCreateForm allowDelivery />);
+    modalV2Store.open(<AddressCreateForm allowDelivery />);
   };
 
   const unlock = () => {
