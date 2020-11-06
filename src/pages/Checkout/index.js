@@ -8,7 +8,7 @@ import RemoveItemForm from 'forms/cart/RemoveItem';
 import { logPageView, logEvent } from 'services/google-analytics';
 import { connect, formatMoney } from 'utils';
 
-import DeliveryAddressOptions from './DeliveryAddressOptions';
+import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
 
 import PackagingSummary from './PackagingSummary';
 import ShippingOption from '../../common/ShippingOption';
@@ -40,7 +40,6 @@ class Checkout extends Component {
       selectedAddress: null,
       selectedPayment: null,
 
-      lockAddress: true,
       lockPayment: false,
 
       newPayment: false,
@@ -142,25 +141,6 @@ class Checkout extends Component {
 
     return (parseFloat(tipValue) * 100).toFixed();
   }
-
-  handleSelectAddress = (data) => {
-    const selectedAddress = this.userStore.selectedDeliveryAddress;
-    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
-      this.setState({ selectedAddress: data, selectedAddressChanged: true });
-      this.userStore.setDeliveryAddress(data);
-    } else {
-      this.setState({ selectedAddressChanged: false });
-    }
-  };
-
-  handleSubmitAddress = async (address) => {
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-  };
-
-  handleUnlockAddress = () => {
-    this.setState({ lockAddress: false });
-  };
 
   handleSubmitPayment = (lock, selectedPayment) => {
     logEvent({ category: 'Checkout', action: 'SubmitPayment' });
@@ -325,18 +305,7 @@ class Checkout extends Component {
             <div className="">
               <div style={{ maxWidth: '440px' }}>
                 {this.userStore.user && (
-                  <DeliveryAddressOptions
-                    lock={this.state.lockAddress}
-                    selected={
-                      this.userStore.selectedDeliveryAddress
-                        ? this.userStore.selectedDeliveryAddress.address_id
-                        : null
-                    }
-                    user={this.userStore.user}
-                    onSubmit={this.handleSubmitAddress}
-                    onSelect={this.handleSelectAddress}
-                    onUnlock={this.handleUnlockAddress}
-                  />
+                  <DeliveryAddressOptions name="addressId" />
                 )}
 
                 {this.userStore.user && (
