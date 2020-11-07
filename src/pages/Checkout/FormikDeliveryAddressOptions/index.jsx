@@ -3,7 +3,16 @@ import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import AddressCreateForm from 'forms/Address/Create';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import { Box, Button, Card, Typography, Collapse } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  IconButton,
+  Typography,
+  Collapse,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import AddressList from './AddressList';
 import Address from './Address';
 import { Add, Edit } from '@material-ui/icons';
@@ -11,7 +20,7 @@ import { useStores } from 'hooks/mobx';
 import { useFormikContext } from 'formik';
 
 function AddressOptions({ name }) {
-  const [lock, setLock] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
 
   const { modalV2: modalV2Store, user: userStore } = useStores();
@@ -28,8 +37,8 @@ function AddressOptions({ name }) {
     return user.addresses.find((a) => a.address_id === id);
   };
 
-  const handleSubmit = () => {
-    setLock(true);
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -39,19 +48,19 @@ function AddressOptions({ name }) {
     const getAddresses = () => {
       const data = user.addresses || [];
 
-      if (lock) {
+      if (!isOpen) {
         return data.filter((_d) => _d.address_id === selected.address_id);
       } else {
         return data;
       }
     };
     setData(getAddresses());
-  }, [selected, user, lock]);
+  }, [selected, user, isOpen]);
 
   // automatically closes the Collapse on select change by the user
   useEffect(() => {
     if (selected) {
-      setLock(true);
+      setIsOpen(false);
     }
   }, [selected]);
 
@@ -59,80 +68,68 @@ function AddressOptions({ name }) {
     modalV2Store.open(<AddressCreateForm allowDelivery />);
   };
 
-  const unlock = () => {
-    setLock(false);
+  const handleOpen = () => {
+    setIsOpen(true);
   };
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between">
-        <Typography variant="h4" gutterBottom>
-          Shipping Address
-        </Typography>
-        {lock && selected && (
-          <Button
-            style={{ marginBottom: '0.5rem' }}
-            color="primary"
-            onClick={unlock}
-            startIcon={<Edit />}
-          >
-            <Typography variant="h6">EDIT</Typography>
-          </Button>
-        )}
-      </Box>
       <Box mb={4}>
         <Card>
-          <Box p={2}>
-            <Collapse
-              in={!lock}
-              collapsedHeight={84}
-              timeout={{
-                enter: 600,
-                exit: 400,
-              }}
-            >
-              {lock ? (
-                selected ? (
-                  <Address address={selected} />
-                ) : (
-                  <Box>
-                    <Typography variant="h6" color="error" gutterBottom>
-                      No shipping address selected
-                    </Typography>
-                    <PrimaryWallyButton fullWidth onClick={handleAdd}>
-                      Add an Address
-                    </PrimaryWallyButton>
-                  </Box>
-                )
-              ) : (
-                <>
-                  <Box mb={2}>
-                    <PrimaryWallyButton
-                      onClick={handleAdd}
-                      fullWidth
-                      variant="outlined"
-                      startIcon={<Add />}
+          <Box p={4}>
+            <Typography variant="h2" gutterBottom>
+              Shipping Address
+            </Typography>
+            <Box my={2}>
+              <Grid container justify="flex-end" alignItems="center">
+                <Grid item>
+                  {!isOpen && selected ? (
+                    <Button
+                      color="primary"
+                      onClick={handleOpen}
+                      startIcon={<Edit />}
+                      style={{ padding: '14.5px 12px' }}
                     >
-                      Add New Address
-                    </PrimaryWallyButton>
-                  </Box>
-                  <AddressList
-                    addresses={data}
-                    selected={selected}
-                    preferred_address={user.preferred_address}
-                    onChange={handleSelect}
-                  />
-                  <Box mt={1}>
-                    {selected && (
-                      <PrimaryWallyButton fullWidth onClick={handleSubmit}>
-                        <Typography variant="h4" component="span">
-                          Submit
-                        </Typography>
-                      </PrimaryWallyButton>
-                    )}
-                  </Box>
-                </>
+                      Edit
+                    </Button>
+                  ) : (
+                    <IconButton onClick={handleClose} aria-label="close">
+                      <CloseIcon fontSize="large" />
+                    </IconButton>
+                  )}
+                </Grid>
+              </Grid>
+            </Box>
+            <Collapse in={isOpen} collapsedHeight={100} timeout="auto">
+              {selected ? (
+                <Address address={selected} isSelected />
+              ) : (
+                <Box>
+                  <Typography variant="h6" color="error" gutterBottom>
+                    No shipping address selected
+                  </Typography>
+                  <PrimaryWallyButton fullWidth onClick={handleAdd}>
+                    Add an Address
+                  </PrimaryWallyButton>
+                </Box>
               )}
+              <Box p={2}>
+                <PrimaryWallyButton
+                  onClick={handleAdd}
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<Add />}
+                  style={{ padding: '0.5rem 0' }}
+                >
+                  Add New Address
+                </PrimaryWallyButton>
+              </Box>
+              <AddressList
+                addresses={data}
+                selected={selected}
+                preferred_address={user.preferred_address}
+                onChange={handleSelect}
+              />
             </Collapse>
           </Box>
         </Card>
