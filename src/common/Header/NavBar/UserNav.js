@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 
 // Services & Utilities
 import { logModalView } from 'services/google-analytics';
-import { formatMoney, getItemsCount } from 'utils';
+import { formatMoney } from 'utils';
 
 // npm Package Components
 import { Badge, Box, Typography } from '@material-ui/core';
@@ -35,12 +35,12 @@ import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
-    <>
+    <Box display="flex" alignItems="center">
       <MobileNavMenu>
         <MobileUserNavMenu />
       </MobileNavMenu>
       <Cart />
-    </>
+    </Box>
   ) : null;
 });
 
