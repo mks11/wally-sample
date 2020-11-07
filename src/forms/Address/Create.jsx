@@ -5,13 +5,7 @@ import {
   TextInput,
   FormikPlacesAutoComplete,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import {
-  Grid,
-  Box,
-  FormControlLabel,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
@@ -74,10 +68,7 @@ export default function AddressCreateForm({ allowDelivery }) {
       validationSchema={Yup.object({
         name: Yup.string().required("Name can't be blank"),
         telephone: Yup.string()
-          .matches(
-            /^\d{10}$/,
-            'Telephone must be 10 digit (currently supported format - xxxxxxxxxx).',
-          )
+          .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
           .required("Telephone can't be blank"),
         streetAddress: Yup.string().required('An address must be provided'),
         unit: Yup.string(),
@@ -91,7 +82,7 @@ export default function AddressCreateForm({ allowDelivery }) {
       <Form>
         <Grid container spacing={3}>
           <Typography variant="h1" gutterBottom align="center">
-            Add new address
+            Add New Address
           </Typography>
           <Grid item xs={12} sm={12}>
             <TextInput
