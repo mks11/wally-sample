@@ -39,6 +39,7 @@ let theme = createMuiTheme({
       fontFamily: ['ClearFace'].join(','),
       fontSize: '2.488rem',
       fontWeight: 'bold',
+      color: '#000',
     },
     h2: {
       fontFamily: ['Sofia Pro'].join(','),
