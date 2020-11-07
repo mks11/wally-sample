@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 
 // Utils
 import { logEvent } from 'services/google-analytics';
@@ -20,7 +19,7 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 // API
 import { applyPromo } from 'api/promocode';
 
-function ApplyPromoCodeForm({ onApply }) {
+function ApplyPromoCodeForm() {
   const {
     checkout: checkoutStore,
     user: userStore,
@@ -86,7 +85,6 @@ function ApplyPromoCodeForm({ onApply }) {
         const auth = userStore.getHeaderAuth();
 
         const res = await applyPromo(promoCode, auth);
-        onApply && onApply(promoCode);
         // Reload the user if their promo included a benefit or store credit
         const {
           data: { benefit, store_credit },
@@ -125,9 +123,5 @@ function ApplyPromoCodeForm({ onApply }) {
     }
   }
 }
-
-ApplyPromoCodeForm.propTypes = {
-  onApply: PropTypes.func,
-};
 
 export default observer(ApplyPromoCodeForm);
