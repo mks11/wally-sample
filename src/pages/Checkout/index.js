@@ -1,329 +1,141 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import Title from 'common/page/Title';
-import PaymentSelect from 'common/PaymentSelect';
+import React, { useEffect, useState } from 'react';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
+import { Box, Container, Grid, Typography } from '@material-ui/core';
+
+// Utilities
+import { logPageView, logEvent } from 'services/google-analytics';
+import { formatMoney } from 'utils';
+
+// MobX
+import { observer } from 'mobx-react';
+import { useStores } from 'hooks/mobx';
+
+// Custom Components
+import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
+import ShippingOption from 'common/ShippingOption';
+import PaymentSelect from 'common/PaymentSelect';
+import PackagingSummary from './PackagingSummary';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Forms
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 import RemoveItemForm from 'forms/cart/RemoveItem';
 
-import { logPageView, logEvent } from 'services/google-analytics';
-import { connect, formatMoney } from 'utils';
+function Checkout() {
+  const {
+    checkout: checkoutStore,
+    loading: loadingStore,
+    modal: modalStore,
+    modalV2: modalV2Store,
+    product: productStore,
+    routing: routingStore,
+    user: userStore,
+  } = useStores();
 
-import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
+  // Addresses
+  const [selectedAddress, setSelectedAddress] = useState(undefined);
 
-import PackagingSummary from './PackagingSummary';
-import ShippingOption from '../../common/ShippingOption';
-import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
+  // Payment
+  const [lockPayment, setLockPayment] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(undefined);
 
-class Checkout extends Component {
-  constructor(props) {
-    super(props);
+  // Response handling
+  const [invalidText, setInvalidText] = useState('');
 
-    this.userStore = this.props.store.user;
-    this.modalStore = this.props.store.modal;
-    this.productStore = this.props.store.product;
-    this.checkoutStore = this.props.store.checkout;
-    this.routing = this.props.store.routing;
-    this.loading = this.props.store.loading;
-    this.modalV2Store = this.props.store.modalV2;
-
-    this.state = {
-      appliedStoreCredit: 0,
-      appliedStoreCreditAmount: 0,
-      applicableStoreCreditAmount: 0,
-
-      appliedPromo: false,
-
-      appliedTipAmount: 0,
-      appliedTipAmountChanged: false,
-      freezedTipAmount: null,
-
-      selectedAddress: null,
-      selectedPayment: null,
-
-      lockPayment: false,
-
-      newPayment: false,
-
-      invalidText: '',
-      successText: '',
-
-      deliveryTimes: this.checkoutStore.deliveryTimes,
-
-      placeOrderRequest: false,
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     // Store page view in google analytics
-    const { location } = this.routing;
+    const { location } = routingStore;
     logPageView(location.pathname);
 
-    this.userStore.getStatus(true).then((status) => {
+    userStore.getStatus().then((status) => {
       if (status) {
         const selectedAddress =
-          this.userStore.selectedDeliveryAddress ||
-          (this.userStore.user
-            ? this.userStore.getAddressById(
-                this.userStore.user.preferred_address,
-              )
+          userStore.selectedDeliveryAddress ||
+          (userStore.user
+            ? userStore.getAddressById(userStore.user.preferred_address)
             : null);
         if (selectedAddress) {
-          this.userStore.setDeliveryAddress(selectedAddress);
+          userStore.setDeliveryAddress(selectedAddress);
         }
 
-        // this.checkoutStore.getDeliveryTimes();
-        this.loadData();
-        if (this.userStore.user.addresses.length > 0) {
-          const selectedAddress = this.userStore.user.addresses.find(
-            (d) => d._id === this.userStore.user.preferred_address,
+        loadData();
+        if (userStore.user.addresses.length > 0) {
+          const selectedAddress = userStore.user.addresses.find(
+            (d) => d._id === userStore.user.preferred_address,
           );
-          this.setState({ selectedAddress: selectedAddress._id });
-        } else {
-          this.setState({ lockAddress: false });
+          setSelectedAddress(selectedAddress._id);
         }
 
-        if (this.userStore.user.payment.length > 0) {
-          const selectedPayment = this.userStore.user.payment.find(
-            (d) => d._id === this.userStore.user.preferred_payment,
+        if (userStore.user.payment.length > 0) {
+          const selectedPayment = userStore.user.payment.find(
+            (d) => d._id === userStore.user.preferred_payment,
           );
-          this.setState({ selectedPayment: selectedPayment._id });
+          setSelectedPayment(selectedPayment._id);
         }
 
-        const { checkoutFirst } = this.userStore.flags || {};
-        !checkoutFirst && this.modalStore.toggleModal('checkoutfirst');
+        const { checkoutFirst } = userStore.flags || {};
+        !checkoutFirst && modalStore.toggleModal('checkoutfirst');
       } else {
-        this.routing.push('/main');
+        routing.push('/main');
       }
     });
+  }, []);
+
+  if (!checkoutStore.order || !userStore.user) {
+    return null;
   }
 
-  loadData() {
-    let dataOrder;
-    this.checkoutStore
-      .getOrderSummary(this.userStore.getHeaderAuth())
-      .then((data) => {
-        this.setState({
-          applicableStoreCreditAmount: this.checkoutStore.order
-            .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_discount,
-          appliedPromoCode: this.checkoutStore.order.promo,
-        });
+  const { order } = checkoutStore;
+  const cart_items = order && order.cart_items ? order.cart_items : [];
+  const orderTotal = updateTotal();
 
-        dataOrder = data;
-        return data;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }
+  return (
+    <Formik
+      initialValues={{
+        addressId: selectedAddress || '',
+        shippingServiceLevel: 'ups_ground',
+        paymentId: selectedPayment || '',
+      }}
+      validationSchema={Yup.object({
+        addressId: Yup.string().required('You must select a shipping address.'),
+        shippingServiceLevel: Yup.string().required(),
+        paymentId: Yup.string(),
+      })}
+      enableReinitialize
+      onSubmit={(values, { setSubmitting }) => {
+        console.log(values);
+        setSubmitting(false);
+      }}
+    >
+      {({ isSubmitting }) => (
+        <Form>
+          <Container maxWidth="xl">
+            <Box mt={3}>
+              <Typography variant="h1" gutterBottom>
+                Checkout
+              </Typography>
+            </Box>
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={5} lg={6}>
+                {userStore.user && <DeliveryAddressOptions name="addressId" />}
 
-  updateData() {
-    this.checkoutStore
-      .getOrderSummary(this.userStore.getHeaderAuth())
-      .then((data) => {
-        this.setState({
-          applicableStoreCreditAmount: this.checkoutStore.order
-            .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_amount,
-          appliedPromoCode: this.checkoutStore.order.promo,
-          appliedTipAmount: this.checkoutStore.order.tip_amount / 100,
-        });
-      });
-  }
-
-  parseAppliedTip() {
-    const { appliedTipAmount } = this.state;
-    let tipValue = appliedTipAmount;
-
-    if (typeof appliedTipAmount === 'string') {
-      tipValue = appliedTipAmount.replace('$', '');
-    }
-
-    return (parseFloat(tipValue) * 100).toFixed();
-  }
-
-  handleSubmitPayment = (lock, selectedPayment) => {
-    logEvent({ category: 'Checkout', action: 'SubmitPayment' });
-    this.setState({
-      selectedPayment,
-      lockPayment: lock,
-    });
-  };
-
-  handleEdit(id, quantity) {
-    this.productStore
-      .showModal(id, quantity, this.userStore.getDeliveryParams())
-      .then(() => {
-        this.modalStore.toggleModal('product');
-      });
-  }
-
-  handleDelete({ product_name, product_id, inventory_id }) {
-    this.modalV2Store.open(
-      <RemoveItemForm
-        item={{
-          name: product_name,
-          productId: product_id,
-          inventoryId: inventory_id,
-        }}
-      />,
-    );
-
-    this.loadData();
-  }
-
-  handlePlaceOrder() {
-    const { placeOrderRequest } = this.state;
-
-    if (placeOrderRequest) {
-      return;
-    }
-
-    this.setState({ invalidText: '', placeOrderRequest: true });
-    if (!this.userStore.selectedDeliveryAddress) {
-      this.setState({
-        invalidText: 'Please select address',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-
-    if (!this.state.lockPayment) {
-      this.setState({
-        invalidText: 'Please select payment',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-    this.loading.toggle();
-    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
-    const deliveryTime = 'UPS Ground (1-5 Days)';
-
-    this.checkoutStore
-      .submitOrder(
-        {
-          cart_id: this.checkoutStore.cart._id,
-          store_credit: this.state.appliedStoreCreditAmount > 0,
-          user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-          address_id: this.userStore.selectedDeliveryAddress.address_id,
-          payment_id: this.state.selectedPayment,
-          delivery_time: deliveryTime,
-          tip_amount: this.parseAppliedTip(),
-          has_returns: false,
-          pickup_notes: '',
-        },
-        this.userStore.getHeaderAuth(),
-      )
-      .then((data) => {
-        logEvent({
-          category: 'Order',
-          action: 'Submit Order',
-        });
-        this.routing.push('/orders/' + data.order._id);
-        this.checkoutStore.clearCart(this.userStore.getHeaderAuth());
-        this.userStore.setDeliveryTime(null);
-        this.loading.toggle();
-        this.setState({ placeOrderRequest: false });
-      })
-      .catch((e) => {
-        console.error('Failed to submit order', e);
-        const msg = e.response.data.error.message;
-        this.setState({ invalidText: msg, placeOrderRequest: false });
-        this.loading.toggle();
-      });
-  }
-
-  handleAddPayment = (data) => {
-    if (data) {
-      logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
-      this.userStore.setUserData(data);
-      this.setState({
-        selectedPayment: this.userStore.user.preferred_payment,
-        newPayment: false,
-      });
-    }
-  };
-
-  handlePackagingDepositClick = () => {
-    this.modalStore.toggleModal('packagingdeposit');
-  };
-
-  updateTotal() {
-    const order = this.checkoutStore.order;
-    const customTip =
-      this.state.freezedTipAmount || this.state.appliedTipAmount;
-    let total = order.total / 100;
-
-    if (!order.tip_amount || this.state.appliedTipAmountChanged) {
-      const currentTipAmount = order.tip_amount || 0;
-      total = (order.total - currentTipAmount) / 100 + parseFloat(customTip);
-    }
-    return total;
-  }
-
-  handleApplyPromo() {
-    const { order } = this.checkoutStore;
-
-    if (order) {
-      this.setState({
-        appliedStoreCredit: order.applied_store_credit,
-        appliedPromo: true,
-        appliedPromoCode: order.promo_code,
-      });
-    }
-  }
-
-  render() {
-    if (!this.checkoutStore.order || !this.userStore.user) {
-      return null;
-    }
-
-    const order = this.checkoutStore.order;
-
-    let buttonPlaceOrderClass = 'btn btn-main';
-    if (
-      this.userStore.selectedDeliveryAddress &&
-      this.state.lockPayment &&
-      this.userStore.selectedDeliveryTime &&
-      !this.state.placeOrderRequest
-    ) {
-      buttonPlaceOrderClass += ' active';
-    }
-    if (this.userStore.selectedDeliveryAddress) {
-      buttonPlaceOrderClass += ' active';
-    }
-
-    const cart_items = order && order.cart_items ? order.cart_items : [];
-
-    const orderTotal = this.updateTotal();
-
-    return (
-      <div className="App">
-        <Title content="Checkout" />
-        <div className="container">
-          <div className="checkout-wrap">
-            <div className="">
-              <div style={{ maxWidth: '440px' }}>
-                {this.userStore.user && (
-                  <DeliveryAddressOptions name="addressId" />
-                )}
-
-                {this.userStore.user && (
+                {userStore.user && (
                   <ShippingOption
                     lock={false}
-                    data={this.state.deliveryTimes}
-                    selected={this.userStore.selectedDeliveryTime}
+                    selected={userStore.selectedDeliveryTime}
                     title="Shipping Option"
-                    user={this.userStore.user}
+                    user={userStore.user}
                   />
                 )}
 
                 <React.Fragment>
                   <h3 className="m-0 mb-3 p-r mt-5">
                     Payment
-                    {this.state.lockPayment ? (
+                    {lockPayment ? (
                       <a
-                        onClick={(e) => this.setState({ lockPayment: false })}
+                        onClick={(e) => setLockPayment(false)}
                         className="address-rbtn link-blue pointer"
                       >
                         CHANGE
@@ -332,24 +144,18 @@ class Checkout extends Component {
                   </h3>
                   <PaymentSelect
                     {...{
-                      lockPayment: this.state.lockPayment,
-                      userPayment: this.userStore.user.payment,
-                      userPreferredPayment: this.userStore.user
-                        .preferred_payment,
-                      onAddPayment: this.handleAddPayment,
-                      onSubmitPayment: this.handleSubmitPayment,
-                      userGuest: !this.userStore.status,
+                      lockPayment,
+                      userPayment: userStore.user.payment,
+                      userPreferredPayment: userStore.user.preferred_payment,
+                      onAddPayment: handleAddPayment,
+                      onSubmitPayment: handleSubmitPayment,
+                      userGuest: !userStore.status,
                       preselect: true,
                     }}
                   />
                 </React.Fragment>
-              </div>
-            </div>
-            <div className="">
-              <section
-                className="order-summary mb-5"
-                style={{ maxWidth: '440px' }}
-              >
+              </Grid>
+              <Grid item xs={12} md={7} lg={6} component="section">
                 <div className="card1 card-shadow">
                   <div className="card-body">
                     <h3 className="m-0 mb-2">Order Summary</h3>
@@ -381,7 +187,7 @@ class Checkout extends Component {
                               <div className="item-link">
                                 <a
                                   onClick={(e) =>
-                                    this.handleEdit(
+                                    handleEdit(
                                       c.product_id,
                                       c.customer_quantity,
                                     )
@@ -391,7 +197,7 @@ class Checkout extends Component {
                                   EDIT
                                 </a>
                                 <a
-                                  onClick={(e) => this.handleDelete(c)}
+                                  onClick={(e) => handleDelete(c)}
                                   className="text-dark-grey"
                                 >
                                   DELETE
@@ -428,7 +234,7 @@ class Checkout extends Component {
                       <div className="summary">
                         <span>
                           <strong>
-                            <a onClick={this.handlePackagingDepositClick}>
+                            <a onClick={handlePackagingDepositClick}>
                               {' '}
                               Packaging Deposit{' '}
                             </a>
@@ -470,9 +276,7 @@ class Checkout extends Component {
                     </div>
 
                     <div className="item-extras">
-                      <ApplyPromoCodeForm
-                        onApply={() => this.handleApplyPromo()}
-                      />
+                      <ApplyPromoCodeForm onApply={() => handleApplyPromo()} />
                     </div>
 
                     <div className="item-total">
@@ -480,21 +284,17 @@ class Checkout extends Component {
                       <span>{formatMoney(orderTotal)}</span>
                     </div>
 
-                    <button
-                      onClick={(e) => this.handlePlaceOrder()}
-                      className={buttonPlaceOrderClass}
-                      disabled={cart_items.length == 0}
+                    <PrimaryWallyButton
+                      type="submit"
+                      fullWidth
+                      disabled={cart_items.length == 0 || isSubmitting}
+                      style={{ padding: '0.5rem 0' }}
                     >
-                      PLACE ORDER
-                    </button>
-                    {this.state.invalidText ? (
+                      Place My Order
+                    </PrimaryWallyButton>
+                    {invalidText ? (
                       <span className="text-error text-center d-block mt-2">
-                        {this.state.invalidText}
-                      </span>
-                    ) : null}
-                    {this.state.successText ? (
-                      <span className="text-success text-center d-block mt-2">
-                        {this.state.successText}
+                        {invalidText}
                       </span>
                     ) : null}
                   </div>
@@ -504,13 +304,117 @@ class Checkout extends Component {
                   By placing your order, you agree to be bound by the Terms of
                   Service and Privacy Policy.
                 </p>
-              </section>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Grid>
+            </Grid>
+          </Container>
+        </Form>
+      )}
+    </Formik>
+  );
+
+  function handleAddPayment(data) {
+    if (data) {
+      logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
+      userStore.setUserData(data);
+      setState({
+        selectedPayment: userStore.user.preferred_payment,
+        newPayment: false,
+      });
+    }
+  }
+
+  function handleApplyPromo() {
+    const { order } = checkoutStore;
+
+    if (order) {
+    }
+  }
+
+  function handleDelete({ product_name, product_id, inventory_id }) {
+    modalV2Store.open(
+      <RemoveItemForm
+        item={{
+          name: product_name,
+          productId: product_id,
+          inventoryId: inventory_id,
+        }}
+      />,
     );
+
+    loadData();
+  }
+
+  function handleEdit(id, quantity) {
+    productStore
+      .showModal(id, quantity, userStore.getDeliveryParams())
+      .then(() => {
+        modalStore.toggleModal('product');
+      });
+  }
+
+  function handlePackagingDepositClick() {
+    modalStore.toggleModal('packagingdeposit');
+  }
+
+  function handlePlaceOrder() {
+    setInvalidText('');
+
+    if (!lockPayment) {
+      setInvalidText('Please select payment');
+      return;
+    }
+    loadingStore.show();
+    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
+
+    checkoutStore
+      .submitOrder(
+        {
+          cart_id: checkoutStore.cart._id,
+          address_id: userStore.selectedDeliveryAddress.address_id,
+          payment_id: selectedPayment,
+        },
+        userStore.getHeaderAuth(),
+      )
+      .then((data) => {
+        logEvent({
+          category: 'Order',
+          action: 'Submit Order',
+        });
+        routing.push('/orders/' + data.order._id);
+        checkoutStore.clearCart(userStore.getHeaderAuth());
+        userStore.setDeliveryTime(null);
+        loadingStore.hide();
+      })
+      .catch((e) => {
+        console.error('Failed to submit order', e);
+        const msg = e.response.data.error.message;
+        setInvalidText(msg);
+        loadingStore.hide();
+      });
+  }
+
+  function handleSubmitPayment(lock, selectedPayment) {
+    logEvent({ category: 'Checkout', action: 'SubmitPayment' });
+    setLockPayment(lock);
+    setSelectedPayment(selectedPayment);
+  }
+
+  function loadData() {
+    checkoutStore
+      .getOrderSummary(userStore.getHeaderAuth())
+      .then((data) => {
+        return data;
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+
+  function updateTotal() {
+    const { order } = checkoutStore;
+
+    return order.total / 100;
   }
 }
 
-export default connect('store')(Checkout);
+export default observer(Checkout);
