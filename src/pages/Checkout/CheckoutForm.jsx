@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useStores } from 'hooks';
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
 
 export default function CheckoutForm() {
