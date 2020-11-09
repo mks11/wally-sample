@@ -381,22 +381,6 @@ h4 {
   min-height: 100vh;
 }
 
-.bg-bottles {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  right: 0;
-  -webkit-transform: translate(0, -50%);
-  transform: translate(0, -50%);
-  min-height: 150%;
-  bottom: 0;
-  background-image: url(images/bottles.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: 20;
-}
-
 button,
 .btn,
 [role='button'] {
