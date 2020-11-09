@@ -20,7 +20,7 @@ import { useStores } from 'hooks/mobx';
 function Subcategories() {
   const store = useStores();
   const { retail, modal } = store;
-  useRequest(store, async () => retail.getSubcategories()) || [];
+  useRequest(store, async () => retail.getSubcategories());
 
   const [subcategories, setSubcategories] = useState([]);
 
