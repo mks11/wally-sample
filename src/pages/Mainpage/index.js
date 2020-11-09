@@ -300,7 +300,7 @@ class Mainpage extends Component {
         url="/shop/brands/salonsolids"
       >
         <Typography gutterBottom>
-          salonsolids Hair care available now.
+          salonsolids hair care available now.
         </Typography>
       </HeroSlide>
     ));
