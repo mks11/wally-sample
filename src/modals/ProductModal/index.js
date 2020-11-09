@@ -597,7 +597,7 @@ function ProductDetails({
   );
 }
 
-function createCarouselSlides(
+export function createCarouselSlides(
   imageRefs,
   ingredientLabels,
   name,
