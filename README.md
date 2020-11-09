@@ -159,7 +159,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 ### Requirements
 
 - [Git](https://git-scm.com/downloads)
-- [Node 10.8.0](https://nodejs.org/en/blog/release/v10.8.0/)
+- [Node 14.15.0](https://nodejs.org/en/)
 
 ### Recommended Tools
 
