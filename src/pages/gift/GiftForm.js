@@ -179,7 +179,13 @@ class GiftForm extends Component {
                 id="giftAmount"
                 name="giftAmount"
                 onBlur={this.validateForm}
-                onChange={this.handleInputChange}
+                onChange={(value, name) =>
+                  this.setState({
+                    [name]: value,
+                    formIsValid: false,
+                    errorMessage: null,
+                  })
+                }
                 prefix="$"
                 value={giftAmount}
               />
