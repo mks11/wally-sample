@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import { logEvent } from "services/google-analytics";
+import React, { Component } from 'react';
+import { logEvent } from 'services/google-analytics';
+import ripeNReady from 'images/ripenready.jpg';
 
 class ReferralModal extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      refUrl: "",
+      refUrl: '',
     };
   }
 
@@ -25,15 +26,15 @@ class ReferralModal extends Component {
   };
 
   handleCopy = () => {
-    logEvent({ category: "Refer", action: "CopyReferralLink" });
+    logEvent({ category: 'Refer', action: 'CopyReferralLink' });
     const $el = this.el;
     $el.select();
     try {
-      var successful = document.execCommand("copy");
-      var msg = successful ? "successfully" : "unsuccessfully";
-      console.log("Text copied " + msg);
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'successfully' : 'unsuccessfully';
+      console.log('Text copied ' + msg);
     } catch (err) {
-      console.warn("Unable to copy text");
+      console.warn('Unable to copy text');
     }
   };
 
@@ -52,7 +53,7 @@ class ReferralModal extends Component {
         </span>
         <div className="mb-2 text-center">
           <img
-            src="/images/ripenready.jpg"
+            src={ripeNReady}
             alt="The Wally Shop Ripe 'n Ready tote bag."
             width="70%"
           />
@@ -60,7 +61,7 @@ class ReferralModal extends Component {
         <div className="referral-wrap p-2">
           <input
             type="text"
-            style={{ position: "absolute", zIndex: -100 }}
+            style={{ position: 'absolute', zIndex: -100 }}
             value={refUrl}
             ref={(el) => (this.el = el)}
             readOnly

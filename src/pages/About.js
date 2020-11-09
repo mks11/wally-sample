@@ -1,9 +1,11 @@
-import React, { Component } from "react";
-import Title from "../common/page/Title";
-import { logPageView } from "services/google-analytics";
-import { connect } from "../utils";
+import React, { Component } from 'react';
+import Title from '../common/page/Title';
+import { logPageView } from 'services/google-analytics';
+import { connect } from '../utils';
 
-import Head from "../common/Head";
+import Head from '../common/Head';
+import about450 from 'images/about-450.jpg';
+import about600 from 'images/about-600.jpg';
 
 class About extends Component {
   constructor(props, context) {
@@ -67,7 +69,7 @@ class About extends Component {
                     returnable packaging for a 100% waste free shopping
                     experience. And while we are all cleaning up the world ~
                     we’re going to have fun while we are at it, in full purple
-                    dreamy glow{" "}
+                    dreamy glow{' '}
                     <span role="img" aria-label="sparkle">
                       ✨
                     </span>
@@ -118,17 +120,17 @@ class About extends Component {
   }
 }
 
-export default connect("store")(About);
+export default connect('store')(About);
 
 function AboutPhoto() {
   return (
     <div className="tagline howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
       <img
-        srcSet="images/about-450.jpg 450w,
-                   images/about-600.jpg 600w"
+        srcSet={`${about450} 450w,
+                   ${about600} 600w`}
         sizes="(max-width: 767px) 450px,
                   600px"
-        src="images/about-600.jpg"
+        src={about600}
         alt="About page"
       />
     </div>

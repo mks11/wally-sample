@@ -28,6 +28,9 @@ import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
+// Images
+import sidePanelSticker from 'images/sidepanel_sticker.png';
+
 var heroImages = [
   {
     lg:
@@ -321,7 +324,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src="/images/sidepanel_sticker.png" />
+                      <img src={sidePanelSticker} />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />

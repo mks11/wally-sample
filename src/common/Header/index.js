@@ -16,6 +16,9 @@ import styled from 'styled-components';
 // Custom Components
 import Navbar from 'common/Header/NavBar';
 
+// images
+import logoFull from 'images/logo-full.svg';
+
 const LogoFull = styled.img`
   height: 24px;
 
@@ -48,7 +51,7 @@ const Logo = observer(() => {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <LogoFull src="/images/logo-full.svg" alt="The Wally Shop logo." />
+        <LogoFull src={logoFull} alt="The Wally Shop logo." />
       </Link>
     </Box>
   );

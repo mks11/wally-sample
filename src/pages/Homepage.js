@@ -5,6 +5,18 @@ import { Row, Col } from 'reactstrap';
 import { connect } from '../utils';
 import SignupForm from 'forms/authentication/SignupForm';
 
+import intro450 from 'images/intro-450.jpg';
+import intro600 from 'images/intro-600.jpg';
+
+import order450 from 'images/order-450.jpg';
+import order600 from 'images/order-600.jpg';
+
+import tote450 from 'images/tote-450.jpg';
+import tote600 from 'images/tote-600.jpg';
+
+import returnPackaging450 from 'images/return-packaging-450.jpg';
+import returnPackaging600 from 'images/return-packaging-600.jpg';
+
 class Homepage extends Component {
   constructor(props, context) {
     super(props, context);
@@ -245,11 +257,11 @@ function IntroPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
       <img
-        srcSet="images/intro-450.jpg 450w,
-                   images/intro-600.jpg 600w"
+        srcSet={`${intro450} 450w,
+                   ${intro600} 600w`}
         sizes="(max-width: 767px) 450px,
                   600px"
-        src="images/intro-600.jpg"
+        src={intro600}
         alt="Man holding jar of green lentils."
       />
     </div>
@@ -260,11 +272,11 @@ function OrderPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
       <img
-        srcSet="images/order-450.jpg 450w,
-                   images/order-600.jpg 600w"
+        srcSet={`${order450} 450w,
+                   ${order600} 600w`}
         sizes="(max-width: 767px) 450px,
                   600px"
-        src="images/order-600.jpg"
+        src={order600}
         alt="Man giving money in exchange for a jar of pasta."
       />
     </div>
@@ -275,11 +287,11 @@ function TotePhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
       <img
-        srcSet="images/tote-450.jpg 450w,
-                   images/tote-600.jpg 600w"
+        srcSet={`${tote450} 450w,
+                   ${tote600} 600w`}
         sizes="(max-width: 767px) 450px,
                   600px"
-        src="images/tote-600.jpg"
+        src={tote600}
         alt="The Wally Shop's reusable tote."
       />
     </div>
@@ -290,11 +302,11 @@ function ReturnPackagingPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
       <img
-        srcSet="images/return-packaging-450.jpg 450w,
-                   images/return-packaging-600.jpg 600w"
+        srcSet={`${returnPackaging450} 450w,
+                   ${returnPackaging600} 600w`}
         sizes="(max-width: 767px) 450px,
                   600px"
-        src="images/return-packaging-600.jpg"
+        src={returnPackaging600}
         alt="Returning an empty jar."
       />
     </div>

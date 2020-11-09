@@ -1,10 +1,19 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView } from 'services/google-analytics';
+import { connect } from '../utils';
 
-import Head from "../common/Head";
-import Title from "../common/page/Title";
+import Head from '../common/Head';
+import Title from '../common/page/Title';
+
+import orderHd450 from 'images/order-hd-450.jpg';
+import orderHd600 from 'images/order-hd-600.jpg';
+
+import toteHd450 from 'images/tote-hd-450.jpg';
+import toteHd600 from 'images/tote-hd-600.jpg';
+
+import returnPackagingHd450 from 'images/return-packaging-hd-450.jpg';
+import returnPackagingHd600 from 'images/return-packaging-hd-600.jpg';
 
 class HowItWorks extends Component {
   constructor(props, context) {
@@ -105,43 +114,49 @@ class HowItWorks extends Component {
   }
 }
 
-export default connect("store")(HowItWorks);
+export default connect('store')(HowItWorks);
 
-function OrderPhoto(){
+function OrderPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcSet="images/order-hd-450.jpg 450w,
-                   images/order-hd-600.jpg 600w"
-                   sizes="(max-width: 767px) 450px,
+      <img
+        srcSet={`${orderHd450} 450w,
+                   ${orderHd600} 600w`}
+        sizes="(max-width: 767px) 450px,
                    600px"
-                   src="images/order-hd-600.jpg"
-                   alt="Man giving money in exchange for a jar of pasta." />
+        src={orderHd600}
+        alt="Man giving money in exchange for a jar of pasta."
+      />
     </div>
-  )
+  );
 }
 
-function TotePhoto(){
+function TotePhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-      <img srcSet="images/tote-hd-450.jpg 450w,
-                   images/tote-hd-600.jpg 600w"
-                   sizes="(max-width: 767px) 450px,
+      <img
+        srcSet={`${toteHd450} 450w,
+                   ${toteHd600} 600w`}
+        sizes="(max-width: 767px) 450px,
                    600px"
-                   src="images/tote-hd-600.jpg"
-                   alt="The Wally Shop's reusable tote." />
+        src={toteHd600}
+        alt="The Wally Shop's reusable tote."
+      />
     </div>
-  )
+  );
 }
 
-function ReturnPackagingPhoto(){
+function ReturnPackagingPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img srcSet="images/return-packaging-hd-450.jpg 450w,
-                   images/return-packaging-hd-600.jpg 600w"
-                   sizes="(max-width: 767px) 450px,
+      <img
+        srcSet={`${returnPackagingHd450} 450w,
+                   ${returnPackagingHd600} 600w`}
+        sizes="(max-width: 767px) 450px,
                    600px"
-                   src="images/return-packaging-hd-600.jpg"
-                   alt="Returning an empty jar." />
-      </div>
-  )
+        src={returnPackagingHd600}
+        alt="Returning an empty jar."
+      />
+    </div>
+  );
 }
