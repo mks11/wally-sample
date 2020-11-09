@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { logPageView, logEvent, logModalView } from 'services/google-analytics';
+import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
 import { Row, Col } from 'reactstrap';
-import { validateEmail, connect } from '../utils';
+import { connect } from '../utils';
 import SignupForm from 'forms/authentication/SignupForm';
 
 class Homepage extends Component {
@@ -27,7 +27,6 @@ class Homepage extends Component {
 
     //input
     this.handleEmail = this.handleEmail.bind(this);
-    this.handleSubscribe = this.handleSubscribe.bind(this);
     this.handleSignup = this.handleSignup.bind(this);
     this.zipStore = this.props.store.zip;
     this.userStore = this.props.store.user;
@@ -77,35 +76,6 @@ class Homepage extends Component {
 
   componentWillUnmount() {
     window.$('body').removeClass('homepage-background');
-  }
-
-  handleSubscribe() {
-    if (!validateEmail(this.state.email)) {
-      this.setState({ invalidEmail: 'Invalid Email' });
-      return;
-    }
-
-    this.setState({ invalidEmail: '' });
-    logEvent({
-      category: 'Homepage',
-      action: 'SubmitEmail',
-      value: this.state.zip,
-      label: 'GetNotified',
-    });
-    this.userStore
-      .getWaitlistInfo({
-        email: this.state.email,
-        src: this.state.audienceSource,
-      })
-      .then((res) => {
-        this.modalStore.toggleModal('waitinglist', null, res);
-      })
-      .catch(() => {
-        this.modalStore.toggleModal(
-          'error',
-          'Something went wrong during your request',
-        );
-      });
   }
 
   handleSignup(e) {
