@@ -1,34 +1,34 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import ClickOutside from 'react-click-outside'
-import FontAwesome from 'react-fontawesome'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import FontAwesome from 'react-fontawesome';
 
-const titleStyle = { color: '#39393b', fontWeight: 'bold' }
+const titleStyle = { color: '#39393b', fontWeight: 'bold' };
 
 class PackagingSummary extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      packagingdeposit: false
-    }
+      packagingdeposit: false,
+    };
   }
 
   showPackagingPopup = () => {
-    this.setState({ packagingdeposit: true })
-  }
+    this.setState({ packagingdeposit: true });
+  };
 
   hidePackagingPopup = () => {
-    this.setState({ packagingdeposit: false })
-  }
+    this.setState({ packagingdeposit: false });
+  };
 
   render() {
-    const { packagingdeposit } = this.state
-    const { title  } = this.props
+    const { packagingdeposit } = this.state;
+    const { title } = this.props;
 
     return (
       <div className={`summary ${packagingdeposit ? 'open' : ''}`}>
-        <ClickOutside onClickOutside={this.hidePackagingPopup}>
+        <ClickAwayListener onClickAway={() => this.hidePackagingPopup()}>
           <div
             className="popover bs-popover-right"
             role="tooltip"
@@ -37,14 +37,24 @@ class PackagingSummary extends Component {
           >
             <div className="arrow"></div>
             <div className="popover-body">
-              This charge correlates to how many pieces of reusable packaging we lend you. Once you return our reusable packaging to a Wally Shop courier, you'll get the deposit back as store credit. <Link className="text-violet" to={"/help/topics/5b9158285e3b27043b178f90"}>Learn more</Link>
+              This charge correlates to how many pieces of reusable packaging we
+              lend you. Once you return our reusable packaging to a Wally Shop
+              courier, you'll get the deposit back as store credit.{' '}
+              <Link
+                className="text-violet"
+                to={'/help/topics/5b9158285e3b27043b178f90'}
+              >
+                Learn more
+              </Link>
             </div>
           </div>
-        </ClickOutside>
-        <span onClick={this.showPackagingPopup} style={titleStyle}>{title}  <FontAwesome name='info-circle' /></span>
+        </ClickAwayListener>
+        <span onClick={this.showPackagingPopup} style={titleStyle}>
+          {title} <FontAwesome name="info-circle" />
+        </span>
       </div>
-    )
+    );
   }
 }
 
-export default PackagingSummary
+export default PackagingSummary;

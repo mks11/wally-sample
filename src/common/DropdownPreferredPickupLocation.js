@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import ClickOutside from "react-click-outside";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import PropTypes from 'prop-types';
 
 export default function PreferredPickup({
   defaultLocation,
   disable,
   selected,
-  handleSelected
+  handleSelected,
 }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const hideDropdown = () => setDropdownOpen(false);
@@ -15,86 +15,88 @@ export default function PreferredPickup({
   const toggleDropdown = () => !disable && setDropdownOpen(!isDropdownOpen);
 
   const pickupLocations = [
-    "Front Door",
-    "Back Door",
-    "Shipping",
-    "Receiving",
-    "Office",
-    "Mail Room",
-    "Garage",
-    "Upstairs",
-    "Downstairs",
-    "Guard House",
-    "Third party",
-    "Warehouse",
-    "None"
-  ].filter(p => p !== defaultLocation);
+    'Front Door',
+    'Back Door',
+    'Shipping',
+    'Receiving',
+    'Office',
+    'Mail Room',
+    'Garage',
+    'Upstairs',
+    'Downstairs',
+    'Guard House',
+    'Third party',
+    'Warehouse',
+    'None',
+  ].filter((p) => p !== defaultLocation);
 
-  let dropdownClass = "dropdown-menu";
+  let dropdownClass = 'dropdown-menu';
   if (isDropdownOpen) {
-    dropdownClass += " show";
+    dropdownClass += ' show';
   }
-  let dropdownButtonClass = "btn btn-dropdown-outline dropdown-toggle";
+  let dropdownButtonClass = 'btn btn-dropdown-outline dropdown-toggle';
   if (disable) {
-    dropdownButtonClass += " disabled";
+    dropdownButtonClass += ' disabled';
   }
 
-  const handleSelectedLocal = item => {
+  const handleSelectedLocal = (item) => {
     handleSelected(item);
     //close the dropdown
-    setDropdownOpen(false)
+    setDropdownOpen(false);
   };
 
   return (
     <div className="dropdown show">
-      <ClickOutside onClickOutside={hideDropdown}>
-        <button
-          onClick={toggleDropdown}
-          className={dropdownButtonClass}
-          type="button"
-          data-toggle="dropdown"
-          aria-expanded="true"
-        >
-          {selected ? (
-            <React.Fragment>{selected}</React.Fragment>
-          ) : (
-            <React.Fragment>Preferred Pickup Location</React.Fragment>
-          )}
-        </button>
-        <div className={dropdownClass}>
-          {pickupLocations.map((item, key) => {
-            return (
-              <React.Fragment key={key}>
-                <div
-                  className="dropdown-item"
-                  onClick={() => handleSelectedLocal(item)}
-                >
-                  <div className="custom-control custom-radio">
-                    <input
-                      type="radio"
-                      name="timeRadio"
-                      className="custom-control-input"
-                      checked={selected === item}
-                    />
-                    <label className="custom-control-label">{item}</label>
+      <ClickAwayListener onClickAway={hideDropdown}>
+        <>
+          <button
+            onClick={toggleDropdown}
+            className={dropdownButtonClass}
+            type="button"
+            data-toggle="dropdown"
+            aria-expanded="true"
+          >
+            {selected ? (
+              <React.Fragment>{selected}</React.Fragment>
+            ) : (
+              <React.Fragment>Preferred Pickup Location</React.Fragment>
+            )}
+          </button>
+          <div className={dropdownClass}>
+            {pickupLocations.map((item, key) => {
+              return (
+                <React.Fragment key={key}>
+                  <div
+                    className="dropdown-item"
+                    onClick={() => handleSelectedLocal(item)}
+                  >
+                    <div className="custom-control custom-radio">
+                      <input
+                        type="radio"
+                        name="timeRadio"
+                        className="custom-control-input"
+                        checked={selected === item}
+                      />
+                      <label className="custom-control-label">{item}</label>
+                    </div>
                   </div>
-                </div>
-              </React.Fragment>
-            );
-          })}
-        </div>
-      </ClickOutside>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </>
+      </ClickAwayListener>
     </div>
   );
 }
 
 PreferredPickup.defaultProps = {
-  disable: false
+  disable: false,
 };
 
 PreferredPickup.propTypes = {
-  handleSelected: PropTypes.func.isRequired, 
+  handleSelected: PropTypes.func.isRequired,
   defaultLocation: PropTypes.string.isRequired,
   selected: PropTypes.string.isRequired,
-  disable: PropTypes.bool
+  disable: PropTypes.bool,
 };
