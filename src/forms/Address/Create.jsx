@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, useFormikContext } from 'formik';
 import * as Yup from 'yup';
+import 'yup-phone';
 import {
   TextInput,
   FormikPlacesAutoComplete,
@@ -69,6 +70,7 @@ export default function AddressCreateForm({ allowDelivery }) {
       validationSchema={Yup.object({
         name: Yup.string().required("Name can't be blank"),
         telephone: Yup.string()
+          .phone('US', true, 'Telephone must be a valid US phone number')
           .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
           .required("Telephone can't be blank"),
         streetAddress: Yup.string().required('An address must be provided'),
