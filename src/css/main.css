@@ -136,10 +136,6 @@
   font-family: 'CenturyGothic';
   src: url('../fonts/century-gothic/CenturyGothic.woff') format('woff'),
     url('../fonts/century-gothic/CenturyGothic.ttf') format('truetype'),
-    url('../fonts/century-gothic/CenturyGothic-Regular.eot?#iefix')
-      format('embedded-opentype'),
-    url('../fonts/century-gothic/CenturyGothic-Regular.eot?#iefix')
-      format('embedded-opentype'),
     url('../fonts/century-gothic/CenturyGothic.svg#CenturyGothic') format('svg');
   font-weight: normal;
   font-style: normal;
@@ -643,54 +639,6 @@ button:hover,
     height: 50px;
     font-size: 18px;
   }
-}
-
-.aw-accordion .card {
-  background-color: transparent;
-  border-radius: 0;
-  border: none;
-}
-
-.aw-accordion .card:not(:last-child) {
-  border-bottom: 1px solid #ccc;
-}
-
-.aw-accordion .card-header {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-}
-
-.aw-accordion .card-body {
-  padding: 16px 0 28px;
-}
-
-.aw-accordion h5 {
-  font-weight: normal;
-}
-
-.aw-accordion .btn {
-  font-weight: normal;
-  display: block;
-  color: inherit;
-  font-size: 19px;
-  padding: 12px 0;
-  text-align: left;
-  width: 100%;
-  background-position: right center;
-  background-repeat: no-repeat;
-  background-size: 20px;
-  background-image: url(../images/arr-rounded-down.svg);
-}
-
-.aw-accordion .btn:focus,
-.aw-accordion .btn:hover {
-  text-decoration: none;
-}
-
-.aw-accordion .btn[aria-expanded='true'] {
-  font-weight: 700;
-  background-image: none;
 }
 
 .aw-header {

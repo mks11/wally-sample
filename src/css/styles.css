@@ -420,20 +420,8 @@ nav.aw-nav a.dropdown-item:hover::after {
   padding-left: 5px;
   padding-right: 5px;
 }
-.aw-iconbox {
-  margin-bottom: 30px;
-  position: relative;
-}
 .howto-item img,
-.aw-iconbox img {
-  height: 135px;
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 30px;
-}
-.howto-item h4,
-.aw-iconbox h4 {
+.howto-item h4 {
   font-size: 16px;
   margin: 20px auto;
   text-align: center;
@@ -441,16 +429,7 @@ nav.aw-nav a.dropdown-item:hover::after {
 .howto-item p {
   font-size: 15px;
 }
-.col-sm-6 + .col-sm-6 .aw-iconbox::before {
-  position: absolute;
-  content: '';
-  width: 48px;
-  height: 86px;
-  display: block;
-  background: url(../images/howitworks_arrow.png) no-repeat;
-  left: -30px;
-  top: 45px;
-}
+
 .howto-item img {
   height: auto;
   max-width: 90%;
@@ -1124,9 +1103,6 @@ nav.aw-nav a.dropdown-item:hover::after {
 
 @media (max-width: 1199px) {
   .howto-item h4,
-  .aw-iconbox h4 {
-    font-size: 16px;
-  }
   .howto-item {
     padding-left: 0;
     padding-right: 0;
@@ -1352,9 +1328,6 @@ nav.aw-nav a.dropdown-item:hover::after {
   line-height: 30px;
 }
 
-.col-sm-6:nth-child(3) .aw-iconbox::before {
-  display: none;
-}
 .shop-wrap {
   margin: 0 -20px 20px;
 }
@@ -1770,9 +1743,6 @@ nav.aw-nav a.dropdown-item:hover::after {
 }
 
 @media (max-width: 1199px) {
-  .aw-iconbox h4 {
-    font-size: 16px;
-  }
   .howto-item {
     padding-left: 0;
     padding-right: 0;
@@ -1946,9 +1916,6 @@ nav.aw-nav a.dropdown-item:hover::after {
     width: 90px;
   }
 
-  .col-sm-6:nth-child(3) .aw-iconbox::before {
-    display: none;
-  }
   .shop-wrap {
     margin: 0 -20px 20px;
   }
@@ -2378,9 +2345,6 @@ nav.aw-nav a.dropdown-item:hover::after {
     font-size: 12px;
   }
 
-  .col-sm-6 .aw-iconbox::before {
-    display: none !important;
-  }
   p {
     font-size: 14px;
   }
@@ -2518,9 +2482,6 @@ nav.aw-nav a.dropdown-item:hover::after {
   .whyitmatters-item p,
   .faq-accordion .card-body {
     font-size: 12px;
-  }
-  .col-sm-6 .aw-iconbox::before {
-    display: none !important;
   }
 }
 

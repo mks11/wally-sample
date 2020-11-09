@@ -20,6 +20,8 @@ import { syncHistoryWithStore } from 'mobx-react-router';
 import store from './stores';
 
 // Styles
+import 'css/main.css';
+import 'css/styles.css';
 import theme from 'mui-theme';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons';
