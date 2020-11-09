@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Input } from "reactstrap";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Input } from 'reactstrap';
 
-import { logEvent } from "services/google-analytics";
-import { validateEmail, connect } from "../../utils";
+import { logEvent } from 'services/google-analytics';
+import { validateEmail, connect } from '../../utils';
 
-import FBLogin from "../../common/FBLogin";
+import FBLogin from '../../common/FBLogin';
 
 class SignupModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pin: "",
-      name: "",
-      email: "",
-      password: "",
-      invalidText: "",
+      pin: '',
+      name: '',
+      email: '',
+      password: '',
+      invalidText: '',
       signupRequest: false,
       pinError: false,
       displayPinErrorInfo: false,
@@ -26,24 +26,24 @@ class SignupModal extends Component {
     const { name, email, password, signupRequest } = this.state;
 
     if (!signupRequest) {
-      this.setState({ invalidText: "", signupRequest: true });
+      this.setState({ invalidText: '', signupRequest: true });
 
       if (!name) {
         this.setState({
-          invalidText: "Name cannot be empty",
+          invalidText: 'Name cannot be empty',
           signupRequest: false,
         });
         return;
       }
 
       if (!validateEmail(email)) {
-        this.setState({ invalidText: "Email not valid", signupRequest: false });
+        this.setState({ invalidText: 'Email not valid', signupRequest: false });
         return;
       }
 
       if (!password) {
         this.setState({
-          invalidText: "Password cannot be empty",
+          invalidText: 'Password cannot be empty',
           signupRequest: false,
         });
         return;
@@ -51,7 +51,7 @@ class SignupModal extends Component {
 
       const { user, zip, checkout } = this.props.stores;
 
-      logEvent({ category: "Signup", action: "SubmitInfo" });
+      logEvent({ category: 'Signup', action: 'SubmitInfo' });
       user
         .signup({
           name,
@@ -65,18 +65,18 @@ class SignupModal extends Component {
           user.setToken(data.token);
           checkout.getCurrentCart(
             user.getHeaderAuth(),
-            user.getDeliveryParams()
+            user.getDeliveryParams(),
           );
           checkout.getDeliveryTimes();
           this.setState({ signupRequest: false });
-          this.props.switchTo("welcome");
-          this.props.store.routing.push("/main");
+          this.props.switchTo('welcome');
+          this.props.store.routing.push('/main');
 
           user.giftCardPromo = null;
           user.refPromo = null;
         })
         .catch((e) => {
-          console.error("Failed to signup", e);
+          console.error('Failed to signup', e);
           const msg = e.response.data.error.message;
           this.setState({ invalidText: msg, signupRequest: false });
         });
@@ -91,28 +91,11 @@ class SignupModal extends Component {
   };
 
   handleLogin = () => {
-    this.props.switchTo("login");
+    this.props.switchTo('login');
   };
 
   onValueChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handlePinVerification = (e) => {
-    const { user } = this.props.stores;
-    const { pin, email } = this.state;
-
-    user
-      .verifyPin(pin, email)
-      .then((res) => {
-        this.setState({ pinError: !res.verified });
-      })
-      .catch(() => {
-        this.setState({ pinError: true });
-      })
-      .finally(() => {
-        this.setState({ displayPinErrorInfo: true });
-      });
   };
 
   render() {
@@ -152,12 +135,12 @@ class SignupModal extends Component {
           />
 
           <span className="tnc mt-5 mb-5">
-            By signing up, you agree to our{" "}
-            <Link target="_blank" to={"/tnc"}>
+            By signing up, you agree to our{' '}
+            <Link target="_blank" to={'/tnc'}>
               <i>Terms of Service</i>
-            </Link>{" "}
+            </Link>{' '}
             &nbsp;and &nbsp;
-            <Link target="_blank" to={"/privacy"}>
+            <Link target="_blank" to={'/privacy'}>
               <i>Privacy Policy.</i>
             </Link>
           </span>
@@ -167,7 +150,7 @@ class SignupModal extends Component {
 
           <button
             className={`btn btn-main ${
-              name && email && password && !signupRequest ? "active" : ""
+              name && email && password && !signupRequest ? 'active' : ''
             }`}
             onClick={this.handleSubmit}
           >
@@ -199,4 +182,4 @@ class SignupModal extends Component {
   }
 }
 
-export default connect("store")(SignupModal);
+export default connect('store')(SignupModal);

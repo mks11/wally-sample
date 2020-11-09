@@ -12,7 +12,6 @@ import HelpSingle from './pages/HelpSingle';
 import HelpSingleAnswer from './pages/HelpSingleAnswer';
 import HelpAnswer from './pages/HelpAnswer';
 import ResetPassword from './pages/ResetPassword';
-import EmailVerification from './pages/EmailVerification';
 import Orders from './pages/Orders';
 import ManageOrders from './pages/ManageOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
@@ -230,7 +229,6 @@ function Routes(props) {
         path="/shop/brands/:brandName"
         component={ShopByBrand}
       />
-      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
       <Route exact path="/checkout" component={Checkout} />
