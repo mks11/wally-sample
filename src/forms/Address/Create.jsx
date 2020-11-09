@@ -10,6 +10,7 @@ import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
 import { createAddress } from 'api/user';
+import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 
 export default function AddressCreateForm({ allowDelivery }) {
   const [createdAddr, setCreatedAddr] = useState();
@@ -94,12 +95,12 @@ export default function AddressCreateForm({ allowDelivery }) {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <TextInput
+            <PhoneInput
               name="telephone"
               placeholder="Enter your telephone"
-              label="Telephone"
-              fullWidth={true}
               variant="outlined"
+              fullWidth
+              label="Telephone"
             />
           </Grid>
           <Grid item xs={12}>
