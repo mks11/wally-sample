@@ -23,13 +23,9 @@ import store from './stores';
 import 'css/main.css';
 import 'css/styles.css';
 import theme from 'mui-theme';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const browserHistory = createBrowserHistory();
 const history = syncHistoryWithStore(browserHistory, store.routing);
-
-library.add(faStroopwafel, faSearch);
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize(process.env.REACT_APP_GA_PROPERTY_DEFAULT);
