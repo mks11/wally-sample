@@ -12,6 +12,7 @@
     "aws-s3": "^2.0.5",
     "axios": "^0.21.0",
     "formik": "^2.2.3",
+    "libphonenumber-js": "^1.9.2",
     "mobx": "^5.0.3",
     "mobx-react": "^6.3.0",
     "mobx-react-router": "^4.1.0",
@@ -47,7 +48,8 @@
     "reactstrap": "^6.3.1",
     "sitemap": "^6.3.3",
     "styled-components": "^4.4.0",
-    "yup": "^0.29.3"
+    "yup": "^0.29.3",
+    "yup-phone": "^1.2.13"
   },
   "scripts": {
     "server": "nodemon server/server.js",
