@@ -1,12 +1,22 @@
-import React from 'react';
-import PhoneInputMUI from 'common/PhoneInput';
+import React, { forwardRef } from 'react';
+
+// Phone Number Utilities and Components
+import PhoneInput from 'react-phone-number-input/input';
+import metadata from 'metadata.custom.json';
+
 import { useFormikContext, useField } from 'formik';
+import { TextField } from '@material-ui/core';
 import { HelperText } from 'styled-component-lib/HelperText';
 
-export default function PhoneInput({ name, ...props }) {
+const CustomPhoneInput = forwardRef((props, ref) => {
+  return <TextField inputRef={ref} {...props} />;
+});
+
+export default function PhoneNumberInput({ name, ...props }) {
   const { setFieldValue } = useFormikContext();
-  const handleChange = (txt) => {
-    setFieldValue(name, txt);
+  const handleChange = (value) => {
+    const val = value.substr(2);
+    setFieldValue(name, val);
   };
 
   const [field, meta] = useField({ name });
@@ -15,7 +25,10 @@ export default function PhoneInput({ name, ...props }) {
 
   return (
     <>
-      <PhoneInputMUI
+      <PhoneInput
+        country="US"
+        inputComponent={CustomPhoneInput}
+        metadata={metadata}
         onChange={handleChange}
         error={!!(meta.touched && meta.error)}
         {...restField}
