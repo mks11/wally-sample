@@ -211,7 +211,7 @@ class SingleProductView extends Component {
           <Form horizontal onSubmit={this.handleSubmit}>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Product:</strong>
                 </Col>
                 <Col sm={10}>{product.product_name}</Col>
@@ -219,7 +219,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Quantity:</strong>
                 </Col>
                 <Col sm={10}>
@@ -233,7 +233,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Producer:</strong>
                 </Col>
                 <Col sm={10}>
@@ -253,7 +253,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Shop:</strong>
                 </Col>
                 <Col sm={10}>
@@ -268,7 +268,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Local:</strong>
                 </Col>
                 <Col sm={10}>
@@ -289,7 +289,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Organic:</strong>
                 </Col>
                 <Col sm={10}>
@@ -310,7 +310,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Shop Price:</strong>
                 </Col>
                 <Col sm={10}>
@@ -331,7 +331,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Wally Shop Price:</strong>
                 </Col>
                 <Col sm={10}>
@@ -342,7 +342,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Estimated Total:</strong>
                 </Col>
                 <Col sm={10}>
@@ -353,7 +353,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Substitute:</strong>
                 </Col>
                 <Col sm={4}>
@@ -376,7 +376,7 @@ class SingleProductView extends Component {
                     <option value={false}>False</option>
                   </Input>
                 </Col>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Missing:</strong>
                 </Col>
                 <Col sm={4}>
@@ -403,7 +403,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Substitute Product Name:</strong>
                 </Col>
                 <Col sm={10}>
@@ -419,7 +419,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>
                     Final Quantity (
                     {product.unit_type !== 'oz' ? product.unit_type : 'lbs'}):
@@ -438,7 +438,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Total Paid ($):</strong>
                 </Col>
                 <Col sm={10}>
@@ -454,7 +454,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Weight (lbs):</strong>
                 </Col>
                 <Col sm={10}>
@@ -478,7 +478,7 @@ class SingleProductView extends Component {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col as={ControlLabel} sm={2}>
+                <Col componentClass={ControlLabel} sm={2}>
                   <strong>Missing Product Reason:</strong>
                 </Col>
                 <Col sm={10}>

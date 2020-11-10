@@ -240,31 +240,31 @@ class SingleOrderView extends Component {
           </Paper>
           <FormGroup className={'single-order-total'}>
             <Row>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Current Subtotal:</strong>
               </Col>
               <Col sm={4}>${Math.round(currentSubTotal) / 100}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Original Subtotal:</strong>
               </Col>
               <Col sm={4}>${Math.round(originalSubTotal) / 100}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Promo Discount</strong>
               </Col>
               <Col sm={4}>${selectedOrder.promo_discount / 100}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Applied Store Credit</strong>
               </Col>
               <Col sm={4}>${selectedOrder.applied_store_credit / 100}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Tax Amount</strong>
               </Col>
               <Col sm={4}>${selectedOrder.tax_amount}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Tip Amount</strong>
               </Col>
               <Col sm={4}>${selectedOrder.tip_amount / 100}</Col>
-              <Col as={ControlLabel} sm={2}>
+              <Col componentClass={ControlLabel} sm={2}>
                 <strong>Total</strong>
               </Col>
               <Col sm={4}>${selectedOrder.total / 100}</Col>
