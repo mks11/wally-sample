@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ClickOutside from 'react-click-outside';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 class CarbonBar extends Component {
   constructor(props) {
@@ -44,14 +44,14 @@ class CarbonBar extends Component {
         >
           {this.getFeedback(nCartItems)}
           <i onClick={this.toggleCarbonBarInfo} className="fa fa-info-circle" />
-          <ClickOutside onClickOutside={this.hideCarbonBarInfo}>
+          <ClickAwayListener onClickAway={() => this.hideCarbonBarInfo()}>
             <div className="package-info-popover">
               <p>
                 Our totes are designed to hold 12 jars. By fully utilizing a
                 tote, you are minimizing the carbon effects of your order
               </p>
             </div>
-          </ClickOutside>
+          </ClickAwayListener>
         </div>
         <div className="carbon-bar">
           <div

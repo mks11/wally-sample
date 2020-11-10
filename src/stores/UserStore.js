@@ -15,13 +15,9 @@ import {
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
   API_PURCHASE_GIFTCARD,
-  API_EMAIL_VERIFICATION,
-  API_WAITLIST_INFO,
-  API_PIN_VERIFICATION,
 } from '../config';
 import axios from 'axios';
 import moment from 'moment';
-import uuid from 'uuid';
 
 const TYPES = ['admin', 'ops_lead', 'user', 'ops', 'retail'];
 
@@ -459,19 +455,6 @@ class UserStore {
     return user;
   }
 
-  addFakeAddress(data) {
-    let addresses = [];
-    if (localStorage.getItem('addresses')) {
-      addresses = JSON.parse(localStorage.getItem('addresses'));
-    }
-    data.address_id = uuid();
-    data._id = data.address_id;
-
-    addresses.push(data);
-
-    localStorage.setItem('addresses', JSON.stringify(addresses));
-  }
-
   async subscribeNewsletter(email) {
     const res = await axios.post(API_SUBSCRIBE_EMAIL, { email });
     return res.data;
@@ -511,32 +494,6 @@ class UserStore {
     this.flags = flags;
 
     localStorage.setItem('flags', JSON.stringify(flags));
-  }
-
-  async verifyWaitlistEmail(email, token) {
-    const res = await axios.get(
-      `${API_EMAIL_VERIFICATION}?user_email=${email}&token_id=${token}`,
-    );
-    return res.data;
-  }
-
-  async getWaitlistInfo(data) {
-    let email = data.email;
-    let ref = data.ref;
-    let src = data.src;
-    var qs = `user_email=${email}`;
-    if (ref) qs += `&referral_code=${ref}`;
-    if (src) qs += `&src=${src}`;
-    const reqUrl = `${API_WAITLIST_INFO}?${qs}`;
-    const res = await axios.get(reqUrl);
-    return res.data;
-  }
-
-  async verifyPin(pin, email) {
-    const res = await axios.get(
-      `${API_PIN_VERIFICATION}?pin=${pin}&user_email=${email}`,
-    );
-    return res.data;
   }
 }
 
@@ -611,14 +568,10 @@ decorate(UserStore, {
   setDeliveryAddress: action,
   setDeliveryTime: action,
   loadFakeUser: action,
-  addFakeAddress: action,
   adjustDeliveryTimes: action,
 
   getAddressById: action,
   updateFlags: action,
-  verifyWaitlistEmail: action,
-  getWaitlistInfo: action,
-  verifyPin: action,
 });
 
 export default new UserStore();

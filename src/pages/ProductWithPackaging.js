@@ -3,11 +3,12 @@ import { Row, Col } from 'reactstrap';
 
 import { logPageView, logEvent } from 'services/google-analytics';
 import { formatMoney, connect } from 'utils';
-import { PRODUCT_BASE_URL } from 'config';
 import AmountGroup from 'common/AmountGroup';
 
 import QuantitySelect from '../common/QuantitySelect';
 import Addons from '../common/ProductAddons';
+import ImageCarousel from 'common/ImageCarousel';
+import { createCarouselSlides } from 'modals/ProductModal';
 
 class ProductWithPackaging extends Component {
   constructor(props) {
@@ -320,7 +321,17 @@ class ProductWithPackaging extends Component {
       nutrition_facts,
       ingredient_labels,
       product_id,
+      name,
     } = product;
+
+    const { slides, thumbnails } = createCarouselSlides(
+      image_refs,
+      ingredient_labels,
+      name,
+      nutrition_facts,
+      product_id,
+    );
+
     return (
       <div className={'container'}>
         <Row>
@@ -331,11 +342,11 @@ class ProductWithPackaging extends Component {
               </div>
               <div className="col-sm-6">
                 <ImageCarousel
-                  imageRefs={image_refs}
-                  ingredientLabels={ingredient_labels}
-                  name={name}
-                  nutritionFacts={nutrition_facts}
-                  productId={product_id}
+                  keyName={product_id}
+                  height={500}
+                  slides={slides}
+                  thumbnails={thumbnails}
+                  width={500}
                 />
               </div>
             </div>

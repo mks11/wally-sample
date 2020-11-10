@@ -1,24 +1,25 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { validateEmail, connect } from "../utils";
-import { INSTAGRAM, FACEBOOK } from "../config";
-import {Facebook, Instagram} from '@material-ui/icons';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { validateEmail, connect } from '../utils';
+import { INSTAGRAM, FACEBOOK } from '../config';
+import { Facebook, Instagram } from '@material-ui/icons';
+import footerLogo from 'images/logo.png';
 
 class Footer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: ""
+      email: '',
     };
 
     this.zipStore = this.props.store.zip;
     this.userStore = this.props.store.user;
-    this.routing = this.props.store.routing
+    this.routing = this.props.store.routing;
   }
 
   handleSubscribe() {
     if (!validateEmail(this.state.email)) {
-      this.setState({ invalidText: "Invalid email" });
+      this.setState({ invalidText: 'Invalid email' });
       return;
     }
 
@@ -27,35 +28,39 @@ class Footer extends Component {
     this.userStore
       .subscribeNewsletter(this.state.email)
       .then(() => {
-        this.setState({ invalidText: "", successText: "Subscribed!" });
+        this.setState({ invalidText: '', successText: 'Subscribed!' });
         setTimeout(() => {
-          this.setState({ successText: "" });
+          this.setState({ successText: '' });
         }, 1500);
       })
-      .catch(e => {
-        this.setState({ invalidText: "Failed to subscribe" });
+      .catch((e) => {
+        this.setState({ invalidText: 'Failed to subscribe' });
       });
   }
 
-  handleEmailChange = e => {
-    this.setState({ email: e.target.value, invalidText: "" });
+  handleEmailChange = (e) => {
+    this.setState({ email: e.target.value, invalidText: '' });
   };
   render() {
-    const isHomePage = this.routing.location.pathname === '/'
+    const isHomePage = this.routing.location.pathname === '/';
 
     let isAdmin = false;
     if (this.userStore.user) {
       const user = this.userStore.user;
-      isAdmin = user.type === "admin";
+      isAdmin = user.type === 'admin';
     }
     if (isAdmin) return null;
     return (
-      <footer className={ `aw-footer ${ isHomePage ? 'bg-transparent' : 'util-bg-color-white' }` }>
+      <footer
+        className={`aw-footer ${
+          isHomePage ? 'bg-transparent' : 'util-bg-color-white'
+        }`}
+      >
         <div className="container">
           <div className="row">
             <div className="col-auto col-sm-2">
               <a href="/">
-                <img className="footer-logo" src={"/images/logo.png"} alt="" />
+                <img className="footer-logo" src={footerLogo} alt="" />
               </a>
             </div>
             <div className="col col-sm-10">
@@ -84,10 +89,10 @@ class Footer extends Component {
                       <a href="mailto:info@thewallyshop.co">Contact Us</a>
                     </li>
                     <li>
-                      <Link to={"/tnc"}>Terms &amp; Conditions</Link>
+                      <Link to={'/tnc'}>Terms &amp; Conditions</Link>
                     </li>
                     <li>
-                      <Link to={"/privacy"}>Privacy Policy</Link>
+                      <Link to={'/privacy'}>Privacy Policy</Link>
                     </li>
                   </ul>
                 </div>
@@ -100,7 +105,7 @@ class Footer extends Component {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Facebook style={{fontSize: '48px'}} />
+                        <Facebook style={{ fontSize: '48px' }} />
                       </a>
                     </li>
                     <li className="d-block align-middle">
@@ -109,7 +114,7 @@ class Footer extends Component {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Instagram style={{fontSize: '48px'}} />
+                        <Instagram style={{ fontSize: '48px' }} />
                       </a>
                     </li>
                   </ul>
@@ -121,7 +126,7 @@ class Footer extends Component {
         <div className="container">
           <div className="footer-bottom">
             <div className="container">
-              <form className="form-inline" style={{ position: "relative" }}>
+              <form className="form-inline" style={{ position: 'relative' }}>
                 <label htmlFor="subscribe-email">
                   Subscribe to our newsletter
                 </label>
@@ -138,7 +143,7 @@ class Footer extends Component {
                       className="btn btn-primary"
                       type="button"
                       id="btn-subscribe"
-                      onClick={e => this.handleSubscribe(e)}
+                      onClick={(e) => this.handleSubscribe(e)}
                     >
                       Subscribe
                     </button>
@@ -163,4 +168,4 @@ class Footer extends Component {
   }
 }
 
-export default connect("store")(Footer);
+export default connect('store')(Footer);

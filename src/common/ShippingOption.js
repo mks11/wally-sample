@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import ClickOutside from "react-click-outside";
+import React, { Component } from 'react';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 class ShippingOption extends Component {
   state = {
     selected: null,
-    data: []
+    data: [],
   };
 
   componentDidMount() {
     this.setState({
-      selected: "UPS Ground (1-5 Days)"
+      selected: 'UPS Ground (1-5 Days)',
     });
   }
 
@@ -17,7 +17,7 @@ class ShippingOption extends Component {
     this.setState({ timeDropdown: !this.state.timeDropdown });
   }
 
-  hideTimeDropdown(e) {
+  hideTimeDropdown() {
     if (!this.state.timeDropdown) {
       return;
     }
@@ -26,25 +26,25 @@ class ShippingOption extends Component {
   }
 
   render() {
-    let timeDropdownClass = "dropdown-menu";
+    let timeDropdownClass = 'dropdown-menu';
     if (this.state.timeDropdown && !this.props.addressUnlocked) {
-      timeDropdownClass += " show";
+      timeDropdownClass += ' show';
     }
     const dropdown =
-      typeof this.props.dropdown !== "undefined" ? this.props.dropdown : true;
+      typeof this.props.dropdown !== 'undefined' ? this.props.dropdown : true;
     const showTitle = this.props.title !== null ? this.props.title : true;
-    let dropdownButtonClass = "btn btn-dropdown-outline dropdown-toggle";
+    let dropdownButtonClass = 'btn btn-dropdown-outline dropdown-toggle';
     if (!dropdown) {
-      dropdownButtonClass += " disabled";
+      dropdownButtonClass += ' disabled';
     }
 
     return (
       <React.Fragment>
         {showTitle && <h3 className="m-0 mb-3 p-r">{showTitle}</h3>}
-        <div className="dropdown show">
-          <ClickOutside onClickOutside={e => this.hideTimeDropdown()}>
+        <ClickAwayListener onClickAway={() => this.hideTimeDropdown()}>
+          <div className="dropdown show">
             <button
-              onClick={e => this.toggleTimeDropdown()}
+              onClick={(e) => this.toggleTimeDropdown()}
               className={dropdownButtonClass}
               type="button"
               data-toggle="dropdown"
@@ -55,13 +55,13 @@ class ShippingOption extends Component {
             <div className={timeDropdownClass}>
               <div
                 className="dropdown-item"
-                onClick={e => this.toggleTimeDropdown()}
+                onClick={(e) => this.toggleTimeDropdown()}
               >
                 <div className="custom-control custom-radio">
                   <input
                     type="radio"
                     name="timeRadio"
-                    checked={this.state.selected === "UPS Ground (1-5 Days)"}
+                    checked={this.state.selected === 'UPS Ground (1-5 Days)'}
                     className="custom-control-input"
                   />
                   <label className="custom-control-label">
@@ -70,8 +70,8 @@ class ShippingOption extends Component {
                 </div>
               </div>
             </div>
-          </ClickOutside>
-        </div>
+          </div>
+        </ClickAwayListener>
       </React.Fragment>
     );
   }

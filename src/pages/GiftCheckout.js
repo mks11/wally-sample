@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import qs from "qs";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import qs from 'qs';
 
-import { logPageView } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView } from 'services/google-analytics';
+import { connect } from '../utils';
 
-import FontAwesome from "react-fontawesome";
-import GiftForm from "./gift/GiftForm";
-import Head from "../common/Head";
-import Title from "../common/page/Title";
+import FontAwesome from 'react-fontawesome';
+import GiftForm from './gift/GiftForm';
+import Head from '../common/Head';
+import Title from '../common/page/Title';
 
 class GiftCheckout extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class GiftCheckout extends Component {
       if (status) {
         if (this.userStore.user.payment.length > 0) {
           const selectedPayment = this.userStore.user.payment.find(
-            (d) => d._id === this.userStore.user.preferred_payment
+            (d) => d._id === this.userStore.user.preferred_payment,
           );
           this.setState({ selectedPayment: selectedPayment._id });
         }
@@ -54,7 +54,7 @@ class GiftCheckout extends Component {
 
     if (giftcard) {
       this.userStore.giftCardPromo = giftcard;
-      this.routing.push("/main");
+      this.routing.push('/main');
     }
   }
 
@@ -68,14 +68,14 @@ class GiftCheckout extends Component {
       .purchaseGiftCard(finalData)
       .then((res) => {
         if (res.success) {
-          this.routing.push("/main");
+          this.routing.push('/main');
         } else {
-          this.setState({ purchaseFailed: "Gift card purchase failed" });
+          this.setState({ purchaseFailed: 'Gift card purchase failed' });
         }
       })
       .catch((e) => {
         const msg = !e.response.data.error
-          ? "Purchase failed"
+          ? 'Purchase failed'
           : e.response.data.error.message;
         this.setState({ purchaseFailed: msg });
       });
@@ -93,7 +93,7 @@ class GiftCheckout extends Component {
       const guestPayment = !this.userStore.status
         ? [
             {
-              _id: "guestuser_id",
+              _id: 'guestuser_id',
               last4: data.last4,
             },
           ]
@@ -102,7 +102,7 @@ class GiftCheckout extends Component {
       this.setState({
         stripeToken: data.stripeToken,
         guestUserPayment: guestPayment,
-        selectedPayment: "guestuser_id",
+        selectedPayment: 'guestuser_id',
       });
     }
   };
@@ -117,7 +117,7 @@ class GiftCheckout extends Component {
 
     if (!processGiftCard) return null;
 
-    const giftFrom = this.userStore.user ? this.userStore.user.email : "";
+    const giftFrom = this.userStore.user ? this.userStore.user.email : '';
     const userPayment = this.userStore.user
       ? this.userStore.user.payment
       : guestUserPayment;
@@ -136,14 +136,6 @@ class GiftCheckout extends Component {
         <div className="container">
           <div className="gift-checkout-wrap card1 card-shadow">
             <h3>Get fresh with a Wally Shop gift card</h3>
-            <p>
-              Check our{" "}
-              <Link to="/help/topics/5b92991899ddae0fb0f0a59f">
-                available zip codes
-              </Link>{" "}
-              to be sure that your recipient is in an area that The Wally Shop
-              operates.
-            </p>
             <h3>
               <FontAwesome name="gift" className="gift-icon" />
               Build Gift Card
@@ -165,4 +157,4 @@ class GiftCheckout extends Component {
   }
 }
 
-export default connect("store")(GiftCheckout);
+export default connect('store')(GiftCheckout);

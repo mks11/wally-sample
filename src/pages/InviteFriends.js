@@ -4,6 +4,8 @@ import { logPageView, logEvent } from 'services/google-analytics';
 import { connect } from '../utils';
 
 import SignupForm from 'forms/authentication/SignupForm';
+import inviteFriends450 from 'images/invite-friends-450.jpg';
+import inviteFriends600 from 'images/invite-friends-600.jpg';
 
 class InviteFriends extends Component {
   constructor(props) {
@@ -74,11 +76,11 @@ function InviteFriendsPhoto() {
   return (
     <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
       <img
-        srcSet="images/invite-friends-450.jpg 450w,
-                   images/invite-friends-600.jpg 600w"
+        srcSet={`${inviteFriends450} 450w,
+                   ${inviteFriends600} 600w`}
         sizes="(max-width: 767px) 450px,
                    600px"
-        src="images/invite-friends-600.jpg"
+        src={inviteFriends600}
         alt="Man giving money in exchange for a jar of pasta."
       />
     </div>

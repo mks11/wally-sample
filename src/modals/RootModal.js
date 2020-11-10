@@ -20,9 +20,6 @@ import CheckoutFirstModal from './CheckoutFirstModal';
 import MainFirstModal from './MainFirstModal';
 import MainSecondModal from './MainSecondModal';
 import ModalError from './ModalError';
-import WaitingListModal from './WaitingListModal';
-import EmailVerification from './EmailVerification';
-import JoinWaitlistModal from './JoinWaitlistModal';
 import PackagingDepositModal from './PackagingDepositModal';
 import AddressUpdateModal from './AddressUpdate';
 import AddressDeleteModal from './AddressDelete';
@@ -49,9 +46,6 @@ const ModalRoutes = {
   mainFirst: MainFirstModal,
   mainSecond: MainSecondModal,
   error: ModalError,
-  waitinglist: WaitingListModal,
-  emailverification: EmailVerification,
-  joinwaitlist: JoinWaitlistModal,
   packagingdeposit: PackagingDepositModal,
   success: SuccessModal,
   reportIssue: ReportIssueModal,

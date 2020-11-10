@@ -28,14 +28,17 @@ import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
+// Images
+import sidePanelSticker from 'images/sidepanel_sticker.png';
+
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/simplified-superfoods/simplified-superfoods-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -293,15 +296,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New Simplified Superfoods Products'}
+        alt={'New salonsolids Products'}
         img={img}
         justify="flex-start"
-        title={'Simplified Superfoods'}
-        url="/shop/brands/simplified-superfoods"
+        title={'Love Your Scalp'}
+        url="/shop/brands/salonsolids"
       >
-        <Typography>A smoothie mix that packs it all.</Typography>
         <Typography gutterBottom>
-          Protein, fiber, & fat to fuel your day.
+          salonsolids hair care available now.
         </Typography>
       </HeroSlide>
     ));
@@ -322,7 +324,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src="/images/sidepanel_sticker.png" />
+                      <img src={sidePanelSticker} />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />

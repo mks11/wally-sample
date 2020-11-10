@@ -7,6 +7,8 @@ import { connect } from 'utils';
 import Filters from './Filters';
 import SearchBar from './SearchBar';
 
+import reorder from 'images/reorder.png';
+
 class ProductTop extends Component {
   constructor(props) {
     super(props);
@@ -50,7 +52,7 @@ class ProductTop extends Component {
                   </button>
                 </Col>
                 <Link className="d-none d-md-block ml-3" to="/main/buyagain">
-                  <img src="/images/reorder.png" height="40" alt="" />
+                  <img src={reorder} height="40" alt="" />
                 </Link>
               </div>
             </Col>

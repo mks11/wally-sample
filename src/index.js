@@ -6,8 +6,8 @@ import ReactGA from 'react-ga';
 import ScrollToTop from './common/ScrollToTop';
 import ScrollSpy from 'common/ScrollSpy';
 import Layout from 'templates/Layout';
+
 // Context
-import { CookiesProvider } from 'react-cookie';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { Provider } from 'mobx-react';
 
@@ -20,6 +20,8 @@ import { syncHistoryWithStore } from 'mobx-react-router';
 import store from './stores';
 
 // Styles
+import 'css/main.css';
+import 'css/styles.css';
 import theme from 'mui-theme';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -43,13 +45,11 @@ ReactDOM.render(
     <StylesProvider injectFirst>
       <Provider store={store}>
         <Router history={history}>
-          <CookiesProvider>
-            <ScrollSpy>
-              <ScrollToTop>
-                <Layout />
-              </ScrollToTop>
-            </ScrollSpy>
-          </CookiesProvider>
+          <ScrollSpy>
+            <ScrollToTop>
+              <Layout />
+            </ScrollToTop>
+          </ScrollSpy>
         </Router>
       </Provider>
     </StylesProvider>

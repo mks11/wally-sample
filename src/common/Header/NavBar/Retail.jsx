@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link as RLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
@@ -60,13 +58,3 @@ export const DesktopRetailNav = observer(() => {
     </>
   ) : null;
 });
-
-function Link({ children, ...rest }) {
-  return (
-    <li>
-      <RLink {...rest}>
-        <MobileNavLinkText>{children}</MobileNavLinkText>
-      </RLink>
-    </li>
-  );
-}

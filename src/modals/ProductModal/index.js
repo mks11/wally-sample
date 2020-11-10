@@ -20,6 +20,10 @@ import ImageCarousel from 'common/ImageCarousel';
 
 import { PRODUCT_BASE_URL } from 'config';
 
+// Images
+import jarIcon from 'images/jar8_icon.png';
+import jarIconGrey from 'images/jar8_grey_icon.png';
+
 const SimilarProducts = styled(Row)`
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -597,7 +601,7 @@ function ProductDetails({
   );
 }
 
-function createCarouselSlides(
+export function createCarouselSlides(
   imageRefs,
   ingredientLabels,
   name,
@@ -624,11 +628,7 @@ function JarIcons({ packagingSize }) {
     <div className="jar-icons">
       <div>
         <img
-          src={
-            packagingSize === 8
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
+          src={packagingSize === 8 ? jarIcon : jarIconGrey}
           alt="Packaging size 8 oz"
           width="22"
         />
@@ -637,9 +637,7 @@ function JarIcons({ packagingSize }) {
       <div>
         <img
           src={
-            packagingSize === 16 || packagingSize === 25
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
+            packagingSize === 16 || packagingSize === 25 ? jarIcon : jarIconGrey
           }
           alt="Packaging size 25 oz"
           width="26"
@@ -648,11 +646,7 @@ function JarIcons({ packagingSize }) {
       </div>
       <div>
         <img
-          src={
-            packagingSize === 32
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
+          src={packagingSize === 32 ? jarIcon : jarIconGrey}
           alt="Packaging size 32 oz"
           width="30"
         />
@@ -660,11 +654,7 @@ function JarIcons({ packagingSize }) {
       </div>
       <div>
         <img
-          src={
-            packagingSize === 64
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
+          src={packagingSize === 64 ? jarIcon : jarIconGrey}
           alt="Packaging size 64 oz"
           width="34"
         />
