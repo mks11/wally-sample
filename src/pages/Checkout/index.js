@@ -314,7 +314,6 @@ function Checkout() {
 
   function handleAddPayment(data) {
     if (data) {
-      logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
       userStore.setUserData(data);
       setSelectedPayment(userStore.user.preferred_payment);
     }
