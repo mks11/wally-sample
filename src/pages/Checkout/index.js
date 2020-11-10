@@ -78,7 +78,7 @@ function Checkout() {
         const { checkoutFirst } = userStore.flags || {};
         !checkoutFirst && modalStore.toggleModal('checkoutfirst');
       } else {
-        routing.push('/main');
+        routingStore.push('/main');
       }
     });
   }, []);
@@ -316,10 +316,7 @@ function Checkout() {
     if (data) {
       logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
       userStore.setUserData(data);
-      setState({
-        selectedPayment: userStore.user.preferred_payment,
-        newPayment: false,
-      });
+      setSelectedPayment(userStore.user.preferred_payment);
     }
   }
 
@@ -380,7 +377,7 @@ function Checkout() {
           category: 'Order',
           action: 'Submit Order',
         });
-        routing.push('/orders/' + data.order._id);
+        routingStore.push('/orders/' + data.order._id);
         checkoutStore.clearCart(userStore.getHeaderAuth());
         userStore.setDeliveryTime(null);
         loadingStore.hide();
