@@ -5,8 +5,8 @@ import AddressCreateForm from 'forms/Address/Create';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import {
   Box,
-  Button,
   Card,
+  Container,
   Grid,
   IconButton,
   Typography,
@@ -15,14 +15,14 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddressList from './AddressList';
 import Address from './Address';
-import { Add, Edit } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useStores } from 'hooks/mobx';
 import { useFormikContext } from 'formik';
 
 function AddressOptions({ name }) {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
-
   const { modalV2: modalV2Store, user: userStore } = useStores();
   const { user = {} } = userStore;
   const { setFieldValue } = useFormikContext() || {};
@@ -35,10 +35,6 @@ function AddressOptions({ name }) {
 
   const addrById = (id) => {
     return user.addresses.find((a) => a.address_id === id);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -57,13 +53,6 @@ function AddressOptions({ name }) {
     setData(getAddresses());
   }, [selected, user, isOpen]);
 
-  // automatically closes the Collapse on select change by the user
-  useEffect(() => {
-    if (selected) {
-      setIsOpen(false);
-    }
-  }, [selected]);
-
   const handleAdd = () => {
     modalV2Store.open(<AddressCreateForm allowDelivery />);
   };
@@ -72,34 +61,37 @@ function AddressOptions({ name }) {
     setIsOpen(true);
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <Box mb={4}>
         <Card>
           <Box p={4}>
-            <Typography variant="h2" gutterBottom>
-              Shipping Address
-            </Typography>
-            <Box my={2}>
-              <Grid container justify="flex-end" alignItems="center">
-                <Grid item>
-                  {!isOpen && selected ? (
-                    <Button
-                      color="primary"
-                      onClick={handleOpen}
-                      startIcon={<Edit />}
-                      style={{ padding: '14.5px 12px' }}
-                    >
-                      Edit
-                    </Button>
-                  ) : (
-                    <IconButton onClick={handleClose} aria-label="close">
-                      <CloseIcon fontSize="large" />
-                    </IconButton>
-                  )}
-                </Grid>
+            <Grid container justify="space-between" alignItems="center">
+              <Grid item>
+                <Typography variant="h2">Shipping Address</Typography>
               </Grid>
-            </Box>
+              <Grid item>
+                {isOpen ? (
+                  <IconButton onClick={handleClose} aria-label="close">
+                    <CloseIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    aria-controls="shipping-address-menu"
+                    aria-haspopup="true"
+                    color="primary"
+                    onClick={handleOpen}
+                    disabled={isOpen}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
             <Collapse in={isOpen} collapsedHeight={100} timeout="auto">
               {selected ? (
                 <Address address={selected} isSelected />
@@ -109,27 +101,40 @@ function AddressOptions({ name }) {
                     No shipping address selected
                   </Typography>
                   <PrimaryWallyButton fullWidth onClick={handleAdd}>
-                    Add an Address
+                    Add address
                   </PrimaryWallyButton>
                 </Box>
               )}
-              <Box p={2}>
-                <PrimaryWallyButton
-                  onClick={handleAdd}
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<Add />}
-                  style={{ padding: '0.5rem 0' }}
-                >
-                  Add New Address
-                </PrimaryWallyButton>
-              </Box>
+              <Container maxWidth="sm">
+                <Box p={2}>
+                  <PrimaryWallyButton
+                    onClick={handleAdd}
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<Add />}
+                    style={{ padding: '0.5rem 0' }}
+                  >
+                    Add address
+                  </PrimaryWallyButton>
+                </Box>
+              </Container>
               <AddressList
                 addresses={data}
                 selected={selected}
                 preferred_address={user.preferred_address}
                 onChange={handleSelect}
               />
+              <Container maxWidth="sm">
+                <Box mt={2}>
+                  <PrimaryWallyButton
+                    onClick={handleClose}
+                    fullWidth
+                    style={{ padding: '0.5rem 0' }}
+                  >
+                    Save
+                  </PrimaryWallyButton>
+                </Box>
+              </Container>
             </Collapse>
           </Box>
         </Card>

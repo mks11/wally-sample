@@ -5,7 +5,6 @@ import {
   Divider,
   FormControlLabel,
   Radio,
-  Typography,
 } from '@material-ui/core';
 import Address from './Address';
 
@@ -27,7 +26,6 @@ export default function AddressRadioItem({
   value,
 }) {
   const classes = useStyles();
-  const { street_address, unit, state, zip, name, telephone } = address;
 
   return (
     <Box>
