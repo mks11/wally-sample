@@ -14,7 +14,7 @@ import { useStores } from 'hooks/mobx';
 
 // Custom Components
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
-import ShippingOption from 'common/ShippingOption';
+import ShippingOptions from './ShippingOptions';
 import PaymentSelect from 'common/PaymentSelect';
 import PackagingSummary from './PackagingSummary';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
@@ -122,7 +122,7 @@ function Checkout() {
                 {userStore.user && <DeliveryAddressOptions name="addressId" />}
 
                 {userStore.user && (
-                  <ShippingOption
+                  <ShippingOptions
                     lock={false}
                     selected={userStore.selectedDeliveryTime}
                     title="Shipping Option"
