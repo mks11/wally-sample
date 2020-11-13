@@ -31,11 +31,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/salonsolids/salonsolids-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -293,14 +293,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New salonsolids Products'}
+        alt={'New Sapo Company Products'}
         img={img}
         justify="flex-start"
-        title={'Love Your Scalp'}
-        url="/shop/brands/salonsolids"
+        title={'Sapo Company'}
+        url="/shop/brands/sapo-company"
       >
         <Typography gutterBottom>
-          salonsolids hair care available now.
+          Bar soaps for that luxurious lather.
         </Typography>
       </HeroSlide>
     ));
