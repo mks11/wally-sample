@@ -24,6 +24,11 @@ import 'css/main.css';
 import 'css/styles.css';
 import theme from 'mui-theme';
 
+// Stripe
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { STRIPE_API_KEY } from 'config';
+
 const browserHistory = createBrowserHistory();
 const history = syncHistoryWithStore(browserHistory, store.routing);
 
@@ -36,17 +41,21 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+const stripePromise = loadStripe(STRIPE_API_KEY);
+
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <StylesProvider injectFirst>
       <Provider store={store}>
-        <Router history={history}>
-          <ScrollSpy>
-            <ScrollToTop>
-              <Layout />
-            </ScrollToTop>
-          </ScrollSpy>
-        </Router>
+        <Elements stripe={stripePromise}>
+          <Router history={history}>
+            <ScrollSpy>
+              <ScrollToTop>
+                <Layout />
+              </ScrollToTop>
+            </ScrollSpy>
+          </Router>
+        </Elements>
       </Provider>
     </StylesProvider>
   </ThemeProvider>,
