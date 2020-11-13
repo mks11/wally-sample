@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import CardSmall from './CardSmall';
-import { StripeProvider, Elements } from 'react-stripe-elements';
 import { connect } from 'utils';
-
-import { STRIPE_API_KEY } from '../config';
-
 // Images
 import cardIcon from 'images/card.png';
+
+import RadioGroup from './../pages/Checkout/RadioGroup';
+import { Box } from '@material-ui/core';
 
 class PaymentSelect extends Component {
   constructor(props) {
@@ -71,13 +70,14 @@ class PaymentSelect extends Component {
       userGuest,
     } = this.props;
 
+    console.log('userPayment', userPayment);
+
     const paymentFormClass = `addPaymentForm ${!newPayment ? 'd-none' : ''}`;
     const selected = forceSelect || selectedPayment;
 
     return (
-      <div className="card1">
-        <div className={`card-body ${lockPayment ? 'lock' : ''}`}>
-          {userPayment &&
+      <Box>
+        {/* {userPayment &&
             userPayment.map((data, index) => {
               if (lockPayment && selected !== data._id) {
                 return null;
@@ -115,59 +115,65 @@ class PaymentSelect extends Component {
                   )}
                 </div>
               );
-            })}
-
-          {!lockPayment ? (
-            <div>
-              <div
-                className={`custom-control custom-radio bb1 ${
-                  '0' === selected ? 'active' : ''
-                }`}
-              >
-                <input
-                  type="radio"
-                  id="paymentAdd"
-                  name="customRadio"
-                  className="custom-control-input"
-                  value="0"
-                  checked={selected === '0'}
-                  onChange={(e) => this.handleSelectPayment(selected)}
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor="paymentAdd"
-                  onClick={(e) => this.handleSelectPayment('0')}
-                >
-                  Add new card
-                </label>
-              </div>
-              <div className={paymentFormClass}>
-                <StripeProvider apiKey={STRIPE_API_KEY}>
-                  <Elements>
-                    <CardSmall
-                      addPayment={this.handleAddPayment}
-                      userGuest={userGuest}
-                    />
-                  </Elements>
-                </StripeProvider>
-              </div>
-            </div>
-          ) : null}
-          {!lockPayment && !newPayment && (
-            <button
-              className="btn btn-main active"
-              onClick={(e) => this.handleSubmitPayment(e)}
+            })} */}
+        {userPayment && (
+          <RadioGroup
+            items={userPayment}
+            valueFn={(v) => v._id}
+            Label={({ item }) => (
+              <Box>
+                <img src={cardIcon} alt="" />
+                {userPreferredPayment && userPreferredPayment === item._id && (
+                  <span className="address-rbtn link-blue"> DEFAULT</span>
+                )}
+              </Box>
+            )}
+          />
+        )}
+        <div>
+          <div
+            className={`custom-control custom-radio bb1 ${
+              '0' === selected ? 'active' : ''
+            }`}
+          >
+            <input
+              type="radio"
+              id="paymentAdd"
+              name="customRadio"
+              className="custom-control-input"
+              value="0"
+              checked={selected === '0'}
+              onChange={(e) => this.handleSelectPayment(selected)}
+            />
+            <label
+              className="custom-control-label"
+              htmlFor="paymentAdd"
+              onClick={(e) => this.handleSelectPayment('0')}
             >
-              SUBMIT
-            </button>
-          )}
-          {error && (
-            <span className="text-error text-block">
-              Failed to add new payment
-            </span>
-          )}
+              Add new card
+            </label>
+          </div>
+          <div className={paymentFormClass}>
+            <CardSmall
+              addPayment={this.handleAddPayment}
+              userGuest={userGuest}
+            />
+          </div>
         </div>
-      </div>
+        {!newPayment && (
+          <button
+            className="btn btn-main active"
+            onClick={(e) => this.handleSubmitPayment(e)}
+          >
+            SUBMIT
+          </button>
+        )}
+        {error && (
+          <span className="text-error text-block">
+            Failed to add new payment
+          </span>
+        )}
+      </Box>
     );
   }
 }

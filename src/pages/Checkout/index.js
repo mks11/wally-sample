@@ -15,7 +15,9 @@ import { useStores } from 'hooks/mobx';
 // Custom Components
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
 import ShippingOptions from './ShippingOptions';
+import PaymentOptions from './PaymentOptions';
 import PaymentSelect from 'common/PaymentSelect';
+
 import PackagingSummary from './PackagingSummary';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
@@ -130,30 +132,7 @@ function Checkout() {
                   />
                 )}
 
-                <React.Fragment>
-                  <h3 className="m-0 mb-3 p-r mt-5">
-                    Payment
-                    {lockPayment ? (
-                      <a
-                        onClick={(e) => setLockPayment(false)}
-                        className="address-rbtn link-blue pointer"
-                      >
-                        CHANGE
-                      </a>
-                    ) : null}
-                  </h3>
-                  <PaymentSelect
-                    {...{
-                      lockPayment,
-                      userPayment: userStore.user.payment,
-                      userPreferredPayment: userStore.user.preferred_payment,
-                      onAddPayment: handleAddPayment,
-                      onSubmitPayment: handleSubmitPayment,
-                      userGuest: !userStore.status,
-                      preselect: true,
-                    }}
-                  />
-                </React.Fragment>
+                {userStore.user && <PaymentOptions />}
               </Grid>
               <Grid item xs={12} md={7} lg={6} component="section">
                 <div className="card1 card-shadow">

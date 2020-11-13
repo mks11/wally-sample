@@ -46,7 +46,6 @@ export default function CheckoutCard({
                 </IconButton>
               ) : (
                 <IconButton
-                  aria-controls="shipping-address-menu"
                   aria-haspopup="true"
                   color="primary"
                   onClick={handleOpen}

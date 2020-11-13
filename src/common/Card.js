@@ -6,8 +6,8 @@ import {
   CardExpiryElement,
   CardCVCElement,
   PostalCodeElement,
-  injectStripe,
-} from 'react-stripe-elements';
+  // injectStripe, //todo
+} from '@stripe/react-stripe-js';
 
 const handleBlur = () => {
   console.log('[blur]');
@@ -24,14 +24,14 @@ const createOptions = (padding) => {
     style: {
       base: {
         border: '1px solid #000',
-        fontSize:'18px',
+        fontSize: '18px',
         color: '#000',
         fontFamily: 'Circe',
         letterSpacing: '0.025em',
         '::placeholder': {
           color: '#aab7c4',
         },
-        ...(padding ? {padding} : {}),
+        ...(padding ? { padding } : {}),
       },
       invalid: {
         color: '#9e2146',
@@ -41,7 +41,6 @@ const createOptions = (padding) => {
 };
 
 class _SplitForm extends React.Component {
-
   state = {
     invalidText: '',
     cardnumber: false,
@@ -50,32 +49,31 @@ class _SplitForm extends React.Component {
     zip: false,
 
     billing_zip: null,
-    preferred_payment: false
-  }
-
-  handleChange = (change) => {
-    if (!change) return
-
-    let changed = {}
-    switch(change.elementType) {
-      case 'cardNumber': 
-        changed = {cardnumber: change.complete}
-        break
-      case 'cardExpiry': 
-        changed = {mmyy: change.complete}
-        break
-      case 'cardCvc': 
-        changed = {cvc: change.complete}
-        break
-      case 'postalCode': 
-        changed = {zip: change.complete, billing_zip: change.value}
-        break
-      default:
-        break
-    }
-    this.setState(changed)
+    preferred_payment: false,
   };
 
+  handleChange = (change) => {
+    if (!change) return;
+
+    let changed = {};
+    switch (change.elementType) {
+      case 'cardNumber':
+        changed = { cardnumber: change.complete };
+        break;
+      case 'cardExpiry':
+        changed = { mmyy: change.complete };
+        break;
+      case 'cardCvc':
+        changed = { cvc: change.complete };
+        break;
+      case 'postalCode':
+        changed = { zip: change.complete, billing_zip: change.value };
+        break;
+      default:
+        break;
+    }
+    this.setState(changed);
+  };
 
   handleSubmit = (ev) => {
     ev.preventDefault();
@@ -84,53 +82,57 @@ class _SplitForm extends React.Component {
         .createToken()
         .then((payload) => {
           if (payload.error) {
-            throw payload
+            throw payload;
           }
 
-          this.props.userStore.savePayment({
-            preferred_payment: this.state.preferred_payment,
-            billing_zip: this.state.billing_zip,
-            stripeToken: payload.token.id
-          })
-          .then(data => {
-            this.props.addPayment(data)
-          })
-          .catch(_ => {
-            this.setState({invalidText: 'Failed to add new payment'})
-          })
-        }).then((data) => {
+          this.props.userStore
+            .savePayment({
+              preferred_payment: this.state.preferred_payment,
+              billing_zip: this.state.billing_zip,
+              stripeToken: payload.token.id,
+            })
+            .then((data) => {
+              this.props.addPayment(data);
+            })
+            .catch((_) => {
+              this.setState({ invalidText: 'Failed to add new payment' });
+            });
+        })
+        .then((data) => {
           this.setState({
-            invalidText: ''
-          })
-          this._cardnumber.clear()
-          this._cardexpiry.clear()
-          this._cvc.clear()
-          this._zip.clear()
-        }).catch((e) => {
+            invalidText: '',
+          });
+          this._cardnumber.clear();
+          this._cardexpiry.clear();
+          this._cvc.clear();
+          this._zip.clear();
+        })
+        .catch((e) => {
           if (e.response) {
-            const msg = e.response.data.error.message
-            this.setState({invalidText: msg})
-            console.error('Failed to save payment', e)
-            return
+            const msg = e.response.data.error.message;
+            this.setState({ invalidText: msg });
+            console.error('Failed to save payment', e);
+            return;
           }
 
           if (e.error) {
-            this.setState({invalidText: e.error.message})
+            this.setState({ invalidText: e.error.message });
           }
-          
-        })
+        });
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
 
-
-
   render() {
-
-    let buttonClass = 'btn btn-main my-3'
-    if (this.state.cardnumber && this.state.cvc && this.state.mmyy && this.state.zip) {
-      buttonClass += ' active'
+    let buttonClass = 'btn btn-main my-3';
+    if (
+      this.state.cardnumber &&
+      this.state.cvc &&
+      this.state.mmyy &&
+      this.state.zip
+    ) {
+      buttonClass += ' active';
     }
     return (
       <div>
@@ -162,35 +164,49 @@ class _SplitForm extends React.Component {
                 onReady={handleReady}
                 {...createOptions(this.props.fontSize)}
               />
+            </FormGroup>
+            <PostalCodeElement
+              className="card-element-input"
+              placeholder="Billing zipcode"
+              onBlur={handleBlur}
+              onChange={this.handleChange}
+              onFocus={handleFocus}
+              onReady={handleReady}
+              {...createOptions(this.props.fontSize)}
+            />
 
-          </FormGroup>
-          <PostalCodeElement
-            className="card-element-input"
-            placeholder="Billing zipcode"
-            onBlur={handleBlur}
-            onChange={this.handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
+            <FormGroup check className="my-4">
+              <Label check>
+                <Input
+                  type="checkbox"
+                  onChange={(e) =>
+                    this.setState({
+                      preferred_payment: !this.state.preferred_payment,
+                    })
+                  }
+                />
+                Make default payment card
+              </Label>
+            </FormGroup>
+          </ModalBody>
 
-        <FormGroup check className="my-4">
-          <Label check>
-            <Input type="checkbox" onChange={e=>this.setState({preferred_payment: !this.state.preferred_payment})} />{' '}
-            Make default payment card
-          </Label>
-        </FormGroup>
-      </ModalBody>
-
-      <ModalBody className="modal-body-bordertop">
-        <button type="submit" className={buttonClass}>SAVE</button>
-        { this.state.invalidText ? <span className="text-error text-center text-block">{this.state.invalidText}</span>: null}
-      </ModalBody>
-    </form>
-  </div>
+          <ModalBody className="modal-body-bordertop">
+            <button type="submit" className={buttonClass}>
+              SAVE
+            </button>
+            {this.state.invalidText ? (
+              <span className="text-error text-center text-block">
+                {this.state.invalidText}
+              </span>
+            ) : null}
+          </ModalBody>
+        </form>
+      </div>
     );
   }
 }
-const SplitForm = injectStripe(_SplitForm);
 
-export default SplitForm
+//todo
+// const SplitForm = injectStripe(_SplitForm);
+
+export default _SplitForm;
