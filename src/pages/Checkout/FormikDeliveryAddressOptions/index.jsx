@@ -15,8 +15,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddressList from './AddressList';
 import Address from './Address';
-import { Add } from '@material-ui/icons';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Add, ArrowDropDown as ArrowDropDownIcon } from '@material-ui/icons';
 import { useStores } from 'hooks/mobx';
 import { useFormikContext } from 'formik';
 
@@ -87,7 +86,7 @@ function AddressOptions({ name }) {
                     onClick={handleOpen}
                     disabled={isOpen}
                   >
-                    <MoreVertIcon />
+                    <ArrowDropDownIcon fontSize="large" />
                   </IconButton>
                 )}
               </Grid>
