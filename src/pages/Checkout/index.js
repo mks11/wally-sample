@@ -11,12 +11,12 @@ import { formatMoney } from 'utils';
 // MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
+import { toJS } from 'mobx';
 
 // Custom Components
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
 import ShippingOptions from './ShippingOptions';
 import PaymentOptions from './PaymentOptions';
-import PaymentSelect from 'common/PaymentSelect';
 
 import PackagingSummary from './PackagingSummary';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
@@ -39,9 +39,8 @@ function Checkout() {
   // Addresses
   const [selectedAddress, setSelectedAddress] = useState(undefined);
 
-  // Payment
-  const [lockPayment, setLockPayment] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(undefined);
+  //Payment
+  const [selectedPayment, setSelectedPayment] = useState();
 
   // Response handling
   const [invalidText, setInvalidText] = useState('');
@@ -121,18 +120,16 @@ function Checkout() {
             </Box>
             <Grid container spacing={4}>
               <Grid item xs={12} md={5} lg={6}>
-                {userStore.user && <DeliveryAddressOptions name="addressId" />}
-
                 {userStore.user && (
-                  <ShippingOptions
-                    lock={false}
-                    selected={userStore.selectedDeliveryTime}
-                    title="Shipping Option"
-                    user={userStore.user}
-                  />
+                  <>
+                    <DeliveryAddressOptions name="addressId" />
+                    <ShippingOptions name="shippingServiceLevel" />
+                    <PaymentOptions
+                      name="paymentId"
+                      options={toJS(userStore.user.payment)}
+                    />
+                  </>
                 )}
-
-                {userStore.user && <PaymentOptions />}
               </Grid>
               <Grid item xs={12} md={7} lg={6} component="section">
                 <div className="card1 card-shadow">
@@ -291,13 +288,6 @@ function Checkout() {
     </Formik>
   );
 
-  function handleAddPayment(data) {
-    if (data) {
-      userStore.setUserData(data);
-      setSelectedPayment(userStore.user.preferred_payment);
-    }
-  }
-
   function handleApplyPromo() {
     const { order } = checkoutStore;
 
@@ -334,10 +324,10 @@ function Checkout() {
   function handlePlaceOrder() {
     setInvalidText('');
 
-    if (!lockPayment) {
-      setInvalidText('Please select payment');
-      return;
-    }
+    // if (!lockPayment) {
+    //   setInvalidText('Please select payment');
+    //   return;
+    // }
     loadingStore.show();
     logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
 
@@ -366,12 +356,6 @@ function Checkout() {
         setInvalidText(msg);
         loadingStore.hide();
       });
-  }
-
-  function handleSubmitPayment(lock, selectedPayment) {
-    logEvent({ category: 'Checkout', action: 'SubmitPayment' });
-    setLockPayment(lock);
-    setSelectedPayment(selectedPayment);
   }
 
   function loadData() {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Box } from '@material-ui/core';
-import CheckoutCard from './CheckoutCard';
+import CheckoutCard from './BaseCheckoutCard';
 import RadioGroup from './RadioGroup';
 import { useFormikContext } from 'formik';
 
@@ -11,10 +11,6 @@ function ShippingOptions({ name }) {
     {
       value: 'ups_ground',
       name: 'UPS Ground (1-5 days)',
-    },
-    {
-      value: 'fedx',
-      name: 'Fedex shippping',
     },
   ];
 
@@ -31,7 +27,7 @@ function ShippingOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={18}>
+    <CheckoutCard title="Shipping Options" collapsedHeight={22}>
       <Typography variant="body1"> {getName()} </Typography>
       <RadioGroup
         items={OPTIONS}
@@ -42,6 +38,7 @@ function ShippingOptions({ name }) {
             <Typography variant="h6">{item.name}</Typography>
           </Box>
         )}
+        isChecked={(item) => item.value === selected}
       />
     </CheckoutCard>
   );
