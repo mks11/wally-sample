@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import {
   Close as CloseIcon,
-  MoreVert as MoreVertIcon,
+  ArrowDropDown as ArrowDropDownIcon,
 } from '@material-ui/icons';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
@@ -42,7 +42,7 @@ export default function CheckoutCard({
             <Grid item>
               {isOpen ? (
                 <IconButton onClick={handleClose} aria-label="close">
-                  <CloseIcon />
+                  <CloseIcon fontSize="large" />
                 </IconButton>
               ) : (
                 <IconButton
@@ -51,7 +51,7 @@ export default function CheckoutCard({
                   onClick={handleOpen}
                   disabled={isOpen}
                 >
-                  <MoreVertIcon />
+                  <ArrowDropDownIcon fontSize="large" />
                 </IconButton>
               )}
             </Grid>
