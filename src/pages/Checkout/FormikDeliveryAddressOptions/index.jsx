@@ -76,7 +76,7 @@ function AddressOptions({ name }) {
               <Grid item>
                 {isOpen ? (
                   <IconButton onClick={handleClose} aria-label="close">
-                    <CloseIcon />
+                    <CloseIcon fontSize="large" />
                   </IconButton>
                 ) : (
                   <IconButton
@@ -95,7 +95,7 @@ function AddressOptions({ name }) {
               {selected ? (
                 <Address address={selected} isSelected />
               ) : (
-                <Box>
+                <Box p={2}>
                   <Typography variant="h6" color="error" gutterBottom>
                     No shipping address selected
                   </Typography>

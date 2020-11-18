@@ -10,7 +10,8 @@ function ShippingOptions({ name }) {
   const OPTIONS = [
     {
       value: 'ups_ground',
-      name: 'UPS Ground (1-5 days)',
+      name: 'UPS Ground',
+      description: 'Delivery in one to five days.',
     },
   ];
 
@@ -27,15 +28,22 @@ function ShippingOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={22}>
-      <Typography variant="body1"> {getName()} </Typography>
+    <CheckoutCard title="Shipping Options" collapsedHeight={40}>
+      <Box p={1}>
+        <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+          {getName() || 'No shipping method selected.'}
+        </Typography>
+      </Box>
       <RadioGroup
         items={OPTIONS}
         onChange={handleChange}
         valueFn={(v) => v.value}
         Label={({ item }) => (
-          <Box p={1}>
-            <Typography variant="h6">{item.name}</Typography>
+          <Box p={2}>
+            <Typography>{item.name}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              {item.description}
+            </Typography>
           </Box>
         )}
         isChecked={(item) => item.value === selected}

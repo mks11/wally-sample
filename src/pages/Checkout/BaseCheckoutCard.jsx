@@ -35,9 +35,7 @@ export default function CheckoutCard({
         <Box p={4}>
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
-              <Typography variant="h2" gutterBottom>
-                {title}
-              </Typography>
+              <Typography variant="h2">{title}</Typography>
             </Grid>
             <Grid item>
               {isOpen ? (
