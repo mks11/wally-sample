@@ -6,8 +6,9 @@ export const PrimaryWallyButton = styled(Button).attrs((props) => ({
   variant: props.variant || 'contained',
 }))`
   color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
-  border-radius: 50px;
+  border-radius: 4px;
   white-space: nowrap;
+  padding: 0.7em 1.5em;
   &:hover {
     color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
   }
