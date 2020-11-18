@@ -15,9 +15,10 @@ import {
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 export default function CheckoutCard({
-  title,
-  collapsedHeight = 100,
   children,
+  collapsedHeight = 100,
+  isDisabled = false,
+  title,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +48,7 @@ export default function CheckoutCard({
                   aria-haspopup="true"
                   color="primary"
                   onClick={handleOpen}
-                  disabled={isOpen}
+                  disabled={isDisabled || isOpen}
                 >
                   <ArrowDropDownIcon fontSize="large" />
                 </IconButton>
@@ -62,11 +63,7 @@ export default function CheckoutCard({
             <Box>{children}</Box>
             <Container maxWidth="sm">
               <Box mt={2}>
-                <PrimaryWallyButton
-                  onClick={handleClose}
-                  fullWidth
-                  style={{ padding: '0.5rem 0' }}
-                >
+                <PrimaryWallyButton onClick={handleClose} fullWidth>
                   Save
                 </PrimaryWallyButton>
               </Box>
