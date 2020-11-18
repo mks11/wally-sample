@@ -10,7 +10,7 @@ import { observer } from 'mobx-react';
 
 function RootModalV2() {
   const { modalV2 } = useStores();
-  const { isOpen, children } = modalV2;
+  const { anchor, children, isOpen } = modalV2;
 
   const handleClose = () => {
     modalV2.close();
@@ -18,7 +18,7 @@ function RootModalV2() {
 
   return (
     <Drawer
-      anchor="right"
+      anchor={anchor || 'right'}
       open={isOpen}
       onClose={handleClose}
       style={{

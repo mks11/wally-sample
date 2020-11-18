@@ -2,11 +2,13 @@ import { observable, decorate, action } from 'mobx';
 
 class ModalStoreV2 {
   constructor() {
+    this.anchor = 'right';
     this.isOpen = false;
     this.children = null;
   }
 
-  open(children) {
+  open(children, anchor = 'right') {
+    this.anchor = anchor;
     this.children = children;
     this.isOpen = true;
   }
@@ -18,6 +20,7 @@ class ModalStoreV2 {
 }
 
 decorate(ModalStoreV2, {
+  anchor: observable,
   isOpen: observable,
   children: observable,
   open: action,
