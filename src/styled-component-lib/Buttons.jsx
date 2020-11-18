@@ -53,8 +53,8 @@ export const ColorfulWallyButton = styled.button`
     props.bordercolor ? `1px solid ${props.bordercolor}` : 'none'};
   border-color: ${(props) => props.bordercolor || '#97adff'};
   color: ${(props) => props.color || '#fff'};
-  border-radius: 50px;
-  padding: 0.75em 1em;
+  border-radius: 4px;
+  padding: 0.7em 1em;
   min-width: 100px;
   &:hover {
     color: ${(props) => props.color || '#fff'};

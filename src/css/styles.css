@@ -2427,7 +2427,8 @@ nav.aw-nav a.dropdown-item:hover::after {
 .btn-blue-fb {
   font-size: 1.2rem;
   font-weight: bold;
-  border-radius: 50px;
+  border-radius: 4px;
+  padding: 0.7em 1.5em;
   width: 100%;
   margin: 0 auto;
   color: #fff;

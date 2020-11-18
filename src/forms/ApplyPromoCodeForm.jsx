@@ -54,7 +54,7 @@ function ApplyPromoCodeForm() {
                 <Grid item xs={4}>
                   <PrimaryWallyButton
                     disabled={isSubmitting}
-                    style={{ padding: '0.7em 1.5em', maxHeight: '56px' }}
+                    style={{ maxHeight: '56px' }}
                     fullWidth
                     type="submit"
                   >

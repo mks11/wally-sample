@@ -125,11 +125,7 @@ function AddressOptions({ name }) {
               />
               <Container maxWidth="sm">
                 <Box mt={2}>
-                  <PrimaryWallyButton
-                    onClick={handleClose}
-                    fullWidth
-                    style={{ padding: '0.5rem 0' }}
-                  >
+                  <PrimaryWallyButton onClick={handleClose} fullWidth>
                     Save
                   </PrimaryWallyButton>
                 </Box>

@@ -55,7 +55,7 @@ export default function LoginForm() {
           />
         </Box>
         <Box my={2}>
-          <PrimaryWallyButton style={{ padding: '1em 1.5em' }} type="submit">
+          <PrimaryWallyButton type="submit">
             <Typography variant="h5" component="span">
               Submit
             </Typography>
