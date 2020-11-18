@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 
-export const PrimaryWallyButton = styled(Button).attrs({
+export const PrimaryWallyButton = styled(Button).attrs((props) => ({
   color: 'primary',
-  variant: (props) => props.variant || 'contained',
-})`
+  variant: props.variant || 'contained',
+}))`
   color: ${(props) => (props.variant === 'outlined' ? '#97adff' : '#fff')};
   border-radius: 50px;
   white-space: nowrap;
@@ -13,24 +13,24 @@ export const PrimaryWallyButton = styled(Button).attrs({
   }
 `;
 
-export const PrimaryTextButton = styled(Button).attrs({
+export const PrimaryTextButton = styled(Button).attrs((props) => ({
   color: 'primary',
-})`
+}))`
   white-space: nowrap;
 `;
 
-export const SecondaryWallyButton = styled(Button).attrs({
+export const SecondaryWallyButton = styled(Button).attrs((props) => ({
   color: 'secondary',
   variant: 'contained',
-})`
+}))`
   color: #133063;
   border-radius: 50px;
   white-space: nowrap;
 `;
 
-export const DangerButton = styled(PrimaryWallyButton).attrs({
+export const DangerButton = styled(PrimaryWallyButton).attrs((props) => ({
   variant: 'outlined',
-})`
+}))`
   border-color: #f45246;
   color: #f45246;
   white-space: nowrap;
