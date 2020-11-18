@@ -30,10 +30,10 @@ export const DesktopNavLink = styled(Link)`
   }
 `;
 
-export const DesktopNavLinkText = styled(Typography).attrs({
+export const DesktopNavLinkText = styled(Typography).attrs((props) => ({
   variant: 'body1',
   component: 'span',
-})`
+}))`
   color: #000;
   font-weight: normal;
 

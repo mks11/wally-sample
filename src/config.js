@@ -6,7 +6,6 @@
 
 export let BASE_URL = 'http://localhost:4001';
 export let STRIPE_API_KEY = 'pk_test_pq5Ha0elSORzrITfK2G7GkK4';
-
 if (process.env.NODE_ENV === 'production') {
   BASE_URL = 'https://the-wally-shop.herokuapp.com';
   STRIPE_API_KEY = 'pk_live_QV08YsHEj9zFZeHcx3O6X5Wn';

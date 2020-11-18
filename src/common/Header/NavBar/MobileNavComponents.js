@@ -19,10 +19,10 @@ export const MobileNavLink = styled(Link)`
   width: 100%;
 `;
 
-export const MobileNavLinkText = styled(Typography).attrs({
+export const MobileNavLinkText = styled(Typography).attrs((props) => ({
   variant: 'h4',
   component: 'span',
-})`
+}))`
   color: #000;
 `;
 
