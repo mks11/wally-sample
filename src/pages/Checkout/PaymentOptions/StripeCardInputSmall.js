@@ -1,102 +1,108 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+
+// Stripe
 import { CardElement, ElementsConsumer } from '@stripe/react-stripe-js';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Components
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import { Box } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import Checkbox from 'common/FormikComponents/NonRenderPropAPI/Checkbox';
-import { Typography } from '@material-ui/core';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { HelperText } from 'styled-component-lib/HelperText';
 
 // TODO style the input
-const createOptions = (padding) => {
-  return {
-    style: {
-      base: {
-        border: '1px solid #000',
-        fontSize: '14px',
-        color: '#000',
-        fontFamily: 'Circe',
-        letterSpacing: '0.025em',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-        ...(padding ? { padding } : {}),
-      },
-      invalid: {
-        color: '#9e2146',
-      },
-    },
-  };
-};
-
-class SplitForm extends React.Component {
-  state = {
-    invalidText: '',
-  };
-
-  handleSubmit = async (ev) => {
-    this.setState({
-      invalidText: '',
-    });
-
-    ev.preventDefault();
-
-    const { stripe, elements } = this.props;
-
+function CardInput({ elements, stripe }) {
+  const [paymentError, setPaymentError] = useState(false);
+  const { user: userStore, modalV2 } = useStores();
+  const theme = useTheme();
+  const errorColor = theme.palette.error.main;
+  const handleSubmit = async (values) => {
     if (!stripe || !elements) {
       return;
     }
-
-    const cardElement = elements.getElement(CardElement);
-    this.props.stripe
-      .createToken(cardElement)
-      .then((payload) => {
-        if (payload.error) {
-          throw payload;
-        }
-        return this.props.onAdd({
-          preferred_payment: this.state.preferred_payment,
-          billing_zip: this.state.billing_zip,
-          stripeToken: payload.token.id,
-        });
-      })
-      .catch((e) => {
-        if (e.response) {
-          const msg = e.response.data.error.message;
-          this.setState({ invalidText: msg });
-          return;
-        }
-        if (e.error) {
-          this.setState({ invalidText: e.error.message });
-        }
+    try {
+      const cardElement = elements.getElement(CardElement);
+      const payload = await stripe.createToken(cardElement);
+      if (payload.error) {
+        throw payload;
+      }
+      await userStore.savePayment({
+        isPreferredPayment: values.isPreferredPayment,
+        stripeToken: payload.token.id,
       });
+      modalV2.close();
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error &&
+        error.response.data.error.message
+      ) {
+        const { message } = error.response.data.error;
+        setPaymentError(message);
+      } else {
+        setPaymentError('Failed to add new card.');
+      }
+    }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <CardElement />
-        <Checkbox
-          label="Make default payment card"
-          name="isPreferredAddress" //todo confirm the name
-          color="primary"
-        />
-        <PrimaryWallyButton variant="outlined" type="submit">
-          Add New Card
-        </PrimaryWallyButton>
-        {this.state.invalidText ? (
-          <Typography color="error">{this.state.invalidText}</Typography>
-        ) : null}
-      </form>
-    );
-  }
+  return (
+    <Formik
+      initialValues={{ isPreferredPayment: false }}
+      validationSchema={Yup.object({ isPreferredPayment: Yup.bool() })}
+      enableReinitialize
+      onSubmit={(values, { setSubmitting }) => {
+        handleSubmit(values);
+        setSubmitting(false);
+      }}
+    >
+      {({ isSubmitting }) => (
+        <Form>
+          <Box
+            p={2}
+            border={
+              paymentError ? `1px solid ${errorColor}` : '1px solid black'
+            }
+            borderRadius="4px"
+          >
+            <CardElement />
+          </Box>
+          <HelperText error={paymentError ? true : false}>
+            {paymentError ? paymentError : ' '}
+          </HelperText>
+          <Box pb={2}>
+            <Checkbox
+              label="Make default payment method"
+              name="isPreferredPayment"
+              color="primary"
+            />
+          </Box>
+          <PrimaryWallyButton
+            variant="outlined"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Add New Card
+          </PrimaryWallyButton>
+        </Form>
+      )}
+    </Formik>
+  );
 }
 
-const _SplitForm = (props) => {
+const StripeCardInputSmall = (props) => {
   return (
     <ElementsConsumer>
       {({ elements, stripe }) => (
-        <SplitForm elements={elements} stripe={stripe} {...props} />
+        <CardInput elements={elements} stripe={stripe} {...props} />
       )}
     </ElementsConsumer>
   );
 };
 
-export default _SplitForm;
+export default StripeCardInputSmall;
