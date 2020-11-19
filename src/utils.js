@@ -73,6 +73,20 @@ function getItemsCount(items) {
   return count;
 }
 
+function getErrorMessage(error) {
+  if (
+    error.response &&
+    error.response.data &&
+    error.response.data.error &&
+    error.response.data.error.message
+  ) {
+    const msg = error.response.data.error.message;
+    return msg;
+  }
+
+  return null;
+}
+
 export {
   connect,
   validateEmail,
@@ -81,4 +95,5 @@ export {
   isValidTimeOrder,
   sortByTimestampDes,
   getItemsCount,
+  getErrorMessage,
 };

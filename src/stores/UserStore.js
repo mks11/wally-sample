@@ -9,13 +9,13 @@ import {
   API_ADDRESS_NEW,
   API_ADDRESS_REMOVE,
   API_PAYMENT_NEW,
-  API_PAYMENT_EDIT,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
   API_PURCHASE_GIFTCARD,
 } from '../config';
+
 import axios from 'axios';
 import moment from 'moment';
 
@@ -216,15 +216,6 @@ class UserStore {
     const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth());
     this.updateSelectedDeliveryAddress(res.data);
     this.setUserData(res.data);
-    return res.data;
-  }
-
-  async makeDefaultPayment(id) {
-    const res = await axios.post(
-      API_PAYMENT_EDIT,
-      { id },
-      this.getHeaderAuth(),
-    );
     return res.data;
   }
 
