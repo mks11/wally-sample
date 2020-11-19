@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Box } from '@material-ui/core';
 import CheckoutCard from './BaseCheckoutCard';
-import RadioGroup from './RadioGroup';
+import RadioGroup from 'common/RadioGroup';
 import { useFormikContext } from 'formik';
 
 function ShippingOptions({ name }) {
