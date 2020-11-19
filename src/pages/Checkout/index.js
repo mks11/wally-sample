@@ -40,7 +40,7 @@ function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState(undefined);
 
   //Payment
-  const [selectedPayment, setSelectedPayment] = useState();
+  const [selectedPayment, setSelectedPayment] = useState(undefined);
 
   // Response handling
   const [invalidText, setInvalidText] = useState('');
@@ -52,6 +52,7 @@ function Checkout() {
 
     userStore.getStatus().then((status) => {
       if (status) {
+        // Do we even need the store methods anymore? This state is ephemeral.
         const selectedAddress =
           userStore.selectedDeliveryAddress ||
           (userStore.user
@@ -63,16 +64,23 @@ function Checkout() {
 
         loadData();
         if (userStore.user.addresses.length > 0) {
-          const selectedAddress = userStore.user.addresses.find(
+          const preferredAddress = userStore.user.addresses.find(
             (d) => d._id === userStore.user.preferred_address,
           );
+          let selectedAddress = preferredAddress
+            ? preferredAddress._id
+            : userStore.user.addresses[0];
           setSelectedAddress(selectedAddress._id);
         }
 
         if (userStore.user.payment.length > 0) {
-          const selectedPayment = userStore.user.payment.find(
+          const preferredPayment = userStore.user.payment.find(
             (d) => d._id === userStore.user.preferred_payment,
           );
+
+          let selectedPayment = preferredPayment
+            ? preferredPayment._id
+            : userStore.user.payment[0];
           setSelectedPayment(selectedPayment._id);
         }
 
@@ -264,7 +272,6 @@ function Checkout() {
                       type="submit"
                       fullWidth
                       disabled={cart_items.length == 0 || isSubmitting}
-                      style={{ padding: '0.5rem 0' }}
                     >
                       Place My Order
                     </PrimaryWallyButton>
