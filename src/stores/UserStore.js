@@ -8,7 +8,6 @@ import {
   API_EDIT_USER,
   API_ADDRESS_NEW,
   API_ADDRESS_REMOVE,
-  API_PAYMENT_NEW,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_SUBSCRIBE_EMAIL,
@@ -31,13 +30,8 @@ class UserStore {
   addressModalOpen = false;
   activeAddress = null;
 
-  paymentModal = false;
-  paymentModalOpen = false;
-
   selectedDeliveryAddress = null;
   selectedDeliveryTime = null;
-
-  activePayment = null;
 
   refPromo = null;
   giftCardPromo = null;
@@ -160,21 +154,6 @@ class UserStore {
     this.addressModalOpen = false;
   }
 
-  showPaymentModal(data) {
-    this.activePayment = data;
-    this.paymentModal = true;
-    this.paymentModalOpen = true;
-  }
-
-  hidePaymentModal() {
-    this.activePayment = null;
-    this.paymentModal = false;
-  }
-
-  closePaymentModal() {
-    this.paymentModalOpen = false;
-  }
-
   getHeaderAuth() {
     return {
       headers: { Authorization: 'Bearer ' + this.token.accessToken },
@@ -224,12 +203,6 @@ class UserStore {
       API_PAYMENT_REMOVE + payment_id,
       this.getHeaderAuth(),
     );
-    return res.data;
-  }
-
-  async savePayment(data) {
-    const res = await axios.post(API_PAYMENT_NEW, data, this.getHeaderAuth());
-    this.setUserData(res.data);
     return res.data;
   }
 
@@ -497,10 +470,6 @@ decorate(UserStore, {
   activeAddress: observable,
   getDeliveryParams: action,
 
-  paymentModal: observable,
-  paymentModalOpen: observable,
-  activePayment: observable,
-
   promoModal: observable,
   promoSuccessModal: observable,
 
@@ -538,10 +507,6 @@ decorate(UserStore, {
   hideAddressModal: action,
   closeAddressModal: action,
 
-  showPaymentModal: action,
-  hidePaymentModal: action,
-  closePaymentModal: action,
-
   referFriend: action,
 
   deleteAddress: action,
@@ -549,8 +514,6 @@ decorate(UserStore, {
   makeDefaultAddress: action,
 
   deletePayment: action,
-  savePayment: action,
-  makeDefaultPayment: action,
 
   getHeaderAuth: action,
   forgotPassword: action,

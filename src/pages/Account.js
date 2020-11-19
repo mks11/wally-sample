@@ -13,9 +13,13 @@ import { connect, getErrorMessage } from '../utils';
 import { Input } from 'reactstrap';
 import Title from '../common/page/Title';
 import AddressModal from './account/AddressModal';
-import PaymentModal from './account/PaymentModal';
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
-import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
+import StripeCardInput from 'common/StripeCardInput';
+import {
+  PrimaryTextButton,
+  PrimaryWallyButton,
+  DangerButton,
+} from 'styled-component-lib/Buttons';
 import {
   Badge,
   Box,
@@ -31,6 +35,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
@@ -299,40 +304,62 @@ class Account extends Component {
           </div>
         </section>
 
-        <section className="page-section aw-account--payment pt-2">
+        <Box component="section">
           <Container maxWidth="xl">
-            <Typography variant="h2">Payment Methods</Typography>
-            <Divider />
-            <List>
-              {payments.map((paymentMethod) => (
-                <PaymentMethod
-                  key={paymentMethod._id}
-                  paymentMethod={paymentMethod}
-                ></PaymentMethod>
-              ))}
-            </List>
-            <button
-              onClick={(e) => this.userStore.showPaymentModal()}
-              className="btn btn-icon-transparent btn-block mt-4"
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
             >
-              <i className="ico ico-add-square mr-3"></i>Add new card
-            </button>
-            <br />
-            <br />
-            <Box maxWidth="567px">
+              <Typography variant="h2">Payment Methods</Typography>
+              <AddNewPaymentMethod />
+            </Box>
+            <Divider />
+            {payments.length ? (
+              <List>
+                {payments.map((paymentMethod) => (
+                  <PaymentMethod
+                    key={paymentMethod._id}
+                    paymentMethod={paymentMethod}
+                  ></PaymentMethod>
+                ))}
+              </List>
+            ) : (
+              <Box my={2}>
+                <Typography>No payment methods on file</Typography>
+              </Box>
+            )}
+            <Box maxWidth="567px" mt={4}>
               <ApplyPromoCodeForm />
             </Box>
           </Container>
-        </section>
+        </Box>
 
         {this.userStore.addressModalOpen ? <AddressModal /> : null}
-        {this.userStore.paymentModalOpen ? <PaymentModal /> : null}
       </div>
     );
   }
 }
 
 export default connect('store')(Account);
+
+function AddNewPaymentMethod() {
+  const { modalV2: modalV2Store } = useStores();
+  const handleAddNewPaymentMethod = () => {
+    modalV2Store.open(
+      <>
+        <Typography variant="h1">Add Payment Method</Typography>
+        <StripeCardInput />
+      </>,
+    );
+  };
+
+  return (
+    <PrimaryTextButton onClick={handleAddNewPaymentMethod}>
+      <AddIcon /> New
+    </PrimaryTextButton>
+  );
+}
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -410,15 +437,20 @@ const PaymentMethod = observer(({ paymentMethod }) => {
         <Grid container justify="space-between">
           <Grid item>
             <Box mx={2}>
-              <Box mr={1}>
-                <Typography component="span" style={{ fontWeight: 'bold' }}>
-                  {brand} **** {last4}
-                  {_id === userStore.user.preferred_payment && (
-                    <StyledBadge badgeContent="Default" color="primary" />
-                  )}
-                </Typography>
-              </Box>
-              <Typography color="textSecondary">
+              <Typography style={{ fontWeight: 'bold' }}>
+                {brand}
+                {_id === userStore.user.preferred_payment && (
+                  <StyledBadge badgeContent="Default" color="primary" />
+                )}
+              </Typography>
+              <Typography component="span" style={{ fontWeight: 'bold' }}>
+                **** {last4}
+              </Typography>
+              <Typography
+                component="span"
+                color="textSecondary"
+                style={{ marginLeft: '8px' }}
+              >
                 Expires {expMonth}/{expYear}
               </Typography>
             </Box>
