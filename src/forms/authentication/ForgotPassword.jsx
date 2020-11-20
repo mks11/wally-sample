@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-// Config
-import { support } from 'config';
-
 // Hooks
 import { useStores } from 'hooks/mobx';
 
@@ -14,7 +11,6 @@ import { Box, Typography } from '@material-ui/core';
 import { TextInput } from 'common/FormikComponents/NonRenderPropAPI';
 
 // Styled Components
-import { Label } from 'styled-component-lib/InputLabel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 import * as Yup from 'yup';

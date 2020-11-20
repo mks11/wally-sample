@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { Label } from 'styled-component-lib/InputLabel';
 import { Input } from 'reactstrap';

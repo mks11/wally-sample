@@ -161,7 +161,7 @@ export function CreditCardLogo({ brand }) {
   const alt = brand ? brand + ' logo' : 'Credit card logo.';
   useEffect(() => {
     loadLogo();
-  }, [brand]);
+  }, [brand, loadLogo]);
 
   return (
     <Box
