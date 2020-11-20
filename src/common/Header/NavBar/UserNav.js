@@ -1,19 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // MobX
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Services & Utilities
-import { logModalView } from 'services/google-analytics';
-import { formatMoney } from 'utils';
+import { logEvent, logModalView } from 'services/google-analytics';
+import { formatMoney, getItemsCount } from 'utils';
+import { isMobile } from 'react-device-detect';
 
 // npm Package Components
-import { Badge, Box, Typography } from '@material-ui/core';
+import {
+  Badge,
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Menu,
+  Typography,
+} from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import { Link } from 'react-router-dom';
 
 // Custom Components
+import CarbonBar from 'common/CarbonBar';
 import {
   MobileNavItem,
   MobileNavListItem,
@@ -31,16 +40,25 @@ import {
 } from 'common/Header/NavBar/DesktopNavComponents';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
+import LoginForm from 'forms/authentication/LoginForm';
+import RemoveItemForm from 'forms/cart/RemoveItem';
+
+// Styled Components
+import {
+  PrimaryWallyButton,
+  PrimaryTextButton,
+  DangerTextButton,
+} from 'styled-component-lib/Buttons';
 
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
   return user.isUser ? (
-    <Box display="flex" alignItems="center">
+    <>
       <MobileNavMenu>
         <MobileUserNavMenu />
       </MobileNavMenu>
       <Cart />
-    </Box>
+    </>
   ) : null;
 });
 
@@ -159,11 +177,252 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
+const CartMenuMobile = observer(({ items }) => {
+  const { modal, routing, ui, user, modalV2 } = useStores();
+
+  const handleDeleteMobile = (item) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProductMobile' });
+    ui.toggleCartMobile();
+    modalV2.open(<RemoveItemForm item={item} />);
+  };
+
+  const handleCheckoutMobile = () => {
+    logEvent({ category: 'Cart', action: 'ClickCheckoutMobile' });
+    if (user.status) {
+      ui.toggleCartMobile(false);
+      routing.push('/main/similar-products');
+    } else {
+      ui.toggleCartMobile(false);
+      modalV2.open(<LoginForm />);
+    }
+  };
+
+  return (
+    <div className={`cart-mobile d-md-none ${ui.cartMobile ? 'open' : ''}`}>
+      <button
+        className="btn-close-cart btn-transparent"
+        type="button"
+        onClick={(e) => ui.toggleCartMobile(false)}
+      >
+        <span className="navbar-toggler-icon close-icon"></span>
+      </button>
+      {items.length > 0 ? (
+        <React.Fragment>
+          <h2 className="ml-4 mb-2">Order</h2>
+          <div className="tbl-cart-mobile">
+            <table>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.product_name}>
+                    <td style={{ width: 42 }}>{item.customer_quantity}</td>
+                    <td>
+                      {item.product_name}
+                      <br />
+                      <span>{item.packaging_name}</span>
+                    </td>
+                    <td style={{ width: 46, color: '#e07f82' }}>
+                      {formatMoney(item.total / 100)}
+                    </td>
+                    <td
+                      style={{ width: 10 }}
+                      onClick={(e) =>
+                        handleDeleteMobile({
+                          inventoryId: item._id,
+                          name: item.product_name,
+                          productId: item.product_id,
+                        })
+                      }
+                    >
+                      <button
+                        className="btn-close-cart btn-transparent"
+                        type="button"
+                      >
+                        <span className="navbar-toggler-icon close-icon-grey"></span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button
+            className="btn btn-main active btn-checkout-mobile"
+            onClick={(e) => handleCheckoutMobile(e)}
+          >
+            Checkout
+          </button>
+        </React.Fragment>
+      ) : (
+        <h5 className="text-center">No items in cart</h5>
+      )}
+    </div>
+  );
+});
+
+const CartDropdown = observer(({ anchorEl, handleClose }) => {
+  const { checkout, modal, product, routing, ui, user, modalV2 } = useStores();
+  const { cart } = checkout;
+
+  const handleCheckout = () => {
+    logEvent({ category: 'Cart', action: 'ClickCheckout' });
+    ui.hideBackdrop();
+    handleClose();
+    if (user.status) {
+      routing.push('/main/similar-products');
+    } else {
+      modalV2.open(<LoginForm />);
+    }
+  };
+
+  const handleEdit = (data) => {
+    logEvent({ category: 'Cart', action: 'ClickEditProduct' });
+    handleClose();
+    product
+      .showModal(
+        data.product_id,
+        data.customer_quantity,
+        user.getDeliveryParams(),
+      )
+      .then((data) => {
+        user.adjustDeliveryTimes(data.delivery_date, checkout.deliveryTimes);
+        modal.toggleModal('product');
+      });
+  };
+
+  const handleDelete = (item) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    handleClose();
+    modalV2.open(<RemoveItemForm item={item} />);
+  };
+
+  const items = cart ? cart.cart_items : [];
+  const count = getItemsCount(items);
+  const subtotal = cart ? cart.subtotal / 100 : 0;
+
+  return isMobile ? null : (
+    <Menu
+      id="cart"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <Box p={3} minWidth="350px">
+        {items && count > 0 ? (
+          <>
+            <Typography variant="h1">Cart</Typography>
+            <Box my={2}>
+              <CarbonBar nCartItems={count} />
+            </Box>
+            <Box mb={2}>
+              {items.map((item) => {
+                const {
+                  customer_quantity,
+                  _id,
+                  product_id,
+                  product_name,
+                } = item;
+                return (
+                  <Box key={product_name}>
+                    <Box my={2}>
+                      {/* Cart Item Quantity Management*/}
+                      <Box my={1}>
+                        <Typography variant="h6">{product_name}</Typography>
+                        <Grid container alignItems="center">
+                          <Grid item>
+                            <Typography
+                              color="textSecondary"
+                              component="span"
+                              gutterBottom
+                            >
+                              Quantity: {customer_quantity}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <PrimaryTextButton
+                              onClick={() =>
+                                handleEdit({
+                                  product_id,
+                                  customer_quantity,
+                                })
+                              }
+                            >
+                              <Typography>Edit</Typography>
+                            </PrimaryTextButton>
+                          </Grid>
+                          <Grid item>
+                            <DangerTextButton
+                              onClick={() =>
+                                handleDelete({
+                                  inventoryId: _id,
+                                  name: product_name,
+                                  productId: product_id,
+                                })
+                              }
+                            >
+                              <Typography>Remove</Typography>
+                            </DangerTextButton>
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Item subtotal */}
+                      <Grid container spacing={2} justify="space-between">
+                        <Grid item>
+                          <Typography component="span">Subtotal</Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography component="span">
+                            {formatMoney(item.total / 100)}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                    <Divider />
+                  </Box>
+                );
+              })}
+              <Box my={2}>
+                <Grid container justify="space-between" alignItems="center">
+                  <Typography variant="h6" component="span">
+                    Subtotal
+                  </Typography>
+                  <Typography variant="h6" component="span">
+                    {formatMoney(subtotal)}
+                  </Typography>
+                </Grid>
+              </Box>
+            </Box>
+            <PrimaryWallyButton onClick={handleCheckout} fullWidth>
+              <Typography>Checkout</Typography>
+            </PrimaryWallyButton>
+          </>
+        ) : (
+          <Typography>No items in cart</Typography>
+        )}
+      </Box>
+    </Menu>
+  );
+});
+
+// const CartMenu
 const Cart = observer(() => {
-  const { user, checkout } = useStores();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { ui, user, checkout } = useStores();
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
   const isDisabled = numItems < 1;
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleOpenCartMobile = () => {
+    logModalView('/cart-mobile');
+    ui.toggleCartMobile(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const getCartData = async () => {
@@ -174,13 +433,12 @@ const Cart = observer(() => {
   }, []);
 
   return (
-    <Box display="flex" alignItems="center">
-      <Link
-        alt="Cart"
-        aria-label="cart"
+    <>
+      <IconButton
+        aria-label="menu"
+        onClick={isMobile ? handleOpenCartMobile : handleClick}
         disabled={isDisabled}
         style={{ color: isDisabled ? 'rgba(0, 0, 0, 0.5)' : 'inherit' }}
-        to="/cart"
       >
         <Badge
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -189,8 +447,10 @@ const Cart = observer(() => {
         >
           <ShoppingBasketIcon fontSize="large" />
         </Badge>
-      </Link>
-    </Box>
+      </IconButton>
+      <CartDropdown anchorEl={anchorEl} handleClose={handleClose} />
+      <CartMenuMobile items={items} />
+    </>
   );
 
   function getNumItems(items) {
