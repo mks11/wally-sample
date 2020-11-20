@@ -15,7 +15,10 @@ import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 import ManageOrders from './pages/ManageOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
+
+// Checkout Flow
 import Checkout from './pages/Checkout';
+import SimilarProducts from './pages/SimilarProducts';
 import GiftCheckout from './pages/GiftCheckout';
 import InviteFriends from './pages/InviteFriends';
 import Backers from './pages/Backers';
@@ -230,7 +233,13 @@ function Routes(props) {
       />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
-      <ProtectedRoute exact path="/cart" component={Checkout} />
+      {/* Checkout Flow */}
+      <ProtectedRoute
+        exact
+        path="/similar-products"
+        component={SimilarProducts}
+      />
+      <ProtectedRoute exact path="/checkout" component={Checkout} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/schedule-pickup" component={Mainpage} />
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
