@@ -25,9 +25,7 @@ class CheckoutStore {
     const local = localStorage.getItem('cart');
     let url = API_GET_CURRENT_CART;
     if (local) {
-      runInAction(() => {
-        this.cart = JSON.parse(local);
-      });
+      this.cart = JSON.parse(local);
       url += '/' + this.cart._id;
     }
 
@@ -43,9 +41,7 @@ class CheckoutStore {
       res = await axios.get(url, auth);
       localStorage.removeItem('cart');
     }
-    runInAction(() => {
-      this.cart = res.data;
-    });
+    this.cart = res.data;
     return res.data;
   }
 
@@ -58,19 +54,13 @@ class CheckoutStore {
       cart_id = this.order.cart_id;
     }
 
-    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
-    const url = `${
-      API_EDIT_CURRENT_CART + cart_id
-    }?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${
-      delivery.date
-    }`;
+    const url = API_EDIT_CURRENT_CART + cart_id;
     let res;
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.patch(url, data);
     } else {
       res = await axios.patch(url, data, auth);
     }
-
     this.cart = res.data;
     if (order_summary) {
       this.getOrderSummary(auth);

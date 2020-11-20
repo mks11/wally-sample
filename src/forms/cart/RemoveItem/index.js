@@ -9,10 +9,15 @@ import { logEvent } from 'services/google-analytics';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
 
-function RemoveItemForm({ item }) {
+function RemoveItemForm({ item, handleReinitializeCartSummary }) {
   const { routing, checkout, user, modalV2 } = useStores();
 
-  const handleClose = () => modalV2.close();
+  const handleClose = () => {
+    handleReinitializeCartSummary
+      ? handleReinitializeCartSummary()
+      : modalV2.close();
+  };
+
   const handleDelete = () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
 
@@ -34,7 +39,7 @@ function RemoveItemForm({ item }) {
         orderSummary,
         user.getDeliveryParams(),
       )
-      .then(() => modalV2.close())
+      .then(() => handleClose())
       .catch((e) => {
         const msg = e.response.data.error.message;
         console.error('Failed to add to cart', e);
@@ -42,21 +47,21 @@ function RemoveItemForm({ item }) {
   };
   return (
     <Box>
-      <Typography variant="h1" gutterBottom>
-        Remove from Cart
-      </Typography>
-      <Typography
-        gutterBottom
-      >{`Are you sure you want to remove ${item.name} from your cart?`}</Typography>
+      <Typography variant="h1">Remove from Cart</Typography>
+      <Box py={2}>
+        <Typography
+          gutterBottom
+        >{`Are you sure you want to remove ${item.name} from your cart?`}</Typography>
+      </Box>
       <Box py={1}>
-        <Grid container spacing={2}>
-          <Grid item>
-            <PrimaryWallyButton onClick={handleDelete}>
+        <Grid container spacing={2} justify="center">
+          <Grid item xs={4}>
+            <PrimaryWallyButton onClick={handleDelete} fullWidth>
               <Typography>Yes</Typography>
             </PrimaryWallyButton>
           </Grid>
-          <Grid item>
-            <DangerButton onClick={handleClose}>
+          <Grid item xs={4}>
+            <DangerButton onClick={handleClose} fullWidth>
               <Typography>No</Typography>
             </DangerButton>
           </Grid>
