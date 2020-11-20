@@ -296,12 +296,10 @@ class Mainpage extends Component {
         alt={'Thanksgiving Reusables Cornucopia'}
         img={img}
         justify="flex-start"
-        title={'Sapo Company'}
-        url="/shop/brands/sapo-company"
+        title={'Bulk Friday is Coming.'}
+        // url="/shop/brands/sapo-company"
       >
-        <Typography gutterBottom>
-          Bar soaps for that luxurious lather.
-        </Typography>
+        <Typography gutterBottom>Free shipping from 11/27 to 11/30</Typography>
       </HeroSlide>
     ));
 
@@ -633,7 +631,7 @@ function HeroSlideOverlay({ children, justify, title, url }) {
     >
       <Grid container justify={justify || 'flex-start'}>
         <Grid item xs={12} sm={8}>
-          {title && <HeroOverline>Limited Release</HeroOverline>}
+          {/* {title && <HeroOverline>Happy Holidays</HeroOverline>} */}
           {title && <HeroTitle>{title}</HeroTitle>}
           {children && children}
           {url && (
