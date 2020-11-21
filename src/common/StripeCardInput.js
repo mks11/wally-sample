@@ -92,11 +92,7 @@ function CardInput({ elements, onAdd, stripe }) {
               color="primary"
             />
           </Box>
-          <PrimaryWallyButton
-            variant="outlined"
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <PrimaryWallyButton type="submit" disabled={isSubmitting}>
             Add New Card
           </PrimaryWallyButton>
         </Form>
