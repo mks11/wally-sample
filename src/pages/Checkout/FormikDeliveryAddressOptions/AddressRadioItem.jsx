@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%', // to make label clickable for the entire width
     display: 'flex',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   label: {
     width: '100%',
@@ -28,7 +28,7 @@ export default function AddressRadioItem({
   const classes = useStyles();
 
   return (
-    <Box>
+    <Box display="flex">
       <FormControlLabel
         control={<Radio color="primary" />}
         classes={{ root: classes.root, label: classes.label }}
