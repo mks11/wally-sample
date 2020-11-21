@@ -9,9 +9,10 @@ function ShippingOptions({ name }) {
 
   const OPTIONS = [
     {
-      value: 'ups_ground',
-      name: 'UPS Ground',
       description: 'Delivery in one to five days.',
+      name: 'UPS Ground',
+      price: '8.99',
+      value: 'ups_ground',
     },
   ];
 
@@ -40,14 +41,20 @@ function ShippingOptions({ name }) {
         valueFn={(v) => v.value}
         Label={({ item }) => (
           <Box p={2}>
+            <Typography style={{ fontWeight: 'bold' }}>
+              ${item.price}
+            </Typography>
             <Typography>{item.name}</Typography>
             <Typography variant="body2" color="textSecondary">
-              {item.description}
+              {item.description} *
             </Typography>
           </Box>
         )}
         isChecked={(item) => item.value === selected}
       />
+      <Typography variant="body2" color="textSecondary">
+        * Delivery may take longer than usual because of COVID-19
+      </Typography>
     </CheckoutCard>
   );
 }
