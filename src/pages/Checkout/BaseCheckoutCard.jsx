@@ -8,10 +8,7 @@ import {
   Container,
   Collapse,
 } from '@material-ui/core';
-import {
-  Close as CloseIcon,
-  ArrowDropDown as ArrowDropDownIcon,
-} from '@material-ui/icons';
+import { CloseIcon, KeyboardArrowDownIcon } from 'Icons';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 export default function CheckoutCard({
@@ -50,7 +47,7 @@ export default function CheckoutCard({
                   onClick={handleOpen}
                   disabled={isDisabled || isOpen}
                 >
-                  <ArrowDropDownIcon fontSize="large" />
+                  <KeyboardArrowDownIcon fontSize="large" />
                 </IconButton>
               )}
             </Grid>
