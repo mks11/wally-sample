@@ -1,5 +1,18 @@
 import React from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Badge, Box, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -40,
+    top: 0,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '8px',
+    color: '#FFF',
+    fontFamily: ['Sofia Pro', 'sans-serif'].join(),
+    fontWeight: 'bold',
+  },
+}))(Badge);
 
 export default function Address({
   address = {},
@@ -19,6 +32,9 @@ export default function Address({
       <Box flexGrow={1} width="100%">
         <Typography style={isSelected && { fontWeight: 'bold' }}>
           {name}
+          {isPreferredAddress && (
+            <StyledBadge badgeContent="Default" color="primary" />
+          )}
         </Typography>
         <Typography style={isSelected && { fontWeight: 'bold' }}>
           {street_address_unit},
@@ -26,13 +42,9 @@ export default function Address({
         <Typography style={isSelected && { fontWeight: 'bold' }}>
           {city}, {state} {zip}
         </Typography>
-      </Box>
-      <Box flexShrink={1}>
-        {isPreferredAddress && (
-          <Typography variant="h6" component="span">
-            Preferred
-          </Typography>
-        )}
+        <Typography style={isSelected && { fontWeight: 'bold' }}>
+          {telephone}
+        </Typography>
       </Box>
     </Box>
   );
