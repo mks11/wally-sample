@@ -1,72 +1,59 @@
-import React, { Component } from "react";
-import { logPageView } from "services/google-analytics";
+import React, { useEffect } from 'react';
 
-import { connect } from "../utils";
+import { observer } from 'mobx-react';
+import { useStores } from 'hooks/mobx';
+import { Box, List, ListItem, Typography } from '@material-ui/core';
+import Page from './shared/Page';
 
-import Head from "../common/Head";
+function Backers() {
+  const {
+    user: userStore,
+    modal: modalStore,
+    backer: backerStore,
+  } = useStores();
 
-class Backers extends Component {
-  constructor(props) {
-    super(props);
-
-    this.backerStore = this.props.store.backer;
-    this.modalStore = this.props.store.modal;
-    this.routing = this.props.store.routing;
-    this.userStore = this.props.store.user;
-  }
-
-  componentDidMount() {
-    // Store page view in google analytics
-    const { location } = this.routing;
-    logPageView(location.pathname);
-    this.userStore.getStatus();
-    this.loadData();
-  }
-
-  loadData() {
-    this.backerStore
+  useEffect(() => {
+    userStore.getStatus();
+    backerStore
       .loadBackers()
       .then((data) => {
         // data loaded
       })
       .catch((e) => {
-        console.error("Failed to load backers", e);
-        this.modalStore.toggleModal("error");
+        modalStore.toggleModal('error');
       });
-  }
+  }, [userStore, backerStore, modalStore]);
 
-  render() {
-    return (
-      <div className="App">
-        <Head
-          title="Our Backers"
-          description="The Wally Shop's Kick-Starter backers."
-        />
-        <section className="page-section aw-our--story">
-          <div className="container">
-            <div className="text-center">
-              <h1>Our Backers</h1>
-              <h3>
-                We are extremely grateful to the following people who made this
-                all possible:
-              </h3>
-              <hr />
-            </div>
-          </div>
-        </section>
-        <div className="container">
-          <div className="row">
-            {this.backerStore.backers.map((b, key) => (
-              <span className="col-sm-4" key={key}>
-                <p className="text-center">{b}</p>
-              </span>
-            ))}
-            <br />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <Page description="The Wally Shop's Kick-Starter backers.">
+      <Box textAlign="center" px={2} mt={4}>
+        <Typography variant="h1" gutterBottom>
+          Our Backers
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          We are extremely grateful to the following people who made this all
+          possible:
+        </Typography>
+        <hr />
+      </Box>
+      <Box justifyContent="center">
+        <List>
+          {backerStore.backers.map((b, key) => (
+            <ListItem
+              key={key}
+              style={{ justifyContent: 'center' }}
+              alignItems="center"
+            >
+              <Typography align="center" variant="body1">
+                {b}
+              </Typography>
+            </ListItem>
+          ))}
+          <br />
+        </List>
+      </Box>
+    </Page>
+  );
 }
 
-export default connect("store")(Backers);
+export default observer(Backers);
