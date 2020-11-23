@@ -1,7 +1,6 @@
-import { Box, Container } from '@material-ui/core';
+import { Box, Container, Typography } from '@material-ui/core';
 import React from 'react';
 import Head from '../../common/Head';
-import Title from '../../common/page/Title';
 
 export default function Page({
   children,
@@ -13,13 +12,15 @@ export default function Page({
 }) {
   return (
     <Box style={style} {...rest}>
-      <Head title={title} description={description} />
-      {title && (
-        <Typography variant="h1" gutterBottom>
-          {title}
-        </Typography>
-      )}
-      <Container maxWidth="xl">{children}</Container>
+      <Container maxWidth="xl">
+        <Head title={title} description={description} />
+        {title && (
+          <Box my={4}>
+            <Typography variant="h1">{title}</Typography>
+          </Box>
+        )}
+        {children}
+      </Container>
     </Box>
   );
 }
