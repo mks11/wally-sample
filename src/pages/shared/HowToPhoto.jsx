@@ -10,7 +10,7 @@ function HowToPhoto({ src450, src600, alt, style, ...rest }) {
       src={src600}
       alt={alt}
       style={{
-        maxWidth: '90%',
+        maxWidth: '100%',
         height: 'auto',
         // alignSelf: 'center',
         // margin: '0 auto',

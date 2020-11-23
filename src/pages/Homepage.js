@@ -18,31 +18,14 @@ import returnPackaging450 from 'images/return-packaging-450.jpg';
 import returnPackaging600 from 'images/return-packaging-600.jpg';
 import { useStores } from 'hooks/mobx';
 
-import { Box, Grid, Typography, Container } from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
 
 import styled from 'styled-components';
 import HowTo from './shared/HowTo';
 import HowToPhoto from './shared/HowToPhoto';
 import Page from './shared/Page';
-
-const ScrollingContainer = styled('div')`
-  display: inline-block;
-  animation: marquee 20s linear infinite;
-`;
-
-const ScrollingContainer2 = styled('div')`
-  display: inline-block;
-  animation: marquee2 20s linear infinite;
-  /* Must be half the animation duration of both divs so it stats in sync to fill void left by completed transtition of first div */
-  animation-delay: 10s;
-`;
-
-const ScrollingH1 = styled('h1')`
-  text-align: center;
-  font-family: 'NEONGLOW';
-  color: #3c2ebf;
-`;
+import PageSection from 'common/PageSection';
 
 function Homepage({ location }) {
   const [state, setState] = useState({
@@ -103,9 +86,11 @@ function Homepage({ location }) {
   };
 
   const StartShoppingButton = () => (
-    <PrimaryWallyButton onClick={handleSignup} style={{ padding: '8px 44px' }}>
-      START SHOPPING
-    </PrimaryWallyButton>
+    <Box my={5}>
+      <PrimaryWallyButton onClick={handleSignup}>
+        Start Shopping
+      </PrimaryWallyButton>
+    </Box>
   );
 
   return (
@@ -114,21 +99,8 @@ function Homepage({ location }) {
         backgroundImage: 'linear-gradient(#fae1ff, #fff)',
       }}
     >
-      <Box overflow="hidden" whiteSpace="nowrap" mx={6}>
-        <ScrollingContainer>
-          <ScrollingH1>
-            Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-            nationwide ~{' '}
-          </ScrollingH1>
-        </ScrollingContainer>
-        <ScrollingContainer2>
-          <ScrollingH1>
-            Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-            nationwide ~{' '}
-          </ScrollingH1>
-        </ScrollingContainer2>
-      </Box>
-      <Box>
+      <NowShippingNationWideBanner />
+      <PageSection>
         <Grid
           display="flex"
           flex={1}
@@ -136,45 +108,44 @@ function Homepage({ location }) {
           justifyContent="center"
           container
         >
-          <Grid item sm={6} align="center">
-            <IntroPhoto />
+          <Grid item xs={12} sm={6} align="center">
+            <Container maxWidth="sm">
+              <IntroPhoto />
+            </Container>
           </Grid>
           <Grid item sm={6}>
             <Container maxWidth="sm">
-              <Typography align="center" variant="h1" gutterBottom>
-                Shop package-free groceries
-              </Typography>
-              <Typography align="center" variant="body1" component="h4">
-                {state.heroDescription}
-              </Typography>
-              <Box mt={5} display="flex" justifyContent="center">
+              <Box my={5}>
+                <Typography variant="h1" gutterBottom>
+                  Shop package-free groceries
+                </Typography>
+                <Typography variant="body1" component="h4" gutterBottom>
+                  {state.heroDescription}
+                </Typography>
                 <StartShoppingButton />
               </Box>
             </Container>
           </Grid>
         </Grid>
-      </Box>
+      </PageSection>
 
-      <Box>
-        <Box textAlign="center" my={6} maxWidth="560px" marginX="auto">
+      <PageSection>
+        <Box px={2}>
           <Typography variant="h2" gutterBottom>
-            Do you with reusables.
+            Do you, with reusables.
           </Typography>
           <Typography variant="body1" gutterBottom>
             The Wally Shop is the platform connecting you with your favorite
-            brands 100% waste-free IRL and we are now available nationwide{' '}
-            <span role="img" aria-label="sprinkle">
-              ✨
-            </span>{' '}
-            Our vision is to help you shop for everything in all reusable
-            packaging (cleaning, beauty, pet supplies, you name it!).
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            We hope you’re as ready as we are to join the #reusablesrevolution
-            and change the world in dreamy purple ~ one order at a time.
-            #wallydreamsinpurple
+            brands 100% waste-free IRL and we are now available nationwide. Our
+            vision is to help you shop for everything in all reusable packaging
+            (cleaning, beauty, pet supplies, you name it!). We hope you’re as
+            ready as we are to join the #reusablesrevolution and change the
+            world in dreamy purple ~ one order at a time. #wallydreamsinpurple
           </Typography>
         </Box>
+      </PageSection>
+
+      <PageSection>
         <HowTo
           title="Order"
           description="Choose from hundreds of responsibly-made, Trader Joe’s
@@ -190,6 +161,8 @@ function Homepage({ location }) {
           }
           photoAlign="right"
         />
+      </PageSection>
+      <PageSection>
         <HowTo
           title="Receive"
           description="Your order will arrive at your doorHowTo in completely reusable,
@@ -204,6 +177,8 @@ function Homepage({ location }) {
           }
           photoAlign="left"
         />
+      </PageSection>
+      <PageSection>
         <HowTo
           title="Return"
           description="Once finished, you can return all your packaging (jars, totes,
@@ -220,16 +195,63 @@ function Homepage({ location }) {
           }
           photoAlign="right"
         />
-
-        <Box justifyContent="center" textAlign="center">
+      </PageSection>
+      <PageSection>
+        <Box px={2} my={5}>
+          <Typography variant="h2" gutterBottom>
+            Experience The Wally Shop
+          </Typography>
+          <Typography gutterBottom>
+            Thousands of shoppers are joining the reusables revolution. Now,
+            it's your turn.
+          </Typography>
           <StartShoppingButton />
         </Box>
-      </Box>
+      </PageSection>
     </Page>
   );
 }
 
 export default observer(Homepage);
+
+const ScrollingContainer = styled('div')`
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+`;
+
+const ScrollingContainer2 = styled('div')`
+  display: inline-block;
+  animation: marquee2 20s linear infinite;
+
+  /* Must be half the animation duration of both divs so it stats in sync to
+  fill void left by completed transtition of first div */
+  animation-delay: 10s;
+`;
+
+const ScrollingH1 = styled('h1')`
+  text-align: center;
+  font-family: 'NEONGLOW';
+  color: #3c2ebf;
+`;
+
+function NowShippingNationWideBanner() {
+  return (
+    <Box overflow="hidden" whiteSpace="nowrap">
+      <ScrollingContainer>
+        <ScrollingH1>
+          Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+          nationwide ~{' '}
+        </ScrollingH1>
+      </ScrollingContainer>
+      <ScrollingContainer2>
+        <ScrollingH1>
+          Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+          nationwide ~{' '}
+        </ScrollingH1>
+      </ScrollingContainer2>
+    </Box>
+  );
+}
 
 function IntroPhoto() {
   return (

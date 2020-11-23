@@ -1,43 +1,39 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 export default function HowTo({
-  title,
-  description,
-  photoAlign,
   children,
+  description,
+  justify,
+  photoAlign,
   photo,
+  title,
   ...rest
 }) {
   return (
-    <Box my={12} display="flex">
-      <Grid
-        container
-        spacing={4}
-        justify="center"
-        direction={photoAlign === 'left' ? 'row-reverse' : 'row'}
-      >
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          justify="center"
-          alignItems="center"
-          style={{
-            display: 'flex',
-          }}
-        >
-          <Box>
-            <Typography variant="h1" gutterBottom>
+    <Grid
+      container
+      justify={justify || 'center'}
+      alignItems="center"
+      direction={photoAlign === 'left' ? 'row-reverse' : 'row'}
+    >
+      <Grid item xs={12} sm={6}>
+        <Box my={5}>
+          <Container maxWidth="sm">
+            <Typography variant="h2" gutterBottom>
               {title}
             </Typography>
             <Typography variant="body1">{description}</Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Box textAlign="center">{photo}</Box>
-        </Grid>
+          </Container>
+        </Box>
       </Grid>
-    </Box>
+      {photo && (
+        <Grid item xs={12} sm={6}>
+          <Container maxWidth="sm">
+            <Box textAlign="center">{photo}</Box>
+          </Container>
+        </Grid>
+      )}
+    </Grid>
   );
 }
