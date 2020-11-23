@@ -27,13 +27,7 @@ import HowToPhoto from './shared/HowToPhoto';
 import Page from './shared/Page';
 import PageSection from 'common/PageSection';
 
-function Homepage({ location }) {
-  const [state, setState] = useState({
-    audienceSource: '',
-    heroDescription:
-      "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
-  });
-
+function Homepage() {
   const {
     user: userStore,
     modalV2: modalV2Store,
@@ -41,44 +35,30 @@ function Homepage({ location }) {
     metric: metricStore,
   } = useStores();
 
-  const setUtilState = (newS) => {
-    setState((prev) => ({ ...prev, newS }));
-  };
-
   useEffect(() => {
     const { location } = routingStore;
 
     logPageView(location.pathname);
 
+    // Not sure if this does anything useful anymore.
     if (qs.parse(location.search, { ignoreQueryPrefix: true }).color) {
       if (
         qs.parse(location.search, { ignoreQueryPrefix: true }).color ===
         'purple'
       ) {
-        setUtilState({ audienceSource: 'ig' });
         metricStore.triggerAudienceSource('ig');
       }
     }
 
-    userStore
-      .getStatus()
-      .then((status) => {
-        if (status) {
-          const user = userStore.user;
-          console.log(user.type);
-          if (user.type === 'admin') {
-            routingStore.push('/manage/retail');
-          } else {
-            routingStore.push('/main');
-          }
-        }
-        setUtilState({ fetching: false });
-      })
-      .catch((e) => {
-        console.error('Failed to get status', e);
-        setUtilState({ fetching: false });
-      });
-  }, [userStore, metricStore, routingStore]);
+    if (userStore.user) {
+      const { user } = userStore;
+      if (user.type === 'admin') {
+        routingStore.push('/manage/retail');
+      } else {
+        routingStore.push('/main');
+      }
+    }
+  }, [userStore.user, metricStore, routingStore]);
 
   const handleSignup = (e) => {
     logModalView('/signup-zip');
@@ -101,13 +81,7 @@ function Homepage({ location }) {
     >
       <NowShippingNationWideBanner />
       <PageSection>
-        <Grid
-          display="flex"
-          flex={1}
-          alignItems="center"
-          justifyContent="center"
-          container
-        >
+        <Grid display="flex" flex={1} alignItems="center" container>
           <Grid item xs={12} sm={6} align="center">
             <Container maxWidth="sm">
               <IntroPhoto />
@@ -120,7 +94,9 @@ function Homepage({ location }) {
                   Shop package-free groceries
                 </Typography>
                 <Typography variant="body1" component="h4" gutterBottom>
-                  {state.heroDescription}
+                  In response to Covid-19, The Wally Shop has no more waitlist,
+                  making access to food available to all.\n For every order
+                  placed, we'll also be donating $1 to Feeding America.
                 </Typography>
                 <StartShoppingButton />
               </Box>
