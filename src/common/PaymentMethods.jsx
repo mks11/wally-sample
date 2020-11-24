@@ -156,7 +156,6 @@ export const CreditCard = ({ paymentMethod }) => {
     </Box>
   );
 };
-
 export function CreditCardLogo({ brand }) {
   var [logo, setLogo] = useState(undefined);
   const alt = brand ? brand + ' logo' : 'Credit card logo.';
@@ -187,7 +186,7 @@ export function CreditCardLogo({ brand }) {
           <img
             src={logo}
             alt={alt}
-            style={{ width: '32px', height: '22px', maxHeight: '32px' }}
+            style={{ width: '32px', maxHeight: '32px' }}
           />
         </Box>
       ) : (
