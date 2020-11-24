@@ -5,10 +5,10 @@ import Address from './Address';
 
 export default function AddressList({
   addresses,
-  selected,
-  preferred_address,
-  onChange,
+  defaultAddressId,
   isLocked,
+  onChange,
+  selected,
 }) {
   const handleChange = (e) => {
     onChange(e.target.value);
@@ -20,15 +20,18 @@ export default function AddressList({
 
   return (
     <RadioGroup aria-label={'address'} onChange={handleChange}>
-      {addresses.map((addr) => {
+      {addresses.map((address) => {
+        // Stringify the address to enable the handle select method to be used directly
+        // with address data from the user's list of addresses and from API responses
+        const value = JSON.stringify(address);
         return (
           <AddressRadioItem
-            value={addr.address_id}
-            address={addr}
-            key={addr.address_id}
-            selected_id={selected._id}
+            key={address.address_id}
+            address={address}
+            isPreferredAddress={defaultAddressId === address.address_id}
             onChange={onChange}
-            isPreferredAddress={preferred_address === addr.address_id}
+            selected={selected}
+            value={value}
           />
         );
       })}

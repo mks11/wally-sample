@@ -21,11 +21,13 @@ const useStyles = makeStyles(() => ({
 
 export default function AddressRadioItem({
   address,
-  selected_id,
+  selected,
   isPreferredAddress,
   value,
 }) {
   const classes = useStyles();
+  const parsedVal = JSON.parse(value);
+  const isSelected = parsedVal._id === selected._id;
 
   return (
     <Box display="flex">
@@ -33,7 +35,7 @@ export default function AddressRadioItem({
         control={<Radio color="primary" />}
         classes={{ root: classes.root, label: classes.label }}
         value={value}
-        checked={value === selected_id}
+        checked={isSelected}
         label={
           <Address address={address} isPreferredAddress={isPreferredAddress} />
         }
