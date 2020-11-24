@@ -6,10 +6,9 @@ import about450 from 'images/about-450.jpg';
 import about600 from 'images/about-600.jpg';
 
 import { Box, Typography, Grid } from '@material-ui/core';
-import HowToPhoto from './shared/HowToPhoto';
-import PageSection from 'common/PageSection';
 import { useStores } from 'hooks/mobx';
 import Page from './shared/Page';
+import PageSection from 'common/PageSection';
 
 function About() {
   const { routing: routingStore } = useStores();

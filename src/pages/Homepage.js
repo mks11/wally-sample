@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
 import { observer } from 'mobx-react';
@@ -23,9 +23,9 @@ import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
 
 import styled from 'styled-components';
 import HowTo from './shared/HowTo';
-import HowToPhoto from './shared/HowToPhoto';
 import Page from './shared/Page';
 import PageSection from 'common/PageSection';
+import ResponsivePhoto from 'common/ResponsivePhoto';
 
 function Homepage() {
   const {
@@ -122,9 +122,9 @@ function Homepage() {
           description="Choose from hundreds of responsibly-made, price-competitive bulk foods. At checkout, you'll be charged a
               deposit for your packaging."
           photo={
-            <HowToPhoto
-              src450={order450}
-              src600={order600}
+            <ResponsivePhoto
+              mobileSrc={order450}
+              desktopSrc={order600}
               alt="Man giving money in exchange for a jar of pasta."
             />
           }
@@ -138,9 +138,9 @@ function Homepage() {
               returnable packaging. The shipping tote it arrives in folds up for
               easy storage. Simple, convenient, 100% waste free shopping."
           photo={
-            <HowToPhoto
-              src450={tote450}
-              src600={tote600}
+            <ResponsivePhoto
+              mobileSrc={tote450}
+              desktopSrc={tote600}
               alt="The Wally Shop's reusable tote."
             />
           }
@@ -152,9 +152,9 @@ function Homepage() {
           title="Return"
           description="Once finished, you'll schedule a free packaging pick up or leave your packaging with your courier during a future delivery. Once received at our warehouse, your deposit is credited back to you and the packaging is cleaned to be put back into circulation."
           photo={
-            <HowToPhoto
-              src450={returnPackaging450}
-              src600={returnPackaging600}
+            <ResponsivePhoto
+              mobileSrc={returnPackaging450}
+              desktopSrc={returnPackaging600}
               alt="Returning an empty jar."
             />
           }
@@ -220,9 +220,9 @@ function NowShippingNationWideBanner() {
 
 function IntroPhoto() {
   return (
-    <HowToPhoto
-      src450={intro450}
-      src600={intro600}
+    <ResponsivePhoto
+      mobileSrc={intro450}
+      desktopSrc={intro600}
       alt="Man holding jar of green lentils."
     />
   );

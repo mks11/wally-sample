@@ -12,7 +12,7 @@ import returnPackagingHd600 from 'images/return-packaging-hd-600.jpg';
 import { observer } from 'mobx-react';
 
 import HowTo from './shared/HowTo';
-import HowToPhoto from './shared/HowToPhoto';
+import ResponsivePhoto from 'common/ResponsivePhoto';
 
 import { Box, Typography } from '@material-ui/core';
 import Page from './shared/Page';
@@ -51,9 +51,9 @@ function HowItWorks() {
                   a deposit for your packaging (don’t worry, you will be getting
                   it back!)."
         photo={
-          <HowToPhoto
-            src450={orderHd450}
-            src600={orderHd600}
+          <ResponsivePhoto
+            mobileSrc={orderHd450}
+            desktopSrc={orderHd600}
             alt="Man giving money in exchange for a jar of pasta."
           />
         }
@@ -69,9 +69,9 @@ function HowItWorks() {
             "
         photoAlign="left"
         photo={
-          <HowToPhoto
-            src450={toteHd450}
-            src600={toteHd600}
+          <ResponsivePhoto
+            mobileSrc={toteHd450}
+            desktopSrc={toteHd600}
             alt="The Wally Shop's reusable tote."
           />
         }
@@ -88,9 +88,9 @@ function HowItWorks() {
                 circulation.
             "
         photo={
-          <HowToPhoto
-            src450={returnPackagingHd450}
-            src600={returnPackagingHd600}
+          <ResponsivePhoto
+            mobileSrc={returnPackagingHd450}
+            desktopSrc={returnPackagingHd600}
             alt="Returning an empty jar."
           />
         }
