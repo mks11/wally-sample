@@ -25,11 +25,6 @@ class UserStore {
   status = false;
   token = '';
 
-  // for account page
-  addressModal = false;
-  addressModalOpen = false;
-  activeAddress = null;
-
   selectedDeliveryAddress = null;
   selectedDeliveryTime = null;
 
@@ -137,21 +132,6 @@ class UserStore {
   async edit(data) {
     const res = await axios.patch(API_EDIT_USER, data, this.getHeaderAuth());
     return res.data;
-  }
-
-  showAddressModal(data) {
-    this.activeAddress = data;
-    this.addressModal = true;
-    this.addressModalOpen = true;
-  }
-
-  hideAddressModal() {
-    this.activeAddress = null;
-    this.addressModal = false;
-  }
-
-  closeAddressModal() {
-    this.addressModalOpen = false;
   }
 
   getHeaderAuth() {
@@ -465,9 +445,6 @@ decorate(UserStore, {
   user: observable,
   status: observable,
   token: observable,
-  addressModal: observable,
-  addressModalOpen: observable,
-  activeAddress: observable,
   getDeliveryParams: action,
 
   promoModal: observable,
@@ -503,9 +480,6 @@ decorate(UserStore, {
   signup: action,
   logout: action,
   getStatus: action,
-  showAddressModal: action,
-  hideAddressModal: action,
-  closeAddressModal: action,
 
   referFriend: action,
 

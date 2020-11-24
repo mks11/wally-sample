@@ -8,17 +8,23 @@ import { connect } from '../utils';
 
 import { Input } from 'reactstrap';
 import Title from '../common/page/Title';
-import AddressModal from './account/AddressModal';
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
+
+// Addresses
+import AddressCreateForm from 'forms/Address/Create';
 
 // Payment Methods
 import StripeCardInput from 'common/StripeCardInput';
 import { PaymentMethod } from 'common/PaymentMethods';
+
+// Styled Components
 import {
   PrimaryTextButton,
   PrimaryWallyButton,
   DangerButton,
 } from 'styled-component-lib/Buttons';
+
+// Material UI
 import {
   Box,
   Button,
@@ -29,7 +35,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
-import AddIcon from '@material-ui/icons/Add';
+import { AddIcon } from 'Icons';
+
 class Account extends Component {
   constructor(props) {
     super(props);
@@ -191,9 +198,18 @@ class Account extends Component {
           </div>
         </section>
 
-        <section className="page-section aw-account--address pt-2">
-          <div className="container">
-            <Typography variant="h2">Addresses</Typography>
+        <Box component="section" my={4}>
+          <Container maxWidth="xl">
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              mb={2}
+            >
+              <Typography variant="h2">Addresses</Typography>
+              <AddNewAddress />
+            </Box>
+            <Divider />
             <ul className="list-addresses">
               {addresses.map((data, index) => (
                 <li key={index}>
@@ -285,14 +301,8 @@ class Account extends Component {
                 </li>
               ))}
             </ul>
-            <button
-              className="btn btn-icon-transparent mt-4"
-              onClick={(e) => this.userStore.showAddressModal()}
-            >
-              <i className="ico ico-add-circle mr-3"></i>Add new address
-            </button>
-          </div>
-        </section>
+          </Container>
+        </Box>
 
         <Box component="section">
           <Container maxWidth="xl">
@@ -300,6 +310,7 @@ class Account extends Component {
               display="flex"
               alignItems="center"
               justifyContent="space-between"
+              mb={2}
             >
               <Typography variant="h2">Payment Methods</Typography>
               <AddNewPaymentMethod />
@@ -324,14 +335,25 @@ class Account extends Component {
             </Box>
           </Container>
         </Box>
-
-        {this.userStore.addressModalOpen ? <AddressModal /> : null}
       </div>
     );
   }
 }
 
 export default connect('store')(Account);
+
+function AddNewAddress() {
+  const { modalV2: modalV2Store } = useStores();
+  const handleAddNewAddress = () => {
+    modalV2Store.open(<AddressCreateForm />, 'left');
+  };
+
+  return (
+    <PrimaryTextButton onClick={handleAddNewAddress}>
+      <AddIcon /> New
+    </PrimaryTextButton>
+  );
+}
 
 function AddNewPaymentMethod() {
   const { modalV2: modalV2Store } = useStores();
