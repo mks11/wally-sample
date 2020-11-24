@@ -332,12 +332,10 @@ class UserStore {
     runInAction(() => (this.isAuthenticating = true));
     this.readStorage();
 
-    runInAction(() => {
-      if (!this.token && !this.token.accessToken) {
-        this.status = false;
-        return this.status;
-      }
-    });
+    if (!this.token && !this.token.accessToken) {
+      this.status = false;
+      return this.status;
+    }
 
     this.saveLocalAddresses();
 
@@ -345,21 +343,19 @@ class UserStore {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
       let status = resp.data.status && localStorage.getItem('user');
 
-      runInAction(() => {
-        if (resp.data.status && localStorage.getItem('user')) {
-          this.status = true;
-          // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-          this.user = JSON.parse(localStorage.getItem('user'));
-          if (update) {
-            this.getUser();
-          }
-        } else {
-          status = false;
-          this.status = false;
-          this.user = null;
-          this.logout();
+      if (resp.data.status && localStorage.getItem('user')) {
+        this.status = true;
+        // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
+        this.user = JSON.parse(localStorage.getItem('user'));
+        if (update) {
+          this.getUser();
         }
-      });
+      } else {
+        status = false;
+        this.status = false;
+        this.user = null;
+        this.logout();
+      }
 
       return status;
     } catch (e) {

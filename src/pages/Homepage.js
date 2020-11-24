@@ -50,6 +50,10 @@ function Homepage() {
       }
     }
 
+    redirectToShopIfLoggedIn();
+  }, [userStore.user, metricStore, routingStore]);
+
+  async function redirectToShopIfLoggedIn() {
     if (userStore.user) {
       const { user } = userStore;
       if (user.type === 'admin') {
@@ -57,8 +61,15 @@ function Homepage() {
       } else {
         routingStore.push('/main');
       }
+    } else {
+      try {
+        await userStore.getStatus();
+      } catch (error) {
+        // TODO: Implement a more elegant error handler than this.
+        console.error("Couldn't check user's auth status.");
+      }
     }
-  }, [userStore.user, metricStore, routingStore]);
+  }
 
   const handleSignup = (e) => {
     logModalView('/signup-zip');
@@ -91,12 +102,12 @@ function Homepage() {
             <Container maxWidth="sm">
               <Box my={5}>
                 <Typography variant="h1" gutterBottom>
-                  Shop package-free groceries
+                  Do you, with reusables.
                 </Typography>
-                <Typography variant="body1" component="h4" gutterBottom>
-                  In response to Covid-19, The Wally Shop has no more waitlist,
-                  making access to food available to all.\n For every order
-                  placed, we'll also be donating $1 to Feeding America.
+                <Typography variant="body1" gutterBottom>
+                  The Wally Shop connects you with your favorite brands 100%
+                  waste-free. Our vision is to help you shop for everything in
+                  all reusable packaging. We're now available nationwide!
                 </Typography>
                 <StartShoppingButton />
               </Box>
@@ -106,28 +117,10 @@ function Homepage() {
       </PageSection>
 
       <PageSection>
-        <Box px={2}>
-          <Typography variant="h2" gutterBottom>
-            Do you, with reusables.
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            The Wally Shop is the platform connecting you with your favorite
-            brands 100% waste-free IRL and we are now available nationwide. Our
-            vision is to help you shop for everything in all reusable packaging
-            (cleaning, beauty, pet supplies, you name it!). We hope you’re as
-            ready as we are to join the #reusablesrevolution and change the
-            world in dreamy purple ~ one order at a time. #wallydreamsinpurple
-          </Typography>
-        </Box>
-      </PageSection>
-
-      <PageSection>
         <HowTo
           title="Order"
-          description="Choose from hundreds of responsibly-made, Trader Joe’s
-              price-competitive bulk foods. At checkout, you will be charged a
-              deposit for your packaging (don’t worry, you will be getting it
-              back!)."
+          description="Choose from hundreds of responsibly-made, price-competitive bulk foods. At checkout, you'll be charged a
+              deposit for your packaging."
           photo={
             <HowToPhoto
               src450={order450}
@@ -141,7 +134,7 @@ function Homepage() {
       <PageSection>
         <HowTo
           title="Receive"
-          description="Your order will arrive at your doorHowTo in completely reusable,
+          description="Your order will arrive at your door in completely reusable,
               returnable packaging. The shipping tote it arrives in folds up for
               easy storage. Simple, convenient, 100% waste free shopping."
           photo={
@@ -157,11 +150,7 @@ function Homepage() {
       <PageSection>
         <HowTo
           title="Return"
-          description="Once finished, you can return all your packaging (jars, totes,
-              anything we send to you, we take back and reuse) to a FedEx/UPS
-              delivery courier on a future delivery or schedule a free pick-up
-              on the website. Your deposit is credited back to you and the
-              packaging is cleaned to be put back into circulation."
+          description="Once finished, you'll schedule a free packaging pick up or leave your packaging with your courier during a future delivery. Once received at our warehouse, your deposit is credited back to you and the packaging is cleaned to be put back into circulation."
           photo={
             <HowToPhoto
               src450={returnPackaging450}
