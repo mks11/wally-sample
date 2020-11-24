@@ -3,26 +3,20 @@ import CheckoutCard from './../BaseCheckoutCard';
 import PaymentSelect from 'common/PaymentSelect';
 import { useStores } from 'hooks/mobx';
 import StripeCardInput from 'common/StripeCardInput';
-import { Box, Divider, Typography } from '@material-ui/core';
-import { AddIcon, KeyboardArrowLeftIcon } from 'Icons';
+import { Box, Container, Divider, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { CreditCard } from 'common/PaymentMethods';
 import { observer } from 'mobx-react';
 import { useFormikContext } from 'formik';
-import {
-  PrimaryTextButton,
-  PrimaryWallyButton,
-} from 'styled-component-lib/Buttons';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 function Payment({ name, options = [], onAdd }) {
   const { modalV2: modalV2Store, user: userStore } = useStores();
   const [selectedPaymentId, setSelectedPaymentId] = useState(undefined);
   const { setFieldValue } = useFormikContext() || {};
   const [error, setError] = useState(false);
-  const preferredPaymentId = userStore.user.preferred_payment;
-  const selectedPayment =
-    options.find((v) => v._id === selectedPaymentId) || {};
-  const { last4 } = selectedPayment;
 
+  const preferredPaymentId = userStore.user.preferred_payment;
   useEffect(() => {
     if (!selectedPaymentId && preferredPaymentId) {
       setSelectedPaymentId(preferredPaymentId);
@@ -30,59 +24,14 @@ function Payment({ name, options = [], onAdd }) {
     }
   }, [options, selectedPaymentId]);
 
-  useEffect(() => {
-    handleOpenPaymentSelect();
-  }, [selectedPaymentId]);
-
   const handlePaymentSelect = (id) => {
-    console.log(id);
     setSelectedPaymentId(id);
     setFieldValue && setFieldValue(name, id);
   };
 
-  const handleClose = () => {
-    modalV2Store.close();
-  };
-
-  const handleOpenPaymentSelect = () => {
+  const openCreateCardModal = () => {
     modalV2Store.open(
       <>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h1">Payment</Typography>
-          <PrimaryWallyButton onClick={openCreateCardModal}>
-            <AddIcon />
-            New
-          </PrimaryWallyButton>
-        </Box>
-        <Box py={2}>
-          <Divider />
-        </Box>
-        <PaymentSelect
-          options={options}
-          selectedId={selectedPaymentId}
-          onSelect={handlePaymentSelect}
-        />
-        <Box mt={2}>
-          <PrimaryWallyButton onClick={handleClose} fullWidth>
-            Save
-          </PrimaryWallyButton>
-        </Box>
-      </>,
-      'left',
-    );
-  };
-
-  function openCreateCardModal() {
-    modalV2Store.open(
-      <>
-        <Box my={2}>
-          <PrimaryTextButton
-            onClick={handleOpenPaymentSelect}
-            startIcon={<KeyboardArrowLeftIcon />}
-          >
-            Back
-          </PrimaryTextButton>
-        </Box>
         <Typography variant="h1" gutterBottom>
           New Payment Method
         </Typography>
@@ -90,12 +39,16 @@ function Payment({ name, options = [], onAdd }) {
       </>,
       'left',
     );
-  }
+  };
 
+  const selectedPayment =
+    options.find((v) => v._id === selectedPaymentId) || {};
+  const { last4 } = selectedPayment;
+  const collapsedHeight = last4 ? 80 : 10;
   return (
     <CheckoutCard
       title="Payment"
-      handleOpen={handleOpenPaymentSelect}
+      collapsedHeight={collapsedHeight}
       isDisabled={last4 ? false : true}
     >
       <Box p={1}>
@@ -105,6 +58,27 @@ function Payment({ name, options = [], onAdd }) {
           <Typography> No payment information on file. </Typography>
         )}
       </Box>
+      <Box p={1}>
+        <Container maxWidth="xs" disableGutters>
+          <Box display="flex" justifyContent="center">
+            <PrimaryWallyButton
+              variant="outlined"
+              onClick={openCreateCardModal}
+            >
+              <AddIcon />
+              Add Payment Method
+            </PrimaryWallyButton>
+          </Box>
+        </Container>
+      </Box>
+      <Box py={2}>
+        <Divider />
+      </Box>
+      <PaymentSelect
+        options={options}
+        selectedId={selectedPaymentId}
+        onSelect={handlePaymentSelect}
+      />
 
       {error && (
         <Typography color="error"> Failed to add new payment </Typography>

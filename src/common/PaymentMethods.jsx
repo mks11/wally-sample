@@ -160,16 +160,14 @@ export const CreditCard = ({ paymentMethod }) => {
 export function CreditCardLogo({ brand }) {
   var [logo, setLogo] = useState(undefined);
   const alt = brand ? brand + ' logo' : 'Credit card logo.';
-
   useEffect(() => {
     async function loadLogo() {
       const logoSVG = await getCCLogo(brand);
       if (logoSVG) {
         setLogo(logoSVG.default);
-      }
+      } else setLogo(undefined);
     }
-
-    if (brand) loadLogo();
+    loadLogo();
   }, [brand]);
 
   return (

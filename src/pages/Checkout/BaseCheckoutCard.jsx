@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  Box,
+  Card,
+  Grid,
+  Typography,
+  IconButton,
+  Container,
+  Collapse,
+} from '@material-ui/core';
+import { CloseIcon, KeyboardArrowDownIcon } from 'Icons';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
-import { Box, Card, Grid, Typography } from '@material-ui/core';
-import { PrimaryTextButton } from 'styled-component-lib/Buttons';
+export default function CheckoutCard({
+  children,
+  collapsedHeight = 100,
+  isDisabled = false,
+  title,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
 
-export default function CheckoutCard({ children, handleOpen, title }) {
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Box mb={4}>
       <Card>
@@ -13,12 +36,36 @@ export default function CheckoutCard({ children, handleOpen, title }) {
               <Typography variant="h2">{title}</Typography>
             </Grid>
             <Grid item>
-              <PrimaryTextButton disableRipple onClick={handleOpen}>
-                Edit
-              </PrimaryTextButton>
+              {isOpen ? (
+                <IconButton onClick={handleClose} aria-label="close">
+                  <CloseIcon fontSize="large" />
+                </IconButton>
+              ) : (
+                <IconButton
+                  aria-haspopup="true"
+                  color="primary"
+                  onClick={handleOpen}
+                  disabled={isDisabled || isOpen}
+                >
+                  <KeyboardArrowDownIcon fontSize="large" />
+                </IconButton>
+              )}
             </Grid>
           </Grid>
-          <Box>{children}</Box>\
+          <Collapse
+            in={isOpen}
+            collapsedHeight={collapsedHeight}
+            timeout="auto"
+          >
+            <Box>{children}</Box>
+            <Container maxWidth="sm">
+              <Box mt={2}>
+                <PrimaryWallyButton onClick={handleClose} fullWidth>
+                  Save
+                </PrimaryWallyButton>
+              </Box>
+            </Container>
+          </Collapse>
         </Box>
       </Card>
     </Box>
