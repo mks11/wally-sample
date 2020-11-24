@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
+import SubscribeToNewsletter from './../common/SubscribeToNewsletter';
+
 import styled from 'styled-components';
 
 const INSTAGRAM = 'https://www.instagram.com/thewallyshop/';
@@ -77,38 +79,6 @@ const FooterWrapper = styled(Grid)`
 `;
 
 function Footer() {
-  const [email, setEmail] = useState('');
-  const [invalidText, setInvalidText] = useState('');
-  const [successText, setSuccessText] = useState('');
-  const { user: userStore } = useStores();
-
-  const handleSubscribe = () => {
-    if (!validateEmail(email)) {
-      setInvalidText('Invalid email');
-      return;
-    }
-
-    setInvalidText('');
-
-    userStore
-      .subscribeNewsletter(email)
-      .then(() => {
-        setEmail('');
-        setInvalidText('');
-        setSuccessText('Subscribed!');
-        setTimeout(() => {
-          setSuccessText('');
-        }, 1500);
-      })
-      .catch(() => {
-        setInvalidText('Failed to subscribe.');
-      });
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
   return (
     <FooterContainer>
       <Container maxWidth="xl">
@@ -209,44 +179,10 @@ function Footer() {
             </List>
           </Grid>
         </FooterWrapper>
-        <div className="footer-bottom">
-          <Box>
-            <form className="form-inline" style={{ position: 'relative' }}>
-              <label htmlFor="subscribe-email">
-                Subscribe to our newsletter
-              </label>
-              <div className="input-group">
-                <input
-                  type="email"
-                  id="subscribe-email"
-                  className="form-control"
-                  placeholder="Enter your email"
-                  onChange={handleEmailChange}
-                />
-                <div className="input-group-append">
-                  <PrimaryWallyButton
-                    className="btn btn-primary"
-                    type="button"
-                    id="btn-subscribe"
-                    onClick={(e) => handleSubscribe(e)}
-                  >
-                    Subscribe
-                  </PrimaryWallyButton>
-                </div>
-              </div>
-              {invalidText ? (
-                <Typography variant="error" component="span">
-                  {invalidText}
-                </Typography>
-              ) : null}
-              {successText ? (
-                <Typography variant="success" component="span">
-                  {successText}
-                </Typography>
-              ) : null}
-            </form>
-          </Box>
-        </div>
+
+        <Box>
+          <SubscribeToNewsletter />
+        </Box>
       </Container>
     </FooterContainer>
   );

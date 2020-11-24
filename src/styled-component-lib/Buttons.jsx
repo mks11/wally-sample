@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import React from 'react';
 import { Button } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const PrimaryWallyButton = styled(Button).attrs({
   color: 'primary',
@@ -60,3 +62,18 @@ export const ColorfulWallyButton = styled.button`
     background-color: ${(props) => `${props.bgColor}` || '#97adff40'};
   }
 `;
+
+const _ActivityButton = styled(PrimaryWallyButton);
+
+export const ActivityButton = ({ isLoading, children, ...rest }) => {
+  if (isLoading) {
+    return (
+      <PrimaryWallyButton {...rest}>
+        {children}
+        <CircularProgress color="white" size={20} />
+      </PrimaryWallyButton>
+    );
+  } else {
+    return <PrimaryWallyButton {...rest}>{children} </PrimaryWallyButton>;
+  }
+};

@@ -12,7 +12,6 @@ import {
   API_PAYMENT_EDIT,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
-  API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
   API_PURCHASE_GIFTCARD,
   API_EMAIL_VERIFICATION,
@@ -466,11 +465,6 @@ class UserStore {
     addresses.push(data);
 
     localStorage.setItem('addresses', JSON.stringify(addresses));
-  }
-
-  async subscribeNewsletter(email) {
-    const res = await axios.post(API_SUBSCRIBE_EMAIL, { email });
-    return res.data;
   }
 
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {
