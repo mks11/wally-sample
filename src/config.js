@@ -152,8 +152,6 @@ export const API_RETAIL_UPLOAD_SKUS = BASE_URL + '/api/admin/retail/skus';
 export const API_GET_ADVERTISEMENTS = BASE_URL + '/api/web/ad_display';
 export const GET_ZIP_CODES = BASE_URL + '/api/service/zipcodes';
 
-export const API_GET_KICKSTARTER_BACKERS = BASE_URL + '/api/web/backers';
-
 export const API_GET_PRODUCTS_MATCHING_FILTERS =
   BASE_URL + '/api/products/filter';
 
