@@ -169,9 +169,6 @@ export const API_EDIT_CART_ITEM = BASE_URL + '/api/order';
 
 export const API_POST_METRIC_SOURCE = BASE_URL + '/api/metric/audience-source';
 
-export const INSTAGRAM = 'https://www.instagram.com/thewallyshop/';
-export const FACEBOOK = 'https://facebook.com/thewallyshop';
-
 export const GOOGLE_API_KEY = 'AIzaSyB1VsxMUiBN9H89Qgs5Z1eXtbkCyNB1KGQ';
 
 export const APP_URL = 'https://thewallyshop.co';
