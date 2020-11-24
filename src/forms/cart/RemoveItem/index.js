@@ -55,15 +55,15 @@ function RemoveItemForm({ item, handleReinitializeCartSummary }) {
       </Box>
       <Box py={1}>
         <Grid container spacing={2} justify="center">
-          <Grid item xs={4}>
-            <PrimaryWallyButton onClick={handleDelete} fullWidth>
+          <Grid item xs={6}>
+            <DangerButton onClick={handleDelete} fullWidth>
               <Typography>Yes</Typography>
-            </PrimaryWallyButton>
-          </Grid>
-          <Grid item xs={4}>
-            <DangerButton onClick={handleClose} fullWidth>
-              <Typography>No</Typography>
             </DangerButton>
+          </Grid>
+          <Grid item xs={6}>
+            <PrimaryWallyButton onClick={handleClose} fullWidth>
+              <Typography>No</Typography>
+            </PrimaryWallyButton>
           </Grid>
         </Grid>
       </Box>

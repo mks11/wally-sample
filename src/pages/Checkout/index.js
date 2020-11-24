@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import { Box, Container, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
@@ -63,26 +70,6 @@ function Checkout() {
         }
 
         loadData();
-        if (userStore.user.addresses.length > 0) {
-          const preferredAddress = userStore.user.addresses.find(
-            (d) => d._id === userStore.user.preferred_address,
-          );
-          let selectedAddress = preferredAddress
-            ? preferredAddress._id
-            : userStore.user.addresses[0];
-          setSelectedAddress(selectedAddress._id);
-        }
-
-        if (userStore.user.payment.length > 0) {
-          const preferredPayment = userStore.user.payment.find(
-            (d) => d._id === userStore.user.preferred_payment,
-          );
-
-          let selectedPayment = preferredPayment
-            ? preferredPayment._id
-            : userStore.user.payment[0];
-          setSelectedPayment(selectedPayment._id);
-        }
 
         const { checkoutFirst } = userStore.flags || {};
         !checkoutFirst && modalStore.toggleModal('checkoutfirst');
@@ -140,10 +127,12 @@ function Checkout() {
                 )}
               </Grid>
               <Grid item xs={12} md={7} lg={6} component="section">
-                <div className="card1 card-shadow">
+                <Card elevation={4}>
                   <div className="card-body">
-                    <h3 className="m-0 mb-2">Order Summary</h3>
-                    <hr />
+                    <Typography variant="h2" gutterBottom>
+                      Order Summary
+                    </Typography>
+                    <Divider />
                     {cart_items.map((c, i) => {
                       const unit_type = c.unit_type || c.price_unit;
                       const showType =
@@ -281,7 +270,7 @@ function Checkout() {
                       </span>
                     ) : null}
                   </div>
-                </div>
+                </Card>
 
                 <p className="mt-3">
                   By placing your order, you agree to be bound by the Terms of
@@ -365,15 +354,34 @@ function Checkout() {
       });
   }
 
-  function loadData() {
-    checkoutStore
-      .getOrderSummary(userStore.getHeaderAuth())
-      .then((data) => {
-        return data;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  async function loadData() {
+    try {
+      const auth = userStore.getHeaderAuth();
+      await checkoutStore.getOrderSummary(auth);
+
+      if (userStore.user.addresses.length > 0) {
+        const preferredAddress = userStore.user.addresses.find(
+          (d) => d._id === userStore.user.preferred_address,
+        );
+        let selectedAddress = preferredAddress
+          ? preferredAddress._id
+          : userStore.user.addresses[0];
+        setSelectedAddress(selectedAddress._id);
+      }
+
+      if (userStore.user.payment.length > 0) {
+        const preferredPayment = userStore.user.payment.find(
+          (d) => d._id === userStore.user.preferred_payment,
+        );
+
+        let selectedPayment = preferredPayment
+          ? preferredPayment._id
+          : userStore.user.payment[0];
+        setSelectedPayment(selectedPayment._id);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function updateTotal() {
