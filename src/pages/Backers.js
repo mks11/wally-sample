@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
@@ -9,19 +9,22 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 function Backers() {
   // Load backers 10 at a time.
   const limit = 10;
-  const [sliceIndex, setSliceIndex] = useState(10);
-  const [backersSlice, setBackersSlice] = useState(backers.slice(0, limit));
+  const sliceIndex = useRef(10);
+  const [backersSlice, setBackersSlice] = useState(backers.slice(0, 10));
   const { user: userStore } = useStores();
 
   useEffect(() => {
     userStore.getStatus();
   }, [userStore]);
 
-  const isDisabled = () => sliceIndex >= backers.length;
+  const isDisabled = () => sliceIndex.current >= backers.length;
 
   const loadMoreBackers = () => {
-    setSliceIndex(sliceIndex + limit);
-    setBackersSlice(backers.slice(0, sliceIndex));
+    let nextLimit = sliceIndex.current + limit;
+    if (nextLimit >= backers.length) nextLimit = backers.length;
+
+    sliceIndex.current = nextLimit;
+    setBackersSlice(backers.slice(0, nextLimit));
   };
 
   return (
@@ -30,8 +33,7 @@ function Backers() {
       description="The Wally Shop's Kick-Starter backers."
     >
       <Typography variant="h2" gutterBottom>
-        We are extremely grateful to the following people who made this all
-        possible:
+        We're extremely grateful to the people who made this all possible:
       </Typography>
       <List>
         {backersSlice.map((backer, idx) => (
@@ -40,7 +42,8 @@ function Backers() {
           </ListItem>
         ))}
       </List>
-      <PrimaryWallyButton onClick={loadMoreBackers} disabled={isDisabled}>
+      <br />
+      <PrimaryWallyButton onClick={loadMoreBackers} disabled={isDisabled()}>
         Load More
       </PrimaryWallyButton>
     </Page>
