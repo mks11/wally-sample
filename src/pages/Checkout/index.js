@@ -149,12 +149,11 @@ function Checkout() {
           <Typography variant="h2" gutterBottom>
             Order Summary
           </Typography>
+          {cart_items.map((item, i) => (
+            <OrderItem item={item} />
+          ))}
           <Divider />
           <br />
-          {cart_items.map((item, i) => (
-            <OrderItem key={item.product_name} item={item} />
-          ))}
-
           <Grid container alignItems="center" justify="space-between">
             <Grid item>
               <Typography gutterBottom>Subtotal</Typography>
@@ -366,158 +365,178 @@ function Checkout() {
 export default observer(Checkout);
 
 function OrderItem({ item }) {
-  const {
-    customer_quantity,
-    _id,
-    inventory_id,
-    product,
-    product_id,
-    product_name,
-    unit_type,
-  } = item;
-  const [isLoading, setIsLoading] = useState(false);
-  const [increasedQty, setIncreasedQty] = useState(false);
-  const { checkout, modal, modalV2, product: productStore, user } = useStores();
-  var productImage;
-  var brand;
-
-  if (product) {
-    const { image_refs, vendorFull } = product;
-    if (image_refs && image_refs[0]) {
-      productImage = PRODUCT_BASE_URL + product_id + '/' + image_refs[0];
-    }
-
-    if (vendorFull && vendorFull.name) brand = vendorFull.name;
-  }
-
-  const handleDelete = (item) => {
-    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
-    modalV2.open(<RemoveItemForm item={item} reloadOrderSummary />);
-  };
-
-  const handleUpdateCart = async (items) => {
-    const auth = user.getHeaderAuth();
-    await checkout.editCurrentCart({ items }, auth, true);
-  };
-
-  const handleUpdateQuantity = async (qty) => {
-    try {
-      if (qty > 0) setIncreasedQty(true);
-      else setIncreasedQty(false);
-      setIsLoading(true);
-      const updateQty = customer_quantity + qty;
-      handleUpdateCart([
-        {
-          quantity: updateQty,
-          product_id,
-          inventory_id,
-          unit_type,
-        },
-      ]);
-    } catch (error) {}
-  };
-
-  const handleViewProduct = (productId) => {
-    modalV2.close();
-    productStore.showModal(productId, null);
-    modal.toggleModal('product');
-  };
-
+  const { customer_quantity, product_name, total } = item;
   return (
-    <Box>
-      <Grid container alignItems="center" justify="flex-end">
+    <>
+      <Grid container alignItems="center" justify="space-between">
         <Grid item>
-          <IconButton
-            aria-label="remove-item-from-cart"
-            onClick={() =>
-              handleDelete({
-                inventoryId: _id,
-                name: product_name,
-                productId: product_id,
-              })
-            }
-          >
-            <CloseIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-
-      {/* Product image, name, and brand */}
-      <Grid container spacing={2}>
-        <Grid item>
-          {productImage ? (
-            <Box display="flex" alignItems="center" height="100%">
-              <img
-                alt={product_name}
-                src={productImage}
-                style={{ height: '60px', width: '60px' }}
-              />
-            </Box>
-          ) : (
-            <Box height="60px" width="60px" p={2} />
-          )}
-        </Grid>
-        <Grid item xs={8}>
-          <Typography>{product_name}</Typography>
-          {brand && (
-            <Typography variant="body2" color="textSecondary">
-              {brand}
-            </Typography>
-          )}
-          <PrimaryTextButton
-            onClick={() => handleViewProduct(product_id)}
-            style={{
-              fontSize: '14px',
-              fontWeight: 'normal',
-              paddingLeft: '0',
-              paddingTop: '2px',
-            }}
-          >
-            View Product
-          </PrimaryTextButton>
-        </Grid>
-      </Grid>
-
-      {/* Quantity adjustment and subtotal */}
-      <Box my={1}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Box display="flex" alignItems="center">
-              <IconButton
-                color="primary"
-                disableRipple
-                onClick={() => handleUpdateQuantity(-1)}
-                disabled={customer_quantity < 2 || isLoading}
-              >
-                {isLoading && !increasedQty ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <RemoveIcon />
-                )}
-              </IconButton>
-              <Typography>{customer_quantity}</Typography>
-              <IconButton
-                color="primary"
-                disableRipple
-                onClick={() => handleUpdateQuantity(1)}
-                disabled={customer_quantity > 9 || isLoading}
-              >
-                {isLoading && increasedQty ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <AddIcon />
-                )}
-              </IconButton>
-            </Box>
-          </Grid>
-          <Typography style={{ fontWeight: 'bold' }} align="center">
-            {formatMoney(item.total / 100)}
+          <Typography variant="h6" component="p">
+            {product_name}
           </Typography>
         </Grid>
-      </Box>
-      <Box mb={1}>
-        <Divider />
-      </Box>
-    </Box>
+        <Grid item>
+          <Typography>{formatMoney(total / 100)}</Typography>
+        </Grid>
+      </Grid>
+      <Typography color="textSecondary" gutterBottom>
+        Quantity {customer_quantity}
+      </Typography>
+    </>
   );
 }
+// function OrderItem({ item }) {
+//   const {
+//     customer_quantity,
+//     _id,
+//     inventory_id,
+//     product,
+//     product_id,
+//     product_name,
+//     unit_type,
+//   } = item;
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [increasedQty, setIncreasedQty] = useState(false);
+//   const { checkout, modal, modalV2, product: productStore, user } = useStores();
+//   var productImage;
+//   var brand;
+
+//   if (product) {
+//     const { image_refs, vendorFull } = product;
+//     if (image_refs && image_refs[0]) {
+//       productImage = PRODUCT_BASE_URL + product_id + '/' + image_refs[0];
+//     }
+
+//     if (vendorFull && vendorFull.name) brand = vendorFull.name;
+//   }
+
+//   const handleDelete = (item) => {
+//     logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+//     modalV2.open(<RemoveItemForm item={item} reloadOrderSummary />);
+//   };
+
+//   const handleUpdateCart = async (items) => {
+//     const auth = user.getHeaderAuth();
+//     await checkout.editCurrentCart({ items }, auth, true);
+//   };
+
+//   const handleUpdateQuantity = async (qty) => {
+//     try {
+//       if (qty > 0) setIncreasedQty(true);
+//       else setIncreasedQty(false);
+//       setIsLoading(true);
+//       const updateQty = customer_quantity + qty;
+//       handleUpdateCart([
+//         {
+//           quantity: updateQty,
+//           product_id,
+//           inventory_id,
+//           unit_type,
+//         },
+//       ]);
+//     } catch (error) {}
+//   };
+
+//   const handleViewProduct = (productId) => {
+//     modalV2.close();
+//     productStore.showModal(productId, null);
+//     modal.toggleModal('product');
+//   };
+
+//   return (
+//     <Box>
+//       <Grid container alignItems="center" justify="flex-end">
+//         <Grid item>
+//           <IconButton
+//             aria-label="remove-item-from-cart"
+//             onClick={() =>
+//               handleDelete({
+//                 inventoryId: _id,
+//                 name: product_name,
+//                 productId: product_id,
+//               })
+//             }
+//           >
+//             <CloseIcon />
+//           </IconButton>
+//         </Grid>
+//       </Grid>
+
+//       {/* Product image, name, and brand */}
+//       <Grid container spacing={2}>
+//         <Grid item>
+//           {productImage ? (
+//             <Box display="flex" alignItems="center" height="100%">
+//               <img
+//                 alt={product_name}
+//                 src={productImage}
+//                 style={{ height: '60px', width: '60px' }}
+//               />
+//             </Box>
+//           ) : (
+//             <Box height="60px" width="60px" p={2} />
+//           )}
+//         </Grid>
+//         <Grid item xs={8}>
+//           <Typography>{product_name}</Typography>
+//           {brand && (
+//             <Typography variant="body2" color="textSecondary">
+//               {brand}
+//             </Typography>
+//           )}
+//           <PrimaryTextButton
+//             onClick={() => handleViewProduct(product_id)}
+//             style={{
+//               fontSize: '14px',
+//               fontWeight: 'normal',
+//               paddingLeft: '0',
+//               paddingTop: '2px',
+//             }}
+//           >
+//             View Product
+//           </PrimaryTextButton>
+//         </Grid>
+//       </Grid>
+
+//       {/* Quantity adjustment and subtotal */}
+//       <Box my={1}>
+//         <Grid container alignItems="center" justify="space-between">
+//           <Grid item>
+//             <Box display="flex" alignItems="center">
+//               <IconButton
+//                 color="primary"
+//                 disableRipple
+//                 onClick={() => handleUpdateQuantity(-1)}
+//                 disabled={customer_quantity < 2 || isLoading}
+//               >
+//                 {isLoading && !increasedQty ? (
+//                   <CircularProgress size={24} />
+//                 ) : (
+//                   <RemoveIcon />
+//                 )}
+//               </IconButton>
+//               <Typography>{customer_quantity}</Typography>
+//               <IconButton
+//                 color="primary"
+//                 disableRipple
+//                 onClick={() => handleUpdateQuantity(1)}
+//                 disabled={customer_quantity > 9 || isLoading}
+//               >
+//                 {isLoading && increasedQty ? (
+//                   <CircularProgress size={24} />
+//                 ) : (
+//                   <AddIcon />
+//                 )}
+//               </IconButton>
+//             </Box>
+//           </Grid>
+//           <Typography style={{ fontWeight: 'bold' }} align="center">
+//             {formatMoney(item.total / 100)}
+//           </Typography>
+//         </Grid>
+//       </Box>
+//       <Box mb={1}>
+//         <Divider />
+//       </Box>
+//     </Box>
+//   );
+// }

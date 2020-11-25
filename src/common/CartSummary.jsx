@@ -114,7 +114,7 @@ function CartItem({ item }) {
 
   const handleUpdateCart = async (items) => {
     const auth = user.getHeaderAuth();
-    checkout.editCurrentCart({ items }, auth);
+    checkout.editCurrentCart({ items }, auth, true);
   };
 
   const handleUpdateQuantity = async (qty) => {
