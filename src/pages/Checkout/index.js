@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { PRODUCT_BASE_URL } from 'config';
+import React, { useEffect } from 'react';
+// import { PRODUCT_BASE_URL } from 'config';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import {
   Box,
   Card,
-  CircularProgress,
+  // CircularProgress,
   Container,
   Divider,
   Grid,
@@ -14,7 +14,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import { AddIcon, CloseIcon, InfoIcon, RemoveIcon } from 'Icons';
+// import { AddIcon, CloseIcon, InfoIcon, RemoveIcon } from 'Icons';
+import { InfoIcon } from 'Icons';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
@@ -29,15 +30,18 @@ import { toJS } from 'mobx';
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
 import PaymentOptions from './PaymentOptions';
 import {
-  PrimaryTextButton,
+  // PrimaryTextButton,
   PrimaryWallyButton,
 } from 'styled-component-lib/Buttons';
 import ShippingOptions from './ShippingOptions';
 
 // Forms
 import { useFormikContext } from 'formik';
-import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
-import RemoveItemForm from 'forms/cart/RemoveItem';
+// import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
+// import RemoveItemForm from 'forms/cart/RemoveItem';
+
+// Modals
+import PackagingDepositInfo from 'modals/PackagingDepositInfo';
 
 function Checkout() {
   const {
@@ -47,9 +51,6 @@ function Checkout() {
     routing: routingStore,
     user: userStore,
   } = useStores();
-
-  // Response handling
-  const [invalidText, setInvalidText] = useState('');
 
   useEffect(() => {
     // Store page view in google analytics
@@ -88,10 +89,6 @@ function Checkout() {
   if (!checkoutStore.order || !userStore.user) {
     return null;
   }
-
-  const { order } = checkoutStore;
-  const cart_items = order && order.cart_items ? order.cart_items : [];
-  const orderTotal = updateTotal();
 
   return (
     <Formik
@@ -140,162 +137,6 @@ function Checkout() {
     </Formik>
   );
 
-  function OrderSummary() {
-    const theme = useTheme();
-    const { isSubmitting } = useFormikContext();
-    return (
-      <Card elevation={4}>
-        <Box p={4}>
-          <Typography variant="h2" gutterBottom>
-            Order Summary
-          </Typography>
-          {cart_items.map((item, i) => (
-            <OrderItem item={item} />
-          ))}
-          <Divider />
-          <br />
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography gutterBottom>Subtotal</Typography>
-            </Grid>
-            <Grid item>
-              <Typography gutterBottom>
-                {formatMoney(order.subtotal / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography gutterBottom>Tax</Typography>
-            </Grid>
-            <Grid item>
-              <Typography gutterBottom>
-                {formatMoney(order.tax_amount / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography>Shipping</Typography>
-            </Grid>
-            <Grid item>
-              <Typography>
-                {formatMoney(order.delivery_amount / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Box display="flex" alignItems="center">
-                <Typography>Packaging Deposit</Typography>
-                <IconButton
-                  disableRipple
-                  onClick={handlePackagingDepositClick}
-                  style={{ margin: '0 16px' }}
-                >
-                  <InfoIcon />
-                </IconButton>
-              </Box>
-            </Grid>
-            <Grid item>
-              <Typography>
-                {formatMoney(order.packaging_deposit / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          {order.applied_packaging_balance === 0 ? null : (
-            <Grid container alignItems="center" justify="space-between">
-              <Grid item>
-                <Typography gutterBottom>
-                  Applied packaging deposit balance
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography gutterBottom>
-                  -{formatMoney(order.applied_packaging_balance / 100)}
-                </Typography>
-              </Grid>
-            </Grid>
-          )}
-          {order.promo_discount === 0 ? null : (
-            <Grid container alignItems="center" justify="space-between">
-              <Grid item>
-                <Typography
-                  gutterBottom
-                  style={{ color: theme.palette.success.main }}
-                >
-                  Applied discount
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography
-                  gutterBottom
-                  style={{ color: theme.palette.success.main }}
-                >
-                  -{formatMoney(order.promo_discount / 100)}
-                </Typography>
-              </Grid>
-            </Grid>
-          )}
-
-          {order.applied_store_credit === 0 ? null : (
-            <Grid container alignItems="center" justify="space-between">
-              <Grid item>
-                <Typography gutterBottom>Applied store credit</Typography>
-              </Grid>
-              <Grid item>
-                <Typography gutterBottom>
-                  -{formatMoney(order.applied_store_credit / 100)}
-                </Typography>
-              </Grid>
-            </Grid>
-          )}
-
-          {/* <div className="item-extras">
-            <ApplyPromoCodeForm onApply={() => handleApplyPromo()} />
-          </div> */}
-
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography variant="h6" component="p" gutterBottom>
-                Total
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h6" component="p" gutterBottom>
-                {formatMoney(orderTotal)}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Box my={4}>
-            <PrimaryWallyButton
-              type="submit"
-              fullWidth
-              disabled={cart_items.length == 0 || isSubmitting}
-            >
-              Place My Order
-            </PrimaryWallyButton>
-            <Box my={2}>
-              <Typography variant="body2" color="textSecondary">
-                By placing your order, you agree to be bound by the Terms of
-                Service and Privacy Policy.
-              </Typography>
-            </Box>
-          </Box>
-          {invalidText ? (
-            <span className="text-error text-center d-block mt-2">
-              {invalidText}
-            </span>
-          ) : null}
-        </Box>
-      </Card>
-    );
-  }
-
   function handleApplyPromo() {
     const { order } = checkoutStore;
 
@@ -303,19 +144,9 @@ function Checkout() {
     }
   }
 
-  function handlePackagingDepositClick() {
-    modalStore.toggleModal('packagingdeposit');
-  }
-
   function handlePlaceOrder(values, setFieldError) {
     console.log(values);
     return;
-    setInvalidText('');
-
-    // if (!lockPayment) {
-    //   setInvalidText('Please select payment');
-    //   return;
-    // }
     loadingStore.show();
     logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
 
@@ -341,7 +172,6 @@ function Checkout() {
       .catch((e) => {
         console.error('Failed to submit order', e);
         const msg = e.response.data.error.message;
-        setInvalidText(msg);
         loadingStore.hide();
       });
   }
@@ -354,15 +184,168 @@ function Checkout() {
       console.error(error);
     }
   }
-
-  function updateTotal() {
-    const { order } = checkoutStore;
-
-    return order.total / 100;
-  }
 }
 
 export default observer(Checkout);
+
+function OrderSummary() {
+  const theme = useTheme();
+  const { isSubmitting } = useFormikContext();
+  const { checkout, modalV2 } = useStores();
+
+  const { order } = checkout;
+  const cart_items = order && order.cart_items ? order.cart_items : [];
+  const orderTotal = order.total / 100;
+
+  function handlePackagingDepositClick() {
+    modalV2.open(<PackagingDepositInfo />);
+  }
+
+  return (
+    <Card elevation={4}>
+      <Box p={4}>
+        <Typography variant="h2" gutterBottom>
+          Order Summary
+        </Typography>
+        {cart_items.map((item, i) => (
+          <OrderItem key={item.product_name} item={item} />
+        ))}
+        <Divider />
+        <br />
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Typography gutterBottom>Subtotal</Typography>
+          </Grid>
+          <Grid item>
+            <Typography gutterBottom>
+              {formatMoney(order.subtotal / 100)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Typography gutterBottom>Tax</Typography>
+          </Grid>
+          <Grid item>
+            <Typography gutterBottom>
+              {formatMoney(order.tax_amount / 100)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Typography>Shipping</Typography>
+          </Grid>
+          <Grid item>
+            <Typography>{formatMoney(order.delivery_amount / 100)}</Typography>
+          </Grid>
+        </Grid>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Box display="flex" alignItems="center">
+              <Typography>Packaging Deposit</Typography>
+              <IconButton
+                disableRipple
+                onClick={handlePackagingDepositClick}
+                style={{ margin: '0 16px' }}
+              >
+                <InfoIcon />
+              </IconButton>
+            </Box>
+          </Grid>
+          <Grid item>
+            <Typography>
+              {formatMoney(order.packaging_deposit / 100)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        {order.applied_packaging_balance === 0 ? null : (
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item>
+              <Typography gutterBottom>
+                Applied packaging deposit balance
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography gutterBottom>
+                -{formatMoney(order.applied_packaging_balance / 100)}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+        {order.promo_discount === 0 ? null : (
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item>
+              <Typography
+                gutterBottom
+                style={{ color: theme.palette.success.main }}
+              >
+                Applied discount
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography
+                gutterBottom
+                style={{ color: theme.palette.success.main }}
+              >
+                -{formatMoney(order.promo_discount / 100)}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+
+        {order.applied_store_credit === 0 ? null : (
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item>
+              <Typography gutterBottom>Applied store credit</Typography>
+            </Grid>
+            <Grid item>
+              <Typography gutterBottom>
+                -{formatMoney(order.applied_store_credit / 100)}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+
+        {/* <div className="item-extras">
+          <ApplyPromoCodeForm onApply={() => handleApplyPromo()} />
+        </div> */}
+
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Typography variant="h6" component="p" gutterBottom>
+              Total
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="h6" component="p" gutterBottom>
+              {formatMoney(orderTotal)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Box my={4}>
+          <PrimaryWallyButton
+            type="submit"
+            fullWidth
+            disabled={cart_items.length == 0 || isSubmitting}
+          >
+            Place My Order
+          </PrimaryWallyButton>
+          <Box my={2}>
+            <Typography variant="body2" color="textSecondary">
+              By placing your order, you agree to be bound by the Terms of
+              Service and Privacy Policy.
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Card>
+  );
+}
 
 function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;
@@ -384,6 +367,7 @@ function OrderItem({ item }) {
     </>
   );
 }
+
 // function OrderItem({ item }) {
 //   const {
 //     customer_quantity,
