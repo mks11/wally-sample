@@ -26,6 +26,7 @@ class UserStore {
   token = '';
 
   selectedDeliveryAddress = null;
+  selectedPaymentMethod = null;
   selectedDeliveryTime = null;
 
   refPromo = null;
@@ -369,6 +370,14 @@ class UserStore {
     this.setDeliveryData();
   }
 
+  getPaymentMethodById(id) {
+    return this.user ? this.user.payment.find((item) => item._id === id) : null;
+  }
+
+  setPaymentMethod(data) {
+    this.selectedPaymentMethod = data;
+  }
+
   getDeliveryParams() {
     let data = {
       zip: null,
@@ -451,6 +460,7 @@ decorate(UserStore, {
   promoSuccessModal: observable,
 
   selectedDeliveryAddress: observable,
+  selectedPaymentMethod: observable,
   selectedDeliveryTime: observable,
 
   refPromo: observable,
@@ -494,6 +504,7 @@ decorate(UserStore, {
   resetPassword: action,
 
   setDeliveryAddress: action,
+  setPaymentMethod: action,
   setDeliveryTime: action,
   loadFakeUser: action,
   adjustDeliveryTimes: action,

@@ -9,7 +9,11 @@ import { logEvent } from 'services/google-analytics';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
 
-function RemoveItemForm({ item, handleReinitializeCartSummary }) {
+function RemoveItemForm({
+  item,
+  handleReinitializeCartSummary,
+  reloadOrderSummary = false,
+}) {
   const { routing, checkout, user, modalV2 } = useStores();
 
   const handleClose = () => {
@@ -20,8 +24,6 @@ function RemoveItemForm({ item, handleReinitializeCartSummary }) {
 
   const handleDelete = () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
-
-    const orderSummary = routing.location.pathname.indexOf('cart') !== -1;
 
     // TODO: ERROR HANDLING
     checkout
@@ -36,7 +38,7 @@ function RemoveItemForm({ item, handleReinitializeCartSummary }) {
           ],
         },
         user.getHeaderAuth(),
-        orderSummary,
+        reloadOrderSummary,
         user.getDeliveryParams(),
       )
       .then(() => handleClose())

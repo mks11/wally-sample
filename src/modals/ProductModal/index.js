@@ -54,25 +54,28 @@ class ProductModal extends Component {
     const modal = this.modalStore;
     const user = this.userStore;
 
-    this.setState({ qty: product.activeProduct.min_size });
-    let priceMultiplier = 1;
-    this.setState({ priceMultiplier: priceMultiplier });
+    if (product.activeProduct) {
+      this.setState({ qty: product.activeProduct.min_size });
+      let priceMultiplier = 1;
+      this.setState({ priceMultiplier: priceMultiplier });
 
-    let packagingType =
-      product.activeProduct.available_inventory[0].packaging_type;
-    this.setState({ packagingType: packagingType });
+      let packagingType =
+        product.activeProduct.available_inventory[0].packaging_type;
+      this.setState({ packagingType: packagingType });
 
-    if (!product.activeProduct) return null;
+      this.setState({
+        outOfStock: product.activeProduct.out_of_stock,
+        available: true,
+      });
+      logModalView('/product/' + product.activeProductId);
 
-    this.setState({
-      outOfStock: product.activeProduct.out_of_stock,
-      available: true,
-    });
-    logModalView('/product/' + product.activeProductId);
-
-    if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
-      const { addonsFirst } = user.flags || {};
-      !addonsFirst && modal.toggleAddonsFirst();
+      if (
+        product.activeProduct.add_ons &&
+        product.activeProduct.add_ons.length
+      ) {
+        const { addonsFirst } = user.flags || {};
+        !addonsFirst && modal.toggleAddonsFirst();
+      }
     }
   }
 

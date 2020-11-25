@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { PRODUCT_BASE_URL } from 'config';
 
 // MobX
@@ -14,7 +14,6 @@ import { Box, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import { AddIcon, CloseIcon, RemoveIcon } from 'Icons';
 
 // Custom Components
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import RemoveItemForm from 'forms/cart/RemoveItem';
 
 // Custom Components
@@ -22,7 +21,10 @@ import CarbonBar from 'common/CarbonBar';
 import LoginForm from 'forms/authentication/LoginForm';
 
 // Styled Components
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import {
+  PrimaryTextButton,
+  PrimaryWallyButton,
+} from 'styled-component-lib/Buttons';
 
 const CartSummary = observer(() => {
   const { checkout, routing, user, modalV2 } = useStores();
@@ -95,9 +97,8 @@ function CartItem({ item }) {
     product_name,
     unit_type,
   } = item;
-  const [quantity, setQuantity] = useState(customer_quantity || 0);
-  const { checkout, loading, modalV2, user } = useStores();
 
+  const { checkout, modal, modalV2, product: productStore, user } = useStores();
   var productImage;
   var brand;
 
@@ -111,17 +112,29 @@ function CartItem({ item }) {
     if (vendorFull && vendorFull.name) brand = vendorFull.name;
   }
 
-  const handleAddQty = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleRemoveQty = () => {
-    setQuantity(quantity - 1);
-  };
-
   const handleUpdateCart = async (items) => {
     const auth = user.getHeaderAuth();
     checkout.editCurrentCart({ items }, auth);
+  };
+
+  const handleUpdateQuantity = async (qty) => {
+    try {
+      const updateQty = customer_quantity + qty;
+      handleUpdateCart([
+        {
+          quantity: updateQty,
+          product_id,
+          inventory_id,
+          unit_type,
+        },
+      ]);
+    } catch (error) {}
+  };
+
+  const handleViewProduct = (productId) => {
+    modalV2.close();
+    productStore.showModal(productId, null);
+    modal.toggleModal('product');
   };
 
   const handleDelete = (item) => {
@@ -137,17 +150,6 @@ function CartItem({ item }) {
   function openCartSummary() {
     modalV2.open(<CartSummary />, 'right');
   }
-
-  useEffect(() => {
-    handleUpdateCart([
-      {
-        quantity,
-        product_id,
-        inventory_id,
-        unit_type,
-      },
-    ]);
-  }, [quantity]);
 
   return (
     <Box>
@@ -172,13 +174,16 @@ function CartItem({ item }) {
       <Grid container spacing={2}>
         <Grid item>
           {productImage ? (
-            <LazyLoadImage
-              alt={product_name}
-              height={60}
-              src={productImage}
-              width={60}
-            />
-          ) : null}
+            <Box display="flex" alignItems="center" height="100%">
+              <img
+                alt={product_name}
+                src={productImage}
+                style={{ height: '60px', width: '60px' }}
+              />
+            </Box>
+          ) : (
+            <Box height="60px" width="60px" p={2} />
+          )}
         </Grid>
         <Grid item xs={8}>
           <Typography>{product_name}</Typography>
@@ -187,28 +192,39 @@ function CartItem({ item }) {
               {brand}
             </Typography>
           )}
+          <PrimaryTextButton
+            onClick={() => handleViewProduct(product_id)}
+            style={{
+              fontSize: '14px',
+              fontWeight: 'normal',
+              paddingLeft: '0',
+              paddingTop: '2px',
+            }}
+          >
+            View Product
+          </PrimaryTextButton>
         </Grid>
       </Grid>
 
       {/* Quantity adjustment and subtotal */}
-      <Box my={4}>
+      <Box my={1}>
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <Box display="flex" alignItems="center">
               <IconButton
                 color="primary"
                 disableRipple
-                onClick={handleRemoveQty}
-                disabled={quantity < 2}
+                onClick={() => handleUpdateQuantity(-1)}
+                disabled={customer_quantity < 2}
               >
                 <RemoveIcon />
               </IconButton>
-              <Typography>{quantity}</Typography>
+              <Typography>{customer_quantity}</Typography>
               <IconButton
                 color="primary"
                 disableRipple
-                onClick={handleAddQty}
-                disabled={quantity > 9}
+                onClick={() => handleUpdateQuantity(1)}
+                disabled={customer_quantity > 9}
               >
                 <AddIcon />
               </IconButton>
