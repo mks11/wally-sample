@@ -29,7 +29,7 @@ function ShippingOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={40}>
+    <CheckoutCard title="Shipping Options" collapsedHeight={40} name={name}>
       <Box p={1}>
         <Typography variant="body1" style={{ fontWeight: 'bold' }}>
           {getName() || 'No shipping method selected.'}

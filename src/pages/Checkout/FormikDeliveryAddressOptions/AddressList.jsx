@@ -1,12 +1,11 @@
 import React from 'react';
 import { RadioGroup } from '@material-ui/core';
 import AddressRadioItem from './AddressRadioItem';
-import Address from './Address';
 
 export default function AddressList({
   addresses,
   defaultAddressId,
-  isLocked,
+  name,
   onChange,
   selected,
 }) {
@@ -14,12 +13,8 @@ export default function AddressList({
     onChange(e.target.value);
   };
 
-  if (isLocked) {
-    return <Address address={selected} />;
-  }
-
   return (
-    <RadioGroup aria-label={'address'} onChange={handleChange}>
+    <RadioGroup aria-label={'address'} name={name} onChange={handleChange}>
       {addresses.map((address) => {
         // Stringify the address to enable the handle select method to be used directly
         // with address data from the user's list of addresses and from API responses
@@ -29,7 +24,6 @@ export default function AddressList({
             key={address.address_id}
             address={address}
             isPreferredAddress={defaultAddressId === address.address_id}
-            onChange={onChange}
             selected={selected}
             value={value}
           />

@@ -116,18 +116,16 @@ function Checkout() {
             </Typography>
           </Box>
           <Grid container spacing={4}>
-            <Grid item xs={12} md={5} lg={6}>
-              {userStore.user && (
-                <>
-                  <DeliveryAddressOptions name="addressId" />
-                  <ShippingOptions name="shippingServiceLevel" />
-                  <PaymentOptions
-                    name="paymentId"
-                    options={toJS(userStore.user.payment)}
-                  />
-                </>
-              )}
-            </Grid>
+            {userStore.user && (
+              <Grid item xs={12} md={5} lg={6}>
+                <DeliveryAddressOptions name="addressId" />
+                <ShippingOptions name="shippingServiceLevel" />
+                <PaymentOptions
+                  name="paymentId"
+                  options={toJS(userStore.user.payment)}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} md={7} lg={6} component="section">
               <OrderSummary />
             </Grid>

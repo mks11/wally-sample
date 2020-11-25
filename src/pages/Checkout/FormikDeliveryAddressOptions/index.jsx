@@ -8,9 +8,10 @@ import AddressList from './AddressList';
 import Address from './Address';
 import { AddIcon } from 'Icons';
 import { useStores } from 'hooks/mobx';
-import { useFormikContext } from 'formik';
 import CheckoutCard from 'pages/Checkout/BaseCheckoutCard';
 
+// Forms
+import { useFormikContext } from 'formik';
 function AddressOptions({ name }) {
   const [data, setData] = useState([]);
   const { modalV2: modalV2Store, user: userStore } = useStores();
@@ -43,7 +44,7 @@ function AddressOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Delivery Address">
+    <CheckoutCard title="Delivery Address" name={name}>
       {selected ? (
         <Address address={selected} isSelected />
       ) : (
@@ -72,6 +73,7 @@ function AddressOptions({ name }) {
       <AddressList
         addresses={data}
         defaultAddressId={user.preferred_address}
+        name={name}
         onChange={handleSelect}
         selected={selected}
       />

@@ -8,16 +8,25 @@ import {
   Container,
   Collapse,
 } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { CloseIcon, KeyboardArrowDownIcon } from 'Icons';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Forms
+import { HelperText } from 'styled-component-lib/HelperText';
+import { useField } from 'formik';
 
 export default function CheckoutCard({
   children,
   collapsedHeight = 100,
   isDisabled = false,
+  name,
   title,
 }) {
+  const [field, meta] = useField(name);
   const [isOpen, setIsOpen] = useState(false);
+  const theme = useTheme();
+  const hasError = meta.touched && meta.error;
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -28,8 +37,14 @@ export default function CheckoutCard({
   };
 
   return (
-    <Box mb={4}>
-      <Card>
+    <Box mb={1}>
+      <Card
+        style={{
+          border: hasError
+            ? `1px solid ${theme.palette.error.main}`
+            : '1px solid transparent',
+        }}
+      >
         <Box p={4}>
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
@@ -68,6 +83,9 @@ export default function CheckoutCard({
           </Collapse>
         </Box>
       </Card>
+      <HelperText error={hasError ? true : false}>
+        {hasError ? meta.error : ' '}
+      </HelperText>
     </Box>
   );
 }

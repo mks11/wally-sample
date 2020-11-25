@@ -50,6 +50,7 @@ function Payment({ name, options = [], onAdd }) {
       title="Payment"
       collapsedHeight={collapsedHeight}
       isDisabled={last4 ? false : true}
+      name={name}
     >
       <Box p={1}>
         {selectedPaymentId ? (
