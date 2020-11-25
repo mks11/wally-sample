@@ -1,25 +1,49 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { Typography, Grid, Box, Container } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import EmailIcon from '@material-ui/icons/Email';
 import { subscribeToNewsletter } from './../api/sendinblue';
 import { TextInput } from './FormikComponents/NonRenderPropAPI';
 import { useStores } from 'hooks/mobx';
 import { ActivityButton } from 'styled-component-lib/Buttons';
 
 export default function SubscribeToNewsletter() {
-  const { snackbar: snackbarStore } = useStores();
+  const { modalV2 } = useStores();
 
+  const handleOpenNewsletterForm = () => {
+    modalV2.open(<SubscribeToNewsletterForm />);
+  };
+
+  return (
+    <button
+      style={{
+        alignItems: 'center',
+        display: 'flex',
+        padding: '0.5rem',
+        border: 'none',
+        background: 'transparent',
+        fontSize: '16px',
+        color: '#263a52',
+      }}
+      onClick={handleOpenNewsletterForm}
+    >
+      <EmailIcon fontSize="large" style={{ color: '#263a52' }} />
+      <span style={{ marginLeft: '4px' }}>Newsletter</span>
+    </button>
+  );
+}
+
+function SubscribeToNewsletterForm() {
+  const { modalV2, snackbar: snackbarStore } = useStores();
   const handleSubscribe = async (
     { email },
     { setSubmitting, setFieldError },
   ) => {
     try {
-      const res = await subscribeToNewsletter(email);
-      snackbarStore.openSnackbar(
-        'Successfully subscribed to newsletter!',
-        'success',
-      );
+      await subscribeToNewsletter(email);
+      modalV2.close();
+      snackbarStore.openSnackbar('Subscribed to newsletter!', 'success');
     } catch (e) {
       if (e && e.response && e.response.data && e.response.data.error) {
         setFieldError('email', e.response.data.error.message);
@@ -30,49 +54,53 @@ export default function SubscribeToNewsletter() {
   };
 
   return (
-    <Formik
-      initialValues={{
-        email: '',
-      }}
-      validationSchema={Yup.object({
-        email: Yup.string()
-          .required("Email address can't be blank.")
-          .email('Invalid email address.'),
-      })}
-      onSubmit={handleSubscribe}
-    >
-      {({ isSubmitting }) => {
-        return (
-          <Form>
-            <Container maxWidth="sm">
+    <>
+      <Typography variant="h1" gutterBottom>
+        Subscribe to our newsletter
+      </Typography>
+      <Formik
+        initialValues={{
+          email: '',
+        }}
+        validationSchema={Yup.object({
+          email: Yup.string()
+            .required("Email address can't be blank.")
+            .email('Invalid email address.'),
+        })}
+        onSubmit={handleSubscribe}
+      >
+        {({ isSubmitting }) => {
+          return (
+            <Form>
               <Grid container spacing={1} alignItems="flex-start">
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                   <TextInput
                     name="email"
                     type="email"
-                    label="Subscribe to our newsletter"
-                    placeholder="Enter your email"
-                    fullWidth
+                    label="Subscribe"
+                    placeholder="Enter your email address"
+                    variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={4} style={{ marginTop: '0.8rem' }}>
+                <Grid item xs={8} sm={6}>
                   <ActivityButton
                     type="submit"
                     isLoading={isSubmitting}
+                    loadingTitle="Subscribing..."
                     loaderProps={{
                       size: 22,
                     }}
+                    fullWidth
+                    style={{ paddingTop: '12.5px', paddingBottom: '12.5px' }}
                   >
-                    <Typography style={{ padding: '0 1.2rem' }}>
-                      Subscribe
-                    </Typography>
+                    submit
                   </ActivityButton>
                 </Grid>
               </Grid>
-            </Container>
-          </Form>
-        );
-      }}
-    </Formik>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
   );
 }

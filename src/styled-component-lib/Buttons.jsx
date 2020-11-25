@@ -77,18 +77,20 @@ export const ActivityButton = ({
   if (isLoading) {
     return (
       <Comp disabled={disabled} {...rest}>
-        {/** 
-          Clones a element (like Typography) and sets the 
+        {/**
+          Clones a element (like Typography) and sets the
           loadingTitle to be its children
           All variants and styles will be applied to the 'loadingTitle' as well
          */}
-        {React.cloneElement(children, {
-          children: loadingTitle,
-        })}
-        {/** Color "white" for the current 'primary' color 
+        {loadingTitle}
+        {/** Color "white" for the current 'primary' color
           throws a warning for not being an inherited property
         */}
-        <CircularProgress color={color} {...loaderProps} />
+        <CircularProgress
+          color={color}
+          {...loaderProps}
+          style={{ marginLeft: '3px' }}
+        />
       </Comp>
     );
   } else {
