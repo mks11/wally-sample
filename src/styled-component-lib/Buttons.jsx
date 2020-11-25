@@ -63,17 +63,35 @@ export const ColorfulWallyButton = styled.button`
   }
 `;
 
-const _ActivityButton = styled(PrimaryWallyButton);
-
-export const ActivityButton = ({ isLoading, children, ...rest }) => {
+export const ActivityButton = ({
+  isLoading,
+  loadingTitle = 'Submitting...',
+  color,
+  disabled = true, // default disable while submitting
+  children,
+  component,
+  loaderProps,
+  ...rest
+}) => {
+  const Comp = component || PrimaryWallyButton;
   if (isLoading) {
     return (
-      <PrimaryWallyButton {...rest}>
-        {children}
-        <CircularProgress color="white" size={20} />
-      </PrimaryWallyButton>
+      <Comp disabled={disabled} {...rest}>
+        {/** 
+          Clones a element (like Typography) and sets the 
+          loadingTitle to be its children
+          All variants and styles will be applied to the 'loadingTitle' as well
+         */}
+        {React.cloneElement(children, {
+          children: loadingTitle,
+        })}
+        {/** Color "white" for the current 'primary' color 
+          throws a warning for not being an inherited property
+        */}
+        <CircularProgress color={color} {...loaderProps} />
+      </Comp>
     );
   } else {
-    return <PrimaryWallyButton {...rest}>{children} </PrimaryWallyButton>;
+    return <Comp {...rest}>{children} </Comp>;
   }
 };

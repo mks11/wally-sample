@@ -1,22 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import {
-  InputAdornment,
-  Typography,
-  Grid,
-  Box,
-  Container,
-} from '@material-ui/core';
-import { PrimaryWallyButton } from './../styled-component-lib/Buttons';
+import { Typography, Grid, Box, Container } from '@material-ui/core';
 import { subscribeToNewsletter } from './../api/sendinblue';
 import { TextInput } from './FormikComponents/NonRenderPropAPI';
 import { useStores } from 'hooks/mobx';
-import { AccountCircle, DonutLargeOutlined } from '@material-ui/icons';
 import { ActivityButton } from 'styled-component-lib/Buttons';
 
 export default function SubscribeToNewsletter() {
-  const [email, setEmail] = useState('');
   const { snackbar: snackbarStore } = useStores();
 
   const handleSubscribe = async (
@@ -24,7 +15,7 @@ export default function SubscribeToNewsletter() {
     { setSubmitting, setFieldError },
   ) => {
     try {
-      await subscribeToNewsletter(email);
+      const res = await subscribeToNewsletter(email);
       snackbarStore.openSnackbar(
         'Successfully subscribed to newsletter!',
         'success',
@@ -36,10 +27,6 @@ export default function SubscribeToNewsletter() {
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
   };
 
   return (
@@ -68,12 +55,17 @@ export default function SubscribeToNewsletter() {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={4}>
-                  {/* <PrimaryWallyButton type="submit">
-                    Subscribe
-                  </PrimaryWallyButton> */}
-                  <ActivityButton type="submit" isLoading>
-                    Subscribe
+                <Grid item xs={4} style={{ marginTop: '0.8rem' }}>
+                  <ActivityButton
+                    type="submit"
+                    isLoading={isSubmitting}
+                    loaderProps={{
+                      size: 22,
+                    }}
+                  >
+                    <Typography style={{ padding: '0 1.2rem' }}>
+                      Subscribe
+                    </Typography>
                   </ActivityButton>
                 </Grid>
               </Grid>
@@ -83,29 +75,4 @@ export default function SubscribeToNewsletter() {
       }}
     </Formik>
   );
-}
-
-{
-  /* <Form>
-            <Box
-              //   container
-              //   spacing={1}
-              alignItems="center"
-              style={{ minWidth: '160px', border: '1px solid blue' }}
-              display="flex"
-            >
-              <Box flexGrow={1}>
-                <TextInput
-                  name="email"
-                  type="email"
-                  label="Subscribe to our newsletter"
-                  placeholder="Enter your email"
-                  //   variant="outlined"
-                />
-              </Box>
-              <Box flexShrink={1}>
-                <PrimaryWallyButton type="submit">Subscribe</PrimaryWallyButton>
-              </Box>
-            </Box>
-          </Form> */
 }
