@@ -31,13 +31,14 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-480.jpg',
   },
 ];
+
 const hasDots = heroImages.length > 1;
 
 var DesktopCarouselWrapper = styled(Box)`
@@ -293,13 +294,13 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'Thanksgiving Reusables Cornucopia'}
+        alt={'Black Friday Promotion'}
         img={img}
         justify="flex-start"
-        title={'Bulk Friday is Coming.'}
+        // title={'Bulk Friday is Coming.'}
         // url="/shop/brands/sapo-company"
       >
-        <Typography gutterBottom>Free shipping from 11/27 to 11/30</Typography>
+        {/* <Typography gutterBottom>Free shipping from 11/27 to 11/30</Typography> */}
       </HeroSlide>
     ));
 
