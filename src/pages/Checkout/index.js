@@ -93,9 +93,13 @@ function Checkout() {
   return (
     <Formik
       initialValues={{
-        addressId: userStore.selectedDeliveryAddress._id || '',
+        addressId: userStore.selectedDeliveryAddress
+          ? userStore.selectedDeliveryAddress._id
+          : '',
         shippingServiceLevel: 'ups_ground',
-        paymentId: userStore.selectedPaymentMethod._id || '',
+        paymentId: userStore.selectedPaymentMethod
+          ? userStore.selectedPaymentMethod._id
+          : '',
       }}
       validationSchema={Yup.object({
         addressId: Yup.string().required('You must select a shipping address.'),
