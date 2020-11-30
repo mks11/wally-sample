@@ -14,13 +14,12 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-export default function Address({
-  address = {},
-  isPreferredAddress,
-  isSelected,
-}) {
+export default function Address({ address = {}, isPreferredAddress }) {
   const { street_address, unit, city, state, zip, name, telephone } = address;
-  const street_address_unit = (street_address + ' ' + unit).trim(); // handles formatting when unit is not present
+
+  // handles formatting when unit is not present
+  const street_address_unit = (street_address + ' ' + unit).trim();
+
   return (
     <Box
       display="flex"
@@ -30,21 +29,17 @@ export default function Address({
       p={1}
     >
       <Box flexGrow={1} width="100%">
-        <Typography style={isSelected && { fontWeight: 'bold' }}>
+        <Typography>
           {name}
           {isPreferredAddress && (
             <StyledBadge badgeContent="Default" color="primary" />
           )}
         </Typography>
-        <Typography style={isSelected && { fontWeight: 'bold' }}>
-          {street_address_unit},
-        </Typography>
-        <Typography style={isSelected && { fontWeight: 'bold' }}>
+        <Typography>{street_address_unit},</Typography>
+        <Typography>
           {city}, {state} {zip}
         </Typography>
-        <Typography style={isSelected && { fontWeight: 'bold' }}>
-          {telephone}
-        </Typography>
+        <Typography>{telephone}</Typography>
       </Box>
     </Box>
   );
