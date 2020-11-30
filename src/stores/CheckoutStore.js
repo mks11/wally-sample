@@ -54,7 +54,9 @@ class CheckoutStore {
       cart_id = this.order.cart_id;
     }
 
-    const url = API_EDIT_CURRENT_CART + cart_id;
+    let url = API_EDIT_CURRENT_CART;
+    if (cart_id) url += cart_id;
+
     let res;
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.patch(url, data);

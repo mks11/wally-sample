@@ -1,23 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { observer } from 'mobx-react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import AddressCreateForm from 'forms/Address/Create';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Material UI
 import { Box, Container, Typography } from '@material-ui/core';
-import AddressList from './AddressList';
-import Address from './Address';
-import { AddIcon } from 'Icons';
+
+// MobX
+import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
+
+// Styled Components
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+import Address from './Address';
+import AddressList from './AddressList';
+import { AddIcon } from 'Icons';
 import CheckoutCard from 'pages/Checkout/BaseCheckoutCard';
 
 // Forms
 import { useFormikContext } from 'formik';
+
+// Addresses
+const AddressCreateForm = lazy(() => import('forms/Address/Create'));
+
 function AddressOptions({ name }) {
   const [data, setData] = useState([]);
-  const { modalV2: modalV2Store, user: userStore } = useStores();
+  const { user: userStore } = useStores();
   const { user = {} } = userStore;
   const { setFieldValue } = useFormikContext() || {};
   const selected = userStore.selectedDeliveryAddress;
+  const collapsedHeight = selected ? 100 : 50;
 
   const handleSelect = (address) => {
     const a = JSON.parse(address);
@@ -39,37 +50,20 @@ function AddressOptions({ name }) {
     setData(user.addresses || []);
   }
 
-  const handleAdd = () => {
-    modalV2Store.open(<AddressCreateForm onCreate={handleSelect} />, 'left');
-  };
-
   return (
-    <CheckoutCard title="Delivery Address" name={name}>
+    <CheckoutCard
+      collapsedHeight={collapsedHeight}
+      title="Delivery Address"
+      name={name}
+    >
       {selected ? (
-        <Address address={selected} isSelected />
+        <Address address={selected} />
       ) : (
         <Box p={2}>
-          <Typography variant="h6" color="error" gutterBottom>
-            No shipping address selected
-          </Typography>
-          <PrimaryWallyButton fullWidth onClick={handleAdd}>
-            Add address
-          </PrimaryWallyButton>
+          <Typography>No shipping address selected.</Typography>
         </Box>
       )}
-      <Container maxWidth="sm">
-        <Box p={2}>
-          <PrimaryWallyButton
-            onClick={handleAdd}
-            fullWidth
-            variant="outlined"
-            startIcon={<AddIcon />}
-            style={{ padding: '0.5rem 0' }}
-          >
-            Add address
-          </PrimaryWallyButton>
-        </Box>
-      </Container>
+      <AddNewAddress />
       <AddressList
         addresses={data}
         defaultAddressId={user.preferred_address}
@@ -86,3 +80,40 @@ AddressOptions.propTypes = {
 };
 
 export default observer(AddressOptions);
+
+function AddNewAddress() {
+  const { modalV2: modalV2Store } = useStores();
+
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Add New Address
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
+
+  const handleAddNewAddress = () => {
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <AddressCreateForm />
+      </Suspense>,
+      'left',
+    );
+  };
+
+  return (
+    <Container maxWidth="sm" disableGutters>
+      <Box p={2}>
+        <PrimaryWallyButton
+          onClick={handleAddNewAddress}
+          fullWidth
+          variant="outlined"
+          startIcon={<AddIcon />}
+        >
+          Add address
+        </PrimaryWallyButton>
+      </Box>
+    </Container>
+  );
+}

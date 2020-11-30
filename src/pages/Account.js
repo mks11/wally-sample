@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -9,9 +9,6 @@ import { connect } from '../utils';
 import { Input } from 'reactstrap';
 import Title from '../common/page/Title';
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
-
-// Addresses
-import AddressCreateForm from 'forms/Address/Create';
 
 // Payment Methods
 import StripeCardInput from 'common/StripeCardInput';
@@ -36,6 +33,9 @@ import {
 } from '@material-ui/core';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 import { AddIcon } from 'Icons';
+
+// Addresses
+const AddressCreateForm = lazy(() => import('forms/Address/Create'));
 
 class Account extends Component {
   constructor(props) {
@@ -344,8 +344,23 @@ export default connect('store')(Account);
 
 function AddNewAddress() {
   const { modalV2: modalV2Store } = useStores();
+
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Add New Address
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
+
   const handleAddNewAddress = () => {
-    modalV2Store.open(<AddressCreateForm />, 'left');
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <AddressCreateForm />
+      </Suspense>,
+      'left',
+    );
   };
 
   return (

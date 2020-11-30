@@ -43,135 +43,135 @@ export default function AddressCreateForm({ onCreate }) {
   };
 
   return (
-    <Formik
-      initialValues={{
-        name: '',
-        telephone: '',
-        streetAddress: '',
-        unit: '',
-        city: '',
-        state: '',
-        zip: '',
-        isPreferredAddress: false,
-      }}
-      validationSchema={Yup.object({
-        name: Yup.string().required("Name can't be blank"),
-        telephone: Yup.string()
-          .phone('US', true, 'Telephone must be a valid US phone number')
-          .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
-          .required("Telephone can't be blank"),
-        streetAddress: Yup.string().required('An address must be provided'),
-        unit: Yup.string(),
-        city: Yup.string().required("City can't be blank"),
-        state: Yup.string().required("State can't be blank"),
-        zip: Yup.string().required("Zip can't be blank"),
-        isPreferredAddress: Yup.bool(),
-      })}
-      onSubmit={(values, { setFieldError, setSubmitting }) => {
-        handleSubmit(values, setFieldError);
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h1" gutterBottom>
-                Add New Address
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextInput
-                name="name"
-                placeholder="Enter your name"
-                label="Name"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <PhoneInput
-                name="telephone"
-                placeholder="Enter your telephone"
-                variant="outlined"
-                fullWidth
-                label="Telephone"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormikPlacesAutoComplete
-                names={['city', 'zip', 'state', 'streetAddress']}
-                mode={'edit'}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextInput
-                name="streetAddress"
-                label="Street Address"
-                placeholder="Street Address"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextInput
-                name="unit"
-                label="Unit"
-                placeholder="Apt number or company"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextInput
-                name="city"
-                label="City"
-                placeholder="City"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextInput
-                name="state"
-                placeholder="State"
-                label="State"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextInput
-                name="zip"
-                label="Zip"
-                placeholder="Zip"
-                fullWidth={true}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Checkbox
-                name="isPreferredAddress"
-                label="Set as my preferred address"
-                color="primary"
-              />
-            </Grid>
-          </Grid>
-          <Grid container justify="center">
-            <Grid item>
-              <Box py={2}>
-                <PrimaryWallyButton
-                  type="submit"
+    <>
+      <Typography variant="h1" gutterBottom>
+        Add New Address
+      </Typography>
+      <Formik
+        initialValues={{
+          name: '',
+          telephone: '',
+          streetAddress: '',
+          unit: '',
+          city: '',
+          state: '',
+          zip: '',
+          isPreferredAddress: false,
+        }}
+        validationSchema={Yup.object({
+          name: Yup.string().required("Name can't be blank"),
+          telephone: Yup.string()
+            .phone('US', true, 'Telephone must be a valid US phone number')
+            .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
+            .required("Telephone can't be blank"),
+          streetAddress: Yup.string().required('An address must be provided'),
+          unit: Yup.string(),
+          city: Yup.string().required("City can't be blank"),
+          state: Yup.string().required("State can't be blank"),
+          zip: Yup.string().required("Zip can't be blank"),
+          isPreferredAddress: Yup.bool(),
+        })}
+        onSubmit={(values, { setFieldError, setSubmitting }) => {
+          handleSubmit(values, setFieldError);
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12}>
+                <TextInput
+                  name="name"
+                  placeholder="Enter your name"
+                  label="Name"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <PhoneInput
+                  name="telephone"
+                  placeholder="Enter your telephone"
+                  variant="outlined"
                   fullWidth
-                  disabled={isSubmitting}
-                >
-                  Add New Address
-                </PrimaryWallyButton>
-              </Box>
+                  label="Telephone"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormikPlacesAutoComplete
+                  names={['city', 'zip', 'state', 'streetAddress']}
+                  mode={'edit'}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInput
+                  name="streetAddress"
+                  label="Street Address"
+                  placeholder="Street Address"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextInput
+                  name="unit"
+                  label="Unit"
+                  placeholder="Apt number or company"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextInput
+                  name="city"
+                  label="City"
+                  placeholder="City"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextInput
+                  name="state"
+                  placeholder="State"
+                  label="State"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextInput
+                  name="zip"
+                  label="Zip"
+                  placeholder="Zip"
+                  fullWidth={true}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Checkbox
+                  name="isPreferredAddress"
+                  label="Set as my preferred address"
+                  color="primary"
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Form>
-      )}
-    </Formik>
+            <Grid container justify="center">
+              <Grid item>
+                <Box py={2}>
+                  <PrimaryWallyButton
+                    type="submit"
+                    fullWidth
+                    disabled={isSubmitting}
+                  >
+                    Add New Address
+                  </PrimaryWallyButton>
+                </Box>
+              </Grid>
+            </Grid>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 }
