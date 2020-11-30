@@ -31,11 +31,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/bulk-friday/bf-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-480.jpg',
   },
 ];
 
@@ -294,13 +294,15 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'Black Friday Promotion'}
+        alt={'New products by gwell'}
         img={img}
         justify="flex-start"
-        // title={'Bulk Friday is Coming.'}
-        // url="/shop/brands/sapo-company"
+        title="Snacks by Gwell"
+        url="/shop/brands/gwell"
       >
-        {/* <Typography gutterBottom>Free shipping from 11/27 to 11/30</Typography> */}
+        <Typography gutterBottom>
+          Fuel your day with functional snacks by Gwell, available now.
+        </Typography>
       </HeroSlide>
     ));
 
@@ -632,7 +634,7 @@ function HeroSlideOverlay({ children, justify, title, url }) {
     >
       <Grid container justify={justify || 'flex-start'}>
         <Grid item xs={12} sm={8}>
-          {/* {title && <HeroOverline>Happy Holidays</HeroOverline>} */}
+          {title && <HeroOverline>Limited Release</HeroOverline>}
           {title && <HeroTitle>{title}</HeroTitle>}
           {children && children}
           {url && (
