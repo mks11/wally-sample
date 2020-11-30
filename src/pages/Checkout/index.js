@@ -91,52 +91,54 @@ function Checkout() {
   }
 
   return (
-    <Formik
-      initialValues={{
-        addressId: userStore.selectedDeliveryAddress
-          ? userStore.selectedDeliveryAddress._id
-          : '',
-        shippingServiceLevel: 'ups_ground',
-        paymentId: userStore.selectedPaymentMethod
-          ? userStore.selectedPaymentMethod._id
-          : '',
-      }}
-      validationSchema={Yup.object({
-        addressId: Yup.string().required('You must select a shipping address.'),
-        shippingServiceLevel: Yup.string().required(),
-        paymentId: Yup.string(),
-      })}
-      enableReinitialize
-      onSubmit={(values, { setFieldError, setSubmitting }) => {
-        handlePlaceOrder(values, setFieldError);
-        setSubmitting(false);
-      }}
-    >
-      <Form>
-        <Container maxWidth="xl">
-          <Box mt={3}>
-            <Typography variant="h1" gutterBottom>
-              Checkout
-            </Typography>
-          </Box>
-          <Grid container spacing={4}>
-            {userStore.user && (
-              <Grid item xs={12} md={5} lg={6}>
-                <DeliveryAddressOptions name="addressId" />
-                <ShippingOptions name="shippingServiceLevel" />
-                <PaymentOptions
-                  name="paymentId"
-                  options={toJS(userStore.user.payment)}
-                />
+    <Container maxWidth="xl">
+      <Box py={4}>
+        <Typography variant="h1" gutterBottom>
+          Checkout
+        </Typography>
+        <Formik
+          initialValues={{
+            addressId: userStore.selectedDeliveryAddress
+              ? userStore.selectedDeliveryAddress._id
+              : '',
+            shippingServiceLevel: 'ups_ground',
+            paymentId: userStore.selectedPaymentMethod
+              ? userStore.selectedPaymentMethod._id
+              : '',
+          }}
+          validationSchema={Yup.object({
+            addressId: Yup.string().required(
+              'You must select a shipping address.',
+            ),
+            shippingServiceLevel: Yup.string().required(),
+            paymentId: Yup.string(),
+          })}
+          enableReinitialize
+          onSubmit={(values, { setFieldError, setSubmitting }) => {
+            handlePlaceOrder(values, setFieldError);
+            setSubmitting(false);
+          }}
+        >
+          <Form>
+            <Grid container spacing={4}>
+              {userStore.user && (
+                <Grid item xs={12} lg={6}>
+                  <DeliveryAddressOptions name="addressId" />
+                  <ShippingOptions name="shippingServiceLevel" />
+                  <PaymentOptions
+                    name="paymentId"
+                    options={toJS(userStore.user.payment)}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={12} lg={6} component="section">
+                <OrderSummary />
               </Grid>
-            )}
-            <Grid item xs={12} md={7} lg={6} component="section">
-              <OrderSummary />
             </Grid>
-          </Grid>
-        </Container>
-      </Form>
-    </Formik>
+          </Form>
+        </Formik>
+      </Box>
+    </Container>
   );
 
   function handleApplyPromo() {
@@ -251,7 +253,7 @@ function OrderSummary() {
               <IconButton
                 disableRipple
                 onClick={handlePackagingDepositClick}
-                style={{ margin: '0 16px' }}
+                style={{ marginLeft: '2px' }}
               >
                 <InfoIcon />
               </IconButton>
