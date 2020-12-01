@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { PRODUCT_BASE_URL } from 'config';
 
 // MobX
@@ -87,6 +87,8 @@ const CartSummary = observer(() => {
 
 export default CartSummary;
 
+const ProductModal = lazy(() => import('modals/ProductModalV2'));
+
 function CartItem({ item }) {
   const {
     customer_quantity,
@@ -97,8 +99,14 @@ function CartItem({ item }) {
     product_name,
     unit_type,
   } = item;
-
-  const { checkout, modal, modalV2, product: productStore, user } = useStores();
+  const {
+    checkout,
+    modal,
+    modalV2,
+    product: productStore,
+    routing,
+    user,
+  } = useStores();
   var productImage;
   var brand;
 
@@ -113,8 +121,12 @@ function CartItem({ item }) {
   }
 
   const handleUpdateCart = async (items) => {
+    // If we're on the checkout page, we should reload the order summary.
+    const shouldReloadOrderSummary = routing.location.pathname.includes(
+      'checkout',
+    );
     const auth = user.getHeaderAuth();
-    checkout.editCurrentCart({ items }, auth, true);
+    checkout.editCurrentCart({ items }, auth, shouldReloadOrderSummary);
   };
 
   const handleUpdateQuantity = async (qty) => {
@@ -132,9 +144,15 @@ function CartItem({ item }) {
   };
 
   const handleViewProduct = (productId) => {
-    modalV2.close();
     productStore.showModal(productId, null);
-    modal.toggleModal('product');
+    modalV2.close();
+    modalV2.open(
+      <Suspense fallback={<p>Loading...</p>}>
+        <ProductModal />
+      </Suspense>,
+      'right',
+      'md',
+    );
   };
 
   const handleDelete = (item) => {
