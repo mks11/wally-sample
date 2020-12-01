@@ -11,7 +11,7 @@ import { formatMoney, getItemsCount } from 'utils';
 
 // npm Package Components
 import { Box, Divider, Grid, IconButton, Typography } from '@material-ui/core';
-import { AddIcon, CloseIcon, RemoveIcon } from 'Icons';
+import { AddIcon, ArrowBackIcon, CloseIcon, RemoveIcon } from 'Icons';
 
 // Custom Components
 import RemoveItemForm from 'forms/cart/RemoveItem';
@@ -148,6 +148,14 @@ function CartItem({ item }) {
     modalV2.close();
     modalV2.open(
       <Suspense fallback={<p>Loading...</p>}>
+        <Box p={1} paddingLeft={0}>
+          <PrimaryTextButton
+            onClick={openCartSummary}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </PrimaryTextButton>
+        </Box>
         <ProductModal />
       </Suspense>,
       'right',
