@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -54,6 +54,8 @@ var MobileCarouselWrapper = styled(Box)`
     display: none;
   }
 `;
+
+const ProductModal = lazy(() => import('modals/ProductModalV2'));
 
 class Mainpage extends Component {
   constructor(props) {
@@ -217,10 +219,19 @@ class Mainpage extends Component {
     }
   }
 
-  handleProductModal = (product_id) => {
-    this.productStore.showModal(product_id, null).then((data) => {
-      this.modalStore.toggleModal('product');
-    });
+  handleProductModal = async (product_id) => {
+    try {
+      await this.productStore.showModal(product_id, null);
+      this.modalV2.open(
+        <Suspense fallback={<p>Loading</p>}>
+          <ProductModal />
+        </Suspense>,
+        'right',
+        'md',
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   handleSearch = (keyword) => {
