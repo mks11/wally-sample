@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { PRODUCT_BASE_URL } from 'config';
 
 // MobX
@@ -10,11 +10,15 @@ import { logEvent } from 'services/google-analytics';
 import { formatMoney, getItemsCount } from 'utils';
 
 // npm Package Components
-import { Box, Divider, Grid, IconButton, Typography } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import { AddIcon, ArrowBackIcon, CloseIcon, RemoveIcon } from 'Icons';
-
-// Custom Components
-import RemoveItemForm from 'forms/cart/RemoveItem';
 
 // Custom Components
 import CarbonBar from 'common/CarbonBar';
@@ -88,6 +92,7 @@ const CartSummary = observer(() => {
 export default CartSummary;
 
 const ProductModal = lazy(() => import('modals/ProductModalV2'));
+const RemoveItemForm = lazy(() => import('forms/cart/RemoveItem'));
 
 function CartItem({ item }) {
   const {
@@ -99,16 +104,22 @@ function CartItem({ item }) {
     product_name,
     unit_type,
   } = item;
+  const [isLoading, setIsLoading] = useState(false);
+  const [increasedQty, setIncreasedQty] = useState(false);
   const {
     checkout,
-    modal,
     modalV2,
     product: productStore,
     routing,
     user,
   } = useStores();
-  var productImage;
   var brand;
+  var productImage;
+
+  // If we're on the checkout page, we should reload the order summary.
+  const shouldReloadOrderSummary = routing.location.pathname.includes(
+    'checkout',
+  );
 
   if (product && product[0]) {
     const { image_refs, vendorFull } = product[0];
@@ -120,19 +131,31 @@ function CartItem({ item }) {
     if (vendorFull && vendorFull.name) brand = vendorFull.name;
   }
 
-  const handleUpdateCart = async (items) => {
-    // If we're on the checkout page, we should reload the order summary.
-    const shouldReloadOrderSummary = routing.location.pathname.includes(
-      'checkout',
+  const handleDelete = (item) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    modalV2.open(
+      <Suspense fallback={<Typography variant="h1">Remove Item</Typography>}>
+        <RemoveItemForm
+          item={item}
+          handleReinitializeCartSummary={openCartSummary}
+          reloadOrderSummary={shouldReloadOrderSummary}
+        />
+      </Suspense>,
     );
+  };
+
+  const handleUpdateCart = (items) => {
     const auth = user.getHeaderAuth();
-    checkout.editCurrentCart({ items }, auth, shouldReloadOrderSummary);
+    return checkout.editCurrentCart({ items }, auth, shouldReloadOrderSummary);
   };
 
   const handleUpdateQuantity = async (qty) => {
     try {
+      if (qty > 0) setIncreasedQty(true);
+      else setIncreasedQty(false);
+      setIsLoading(true);
       const updateQty = customer_quantity + qty;
-      handleUpdateCart([
+      await handleUpdateCart([
         {
           quantity: updateQty,
           product_id,
@@ -140,7 +163,11 @@ function CartItem({ item }) {
           unit_type,
         },
       ]);
-    } catch (error) {}
+    } catch (error) {
+      // TODO HANDLE ERRORS
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleViewProduct = (productId) => {
@@ -160,16 +187,6 @@ function CartItem({ item }) {
       </Suspense>,
       'right',
       'md',
-    );
-  };
-
-  const handleDelete = (item) => {
-    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
-    modalV2.open(
-      <RemoveItemForm
-        item={item}
-        handleReinitializeCartSummary={openCartSummary}
-      />,
     );
   };
 
@@ -241,18 +258,26 @@ function CartItem({ item }) {
                 color="primary"
                 disableRipple
                 onClick={() => handleUpdateQuantity(-1)}
-                disabled={customer_quantity < 2}
+                disabled={customer_quantity < 2 || isLoading}
               >
-                <RemoveIcon />
+                {isLoading && !increasedQty ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <RemoveIcon />
+                )}
               </IconButton>
               <Typography>{customer_quantity}</Typography>
               <IconButton
                 color="primary"
                 disableRipple
                 onClick={() => handleUpdateQuantity(1)}
-                disabled={customer_quantity > 9}
+                disabled={customer_quantity > 9 || isLoading}
               >
-                <AddIcon />
+                {isLoading && increasedQty ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <AddIcon />
+                )}
               </IconButton>
             </Box>
           </Grid>
