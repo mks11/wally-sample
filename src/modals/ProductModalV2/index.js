@@ -15,7 +15,7 @@ import { formatMoney } from 'utils';
 import { Image, ImageWithZoom } from 'pure-react-carousel';
 
 // Material UI
-import { Box, Card, Container, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
 // Reactstrap
@@ -335,64 +335,62 @@ const ProductModalV2 = observer(() => {
   );
 
   return (
-    <Container maxWidth="md">
-      <Card elevation={2}>
-        <Box p={4}>
-          <Typography variant="h1">{name}</Typography>
-          {manufacturer && (
-            <Brand
-              manufacturer={manufacturer}
-              vendor={vendorFull}
-              onClick={closeModal}
-            />
-          )}
-          <Typography variant="subtitle1" gutterBottom>
-            {shipMessage}
+    <Box>
+      <Typography variant="h1">{name}</Typography>
+      {manufacturer && (
+        <Brand
+          manufacturer={manufacturer}
+          vendor={vendorFull}
+          onClick={closeModal}
+        />
+      )}
+      <Typography variant="subtitle1" gutterBottom>
+        {shipMessage}
+      </Typography>
+      <Grid container justify="center" alignItems="center" spacing={2}>
+        <Grid item xs={12} sm={6} md={6}>
+          <ImageCarousel
+            keyName={product_id}
+            height={500}
+            slides={slides}
+            thumbnails={thumbnails}
+            width={500}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={6}>
+          <Typography
+            variant="h4"
+            component="p"
+            style={{ fontWeight: 'bold', color: '#6060a8' }}
+          >
+            {formatMoney(price)}
           </Typography>
-          <Grid container justify="center" alignItems="center" spacing={2}>
-            <Grid item xs={12} sm={6} md={6}>
-              <ImageCarousel
-                keyName={product_id}
-                height={500}
-                slides={slides}
-                thumbnails={thumbnails}
-                width={500}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6}>
-              <Typography
-                variant="h4"
-                component="p"
-                style={{ fontWeight: 'bold', color: '#6060a8' }}
-              >
-                {formatMoney(price)}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                component="span"
-                gutterBottom
-                style={{ fontWeight: 'bold' }}
-              >
-                {typeof netWeight === 'number'
-                  ? `Net weight ${netWeight} oz `
-                  : `${netWeight} `}
-              </Typography>
-              <Typography variant="subtitle1" component="span" gutterBottom>
-                {typeof pricePerOz === 'number'
-                  ? `(${formatMoney(pricePerOz)} / oz)`
-                  : `(${pricePerOz})`}
-              </Typography>
+          <Typography
+            variant="subtitle1"
+            component="span"
+            gutterBottom
+            style={{ fontWeight: 'bold' }}
+          >
+            {typeof netWeight === 'number'
+              ? `Net weight ${netWeight} oz `
+              : `${netWeight} `}
+          </Typography>
+          <Typography variant="subtitle1" component="span" gutterBottom>
+            {typeof pricePerOz === 'number'
+              ? `(${formatMoney(pricePerOz)} / oz)`
+              : `(${pricePerOz})`}
+          </Typography>
 
-              {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
-              {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
+          {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
+          {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
               <div>
                 Unit weight is {unit_weight} {weight_unit}.
               </div>
             )} */}
-              <hr />
+          <hr />
 
-              {/* PACKAGING ICONS - NOT USED AT THE MOMENT */}
-              {/* <div className={infoPackageClass}>
+          {/* PACKAGING ICONS - NOT USED AT THE MOMENT */}
+          {/* <div className={infoPackageClass}>
               <strong>Packaged in:</strong>{' '}
               <i
                 onClick={toggleInfoPackage}
@@ -405,9 +403,9 @@ const ProductModalV2 = observer(() => {
                 <p>More sizes coming soon!</p>
               </div>
             </div> */}
-              {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
-              {/* <div className="mb-3">{packaging_type}</div> */}
-              {/* {buy_by_packaging && (
+          {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
+          {/* <div className="mb-3">{packaging_type}</div> */}
+          {/* {buy_by_packaging && (
               <>
                 <div>
                   <strong>Size:</strong>
@@ -427,116 +425,110 @@ const ProductModalV2 = observer(() => {
               </>
             )} */}
 
-              <Typography
-                variant="h4"
-                component="p"
-                gutterBottom
-                style={{ fontWeight: 'bold' }}
-              >
-                Quantity:
-              </Typography>
-              <QuantitySelect
-                value={qty}
-                onSelectChange={handleSelectQuantity}
-                options={qtyOptions}
-                price_unit={buy_by_packaging ? '' : price_unit}
-              />
-              <Typography variant="body1" gutterBottom>
-                Total: {formatMoney(totalPrice)}
-              </Typography>
-              <PrimaryWallyButton
-                onClick={handleAddToCart}
-                disabled={outOfStock || !available || isSubmitting}
-              >
-                {outOfStock
-                  ? 'Out of Stock'
-                  : available
-                  ? 'Add to cart'
-                  : 'Unavailable'}
-              </PrimaryWallyButton>
-              <br />
-              <br />
-              <Typography variant="subtitle1" gutterBottom>
-                *Packed in a facility that processes dairy, gluten, peanuts and
-                tree nuts.
-              </Typography>
-            </Grid>
-          </Grid>
-          <hr />
-          <Box padding={1}>
-            <ProductDetails
-              description={description}
-              ingredients={ingredients}
-              instructions={instruction}
-              allergens={allergens}
-              tags={tags}
-            />
-          </Box>
-          {a_plus_url && (
-            <Row>
-              <Col>
-                <hr />
-                <div className="a-plus-image">
-                  <img src={a_plus_url} alt="A+" />
-                </div>
-              </Col>
-            </Row>
-          )}
-          <hr />
-          <Box padding={1}>
-            <Typography variant="h2" gutterBottom>
-              Ratings
-            </Typography>
-            <Typography variant="h5" component="p" gutterBottom>
-              Product Rating:{' '}
-            </Typography>
-            {avg_rating ? (
-              <ProductRatingStars rating={avg_rating} />
-            ) : (
-              <Typography variant="body1" gutterBottom>
-                No Ratings Yet
-              </Typography>
-            )}
-            <br />
-            {recentThreeComments && recentThreeComments.length > 0 && (
-              <React.Fragment>
-                <Typography variant="h5" component="p" gutterBottom>
-                  Comments:{' '}
-                </Typography>
-                <Box>
-                  {recentThreeComments.map((comment, key) => (
-                    <Typography
-                      key={'comment-' + key}
-                      variant="body1"
-                      gutterBottom
-                    >
-                      "{truncate(comment.comment, 200)}" - {comment.user_name}
-                    </Typography>
-                  ))}
-                </Box>
-              </React.Fragment>
-            )}
-          </Box>
-          <hr />
-          {userStore.user && <ProductRatingForm product_id={product_id} />}
-          <hr />
-          <Typography variant="h2" gutterBottom>
-            You might also like
+          <Typography
+            variant="h4"
+            component="p"
+            gutterBottom
+            style={{ fontWeight: 'bold' }}
+          >
+            Quantity:
           </Typography>
-          {similar_products && similar_products.length > 0 && (
-            <SimilarProducts>
-              {similar_products.map((product) => (
-                <Product
-                  key={product.product_name}
-                  product={product}
-                  onProductClick={() => handleProductClick(product.product_id)}
-                />
+          <QuantitySelect
+            value={qty}
+            onSelectChange={handleSelectQuantity}
+            options={qtyOptions}
+            price_unit={buy_by_packaging ? '' : price_unit}
+          />
+          <Typography variant="body1" gutterBottom>
+            Total: {formatMoney(totalPrice)}
+          </Typography>
+          <PrimaryWallyButton
+            onClick={handleAddToCart}
+            disabled={outOfStock || !available || isSubmitting}
+          >
+            {outOfStock
+              ? 'Out of Stock'
+              : available
+              ? 'Add to cart'
+              : 'Unavailable'}
+          </PrimaryWallyButton>
+          <br />
+          <br />
+          <Typography variant="subtitle1" gutterBottom>
+            *Packed in a facility that processes dairy, gluten, peanuts and tree
+            nuts.
+          </Typography>
+        </Grid>
+      </Grid>
+      <hr />
+      <Box padding={1}>
+        <ProductDetails
+          description={description}
+          ingredients={ingredients}
+          instructions={instruction}
+          allergens={allergens}
+          tags={tags}
+        />
+      </Box>
+      {a_plus_url && (
+        <Row>
+          <Col>
+            <hr />
+            <div className="a-plus-image">
+              <img src={a_plus_url} alt="A+" />
+            </div>
+          </Col>
+        </Row>
+      )}
+      <hr />
+      <Box padding={1}>
+        <Typography variant="h2" gutterBottom>
+          Ratings
+        </Typography>
+        <Typography variant="h5" component="p" gutterBottom>
+          Product Rating:{' '}
+        </Typography>
+        {avg_rating ? (
+          <ProductRatingStars rating={avg_rating} />
+        ) : (
+          <Typography variant="body1" gutterBottom>
+            No Ratings Yet
+          </Typography>
+        )}
+        <br />
+        {recentThreeComments && recentThreeComments.length > 0 && (
+          <React.Fragment>
+            <Typography variant="h5" component="p" gutterBottom>
+              Comments:{' '}
+            </Typography>
+            <Box>
+              {recentThreeComments.map((comment, key) => (
+                <Typography key={'comment-' + key} variant="body1" gutterBottom>
+                  "{truncate(comment.comment, 200)}" - {comment.user_name}
+                </Typography>
               ))}
-            </SimilarProducts>
-          )}
-        </Box>
-      </Card>
-    </Container>
+            </Box>
+          </React.Fragment>
+        )}
+      </Box>
+      <hr />
+      {userStore.user && <ProductRatingForm product_id={product_id} />}
+      <hr />
+      <Typography variant="h2" gutterBottom>
+        You might also like
+      </Typography>
+      {similar_products && similar_products.length > 0 && (
+        <SimilarProducts>
+          {similar_products.map((product) => (
+            <Product
+              key={product.product_name}
+              product={product}
+              onProductClick={() => handleProductClick(product.product_id)}
+            />
+          ))}
+        </SimilarProducts>
+      )}
+    </Box>
   );
 });
 
