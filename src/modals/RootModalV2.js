@@ -11,9 +11,11 @@ import { observer } from 'mobx-react';
 
 function RootModalV2() {
   const theme = useTheme();
-  const { modalV2 } = useStores();
+  const { modalV2, product } = useStores();
   const { anchor, children, isOpen, maxWidth } = modalV2;
+
   const handleClose = () => {
+    product.resetActiveProduct();
     modalV2.close();
   };
 
