@@ -223,7 +223,9 @@ class Mainpage extends Component {
     try {
       await this.productStore.showModal(product_id, null);
       this.modalV2.open(
-        <Suspense fallback={<p>Loading</p>}>
+        <Suspense
+          fallback={<Typography variant="h1">Loading product...</Typography>}
+        >
           <ProductModal />
         </Suspense>,
         'right',
@@ -397,7 +399,6 @@ class Mainpage extends Component {
                               key={index}
                               product={product}
                               deliveryTimes={this.state.deliveryTimes}
-                              onProductClick={this.handleProductModal}
                             />
                           ))
                       ) : (
@@ -440,7 +441,6 @@ class Mainpage extends Component {
                             key={index}
                             product={product}
                             deliveryTimes={this.state.deliveryTimes}
-                            onProductClick={this.handleProductModal}
                           />
                         ))}
                     </div>
@@ -513,7 +513,6 @@ class Mainpage extends Component {
                                   filters={filters}
                                   mode={this.state.categoryTypeMode}
                                   deliveryTimes={this.state.deliveryTimes}
-                                  onProductClick={this.handleProductModal}
                                 />
                               ),
                             )
