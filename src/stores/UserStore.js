@@ -2,7 +2,6 @@ import { observable, decorate, action, computed, runInAction } from 'mobx';
 
 // API
 import { deleteAddress } from 'api/address';
-import { deactivatePaymentMethod } from 'api/payment';
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -29,7 +28,6 @@ class UserStore {
   token = '';
 
   selectedDeliveryAddress = null;
-  selectedPaymentMethod = null;
   selectedDeliveryTime = null;
 
   refPromo = null;
@@ -378,27 +376,6 @@ class UserStore {
     return this.user ? this.user.payment.find((item) => item._id === id) : null;
   }
 
-  setPaymentMethod(data) {
-    this.selectedPaymentMethod = data;
-  }
-
-  deactivatePaymentMethod(paymentId) {
-    const auth = this.getHeaderAuth();
-
-    // Reset the selected address if it matches the address being deleted.
-    if (
-      this.selectedPaymentMethod &&
-      this.selectedPaymentMethod._id &&
-      this.selectedPaymentMethod._id === paymentId
-    ) {
-      this.selectedPaymentMethod = null;
-    }
-
-    return deactivatePaymentMethod(paymentId, auth).then(() => {
-      this.getUser();
-    });
-  }
-
   getDeliveryParams() {
     let data = {
       zip: null,
@@ -481,7 +458,6 @@ decorate(UserStore, {
   promoSuccessModal: observable,
 
   selectedDeliveryAddress: observable,
-  selectedPaymentMethod: observable,
   selectedDeliveryTime: observable,
 
   refPromo: observable,
@@ -525,8 +501,6 @@ decorate(UserStore, {
   resetPassword: action,
 
   setDeliveryAddress: action,
-  setPaymentMethod: action,
-  deactivatePaymentMethod: action,
   setDeliveryTime: action,
   loadFakeUser: action,
   adjustDeliveryTimes: action,

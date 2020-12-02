@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import CheckoutCard from './../BaseCheckoutCard';
 import PaymentSelect from 'common/PaymentSelect';
 import { useStores } from 'hooks/mobx';
@@ -12,30 +12,25 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 function Payment({ name }) {
   const { user: userStore } = useStores();
   const { user = {} } = userStore;
-  const selected = userStore.selectedPaymentMethod;
-  const collapsedHeight = selected ? 80 : 50;
-  const { setFieldValue } = useFormikContext() || {};
+  const { values, setFieldValue } = useFormikContext() || {};
 
-  useEffect(() => {
-    if (!selected && user && user.preferred_payment) {
-      const { preferred_payment } = user;
-      const preferredPaymentMethod = user.payment.find(
-        (p) => p._id === preferred_payment,
-      );
-      userStore.setPaymentMethod(preferredPaymentMethod);
-    }
-  }, [selected, user, userStore]);
+  // Will be equal to a stringified object id
+  const paymentMethodId = values[name];
+  const collapsedHeight = paymentMethodId ? 80 : 50;
+  const selectedPaymentMethod = user
+    ? user.payment.find((p) => p._id === paymentMethodId)
+    : '';
 
-  const handleSelect = (paymentMethod) => {
-    const p = JSON.parse(paymentMethod);
-    userStore.setPaymentMethod(p);
-    setFieldValue && setFieldValue(name, p._id);
+  const handleSelect = (paymentMethodId) => {
+    setFieldValue && setFieldValue(name, paymentMethodId);
   };
 
   return (
     <CheckoutCard title="Payment" collapsedHeight={collapsedHeight} name={name}>
-      {selected ? (
-        <CreditCard paymentMethod={selected} />
+      {selectedPaymentMethod ? (
+        <Box pl={1}>
+          <CreditCard paymentMethod={selectedPaymentMethod} />
+        </Box>
       ) : (
         <Box p={2}>
           <Typography> No payment information on file. </Typography>
@@ -45,12 +40,12 @@ function Payment({ name }) {
       <Box py={2}>
         <Divider />
       </Box>
-      {selected && (
+      {selectedPaymentMethod && (
         <PaymentSelect
           name={name}
           onChange={handleSelect}
           paymentMethods={user ? user.payment : []}
-          selected={selected}
+          selected={selectedPaymentMethod}
         />
       )}
     </CheckoutCard>

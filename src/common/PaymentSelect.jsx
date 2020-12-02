@@ -25,19 +25,14 @@ function PaymentSelect({ name, onChange, paymentMethods = [], selected }) {
         name={name}
         onChange={handleSelect}
       >
-        {activePaymentMethods.map((paymentMethod) => {
-          // Stringify the payment method to enable the handle select method to be used directly
-          // with card data from the user's list of addresses and from API responses
-          const value = JSON.stringify(paymentMethod);
-          return (
-            <PaymentRadioButton
-              key={paymentMethod._id}
-              paymentMethod={paymentMethod}
-              selected={selected}
-              value={value}
-            />
-          );
-        })}
+        {activePaymentMethods.map((paymentMethod) => (
+          <PaymentRadioButton
+            key={paymentMethod._id}
+            paymentMethod={paymentMethod}
+            selected={selected}
+            value={paymentMethod._id}
+          />
+        ))}
       </RadioGroup>
     </>
   );
@@ -58,8 +53,7 @@ const useStyles = makeStyles(() => ({
 
 function PaymentRadioButton({ paymentMethod, selected, value }) {
   const classes = useStyles();
-  const parsedVal = JSON.parse(value);
-  const isSelected = parsedVal._id === selected._id;
+  const isSelected = value === selected._id;
 
   return (
     <Box display="flex">

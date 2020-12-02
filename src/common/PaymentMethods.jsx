@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 // API
-import { reactivatePaymentMethod, updatePaymentMethod } from 'api/payment';
+import {
+  deactivatePaymentMethod,
+  reactivatePaymentMethod,
+  updatePaymentMethod,
+} from 'api/payment';
 
 // Material UI
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -104,7 +108,8 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
   const handleDeactivatePayment = async () => {
     try {
       loadingStore.show();
-      await userStore.deactivatePaymentMethod(_id);
+      await deactivatePaymentMethod(_id, auth);
+      await userStore.getUser();
     } catch (error) {
       const msg = getErrorMessage(error);
       if (msg) snackbarStore.openSnackbar(msg, 'error');

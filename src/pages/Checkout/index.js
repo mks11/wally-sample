@@ -72,7 +72,9 @@ function Checkout() {
   if (!checkoutStore.order || !userStore.user) {
     return null;
   }
-
+  const {
+    user: { preferred_payment },
+  } = userStore;
   return (
     <Container maxWidth="xl">
       <Box py={4}>
@@ -85,9 +87,7 @@ function Checkout() {
               ? userStore.selectedDeliveryAddress._id
               : '',
             shippingServiceLevel: 'ups_ground',
-            paymentId: userStore.selectedPaymentMethod
-              ? userStore.selectedPaymentMethod._id
-              : '',
+            paymentId: preferred_payment ? preferred_payment : '',
           }}
           validationSchema={Yup.object({
             addressId: Yup.string().required(

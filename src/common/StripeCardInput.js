@@ -44,7 +44,7 @@ function CardInput({ elements, onAdd, stripe }) {
         auth,
       );
       userStore.setUserData(user);
-      onAdd && onAdd(JSON.stringify(paymentMethod));
+      onAdd && onAdd(paymentMethod._id);
       modalV2.close();
     } catch (error) {
       if (
