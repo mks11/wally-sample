@@ -92,7 +92,9 @@ function Checkout() {
               'You must select a shipping address.',
             ),
             shippingServiceLevel: Yup.string().required(),
-            paymentId: Yup.string(),
+            paymentId: Yup.string().required(
+              'You must select a payment method.',
+            ),
           })}
           enableReinitialize
           onSubmit={(values, { setFieldError, setSubmitting }) => {
