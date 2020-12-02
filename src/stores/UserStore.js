@@ -1,4 +1,8 @@
 import { observable, decorate, action, computed, runInAction } from 'mobx';
+
+// API
+import { deleteAddress } from 'api/address';
+
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -7,7 +11,6 @@ import {
   API_SIGNUP,
   API_EDIT_USER,
   API_ADDRESS_NEW,
-  API_ADDRESS_REMOVE,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_SUBSCRIBE_EMAIL,
@@ -156,22 +159,6 @@ class UserStore {
     return res.data;
   }
 
-  async deleteAddress(address_id) {
-    const res = await axios
-      .delete(API_ADDRESS_REMOVE + address_id, this.getHeaderAuth())
-      .then((_res) => {
-        runInAction(() => {
-          const addresses = (this.user && this.user.addresses) || [];
-          this.user.addresses = addresses.filter(
-            (addr) => addr._id !== address_id,
-          );
-          this.setUserData(this.user);
-        });
-        return _res;
-      });
-    return res.data;
-  }
-
   async saveAddress(data) {
     const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth());
     this.updateSelectedDeliveryAddress(res.data);
@@ -215,7 +202,7 @@ class UserStore {
   readStorage() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    const delivery = localStorage.getItem('delivery');
+    // const delivery = localStorage.getItem('delivery');
     const flags = localStorage.getItem('flags');
 
     runInAction(() => {
@@ -224,11 +211,11 @@ class UserStore {
         this.user = JSON.parse(user);
       }
 
-      if (delivery) {
-        const deliveryData = JSON.parse(delivery);
-        this.selectedDeliveryAddress = deliveryData.address;
-        this.selectedDeliveryTime = deliveryData.time;
-      }
+      // if (delivery) {
+      //   const deliveryData = JSON.parse(delivery);
+      //   this.selectedDeliveryAddress = deliveryData.address;
+      //   this.selectedDeliveryTime = deliveryData.time;
+      // }
 
       this.flags = flags && JSON.parse(flags);
     });
@@ -242,7 +229,7 @@ class UserStore {
     if (data.address)
       localStorage.setItem('zip', JSON.stringify(data.address.zip));
 
-    localStorage.setItem('delivery', JSON.stringify(data));
+    // localStorage.setItem('delivery', JSON.stringify(data));
   }
 
   async getUser() {
@@ -250,6 +237,23 @@ class UserStore {
     this.setUserData(res.data);
     //this.setUserToken(res.data.token)
     return res.data;
+  }
+
+  deleteAddress(address_id) {
+    const auth = this.getHeaderAuth();
+
+    // Reset the selected address if it matches the address being deleted.
+    if (
+      this.selectedDeliveryAddress &&
+      this.selectedDeliveryAddress.address_id &&
+      this.selectedDeliveryAddress.address_id === address_id
+    ) {
+      this.selectedDeliveryAddress = null;
+    }
+
+    return deleteAddress(address_id, auth).then(() => {
+      this.getUser();
+    });
   }
 
   async saveLocalAddresses() {
@@ -361,8 +365,8 @@ class UserStore {
 
   setDeliveryAddress(data) {
     this.selectedDeliveryAddress = data;
-    localStorage.setItem('zip', data.zip);
-    this.setDeliveryData();
+    // localStorage.setItem('zip', data.zip);
+    // this.setDeliveryData();
   }
 
   setDeliveryTime(time) {
