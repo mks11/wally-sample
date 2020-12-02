@@ -44,7 +44,10 @@ function AddressOptions({ name }) {
       name={name}
     >
       {selectedAddress ? (
-        <Address address={selectedAddress} />
+        <Address
+          address={selectedAddress}
+          isPreferredAddress={addressId === user.preferred_address}
+        />
       ) : (
         <Box p={2}>
           <Typography>No shipping address selected.</Typography>
