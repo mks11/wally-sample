@@ -18,7 +18,10 @@ export default function Address({ address = {}, isPreferredAddress }) {
   const { street_address, unit, city, state, zip, name, telephone } = address;
 
   // handles formatting when unit is not present
-  const street_address_unit = (street_address + ' ' + unit).trim();
+  var streetAddress = street_address;
+  if (unit) {
+    streetAddress += ' ' + unit;
+  }
 
   return (
     <Box
@@ -35,7 +38,7 @@ export default function Address({ address = {}, isPreferredAddress }) {
             <StyledBadge badgeContent="Default" color="primary" />
           )}
         </Typography>
-        <Typography>{street_address_unit},</Typography>
+        <Typography>{streetAddress.trim()},</Typography>
         <Typography>
           {city}, {state} {zip}
         </Typography>

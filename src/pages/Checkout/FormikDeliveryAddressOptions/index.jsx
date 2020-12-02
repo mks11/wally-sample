@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // Material UI
@@ -23,12 +23,11 @@ import { useFormikContext } from 'formik';
 const AddressCreateForm = lazy(() => import('forms/Address/Create'));
 
 function AddressOptions({ name }) {
-  const [data, setData] = useState([]);
   const { user: userStore } = useStores();
   const { user = {} } = userStore;
-  const { setFieldValue } = useFormikContext() || {};
   const selected = userStore.selectedDeliveryAddress;
   const collapsedHeight = selected ? 100 : 50;
+  const { setFieldValue } = useFormikContext() || {};
 
   const handleSelect = (address) => {
     const a = JSON.parse(address);
@@ -37,18 +36,14 @@ function AddressOptions({ name }) {
   };
 
   useEffect(() => {
-    if (user) loadAddresses();
-  }, [user]);
-
-  useEffect(() => {
-    if (!selected && user) {
-      userStore.setDeliveryAddress(user.preferred_address);
+    if (!selected && user && user.preferred_address) {
+      const { preferred_address } = user;
+      const preferredAddress = user.addresses.find(
+        (a) => a._id === preferred_address,
+      );
+      userStore.setDeliveryAddress(preferredAddress);
     }
   }, [selected, user, userStore]);
-
-  function loadAddresses() {
-    setData(user.addresses || []);
-  }
 
   return (
     <CheckoutCard
@@ -63,14 +58,16 @@ function AddressOptions({ name }) {
           <Typography>No shipping address selected.</Typography>
         </Box>
       )}
-      <AddNewAddress />
-      <AddressList
-        addresses={data}
-        defaultAddressId={user.preferred_address}
-        name={name}
-        onChange={handleSelect}
-        selected={selected}
-      />
+      <AddNewAddress onCreate={handleSelect} />
+      {selected && (
+        <AddressList
+          addresses={user ? user.addresses : []}
+          defaultAddressId={user ? user.preferred_address : null}
+          name={name}
+          onChange={handleSelect}
+          selected={selected}
+        />
+      )}
     </CheckoutCard>
   );
 }
@@ -81,7 +78,7 @@ AddressOptions.propTypes = {
 
 export default observer(AddressOptions);
 
-function AddNewAddress() {
+function AddNewAddress({ onCreate }) {
   const { modalV2: modalV2Store } = useStores();
 
   const SuspenseFallback = () => (
@@ -96,7 +93,7 @@ function AddNewAddress() {
   const handleAddNewAddress = () => {
     modalV2Store.open(
       <Suspense fallback={SuspenseFallback()}>
-        <AddressCreateForm />
+        <AddressCreateForm onCreate={onCreate} />
       </Suspense>,
       'left',
     );

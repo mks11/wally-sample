@@ -60,14 +60,7 @@ function Checkout() {
     userStore.getStatus().then(() => {
       const { user } = userStore;
       if (user) {
-        const { preferred_address, preferred_payment } = user;
-
-        const selectedAddress =
-          userStore.selectedDeliveryAddress ||
-          userStore.getAddressById(preferred_address);
-        if (selectedAddress) {
-          userStore.setDeliveryAddress(selectedAddress);
-        }
+        const { preferred_payment } = user;
 
         const selectedPayment =
           userStore.selectedPaymentMethod ||
