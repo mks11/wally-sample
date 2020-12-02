@@ -29,7 +29,7 @@ export default function AddressCreateForm({ onCreate }) {
         const { address } = res.data;
         await userStore.getUser();
         modalV2Store.close();
-        onCreate && onCreate(JSON.stringify(address));
+        onCreate && onCreate(address._id);
         snackbarStore.openSnackbar('Address created successfully!', 'success');
       }
     } catch ({ response }) {
