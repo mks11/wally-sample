@@ -44,7 +44,7 @@ function ShippingOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={40} name={name}>
+    <CheckoutCard title="Shipping Options" collapsedHeight={50} name={name}>
       <Box p={1}>
         <Typography>
           {getSelectedShippingDates() || 'No shipping method selected.'}
@@ -65,9 +65,20 @@ function ShippingOptions({ name }) {
         )}
         isChecked={(item) => item.value === selected}
       />
-      <Typography variant="body2" color="textSecondary">
-        * Delivery may take longer than usual because of COVID-19
-      </Typography>
+      <Box mb={4}>
+        <Typography variant="body2" color="textSecondary">
+          * Delivery may take longer than usual due to increased shipping lead
+          times caused by COVID-19. For more information, visit{' '}
+          <a
+            href="https://www.ups.com/us/en/about/news/important-updates.page"
+            target="blank"
+            rel="noopener noreferrer"
+          >
+            UPS
+          </a>
+          .
+        </Typography>
+      </Box>
     </CheckoutCard>
   );
 }
