@@ -73,7 +73,7 @@ export default function CheckoutCard({
             timeout="auto"
           >
             <Box>{children}</Box>
-            <Container maxWidth="sm">
+            <Container maxWidth="sm" disableGutters>
               <Box mt={2}>
                 <PrimaryWallyButton onClick={handleClose} fullWidth>
                   Save
