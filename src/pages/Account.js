@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component, lazy, Suspense, useState } from 'react';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -27,10 +27,14 @@ import {
   Button,
   Container,
   Divider,
+  FormGroup,
+  FormControlLabel,
   List,
   Grid,
+  Switch,
   Typography,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 import { AddIcon } from 'Icons';
 
@@ -46,6 +50,7 @@ class Account extends Component {
       email: '',
       editName: true,
       editTelephone: true,
+      showDeactivatedPaymentMethods: false,
     };
 
     this.userStore = this.props.store.user;
@@ -102,6 +107,10 @@ class Account extends Component {
       });
   }
 
+  toggleActivePayments(event) {
+    this.setState({ ...this.state, [event.target.name]: event.target.checked });
+  }
+
   updateName(e) {
     this.edit();
     this.toggleEditName(true);
@@ -119,7 +128,9 @@ class Account extends Component {
     const telephone = this.state.telephone ? this.state.telephone : '';
 
     const addresses = this.userStore.user.addresses;
-    const payments = this.userStore.user.payment.filter((p) => p.is_active);
+    const payments = this.state.showDeactivatedPaymentMethods
+      ? this.userStore.user.payment
+      : this.userStore.user.payment.filter((p) => p.is_active);
 
     return (
       <div className="App">
@@ -325,14 +336,24 @@ class Account extends Component {
             </Box>
             <Divider />
             {payments.length ? (
-              <List>
-                {payments.map((paymentMethod) => (
-                  <PaymentMethod
-                    key={paymentMethod._id}
-                    paymentMethod={paymentMethod}
-                  ></PaymentMethod>
-                ))}
-              </List>
+              <>
+                <Box display="flex" alignItems="center" pt={2} px={2}>
+                  <PaymentActivationStatusSwitch
+                    onChange={(e) => this.toggleActivePayments(e)}
+                    showDeactivatedPaymentMethods={
+                      this.state.showDeactivatedPaymentMethods
+                    }
+                  />
+                </Box>
+                <List>
+                  {payments.map((paymentMethod) => (
+                    <PaymentMethod
+                      key={paymentMethod._id}
+                      paymentMethod={paymentMethod}
+                    />
+                  ))}
+                </List>
+              </>
             ) : (
               <Box my={2}>
                 <Typography>No payment methods on file</Typography>
@@ -393,5 +414,78 @@ function AddNewPaymentMethod() {
     <PrimaryTextButton onClick={handleAddNewPaymentMethod}>
       <AddIcon /> New
     </PrimaryTextButton>
+  );
+}
+
+const PaymentMethodSwitch = withStyles((theme) => ({
+  root: {
+    width: 42,
+    height: 26,
+    padding: 0,
+    margin: theme.spacing(1),
+  },
+  switchBase: {
+    padding: 1,
+    '&$checked': {
+      transform: 'translateX(16px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        backgroundColor: '#52d869',
+        opacity: 1,
+        border: 'none',
+      },
+    },
+    '&$focusVisible $thumb': {
+      color: '#52d869',
+      border: '6px solid #fff',
+    },
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+  },
+  track: {
+    borderRadius: 26 / 2,
+    border: `1px solid ${theme.palette.grey[400]}`,
+    backgroundColor: theme.palette.grey[50],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color', 'border']),
+  },
+  checked: {},
+  focusVisible: {},
+}))(({ classes, ...props }) => {
+  return (
+    <Switch
+      focusVisibleClassName={classes.focusVisible}
+      disableRipple
+      classes={{
+        root: classes.root,
+        switchBase: classes.switchBase,
+        thumb: classes.thumb,
+        track: classes.track,
+        checked: classes.checked,
+      }}
+      {...props}
+    />
+  );
+});
+
+function PaymentActivationStatusSwitch({
+  showDeactivatedPaymentMethods,
+  onChange,
+}) {
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <PaymentMethodSwitch
+            checked={showDeactivatedPaymentMethods}
+            onChange={onChange}
+            name="showDeactivatedPaymentMethods"
+          />
+        }
+        label="Show inactive payment methods"
+      />
+    </FormGroup>
   );
 }
