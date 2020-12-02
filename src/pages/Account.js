@@ -210,97 +210,105 @@ class Account extends Component {
               <AddNewAddress />
             </Box>
             <Divider />
-            <ul className="list-addresses">
-              {addresses.map((data, index) => (
-                <li key={index}>
-                  <Grid container justify="space-between">
-                    <Grid item xs={12} lg={3}>
-                      <Typography variant="h4" component="h3">
-                        {data.street_address} {data.unit}, {data.state}{' '}
-                        {data.zip}
-                      </Typography>
-                      <Typography variant="body1">{data.name}</Typography>
-                      <Typography variant="body1" gutterBottom>
-                        {data.telephone}
-                      </Typography>
-                    </Grid>
-                    {data.address_id ===
-                    this.userStore.user.preferred_address ? (
-                      <Grid item>
-                        <br />
-                        <Typography variant="h5" component="span">
-                          DEFAULT
-                        </Typography>
-                      </Grid>
-                    ) : (
-                      <Grid item xs={12} md={6} lg={3}>
-                        <br />
-                        <Button
-                          variant="outlined"
-                          fullWidth
-                          onClick={async () => {
-                            this.loading.show();
-                            this.userStore
-                              .makeDefaultAddress(data.address_id)
-                              .then(() => {
-                                setTimeout(() => {
-                                  this.userStore.getUser();
-                                  this.snackbar.openSnackbar(
-                                    'Default address updated successfully!',
-                                    'success',
-                                  );
-                                }, 200);
-                              })
-                              .finally(() => {
-                                setTimeout(() => this.loading.hide(), 300);
-                              });
-                          }}
-                        >
-                          <Typography variant="body1">
-                            Use as Default Address
+            <Box py={2}>
+              <ul className="list-addresses">
+                {addresses.length ? (
+                  addresses.map((data, index) => (
+                    <li key={index}>
+                      <Grid container justify="space-between">
+                        <Grid item xs={12} lg={3}>
+                          <Typography variant="h4" component="h3">
+                            {data.street_address} {data.unit}, {data.state}{' '}
+                            {data.zip}
                           </Typography>
-                        </Button>
+                          <Typography variant="body1">{data.name}</Typography>
+                          <Typography variant="body1" gutterBottom>
+                            {data.telephone}
+                          </Typography>
+                        </Grid>
+                        {data.address_id ===
+                        this.userStore.user.preferred_address ? (
+                          <Grid item>
+                            <br />
+                            <Typography variant="h5" component="span">
+                              DEFAULT
+                            </Typography>
+                          </Grid>
+                        ) : (
+                          <Grid item xs={12} md={6} lg={3}>
+                            <br />
+                            <Button
+                              variant="outlined"
+                              fullWidth
+                              onClick={async () => {
+                                this.loading.show();
+                                this.userStore
+                                  .makeDefaultAddress(data.address_id)
+                                  .then(() => {
+                                    setTimeout(() => {
+                                      this.userStore.getUser();
+                                      this.snackbar.openSnackbar(
+                                        'Default address updated successfully!',
+                                        'success',
+                                      );
+                                    }, 200);
+                                  })
+                                  .finally(() => {
+                                    setTimeout(() => this.loading.hide(), 300);
+                                  });
+                              }}
+                            >
+                              <Typography variant="body1">
+                                Use as Default Address
+                              </Typography>
+                            </Button>
+                          </Grid>
+                        )}
                       </Grid>
-                    )}
-                  </Grid>
-                  <br />
-                  <br />
-                  <Grid container justify="flex-end" spacing={2}>
-                    <Grid item xs={6} lg={2}>
-                      <DangerButton
-                        variant="outlined"
-                        startIcon={<DeleteOutline fontSize="large" />}
-                        fullWidth
-                        onClick={() =>
-                          this.modalStore.toggleModal(
-                            'addressDelete',
-                            null,
-                            data.address_id,
-                          )
-                        }
-                      >
-                        <Typography variant="body1">Remove</Typography>
-                      </DangerButton>
-                    </Grid>
-                    <Grid item xs={6} lg={2}>
-                      <PrimaryWallyButton
-                        startIcon={<Edit fontSize="large" />}
-                        fullWidth
-                        onClick={() =>
-                          this.modalStore.toggleModal(
-                            'addressUpdate',
-                            null,
-                            data.address_id,
-                          )
-                        }
-                      >
-                        <Typography variant="body1">Update</Typography>
-                      </PrimaryWallyButton>
-                    </Grid>
-                  </Grid>
-                </li>
-              ))}
-            </ul>
+                      <br />
+                      <br />
+                      <Grid container justify="flex-end" spacing={2}>
+                        <Grid item xs={6} lg={2}>
+                          <DangerButton
+                            variant="outlined"
+                            startIcon={<DeleteOutline fontSize="large" />}
+                            fullWidth
+                            onClick={() =>
+                              this.modalStore.toggleModal(
+                                'addressDelete',
+                                null,
+                                data.address_id,
+                              )
+                            }
+                          >
+                            <Typography variant="body1">Remove</Typography>
+                          </DangerButton>
+                        </Grid>
+                        <Grid item xs={6} lg={2}>
+                          <PrimaryWallyButton
+                            startIcon={<Edit fontSize="large" />}
+                            fullWidth
+                            onClick={() =>
+                              this.modalStore.toggleModal(
+                                'addressUpdate',
+                                null,
+                                data.address_id,
+                              )
+                            }
+                          >
+                            <Typography variant="body1">Update</Typography>
+                          </PrimaryWallyButton>
+                        </Grid>
+                      </Grid>
+                    </li>
+                  ))
+                ) : (
+                  <Typography gutterBottom>
+                    You haven't added any addresses yet.
+                  </Typography>
+                )}
+              </ul>
+            </Box>
           </Container>
         </Box>
 
@@ -359,7 +367,7 @@ function AddNewAddress() {
       <Suspense fallback={SuspenseFallback()}>
         <AddressCreateForm />
       </Suspense>,
-      'left',
+      'right',
     );
   };
 
