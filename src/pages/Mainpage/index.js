@@ -125,7 +125,7 @@ class Mainpage extends Component {
         if (!status) {
           this.routing.push('/');
         } else {
-          this.checkoutStore.getDeliveryTimes();
+          // this.checkoutStore.getDeliveryTimes();
           this.loadData();
           const { mainFirst, mainSecond } = this.userStore.flags || {};
           !mainFirst && this.modalStore.toggleModal('mainFirst');

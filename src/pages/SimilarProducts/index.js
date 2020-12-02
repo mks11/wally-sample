@@ -37,7 +37,7 @@ class SimilarProducts extends Component {
     logPageView(location.pathname);
 
     this.userStore.getStatus(true).then((status) => {
-      this.checkoutStore.getDeliveryTimes();
+      // this.checkoutStore.getDeliveryTimes();
       this.loadData();
 
       const { mainFirst } = this.userStore.flags || {};
