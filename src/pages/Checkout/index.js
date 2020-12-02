@@ -73,7 +73,7 @@ function Checkout() {
     return null;
   }
   const {
-    user: { preferred_payment },
+    user: { preferred_address = '', preferred_payment = '' } = {},
   } = userStore;
   return (
     <Container maxWidth="xl">
@@ -83,9 +83,7 @@ function Checkout() {
         </Typography>
         <Formik
           initialValues={{
-            addressId: userStore.selectedDeliveryAddress
-              ? userStore.selectedDeliveryAddress._id
-              : '',
+            addressId: preferred_address ? preferred_address : '',
             shippingServiceLevel: 'ups_ground',
             paymentId: preferred_payment ? preferred_payment : '',
           }}

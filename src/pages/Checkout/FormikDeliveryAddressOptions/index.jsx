@@ -25,25 +25,17 @@ const AddressCreateForm = lazy(() => import('forms/Address/Create'));
 function AddressOptions({ name }) {
   const { user: userStore } = useStores();
   const { user = {} } = userStore;
-  const selected = userStore.selectedDeliveryAddress;
-  const collapsedHeight = selected ? 100 : 50;
-  const { setFieldValue } = useFormikContext() || {};
+  const { values, setFieldValue } = useFormikContext() || {};
 
-  const handleSelect = (address) => {
-    const a = JSON.parse(address);
-    userStore.setDeliveryAddress(a);
-    setFieldValue && setFieldValue(name, a._id);
+  // will be equal to a stringified object id
+  const addressId = values[name];
+  const collapsedHeight = addressId ? 100 : 50;
+  const selectedAddress =
+    user && addressId ? user.addresses.find((a) => a._id === addressId) : '';
+
+  const handleSelect = (addressId) => {
+    setFieldValue && setFieldValue(name, addressId);
   };
-
-  useEffect(() => {
-    if (!selected && user && user.preferred_address) {
-      const { preferred_address } = user;
-      const preferredAddress = user.addresses.find(
-        (a) => a._id === preferred_address,
-      );
-      userStore.setDeliveryAddress(preferredAddress);
-    }
-  }, [selected, user, userStore]);
 
   return (
     <CheckoutCard
@@ -51,21 +43,21 @@ function AddressOptions({ name }) {
       title="Delivery Address"
       name={name}
     >
-      {selected ? (
-        <Address address={selected} />
+      {selectedAddress ? (
+        <Address address={selectedAddress} />
       ) : (
         <Box p={2}>
           <Typography>No shipping address selected.</Typography>
         </Box>
       )}
       <AddNewAddress onCreate={handleSelect} />
-      {selected && (
+      {selectedAddress && (
         <AddressList
           addresses={user ? user.addresses : []}
           defaultAddressId={user ? user.preferred_address : null}
           name={name}
           onChange={handleSelect}
-          selected={selected}
+          selected={selectedAddress}
         />
       )}
     </CheckoutCard>
