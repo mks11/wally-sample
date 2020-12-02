@@ -148,22 +148,6 @@ class UserStore {
     return res;
   }
 
-  async makeDefaultAddress(address_id) {
-    const res = await axios.patch(
-      API_EDIT_USER,
-      { preferred_address: address_id },
-      this.getHeaderAuth(),
-    );
-    return res.data;
-  }
-
-  async saveAddress(data) {
-    const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth());
-    this.updateSelectedDeliveryAddress(res.data);
-    this.setUserData(res.data);
-    return res.data;
-  }
-
   async deletePayment(payment_id) {
     const res = await axios.delete(
       API_PAYMENT_REMOVE + payment_id,
@@ -172,35 +156,9 @@ class UserStore {
     return res.data;
   }
 
-  updateSelectedDeliveryAddress(newUser) {
-    const oldAddresses = this.user.addresses;
-    const newAddresses = newUser.addresses;
-
-    function comparer(otherArray) {
-      return function (current) {
-        return (
-          otherArray.filter(function (other) {
-            return other.address_id === current.address_id;
-          }).length === 0
-        );
-      };
-    }
-
-    let addressOldFilter = oldAddresses.filter(comparer(newAddresses));
-    let addressNewFilter = newAddresses.filter(comparer(oldAddresses));
-
-    let diff = addressOldFilter.concat(addressNewFilter);
-    this.selectedDeliveryAddress = diff[0];
-    localStorage.setItem(
-      'zip',
-      JSON.stringify(this.selectedDeliveryAddress.zip),
-    );
-  }
-
   readStorage() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    // const delivery = localStorage.getItem('delivery');
     const flags = localStorage.getItem('flags');
 
     runInAction(() => {
@@ -209,25 +167,17 @@ class UserStore {
         this.user = JSON.parse(user);
       }
 
-      // if (delivery) {
-      //   const deliveryData = JSON.parse(delivery);
-      //   this.selectedDeliveryAddress = deliveryData.address;
-      //   this.selectedDeliveryTime = deliveryData.time;
-      // }
-
       this.flags = flags && JSON.parse(flags);
     });
   }
 
-  setDeliveryData() {
-    const data = {
-      address: this.selectedDeliveryAddress,
-      time: this.selectedDeliveryTime,
-    };
-    if (data.address)
-      localStorage.setItem('zip', JSON.stringify(data.address.zip));
-
-    // localStorage.setItem('delivery', JSON.stringify(data));
+  async makeDefaultAddress(address_id) {
+    const res = await axios.patch(
+      API_EDIT_USER,
+      { preferred_address: address_id },
+      this.getHeaderAuth(),
+    );
+    return res.data;
   }
 
   async getUser() {
@@ -239,36 +189,9 @@ class UserStore {
 
   deleteAddress(address_id) {
     const auth = this.getHeaderAuth();
-
-    // Reset the selected address if it matches the address being deleted.
-    if (
-      this.selectedDeliveryAddress &&
-      this.selectedDeliveryAddress.address_id &&
-      this.selectedDeliveryAddress.address_id === address_id
-    ) {
-      this.selectedDeliveryAddress = null;
-    }
-
     return deleteAddress(address_id, auth).then(() => {
       this.getUser();
     });
-  }
-
-  async saveLocalAddresses() {
-    let addresses = [];
-    if (localStorage.getItem('addresses')) {
-      addresses = JSON.parse(localStorage.getItem('addresses'));
-    }
-
-    for (const address of addresses) {
-      const user = await this.saveAddress(address, this.getHeaderAuth());
-      if (address.address_id === this.selectedDeliveryAddress.address_id) {
-        const added = user.addresses[user.addresses.length - 1];
-        this.setDeliveryAddress(added);
-      }
-    }
-
-    localStorage.removeItem('addresses');
   }
 
   async getStatus(update) {
@@ -281,8 +204,6 @@ class UserStore {
         return this.status;
       }
     });
-
-    this.saveLocalAddresses();
 
     try {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
@@ -323,7 +244,6 @@ class UserStore {
     this.token = '';
     this.status = false;
     this.user = null;
-    this.selectedDeliveryAddress = null;
     this.selectedDeliveryTime = null;
   }
 
@@ -361,21 +281,15 @@ class UserStore {
       : null;
   }
 
-  setDeliveryAddress(data) {
-    this.selectedDeliveryAddress = data;
-    // localStorage.setItem('zip', data.zip);
-    // this.setDeliveryData();
-  }
-
   setDeliveryTime(time) {
     this.selectedDeliveryTime = time;
-    this.setDeliveryData();
   }
 
   getPaymentMethodById(id) {
     return this.user ? this.user.payment.find((item) => item._id === id) : null;
   }
 
+  // TODO: THIS ISN'T NEEDED ANYMORE. DECOUPLE FROM THE EDIT CART METHOD AND REMOVE
   getDeliveryParams() {
     let data = {
       zip: null,
@@ -391,19 +305,6 @@ class UserStore {
     }
 
     return data;
-  }
-
-  loadFakeUser() {
-    let addresses = [];
-    if (localStorage.getItem('addresses')) {
-      addresses = JSON.parse(localStorage.getItem('addresses'));
-    }
-    const user = {
-      addresses,
-      preferred_address: null,
-    };
-
-    return user;
   }
 
   async subscribeNewsletter(email) {
@@ -491,7 +392,6 @@ decorate(UserStore, {
   referFriend: action,
 
   deleteAddress: action,
-  saveAddress: action,
   makeDefaultAddress: action,
 
   deletePayment: action,
@@ -500,9 +400,7 @@ decorate(UserStore, {
   forgotPassword: action,
   resetPassword: action,
 
-  setDeliveryAddress: action,
   setDeliveryTime: action,
-  loadFakeUser: action,
   adjustDeliveryTimes: action,
 
   getAddressById: action,

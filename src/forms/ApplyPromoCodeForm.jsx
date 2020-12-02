@@ -91,11 +91,7 @@ function ApplyPromoCodeForm() {
         } = res;
         if (benefit || store_credit) await userStore.getUser();
 
-        // Reload the order summary
-        const addressId = userStore.selectedDeliveryAddress
-          ? userStore.selectedDeliveryAddress.address_id
-          : '';
-        await checkoutStore.getOrderSummary(auth, null, null, addressId);
+        await checkoutStore.getOrderSummary(auth);
         snackbarStore.openSnackbar(
           'Promo code applied successfully!',
           'success',
