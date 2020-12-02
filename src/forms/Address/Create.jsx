@@ -32,7 +32,8 @@ export default function AddressCreateForm({ onCreate }) {
         onCreate && onCreate(JSON.stringify(address));
         snackbarStore.openSnackbar('Address created successfully!', 'success');
       }
-    } catch ({ response: { data } }) {
+    } catch ({ response }) {
+      const { data } = response;
       if (data && data.error && data.error.message && data.error.param) {
         const { message, param } = data.error;
         setFieldError(param, message);
@@ -61,7 +62,7 @@ export default function AddressCreateForm({ onCreate }) {
         validationSchema={Yup.object({
           name: Yup.string().required("Name can't be blank"),
           telephone: Yup.string()
-            .phone('US', true, 'Telephone must be a valid US phone number')
+            .phone('US', false, 'Telephone must be a valid US phone number')
             .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
             .required("Telephone can't be blank"),
           streetAddress: Yup.string().required('An address must be provided'),
@@ -79,7 +80,7 @@ export default function AddressCreateForm({ onCreate }) {
         {({ isSubmitting }) => (
           <Form>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12}>
                 <TextInput
                   name="name"
                   placeholder="Enter your name"
@@ -88,7 +89,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12}>
                 <PhoneInput
                   name="telephone"
                   placeholder="Enter your telephone"
@@ -112,7 +113,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="unit"
                   label="Unit"
@@ -121,7 +122,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="city"
                   label="City"
@@ -130,7 +131,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="state"
                   placeholder="State"
@@ -139,7 +140,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="zip"
                   label="Zip"
