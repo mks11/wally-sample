@@ -24,7 +24,6 @@ import { formatMoney } from 'utils';
 // MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
-import { toJS } from 'mobx';
 
 // Custom Components
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
@@ -60,15 +59,6 @@ function Checkout() {
     userStore.getStatus().then(() => {
       const { user } = userStore;
       if (user) {
-        const { preferred_payment } = user;
-
-        const selectedPayment =
-          userStore.selectedPaymentMethod ||
-          userStore.getPaymentMethodById(preferred_payment);
-        if (selectedPayment) {
-          userStore.setPaymentMethod(selectedPayment);
-        }
-
         loadData();
 
         const { checkoutFirst } = userStore.flags || {};
@@ -118,10 +108,7 @@ function Checkout() {
                 <Grid item xs={12} lg={6}>
                   <DeliveryAddressOptions name="addressId" />
                   <ShippingOptions name="shippingServiceLevel" />
-                  <PaymentOptions
-                    name="paymentId"
-                    options={toJS(userStore.user.payment)}
-                  />
+                  <PaymentOptions name="paymentId" />
                 </Grid>
               )}
               <Grid item xs={12} lg={6} component="section">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // API
-import { deactivatePaymentMethod, updatePaymentMethod } from 'api/payment';
+import { updatePaymentMethod } from 'api/payment';
 
 // Material UI
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -40,8 +40,8 @@ const StyledBadge = withStyles((theme) => ({
 export const CreditCardDetails = observer(({ paymentMethod }) => {
   const { user: userStore } = useStores();
   const { brand, exp_month, exp_year, _id, last4 } = paymentMethod;
-  const expMonth = exp_month.padStart(2, '0');
-  const expYear = exp_year.slice(2);
+  const expMonth = exp_month.toString().padStart(2, '0');
+  const expYear = exp_year.toString().slice(2);
   return (
     <Box mx={2}>
       <Typography style={{ fontWeight: 'bold' }}>
@@ -103,8 +103,7 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
   const handleDeactivatePayment = async () => {
     try {
       loadingStore.show();
-      const res = await deactivatePaymentMethod(_id, auth);
-      userStore.setUserData(res.data);
+      await userStore.deactivatePaymentMethod(_id);
     } catch (error) {
       const msg = getErrorMessage(error);
       if (msg) snackbarStore.openSnackbar(msg, 'error');
@@ -150,7 +149,7 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
 
 export const CreditCard = ({ paymentMethod }) => {
   return (
-    <Box my={1} display="flex" alignItems="center">
+    <Box my={1} px={1} display="flex" alignItems="center">
       <CreditCardLogo brand={paymentMethod.brand} />
       <CreditCardDetails paymentMethod={paymentMethod} />
     </Box>
