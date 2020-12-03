@@ -4683,18 +4683,6 @@ a {
   margin: 5px -5px;
 }
 
-.gift-checkout-wrap {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 50px;
-}
-
-@media (max-width: 576px) {
-  .gift-checkout-wrap {
-    padding: 20px;
-  }
-}
-
 .amount-btn-group {
   width: 100%;
 }
@@ -4710,36 +4698,6 @@ a {
 .amount-btn.selected {
   background-color: #6c757d;
   color: #fff;
-}
-
-.gift-checkout-wrap .gift-icon {
-  color: #78c98d;
-  padding: 10px;
-}
-
-.gift-checkout-wrap #giftAmount {
-  margin-top: 10px;
-}
-
-.gift-checkout-wrap label {
-  font-size: 18px;
-}
-
-.gift-checkout-wrap textarea {
-  height: 100px;
-}
-
-.gift-checkout-wrap .gift-submit {
-  background-color: #cecece;
-  border: 0;
-  font-size: 22px;
-  height: 60px;
-  width: 100%;
-  text-transform: uppercase;
-}
-
-.gift-checkout-wrap .gift-submit.active {
-  background-color: #78c98d !important;
 }
 
 .checkout-tips {

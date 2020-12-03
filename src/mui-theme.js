@@ -27,6 +27,9 @@ let theme = createMuiTheme({
     yellow: {
       main: '#F1D26A',
     },
+    text: {
+      main: '#000',
+    },
     success: {
       main: '#60A561',
     },
