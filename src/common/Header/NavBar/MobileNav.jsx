@@ -11,7 +11,7 @@ import { MobileOpsNav } from './OpsNav';
 import { MobileRetailNav } from './Retail';
 
 const MobileNavWrapper = styled(List)`
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 991px) {
     display: block;
   }
 
