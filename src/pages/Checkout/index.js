@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 // import { PRODUCT_BASE_URL } from 'config';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -39,9 +39,6 @@ import ShippingOptions from './ShippingOptions';
 import { useFormikContext } from 'formik';
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 // import RemoveItemForm from 'forms/cart/RemoveItem';
-
-// Modals
-import PackagingDepositInfo from 'modals/PackagingDepositInfo';
 
 function Checkout() {
   const {
@@ -148,7 +145,6 @@ function Checkout() {
         },
         auth,
       );
-
       routingStore.push('/orders/' + res.data.order._id);
       checkoutStore.clearCart(userStore.getHeaderAuth());
     } catch (error) {
@@ -177,6 +173,8 @@ function Checkout() {
 
 export default observer(Checkout);
 
+const PackagingDepositInfo = lazy(() => import('modals/PackagingDepositInfo'));
+
 function OrderSummary() {
   const theme = useTheme();
   const { isSubmitting } = useFormikContext();
@@ -187,7 +185,17 @@ function OrderSummary() {
   const orderTotal = order.total / 100;
 
   function handlePackagingDepositClick() {
-    modalV2.open(<PackagingDepositInfo />);
+    modalV2.open(
+      <Suspense
+        fallback={
+          <Typography variant="h1" gutterBottom>
+            Packaging Deposit?
+          </Typography>
+        }
+      >
+        <PackagingDepositInfo />
+      </Suspense>,
+    );
   }
 
   return (
@@ -320,7 +328,7 @@ function OrderSummary() {
           >
             Place My Order
           </PrimaryWallyButton>
-          <Box my={2}>
+          <Box pt={1} px={2}>
             <Typography variant="body2" color="textSecondary">
               By placing your order, you agree to be bound by the Terms of
               Service and Privacy Policy.
@@ -336,8 +344,8 @@ function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;
   return (
     <>
-      <Grid container alignItems="center" justify="space-between">
-        <Grid item>
+      <Grid container justify="space-between">
+        <Grid item xs={9} md={10}>
           <Typography variant="h6" component="p">
             {product_name}
           </Typography>
