@@ -9,7 +9,6 @@ export const applyPromo = (promoCode, auth) => {
 };
 
 export const purchaseGiftCard = (data) => {
-  console.log(data);
   return axios.post('/api/giftcard', data, {
     baseURL: BASE_URL,
   });

@@ -107,13 +107,8 @@ const GiftForm = observer(() => {
   const handleSubmit = async (values) => {
     try {
       loading.show();
-      // Convert amount to minimum denomination
-      const amount = values.amount * 100;
-      var stripeToken;
 
-      // TODO: REMOVE ONCE FINISHED
-      console.log(values);
-      console.log(amount);
+      var stripeToken;
 
       // Guest checkout
       if (!user) {
@@ -126,7 +121,9 @@ const GiftForm = observer(() => {
           throw stripeToken;
         }
       }
-      const data = { amount, ...values, stripeToken };
+      // Convert amount to minimum denomination
+      const amount = values.amount * 100;
+      const data = { ...values, amount, stripeToken };
       const res = await purchaseGiftCard(data);
       console.log(res);
     } catch (error) {
@@ -142,32 +139,6 @@ const GiftForm = observer(() => {
       loading.hide();
     }
   };
-
-  // This is the old submit handler. Want to mimic most of it's functionality
-  // But improve error handling
-
-  // handleGiftCheckoutSubmit = (data) => {
-  //   let finalData = data;
-  //   if (!data.payment_id) {
-  //     finalData.stripeToken = this.state.stripeToken;
-  //   }
-
-  //   this.userStore
-  //     .purchaseGiftCard(finalData)
-  //     .then((res) => {
-  //       if (res.success) {
-  //         this.routing.push('/main');
-  //       } else {
-  //         this.setState({ purchaseFailed: 'Gift card purchase failed' });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       const msg = !e.response.data.error
-  //         ? 'Purchase failed'
-  //         : e.response.data.error.message;
-  //       this.setState({ purchaseFailed: msg });
-  //     });
-  // };
 
   return (
     <Formik
@@ -346,6 +317,9 @@ function CardInput({ paymentError }) {
 
   return (
     <>
+      <Typography variant="h3" gutterBottom>
+        Payment
+      </Typography>
       <Box
         p={2}
         border={`1px solid ${paymentError ? errorColor : inputColor}`}
