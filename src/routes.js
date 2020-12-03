@@ -19,7 +19,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 // Checkout Flow
 import Checkout from './pages/Checkout';
 import SimilarProducts from './pages/SimilarProducts';
-import GiftCheckout from './pages/GiftCheckout';
+import Giftcard from './pages/Giftcard';
 import InviteFriends from './pages/InviteFriends';
 import Backers from './pages/Backers';
 import Tnc from './pages/Tnc';
@@ -207,7 +207,7 @@ function Routes(props) {
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
-      <Route exact path="/giftcard" component={GiftCheckout} />
+      <Route exact path="/giftcard" component={Giftcard} />
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>

@@ -49,7 +49,7 @@ function MobileGuestNavMenu() {
         Blog
       </MobileNavItem>
       <MobileNavItem to="/giftcard" onClick={handleClose} hasDivider>
-        Gift Card
+        Gift Cards
       </MobileNavItem>
       <MobileNavItem to="/backers" onClick={handleClose}>
         Our Backers
