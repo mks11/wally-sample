@@ -3,10 +3,11 @@ import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
+// API
+import { submitOrder } from 'api/order';
 import {
   Box,
   Card,
-  // CircularProgress,
   Container,
   Divider,
   Grid,
@@ -19,7 +20,7 @@ import { InfoIcon } from 'Icons';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import { formatMoney } from 'utils';
+import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
 
 // MobX
 import { observer } from 'mobx-react';
@@ -36,7 +37,7 @@ import ShippingOptions from './ShippingOptions';
 
 // Forms
 import { useFormikContext } from 'formik';
-// import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 // import RemoveItemForm from 'forms/cart/RemoveItem';
 
 // Modals
@@ -48,6 +49,7 @@ function Checkout() {
     loading: loadingStore,
     modal: modalStore,
     routing: routingStore,
+    snackbar: snackbarStore,
     user: userStore,
   } = useStores();
 
@@ -69,12 +71,14 @@ function Checkout() {
     });
   }, []);
 
-  if (!checkoutStore.order || !userStore.user) {
+  if (!checkoutStore.cart || !checkoutStore.order || !userStore.user) {
     return null;
   }
   const {
     user: { preferred_address = '', preferred_payment = '' } = {},
   } = userStore;
+  const { cart } = checkoutStore;
+
   return (
     <Container maxWidth="xl">
       <Box py={4}>
@@ -84,6 +88,7 @@ function Checkout() {
         <Formik
           initialValues={{
             addressId: preferred_address ? preferred_address : '',
+            cartId: cart._id,
             shippingServiceLevel: 'ups_ground',
             paymentId: preferred_payment ? preferred_payment : '',
           }}
@@ -117,47 +122,47 @@ function Checkout() {
             </Grid>
           </Form>
         </Formik>
+        {/* <Box>
+          <ApplyPromoCodeForm />
+        </Box> */}
       </Box>
     </Container>
   );
 
-  function handleApplyPromo() {
-    const { order } = checkoutStore;
-
-    if (order) {
-    }
-  }
-
-  function handlePlaceOrder(values, setFieldError) {
-    console.log(values);
-    return;
-    loadingStore.show();
-    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
-
-    checkoutStore
-      .submitOrder(
-        {
-          cart_id: checkoutStore.cart._id,
-          address_id: userStore.selectedDeliveryAddress.address_id,
-          payment_id: 'foo',
-        },
-        userStore.getHeaderAuth(),
-      )
-      .then((data) => {
-        logEvent({
-          category: 'Order',
-          action: 'Submit Order',
-        });
-        routingStore.push('/orders/' + data.order._id);
-        checkoutStore.clearCart(userStore.getHeaderAuth());
-        userStore.setDeliveryTime(null);
-        loadingStore.hide();
-      })
-      .catch((e) => {
-        console.error('Failed to submit order', e);
-        const msg = e.response.data.error.message;
-        loadingStore.hide();
+  async function handlePlaceOrder(values, setFieldError) {
+    try {
+      const { addressId, cartId, paymentId, shippingServiceLevel } = values;
+      const auth = userStore.getHeaderAuth();
+      loadingStore.show();
+      logEvent({
+        category: 'Order',
+        action: 'Submit Order',
       });
+
+      const res = await submitOrder(
+        {
+          addressId,
+          cartId,
+          paymentId,
+          shippingServiceLevel,
+        },
+        auth,
+      );
+
+      routingStore.push('/orders/' + res.data.order._id);
+      checkoutStore.clearCart(userStore.getHeaderAuth());
+    } catch (error) {
+      let msg = getErrorMessage(error);
+      let param = getErrorParam(error);
+
+      if (msg && param) {
+        setFieldError(param, msg);
+      } else {
+        snackbarStore.openSnackbar('Order submission failed.', 'error');
+      }
+    } finally {
+      loadingStore.hide();
+    }
   }
 
   async function loadData() {
@@ -165,7 +170,7 @@ function Checkout() {
       const auth = userStore.getHeaderAuth();
       await checkoutStore.getOrderSummary(auth);
     } catch (error) {
-      console.error(error);
+      snackbarStore.openSnackbar('Failed to retrieve order summary.', 'error');
     }
   }
 }
@@ -294,10 +299,6 @@ function OrderSummary() {
           </Grid>
         )}
 
-        {/* <div className="item-extras">
-          <ApplyPromoCodeForm onApply={() => handleApplyPromo()} />
-        </div> */}
-
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <Typography variant="h6" component="p" gutterBottom>
@@ -315,7 +316,7 @@ function OrderSummary() {
           <PrimaryWallyButton
             type="submit"
             fullWidth
-            disabled={cart_items.length == 0 || isSubmitting}
+            disabled={cart_items.length === 0 || isSubmitting}
           >
             Place My Order
           </PrimaryWallyButton>

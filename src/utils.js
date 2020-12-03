@@ -80,8 +80,20 @@ function getErrorMessage(error) {
     error.response.data.error &&
     error.response.data.error.message
   ) {
-    const msg = error.response.data.error.message;
-    return msg;
+    return error.response.data.error.message;
+  }
+
+  return null;
+}
+
+function getErrorParam(error) {
+  if (
+    error.response &&
+    error.response.data &&
+    error.response.data.error &&
+    error.response.data.error.param
+  ) {
+    return error.response.data.error.param;
   }
 
   return null;
@@ -96,4 +108,5 @@ export {
   sortByTimestampDes,
   getItemsCount,
   getErrorMessage,
+  getErrorParam,
 };

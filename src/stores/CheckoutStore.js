@@ -1,10 +1,9 @@
-import { observable, decorate, action, runInAction } from 'mobx';
+import { observable, decorate, action } from 'mobx';
 import {
   API_GET_CURRENT_CART,
   API_EDIT_CURRENT_CART,
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
-  API_CREATE_ORDER,
 } from '../config';
 import axios from 'axios';
 import moment from 'moment';
@@ -82,17 +81,6 @@ class CheckoutStore {
   async getOrderSummary(auth) {
     const res = await axios.get(API_GET_ORDER_SUMMARY, auth);
     this.order = res.data;
-    return res.data;
-  }
-
-  async submitOrder(data, auth) {
-    const res = await axios.post(
-      `${API_CREATE_ORDER}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`,
-      data,
-      auth,
-      data.has_returns,
-      data.pickup_notes,
-    );
     return res.data;
   }
 
