@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 // import { PRODUCT_BASE_URL } from 'config';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
+// API
+import { submitOrder } from 'api/order';
 import {
   Box,
   Card,
-  // CircularProgress,
   Container,
   Divider,
   Grid,
@@ -19,12 +20,11 @@ import { InfoIcon } from 'Icons';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import { formatMoney } from 'utils';
+import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
 
 // MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
-import { toJS } from 'mobx';
 
 // Custom Components
 import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
@@ -37,11 +37,8 @@ import ShippingOptions from './ShippingOptions';
 
 // Forms
 import { useFormikContext } from 'formik';
-// import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 // import RemoveItemForm from 'forms/cart/RemoveItem';
-
-// Modals
-import PackagingDepositInfo from 'modals/PackagingDepositInfo';
 
 function Checkout() {
   const {
@@ -49,6 +46,7 @@ function Checkout() {
     loading: loadingStore,
     modal: modalStore,
     routing: routingStore,
+    snackbar: snackbarStore,
     user: userStore,
   } = useStores();
 
@@ -60,22 +58,6 @@ function Checkout() {
     userStore.getStatus().then(() => {
       const { user } = userStore;
       if (user) {
-        const { preferred_address, preferred_payment } = user;
-
-        const selectedAddress =
-          userStore.selectedDeliveryAddress ||
-          userStore.getAddressById(preferred_address);
-        if (selectedAddress) {
-          userStore.setDeliveryAddress(selectedAddress);
-        }
-
-        const selectedPayment =
-          userStore.selectedPaymentMethod ||
-          userStore.getPaymentMethodById(preferred_payment);
-        if (selectedPayment) {
-          userStore.setPaymentMethod(selectedPayment);
-        }
-
         loadData();
 
         const { checkoutFirst } = userStore.flags || {};
@@ -86,92 +68,97 @@ function Checkout() {
     });
   }, []);
 
-  if (!checkoutStore.order || !userStore.user) {
+  if (!checkoutStore.cart || !checkoutStore.order || !userStore.user) {
     return null;
   }
+  const {
+    user: { preferred_address = '', preferred_payment = '' } = {},
+  } = userStore;
+  const { cart } = checkoutStore;
 
   return (
-    <Formik
-      initialValues={{
-        addressId: userStore.selectedDeliveryAddress._id || '',
-        shippingServiceLevel: 'ups_ground',
-        paymentId: userStore.selectedPaymentMethod._id || '',
-      }}
-      validationSchema={Yup.object({
-        addressId: Yup.string().required('You must select a shipping address.'),
-        shippingServiceLevel: Yup.string().required(),
-        paymentId: Yup.string(),
-      })}
-      enableReinitialize
-      onSubmit={(values, { setFieldError, setSubmitting }) => {
-        handlePlaceOrder(values, setFieldError);
-        setSubmitting(false);
-      }}
-    >
-      <Form>
-        <Container maxWidth="xl">
-          <Box mt={3}>
-            <Typography variant="h1" gutterBottom>
-              Checkout
-            </Typography>
-          </Box>
-          <Grid container spacing={4}>
-            {userStore.user && (
-              <Grid item xs={12} md={5} lg={6}>
-                <DeliveryAddressOptions name="addressId" />
-                <ShippingOptions name="shippingServiceLevel" />
-                <PaymentOptions
-                  name="paymentId"
-                  options={toJS(userStore.user.payment)}
-                />
+    <Container maxWidth="xl">
+      <Box py={4}>
+        <Typography variant="h1" gutterBottom>
+          Checkout
+        </Typography>
+        <Formik
+          initialValues={{
+            addressId: preferred_address ? preferred_address : '',
+            cartId: cart._id,
+            shippingServiceLevel: 'ups_ground',
+            paymentId: preferred_payment ? preferred_payment : '',
+          }}
+          validationSchema={Yup.object({
+            addressId: Yup.string().required(
+              'You must select a shipping address.',
+            ),
+            shippingServiceLevel: Yup.string().required(),
+            paymentId: Yup.string().required(
+              'You must select a payment method.',
+            ),
+          })}
+          enableReinitialize
+          onSubmit={(values, { setFieldError, setSubmitting }) => {
+            handlePlaceOrder(values, setFieldError);
+            setSubmitting(false);
+          }}
+        >
+          <Form>
+            <Grid container spacing={4}>
+              {userStore.user && (
+                <Grid item xs={12} lg={6}>
+                  <DeliveryAddressOptions name="addressId" />
+                  <ShippingOptions name="shippingServiceLevel" />
+                  <PaymentOptions name="paymentId" />
+                </Grid>
+              )}
+              <Grid item xs={12} lg={6} component="section">
+                <OrderSummary />
               </Grid>
-            )}
-            <Grid item xs={12} md={7} lg={6} component="section">
-              <OrderSummary />
             </Grid>
-          </Grid>
-        </Container>
-      </Form>
-    </Formik>
+          </Form>
+        </Formik>
+        {/* <Box>
+          <ApplyPromoCodeForm />
+        </Box> */}
+      </Box>
+    </Container>
   );
 
-  function handleApplyPromo() {
-    const { order } = checkoutStore;
-
-    if (order) {
-    }
-  }
-
-  function handlePlaceOrder(values, setFieldError) {
-    console.log(values);
-    return;
-    loadingStore.show();
-    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
-
-    checkoutStore
-      .submitOrder(
-        {
-          cart_id: checkoutStore.cart._id,
-          address_id: userStore.selectedDeliveryAddress.address_id,
-          payment_id: 'foo',
-        },
-        userStore.getHeaderAuth(),
-      )
-      .then((data) => {
-        logEvent({
-          category: 'Order',
-          action: 'Submit Order',
-        });
-        routingStore.push('/orders/' + data.order._id);
-        checkoutStore.clearCart(userStore.getHeaderAuth());
-        userStore.setDeliveryTime(null);
-        loadingStore.hide();
-      })
-      .catch((e) => {
-        console.error('Failed to submit order', e);
-        const msg = e.response.data.error.message;
-        loadingStore.hide();
+  async function handlePlaceOrder(values, setFieldError) {
+    try {
+      const { addressId, cartId, paymentId, shippingServiceLevel } = values;
+      const auth = userStore.getHeaderAuth();
+      loadingStore.show();
+      logEvent({
+        category: 'Order',
+        action: 'Submit Order',
       });
+
+      const res = await submitOrder(
+        {
+          addressId,
+          cartId,
+          paymentId,
+          shippingServiceLevel,
+        },
+        auth,
+      );
+      routingStore.push('/orders/' + res.data.order._id);
+      checkoutStore.clearCart(userStore.getHeaderAuth());
+    } catch (error) {
+      let msg = getErrorMessage(error);
+      let param = getErrorParam(error);
+
+      if (msg && param) {
+        setFieldError(param, msg);
+      } else {
+        snackbarStore.openSnackbar('Order submission failed.', 'error');
+      }
+    } finally {
+      loadingStore.hide();
+    }
   }
 
   async function loadData() {
@@ -179,12 +166,14 @@ function Checkout() {
       const auth = userStore.getHeaderAuth();
       await checkoutStore.getOrderSummary(auth);
     } catch (error) {
-      console.error(error);
+      snackbarStore.openSnackbar('Failed to retrieve order summary.', 'error');
     }
   }
 }
 
 export default observer(Checkout);
+
+const PackagingDepositInfo = lazy(() => import('modals/PackagingDepositInfo'));
 
 function OrderSummary() {
   const theme = useTheme();
@@ -196,7 +185,17 @@ function OrderSummary() {
   const orderTotal = order.total / 100;
 
   function handlePackagingDepositClick() {
-    modalV2.open(<PackagingDepositInfo />);
+    modalV2.open(
+      <Suspense
+        fallback={
+          <Typography variant="h1" gutterBottom>
+            Packaging Deposit?
+          </Typography>
+        }
+      >
+        <PackagingDepositInfo />
+      </Suspense>,
+    );
   }
 
   return (
@@ -247,7 +246,7 @@ function OrderSummary() {
               <IconButton
                 disableRipple
                 onClick={handlePackagingDepositClick}
-                style={{ margin: '0 16px' }}
+                style={{ marginLeft: '2px' }}
               >
                 <InfoIcon />
               </IconButton>
@@ -308,10 +307,6 @@ function OrderSummary() {
           </Grid>
         )}
 
-        {/* <div className="item-extras">
-          <ApplyPromoCodeForm onApply={() => handleApplyPromo()} />
-        </div> */}
-
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <Typography variant="h6" component="p" gutterBottom>
@@ -329,11 +324,11 @@ function OrderSummary() {
           <PrimaryWallyButton
             type="submit"
             fullWidth
-            disabled={cart_items.length == 0 || isSubmitting}
+            disabled={cart_items.length === 0 || isSubmitting}
           >
             Place My Order
           </PrimaryWallyButton>
-          <Box my={2}>
+          <Box pt={1} px={2}>
             <Typography variant="body2" color="textSecondary">
               By placing your order, you agree to be bound by the Terms of
               Service and Privacy Policy.
@@ -349,8 +344,8 @@ function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;
   return (
     <>
-      <Grid container alignItems="center" justify="space-between">
-        <Grid item>
+      <Grid container justify="space-between">
+        <Grid item xs={9} md={10}>
           <Typography variant="h6" component="p">
             {product_name}
           </Typography>

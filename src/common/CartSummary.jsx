@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { PRODUCT_BASE_URL } from 'config';
 
 // MobX
@@ -10,11 +10,15 @@ import { logEvent } from 'services/google-analytics';
 import { formatMoney, getItemsCount } from 'utils';
 
 // npm Package Components
-import { Box, Divider, Grid, IconButton, Typography } from '@material-ui/core';
-import { AddIcon, CloseIcon, RemoveIcon } from 'Icons';
-
-// Custom Components
-import RemoveItemForm from 'forms/cart/RemoveItem';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
+import { AddIcon, ArrowBackIcon, CloseIcon, RemoveIcon } from 'Icons';
 
 // Custom Components
 import CarbonBar from 'common/CarbonBar';
@@ -87,6 +91,9 @@ const CartSummary = observer(() => {
 
 export default CartSummary;
 
+const ProductModal = lazy(() => import('modals/ProductModalV2'));
+const RemoveItemForm = lazy(() => import('forms/cart/RemoveItem'));
+
 function CartItem({ item }) {
   const {
     customer_quantity,
@@ -97,10 +104,22 @@ function CartItem({ item }) {
     product_name,
     unit_type,
   } = item;
-
-  const { checkout, modal, modalV2, product: productStore, user } = useStores();
-  var productImage;
+  const [isLoading, setIsLoading] = useState(false);
+  const [increasedQty, setIncreasedQty] = useState(false);
+  const {
+    checkout,
+    modalV2,
+    product: productStore,
+    routing,
+    user,
+  } = useStores();
   var brand;
+  var productImage;
+
+  // If we're on the checkout page, we should reload the order summary.
+  const shouldReloadOrderSummary = routing.location.pathname.includes(
+    'checkout',
+  );
 
   if (product && product[0]) {
     const { image_refs, vendorFull } = product[0];
@@ -112,15 +131,31 @@ function CartItem({ item }) {
     if (vendorFull && vendorFull.name) brand = vendorFull.name;
   }
 
-  const handleUpdateCart = async (items) => {
+  const handleDelete = (item) => {
+    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    modalV2.open(
+      <Suspense fallback={<Typography variant="h1">Remove Item</Typography>}>
+        <RemoveItemForm
+          item={item}
+          handleReinitializeCartSummary={openCartSummary}
+          reloadOrderSummary={shouldReloadOrderSummary}
+        />
+      </Suspense>,
+    );
+  };
+
+  const handleUpdateCart = (items) => {
     const auth = user.getHeaderAuth();
-    checkout.editCurrentCart({ items }, auth, true);
+    return checkout.editCurrentCart({ items }, auth, shouldReloadOrderSummary);
   };
 
   const handleUpdateQuantity = async (qty) => {
     try {
+      if (qty > 0) setIncreasedQty(true);
+      else setIncreasedQty(false);
+      setIsLoading(true);
       const updateQty = customer_quantity + qty;
-      handleUpdateCart([
+      await handleUpdateCart([
         {
           quantity: updateQty,
           product_id,
@@ -128,22 +163,30 @@ function CartItem({ item }) {
           unit_type,
         },
       ]);
-    } catch (error) {}
+    } catch (error) {
+      // TODO HANDLE ERRORS
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleViewProduct = (productId) => {
-    modalV2.close();
     productStore.showModal(productId, null);
-    modal.toggleModal('product');
-  };
-
-  const handleDelete = (item) => {
-    logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
+    modalV2.close();
     modalV2.open(
-      <RemoveItemForm
-        item={item}
-        handleReinitializeCartSummary={openCartSummary}
-      />,
+      <Suspense fallback={<p>Loading...</p>}>
+        <Box p={1} paddingLeft={0}>
+          <PrimaryTextButton
+            onClick={openCartSummary}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </PrimaryTextButton>
+        </Box>
+        <ProductModal />
+      </Suspense>,
+      'right',
+      'md',
     );
   };
 
@@ -215,18 +258,26 @@ function CartItem({ item }) {
                 color="primary"
                 disableRipple
                 onClick={() => handleUpdateQuantity(-1)}
-                disabled={customer_quantity < 2}
+                disabled={customer_quantity < 2 || isLoading}
               >
-                <RemoveIcon />
+                {isLoading && !increasedQty ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <RemoveIcon />
+                )}
               </IconButton>
               <Typography>{customer_quantity}</Typography>
               <IconButton
                 color="primary"
                 disableRipple
                 onClick={() => handleUpdateQuantity(1)}
-                disabled={customer_quantity > 9}
+                disabled={customer_quantity > 9 || isLoading}
               >
-                <AddIcon />
+                {isLoading && increasedQty ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <AddIcon />
+                )}
               </IconButton>
             </Box>
           </Grid>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import SearchIcon from '@material-ui/icons/Search';
+import { SearchIcon } from 'Icons';
 import { connect } from 'utils';
 
 class SearchBar extends Component {
@@ -63,10 +63,11 @@ class SearchBar extends Component {
         <div className="input-group search-product">
           <div className="input-group-prepend">
             <div className="input-group-text">
-              <SearchIcon fontSize="large" />
+              <SearchIcon />
             </div>
           </div>
           <AsyncTypeahead
+            id="product-search"
             filterBy={['name']}
             allowNew={false}
             isLoading={searchAheadLoading}

@@ -37,7 +37,7 @@ class SimilarProducts extends Component {
     logPageView(location.pathname);
 
     this.userStore.getStatus(true).then((status) => {
-      this.checkoutStore.getDeliveryTimes();
+      // this.checkoutStore.getDeliveryTimes();
       this.loadData();
 
       const { mainFirst } = this.userStore.flags || {};
@@ -115,15 +115,6 @@ class SimilarProducts extends Component {
       });
   }
 
-  handleProductModal = (product_id, deliveryTimes) => {
-    this.productStore
-      .showModal(product_id, null, this.userStore.getDeliveryParams())
-      .then((data) => {
-        this.userStore.adjustDeliveryTimes(data.delivery_date, deliveryTimes);
-        this.modalStore.toggleModal('product');
-      });
-  };
-
   render() {
     const items = this.checkoutStore.cart
       ? this.checkoutStore.cart.cart_items
@@ -164,7 +155,6 @@ class SimilarProducts extends Component {
                           key={product.product_id}
                           product={product}
                           deliveryTimes={this.state.deliveryTimes}
-                          onProductClick={this.handleProductModal}
                         />
                       ))
                     : null}

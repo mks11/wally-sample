@@ -5,17 +5,21 @@ class ModalStoreV2 {
     this.anchor = 'right';
     this.isOpen = false;
     this.children = null;
+    this.maxWidth = 'sm';
   }
 
-  open(children, anchor = 'right') {
+  open(children, anchor = 'right', maxWidth = 'sm') {
     this.anchor = anchor;
     this.children = children;
     this.isOpen = true;
+    this.maxWidth = maxWidth;
   }
 
   close() {
+    this.anchor = 'right';
     this.children = null;
     this.isOpen = false;
+    this.maxWidth = 'sm';
   }
 }
 
@@ -23,6 +27,7 @@ decorate(ModalStoreV2, {
   anchor: observable,
   isOpen: observable,
   children: observable,
+  maxWidth: observable,
   open: action,
   close: action,
 });

@@ -3,13 +3,15 @@ import { Typography, Box } from '@material-ui/core';
 import CheckoutCard from './BaseCheckoutCard';
 import RadioGroup from 'common/RadioGroup';
 import { useFormikContext } from 'formik';
+import moment from 'moment';
 
 function ShippingOptions({ name }) {
   const [selected, setSelected] = useState('ups_ground');
 
   const OPTIONS = [
     {
-      description: 'Delivery in one to five days.',
+      leastShippingDays: 1,
+      mostShippingDays: 5,
       name: 'UPS Ground',
       price: '8.99',
       value: 'ups_ground',
@@ -23,16 +25,29 @@ function ShippingOptions({ name }) {
     setSelected(val);
   };
 
-  const getName = () => {
-    const opt = OPTIONS.find((v) => v.value === selected);
-    return opt && opt.name;
+  const getSelectedShippingDates = () => {
+    const option = OPTIONS.find((v) => v.value === selected);
+    return option && calcDeliveryDates(option);
+  };
+
+  const calcDeliveryDates = (option) => {
+    const { leastShippingDays, mostShippingDays } = option;
+    // ex: Monday, January 4th
+    const earliestDeliveryDay = moment()
+      .add(leastShippingDays, 'd')
+      .format('dddd, MMMM Do');
+    const latestDeliveryDay = moment()
+      .add(mostShippingDays, 'd')
+      .format('dddd, MMMM Do');
+
+    return earliestDeliveryDay + ' - ' + latestDeliveryDay;
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={40} name={name}>
+    <CheckoutCard title="Shipping Options" collapsedHeight={50} name={name}>
       <Box p={1}>
-        <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-          {getName() || 'No shipping method selected.'}
+        <Typography>
+          {getSelectedShippingDates() || 'No shipping method selected.'}
         </Typography>
       </Box>
       <RadioGroup
@@ -42,19 +57,28 @@ function ShippingOptions({ name }) {
         Label={({ item }) => (
           <Box p={2}>
             <Typography style={{ fontWeight: 'bold' }}>
-              ${item.price}
+              {calcDeliveryDates(item)} *
             </Typography>
-            <Typography>{item.name}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {item.description} *
-            </Typography>
+            <Typography component="span">${item.price}</Typography>
+            <Typography component="span"> via {item.name}</Typography>
           </Box>
         )}
         isChecked={(item) => item.value === selected}
       />
-      <Typography variant="body2" color="textSecondary">
-        * Delivery may take longer than usual because of COVID-19
-      </Typography>
+      <Box mb={4}>
+        <Typography variant="body2" color="textSecondary">
+          * Delivery may take longer than usual due to increased shipping lead
+          times caused by COVID-19. For more information, visit{' '}
+          <a
+            href="https://www.ups.com/us/en/about/news/important-updates.page"
+            target="blank"
+            rel="noopener noreferrer"
+          >
+            UPS
+          </a>
+          .
+        </Typography>
+      </Box>
     </CheckoutCard>
   );
 }

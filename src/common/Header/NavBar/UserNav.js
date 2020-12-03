@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -13,7 +13,6 @@ import { Badge, IconButton, Typography } from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 // Custom Components
-import CartSummary from 'common/CartSummary';
 import {
   MobileNavItem,
   MobileNavListItem,
@@ -159,14 +158,30 @@ const PackagingBalance = observer(() => {
   return null;
 });
 
+const CartSummary = lazy(() => import('common/CartSummary'));
+
 const Cart = observer(() => {
   const { checkout, modalV2, user } = useStores();
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
   const isDisabled = numItems < 1;
 
-  const handleClick = (event) => {
-    modalV2.open(<CartSummary />, 'right');
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Cart
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
+
+  const handleClick = () => {
+    modalV2.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <CartSummary />
+      </Suspense>,
+      'right',
+    );
   };
 
   useEffect(() => {

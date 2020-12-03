@@ -4,11 +4,11 @@ import {
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
   API_GET_IMPULSE_PRODUCTS,
-  API_GET_CATEGORIES,
+  // API_GET_CATEGORIES,
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
-  API_GET_PRODUCTS_MATCHING_FILTERS,
+  // API_GET_PRODUCTS_MATCHING_FILTERS,
 } from '../config';
 import UserStore from './UserStore';
 import axios from 'axios';
@@ -183,6 +183,10 @@ class ProductStore {
     this.customer_quantity = customer_quantity ? customer_quantity : min_size;
 
     return res.data;
+  }
+
+  resetActiveProduct() {
+    this.activeProduct = null;
   }
 
   getAdvertisements() {
@@ -438,7 +442,7 @@ decorate(ProductStore, {
   addSelectedValue: action,
   removeSelectedValue: action,
   /** Ends Vendor */
-
+  resetActiveProduct: action,
   showModal: action,
   getAdvertisements: action,
   getProductDisplayed: action,

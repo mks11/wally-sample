@@ -23,11 +23,10 @@ export default function AddressRadioItem({
   address,
   selected,
   isPreferredAddress,
-  value,
 }) {
   const classes = useStyles();
-  const parsedVal = JSON.parse(value);
-  const isSelected = parsedVal._id === selected._id;
+  const value = address._id;
+  const isSelected = value === selected._id;
 
   return (
     <Box display="flex">

@@ -14,7 +14,7 @@ function RemoveItemForm({
   handleReinitializeCartSummary,
   reloadOrderSummary = false,
 }) {
-  const { routing, checkout, user, modalV2 } = useStores();
+  const { checkout, user, modalV2 } = useStores();
 
   const handleClose = () => {
     handleReinitializeCartSummary
@@ -25,7 +25,6 @@ function RemoveItemForm({
   const handleDelete = () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
 
-    // TODO: ERROR HANDLING
     checkout
       .editCurrentCart(
         {
@@ -43,7 +42,15 @@ function RemoveItemForm({
       )
       .then(() => handleClose())
       .catch((e) => {
-        const msg = e.response.data.error.message;
+        // TODO: ERROR HANDLING
+        // if (
+        //   e.response &&
+        //   e.response.data &&
+        //   e.response.data.error &&
+        //   e.response.data.error.message
+        // ) {
+        //   const msg = e.response.data.error.message;
+        // }
         console.error('Failed to add to cart', e);
       });
   };

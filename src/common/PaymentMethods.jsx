@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 // API
-import { deactivatePaymentMethod, updatePaymentMethod } from 'api/payment';
+import {
+  deactivatePaymentMethod,
+  reactivatePaymentMethod,
+  updatePaymentMethod,
+} from 'api/payment';
 
 // Material UI
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -39,9 +43,9 @@ const StyledBadge = withStyles((theme) => ({
 
 export const CreditCardDetails = observer(({ paymentMethod }) => {
   const { user: userStore } = useStores();
-  const { brand, exp_month, exp_year, _id, last4 } = paymentMethod;
-  const expMonth = exp_month.padStart(2, '0');
-  const expYear = exp_year.slice(2);
+  const { brand, exp_month, exp_year, _id, is_active, last4 } = paymentMethod;
+  const expMonth = exp_month.toString().padStart(2, '0');
+  const expYear = exp_year.toString().slice(2);
   return (
     <Box mx={2}>
       <Typography style={{ fontWeight: 'bold' }}>
@@ -49,9 +53,10 @@ export const CreditCardDetails = observer(({ paymentMethod }) => {
         {_id === userStore.user.preferred_payment && (
           <StyledBadge badgeContent="Default" color="primary" />
         )}
+        {!is_active && <StyledBadge badgeContent="Inactive" color="error" />}
       </Typography>
       <Typography component="span" style={{ fontWeight: 'bold' }}>
-        **** {last4}
+        {last4}
       </Typography>
       <Typography
         component="span"
@@ -71,7 +76,7 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
     user: userStore,
   } = useStores();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { brand, _id } = paymentMethod;
+  const { brand, _id, is_active } = paymentMethod;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -103,8 +108,27 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
   const handleDeactivatePayment = async () => {
     try {
       loadingStore.show();
-      const res = await deactivatePaymentMethod(_id, auth);
-      userStore.setUserData(res.data);
+      await deactivatePaymentMethod(_id, auth);
+      await userStore.getUser();
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      if (msg) snackbarStore.openSnackbar(msg, 'error');
+      else {
+        snackbarStore.openSnackbar(
+          "Couldn't deactivate payment method.",
+          'error',
+        );
+      }
+    } finally {
+      loadingStore.hide();
+    }
+  };
+
+  const handleReactivatePayment = async () => {
+    try {
+      loadingStore.show();
+      await reactivatePaymentMethod(_id, auth);
+      await userStore.getUser();
     } catch (error) {
       const msg = getErrorMessage(error);
       if (msg) snackbarStore.openSnackbar(msg, 'error');
@@ -138,8 +162,19 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleDefaultPayment}>Make Default</MenuItem>
-              <MenuItem onClick={handleDeactivatePayment}>Remove</MenuItem>
+              {is_active && (
+                <MenuItem onClick={handleDefaultPayment}>Make Default</MenuItem>
+              )}
+              {is_active && (
+                <MenuItem onClick={handleDeactivatePayment}>
+                  Deactivate
+                </MenuItem>
+              )}
+              {!is_active && (
+                <MenuItem onClick={handleReactivatePayment}>
+                  Reactivate
+                </MenuItem>
+              )}
             </Menu>
           </Grid>
         </Grid>

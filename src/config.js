@@ -23,7 +23,6 @@ export const API_REFER_FRIEND = BASE_URL + '/api/user/refer';
 
 export const API_ADDRESS_NEW = BASE_URL + '/api/user/address';
 export const API_ADDRESS_EDIT = BASE_URL + '/api/user/address';
-export const API_ADDRESS_REMOVE = BASE_URL + '/api/user/address/';
 
 export const API_PAYMENT_REMOVE = BASE_URL + '/api/user/payment/';
 export const API_PURCHASE_GIFTCARD = BASE_URL + '/api/user/giftcard';
@@ -57,7 +56,6 @@ export const API_EDIT_CURRENT_CART = BASE_URL + '/api/cart/';
 
 export const API_GET_IMPULSE_PRODUCTS = BASE_URL + '/api/products/associated';
 
-export const API_CREATE_ORDER = BASE_URL + '/api/order';
 export const API_GET_ORDER_SUMMARY = BASE_URL + '/api/order/summary';
 export const API_UPDATE_ORDER = BASE_URL + '/api/order/update';
 export const API_DELIVERY_TIMES = BASE_URL + '/api/delivery_windows';

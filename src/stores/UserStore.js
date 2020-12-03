@@ -1,4 +1,7 @@
 import { observable, decorate, action, computed, runInAction } from 'mobx';
+
+// API
+import { deleteAddress } from 'api/address';
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -7,7 +10,6 @@ import {
   API_SIGNUP,
   API_EDIT_USER,
   API_ADDRESS_NEW,
-  API_ADDRESS_REMOVE,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_SUBSCRIBE_EMAIL,
@@ -26,7 +28,6 @@ class UserStore {
   token = '';
 
   selectedDeliveryAddress = null;
-  selectedPaymentMethod = null;
   selectedDeliveryTime = null;
 
   refPromo = null;
@@ -147,6 +148,29 @@ class UserStore {
     return res;
   }
 
+  async deletePayment(payment_id) {
+    const res = await axios.delete(
+      API_PAYMENT_REMOVE + payment_id,
+      this.getHeaderAuth(),
+    );
+    return res.data;
+  }
+
+  readStorage() {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    const flags = localStorage.getItem('flags');
+
+    runInAction(() => {
+      if (token && user) {
+        this.token = JSON.parse(token);
+        this.user = JSON.parse(user);
+      }
+
+      this.flags = flags && JSON.parse(flags);
+    });
+  }
+
   async makeDefaultAddress(address_id) {
     const res = await axios.patch(
       API_EDIT_USER,
@@ -156,95 +180,6 @@ class UserStore {
     return res.data;
   }
 
-  async deleteAddress(address_id) {
-    const res = await axios
-      .delete(API_ADDRESS_REMOVE + address_id, this.getHeaderAuth())
-      .then((_res) => {
-        runInAction(() => {
-          const addresses = (this.user && this.user.addresses) || [];
-          this.user.addresses = addresses.filter(
-            (addr) => addr._id !== address_id,
-          );
-          this.setUserData(this.user);
-        });
-        return _res;
-      });
-    return res.data;
-  }
-
-  async saveAddress(data) {
-    const res = await axios.post(API_ADDRESS_NEW, data, this.getHeaderAuth());
-    this.updateSelectedDeliveryAddress(res.data);
-    this.setUserData(res.data);
-    return res.data;
-  }
-
-  async deletePayment(payment_id) {
-    const res = await axios.delete(
-      API_PAYMENT_REMOVE + payment_id,
-      this.getHeaderAuth(),
-    );
-    return res.data;
-  }
-
-  updateSelectedDeliveryAddress(newUser) {
-    const oldAddresses = this.user.addresses;
-    const newAddresses = newUser.addresses;
-
-    function comparer(otherArray) {
-      return function (current) {
-        return (
-          otherArray.filter(function (other) {
-            return other.address_id === current.address_id;
-          }).length === 0
-        );
-      };
-    }
-
-    let addressOldFilter = oldAddresses.filter(comparer(newAddresses));
-    let addressNewFilter = newAddresses.filter(comparer(oldAddresses));
-
-    let diff = addressOldFilter.concat(addressNewFilter);
-    this.selectedDeliveryAddress = diff[0];
-    localStorage.setItem(
-      'zip',
-      JSON.stringify(this.selectedDeliveryAddress.zip),
-    );
-  }
-
-  readStorage() {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    const delivery = localStorage.getItem('delivery');
-    const flags = localStorage.getItem('flags');
-
-    runInAction(() => {
-      if (token && user) {
-        this.token = JSON.parse(token);
-        this.user = JSON.parse(user);
-      }
-
-      if (delivery) {
-        const deliveryData = JSON.parse(delivery);
-        this.selectedDeliveryAddress = deliveryData.address;
-        this.selectedDeliveryTime = deliveryData.time;
-      }
-
-      this.flags = flags && JSON.parse(flags);
-    });
-  }
-
-  setDeliveryData() {
-    const data = {
-      address: this.selectedDeliveryAddress,
-      time: this.selectedDeliveryTime,
-    };
-    if (data.address)
-      localStorage.setItem('zip', JSON.stringify(data.address.zip));
-
-    localStorage.setItem('delivery', JSON.stringify(data));
-  }
-
   async getUser() {
     const res = await axios.get(API_GET_USER, this.getHeaderAuth());
     this.setUserData(res.data);
@@ -252,21 +187,11 @@ class UserStore {
     return res.data;
   }
 
-  async saveLocalAddresses() {
-    let addresses = [];
-    if (localStorage.getItem('addresses')) {
-      addresses = JSON.parse(localStorage.getItem('addresses'));
-    }
-
-    for (const address of addresses) {
-      const user = await this.saveAddress(address, this.getHeaderAuth());
-      if (address.address_id === this.selectedDeliveryAddress.address_id) {
-        const added = user.addresses[user.addresses.length - 1];
-        this.setDeliveryAddress(added);
-      }
-    }
-
-    localStorage.removeItem('addresses');
+  deleteAddress(address_id) {
+    const auth = this.getHeaderAuth();
+    return deleteAddress(address_id, auth).then(() => {
+      this.getUser();
+    });
   }
 
   async getStatus(update) {
@@ -279,8 +204,6 @@ class UserStore {
         return this.status;
       }
     });
-
-    this.saveLocalAddresses();
 
     try {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
@@ -321,7 +244,6 @@ class UserStore {
     this.token = '';
     this.status = false;
     this.user = null;
-    this.selectedDeliveryAddress = null;
     this.selectedDeliveryTime = null;
   }
 
@@ -359,25 +281,15 @@ class UserStore {
       : null;
   }
 
-  setDeliveryAddress(data) {
-    this.selectedDeliveryAddress = data;
-    localStorage.setItem('zip', data.zip);
-    this.setDeliveryData();
-  }
-
   setDeliveryTime(time) {
     this.selectedDeliveryTime = time;
-    this.setDeliveryData();
   }
 
   getPaymentMethodById(id) {
     return this.user ? this.user.payment.find((item) => item._id === id) : null;
   }
 
-  setPaymentMethod(data) {
-    this.selectedPaymentMethod = data;
-  }
-
+  // TODO: THIS ISN'T NEEDED ANYMORE. DECOUPLE FROM THE EDIT CART METHOD AND REMOVE
   getDeliveryParams() {
     let data = {
       zip: null,
@@ -393,19 +305,6 @@ class UserStore {
     }
 
     return data;
-  }
-
-  loadFakeUser() {
-    let addresses = [];
-    if (localStorage.getItem('addresses')) {
-      addresses = JSON.parse(localStorage.getItem('addresses'));
-    }
-    const user = {
-      addresses,
-      preferred_address: null,
-    };
-
-    return user;
   }
 
   async subscribeNewsletter(email) {
@@ -460,7 +359,6 @@ decorate(UserStore, {
   promoSuccessModal: observable,
 
   selectedDeliveryAddress: observable,
-  selectedPaymentMethod: observable,
   selectedDeliveryTime: observable,
 
   refPromo: observable,
@@ -494,7 +392,6 @@ decorate(UserStore, {
   referFriend: action,
 
   deleteAddress: action,
-  saveAddress: action,
   makeDefaultAddress: action,
 
   deletePayment: action,
@@ -503,10 +400,7 @@ decorate(UserStore, {
   forgotPassword: action,
   resetPassword: action,
 
-  setDeliveryAddress: action,
-  setPaymentMethod: action,
   setDeliveryTime: action,
-  loadFakeUser: action,
   adjustDeliveryTimes: action,
 
   getAddressById: action,

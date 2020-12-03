@@ -2,27 +2,69 @@ import React from 'react';
 
 import { observer } from 'mobx-react';
 
-import RadioGroup from 'common/RadioGroup';
+import {
+  Box,
+  Divider,
+  makeStyles,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@material-ui/core';
 import { CreditCard } from 'common/PaymentMethods';
 
-function PaymentSelect({ options = [], selectedId, onSelect }) {
-  const handleSelect = (payment_id) => {
-    onSelect(payment_id);
+function PaymentSelect({ name, onChange, paymentMethods = [], selected }) {
+  const activePaymentMethods = paymentMethods.filter((o) => o.is_active);
+  const handleSelect = (e) => {
+    onChange(e.target.value);
   };
-
-  const activePaymentMethods = options.filter((o) => o.is_active);
 
   return (
     <>
       <RadioGroup
-        items={activePaymentMethods}
-        valueFn={(v) => v._id}
-        Label={({ item }) => <CreditCard paymentMethod={item} />}
-        isChecked={(item) => item._id === selectedId}
-        onChange={(v) => handleSelect(v)}
-      />
+        aria-label={'payment-methods'}
+        name={name}
+        onChange={handleSelect}
+      >
+        {activePaymentMethods.map((paymentMethod) => (
+          <PaymentRadioButton
+            key={paymentMethod._id}
+            paymentMethod={paymentMethod}
+            selected={selected}
+            value={paymentMethod._id}
+          />
+        ))}
+      </RadioGroup>
     </>
   );
 }
 
 export default observer(PaymentSelect);
+
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%', // to make label clickable for the entire width
+    display: 'flex',
+    alignItems: 'center',
+  },
+  label: {
+    width: '100%',
+  },
+}));
+
+function PaymentRadioButton({ paymentMethod, selected, value }) {
+  const classes = useStyles();
+  const isSelected = value === selected._id;
+
+  return (
+    <Box display="flex">
+      <FormControlLabel
+        control={<Radio color="primary" />}
+        classes={{ root: classes.root, label: classes.label }}
+        value={value}
+        checked={isSelected}
+        label={<CreditCard paymentMethod={paymentMethod} />}
+      />
+      <Divider />
+    </Box>
+  );
+}

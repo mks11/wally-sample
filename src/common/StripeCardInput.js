@@ -55,7 +55,11 @@ function CardInput({ elements, onAdd, stripe }) {
       ) {
         const { message } = error.response.data.error;
         setPaymentError(message);
+      } else if (error && error.error && error.error.message) {
+        const { message } = error.error;
+        setPaymentError(message);
       } else {
+        console.log(error);
         setPaymentError('Failed to add new card.');
       }
     }
