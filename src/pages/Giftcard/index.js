@@ -32,7 +32,7 @@ import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
 // Reactstrap
-import { Col, FormGroup, Label, Input } from 'reactstrap';
+import { Col, FormGroup } from 'reactstrap';
 
 // Stripe
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -150,13 +150,20 @@ const GiftForm = observer(() => {
         recipient: 'foo@bar.com',
         sender: 'bar@baz.com',
       }}
-      // TODO: Implement Yup validation
       validationSchema={Yup.object({
         amount: Yup.number()
           .required("Amount can't be blank")
           .min(10, "Amount can't be less than $10")
           .max(500, "Amount can't exceed $500"),
-        // TODO: ADD VALIDATION FOR message, paymentId, recipient, sender
+        message: Yup.string(),
+        paymentId: Yup.string(),
+        recipient: Yup.string()
+          .email('This should be an email')
+          .required('The field is required'),
+        sender: Yup.string()
+          .email('This should be an email')
+          .required('The field is required'),
+        stripeToken: Yup.string(),
       })}
       onSubmit={(values, { setSubmitting }) => {
         handleSubmit(values);
@@ -170,17 +177,13 @@ const GiftForm = observer(() => {
               <Amount />
 
               {/* TODO: REPLACE ANY NON MATERIAL UI COMPONENTS START */}
-              {/* TODO: REPLACE NAMES WITH THE NAMES OF THE FORMIK VALUES START */}
               <Grid item>
                 <FormGroup row>
-                  <Label for="giftTo" sm={3} className="text-md-right">
-                    To
-                  </Label>
                   <Col sm={9}>
-                    <Input
+                    <TextField
+                      label="To"
+                      name="recipient"
                       type="email"
-                      name="giftTo"
-                      id="giftTo"
                       placeholder="Enter recipient's email address"
                     />
                   </Col>
@@ -188,14 +191,11 @@ const GiftForm = observer(() => {
               </Grid>
               <Grid item>
                 <FormGroup row>
-                  <Label for="giftFrom" sm={3} className="text-md-right">
-                    From
-                  </Label>
                   <Col sm={9}>
-                    <Input
+                    <TextField
+                      label="From"
+                      name="sender"
                       type="email"
-                      name="giftFrom"
-                      id="giftFrom"
                       placeholder="Enter your email address"
                     />
                   </Col>
@@ -203,21 +203,18 @@ const GiftForm = observer(() => {
               </Grid>
               <Grid item>
                 <FormGroup row>
-                  <Label for="giftMessage" sm={3} className="text-md-right">
-                    Your message
-                  </Label>
                   <Col sm={9}>
-                    <Input
+                    <TextField
+                      label="Your message"
+                      name="message"
                       type="textarea"
-                      name="giftMessage"
-                      id="giftMessage"
+                      multiline
                       placeholder="Write a message for your recipient (optional)"
                     />
                   </Col>
                 </FormGroup>
               </Grid>
               {/* TODO: REPLACE ANY NON MATERIAL UI COMPONENTS END */}
-              {/* TODO: REPLACE NAMES WITH THE NAMES OF THE FORMIK VALUES END */}
 
               {/* If user is guest, render card input */}
               <Grid item xs={12}>
