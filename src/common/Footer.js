@@ -72,13 +72,16 @@ class Footer extends Component {
                       <Link to="about">About</Link>
                     </li>
                     <li>
+                      <Link to="/blog">Blog</Link>
+                    </li>
+                    <li>
+                      <Link to="/giftcard">Gift Cards</Link>
+                    </li>
+                    <li>
                       <Link to="howitworks">How It Works</Link>
                     </li>
                     <li>
                       <Link to="/backers">Our Backers</Link>
-                    </li>
-                    <li>
-                      <Link to="/blog">Blog</Link>
                     </li>
                   </ul>
                 </div>

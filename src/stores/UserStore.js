@@ -9,12 +9,10 @@ import {
   API_GET_USER,
   API_SIGNUP,
   API_EDIT_USER,
-  API_ADDRESS_NEW,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
   API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
-  API_PURCHASE_GIFTCARD,
 } from '../config';
 
 import axios from 'axios';
@@ -259,14 +257,6 @@ class UserStore {
 
   async forgotPassword(email) {
     const res = await axios.post(API_FORGOT_PASSWORD, { email });
-    return res.data;
-  }
-
-  async purchaseGiftCard(data) {
-    const auth = this.getHeaderAuth();
-    const options =
-      auth.headers.Authorization === 'Bearer undefined' ? {} : auth;
-    const res = await axios.post(API_PURCHASE_GIFTCARD, data, options);
     return res.data;
   }
 

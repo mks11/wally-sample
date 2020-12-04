@@ -12,7 +12,7 @@ import { DesktopRetailNav } from './Retail';
 
 const DesktopNavWrapper = styled(Box)`
   display: none;
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 992px) {
     display: flex;
   }
 `;

@@ -45,20 +45,17 @@ function MobileGuestNavMenu() {
       <MobileNavItem to="/about" onClick={handleClose} hasDivider>
         About
       </MobileNavItem>
-      <MobileNavItem to="/howitworks" onClick={handleClose} hasDivider>
-        How It Works
-      </MobileNavItem>
       <MobileNavItem to="/blog" onClick={handleClose} hasDivider>
         Blog
+      </MobileNavItem>
+      <MobileNavItem to="/giftcard" onClick={handleClose} hasDivider>
+        Gift Cards
       </MobileNavItem>
       <MobileNavItem to="/backers" onClick={handleClose}>
         Our Backers
       </MobileNavItem>
       {/* <MobileNavItem to="/help" onClick={handleClose} hasDivider>
         Help
-      </MobileNavItem> */}
-      {/* <MobileNavItem to="/giftcard" onClick={handleClose}>
-        Gift Card
       </MobileNavItem> */}
     </>
   );
@@ -108,8 +105,8 @@ export const DesktopGuestNav = observer(() => {
   return !user.user ? (
     <>
       <DesktopNavItem to="/about" text="About" />
-      <DesktopNavItem to="/howitworks" text="How It Works" />
       <DesktopNavItem to="/blog" text="Blog" />
+      <DesktopNavItem to="/giftcard" text="Gift Cards" />
       <LogInButton />
       <SignUpButton />
       <DesktopNavItem
