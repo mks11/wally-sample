@@ -3,6 +3,7 @@ import React from 'react';
 // Hooks
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
+import { useMediaQuery } from 'react-responsive';
 
 // React Router
 import { Link } from 'react-router-dom';
@@ -18,6 +19,23 @@ import Navbar from 'common/Header/NavBar';
 
 // images
 import logoFull from 'images/logo-full.svg';
+import logoCondensed from 'images/logo-condensed.svg';
+
+const LogoCondensed = styled.img`
+  height: 40px;
+
+  @media only screen and (min-width: 567px) {
+    height: 40px;
+  }
+
+  @media only screen and (min-width: 768px) {
+    height: 44px;
+  }
+
+  @media only screen and (min-width: 992px) {
+    height: 48px;
+  }
+`;
 
 const LogoFull = styled.img`
   height: 24px;
@@ -40,10 +58,12 @@ const LogoFull = styled.img`
 `;
 
 const Logo = observer(() => {
+  const shouldDisplayCondensedLogo = useMediaQuery({
+    query: '(max-width: 480px)',
+  });
   const { user, product } = useStores();
 
   var home = user.user ? '/main' : '/';
-
   const onLogoClick = () => {
     product.resetSearch();
   };
@@ -51,16 +71,18 @@ const Logo = observer(() => {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <LogoFull src={logoFull} alt="The Wally Shop logo." />
+        {shouldDisplayCondensedLogo ? (
+          <LogoCondensed src={logoCondensed} alt="The Wally Shop logo." />
+        ) : (
+          <LogoFull src={logoFull} alt="The Wally Shop logo." />
+        )}
       </Link>
     </Box>
   );
 });
 
 const HeaderWrapper = styled(Box)`
-  @media only screen and (min-width: 768px) {
-    padding: 1rem 0;
-  }
+  padding: 1rem 0;
 `;
 
 export default function Header() {

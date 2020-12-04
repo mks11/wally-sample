@@ -7,80 +7,43 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Custom Components
-import {
-  MobileNavItem,
-  MobileNavMenu,
-  SignOutButton,
-  MobileUserGreeting,
-} from './MobileNavComponents';
-import {
-  DesktopNavItem,
-  DesktopDropdownMenu,
-  DesktopDropdownMenuItem,
-  DesktopDropdownMenuListItem,
-} from 'common/Header/NavBar/DesktopNavComponents';
+import { MobileNavMenu } from './MobileNavComponents';
+import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
+import AccountDropdown, {
+  AccountDropdownMenuItem,
+  AccountDropdownMenuListItem,
+} from 'common/Header/NavBar/AccountDropdown';
 
 export const MobileOpsNav = observer(() => {
   const { user } = useStores();
   return user.isOps || user.isOpsLead ? (
-    <MobileNavMenu>
-      <MobileOpsNavMenu />
-    </MobileNavMenu>
-  ) : null;
-});
-
-export const MobileOpsNavMenu = observer(() => {
-  const { user, modalV2 } = useStores();
-  const handleClose = () => modalV2.close();
-
-  return (
     <>
-      <MobileUserGreeting />
-      <MobileNavItem to="/pick-pack" onClick={handleClose} hasDivider>
-        Pick/Pack
-      </MobileNavItem>
-      <MobileNavItem to="/packaging-returns" onClick={handleClose} hasDivider>
-        Packaging Returns
-      </MobileNavItem>
-      <MobileNavItem
-        to="/manage/co-packing/runs"
-        onClick={handleClose}
-        hasDivider
-      >
-        Copacking
-      </MobileNavItem>
-      <MobileNavItem to="/packaging-inventory" onClick={handleClose} hasDivider>
-        Packaging Inventory
-      </MobileNavItem>
-      {/* {user && user.isOpsLead && (
-        <MobileNavItem
-          to="/manage/co-packing/inbound"
-          onClick={handleClose}
-          hasDivider
-        >
-          Inbound Shipments
-        </MobileNavItem>
-      )}
-      {user && user.isOpsLead && (
-        <MobileNavItem
-          to="/manage/co-packing/outbound"
-          onClick={handleClose}
-          hasDivider
-        >
-          Outbound Shipments
-        </MobileNavItem>
-      )} */}
-      {/* TODO - ARE THESE STILL USED? */}
-      {/* <MobileNavItem to="/manage/shopping-app-1" onClick={handleClose} hasDivider>
-        Shopping App
-      </MobileNavItem> */}
-      {/* <MobileNavItem to="/manage/orders" onClick={handleClose} hasDivider>
-        Packing App
-      </MobileNavItem> */}
-
-      <SignOutButton />
+      <MobileNavMenu>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/pick-pack">
+            Pick/Pack
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/packaging-returns">
+            Packaging Returns
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/co-packing/runs">
+            Copacking
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/packaging-inventory">
+            Packaging Inventory
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+      </MobileNavMenu>
+      <AccountDropdown></AccountDropdown>
+      {/* <Cart /> */}
     </>
-  );
+  ) : null;
 });
 
 export const DesktopOpsNav = observer(() => {
@@ -91,36 +54,13 @@ export const DesktopOpsNav = observer(() => {
       <DesktopNavItem to="/pick-pack" text="Pick/Pack" />
       <DesktopNavItem to="/packaging-returns" text="Packaging Returns" />
       <DesktopNavItem to="/manage/co-packing/runs" text="Copacking" />
-      <DesktopDropdownMenu>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/packaging-inventory">
+      <AccountDropdown>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/packaging-inventory">
             Packaging Inventory
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        {/* {user.isOpsLead && (
-          <DesktopDropdownMenuListItem>
-            <DesktopDropdownMenuItem to="/manage/co-packing/inbound">
-              Inbound Shipments
-            </DesktopDropdownMenuItem>
-          </DesktopDropdownMenuListItem>
-        )}
-        {user.isOpsLead && (
-          <DesktopDropdownMenuListItem>
-            <DesktopDropdownMenuItem to="/manage/co-packing/outbound">
-              Outbound Shipments
-            </DesktopDropdownMenuItem>
-          </DesktopDropdownMenuListItem>
-        )} */}
-
-        {/* Deprecated */}
-
-        {/* <DesktopDropdownMenuItem to="/manage/shopping-app-1">
-          Shopping App
-        </DesktopDropdownMenuItem>
-        <DesktopDropdownMenuItem to="/manage/orders">
-          Packaging App
-        </DesktopDropdownMenuItem> */}
-      </DesktopDropdownMenu>
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+      </AccountDropdown>
     </>
   ) : null;
 });

@@ -13,19 +13,36 @@ import {
   SignOutButton,
   MobileUserGreeting,
 } from './MobileNavComponents';
-import {
-  DesktopNavItem,
-  DesktopDropdownMenu,
-  DesktopDropdownMenuItem,
-  DesktopDropdownMenuListItem,
-} from 'common/Header/NavBar/DesktopNavComponents';
+import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
+import AccountDropdown, {
+  AccountDropdownMenuItem,
+  AccountDropdownMenuListItem,
+} from 'common/Header/NavBar/AccountDropdown';
 
 export const MobileAdminNav = observer(() => {
   const { user } = useStores();
   return user.isAdmin ? (
-    <MobileNavMenu>
-      <MobileAdminNavMenu />
-    </MobileNavMenu>
+    <>
+      <MobileNavMenu>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/retail">
+            Retail Management
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/co-packing/runs">
+            Copacking
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/pick-pack">
+            Pick/Pack
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+      </MobileNavMenu>
+      <AccountDropdown></AccountDropdown>
+      {/* <Cart /> */}
+    </>
   ) : null;
 });
 
@@ -35,20 +52,7 @@ export function MobileAdminNavMenu() {
   return (
     <>
       <MobileUserGreeting />
-      <MobileNavItem to="/manage/retail" onClick={handleClose} hasDivider>
-        Retail Management
-      </MobileNavItem>
-      <MobileNavItem
-        to="/manage/co-packing/runs"
-        onClick={handleClose}
-        hasDivider
-      >
-        Copacking
-      </MobileNavItem>
-      <MobileNavItem to="/pick-pack" onClick={handleClose} hasDivider>
-        Pick/Pack
-      </MobileNavItem>
-      <MobileNavItem to="/manage/shopper" onClick={handleClose} hasDivider>
+      {/* <MobileNavItem to="/manage/shopper" onClick={handleClose} hasDivider>
         Manage Shoppers
       </MobileNavItem>
       <MobileNavItem to="/manage/packaging" onClick={handleClose} hasDivider>
@@ -85,7 +89,7 @@ export function MobileAdminNavMenu() {
       </MobileNavItem>
       <MobileNavItem to="/manage/blog" onClick={handleClose} hasDivider>
         Manage Blog Posts
-      </MobileNavItem>
+      </MobileNavItem> */}
       <SignOutButton />
     </>
   );
@@ -99,58 +103,58 @@ export const DesktopAdminNav = observer(() => {
       <DesktopNavItem to="/manage/retail" text="Retail Management" />
       <DesktopNavItem to="/manage/co-packing/runs" text="Copacking" />
       <DesktopNavItem to="/pick-pack" text="Pick/Pack" />
-      <DesktopDropdownMenu>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/shopper">
+      <AccountDropdown>
+        {/* <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/shopper">
             Manage Shoppers
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/packaging">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/packaging">
             Manage Packaging
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/delivery">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/delivery">
             Manage Deliveries
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/courier-routing">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/courier-routing">
             Manage Courier Routes
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/shopping-app-1">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/shopping-app-1">
             Shopping App 1
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/orders">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/orders">
             Packing App
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/products">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/products">
             Products App
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/shipping">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/shipping">
             Shipping
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/printing">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/printing">
             Printing
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-        <DesktopDropdownMenuListItem>
-          <DesktopDropdownMenuItem to="/manage/blog">
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/manage/blog">
             Manage Blog Posts
-          </DesktopDropdownMenuItem>
-        </DesktopDropdownMenuListItem>
-      </DesktopDropdownMenu>
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem> */}
+      </AccountDropdown>
     </>
   ) : null;
 });
