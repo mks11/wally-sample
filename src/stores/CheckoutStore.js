@@ -18,7 +18,7 @@ class CheckoutStore {
     return this.getCurrentCart(auth, {});
   }
 
-  async getCurrentCart(auth, delivery) {
+  async getCurrentCart(auth) {
     let res;
 
     const local = localStorage.getItem('cart');
@@ -27,11 +27,6 @@ class CheckoutStore {
       this.cart = JSON.parse(local);
       url += '/' + this.cart._id;
     }
-
-    // const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    // url += "?time=" + currentTime;
-    // url += "&delivery_zip=" + delivery.zip;
-    // url += "&delivery_date=" + delivery.date;
 
     if (auth.headers.Authorization === 'Bearer undefined') {
       res = await axios.get(url);

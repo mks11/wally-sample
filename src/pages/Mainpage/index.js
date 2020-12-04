@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // Services & utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import { connect, datesEqual } from 'utils';
+import { connect } from 'utils';
 
 // Config
 import { APP_URL } from 'config';
@@ -162,53 +162,6 @@ class Mainpage extends Component {
           this.setState({ sidebar: this.productStore.sidebar });
         })
         .catch((e) => console.error('Failed to load product displayed: ', e));
-
-      this.checkoutStore
-        .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
-        .then((data) => {
-          if (
-            !datesEqual(data.delivery_date, deliveryData.date) &&
-            deliveryData.date !== null
-          ) {
-            this.checkoutStore.getDeliveryTimes().then(() => {
-              if (
-                !this.userStore.status ||
-                (this.userStore.status && !this.userStore.user.is_ecomm)
-              ) {
-                this.modalStore.toggleDelivery();
-              }
-            });
-          }
-
-          data &&
-            this.userStore.adjustDeliveryTimes(
-              data.delivery_date,
-              this.state.deliveryTimes,
-            );
-
-          if (this.userStore.cameFromCartUrl) {
-            if (
-              !this.userStore.status ||
-              (this.userStore.status && !this.userStore.user.is_ecomm)
-            ) {
-              const delivery = this.userStore.getDeliveryParams();
-              if (delivery.zip && delivery.date) {
-                this.checkoutStore.updateCartItems(delivery);
-                this.userStore.cameFromCartUrl = false;
-              } else {
-                if (
-                  !this.userStore.status ||
-                  (this.userStore.status && !this.userStore.user.is_ecomm)
-                ) {
-                  this.modalStore.toggleDelivery();
-                }
-              }
-            }
-          }
-        })
-        .catch((e) => {
-          console.error('Failed to load current cart', e);
-        });
     }
   }
 

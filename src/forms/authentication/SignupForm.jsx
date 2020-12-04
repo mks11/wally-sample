@@ -30,7 +30,7 @@ import * as Yup from 'yup';
 export default function SignupForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const { checkout, modal, modalV2, routing, user } = useStores();
+  const { modal, modalV2, routing, user } = useStores();
 
   return (
     <Box>
@@ -127,7 +127,6 @@ export default function SignupForm() {
       .signup({ name, email, password })
       .then(() => {
         setSubmitting(false);
-        checkout.getCurrentCart(user.getHeaderAuth(), user.getDeliveryParams());
         modal.toggleModal('welcome');
         modalV2.close();
         routing.push('/main');
