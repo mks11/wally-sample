@@ -3,9 +3,6 @@ import { Modal, ModalBody } from 'reactstrap';
 import { connect } from '../utils';
 
 import WelcomeModal from './WelcomeModal';
-import ZipModal from './ZipModal';
-import SignupModal from './SignupModal';
-import LoginModal from './LoginModal';
 import ReferralModal from './ReferralModal';
 import FeedbackModal from './FeedbackModal';
 import ServiceFeedbackModal from './ServiceFeedbackModal';
@@ -28,11 +25,8 @@ import Retail from './RetailModals';
 
 const ModalRoutes = {
   welcome: WelcomeModal,
-  zip: ZipModal,
   invalidzip: InvalidZipModal,
   invalidzipsuccess: InvalidZipSuccessModal,
-  signup: SignupModal,
-  login: LoginModal,
   referral: ReferralModal,
   feedback: FeedbackModal,
   servicefeedback: ServiceFeedbackModal,
