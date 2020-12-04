@@ -48,6 +48,7 @@ function NumberFormatCustom(props) {
   return (
     <NumberFormat
       {...other}
+      allowNegative={false}
       getInputRef={inputRef}
       onValueChange={(values) => {
         onChange({

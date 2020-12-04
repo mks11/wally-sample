@@ -105,6 +105,7 @@ const GiftForm = observer(() => {
   const stripe = useStripe();
 
   const handleSubmit = async (values) => {
+    console.log(values.amount);
     try {
       loading.show();
 
@@ -145,23 +146,24 @@ const GiftForm = observer(() => {
       enableReinitialize
       initialValues={{
         amount: '10',
-        message: 'foo',
+        message: '',
         paymentId: user ? user.preferred_payment : '',
-        recipient: 'foo@bar.com',
-        sender: 'bar@baz.com',
+        recipient: '',
+        sender: '',
       }}
       validationSchema={Yup.object({
         amount: Yup.number()
-          .required("Amount can't be blank")
+          .integer('Amount must be a whole number')
           .min(10, "Amount can't be less than $10")
-          .max(500, "Amount can't exceed $500"),
+          .max(500, "Amount can't exceed $500")
+          .required("Amount can't be blank"),
         message: Yup.string(),
         paymentId: Yup.string(),
         recipient: Yup.string()
-          .email('This should be an email')
+          .email('Email address is invalid')
           .required('The field is required'),
         sender: Yup.string()
-          .email('This should be an email')
+          .email('Email address is invalid')
           .required('The field is required'),
         stripeToken: Yup.string(),
       })}
@@ -177,7 +179,7 @@ const GiftForm = observer(() => {
               <Amount />
 
               {/* TODO: REPLACE ANY NON MATERIAL UI COMPONENTS START */}
-              <Grid item>
+              <Grid item xs={12}>
                 <FormGroup row>
                   <Col sm={9}>
                     <TextField
@@ -185,11 +187,12 @@ const GiftForm = observer(() => {
                       name="recipient"
                       type="email"
                       placeholder="Enter recipient's email address"
+                      variant="outlined"
                     />
                   </Col>
                 </FormGroup>
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <FormGroup row>
                   <Col sm={9}>
                     <TextField
@@ -197,11 +200,12 @@ const GiftForm = observer(() => {
                       name="sender"
                       type="email"
                       placeholder="Enter your email address"
+                      variant="outlined"
                     />
                   </Col>
                 </FormGroup>
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <FormGroup row>
                   <Col sm={9}>
                     <TextField
@@ -210,6 +214,7 @@ const GiftForm = observer(() => {
                       type="textarea"
                       multiline
                       placeholder="Write a message for your recipient (optional)"
+                      variant="outlined"
                     />
                   </Col>
                 </FormGroup>
