@@ -86,7 +86,8 @@ const PackagingBalance = observer(() => {
 const CartSummary = lazy(() => import('common/CartSummary'));
 
 const Cart = observer(() => {
-  const { checkout, modalV2, user } = useStores();
+  const { checkout, modalV2, user: userStore } = useStores();
+  const { user, token } = userStore;
   const items = checkout.cart ? checkout.cart.cart_items : [];
   const numItems = getNumItems(items);
   const isDisabled = numItems < 1;
@@ -110,12 +111,15 @@ const Cart = observer(() => {
   };
 
   useEffect(() => {
-    const getCartData = async () => {
-      const auth = user.getHeaderAuth();
+    const loadCart = async () => {
+      const auth = userStore.getHeaderAuth();
       await checkout.getCurrentCart(auth);
     };
-    getCartData();
-  }, []);
+    if (user && token) {
+      console.log(user);
+      loadCart();
+    }
+  }, [user]);
 
   return (
     <>
