@@ -14,29 +14,46 @@ class CheckoutStore {
   deliveryTimes = [];
 
   async clearCart(auth) {
-    localStorage.removeItem('cart');
-    return this.getCurrentCart(auth, {});
-  }
-
-  async getCurrentCart(auth) {
-    let res;
-
-    const local = localStorage.getItem('cart');
-    let url = API_GET_CURRENT_CART;
-    if (local) {
-      this.cart = JSON.parse(local);
-      url += '/' + this.cart._id;
-    }
-
     if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.get(url);
-      localStorage.setItem('cart', JSON.stringify(res.data));
-    } else {
-      res = await axios.get(url, auth);
       localStorage.removeItem('cart');
     }
-    this.cart = res.data;
-    return res.data;
+    this.cart = null;
+    this.order = null;
+    return this.getCurrentCart(auth);
+  }
+
+  getCurrentCart(auth) {
+    var cart = localStorage.getItem('cart');
+
+    if (auth.headers.Authorization === 'Bearer undefined') {
+      /**
+       * For guest users, their cart is maintained in local storage.
+       *
+       * We only need to make an API call for a guest user that doesn't yet
+       * have a cart cookie in local storage. This API call detects that the
+       * user is a guest and just sends back a new cart object, without saving
+       * to the DB.
+       */
+      if (!cart) {
+        return axios.get(API_GET_CURRENT_CART).then((res) => {
+          localStorage.setItem('cart', JSON.stringify(res.data));
+        });
+      } else {
+        this.cart = cart;
+      }
+    } else {
+      // TODO: If guest customer has cart open in their browser, then signs up for acct,
+      // We need to persist their cart to the DB and remove it from local storage.
+      // if (cart) localStorage.removeItem('cart');
+
+      // If the store is already observing the user's cart, send oid in the req
+      let url = API_GET_CURRENT_CART;
+      if (this.cart && this.cart._id) url += '/' + this.cart._id;
+
+      return axios.get(url, auth).then((res) => {
+        this.cart = res.data;
+      });
+    }
   }
 
   async editCurrentCart(data, auth, order_summary, delivery) {

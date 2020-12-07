@@ -116,10 +116,9 @@ const Cart = observer(() => {
       await checkout.getCurrentCart(auth);
     };
     if (user && token) {
-      console.log(user);
       loadCart();
     }
-  }, [user]);
+  }, [user, token]);
 
   return (
     <>
