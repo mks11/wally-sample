@@ -31,11 +31,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/gwell/gwell-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-480.jpg',
   },
 ];
 
@@ -294,14 +294,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New products by gwell'}
+        alt={'New products by Waste Free Products by Tangie'}
         img={img}
         justify="flex-start"
-        title="Snacks by Gwell"
-        url="/shop/brands/gwell"
+        title="Just Add Water"
+        url="/shop/brands/waste-free-products-by-tangie"
       >
         <Typography gutterBottom>
-          Fuel your day with functional snacks by Gwell, available now.
+          Sustainable soap bars by Tangie for all your cleaning needs.
         </Typography>
       </HeroSlide>
     ));
