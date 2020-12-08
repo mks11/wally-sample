@@ -1,12 +1,15 @@
+import axios from 'axios';
 import { observable, decorate, action } from 'mobx';
+import moment from 'moment';
+
+// API
+import { updateCart } from 'api/cart';
 import {
   API_GET_CURRENT_CART,
   API_EDIT_CURRENT_CART,
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
 } from '../config';
-import axios from 'axios';
-import moment from 'moment';
 
 class CheckoutStore {
   cart = null;
@@ -56,27 +59,25 @@ class CheckoutStore {
     }
   }
 
-  async editCurrentCart(data, auth, order_summary, delivery) {
-    let cart_id;
+  async editCurrentCart(data, auth, order_summary) {
     if (this.cart) {
-      cart_id = this.cart._id;
-    }
-    if (order_summary) {
-      cart_id = this.order.cart_id;
-    }
+      const cartId = this.cart._id;
+      let res;
 
-    let url = API_EDIT_CURRENT_CART;
-    if (cart_id) url += cart_id;
+      if (auth.headers.Authorization === 'Bearer undefined') {
+        // For guest users. Not implemented yet on backend.
+        res = updateCart(cartId, data);
+      } else {
+        res = updateCart(cartId, data, auth);
+      }
 
-    let res;
-    if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.patch(url, data);
-    } else {
-      res = await axios.patch(url, data, auth);
-    }
-    this.cart = res.data;
-    if (order_summary) {
-      this.getOrderSummary(auth);
+      return res.then((res) => {
+        this.cart = res.data;
+
+        if (order_summary) {
+          this.getOrderSummary(auth);
+        }
+      });
     }
   }
 
