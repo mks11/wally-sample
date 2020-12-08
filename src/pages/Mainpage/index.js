@@ -23,7 +23,7 @@ import ProductTop from './ProductTop';
 import MobileSearch from './MobileSearch';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
-import ProductWithPackaging from '../ProductWithPackaging';
+// import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
@@ -403,75 +403,72 @@ class Mainpage extends Component {
                 id !== 'buyagain' && (
                   <div className="col-xl-10 col-md-9 col-sm-12">
                     <div className="product-content-right">
-                      {this.props.location.pathname.split('/')[1] ===
+                      {/* {this.props.location.pathname.split('/')[1] ===
                       'packaging-blank' ? (
                         <ProductWithPackaging
                           packagingId={this.props.match.params.id}
                         />
-                      ) : (
-                        <React.Fragment>
-                          {ads2 && (
-                            <img
-                              src={APP_URL + ads2.image}
-                              className="img-fluid"
-                              alt=""
+                      ) : ( */}
+                      <React.Fragment>
+                        {ads2 && (
+                          <img
+                            src={APP_URL + ads2.image}
+                            className="img-fluid"
+                            alt=""
+                          />
+                        )}
+
+                        <div className="product-breadcrumb">
+                          <CarbonBar nCartItems={count} />
+                        </div>
+
+                        {/* Featured Brands */}
+                        <Container maxWidth="lg" disableGutters>
+                          {/* displayed from 568px and up */}
+                          <DesktopCarouselWrapper my={2} zIndex={1}>
+                            <ImageCarousel
+                              dots={hasDots}
+                              keyName={'featured-brands'}
+                              height={675}
+                              slides={slides}
+                              width={1200}
                             />
-                          )}
+                          </DesktopCarouselWrapper>
+                          {/* displayed from 567px and down */}
+                          <MobileCarouselWrapper my={2} zIndex={1}>
+                            <ImageCarousel
+                              dots={hasDots}
+                              keyName={'featured-brands'}
+                              height={480}
+                              slides={slides}
+                              width={480}
+                            />
+                          </MobileCarouselWrapper>
+                        </Container>
 
-                          <div className="product-breadcrumb">
-                            <CarbonBar nCartItems={count} />
-                          </div>
-
-                          {/* Featured Brands */}
-                          <Container maxWidth="lg" disableGutters>
-                            {/* displayed from 568px and up */}
-                            <DesktopCarouselWrapper my={2} zIndex={1}>
-                              <ImageCarousel
-                                dots={hasDots}
-                                keyName={'featured-brands'}
-                                height={675}
-                                slides={slides}
-                                width={1200}
-                              />
-                            </DesktopCarouselWrapper>
-                            {/* displayed from 567px and down */}
-                            <MobileCarouselWrapper my={2} zIndex={1}>
-                              <ImageCarousel
-                                dots={hasDots}
-                                keyName={'featured-brands'}
-                                height={480}
-                                slides={slides}
-                                width={480}
-                              />
-                            </MobileCarouselWrapper>
-                          </Container>
-
-                          {this.state.categoryTypeMode === 'limit' ? (
-                            <div className="row">
-                              {this.productStore.main_display.map(
-                                (category, index) => (
-                                  <CategoryCard
-                                    key={index}
-                                    category={category}
-                                  />
-                                ),
-                              )}
-                            </div>
-                          ) : (
-                            this.productStore.main_display.map(
+                        {this.state.categoryTypeMode === 'limit' ? (
+                          <div className="row">
+                            {this.productStore.main_display.map(
                               (category, index) => (
-                                <ProductList
-                                  key={index}
-                                  display={category}
-                                  filters={filters}
-                                  mode={this.state.categoryTypeMode}
-                                  deliveryTimes={this.state.deliveryTimes}
-                                />
+                                <CategoryCard key={index} category={category} />
                               ),
-                            )
-                          )}
-                        </React.Fragment>
-                      )}
+                            )}
+                          </div>
+                        ) : (
+                          this.productStore.main_display.map(
+                            (category, index) => (
+                              <ProductList
+                                key={index}
+                                display={category}
+                                filters={filters}
+                                mode={this.state.categoryTypeMode}
+                                deliveryTimes={this.state.deliveryTimes}
+                              />
+                            ),
+                          )
+                        )}
+                      </React.Fragment>
+                      {/* )} */}
                     </div>
                   </div>
                 )
