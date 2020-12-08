@@ -22,7 +22,6 @@ import {
   Card,
   Container,
   Divider,
-  FormGroup,
   Grid,
   Typography,
 } from '@material-ui/core';
@@ -175,7 +174,6 @@ const GiftForm = observer(() => {
           <Box my={4}>
             <Grid container spacing={3}>
               <Amount />
-
               <Grid item container xs={12} spacing={1}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -238,7 +236,7 @@ function Amount() {
       <Typography variant="body2" color="textSecondary" gutterBottom>
         Enter whole amount from $10 to $500 USD
       </Typography>
-      <Box mt={2}>
+      <Box>
         <CurrencyInput
           label="Gift Card Amount"
           name="amount"
