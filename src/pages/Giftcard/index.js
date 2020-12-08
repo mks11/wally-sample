@@ -22,6 +22,7 @@ import {
   Card,
   Container,
   Divider,
+  FormGroup,
   Grid,
   Typography,
 } from '@material-ui/core';
@@ -30,9 +31,6 @@ import { useTheme } from '@material-ui/core/styles';
 // MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
-
-// Reactstrap
-import { Col, FormGroup } from 'reactstrap';
 
 // Stripe
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -175,51 +173,39 @@ const GiftForm = observer(() => {
       {({ isSubmitting }) => (
         <Form>
           <Box my={4}>
-            <Grid container spacing={4}>
+            <Grid container spacing={3}>
               <Amount />
 
-              {/* TODO: REPLACE ANY NON MATERIAL UI COMPONENTS START */}
-              <Grid item xs={12}>
-                <FormGroup row>
-                  <Col sm={9}>
-                    <TextField
-                      label="To"
-                      name="recipient"
-                      type="email"
-                      placeholder="Enter recipient's email address"
-                      variant="outlined"
-                    />
-                  </Col>
-                </FormGroup>
+              <Grid item container xs={12} spacing={1}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="To"
+                    name="recipient"
+                    type="email"
+                    placeholder="Enter recipient's email address"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="From"
+                    name="sender"
+                    type="email"
+                    placeholder="Enter your email address"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Your message"
+                    name="message"
+                    type="textarea"
+                    multiline
+                    placeholder="Write a message for your recipient (optional)"
+                    variant="outlined"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <FormGroup row>
-                  <Col sm={9}>
-                    <TextField
-                      label="From"
-                      name="sender"
-                      type="email"
-                      placeholder="Enter your email address"
-                      variant="outlined"
-                    />
-                  </Col>
-                </FormGroup>
-              </Grid>
-              <Grid item xs={12}>
-                <FormGroup row>
-                  <Col sm={9}>
-                    <TextField
-                      label="Your message"
-                      name="message"
-                      type="textarea"
-                      multiline
-                      placeholder="Write a message for your recipient (optional)"
-                      variant="outlined"
-                    />
-                  </Col>
-                </FormGroup>
-              </Grid>
-              {/* TODO: REPLACE ANY NON MATERIAL UI COMPONENTS END */}
 
               {/* If user is guest, render card input */}
               <Grid item xs={12}>
