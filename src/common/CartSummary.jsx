@@ -97,12 +97,10 @@ const RemoveItemForm = lazy(() => import('forms/cart/RemoveItem'));
 function CartItem({ item }) {
   const {
     customer_quantity,
-    _id,
     inventory_id,
     product,
     product_id,
     product_name,
-    unit_type,
   } = item;
   const [isLoading, setIsLoading] = useState(false);
   const [increasedQty, setIncreasedQty] = useState(false);
@@ -157,10 +155,8 @@ function CartItem({ item }) {
       const updateQty = customer_quantity + qty;
       await handleUpdateCart([
         {
-          quantity: updateQty,
-          product_id,
           inventory_id,
-          unit_type,
+          quantity: updateQty,
         },
       ]);
     } catch (error) {
@@ -202,9 +198,8 @@ function CartItem({ item }) {
             aria-label="remove-item-from-cart"
             onClick={() =>
               handleDelete({
-                inventoryId: _id,
+                inventoryId: inventory_id,
                 name: product_name,
-                productId: product_id,
               })
             }
           >
