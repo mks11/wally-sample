@@ -236,13 +236,7 @@ function Amount() {
       <Typography variant="body2" color="textSecondary" gutterBottom>
         Enter whole amount from $10 to $500 USD
       </Typography>
-      <Box mt={2}>
-        <CurrencyInput
-          label="Gift Card Amount"
-          name="amount"
-          variant="outlined"
-        />
-      </Box>
+
       <Grid container spacing={1}>
         <Grid item>
           <PrimaryWallyButton
@@ -277,6 +271,13 @@ function Amount() {
           </PrimaryWallyButton>
         </Grid>
       </Grid>
+      <Box mt={3}>
+        <CurrencyInput
+          label="Gift Card Amount"
+          name="amount"
+          variant="outlined"
+        />
+      </Box>
     </Grid>
   );
 }
