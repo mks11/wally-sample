@@ -233,9 +233,6 @@ function Amount() {
   return (
     <Grid item xs={12}>
       <InputLabel>Choose or enter an amount</InputLabel>
-      <Typography variant="body2" color="textSecondary" gutterBottom>
-        Enter whole amount from $10 to $500 USD
-      </Typography>
 
       <Grid container spacing={1}>
         <Grid item>
@@ -272,6 +269,9 @@ function Amount() {
         </Grid>
       </Grid>
       <Box mt={3}>
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          Enter whole amount from $10 to $500 USD
+        </Typography>
         <CurrencyInput
           label="Gift Card Amount"
           name="amount"
