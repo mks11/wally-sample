@@ -10,7 +10,6 @@ import ReferralResultModal from './ReferralResultModal';
 import InviteModal from './InviteModal';
 import InvalidZipModal from './InvalidZipModal';
 import InvalidZipSuccessModal from './InvalidZipSuccessModal';
-import DeleteModal from './DeleteModal';
 import ProductModal from './ProductModal';
 import DeliveryModal from './DeliveryModal';
 import CheckoutFirstModal from './CheckoutFirstModal';
@@ -32,7 +31,6 @@ const ModalRoutes = {
   servicefeedback: ServiceFeedbackModal,
   referralresult: ReferralResultModal,
   invite: InviteModal,
-  delete: DeleteModal,
   product: ProductModal,
   delivery: DeliveryModal,
   checkoutfirst: CheckoutFirstModal,
