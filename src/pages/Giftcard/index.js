@@ -172,37 +172,37 @@ const GiftForm = observer(() => {
       {({ isSubmitting }) => (
         <Form>
           <Box my={4}>
-            <Grid container spacing={3}>
-              <Amount />
-              <Grid item container xs={12} spacing={1}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="To"
-                    name="recipient"
-                    type="email"
-                    placeholder="Enter recipient's email address"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="From"
-                    name="sender"
-                    type="email"
-                    placeholder="Enter your email address"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Your message"
-                    name="message"
-                    type="textarea"
-                    multiline
-                    placeholder="Write a message for your recipient (optional)"
-                    variant="outlined"
-                  />
-                </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Amount />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="To"
+                  name="recipient"
+                  type="email"
+                  placeholder="Enter recipient's email address"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="From"
+                  name="sender"
+                  type="email"
+                  placeholder="Enter your email address"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Your message"
+                  name="message"
+                  type="textarea"
+                  multiline
+                  placeholder="Write a message for your recipient (optional)"
+                  variant="outlined"
+                />
               </Grid>
 
               {/* If user is guest, render card input */}
