@@ -44,7 +44,12 @@ function ShippingOptions({ name }) {
   };
 
   return (
-    <CheckoutCard title="Shipping Options" collapsedHeight={50} name={name}>
+    <CheckoutCard
+      title="Shipping Options"
+      collapsedHeight={50}
+      name={name}
+      showSaveButton
+    >
       <Box p={1}>
         <Typography>
           {getSelectedShippingDates() || 'No shipping method selected.'}

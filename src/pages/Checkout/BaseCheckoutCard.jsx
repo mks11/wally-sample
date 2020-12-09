@@ -21,6 +21,7 @@ export default function CheckoutCard({
   collapsedHeight = 100,
   isDisabled = false,
   name,
+  showSaveButton,
   title,
 }) {
   const [field, meta] = useField(name);
@@ -73,13 +74,15 @@ export default function CheckoutCard({
             timeout="auto"
           >
             <Box>{children}</Box>
-            <Container maxWidth="sm" disableGutters>
-              <Box mt={2}>
-                <PrimaryWallyButton onClick={handleClose} fullWidth>
-                  Save
-                </PrimaryWallyButton>
-              </Box>
-            </Container>
+            {showSaveButton ? (
+              <Container maxWidth="sm" disableGutters>
+                <Box mt={2} px={2}>
+                  <PrimaryWallyButton onClick={handleClose} fullWidth>
+                    Save
+                  </PrimaryWallyButton>
+                </Box>
+              </Container>
+            ) : null}
           </Collapse>
         </Box>
       </Card>

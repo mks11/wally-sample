@@ -1,8 +1,8 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 // Material UI
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, Container, Divider, Typography } from '@material-ui/core';
 
 // MobX
 import { observer } from 'mobx-react';
@@ -40,8 +40,9 @@ function AddressOptions({ name }) {
   return (
     <CheckoutCard
       collapsedHeight={collapsedHeight}
-      title="Delivery Address"
       name={name}
+      title="Delivery Address"
+      showSaveButton={selectedAddress ? true : false}
     >
       {selectedAddress ? (
         <Address
@@ -55,13 +56,18 @@ function AddressOptions({ name }) {
       )}
       <AddNewAddress onCreate={handleSelect} />
       {selectedAddress && (
-        <AddressList
-          addresses={user ? user.addresses : []}
-          defaultAddressId={user ? user.preferred_address : null}
-          name={name}
-          onChange={handleSelect}
-          selected={selectedAddress}
-        />
+        <>
+          <Box py={2}>
+            <Divider />
+          </Box>
+          <AddressList
+            addresses={user ? user.addresses : []}
+            defaultAddressId={user ? user.preferred_address : null}
+            name={name}
+            onChange={handleSelect}
+            selected={selectedAddress}
+          />
+        </>
       )}
     </CheckoutCard>
   );
