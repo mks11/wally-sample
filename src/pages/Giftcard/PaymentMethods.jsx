@@ -65,9 +65,11 @@ function PaymentMethods({ name }) {
 
   return (
     <Box
+      p={1}
       border={`1px solid ${
         hasError ? theme.palette.error.main : 'transparent'
       }`}
+      borderRadius="4px"
     >
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
