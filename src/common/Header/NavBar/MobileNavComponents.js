@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // mobx
 import { observer } from 'mobx-react';
@@ -7,7 +7,13 @@ import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
 // npm Package Components
-import { Divider, IconButton, ListItem, Typography } from '@material-ui/core';
+import {
+  Divider,
+  IconButton,
+  ListItem,
+  Menu,
+  Typography,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
 
@@ -101,11 +107,32 @@ export function SignOutButton() {
 }
 
 export function MobileNavMenu({ children }) {
-  const { modalV2 } = useStores();
-  const openNav = () => modalV2.open(children);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let elements = React.Children.toArray(children).map((c) =>
+    React.cloneElement(c, { onClick: handleClose }),
+  );
+
   return (
-    <IconButton aria-label="menu" onClick={openNav}>
-      <MenuIcon fontSize="large" style={{ color: '#000' }} />
-    </IconButton>
+    <>
+      <IconButton aria-label="menu" onClick={handleClick}>
+        <MenuIcon fontSize="large" style={{ color: '#000' }} />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        keepMounted
+      >
+        {elements}
+      </Menu>
+    </>
   );
 }

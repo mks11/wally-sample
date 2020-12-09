@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { logPageView } from 'services/google-analytics';
-import { connect, datesEqual, getItemsCount } from 'utils';
+import { connect, getItemsCount } from 'utils';
 
 import CarbonBar from 'common/CarbonBar';
 import Product from '../Mainpage/Product';
@@ -56,8 +56,6 @@ class SimilarProducts extends Component {
 
     this.setState({ categoryTypeMode });
 
-    const deliveryData = this.userStore.getDeliveryParams();
-
     this.productStore.getAdvertisements();
     // this.productStore.getCategories();
     this.productStore
@@ -66,53 +64,6 @@ class SimilarProducts extends Component {
         this.setState({ sidebar: this.productStore.sidebar });
       })
       .catch((e) => console.error('Failed to load similar products: ', e));
-
-    this.checkoutStore
-      .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
-      .then((data) => {
-        if (
-          !datesEqual(data.delivery_date, deliveryData.date) &&
-          deliveryData.date !== null
-        ) {
-          this.checkoutStore.getDeliveryTimes().then(() => {
-            if (
-              !this.userStore.status ||
-              (this.userStore.status && !this.userStore.user.is_ecomm)
-            ) {
-              this.modalStore.toggleDelivery();
-            }
-          });
-        }
-
-        data &&
-          this.userStore.adjustDeliveryTimes(
-            data.delivery_date,
-            this.state.deliveryTimes,
-          );
-
-        if (this.userStore.cameFromCartUrl) {
-          if (
-            !this.userStore.status ||
-            (this.userStore.status && !this.userStore.user.is_ecomm)
-          ) {
-            const delivery = this.userStore.getDeliveryParams();
-            if (delivery.zip && delivery.date) {
-              this.checkoutStore.updateCartItems(delivery);
-              this.userStore.cameFromCartUrl = false;
-            } else {
-              if (
-                !this.userStore.status ||
-                (this.userStore.status && !this.userStore.user.is_ecomm)
-              ) {
-                this.modalStore.toggleDelivery();
-              }
-            }
-          }
-        }
-      })
-      .catch((e) => {
-        console.error('Failed to load current cart', e);
-      });
   }
 
   render() {

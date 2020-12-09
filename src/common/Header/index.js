@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
+import { useMediaQuery } from 'react-responsive';
 
 // React Router
 import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 // Styling
 import styled from 'styled-components';
@@ -18,6 +19,23 @@ import Navbar from 'common/Header/NavBar';
 
 // images
 import logoFull from 'images/logo-full.svg';
+import logoCondensed from 'images/logo-condensed.svg';
+
+const LogoCondensed = styled.img`
+  height: 40px;
+
+  @media only screen and (min-width: 567px) {
+    height: 40px;
+  }
+
+  @media only screen and (min-width: 768px) {
+    height: 44px;
+  }
+
+  @media only screen and (min-width: 992px) {
+    height: 48px;
+  }
+`;
 
 const LogoFull = styled.img`
   height: 24px;
@@ -40,10 +58,12 @@ const LogoFull = styled.img`
 `;
 
 const Logo = observer(() => {
+  const shouldDisplayCondensedLogo = useMediaQuery({
+    query: '(max-width: 480px)',
+  });
   const { user, product } = useStores();
 
   var home = user.user ? '/main' : '/';
-
   const onLogoClick = () => {
     product.resetSearch();
   };
@@ -51,21 +71,24 @@ const Logo = observer(() => {
   return (
     <Box>
       <Link to={home} onClick={onLogoClick}>
-        <LogoFull src={logoFull} alt="The Wally Shop logo." />
+        {shouldDisplayCondensedLogo ? (
+          <LogoCondensed src={logoCondensed} alt="The Wally Shop logo." />
+        ) : (
+          <LogoFull src={logoFull} alt="The Wally Shop logo." />
+        )}
       </Link>
     </Box>
   );
 });
 
-const HeaderWrapper = styled(Box)`
-  @media only screen and (min-width: 768px) {
-    padding: 1rem 0;
-  }
-`;
+const ProductTop = lazy(() => import('pages/Mainpage/ProductTop'));
 
-export default function Header() {
+const Header = observer(() => {
+  const { routing } = useStores();
+  const showProductTop = routing.location.pathname.includes('main');
+
   return (
-    <HeaderWrapper
+    <Box
       component="header"
       position="sticky"
       top="0"
@@ -73,15 +96,24 @@ export default function Header() {
       style={{ backgroundColor: '#fae1ff' }}
     >
       <Container maxWidth="xl">
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item>
-            <Logo />
+        <Box py={2}>
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Logo />
+            </Grid>
+            <Grid item>
+              <Navbar />
+            </Grid>
           </Grid>
-          <Grid item>
-            <Navbar />
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
-    </HeaderWrapper>
+      {showProductTop && (
+        <Suspense fallback={<Typography>Search</Typography>}>
+          <ProductTop />
+        </Suspense>
+      )}
+    </Box>
   );
-}
+});
+
+export default Header;

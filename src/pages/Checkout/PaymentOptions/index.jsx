@@ -16,7 +16,6 @@ function Payment({ name }) {
 
   // Will be equal to a stringified object id
   const paymentMethodId = values[name];
-  const collapsedHeight = paymentMethodId ? 80 : 50;
   const selectedPaymentMethod = user
     ? user.payment.find((p) => p._id === paymentMethodId)
     : '';
@@ -26,7 +25,12 @@ function Payment({ name }) {
   };
 
   return (
-    <CheckoutCard title="Payment" collapsedHeight={collapsedHeight} name={name}>
+    <CheckoutCard
+      title="Payment"
+      collapsedHeight={50}
+      name={name}
+      showSaveButton={selectedPaymentMethod ? true : false}
+    >
       {selectedPaymentMethod ? (
         <Box pl={1}>
           <CreditCard paymentMethod={selectedPaymentMethod} />
@@ -37,16 +41,19 @@ function Payment({ name }) {
         </Box>
       )}
       <AddNewPayment onCreate={handleSelect} />
-      <Box py={2}>
-        <Divider />
-      </Box>
+
       {selectedPaymentMethod && (
-        <PaymentSelect
-          name={name}
-          onChange={handleSelect}
-          paymentMethods={user ? user.payment : []}
-          selected={selectedPaymentMethod}
-        />
+        <>
+          <Box py={2}>
+            <Divider />
+          </Box>
+          <PaymentSelect
+            name={name}
+            onChange={handleSelect}
+            paymentMethods={user ? user.payment : []}
+            selected={selectedPaymentMethod}
+          />
+        </>
       )}
     </CheckoutCard>
   );

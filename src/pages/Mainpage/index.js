@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // Services & utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import { connect, datesEqual } from 'utils';
+import { connect } from 'utils';
 
 // Config
 import { APP_URL } from 'config';
@@ -20,10 +20,9 @@ import CarbonBar from 'common/CarbonBar';
 import Product from './Product';
 import ProductList from './ProductList';
 import ProductTop from './ProductTop';
-import MobileSearch from './MobileSearch';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
-import ProductWithPackaging from '../ProductWithPackaging';
+// import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
@@ -75,8 +74,6 @@ class Mainpage extends Component {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
       categoryTypeMode: 'limit',
-      showMobileSearch: false,
-      filters: [],
       sortType: 'times_bought',
     };
 
@@ -162,53 +159,6 @@ class Mainpage extends Component {
           this.setState({ sidebar: this.productStore.sidebar });
         })
         .catch((e) => console.error('Failed to load product displayed: ', e));
-
-      this.checkoutStore
-        .getCurrentCart(this.userStore.getHeaderAuth(), deliveryData)
-        .then((data) => {
-          if (
-            !datesEqual(data.delivery_date, deliveryData.date) &&
-            deliveryData.date !== null
-          ) {
-            this.checkoutStore.getDeliveryTimes().then(() => {
-              if (
-                !this.userStore.status ||
-                (this.userStore.status && !this.userStore.user.is_ecomm)
-              ) {
-                this.modalStore.toggleDelivery();
-              }
-            });
-          }
-
-          data &&
-            this.userStore.adjustDeliveryTimes(
-              data.delivery_date,
-              this.state.deliveryTimes,
-            );
-
-          if (this.userStore.cameFromCartUrl) {
-            if (
-              !this.userStore.status ||
-              (this.userStore.status && !this.userStore.user.is_ecomm)
-            ) {
-              const delivery = this.userStore.getDeliveryParams();
-              if (delivery.zip && delivery.date) {
-                this.checkoutStore.updateCartItems(delivery);
-                this.userStore.cameFromCartUrl = false;
-              } else {
-                if (
-                  !this.userStore.status ||
-                  (this.userStore.status && !this.userStore.user.is_ecomm)
-                ) {
-                  this.modalStore.toggleDelivery();
-                }
-              }
-            }
-          }
-        })
-        .catch((e) => {
-          console.error('Failed to load current cart', e);
-        });
     }
   }
 
@@ -236,45 +186,6 @@ class Mainpage extends Component {
     }
   };
 
-  handleSearch = (keyword) => {
-    this.uiStore.hideBackdrop();
-
-    if (!keyword.length) {
-      this.productStore.resetSearch();
-      return;
-    }
-    logEvent({ category: 'Search', action: 'SearchKeyword', label: keyword });
-    this.productStore.searchKeyword(
-      keyword,
-      this.userStore.getDeliveryParams(),
-      this.userStore.getHeaderAuth(),
-    );
-  };
-
-  handleMobileSearchClose = () => {
-    this.setState({ showMobileSearch: false });
-  };
-
-  handleMobileSearchOpen = () => {
-    this.setState({ showMobileSearch: true });
-  };
-
-  handleMobileSearch = (e) => {
-    if (e.keyCode === 13) {
-      this.setState({ showMobileSearch: false });
-      this.handleSearch(e.target.value);
-    }
-  };
-
-  handleCategoryClick = () => {
-    this.setState({ showMobileSearch: false });
-    this.productStore.resetSearch();
-  };
-
-  handleFilterUpdate = (filters) => {
-    this.setState({ filters });
-  };
-
   handleSort = (type) => {
     this.setState({ sortType: type });
   };
@@ -293,7 +204,7 @@ class Mainpage extends Component {
   };
 
   render() {
-    const { showMobileSearch, sidebar, filters } = this.state;
+    const { sidebar } = this.state;
 
     const id = this.props.match.params.id;
     const cartItems = this.checkoutStore.cart
@@ -323,13 +234,6 @@ class Mainpage extends Component {
 
     return (
       <div className="App">
-        <ProductTop
-          onMobileSearchClick={this.handleMobileSearchOpen}
-          onSearch={this.handleSearch}
-          onCategoryClick={this.handleCategoryClick}
-          onFilterUpdate={this.handleFilterUpdate}
-        />
-
         <div className="product-content">
           <Container maxWidth="xl">
             <div className="row ">
@@ -337,7 +241,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src={sidePanelSticker} />
+                      <img src={sidePanelSticker} alt="" />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />
@@ -424,8 +328,8 @@ class Mainpage extends Component {
                     <div className="row">
                       {this.productStore.search.display
                         .filter((p) =>
-                          filters.length
-                            ? !filters.some((f) => {
+                          this.productStore.filters.length
+                            ? !this.productStore.filters.some((f) => {
                                 if (p.allergens && p.tags) {
                                   let [t, v] = f.split(',');
                                   if (t === 'allergen')
@@ -450,75 +354,71 @@ class Mainpage extends Component {
                 id !== 'buyagain' && (
                   <div className="col-xl-10 col-md-9 col-sm-12">
                     <div className="product-content-right">
-                      {this.props.location.pathname.split('/')[1] ===
+                      {/* {this.props.location.pathname.split('/')[1] ===
                       'packaging-blank' ? (
                         <ProductWithPackaging
                           packagingId={this.props.match.params.id}
                         />
-                      ) : (
-                        <React.Fragment>
-                          {ads2 && (
-                            <img
-                              src={APP_URL + ads2.image}
-                              className="img-fluid"
-                              alt=""
+                      ) : ( */}
+                      <React.Fragment>
+                        {ads2 && (
+                          <img
+                            src={APP_URL + ads2.image}
+                            className="img-fluid"
+                            alt=""
+                          />
+                        )}
+
+                        <div className="product-breadcrumb">
+                          <CarbonBar nCartItems={count} />
+                        </div>
+
+                        {/* Featured Brands */}
+                        <Container maxWidth="lg" disableGutters>
+                          {/* displayed from 568px and up */}
+                          <DesktopCarouselWrapper my={2} zIndex={1}>
+                            <ImageCarousel
+                              dots={hasDots}
+                              keyName={'featured-brands'}
+                              height={675}
+                              slides={slides}
+                              width={1200}
                             />
-                          )}
+                          </DesktopCarouselWrapper>
+                          {/* displayed from 567px and down */}
+                          <MobileCarouselWrapper my={2} zIndex={1}>
+                            <ImageCarousel
+                              dots={hasDots}
+                              keyName={'featured-brands'}
+                              height={480}
+                              slides={slides}
+                              width={480}
+                            />
+                          </MobileCarouselWrapper>
+                        </Container>
 
-                          <div className="product-breadcrumb">
-                            <CarbonBar nCartItems={count} />
-                          </div>
-
-                          {/* Featured Brands */}
-                          <Container maxWidth="lg" disableGutters>
-                            {/* displayed from 568px and up */}
-                            <DesktopCarouselWrapper my={2} zIndex={1}>
-                              <ImageCarousel
-                                dots={hasDots}
-                                keyName={'featured-brands'}
-                                height={675}
-                                slides={slides}
-                                width={1200}
-                              />
-                            </DesktopCarouselWrapper>
-                            {/* displayed from 567px and down */}
-                            <MobileCarouselWrapper my={2} zIndex={1}>
-                              <ImageCarousel
-                                dots={hasDots}
-                                keyName={'featured-brands'}
-                                height={480}
-                                slides={slides}
-                                width={480}
-                              />
-                            </MobileCarouselWrapper>
-                          </Container>
-
-                          {this.state.categoryTypeMode === 'limit' ? (
-                            <div className="row">
-                              {this.productStore.main_display.map(
-                                (category, index) => (
-                                  <CategoryCard
-                                    key={index}
-                                    category={category}
-                                  />
-                                ),
-                              )}
-                            </div>
-                          ) : (
-                            this.productStore.main_display.map(
+                        {this.state.categoryTypeMode === 'limit' ? (
+                          <div className="row">
+                            {this.productStore.main_display.map(
                               (category, index) => (
-                                <ProductList
-                                  key={index}
-                                  display={category}
-                                  filters={filters}
-                                  mode={this.state.categoryTypeMode}
-                                  deliveryTimes={this.state.deliveryTimes}
-                                />
+                                <CategoryCard key={index} category={category} />
                               ),
-                            )
-                          )}
-                        </React.Fragment>
-                      )}
+                            )}
+                          </div>
+                        ) : (
+                          this.productStore.main_display.map(
+                            (category, index) => (
+                              <ProductList
+                                key={index}
+                                display={category}
+                                mode={this.state.categoryTypeMode}
+                                deliveryTimes={this.state.deliveryTimes}
+                              />
+                            ),
+                          )
+                        )}
+                      </React.Fragment>
+                      {/* )} */}
                     </div>
                   </div>
                 )
@@ -526,16 +426,6 @@ class Mainpage extends Component {
             </div>
           </Container>
         </div>
-
-        <MobileSearch
-          show={showMobileSearch}
-          onClose={this.handleMobileSearchClose}
-          onSearch={this.handleMobileSearch}
-          onCategoryClick={this.handleCategoryClick}
-          sidebar={sidebar}
-          id={id}
-          onFilterUpdate={this.handleFilterUpdate}
-        />
 
         <AddonFirstModal />
       </div>

@@ -131,14 +131,11 @@ const ProductModalV2 = observer(() => {
       // Are we viewing this from the checkout page? If so, fetch the order summary when the item's qty changes.
       const order_summary =
         routing.location.pathname.indexOf('checkout') !== -1;
-      const finalUnitType = activeProduct.unit_type;
 
       const items = [
         {
-          quantity: qty,
-          product_id: inventory.product_id,
           inventory_id: inventory._id,
-          unit_type: finalUnitType,
+          quantity: qty,
         },
       ];
 
@@ -156,15 +153,12 @@ const ProductModalV2 = observer(() => {
       //     unit_type: addonProduct.unit_type,
       //   });
       // }
-
       try {
         const res = await checkout.editCurrentCart(
           { items },
           userStore.getHeaderAuth(),
           order_summary,
-          userStore.getDeliveryParams(),
         );
-
         res &&
           res.data &&
           userStore.adjustDeliveryTimes(res.data.delivery_date, deliveryTimes);
@@ -218,7 +212,8 @@ const ProductModalV2 = observer(() => {
   };
 
   const handleSelectQuantity = (e) => {
-    setQty(e.target.value);
+    const quantity = parseInt(e.target.value);
+    setQty(quantity);
   };
 
   // const handleQuantityAddon = (value) => {

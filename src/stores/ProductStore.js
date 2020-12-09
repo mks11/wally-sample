@@ -41,10 +41,24 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
-
   products = [];
 
-  /*** Vendor filters */
+  // Product filtration - temporary implementation
+  filters = [];
+  addFilter = (filter) => {
+    this.filters.push(filter);
+  };
+  removeFilter = (idx) => {
+    this.filters.splice(idx, 1);
+  };
+  updateFilters(filters) {
+    this.filters = filters;
+  }
+  resetFilters() {
+    this.filters = [];
+  }
+
+  /*** Product Filters NOT COMPLETE */
   availableLifestyles = [];
   selectedLifestyles = [];
   availableValues = [];
@@ -53,9 +67,8 @@ class ProductStore {
   selectedSubcategories = [];
   availableBrands = [];
   selectedBrands = [];
-  /*** Ends Vendor filters */
 
-  /***  Vendor computed properties  */
+  /***  Product properties  */
   get filteredProducts() {
     if (
       !this.selectedLifestyles.length &&
@@ -88,7 +101,6 @@ class ProductStore {
       },
     );
   }
-  /*** Ends Vendor computed properties */
 
   /*** Vendor filtering actions */
   initializeProductAssortment(assortmentDetails = {}) {
@@ -457,6 +469,10 @@ decorate(ProductStore, {
   getHistoricalProducts: action,
   getProductComments: action,
   getProductsMatchingFilters: action,
+  addFilter: action,
+  removeFilter: action,
+  updateFilters: action,
+  resetFilters: action,
 });
 
 export default new ProductStore();

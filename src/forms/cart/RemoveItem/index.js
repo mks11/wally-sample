@@ -22,37 +22,25 @@ function RemoveItemForm({
       : modalV2.close();
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
-
-    checkout
-      .editCurrentCart(
+    try {
+      await checkout.editCurrentCart(
         {
           items: [
             {
-              quantity: 0,
-              product_id: item.productId,
               inventory_id: item.inventoryId,
+              quantity: 0,
             },
           ],
         },
         user.getHeaderAuth(),
         reloadOrderSummary,
-        user.getDeliveryParams(),
-      )
-      .then(() => handleClose())
-      .catch((e) => {
-        // TODO: ERROR HANDLING
-        // if (
-        //   e.response &&
-        //   e.response.data &&
-        //   e.response.data.error &&
-        //   e.response.data.error.message
-        // ) {
-        //   const msg = e.response.data.error.message;
-        // }
-        console.error('Failed to add to cart', e);
-      });
+      );
+      handleClose();
+    } catch (error) {
+      console.error('Failed to add to cart', error);
+    }
   };
   return (
     <Box>

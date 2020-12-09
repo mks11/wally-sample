@@ -7,43 +7,30 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Custom Components
-import {
-  MobileNavItem,
-  MobileNavMenu,
-  SignOutButton,
-  MobileUserGreeting,
-} from './MobileNavComponents';
-import {
-  DesktopNavItem,
-  DesktopDropdownMenu,
-} from 'common/Header/NavBar/DesktopNavComponents';
+import { MobileNavMenu } from './MobileNavComponents';
+import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
+import AccountDropdown, {
+  AccountDropdownMenuListItem,
+  AccountDropdownMenuItem,
+} from 'common/Header/NavBar/AccountDropdown';
 
 export const MobileRetailNav = observer(() => {
   const { user } = useStores();
   return user.isRetail ? (
-    <MobileNavMenu>
-      <MobileRetailNavMenu />
-    </MobileNavMenu>
+    <>
+      <MobileNavMenu>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/retail">Home</AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/main">Shop</AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+      </MobileNavMenu>
+      <AccountDropdown></AccountDropdown>
+      {/* <Cart /> */}
+    </>
   ) : null;
 });
-
-export function MobileRetailNavMenu() {
-  const { modalV2 } = useStores();
-  const handleClose = () => modalV2.close();
-
-  return (
-    <>
-      <MobileUserGreeting />
-      <MobileNavItem to="/retail" onClick={handleClose} hasDivider>
-        Home
-      </MobileNavItem>
-      <MobileNavItem to="/main" onClick={handleClose} hasDivider>
-        Shop
-      </MobileNavItem>
-      <SignOutButton />
-    </>
-  );
-}
 
 export const DesktopRetailNav = observer(() => {
   const { user } = useStores();
@@ -52,9 +39,7 @@ export const DesktopRetailNav = observer(() => {
     <>
       <DesktopNavItem to="/retail" text="Home" />
       <DesktopNavItem to="/main" text="Shop" />
-      <DesktopDropdownMenu>
-        {/* TODO: ADD LINKS AS NECESSARY */}
-      </DesktopDropdownMenu>
+      <AccountDropdown>{/* TODO: ADD LINKS AS NECESSARY */}</AccountDropdown>
     </>
   ) : null;
 });
