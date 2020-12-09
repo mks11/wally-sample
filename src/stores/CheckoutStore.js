@@ -6,13 +6,13 @@ import moment from 'moment';
 import { updateCart } from 'api/cart';
 import {
   API_GET_CURRENT_CART,
-  API_EDIT_CURRENT_CART,
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
 } from '../config';
 
 class CheckoutStore {
   cart = null;
+  isRetrievingCart = false;
   order = null;
   deliveryTimes = [];
 
@@ -26,6 +26,8 @@ class CheckoutStore {
   }
 
   getCurrentCart(auth) {
+    if (this.isRetrievingCart) return;
+    this.isRetrievingCart = true;
     var cart = localStorage.getItem('cart');
 
     if (auth.headers.Authorization === 'Bearer undefined') {
@@ -40,9 +42,11 @@ class CheckoutStore {
       if (!cart) {
         return axios.get(API_GET_CURRENT_CART).then((res) => {
           localStorage.setItem('cart', JSON.stringify(res.data));
+          this.isRetrievingCart = false;
         });
       } else {
         this.cart = cart;
+        this.isRetrievingCart = false;
       }
     } else {
       // TODO: If guest customer has cart open in their browser, then signs up for acct,
@@ -55,6 +59,7 @@ class CheckoutStore {
 
       return axios.get(url, auth).then((res) => {
         this.cart = res.data;
+        this.isRetrievingCart = false;
       });
     }
   }
@@ -149,6 +154,7 @@ class CheckoutStore {
 
 decorate(CheckoutStore, {
   cart: observable,
+  isRetrievingCart: observable,
   order: observable,
   deliveryTimes: observable,
 
