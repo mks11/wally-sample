@@ -290,7 +290,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src={sidePanelSticker} />
+                      <img src={sidePanelSticker} alt="" />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />
