@@ -115,7 +115,7 @@ function PaymentMethods({ name }) {
           )}
         </Box>
         <Container maxWidth="sm" disableGutters>
-          <Box mt={2}>
+          <Box mt={2} px={2}>
             <PrimaryWallyButton onClick={handleClose} fullWidth>
               Save
             </PrimaryWallyButton>

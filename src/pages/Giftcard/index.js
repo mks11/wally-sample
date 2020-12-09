@@ -17,14 +17,7 @@ import TextField from 'common/FormikComponents/NonRenderPropAPI/TextInput';
 import * as Yup from 'yup';
 
 // Material UI
-import {
-  Box,
-  Card,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Box, Card, Container, Grid, Typography } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
 // MobX
@@ -38,6 +31,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { HelperText } from 'styled-component-lib/HelperText';
 import { Label as InputLabel } from 'styled-component-lib/InputLabel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import styled from 'styled-components';
 
 function GiftCardPage(props) {
   const { routing, user: userStore } = useStores();
@@ -63,24 +57,20 @@ function GiftCardPage(props) {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Head
         title="Gift Card"
         description="Treat your loved ones to a zero-waste Wally Shop giftcard."
       />
       <Box py={4}>
-        <Typography variant="h1" gutterBottom>
-          Gift Card
-        </Typography>
         <Card>
           <Box p={3}>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h1" gutterBottom>
               Do you, with reusables
             </Typography>
             <Typography gutterBottom>
               Treat your loved ones to a zero-waste Wally Shop giftcard.
             </Typography>
-            <Divider />
             <GiftForm />
           </Box>
         </Card>
@@ -172,7 +162,7 @@ const GiftForm = observer(() => {
       {({ isSubmitting }) => (
         <Form>
           <Box my={4}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} justify="center">
               <Grid item xs={12}>
                 <Amount />
               </Grid>
@@ -211,7 +201,7 @@ const GiftForm = observer(() => {
                 {user ? <PaymentMethods name="paymentId" /> : null}
               </Grid>
               {/* If user has account, use their stored payment methods */}
-              <Grid item xs={12}>
+              <Grid item>
                 <PrimaryWallyButton
                   disabled={isSubmitting}
                   fullWidth
@@ -228,56 +218,70 @@ const GiftForm = observer(() => {
   );
 });
 
+const AmountInputWrapper = styled(Grid)`
+  margin-top: 16px;
+  @media only screen and (max-width: 768px) {
+    order: 2;
+  }
+`;
+
+const AmountSelectWrapper = styled(Grid)`
+  margin-top: 16px;
+  padding-left: 16px;
+  @media only screen and (max-width: 768px) {
+    padding-left: 0;
+  }
+`;
+
 function Amount() {
   const { setFieldValue } = useFormikContext();
   return (
     <Grid item xs={12}>
       <InputLabel>Choose or enter an amount</InputLabel>
-
-      <Grid container spacing={1}>
-        <Grid item>
-          <PrimaryWallyButton
-            onClick={() => setFieldValue('amount', 15)}
-            size="small"
-          >
-            $15
-          </PrimaryWallyButton>
-        </Grid>
-        <Grid item>
-          <PrimaryWallyButton
-            onClick={() => setFieldValue('amount', 25)}
-            size="small"
-          >
-            $25
-          </PrimaryWallyButton>
-        </Grid>
-        <Grid item>
-          <PrimaryWallyButton
-            onClick={() => setFieldValue('amount', 50)}
-            size="small"
-          >
-            $50
-          </PrimaryWallyButton>
-        </Grid>
-        <Grid item>
-          <PrimaryWallyButton
-            onClick={() => setFieldValue('amount', 100)}
-            size="small"
-          >
-            $100
-          </PrimaryWallyButton>
-        </Grid>
+      <Typography variant="body2" color="textSecondary" gutterBottom>
+        Enter whole amount from $10 to $500 USD
+      </Typography>
+      <Grid container>
+        <AmountInputWrapper item xs={12} md={6} lg={5}>
+          <CurrencyInput
+            label="Gift Card Amount"
+            name="amount"
+            variant="outlined"
+          />
+        </AmountInputWrapper>
+        <AmountSelectWrapper item xs={12} md={6} lg={7}>
+          <Box my={1}>
+            <PrimaryWallyButton
+              onClick={() => setFieldValue('amount', 15)}
+              size="small"
+              style={{ marginRight: '8px' }}
+            >
+              $15
+            </PrimaryWallyButton>
+            <PrimaryWallyButton
+              onClick={() => setFieldValue('amount', 25)}
+              size="small"
+              style={{ marginRight: '8px' }}
+            >
+              $25
+            </PrimaryWallyButton>
+            <PrimaryWallyButton
+              onClick={() => setFieldValue('amount', 50)}
+              size="small"
+              style={{ marginRight: '8px' }}
+            >
+              $50
+            </PrimaryWallyButton>
+            <PrimaryWallyButton
+              onClick={() => setFieldValue('amount', 100)}
+              size="small"
+              style={{ marginRight: '8px' }}
+            >
+              $100
+            </PrimaryWallyButton>
+          </Box>
+        </AmountSelectWrapper>
       </Grid>
-      <Box mt={3}>
-        <Typography variant="body2" color="textSecondary" gutterBottom>
-          Enter whole amount from $10 to $500 USD
-        </Typography>
-        <CurrencyInput
-          label="Gift Card Amount"
-          name="amount"
-          variant="outlined"
-        />
-      </Box>
     </Grid>
   );
 }
