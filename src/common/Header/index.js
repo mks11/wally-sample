@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 // Styling
 import styled from 'styled-components';
@@ -81,13 +81,14 @@ const Logo = observer(() => {
   );
 });
 
-const HeaderWrapper = styled(Box)`
-  padding: 1rem 0;
-`;
+const ProductTop = lazy(() => import('pages/Mainpage/ProductTop'));
 
-export default function Header() {
+const Header = observer(() => {
+  const { routing } = useStores();
+  const showProductTop = routing.location.pathname.includes('main');
+
   return (
-    <HeaderWrapper
+    <Box
       component="header"
       position="sticky"
       top="0"
@@ -95,15 +96,24 @@ export default function Header() {
       style={{ backgroundColor: '#fae1ff' }}
     >
       <Container maxWidth="xl">
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item>
-            <Logo />
+        <Box py={2}>
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Logo />
+            </Grid>
+            <Grid item>
+              <Navbar />
+            </Grid>
           </Grid>
-          <Grid item>
-            <Navbar />
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
-    </HeaderWrapper>
+      {showProductTop && (
+        <Suspense fallback={<Typography>Search</Typography>}>
+          <ProductTop />
+        </Suspense>
+      )}
+    </Box>
   );
-}
+});
+
+export default Header;

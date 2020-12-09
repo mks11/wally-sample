@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { SearchIcon } from 'Icons';
+import { logEvent } from 'services/google-analytics';
 import { connect } from 'utils';
-
 class SearchBar extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +16,21 @@ class SearchBar extends Component {
       searchAheadLoading: false,
     };
   }
+
+  search = (keyword) => {
+    this.uiStore.hideBackdrop();
+
+    if (!keyword.length) {
+      this.productStore.resetSearch();
+      return;
+    }
+    logEvent({ category: 'Search', action: 'SearchKeyword', label: keyword });
+    this.productStore.searchKeyword(
+      keyword,
+      this.userStore.getDeliveryParams(),
+      this.userStore.getHeaderAuth(),
+    );
+  };
 
   handleSearch = (keyword) => {
     this.setState({ searchAheadLoading: true });
@@ -39,19 +54,17 @@ class SearchBar extends Component {
 
   handleSearchSubmit = (e) => {
     if (e.keyCode === 13) {
-      const { onSearch } = this.props;
       const instance = this._typeahead.getInstance();
       instance.blur();
-      onSearch && onSearch(e.target.value);
+      this.search(e.target.value);
     }
   };
 
   handleSelected = (e) => {
     if (e && e.length) {
-      const { onSearch } = this.props;
       const instance = this._typeahead.getInstance();
       instance.blur();
-      onSearch && onSearch(e[0].name);
+      this.search(e[0].name);
     }
   };
 

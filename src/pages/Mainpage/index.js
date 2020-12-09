@@ -20,7 +20,6 @@ import CarbonBar from 'common/CarbonBar';
 import Product from './Product';
 import ProductList from './ProductList';
 import ProductTop from './ProductTop';
-import MobileSearch from './MobileSearch';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 // import ProductWithPackaging from '../ProductWithPackaging';
@@ -75,8 +74,6 @@ class Mainpage extends Component {
       deliveryTimes: this.checkoutStore.deliveryTimes,
       sidebar: [],
       categoryTypeMode: 'limit',
-      showMobileSearch: false,
-      filters: [],
       sortType: 'times_bought',
     };
 
@@ -189,45 +186,6 @@ class Mainpage extends Component {
     }
   };
 
-  handleSearch = (keyword) => {
-    this.uiStore.hideBackdrop();
-
-    if (!keyword.length) {
-      this.productStore.resetSearch();
-      return;
-    }
-    logEvent({ category: 'Search', action: 'SearchKeyword', label: keyword });
-    this.productStore.searchKeyword(
-      keyword,
-      this.userStore.getDeliveryParams(),
-      this.userStore.getHeaderAuth(),
-    );
-  };
-
-  handleMobileSearchClose = () => {
-    this.setState({ showMobileSearch: false });
-  };
-
-  handleMobileSearchOpen = () => {
-    this.setState({ showMobileSearch: true });
-  };
-
-  handleMobileSearch = (e) => {
-    if (e.keyCode === 13) {
-      this.setState({ showMobileSearch: false });
-      this.handleSearch(e.target.value);
-    }
-  };
-
-  handleCategoryClick = () => {
-    this.setState({ showMobileSearch: false });
-    this.productStore.resetSearch();
-  };
-
-  handleFilterUpdate = (filters) => {
-    this.setState({ filters });
-  };
-
   handleSort = (type) => {
     this.setState({ sortType: type });
   };
@@ -246,7 +204,7 @@ class Mainpage extends Component {
   };
 
   render() {
-    const { showMobileSearch, sidebar, filters } = this.state;
+    const { sidebar } = this.state;
 
     const id = this.props.match.params.id;
     const cartItems = this.checkoutStore.cart
@@ -276,13 +234,6 @@ class Mainpage extends Component {
 
     return (
       <div className="App">
-        <ProductTop
-          onMobileSearchClick={this.handleMobileSearchOpen}
-          onSearch={this.handleSearch}
-          onCategoryClick={this.handleCategoryClick}
-          onFilterUpdate={this.handleFilterUpdate}
-        />
-
         <div className="product-content">
           <Container maxWidth="xl">
             <div className="row ">
@@ -377,8 +328,8 @@ class Mainpage extends Component {
                     <div className="row">
                       {this.productStore.search.display
                         .filter((p) =>
-                          filters.length
-                            ? !filters.some((f) => {
+                          this.productStore.filters.length
+                            ? !this.productStore.filters.some((f) => {
                                 if (p.allergens && p.tags) {
                                   let [t, v] = f.split(',');
                                   if (t === 'allergen')
@@ -460,7 +411,6 @@ class Mainpage extends Component {
                               <ProductList
                                 key={index}
                                 display={category}
-                                filters={filters}
                                 mode={this.state.categoryTypeMode}
                                 deliveryTimes={this.state.deliveryTimes}
                               />
@@ -476,16 +426,6 @@ class Mainpage extends Component {
             </div>
           </Container>
         </div>
-
-        <MobileSearch
-          show={showMobileSearch}
-          onClose={this.handleMobileSearchClose}
-          onSearch={this.handleMobileSearch}
-          onCategoryClick={this.handleCategoryClick}
-          sidebar={sidebar}
-          id={id}
-          onFilterUpdate={this.handleFilterUpdate}
-        />
 
         <AddonFirstModal />
       </div>
