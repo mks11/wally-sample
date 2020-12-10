@@ -242,26 +242,12 @@ class ProductStore {
     return res.data;
   }
 
-  async getImpulseProducts(auth) {
-    let res;
-    this.impulse_products = [];
-
+  getImpulseProducts(auth) {
     this.fetch = true;
-
-    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
-      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth);
-    } else {
-      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`);
-    }
-    const data = res.data;
-
-    this.impulse_products = data.products;
-
-    this.path = data.path;
-    this.sidebar = data.sidebar;
-    this.fetch = false;
-
-    return res.data;
+    return axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth).then((res) => {
+      this.fetch = false;
+      return res;
+    });
   }
 
   async getHistoricalProducts(auth) {

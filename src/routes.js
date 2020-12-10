@@ -65,6 +65,17 @@ import PackagingInventoryPortal from 'pages/packaging-inventory/';
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
+export const CHECKOUT_ROUTES = [
+  { path: '/checkout/cart', name: 'cart', Component: SimilarProducts },
+  { path: '/checkout/shipping', name: 'shipping', Component: SimilarProducts },
+  { path: '/checkout/payment', name: 'payment', Component: SimilarProducts },
+  {
+    path: '/checkout/review',
+    name: 'review',
+    Component: SimilarProducts,
+  },
+];
+
 const ProtectedRoute = observer(({ component: Component, ...rest }) => {
   const { user } = useStores();
   const { isAuthenticating, isLoggedIn } = user;
@@ -211,6 +222,16 @@ function Routes(props) {
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>
+      {CHECKOUT_ROUTES.map(({ Component, name, path }) => (
+        <Route
+          exact
+          key={name}
+          path={path}
+          render={(props) => (
+            <Component {...props} breadcrumbs={CHECKOUT_ROUTES} />
+          )}
+        />
+      ))}
       {/* ==================== User Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
@@ -234,11 +255,6 @@ function Routes(props) {
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
       {/* Checkout Flow */}
-      <ProtectedRoute
-        exact
-        path="/similar-products"
-        component={SimilarProducts}
-      />
       <ProtectedRoute exact path="/checkout" component={Checkout} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/schedule-pickup" component={Mainpage} />

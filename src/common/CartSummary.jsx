@@ -41,7 +41,7 @@ const CartSummary = observer(() => {
     logEvent({ category: 'Cart', action: 'ClickCheckout' });
     if (user.status) {
       modalV2.close();
-      routing.push('/similar-products');
+      routing.push('/checkout/cart');
     } else {
       modalV2.open(<LoginForm />);
     }
