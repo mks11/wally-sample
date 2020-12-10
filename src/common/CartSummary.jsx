@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 
 // Services & Utilities
 import { logEvent } from 'services/google-analytics';
-import { formatMoney, getItemsCount } from 'utils';
+import { formatMoney } from 'utils';
 
 // npm Package Components
 import {
@@ -22,42 +22,23 @@ import { AddIcon, ArrowBackIcon, CloseIcon, RemoveIcon } from 'Icons';
 
 // Custom Components
 import CarbonBar from 'common/CarbonBar';
-import LoginForm from 'forms/authentication/LoginForm';
 
 // Styled Components
-import {
-  PrimaryTextButton,
-  PrimaryWallyButton,
-} from 'styled-component-lib/Buttons';
+import { PrimaryTextButton } from 'styled-component-lib/Buttons';
 
 const CartSummary = observer(() => {
-  const { checkout, routing, user, modalV2 } = useStores();
+  const { checkout } = useStores();
   const { cart } = checkout;
   const items = cart ? cart.cart_items : [];
-  const count = getItemsCount(items);
   const subtotal = cart ? cart.subtotal / 100 : 0;
-
-  const handleCheckout = () => {
-    logEvent({ category: 'Cart', action: 'ClickCheckout' });
-    if (user.status) {
-      modalV2.close();
-      routing.push('/checkout/cart');
-    } else {
-      modalV2.open(<LoginForm />);
-    }
-  };
 
   return (
     <>
-      <Typography variant="h1" gutterBottom>
-        Cart
-      </Typography>
-      {items && count > 0 ? (
+      <Box mb={2}>
+        <CarbonBar />
+      </Box>
+      {items.length ? (
         <>
-          <Box mb={2}>
-            <CarbonBar nCartItems={count} />
-          </Box>
-          <Divider />
           <Box my={2}>
             {items.map((item) => (
               <Box key={item.product_name}>
@@ -66,25 +47,20 @@ const CartSummary = observer(() => {
               </Box>
             ))}
           </Box>
+          <Box my={2}>
+            <Grid container justify="space-between" alignItems="center">
+              <Typography variant="h6" component="span">
+                Subtotal
+              </Typography>
+              <Typography variant="h6" component="span">
+                {formatMoney(subtotal)}
+              </Typography>
+            </Grid>
+          </Box>
         </>
       ) : (
         <Typography>No items in cart</Typography>
       )}
-      <Box my={2}>
-        <Grid container justify="space-between" alignItems="center">
-          <Typography variant="h6" component="span">
-            Subtotal
-          </Typography>
-          <Typography variant="h6" component="span">
-            {formatMoney(subtotal)}
-          </Typography>
-        </Grid>
-      </Box>
-      <Box display="flex" justifyContent="center" py={2}>
-        <PrimaryWallyButton disabled={count < 1} onClick={handleCheckout}>
-          Proceed to Checkout
-        </PrimaryWallyButton>
-      </Box>
     </>
   );
 });
@@ -187,7 +163,15 @@ function CartItem({ item }) {
   };
 
   function openCartSummary() {
-    modalV2.open(<CartSummary />, 'right');
+    modalV2.open(
+      <>
+        <Typography variant="h1" gutterBottom>
+          Cart
+        </Typography>
+        <CartSummary />
+      </>,
+      'right',
+    );
   }
 
   return (

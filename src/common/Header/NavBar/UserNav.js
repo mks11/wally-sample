@@ -5,17 +5,16 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Services & Utilities
-import { logModalView } from 'services/google-analytics';
+import { logEvent, logModalView } from 'services/google-analytics';
 import { formatMoney } from 'utils';
 
 // npm Package Components
-import { Badge, IconButton, Typography } from '@material-ui/core';
+import { Box, Badge, IconButton, Typography } from '@material-ui/core';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 // Custom Components
 import { MobileNavMenu } from './MobileNavComponents';
 import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
-
 import AccountDropdown, {
   AccountDropdownMenuItem,
   AccountDropdownMenuListItem,
@@ -23,6 +22,9 @@ import AccountDropdown, {
 } from 'common/Header/NavBar/AccountDropdown';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
+
+// Styled components
+import { PrimaryWallyButtonLink } from 'styled-component-lib/Links';
 
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
@@ -101,11 +103,28 @@ const Cart = observer(() => {
     </>
   );
 
+  const handleCheckout = () => {
+    logEvent({ category: 'Cart', action: 'ClickCheckout' });
+    modalV2.close();
+  };
+
   const handleClick = () => {
     modalV2.open(
-      <Suspense fallback={SuspenseFallback()}>
-        <CartSummary />
-      </Suspense>,
+      <>
+        <Typography variant="h1" gutterBottom>
+          Cart
+        </Typography>
+        <Suspense fallback={SuspenseFallback()}>
+          <CartSummary />
+        </Suspense>
+        <Box display="flex" justifyContent="center" py={2}>
+          <PrimaryWallyButtonLink to="/checkout/cart" onClick={handleCheckout}>
+            <Typography component="span" variant="h6">
+              Continue To Checkout
+            </Typography>
+          </PrimaryWallyButtonLink>
+        </Box>
+      </>,
       'right',
     );
   };

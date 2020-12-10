@@ -34,10 +34,6 @@ const BackSlideControl = styled(ButtonBack)`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media only screen and (max-width: 992px) {
-    display: none;
-  }
 `;
 
 const NextSlideControl = styled(ButtonNext)`
@@ -55,10 +51,6 @@ const NextSlideControl = styled(ButtonNext)`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media only screen and (max-width: 992px) {
-    display: none;
-  }
 `;
 
 export default function ImageCarousel({
@@ -66,13 +58,15 @@ export default function ImageCarousel({
   dots,
   keyName,
   height,
+  numSlides = 5,
   slides,
   thumbnails,
+  visibleSlides = 1,
   width,
   ...props
 }) {
-  // Only allow 5 slides
-  slides = slides.slice(0, 6);
+  // Only allow a certain amount of slides
+  slides = slides.slice(0, numSlides + 1);
 
   return (
     <CarouselProvider
@@ -81,6 +75,7 @@ export default function ImageCarousel({
       naturalSlideHeight={height}
       totalSlides={slides.length}
       style={{ backgroundColor: 'transparent' }}
+      visibleSlides={visibleSlides}
     >
       <Box position={'relative'}>
         <Slider>

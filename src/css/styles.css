@@ -5276,13 +5276,6 @@ span.category-card-img {
   color: #97adff;
 }
 
-.similar-products-checkout {
-  align-self: flex-end;
-}
-.similar-products-checkout h3 {
-  margin-bottom: 25px;
-}
-
 .scroll-text {
   overflow: hidden;
   white-space: nowrap;

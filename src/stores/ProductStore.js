@@ -1,4 +1,8 @@
 import { observable, decorate, action, computed } from 'mobx';
+
+// API
+import { getImpulseProducts } from 'api/product';
+
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
@@ -242,9 +246,9 @@ class ProductStore {
     return res.data;
   }
 
-  getImpulseProducts(auth) {
+  getImpulseProducts(cartId, auth) {
     this.fetch = true;
-    return axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth).then((res) => {
+    return getImpulseProducts(cartId, auth).then((res) => {
       this.fetch = false;
       return res;
     });

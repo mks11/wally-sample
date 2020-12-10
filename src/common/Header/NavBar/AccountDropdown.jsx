@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { IconContext } from 'react-icons';
-import { FaRegUserCircle } from 'react-icons/fa';
 import { Box, Button, Menu, MenuItem, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -39,18 +37,11 @@ const AccountDropdown = ({ children, ...props }) => {
         onClick={handleClick}
         style={{ padding: '8px 16px' }}
       >
-        <Box position="relative">
-          <IconContext.Provider value={{ size: '2em' }}>
-            <FaRegUserCircle />
-          </IconContext.Provider>
-          <ArrowDropDownIcon />
-          <Typography
-            variant="body1"
-            component="span"
-            style={{ position: 'absolute', bottom: '-16px', left: '0' }}
-          >
+        <Box position="relative" display="flex" alignItems="center">
+          <Typography variant="body1" component="span">
             {userStore.user ? 'Account' : 'Sign in'}
           </Typography>
+          <ArrowDropDownIcon />
         </Box>
       </MenuButton>
       <Menu
