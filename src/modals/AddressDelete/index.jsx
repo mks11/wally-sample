@@ -1,18 +1,30 @@
 import React from 'react';
 import Confirmation from '../shared/Confirmation';
 
+// Cookies
+import { useCookies } from 'react-cookie';
+
 function AddressDeleteModal({
   stores: { user: userStore, modal: modalStore, loading, snackbar },
   toggle,
 }) {
+  const [cookies, setCookie] = useCookies(['addressId']);
+  const addressIdCookie = cookies['addressId'];
   const handleCancel = () => {
     toggle && toggle();
   };
 
-  const handleDelete = async (address_id) => {
+  const handleDelete = async (addressId) => {
     try {
       loading.show();
-      await userStore.deleteAddress(address_id);
+      await userStore.deleteAddress(addressId);
+      console.log(addressId, addressIdCookie);
+
+      if (addressId === addressIdCookie)
+        // Remove the user's selected address cookie if they decide to remove
+        // the address it corresponds to.
+        setCookie('addressId', '');
+
       snackbar.openSnackbar(
         'Your address was deleted successfully.',
         'success',

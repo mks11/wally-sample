@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Typography, Box } from '@material-ui/core';
 import CollapseCard from 'common/FormikComponents/NonRenderPropAPI/CollapseCard';
 import RadioGroup from 'common/RadioGroup';
@@ -19,6 +19,7 @@ function ShippingOptions({ onSave, name }) {
   const { values, setFieldValue } = useFormikContext() || {};
   const shippingServiceLevel = values[name];
   const collapsedHeight = shippingServiceLevel ? 50 : 50;
+  const showSaveButton = OPTIONS.length > 3;
 
   const handleChange = (val) => {
     setFieldValue(name, val);
@@ -47,9 +48,9 @@ function ShippingOptions({ onSave, name }) {
     <CollapseCard
       title="Shipping Options"
       collapsedHeight={collapsedHeight}
-      onSave={onSave}
       name={name}
-      showSaveButton
+      onSave={onSave}
+      showSaveButton={showSaveButton}
     >
       <Box p={1}>
         <Typography>

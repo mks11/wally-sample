@@ -14,7 +14,7 @@ function RootSnackbar() {
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       open={snackbar.isOpen}
-      autoHideDuration={6000}
+      autoHideDuration={snackbar.autoHideDuration}
       onClose={snackbar.closeSnackbar}
     >
       <Alert onClose={snackbar.closeSnackbar} severity={snackbar.severity}>

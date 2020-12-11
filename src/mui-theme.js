@@ -90,7 +90,7 @@ let theme = createMuiTheme({
     },
     button: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.2rem',
+      fontSize: '1rem',
       fontWeight: 'bold',
     },
     caption: {},

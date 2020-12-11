@@ -20,7 +20,7 @@ export default function AddressCreateForm({ onCreate }) {
     snackbar: snackbarStore,
     user: userStore,
   } = stores;
-
+  const { user } = userStore;
   const handleSubmit = async (values, setFieldError) => {
     try {
       const auth = userStore.getHeaderAuth();
@@ -50,8 +50,8 @@ export default function AddressCreateForm({ onCreate }) {
       </Typography>
       <Formik
         initialValues={{
-          name: '',
-          telephone: '',
+          name: user ? user.name : '',
+          telephone: user ? user.primary_telephone : '',
           streetAddress: '',
           unit: '',
           city: '',
@@ -79,8 +79,8 @@ export default function AddressCreateForm({ onCreate }) {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} md={6}>
                 <TextInput
                   name="name"
                   placeholder="Enter your name"
@@ -89,7 +89,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
                 <PhoneInput
                   name="telephone"
                   placeholder="Enter your telephone"
@@ -104,7 +104,7 @@ export default function AddressCreateForm({ onCreate }) {
                   mode={'edit'}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={8} md={6}>
                 <TextInput
                   name="streetAddress"
                   label="Street Address"
@@ -113,7 +113,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={4} sm={6}>
                 <TextInput
                   name="unit"
                   label="Unit"
@@ -122,7 +122,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} md={6}>
                 <TextInput
                   name="city"
                   label="City"
@@ -131,7 +131,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6} md={3}>
                 <TextInput
                   name="state"
                   placeholder="State"
@@ -140,7 +140,7 @@ export default function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6} md={3}>
                 <TextInput
                   name="zip"
                   label="Zip"
@@ -163,7 +163,7 @@ export default function AddressCreateForm({ onCreate }) {
                   <PrimaryWallyButton
                     type="submit"
                     fullWidth
-                    disabled={isSubmitting}
+                    disabled={isSubmitting ? true : false}
                   >
                     Add New Address
                   </PrimaryWallyButton>

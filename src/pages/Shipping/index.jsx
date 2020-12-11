@@ -23,7 +23,10 @@ import { observer } from 'mobx-react';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 const Shipping = observer(({ breadcrumbs, location }) => {
-  const [cookies, setCookie] = useCookies(['addressId']);
+  const [cookies, setCookie] = useCookies([
+    'addressId',
+    'shippingServiceLevel',
+  ]);
   const { checkout, routing, user: userStore } = useStores();
   const { user } = userStore;
   let addressId = cookies['addressId'];
@@ -76,7 +79,7 @@ const Shipping = observer(({ breadcrumbs, location }) => {
         <Formik
           initialValues={{
             addressId: addressId || preferredAddresId || '',
-            shippingServiceLevel: shippingServiceLevel || '',
+            shippingServiceLevel: shippingServiceLevel || 'ups_ground',
           }}
           validationSchema={Yup.object({
             addressId: Yup.string().required(
@@ -88,17 +91,8 @@ const Shipping = observer(({ breadcrumbs, location }) => {
           })}
           enableReinitialize
           onSubmit={(values, { setSubmitting }) => {
-            // Ensure UI is synchronized with cookies in case user doesn't
-            // open the address or shipping method dropdown
-            // to press save when using preferred settings
-            if (!addressId && values.addressId) {
-              handleSaveAddress(values.addressId);
-            }
-
-            if (!shippingServiceLevel && values.shippingServiceLevel) {
-              handleSaveAddress(values.values.shippingServiceLevel);
-            }
-
+            handleSaveAddress(values.addressId);
+            handleSaveShippingMethod(values.shippingServiceLevel);
             setSubmitting(false);
             routing.push('/checkout/payment');
           }}

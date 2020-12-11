@@ -17,15 +17,18 @@ import {
 import { HelperText } from 'styled-component-lib/HelperText';
 import { useField } from 'formik';
 
-export default function CheckoutCard({
+// MobX
+import { useStores } from 'hooks/mobx';
+
+export default function CollapseCard({
   children,
   collapsedHeight = 100,
-  isDisabled = false,
   name,
   onSave,
   showSaveButton,
   title,
 }) {
+  const { snackbar } = useStores();
   const [field, meta] = useField(name);
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
@@ -38,6 +41,7 @@ export default function CheckoutCard({
   const handleSave = () => {
     onSave && onSave(field.value);
     setIsOpen(false);
+    snackbar.openSnackbar(title + ' saved.', 'success', 3000);
   };
 
   return (
@@ -52,14 +56,16 @@ export default function CheckoutCard({
         <Box p={4}>
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
-              <Typography variant="h2">{title}</Typography>
+              <Typography component="h1" variant="h3">
+                {title}
+              </Typography>
             </Grid>
             <Grid item>
               <PrimaryTextButton
                 onClick={isOpen ? handleSave : handleOpen}
                 style={{ width: '86px' }}
               >
-                {isOpen ? 'Close' : 'Change'}
+                {isOpen ? 'Save' : 'Change'}
               </PrimaryTextButton>
             </Grid>
           </Grid>

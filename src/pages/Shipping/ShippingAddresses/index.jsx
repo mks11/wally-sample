@@ -26,6 +26,7 @@ function ShippingAddresses({ onSave, name }) {
   const { user: userStore } = useStores();
   const { user } = userStore;
   const { values, setFieldValue } = useFormikContext() || {};
+  const showSaveButton = user && user.addresses && user.addresses.length >= 3;
 
   // will be equal to a stringified object id
   const addressId = values[name];
@@ -40,9 +41,9 @@ function ShippingAddresses({ onSave, name }) {
   return (
     <CollapseCard
       collapsedHeight={collapsedHeight}
-      name="addressId"
       onSave={onSave}
-      showSaveButton
+      name="addressId"
+      showSaveButton={showSaveButton}
       title="Shipping Address"
     >
       <Box>
