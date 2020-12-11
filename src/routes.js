@@ -19,6 +19,8 @@ import OrderConfirmation from './pages/OrderConfirmation';
 // Checkout Flow
 import Checkout from './pages/Checkout';
 import ReviewCart from './pages/ReviewCart';
+import Shipping from './pages/Shipping';
+
 import Giftcard from './pages/Giftcard';
 import InviteFriends from './pages/InviteFriends';
 import Backers from './pages/Backers';
@@ -67,7 +69,7 @@ import { observer } from 'mobx-react';
 
 export const CHECKOUT_ROUTES = [
   { path: '/checkout/cart', name: 'cart', Component: ReviewCart },
-  { path: '/checkout/shipping', name: 'shipping', Component: ReviewCart },
+  { path: '/checkout/shipping', name: 'shipping', Component: Shipping },
   { path: '/checkout/payment', name: 'payment', Component: ReviewCart },
   {
     path: '/checkout/review',

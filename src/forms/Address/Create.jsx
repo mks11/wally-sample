@@ -10,7 +10,7 @@ import { Box, Grid, Typography } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
-import { createAddress } from 'api/user';
+import { createAddress } from 'api/address';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 
 export default function AddressCreateForm({ onCreate }) {

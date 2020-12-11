@@ -25,7 +25,7 @@ import { PrimaryWallyButtonLink } from 'styled-component-lib/Links';
 
 const ReviewCart = ({ breadcrumbs, location }) => {
   const theme = useTheme();
-  const [visibleSlides, setVisibleSlides] = useState(3);
+  const [visibleSlides, setVisibleSlides] = useState(2);
   const isXs = useMediaQuery({
     query: `(max-width: ${theme.breakpoints.values.sm}px)`,
   });
@@ -44,7 +44,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
     user: userStore,
   } = useStores();
 
-  const { cart } = checkoutStore;
+  const { cart, isRetrievingCart } = checkoutStore;
   const [impulseProducts, setImpulseProducts] = useState([]);
 
   useEffect(() => {
@@ -61,9 +61,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
       setVisibleSlides(1);
     } else if (isSm) {
       setVisibleSlides(1.5);
-    } else if (isMd) {
-      setVisibleSlides(2);
-    } else setVisibleSlides(3);
+    } else setVisibleSlides(2);
   }, [isXs, isSm, isMd]);
 
   const loadData = async () => {
@@ -93,7 +91,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
 
   return (
     <div className="App">
-      <Container maxWidth="xl">
+      <Container maxWidth="md">
         <Box py={4}>
           <CheckoutFlowBreadCrumbs
             breadcrumbs={breadcrumbs}
@@ -117,6 +115,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
                   </Box>
                   {impulseProducts.length > 0 ? (
                     <ImageCarousel
+                      keyName="impulse-products"
                       height={184}
                       numSlides={12}
                       width={384}
@@ -133,13 +132,13 @@ const ReviewCart = ({ breadcrumbs, location }) => {
           <br />
 
           {/* Cart */}
-          {impulseProducts.length ? (
-            <Card elevation={2}>
-              <Box p={2}>
-                <Typography component="h1" variant="h2" gutterBottom>
-                  Review your cart
-                </Typography>
-                <CartSummary />
+          <Card elevation={2}>
+            <Box p={2}>
+              <Typography component="h1" variant="h2" gutterBottom>
+                Review your cart
+              </Typography>
+              <CartSummary />
+              {impulseProducts.length ? (
                 <Box display="flex" justifyContent="center" p={2}>
                   <PrimaryWallyButtonLink to="/checkout/shipping">
                     <Typography component="span" variant="h6">
@@ -147,11 +146,9 @@ const ReviewCart = ({ breadcrumbs, location }) => {
                     </Typography>
                   </PrimaryWallyButtonLink>
                 </Box>
-              </Box>
-            </Card>
-          ) : (
-            <Card style={{ height: '184px' }} elevation={3} />
-          )}
+              ) : null}
+            </Box>
+          </Card>
         </Box>
       </Container>
     </div>
@@ -187,7 +184,7 @@ function ImpulseProduct({ product }) {
   return (
     <Card
       onClick={() => handleProductClick(product.product_id)}
-      style={{ height: '98%', margin: '0 8px' }}
+      style={{ cursor: 'pointer', height: '98%', margin: '0 8px' }}
     >
       <Box p={2} height="100%">
         <Grid

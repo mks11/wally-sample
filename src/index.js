@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 
+// Cookies
+import { CookiesProvider } from 'react-cookie';
+
 // Components
 import ScrollToTop from './common/ScrollToTop';
 import ScrollSpy from 'common/ScrollSpy';
@@ -49,11 +52,13 @@ ReactDOM.render(
       <Provider store={store}>
         <Elements stripe={stripePromise}>
           <Router history={history}>
-            <ScrollSpy>
-              <ScrollToTop>
-                <Layout />
-              </ScrollToTop>
-            </ScrollSpy>
+            <CookiesProvider>
+              <ScrollSpy>
+                <ScrollToTop>
+                  <Layout />
+                </ScrollToTop>
+              </ScrollSpy>
+            </CookiesProvider>
           </Router>
         </Elements>
       </Provider>
