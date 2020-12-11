@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense, useState } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 
 // MobX
 import { useStores } from 'hooks/mobx';

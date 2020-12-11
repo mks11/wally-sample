@@ -7,6 +7,9 @@ import {
   updatePaymentMethod,
 } from 'api/payment';
 
+// Cookies
+import { useCookies } from 'react-cookie';
+
 // Material UI
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
@@ -70,6 +73,9 @@ export const CreditCardDetails = observer(({ paymentMethod }) => {
 });
 
 export const PaymentMethod = observer(({ paymentMethod }) => {
+  const [cookies, setCookie] = useCookies(['paymentId']);
+  const paymentIdCookie = cookies['paymentId'];
+
   const {
     loading: loadingStore,
     snackbar: snackbarStore,
@@ -109,6 +115,11 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
     try {
       loadingStore.show();
       await deactivatePaymentMethod(_id, auth);
+      if (_id === paymentIdCookie) {
+        // Remove the user's selected payment method cookie if they decide to remove
+        // the payment method it corresponds to.
+        setCookie('paymentId', '');
+      }
       await userStore.getUser();
     } catch (error) {
       const msg = getErrorMessage(error);

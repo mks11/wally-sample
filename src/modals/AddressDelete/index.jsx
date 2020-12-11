@@ -20,10 +20,11 @@ function AddressDeleteModal({
       await userStore.deleteAddress(addressId);
       console.log(addressId, addressIdCookie);
 
-      if (addressId === addressIdCookie)
+      if (addressId === addressIdCookie) {
         // Remove the user's selected address cookie if they decide to remove
         // the address it corresponds to.
         setCookie('addressId', '');
+      }
 
       snackbar.openSnackbar(
         'Your address was deleted successfully.',
