@@ -61,12 +61,7 @@ const Payment = observer(({ breadcrumbs, location }) => {
 
   return (
     <Container maxWidth="md">
-      <Box my={4}>
-        <CheckoutFlowBreadcrumbs
-          breadcrumbs={breadcrumbs}
-          location={location}
-        />
-      </Box>
+      <CheckoutFlowBreadcrumbs breadcrumbs={breadcrumbs} location={location} />
       <Box my={4}>
         <Formik
           initialValues={{

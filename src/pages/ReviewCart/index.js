@@ -90,68 +90,63 @@ const ReviewCart = ({ breadcrumbs, location }) => {
     : [];
 
   return (
-    <div className="App">
-      <Container maxWidth="md">
-        <Box py={4}>
-          <CheckoutFlowBreadCrumbs
-            breadcrumbs={breadcrumbs}
-            location={location}
-          />
-          {cart && items.length < 1 ? (
+    <Container maxWidth="md">
+      <CheckoutFlowBreadCrumbs breadcrumbs={breadcrumbs} location={location} />
+      <Box mb={4}>
+        {cart && items.length < 1 ? (
+          <Box py={2} px={1}>
+            <EmptyCartMessage />
+          </Box>
+        ) : (
+          <Card
+            style={{ background: 'rgba(0, 0, 0, 0.05)', marginTop: '32px' }}
+          >
             <Box py={2} px={1}>
-              <EmptyCartMessage />
-            </Box>
-          ) : (
-            <Card
-              style={{ background: 'rgba(0, 0, 0, 0.05)', marginTop: '32px' }}
-            >
-              <Box py={2} px={1}>
-                <Box>
-                  {/* Impulse products */}
-                  <Box px={1}>
-                    <Typography component="h1" variant="h2" gutterBottom>
-                      Need anything else?
-                    </Typography>
-                  </Box>
-                  {impulseProducts.length > 0 ? (
-                    <ImageCarousel
-                      keyName="impulse-products"
-                      height={184}
-                      numSlides={12}
-                      width={384}
-                      slides={slides}
-                      visibleSlides={visibleSlides}
-                    />
-                  ) : (
-                    <Card style={{ height: '184px' }} />
-                  )}
+              <Box>
+                {/* Impulse products */}
+                <Box px={1}>
+                  <Typography component="h1" variant="h2" gutterBottom>
+                    Need anything else?
+                  </Typography>
                 </Box>
+                {impulseProducts.length > 0 ? (
+                  <ImageCarousel
+                    keyName="impulse-products"
+                    height={184}
+                    numSlides={12}
+                    width={384}
+                    slides={slides}
+                    visibleSlides={visibleSlides}
+                  />
+                ) : (
+                  <Card style={{ height: '184px' }} />
+                )}
               </Box>
-            </Card>
-          )}
-          <br />
-
-          {/* Cart */}
-          <Card elevation={2}>
-            <Box p={2}>
-              <Typography component="h1" variant="h2" gutterBottom>
-                Review your cart
-              </Typography>
-              <CartSummary />
-              {impulseProducts.length ? (
-                <Box display="flex" justifyContent="center" p={2}>
-                  <PrimaryWallyButtonLink to="/checkout/shipping">
-                    <Typography component="span" variant="h6">
-                      Continue To Shipping
-                    </Typography>
-                  </PrimaryWallyButtonLink>
-                </Box>
-              ) : null}
             </Box>
           </Card>
-        </Box>
-      </Container>
-    </div>
+        )}
+        <br />
+
+        {/* Cart */}
+        <Card elevation={2}>
+          <Box p={2}>
+            <Typography component="h1" variant="h2" gutterBottom>
+              Review your cart
+            </Typography>
+            <CartSummary />
+            {impulseProducts.length ? (
+              <Box display="flex" justifyContent="center" p={2}>
+                <PrimaryWallyButtonLink to="/checkout/shipping">
+                  <Typography component="span" variant="h6">
+                    Continue To Shipping
+                  </Typography>
+                </PrimaryWallyButtonLink>
+              </Box>
+            ) : null}
+          </Box>
+        </Card>
+      </Box>
+    </Container>
   );
 };
 
