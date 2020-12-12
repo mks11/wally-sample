@@ -64,6 +64,13 @@ function Checkout({ breadcrumbs, location }) {
   ]);
   const { addressId, paymentId, shippingServiceLevel } = cookies;
 
+  // Redirect if user has navigated here via the address bar
+  if (!addressId || !shippingServiceLevel) {
+    routingStore.push('/checkout/shipping');
+  } else if (!paymentId) {
+    routingStore.push('/checkout/payment');
+  }
+
   useEffect(() => {
     // Store page view in google analytics
     const { location } = routingStore;

@@ -8,18 +8,16 @@ class ModalStoreV2 {
     this.maxWidth = 'sm';
   }
 
-  open(children, anchor = 'right', maxWidth = 'sm') {
+  open(children, anchor = 'right', maxWidth = 'sm', paperStyle = undefined) {
     this.anchor = anchor;
     this.children = children;
     this.isOpen = true;
     this.maxWidth = maxWidth;
+    this.paperStyle = paperStyle;
   }
 
   close() {
-    this.anchor = 'right';
-    this.children = null;
     this.isOpen = false;
-    this.maxWidth = 'sm';
   }
 }
 

@@ -12,7 +12,7 @@ import { observer } from 'mobx-react';
 function RootModalV2() {
   const theme = useTheme();
   const { modalV2, product } = useStores();
-  const { anchor, children, isOpen, maxWidth } = modalV2;
+  const { anchor, children, isOpen, maxWidth, paperStyle } = modalV2;
 
   const handleClose = () => {
     product.resetActiveProduct();
@@ -31,10 +31,12 @@ function RootModalV2() {
       }}
       PaperProps={{
         square: false,
-        style: {
-          width: '100%',
-          maxWidth: maxWidth ? getBreakpointWidth(maxWidth) : '576px',
-        },
+        style: paperStyle
+          ? paperStyle
+          : {
+              width: '100%',
+              maxWidth: maxWidth ? getBreakpointWidth(maxWidth) : '576px',
+            },
       }}
     >
       <Box p={4}>
