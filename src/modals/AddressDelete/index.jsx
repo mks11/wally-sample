@@ -18,7 +18,6 @@ function AddressDeleteModal({
     try {
       loading.show();
       await userStore.deleteAddress(addressId);
-      console.log(addressId, addressIdCookie);
 
       if (addressId === addressIdCookie) {
         // Remove the user's selected address cookie if they decide to remove

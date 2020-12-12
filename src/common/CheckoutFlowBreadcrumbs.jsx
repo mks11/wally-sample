@@ -16,13 +16,11 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
     'paymentId',
   ]);
 
-  const addressId = cookies['addressId'];
-  const shippingServiceLevel = cookies['shippingServiceLevel'];
-  const paymentId = cookies['paymentId'];
+  const { addressId, paymentId, shippingServiceLevel } = cookies;
 
   if (breadcrumbs.length <= 1) return null;
   return (
-    <div>
+    <Box mt={4}>
       {/* Link back to any previous steps of the breadcrumb. */}
       {breadcrumbs.map(({ name, path }, idx) => {
         const isCurrentPath = location.pathname.includes(name) ? true : false;
@@ -53,7 +51,7 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
           </Box>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

@@ -29,10 +29,8 @@ const Shipping = observer(({ breadcrumbs, location }) => {
   ]);
   const { checkout, routing, user: userStore } = useStores();
   const { user } = userStore;
-  let addressId = cookies['addressId'];
+  let { addressId, shippingServiceLevel } = cookies;
   var preferredAddresId;
-  let shippingServiceLevel = cookies['shippingServiceLevel'];
-
   // Form state is populated in the following order:
   // 1. Via addressId cookie. This cookie is set when progressing to next page
   // or when a guest submits their address.
@@ -49,7 +47,6 @@ const Shipping = observer(({ breadcrumbs, location }) => {
     setCookie('addressId', value, {
       maxAge: 60 * 60 * 24 * 7,
       path: '/checkout',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
     });
   };
 
@@ -57,7 +54,6 @@ const Shipping = observer(({ breadcrumbs, location }) => {
     setCookie('shippingServiceLevel', value, {
       maxAge: 60 * 60 * 24 * 7,
       path: '/checkout',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
     });
   };
 

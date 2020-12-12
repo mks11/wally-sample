@@ -30,13 +30,11 @@ const Payment = observer(({ breadcrumbs, location }) => {
   const { routing, user: userStore } = useStores();
   const { user } = userStore;
 
-  let addressId = cookies['addressId'];
-  let shippingServiceLevel = cookies['shippingServiceLevel'];
+  let { addressId, paymentId, shippingServiceLevel } = cookies;
   if (!addressId || !shippingServiceLevel) {
     routing.push('/checkout/shipping');
   }
 
-  let paymentId = cookies['paymentId'];
   var preferredPaymentId;
 
   // Form state is populated in the following order:
@@ -55,7 +53,6 @@ const Payment = observer(({ breadcrumbs, location }) => {
     setCookie('paymentId', value, {
       maxAge: 60 * 60 * 24 * 7,
       path: '/checkout',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
     });
   };
 
