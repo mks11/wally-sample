@@ -40,8 +40,8 @@ function ApplyPromoCodeForm() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Box my={2}>
-              <Grid container spacing={2}>
+            <Box mt={2}>
+              <Grid container spacing={1}>
                 <Grid item xs={8}>
                   <TextInput
                     color="primary"
@@ -54,9 +54,11 @@ function ApplyPromoCodeForm() {
                 <Grid item xs={4}>
                   <PrimaryWallyButton
                     disabled={isSubmitting}
-                    style={{ maxHeight: '56px' }}
+                    style={{ height: '56px', maxHeight: '56px' }}
                     fullWidth
                     type="submit"
+                    disableElevation
+                    disableRipple
                   >
                     Apply
                   </PrimaryWallyButton>

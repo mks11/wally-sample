@@ -46,14 +46,14 @@ const Shipping = observer(({ breadcrumbs, location }) => {
   const handleSaveAddress = (value) => {
     setCookie('addressId', value, {
       maxAge: 60 * 60 * 24 * 7,
-      path: '/checkout',
+      path: '/',
     });
   };
 
   const handleSaveShippingMethod = (value) => {
     setCookie('shippingServiceLevel', value, {
       maxAge: 60 * 60 * 24 * 7,
-      path: '/checkout',
+      path: '/',
     });
   };
 

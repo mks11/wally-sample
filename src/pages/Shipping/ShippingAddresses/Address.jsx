@@ -14,8 +14,18 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-export default function Address({ address = {}, isPreferredAddress }) {
-  const { street_address, unit, city, state, zip, name, telephone } = address;
+export default function Address({ address = {}, preferredAddressId }) {
+  const {
+    _id,
+    street_address,
+    unit,
+    city,
+    state,
+    zip,
+    name,
+    telephone,
+  } = address;
+  const isPreferredAddress = _id.toString() === preferredAddressId;
 
   // handles formatting when unit is not present
   var streetAddress = street_address;

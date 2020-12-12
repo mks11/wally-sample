@@ -4,7 +4,7 @@ import AddressRadioItem from './AddressRadioItem';
 
 export default function AddressList({
   addresses,
-  defaultAddressId,
+  preferredAddressId,
   name,
   onChange,
   selected,
@@ -19,7 +19,7 @@ export default function AddressList({
         <AddressRadioItem
           key={address._id}
           address={address}
-          isPreferredAddress={defaultAddressId === address._id}
+          preferredAddressId={preferredAddressId}
           selected={selected}
         />
       ))}

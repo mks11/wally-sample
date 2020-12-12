@@ -24,9 +24,16 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
       {/* Link back to any previous steps of the breadcrumb. */}
       {breadcrumbs.map(({ name, path }, idx) => {
         const isCurrentPath = location.pathname.includes(name) ? true : false;
+
+        // Disable payment link if addressId or shipping cookies not set
         const paymentIsDisabled =
           (!addressId || !shippingServiceLevel) && name === 'payment';
-        const reviewIsDisabled = !paymentId && name === 'review';
+
+        // Disable review link if addressId or shipping or paymentId cookies not set
+        const reviewIsDisabled =
+          (!addressId || !shippingServiceLevel || !paymentId) &&
+          name === 'review';
+
         return (
           <Box component="span" key={name}>
             <Box component="span" mr={1}>

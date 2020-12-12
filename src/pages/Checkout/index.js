@@ -1,5 +1,4 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-// import { PRODUCT_BASE_URL } from 'config';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -12,11 +11,24 @@ import {
   Divider,
   Grid,
   IconButton,
+  List,
+  ListItem,
   Typography,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-// import { AddIcon, CloseIcon, InfoIcon, RemoveIcon } from 'Icons';
 import { InfoIcon } from 'Icons';
+
+// Cookies
+import { useCookies } from 'react-cookie';
+
+// Custom Components
+import Address from 'pages/Shipping/ShippingAddresses/Address';
+import CheckoutFlowBreadcrumbs from 'common/CheckoutFlowBreadcrumbs';
+import { CreditCard } from 'common/PaymentMethods';
+import { OPTIONS, getDeliveryDates } from 'pages/Shipping/ShippingOptions';
+
+// Forms
+import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
@@ -26,21 +38,13 @@ import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
-// Custom Components
-import DeliveryAddressOptions from './FormikDeliveryAddressOptions';
-import PaymentOptions from './PaymentOptions';
-import {
-  // PrimaryTextButton,
-  PrimaryWallyButton,
-} from 'styled-component-lib/Buttons';
-import ShippingOptions from './ShippingOptions';
+// Styled components
+import { HelperText } from 'styled-component-lib/HelperText';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { PrimaryTextLink } from 'styled-component-lib/Links';
 
-// Forms
-import { useFormikContext } from 'formik';
-import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
-// import RemoveItemForm from 'forms/cart/RemoveItem';
-
-function Checkout() {
+function Checkout({ breadcrumbs, location }) {
+  // MobX state
   const {
     checkout: checkoutStore,
     loading: loadingStore,
@@ -49,82 +53,133 @@ function Checkout() {
     snackbar: snackbarStore,
     user: userStore,
   } = useStores();
+  const { cart, order } = checkoutStore;
+  const { flags, user } = userStore;
+
+  // Cookies related to the checkout experience
+  const [cookies, setCookie] = useCookies([
+    'addressId',
+    'paymentId',
+    'shippingServiceLevel',
+  ]);
+  const { addressId, paymentId, shippingServiceLevel } = cookies;
 
   useEffect(() => {
     // Store page view in google analytics
     const { location } = routingStore;
     logPageView(location.pathname);
+    // This triggers a modal if the user hasn't visited the page yet.
+    // The modal explains the packaging deposit process.
+    // The 'flag' is set via a local storage item.
+    if (user && flags && !flags.checkoutFirst) {
+      modalStore.toggleModal('checkoutfirst');
+    }
 
-    userStore.getStatus().then(() => {
-      const { user } = userStore;
-      if (user) {
-        loadData();
+    if (user && flags.checkoutFirst) {
+      loadData();
+    }
+  }, [user, flags]);
 
-        const { checkoutFirst } = userStore.flags || {};
-        !checkoutFirst && modalStore.toggleModal('checkoutfirst');
-      } else {
-        routingStore.push('/main');
-      }
-    });
-  }, []);
-
-  if (!checkoutStore.cart || !checkoutStore.order || !userStore.user) {
+  // TODO: Once guest experience implemented, this logic will need to change
+  if (!cart || !order || !user) {
     return null;
   }
-  const {
-    user: { preferred_address = '', preferred_payment = '' } = {},
-  } = userStore;
-  const { cart } = checkoutStore;
 
   return (
-    <Container maxWidth="xl">
-      <Box py={4}>
-        <Typography variant="h1" gutterBottom>
-          Checkout
-        </Typography>
-        <Formik
-          initialValues={{
-            addressId: preferred_address ? preferred_address : '',
-            cartId: cart._id,
-            shippingServiceLevel: 'ups_ground',
-            paymentId: preferred_payment ? preferred_payment : '',
-          }}
-          validationSchema={Yup.object({
-            addressId: Yup.string().required(
-              'You must select a shipping address.',
-            ),
-            shippingServiceLevel: Yup.string().required(),
-            paymentId: Yup.string().required(
-              'You must select a payment method.',
-            ),
-          })}
-          enableReinitialize
-          onSubmit={(values, { setFieldError, setSubmitting }) => {
-            handlePlaceOrder(values, setFieldError);
-            setSubmitting(false);
-          }}
-        >
-          <Form>
-            <Grid container spacing={4}>
+    <Container maxWidth="md">
+      <CheckoutFlowBreadcrumbs breadcrumbs={breadcrumbs} location={location} />
+      <Box my={4}>
+        <Card elevation={1} style={{ background: 'rgba(0, 0, 0, 0.05)' }}>
+          <Box p={1}>
+            <Box p={1} borderRadius="4px">
+              <Box pt={2} px={1} pb={1}>
+                <Typography component="h1" variant="h3" gutterBottom>
+                  Review your order
+                </Typography>
+              </Box>
               {userStore.user && (
-                <Grid item xs={12} lg={6}>
-                  <DeliveryAddressOptions name="addressId" />
-                  <ShippingOptions name="shippingServiceLevel" />
-                  <PaymentOptions name="paymentId" />
-                </Grid>
+                <>
+                  <OrderSummary />
+                  <Formik
+                    initialValues={{
+                      addressId: addressId || '',
+                      cartId: cart._id || '',
+                      paymentId: paymentId || '',
+                      shippingServiceLevel: shippingServiceLevel || '',
+                    }}
+                    validationSchema={Yup.object({
+                      addressId: Yup.string().required(
+                        'You must select a shipping address.',
+                      ),
+                      cartId: Yup.string().required(
+                        "You can't make an order without a cart.",
+                      ),
+                      paymentId: Yup.string().required(
+                        'You must select a payment method.',
+                      ),
+                      shippingServiceLevel: Yup.string().required(),
+                    })}
+                    enableReinitialize
+                    onSubmit={(values, { setFieldError, setSubmitting }) => {
+                      handlePlaceOrder(values, setFieldError);
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ errors, isSubmitting }) => {
+                      errors = Object.values(errors);
+
+                      return (
+                        <Form>
+                          <Card elevation={0}>
+                            <Box my={1}>
+                              <Container maxWidth="xs">
+                                <PrimaryWallyButton
+                                  type="submit"
+                                  fullWidth
+                                  disabled={isSubmitting}
+                                  disableElevation
+                                  disableRipple
+                                >
+                                  Place Order
+                                </PrimaryWallyButton>
+                                <Box pt={1} px={2}>
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    align="center"
+                                  >
+                                    By placing your order, you agree to be bound
+                                    by the Terms of Service and Privacy Policy.
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" justifyContent="center">
+                                  <HelperText
+                                    error={errors.length ? true : false}
+                                  >
+                                    {errors.length ? errors[0] : ' '}
+                                  </HelperText>
+                                </Box>
+                              </Container>
+                            </Box>
+                          </Card>
+                        </Form>
+                      );
+                    }}
+                  </Formik>
+                </>
               )}
-              <Grid item xs={12} lg={6} component="section">
-                <OrderSummary />
-              </Grid>
-            </Grid>
-          </Form>
-        </Formik>
-        {/* <Box>
-          <ApplyPromoCodeForm />
-        </Box> */}
+            </Box>
+          </Box>
+        </Card>
       </Box>
     </Container>
   );
+
+  function clearCookies() {
+    setCookie('addressId', '', { path: '/' });
+    setCookie('paymentId', '', { path: '/' });
+    setCookie('shippingServiceLevel', '', { path: '/' });
+  }
 
   async function handlePlaceOrder(values, setFieldError) {
     try {
@@ -145,8 +200,9 @@ function Checkout() {
         },
         auth,
       );
-      routingStore.push('/orders/' + res.data.order._id);
       checkoutStore.clearCart(userStore.getHeaderAuth());
+      clearCookies();
+      routingStore.push('/orders/' + res.data.order._id);
     } catch (error) {
       let msg = getErrorMessage(error);
       let param = getErrorParam(error);
@@ -163,10 +219,13 @@ function Checkout() {
 
   async function loadData() {
     try {
+      loadingStore.show();
       const auth = userStore.getHeaderAuth();
       await checkoutStore.getOrderSummary(auth);
     } catch (error) {
       snackbarStore.openSnackbar('Failed to retrieve order summary.', 'error');
+    } finally {
+      loadingStore.hide();
     }
   }
 }
@@ -175,14 +234,48 @@ export default observer(Checkout);
 
 const PackagingDepositInfo = lazy(() => import('modals/PackagingDepositInfo'));
 
-function OrderSummary() {
+const OrderSummary = observer(() => {
   const theme = useTheme();
-  const { isSubmitting } = useFormikContext();
-  const { checkout, modalV2 } = useStores();
+  const { checkout, modalV2, user: userStore } = useStores();
 
-  const { order } = checkout;
+  // Order summary state
+  const { cart, order } = checkout;
   const cart_items = order && order.cart_items ? order.cart_items : [];
-  const orderTotal = order.total / 100;
+  const hasFreeShipping =
+    order &&
+    typeof order.delivery_amount === 'number' &&
+    !+order.delivery_amount;
+  const wasTaxed =
+    order && typeof order.tax_amount === 'number' && +order.tax_amount;
+  const orderTotal = order && order.total && order.total / 100;
+
+  // User state
+  const { user } = userStore;
+
+  // Cookies related to the checkout experience
+  const [cookies] = useCookies([
+    'addressId',
+    'paymentId',
+    'shippingServiceLevel',
+  ]);
+  const { addressId, paymentId, shippingServiceLevel } = cookies;
+
+  var address, paymentMethod, shippingMethod;
+
+  // Find user's address using id stored in cookie.
+  if (user && user.addresses && addressId) {
+    const { addresses } = user;
+    address = addresses.find((a) => a._id.toString() === addressId);
+  }
+
+  if (shippingServiceLevel) {
+    shippingMethod = OPTIONS.find((o) => o.value === shippingServiceLevel);
+  }
+
+  if (user && user.payment && paymentId) {
+    const { payment } = user;
+    paymentMethod = payment.find((p) => p._id.toString() === paymentId);
+  }
 
   function handlePackagingDepositClick() {
     modalV2.open(
@@ -199,146 +292,252 @@ function OrderSummary() {
   }
 
   return (
-    <Card elevation={4}>
-      <Box p={4}>
-        <Typography variant="h2" gutterBottom>
-          Order Summary
-        </Typography>
-        {cart_items.map((item, i) => (
-          <OrderItem key={item.product_name} item={item} />
-        ))}
-        <Divider />
-        <br />
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Typography gutterBottom>Subtotal</Typography>
-          </Grid>
-          <Grid item>
-            <Typography gutterBottom>
-              {formatMoney(order.subtotal / 100)}
+    <>
+      {/* Address */}
+      <Card style={{ marginBottom: '16px' }} elevation={0}>
+        <Box px={2} py={1}>
+          <Box
+            alignItems="center"
+            display="flex"
+            justifyContent="space-between"
+          >
+            <Typography component="h2" variant="h4">
+              Shipping Address
             </Typography>
-          </Grid>
-        </Grid>
 
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Typography gutterBottom>Tax</Typography>
-          </Grid>
-          <Grid item>
-            <Typography gutterBottom>
-              {formatMoney(order.tax_amount / 100)}
+            <PrimaryTextLink to="/checkout/shipping">
+              <Typography component="span" variant="h6">
+                Change
+              </Typography>
+            </PrimaryTextLink>
+          </Box>
+          {address ? (
+            <Address
+              address={address}
+              preferredAddressId={user.preferred_address}
+            />
+          ) : (
+            <Typography>No shipping address selected.</Typography>
+          )}
+        </Box>
+      </Card>
+
+      {/* Shipping method */}
+      <Card style={{ marginBottom: '16px' }} elevation={0}>
+        <Box px={2} py={1} pb={2}>
+          <Box
+            alignItems="center"
+            display="flex"
+            justifyContent="space-between"
+          >
+            <Typography component="h2" variant="h4">
+              Shipping Method
             </Typography>
-          </Grid>
-        </Grid>
 
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Typography>Shipping</Typography>
-          </Grid>
-          <Grid item>
-            <Typography>{formatMoney(order.delivery_amount / 100)}</Typography>
-          </Grid>
-        </Grid>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
+            <PrimaryTextLink to="/checkout/shipping">
+              <Typography component="span" variant="h6">
+                Change
+              </Typography>
+            </PrimaryTextLink>
+          </Box>
+          {shippingMethod ? (
+            <Typography>{getDeliveryDates(shippingMethod)}</Typography>
+          ) : (
+            <Typography>No shipping method selected.</Typography>
+          )}
+        </Box>
+      </Card>
+
+      {/* Payment method */}
+      <Card style={{ marginBottom: '16px' }} elevation={0}>
+        <Box px={2} py={1}>
+          <Box
+            alignItems="center"
+            display="flex"
+            justifyContent="space-between"
+          >
+            <Typography component="h2" variant="h4">
+              Payment Method
+            </Typography>
+
+            <PrimaryTextLink to="/checkout/payment">
+              <Typography component="span" variant="h6">
+                Change
+              </Typography>
+            </PrimaryTextLink>
+          </Box>
+          {paymentMethod ? (
+            <CreditCard my={0} paymentMethod={paymentMethod} />
+          ) : (
+            <Box py={1}>
+              <Typography>No payment method selected.</Typography>
+            </Box>
+          )}
+          <Box mt={3}>
+            <ApplyPromoCodeForm />
+          </Box>
+        </Box>
+      </Card>
+
+      {/* Order Summary */}
+      <Card elevation={0}>
+        <Box p={2}>
+          <Typography component="h2" variant="h4" gutterBottom>
+            Order Summary
+          </Typography>
+          <Typography component="p" variant="h6" gutterBottom>
+            Products
+          </Typography>
+          {cart_items.map((item, i) => (
+            <OrderItem key={item.product_name} item={item} />
+          ))}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            mt={4}
+          >
+            <Typography>Subtotal</Typography>
+            <Typography>{formatMoney(order.subtotal / 100)}</Typography>
+          </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Box display="flex" alignItems="center">
               <Typography>Packaging Deposit</Typography>
-              <IconButton
-                disableRipple
-                onClick={handlePackagingDepositClick}
-                style={{ marginLeft: '2px' }}
-              >
+              <IconButton disableRipple onClick={handlePackagingDepositClick}>
                 <InfoIcon />
               </IconButton>
             </Box>
-          </Grid>
-          <Grid item>
+
             <Typography>
               {formatMoney(order.packaging_deposit / 100)}
             </Typography>
-          </Grid>
-        </Grid>
+          </Box>
+          <Box mb={2}>
+            <Divider />
+          </Box>
 
-        {order.applied_packaging_balance === 0 ? null : (
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography gutterBottom>
-                Applied packaging deposit balance
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography gutterBottom>
-                -{formatMoney(order.applied_packaging_balance / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
-        {order.promo_discount === 0 ? null : (
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography
-                gutterBottom
-                style={{ color: theme.palette.success.main }}
+          {/* Tax && Fees */}
+          <Typography component="h3" variant="h6" gutterBottom>
+            Taxes and Fees
+          </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            color={
+              !wasTaxed ? theme.palette.success.main : theme.palette.text.main
+            }
+          >
+            <Typography>Tax</Typography>
+            <Typography>
+              {wasTaxed ? formatMoney(order.tax_amount / 100) : 'None'}
+            </Typography>
+          </Box>
+
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            color={
+              hasFreeShipping
+                ? theme.palette.success.main
+                : theme.palette.text.main
+            }
+          >
+            <Typography gutterBottom>Shipping</Typography>
+            <Typography gutterBottom>
+              {hasFreeShipping
+                ? 'Free'
+                : formatMoney(order.delivery_amount / 100)}
+            </Typography>
+          </Box>
+          <Box mb={2}>
+            <Divider />
+          </Box>
+          <Typography component="p" variant="h6" gutterBottom>
+            Discounts and Promotions
+          </Typography>
+          <Box color={theme.palette.success.main}>
+            {order.applied_packaging_balance === 0 ? null : (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                Applied discount
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                gutterBottom
-                style={{ color: theme.palette.success.main }}
+                <Typography>Packaging Deposit Balance</Typography>
+                <Typography>
+                  -{formatMoney(order.applied_packaging_balance / 100)}
+                </Typography>
+              </Box>
+            )}
+
+            {order.applied_store_credit === 0 ? null : (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                -{formatMoney(order.promo_discount / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
+                <Typography>Store Credit</Typography>
+                <Typography>
+                  -{formatMoney(order.applied_store_credit / 100)}
+                </Typography>
+              </Box>
+            )}
 
-        {order.applied_store_credit === 0 ? null : (
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography gutterBottom>Applied store credit</Typography>
-            </Grid>
-            <Grid item>
-              <Typography gutterBottom>
-                -{formatMoney(order.applied_store_credit / 100)}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
+            {order.promo_discount === 0 ? null : (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography>Promotional Discounts</Typography>
 
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Typography variant="h6" component="p" gutterBottom>
+                <Typography>
+                  -{formatMoney(order.promo_discount / 100)}
+                </Typography>
+              </Box>
+            )}
+            {cart.applied_promo_codes.length ? (
+              <>
+                <Typography color="textPrimary" component="p">
+                  Applied Promo Codes
+                </Typography>
+                <List>
+                  {cart.applied_promo_codes.map((code) => (
+                    <ListItem key={code.promo_code} style={{ padding: '8px' }}>
+                      <Typography color="textPrimary">
+                        {code.promo_code}
+                      </Typography>
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            ) : null}
+          </Box>
+          <Box my={2}>
+            <Divider />
+          </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="h6" component="p">
               Total
             </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="h6" component="p" gutterBottom>
+            <Typography variant="h6" component="p">
               {formatMoney(orderTotal)}
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Box my={4}>
-          <PrimaryWallyButton
-            type="submit"
-            fullWidth
-            disabled={cart_items.length === 0 || isSubmitting}
-          >
-            Place My Order
-          </PrimaryWallyButton>
-          <Box pt={1} px={2}>
-            <Typography variant="body2" color="textSecondary">
-              By placing your order, you agree to be bound by the Terms of
-              Service and Privacy Policy.
             </Typography>
           </Box>
         </Box>
-      </Box>
-    </Card>
+      </Card>
+    </>
   );
-}
+});
 
 function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;
@@ -346,9 +545,7 @@ function OrderItem({ item }) {
     <>
       <Grid container justify="space-between">
         <Grid item xs={9} md={10}>
-          <Typography variant="h6" component="p">
-            {product_name}
-          </Typography>
+          <Typography>{product_name}</Typography>
         </Grid>
         <Grid item>
           <Typography>{formatMoney(total / 100)}</Typography>
@@ -360,160 +557,3 @@ function OrderItem({ item }) {
     </>
   );
 }
-
-// function OrderItem({ item }) {
-//   const {
-//     customer_quantity,
-//     _id,
-//     inventory_id,
-//     product,
-//     product_id,
-//     product_name,
-//     unit_type,
-//   } = item;
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [increasedQty, setIncreasedQty] = useState(false);
-//   const { checkout, modal, modalV2, product: productStore, user } = useStores();
-//   var productImage;
-//   var brand;
-
-//   if (product) {
-//     const { image_refs, vendorFull } = product;
-//     if (image_refs && image_refs[0]) {
-//       productImage = PRODUCT_BASE_URL + product_id + '/' + image_refs[0];
-//     }
-
-//     if (vendorFull && vendorFull.name) brand = vendorFull.name;
-//   }
-
-//   const handleDelete = (item) => {
-//     logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
-//     modalV2.open(<RemoveItemForm item={item} reloadOrderSummary />);
-//   };
-
-//   const handleUpdateCart = async (items) => {
-//     const auth = user.getHeaderAuth();
-//     await checkout.editCurrentCart({ items }, auth, true);
-//   };
-
-//   const handleUpdateQuantity = async (qty) => {
-//     try {
-//       if (qty > 0) setIncreasedQty(true);
-//       else setIncreasedQty(false);
-//       setIsLoading(true);
-//       const updateQty = customer_quantity + qty;
-//       handleUpdateCart([
-//         {
-//           quantity: updateQty,
-//           product_id,
-//           inventory_id,
-//           unit_type,
-//         },
-//       ]);
-//     } catch (error) {}
-//   };
-
-//   const handleViewProduct = (productId) => {
-//     modalV2.close();
-//     productStore.showModal(productId, null);
-//     modal.toggleModal('product');
-//   };
-
-//   return (
-//     <Box>
-//       <Grid container alignItems="center" justify="flex-end">
-//         <Grid item>
-//           <IconButton
-//             aria-label="remove-item-from-cart"
-//             onClick={() =>
-//               handleDelete({
-//                 inventoryId: _id,
-//                 name: product_name,
-//                 productId: product_id,
-//               })
-//             }
-//           >
-//             <CloseIcon />
-//           </IconButton>
-//         </Grid>
-//       </Grid>
-
-//       {/* Product image, name, and brand */}
-//       <Grid container spacing={2}>
-//         <Grid item>
-//           {productImage ? (
-//             <Box display="flex" alignItems="center" height="100%">
-//               <img
-//                 alt={product_name}
-//                 src={productImage}
-//                 style={{ height: '60px', width: '60px' }}
-//               />
-//             </Box>
-//           ) : (
-//             <Box height="60px" width="60px" p={2} />
-//           )}
-//         </Grid>
-//         <Grid item xs={8}>
-//           <Typography>{product_name}</Typography>
-//           {brand && (
-//             <Typography variant="body2" color="textSecondary">
-//               {brand}
-//             </Typography>
-//           )}
-//           <PrimaryTextButton
-//             onClick={() => handleViewProduct(product_id)}
-//             style={{
-//               fontSize: '14px',
-//               fontWeight: 'normal',
-//               paddingLeft: '0',
-//               paddingTop: '2px',
-//             }}
-//           >
-//             View Product
-//           </PrimaryTextButton>
-//         </Grid>
-//       </Grid>
-
-//       {/* Quantity adjustment and subtotal */}
-//       <Box my={1}>
-//         <Grid container alignItems="center" justify="space-between">
-//           <Grid item>
-//             <Box display="flex" alignItems="center">
-//               <IconButton
-//                 color="primary"
-//                 disableRipple
-//                 onClick={() => handleUpdateQuantity(-1)}
-//                 disabled={customer_quantity < 2 || isLoading}
-//               >
-//                 {isLoading && !increasedQty ? (
-//                   <CircularProgress size={24} />
-//                 ) : (
-//                   <RemoveIcon />
-//                 )}
-//               </IconButton>
-//               <Typography>{customer_quantity}</Typography>
-//               <IconButton
-//                 color="primary"
-//                 disableRipple
-//                 onClick={() => handleUpdateQuantity(1)}
-//                 disabled={customer_quantity > 9 || isLoading}
-//               >
-//                 {isLoading && increasedQty ? (
-//                   <CircularProgress size={24} />
-//                 ) : (
-//                   <AddIcon />
-//                 )}
-//               </IconButton>
-//             </Box>
-//           </Grid>
-//           <Typography style={{ fontWeight: 'bold' }} align="center">
-//             {formatMoney(item.total / 100)}
-//           </Typography>
-//         </Grid>
-//       </Box>
-//       <Box mb={1}>
-//         <Divider />
-//       </Box>
-//     </Box>
-//   );
-// }

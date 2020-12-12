@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 export default function AddressRadioItem({
   address,
   selected,
-  isPreferredAddress,
+  preferredAddressId,
 }) {
   const classes = useStyles();
   const value = address._id;
@@ -36,7 +36,7 @@ export default function AddressRadioItem({
         value={value}
         checked={isSelected}
         label={
-          <Address address={address} isPreferredAddress={isPreferredAddress} />
+          <Address address={address} preferredAddressId={preferredAddressId} />
         }
       />
       <Divider />

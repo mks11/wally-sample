@@ -118,7 +118,7 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
       if (_id === paymentIdCookie) {
         // Remove the user's selected payment method cookie if they decide to remove
         // the payment method it corresponds to.
-        setCookie('paymentId', '');
+        setCookie('paymentId', '', { path: '/' });
       }
       await userStore.getUser();
     } catch (error) {
@@ -194,9 +194,9 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
   );
 });
 
-export const CreditCard = ({ paymentMethod }) => {
+export const CreditCard = ({ my, paymentMethod }) => {
   return (
-    <Box my={1} display="flex" alignItems="center">
+    <Box my={my || 1} display="flex" alignItems="center">
       <CreditCardLogo brand={paymentMethod.brand} />
       <CreditCardDetails paymentMethod={paymentMethod} />
     </Box>
@@ -227,7 +227,14 @@ export function CreditCardLogo({ brand }) {
       justifyContent="center"
     >
       {logo ? (
-        <Box border="2px solid #949494" borderRadius="4px" padding="2px">
+        <Box
+          border="1px solid #949494"
+          borderRadius="4px"
+          padding="1px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
           <img
             src={logo}
             alt={alt}

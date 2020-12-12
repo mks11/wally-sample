@@ -9,14 +9,13 @@ function PackagingDepositInfo() {
       </Typography>
       <Typography gutterBottom>
         We charge a deposit for each piece of packaging used in your order. When
-        you've returned your packaging to us, your Wally Shop account will be
-        credited for each piece of packaging we receive.
+        you return your packaging to us, your account will be credited for each
+        piece of packaging we receive.
       </Typography>
       <Typography gutterBottom>
-        Your packaging balance will be automatically used to cover the packaging
-        deposit of future purchases. If the amount of the deposit on your future
-        order costs more than your current balance, you'll only pay the
-        difference.
+        Your packaging balance will be used to cover the packaging deposit of
+        future purchases. If the amount of the deposit on your future order
+        costs more than your current balance, you'll only pay the difference.
       </Typography>
       <Typography gutterBottom>
         If you prefer, you can{' '}
@@ -40,7 +39,7 @@ function PackagingDepositInfo() {
       <List>
         <ListItem>
           <Typography>
-            <strong>Shipping Totes </strong> - $10 each (one size only)
+            <strong>Shipping Tote</strong> - $10 each (one size)
           </Typography>
         </ListItem>
         <ListItem>

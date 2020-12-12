@@ -21,7 +21,7 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Styled components
-import { PrimaryWallyButtonLink } from 'styled-component-lib/Links';
+import { PrimaryContainedLink } from 'styled-component-lib/Links';
 
 const ReviewCart = ({ breadcrumbs, location }) => {
   const theme = useTheme();
@@ -136,11 +136,11 @@ const ReviewCart = ({ breadcrumbs, location }) => {
             <CartSummary />
             {impulseProducts.length ? (
               <Box display="flex" justifyContent="center" p={2}>
-                <PrimaryWallyButtonLink to="/checkout/shipping">
+                <PrimaryContainedLink to="/checkout/shipping">
                   <Typography component="span" variant="h6">
                     Continue To Shipping
                   </Typography>
-                </PrimaryWallyButtonLink>
+                </PrimaryContainedLink>
               </Box>
             ) : null}
           </Box>

@@ -24,7 +24,7 @@ import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
 // Styled components
-import { PrimaryWallyButtonLink } from 'styled-component-lib/Links';
+import { PrimaryContainedLink } from 'styled-component-lib/Links';
 
 export const MobileUserNav = observer(() => {
   const { user } = useStores();
@@ -118,11 +118,11 @@ const Cart = observer(() => {
           <CartSummary />
         </Suspense>
         <Box display="flex" justifyContent="center" py={2}>
-          <PrimaryWallyButtonLink to="/checkout/cart" onClick={handleCheckout}>
+          <PrimaryContainedLink to="/checkout/cart" onClick={handleCheckout}>
             <Typography component="span" variant="h6">
               Continue To Checkout
             </Typography>
-          </PrimaryWallyButtonLink>
+          </PrimaryContainedLink>
         </Box>
       </>,
       'right',

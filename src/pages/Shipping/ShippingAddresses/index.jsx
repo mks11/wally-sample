@@ -50,7 +50,7 @@ function ShippingAddresses({ onSave, name }) {
         {selectedAddress ? (
           <Address
             address={selectedAddress}
-            isPreferredAddress={addressId === user.preferred_address}
+            preferredAddressId={user.preferred_address}
           />
         ) : (
           <Box p={2}>
@@ -65,9 +65,9 @@ function ShippingAddresses({ onSave, name }) {
             </Box>
             <AddressList
               addresses={user ? user.addresses : []}
-              defaultAddressId={user ? user.preferred_address : null}
               name={name}
               onChange={handleSelect}
+              preferredAddressId={user.preferred_address}
               selected={selectedAddress}
             />
           </>

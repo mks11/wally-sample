@@ -52,7 +52,7 @@ const Payment = observer(({ breadcrumbs, location }) => {
   const handleSavePayment = (value) => {
     setCookie('paymentId', value, {
       maxAge: 60 * 60 * 24 * 7,
-      path: '/checkout',
+      path: '/',
     });
   };
 

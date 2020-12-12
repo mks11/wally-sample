@@ -5,44 +5,32 @@ import RadioGroup from 'common/RadioGroup';
 import { useFormikContext } from 'formik';
 import moment from 'moment';
 
-function ShippingOptions({ onSave, name }) {
-  const OPTIONS = [
-    {
-      leastShippingDays: 1,
-      mostShippingDays: 5,
-      name: 'UPS Ground',
-      price: '8.99',
-      value: 'ups_ground',
-    },
-  ];
+export const OPTIONS = [
+  {
+    leastNumDays: 1,
+    mostNumDays: 5,
+    earliestDeliveryDay: moment().add(1, 'd').format('MM/DD/YY'),
+    latestDeliveryDay: moment().add(5, 'd').format('MM/DD/YY'),
+    name: 'UPS Ground',
+    price: '8.99',
+    value: 'ups_ground',
+  },
+];
 
+function ShippingOptions({ onSave, name }) {
   const { values, setFieldValue } = useFormikContext() || {};
   const shippingServiceLevel = values[name];
-  const collapsedHeight = shippingServiceLevel ? 50 : 50;
+  const collapsedHeight = 20;
   const showSaveButton = OPTIONS.length > 3;
 
   const handleChange = (val) => {
     setFieldValue(name, val);
   };
 
-  const getSelectedShippingDates = () => {
-    const option = OPTIONS.find((v) => v.value === shippingServiceLevel);
-    return option && calcDeliveryDates(option);
-  };
-
-  const calcDeliveryDates = (option) => {
-    if (!option) return;
-    const { leastShippingDays, mostShippingDays } = option;
-    // ex: Monday, January 4th
-    const earliestDeliveryDay = moment()
-      .add(leastShippingDays, 'd')
-      .format('dddd, MMMM Do');
-    const latestDeliveryDay = moment()
-      .add(mostShippingDays, 'd')
-      .format('dddd, MMMM Do');
-
-    return earliestDeliveryDay + ' - ' + latestDeliveryDay;
-  };
+  const selectedShippingMethod = OPTIONS.find(
+    (o) => o.value === shippingServiceLevel,
+  );
+  const deliveryDates = getDeliveryDates(selectedShippingMethod);
 
   return (
     <CollapseCard
@@ -52,27 +40,19 @@ function ShippingOptions({ onSave, name }) {
       onSave={onSave}
       showSaveButton={showSaveButton}
     >
-      <Box p={1}>
+      <Box>
         <Typography>
-          {getSelectedShippingDates() || 'No shipping method selected.'}
+          {deliveryDates || 'No shipping method selected.'}
         </Typography>
       </Box>
       <RadioGroup
         items={OPTIONS}
         onChange={handleChange}
         valueFn={(v) => v.value}
-        Label={({ item }) => (
-          <Box p={2}>
-            <Typography style={{ fontWeight: 'bold' }}>
-              {calcDeliveryDates(item)} *
-            </Typography>
-            <Typography component="span">${item.price}</Typography>
-            <Typography component="span"> via {item.name}</Typography>
-          </Box>
-        )}
+        Label={({ item }) => <ShippingMethod method={item} />}
         isChecked={(item) => item.value === shippingServiceLevel}
       />
-      <Box mb={4}>
+      <Box mb={showSaveButton ? 4 : 0}>
         <Typography variant="body2" color="textSecondary">
           * Delivery may take longer than usual due to increased shipping lead
           times caused by COVID-19. For more information, visit{' '}
@@ -91,3 +71,21 @@ function ShippingOptions({ onSave, name }) {
 }
 
 export default ShippingOptions;
+
+export function getDeliveryDates(method) {
+  const { earliestDeliveryDay, latestDeliveryDay } = method;
+  return 'Get it between ' + earliestDeliveryDay + ' and ' + latestDeliveryDay;
+}
+
+const ShippingMethod = ({ method }) => {
+  const { leastNumDays, mostNumDays, name, price } = method;
+  return (
+    <Box p={2}>
+      <Typography style={{ fontWeight: 'bold' }}>{name}</Typography>
+      <Typography color="textSecondary">
+        Delivery in {leastNumDays} to {mostNumDays} days*
+      </Typography>
+      <Typography>${price}</Typography>
+    </Box>
+  );
+};
