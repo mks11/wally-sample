@@ -1,18 +1,14 @@
 import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 import { logPageView } from 'services/google-analytics';
-import { connect, formatMoney } from '../utils';
-import styled from 'styled-components';
+import { connect } from '../utils';
 
 // Components
 import Head from 'common/Head';
-import { PageTitle } from 'common/page/Title';
-import { Container, Grid, Paper, Typography } from '@material-ui/core';
+import PageSection from 'common/PageSection';
 
-const OrderHelpCTA = styled(Paper)`
-  padding: 2rem;
-  margin-bottom: 2rem;
-`;
+// Material UI
+import { Box, Card, Container, Grid, Typography } from '@material-ui/core';
 
 class Help extends Component {
   state = {
@@ -85,46 +81,45 @@ class Help extends Component {
           title="Help"
           description="Get help with The Wally Shop's service."
         />
-        <PageTitle variant="h1" gutterBottom>
-          Help
-        </PageTitle>
 
-        <section className="page-section aw-our--story">
+        <PageSection>
           <Grid container>
             <Grid item xs={12}>
-              <OrderHelpCTA elevation={3}>
-                <Typography variant="h2" gutterBottom>
-                  Having a problem?
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  You can report a problem with your order or packaging return
-                  on{' '}
-                  <Link to="/orders" style={{ color: '#6060a8' }}>
-                    the order history page
-                  </Link>
-                  .
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Locate the order or packaging return you're having trouble
-                  with, then click the{' '}
-                  <span>
-                    <strong>'Report A Problem'</strong>
-                  </span>{' '}
-                  button to file your request for support.
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  For all other support related matters, contact us at{' '}
-                  <a
-                    href="mailto:info@thewallyshop.co"
-                    target="_blank"
-                    rel="noopenner noreferrer"
-                    style={{ color: '#6060a8' }}
-                  >
-                    info@thewallyshop.co
-                  </a>
-                  .
-                </Typography>
-              </OrderHelpCTA>
+              <Card elevation={2}>
+                <Box p={4}>
+                  <Typography variant="h1" gutterBottom>
+                    Having a problem?
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    You can report a problem with your order or packaging return
+                    on{' '}
+                    <Link to="/orders" style={{ color: '#6060a8' }}>
+                      the order history page
+                    </Link>
+                    .
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Locate the order or packaging return you're having trouble
+                    with, then click the{' '}
+                    <span>
+                      <strong>'Report A Problem'</strong>
+                    </span>{' '}
+                    button to file your request for support.
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    For all other support related matters, contact us at{' '}
+                    <a
+                      href="mailto:info@thewallyshop.co"
+                      target="_blank"
+                      rel="noopenner noreferrer"
+                      style={{ color: '#6060a8' }}
+                    >
+                      info@thewallyshop.co
+                    </a>
+                    .
+                  </Typography>
+                </Box>
+              </Card>
             </Grid>
           </Grid>
           <div className="help-content mt-5">
@@ -253,7 +248,7 @@ class Help extends Component {
               </Fragment>
             )}
           </div>
-        </section>
+        </PageSection>
       </Container>
     );
   }
