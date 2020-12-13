@@ -23,6 +23,7 @@ import { useStores } from 'hooks/mobx';
 export default function CollapseCard({
   children,
   collapsedHeight = 100,
+  elevation = 3,
   name,
   onSave,
   showSaveButton,
@@ -33,27 +34,33 @@ export default function CollapseCard({
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
   const hasError = meta.touched && meta.error;
-
+  const transitionTime = 500;
   const handleOpen = () => {
     setIsOpen(true);
   };
 
   const handleSave = () => {
-    onSave && onSave(field.value);
     setIsOpen(false);
-    snackbar.openSnackbar(title + ' saved.', 'success', 3000);
+    if (onSave && field.value) {
+      onSave(field.value);
+      setTimeout(
+        () => snackbar.openSnackbar(title + ' saved.', 'success', 3000),
+        transitionTime,
+      );
+    }
   };
 
   return (
-    <Box mb={1}>
+    <Box mb={2}>
       <Card
         style={{
           border: hasError
             ? `1px solid ${theme.palette.error.main}`
             : '1px solid transparent',
         }}
+        elevation={elevation}
       >
-        <Box p={4}>
+        <Box p={2} pb={0}>
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
               <Typography component="h1" variant="h3">
@@ -72,7 +79,7 @@ export default function CollapseCard({
           <Collapse
             in={isOpen}
             collapsedHeight={collapsedHeight}
-            timeout="auto"
+            timeout={transitionTime}
           >
             <Box>{children}</Box>
             {showSaveButton ? (
@@ -85,11 +92,11 @@ export default function CollapseCard({
               </Container>
             ) : null}
           </Collapse>
+          <HelperText error={hasError ? true : false}>
+            {hasError ? meta.error : ' '}
+          </HelperText>
         </Box>
       </Card>
-      <HelperText error={hasError ? true : false}>
-        {hasError ? meta.error : ' '}
-      </HelperText>
     </Box>
   );
 }
