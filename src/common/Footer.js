@@ -93,6 +93,9 @@ function Footer() {
             <FooterSectionHeader>SUPPORT</FooterSectionHeader>
             <List>
               <ListItem disableGutters>
+                <Link to={'/help'}>Help</Link>
+              </ListItem>
+              <ListItem disableGutters>
                 <a href="mailto:info@thewallyshop.co">Contact Us</a>
               </ListItem>
               <ListItem disableGutters>
