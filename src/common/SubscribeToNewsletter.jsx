@@ -91,9 +91,6 @@ export function SubscribeToNewsletterForm() {
                   type="submit"
                   isLoading={isSubmitting}
                   loadingTitle="Subscribing..."
-                  loaderProps={{
-                    size: 22,
-                  }}
                   fullWidth
                   style={{ paddingTop: '12.5px', paddingBottom: '12.5px' }}
                 >

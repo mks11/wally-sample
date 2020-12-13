@@ -71,7 +71,6 @@ export const ActivityButton = ({
   disabled = true, // default disable while submitting
   children,
   component,
-  loaderProps,
   ...rest
 }) => {
   const Comp = component || PrimaryWallyButton;
@@ -89,7 +88,7 @@ export const ActivityButton = ({
         */}
         <CircularProgress
           color={color}
-          {...loaderProps}
+          size={22}
           style={{ marginLeft: '3px' }}
         />
       </Comp>
