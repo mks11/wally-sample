@@ -1,4 +1,9 @@
 import React from 'react';
+
+// API
+import { createAddress } from 'api/address';
+
+// Forms
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone';
@@ -6,14 +11,20 @@ import {
   TextInput,
   FormikPlacesAutoComplete,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import { Box, Grid, Typography } from '@material-ui/core';
-import { useStores } from 'hooks/mobx';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { Checkbox } from 'common/FormikComponents/NonRenderPropAPI';
-import { createAddress } from 'api/address';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 
-export default function AddressCreateForm({ onCreate }) {
+// Material UI
+import { Box, Grid, Typography } from '@material-ui/core';
+
+// MobX
+import { observer } from 'mobx-react';
+import { useStores } from 'hooks/mobx';
+
+// Styled Components
+import { ActivityButton } from 'styled-component-lib/Buttons';
+
+function AddressCreateForm({ onCreate }) {
   const stores = useStores();
   const {
     modalV2: modalV2Store,
@@ -21,15 +32,16 @@ export default function AddressCreateForm({ onCreate }) {
     user: userStore,
   } = stores;
   const { user } = userStore;
-  const handleSubmit = async (values, setFieldError) => {
+  const handleSubmit = async (values, { setFieldError, setSubmitting }) => {
     try {
       const auth = userStore.getHeaderAuth();
       let res = await createAddress(values, auth);
       if (res && res.data) {
         const { address } = res.data;
         await userStore.getUser();
-        modalV2Store.close();
         onCreate && onCreate(address._id);
+        setSubmitting(false);
+        modalV2Store.close();
         snackbarStore.openSnackbar('Address created successfully!', 'success');
       }
     } catch ({ response }) {
@@ -40,6 +52,7 @@ export default function AddressCreateForm({ onCreate }) {
       } else {
         snackbarStore.openSnackbar('Failed to create new address.', 'error');
       }
+      setSubmitting(false);
     }
   };
 
@@ -72,9 +85,8 @@ export default function AddressCreateForm({ onCreate }) {
           zip: Yup.string().required("Zip can't be blank"),
           isPreferredAddress: Yup.bool(),
         })}
-        onSubmit={(values, { setFieldError, setSubmitting }) => {
-          handleSubmit(values, setFieldError);
-          setSubmitting(false);
+        onSubmit={(values, actions) => {
+          handleSubmit(values, actions);
         }}
       >
         {({ isSubmitting }) => (
@@ -160,13 +172,15 @@ export default function AddressCreateForm({ onCreate }) {
             <Grid container justify="center">
               <Grid item>
                 <Box py={2}>
-                  <PrimaryWallyButton
-                    type="submit"
-                    fullWidth
+                  <ActivityButton
                     disabled={isSubmitting ? true : false}
+                    fullWidth
+                    isLoading={isSubmitting}
+                    loadingTitle={'Loading...'}
+                    type="submit"
                   >
-                    Add New Address
-                  </PrimaryWallyButton>
+                    Submit
+                  </ActivityButton>
                 </Box>
               </Grid>
             </Grid>
@@ -176,3 +190,5 @@ export default function AddressCreateForm({ onCreate }) {
     </>
   );
 }
+
+export default observer(AddressCreateForm);
