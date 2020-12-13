@@ -19,7 +19,8 @@ function Payment({ onSave, name }) {
   const selectedPaymentMethod = user
     ? user.payment.find((p) => p._id === paymentMethodId)
     : '';
-  const showSaveButton = user && user.payment && user.payment.length >= 3;
+  const showSaveButton =
+    user && user.payment && user.payment.filter((p) => p.is_active).length >= 3;
 
   const handleSelect = (paymentMethodId) => {
     setFieldValue && setFieldValue(name, paymentMethodId);
@@ -29,6 +30,7 @@ function Payment({ onSave, name }) {
     <CollapseCard
       title="Payment"
       collapsedHeight={50}
+      elevation={0}
       name={name}
       onSave={onSave}
       showSaveButton={showSaveButton}

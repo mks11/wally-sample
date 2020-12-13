@@ -12,7 +12,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 // Material UI
-import { Box, Container } from '@material-ui/core';
+import { Box, Card, Container } from '@material-ui/core';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -59,35 +59,37 @@ const Payment = observer(({ breadcrumbs, location }) => {
   return (
     <Container maxWidth="md">
       <CheckoutFlowBreadcrumbs breadcrumbs={breadcrumbs} location={location} />
-      <Box my={4}>
-        <Formik
-          initialValues={{
-            paymentId: paymentId || preferredPaymentId || '',
-          }}
-          validationSchema={Yup.object({
-            paymentId: Yup.string().required(
-              'You must enter a payment method.',
-            ),
-          })}
-          enableReinitialize
-          onSubmit={(values, { setSubmitting }) => {
-            handleSavePayment(values.paymentId);
-            setSubmitting(false);
-            routing.push('/checkout/review');
-          }}
-        >
-          <Form>
-            {userStore.user && (
-              <PaymentOptions onSave={handleSavePayment} name="paymentId" />
-            )}
-            <Box display="flex" justifyContent="center">
-              <PrimaryWallyButton type="submit">
-                Continue to Place Order
-              </PrimaryWallyButton>
-            </Box>
-          </Form>
-        </Formik>
-      </Box>
+      <Card style={{ background: 'rgba(0, 0, 0, 0.05)' }}>
+        <Box p={2}>
+          <Formik
+            initialValues={{
+              paymentId: paymentId || preferredPaymentId || '',
+            }}
+            validationSchema={Yup.object({
+              paymentId: Yup.string().required(
+                'You must enter a payment method.',
+              ),
+            })}
+            enableReinitialize
+            onSubmit={(values, { setSubmitting }) => {
+              handleSavePayment(values.paymentId);
+              setSubmitting(false);
+              routing.push('/checkout/review');
+            }}
+          >
+            <Form>
+              {userStore.user && (
+                <PaymentOptions onSave={handleSavePayment} name="paymentId" />
+              )}
+              <Box display="flex" justifyContent="center">
+                <PrimaryWallyButton type="submit">
+                  Continue to Place Order
+                </PrimaryWallyButton>
+              </Box>
+            </Form>
+          </Formik>
+        </Box>
+      </Card>
     </Container>
   );
 });

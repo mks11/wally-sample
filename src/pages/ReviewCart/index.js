@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 // Custom Components
 import CartSummary from 'common/CartSummary';
 import CheckoutFlowBreadCrumbs from 'common/CheckoutFlowBreadcrumbs';
-import EmptyCartMessage from './EmptyCartMessage';
+
 import ImageCarousel from 'common/ImageCarousel';
 
 // Material UI
@@ -21,7 +21,10 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Styled components
-import { PrimaryContainedLink } from 'styled-component-lib/Links';
+import {
+  InternalWallyLink,
+  PrimaryContainedLink,
+} from 'styled-component-lib/Links';
 
 const ReviewCart = ({ breadcrumbs, location }) => {
   const theme = useTheme();
@@ -44,7 +47,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
     user: userStore,
   } = useStores();
 
-  const { cart, isRetrievingCart } = checkoutStore;
+  const { cart } = checkoutStore;
   const [impulseProducts, setImpulseProducts] = useState([]);
 
   useEffect(() => {
@@ -92,60 +95,65 @@ const ReviewCart = ({ breadcrumbs, location }) => {
   return (
     <Container maxWidth="md">
       <CheckoutFlowBreadCrumbs breadcrumbs={breadcrumbs} location={location} />
-      <Box mb={4}>
-        {cart && items.length < 1 ? (
-          <Box py={2} px={1}>
-            <EmptyCartMessage />
-          </Box>
-        ) : (
-          <Card
-            style={{ background: 'rgba(0, 0, 0, 0.05)', marginTop: '32px' }}
-          >
-            <Box py={2} px={1}>
-              <Box>
-                {/* Impulse products */}
-                <Box px={1}>
+      <Card style={{ background: 'rgba(0, 0, 0, 0.05)' }}>
+        <Box p={2}>
+          <Card elevation={0}>
+            <Box p={2}>
+              {cart && items.length < 1 ? (
+                <>
+                  <Typography variant="h1">Your cart is empty.</Typography>
+                  <Typography variant="body1">
+                    Why don’t you{' '}
+                    <InternalWallyLink to="/main">
+                      head back to our shop
+                    </InternalWallyLink>{' '}
+                    so we can fix that?
+                  </Typography>
+                </>
+              ) : (
+                <>
                   <Typography component="h1" variant="h2" gutterBottom>
                     Need anything else?
                   </Typography>
-                </Box>
-                {impulseProducts.length > 0 ? (
-                  <ImageCarousel
-                    keyName="impulse-products"
-                    height={184}
-                    numSlides={12}
-                    width={384}
-                    slides={slides}
-                    visibleSlides={visibleSlides}
-                  />
-                ) : (
-                  <Card style={{ height: '184px' }} />
-                )}
-              </Box>
+                  {impulseProducts.length > 0 ? (
+                    <ImageCarousel
+                      keyName="impulse-products"
+                      height={250}
+                      numSlides={12}
+                      width={384}
+                      slides={slides}
+                      visibleSlides={visibleSlides}
+                    />
+                  ) : (
+                    <Card style={{ height: '184px' }} />
+                  )}
+                </>
+              )}
             </Box>
           </Card>
-        )}
-        <br />
 
-        {/* Cart */}
-        <Card elevation={2}>
-          <Box p={2}>
-            <Typography component="h1" variant="h2" gutterBottom>
-              Review your cart
-            </Typography>
-            <CartSummary />
-            {impulseProducts.length ? (
-              <Box display="flex" justifyContent="center" p={2}>
-                <PrimaryContainedLink to="/checkout/shipping">
-                  <Typography component="span" variant="h6">
-                    Continue To Shipping
-                  </Typography>
-                </PrimaryContainedLink>
+          {/* Cart */}
+          {cart && items.length ? (
+            <Card elevation={0} style={{ marginTop: '1rem' }}>
+              <Box p={2}>
+                <Typography component="h1" variant="h2" gutterBottom>
+                  Review your cart
+                </Typography>
+                <CartSummary />
+                {impulseProducts.length ? (
+                  <Box display="flex" justifyContent="center" pt={2}>
+                    <PrimaryContainedLink to="/checkout/shipping">
+                      <Typography component="span" variant="h6">
+                        Continue To Shipping
+                      </Typography>
+                    </PrimaryContainedLink>
+                  </Box>
+                ) : null}
               </Box>
-            ) : null}
-          </Box>
-        </Card>
-      </Box>
+            </Card>
+          ) : null}
+        </Box>
+      </Card>
     </Container>
   );
 };
@@ -179,9 +187,9 @@ function ImpulseProduct({ product }) {
   return (
     <Card
       onClick={() => handleProductClick(product.product_id)}
-      style={{ cursor: 'pointer', height: '98%', margin: '0 8px' }}
+      style={{ cursor: 'pointer', height: '98%', margin: '0 4px' }}
     >
-      <Box p={2} height="100%">
+      <Box p={1} height="100%" display="flex" alignItems="center">
         <Grid
           container
           alignItems="center"

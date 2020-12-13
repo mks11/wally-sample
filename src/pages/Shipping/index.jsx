@@ -13,7 +13,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 // Material UI
-import { Box, Container } from '@material-ui/core';
+import { Box, Card, Container } from '@material-ui/core';
 
 // MobX
 import { useStores } from 'hooks/mobx';
@@ -66,44 +66,49 @@ const Shipping = observer(({ breadcrumbs, location }) => {
   return (
     <Container maxWidth="md">
       <CheckoutFlowBreadcrumbs breadcrumbs={breadcrumbs} location={location} />
-      <Box my={4}>
-        <Formik
-          initialValues={{
-            addressId: addressId || preferredAddresId || '',
-            shippingServiceLevel: shippingServiceLevel || 'ups_ground',
-          }}
-          validationSchema={Yup.object({
-            addressId: Yup.string().required(
-              'You must enter your shipping address.',
-            ),
-            shippingServiceLevel: Yup.string().required(
-              'You must select a shipping method.',
-            ),
-          })}
-          enableReinitialize
-          onSubmit={(values, { setSubmitting }) => {
-            handleSaveAddress(values.addressId);
-            handleSaveShippingMethod(values.shippingServiceLevel);
-            setSubmitting(false);
-            routing.push('/checkout/payment');
-          }}
-        >
-          <Form>
-            {userStore.user && (
-              <ShippingAddresses onSave={handleSaveAddress} name="addressId" />
-            )}
-            <ShippingOptions
-              name="shippingServiceLevel"
-              onSave={handleSaveShippingMethod}
-            />
-            <Box display="flex" justifyContent="center">
-              <PrimaryWallyButton type="submit">
-                Continue to Payment
-              </PrimaryWallyButton>
-            </Box>
-          </Form>
-        </Formik>
-      </Box>
+      <Card style={{ background: 'rgba(0, 0, 0, 0.05)' }}>
+        <Box p={2}>
+          <Formik
+            initialValues={{
+              addressId: addressId || preferredAddresId || '',
+              shippingServiceLevel: shippingServiceLevel || 'ups_ground',
+            }}
+            validationSchema={Yup.object({
+              addressId: Yup.string().required(
+                'You must enter your shipping address.',
+              ),
+              shippingServiceLevel: Yup.string().required(
+                'You must select a shipping method.',
+              ),
+            })}
+            enableReinitialize
+            onSubmit={(values, { setSubmitting }) => {
+              handleSaveAddress(values.addressId);
+              handleSaveShippingMethod(values.shippingServiceLevel);
+              setSubmitting(false);
+              routing.push('/checkout/payment');
+            }}
+          >
+            <Form>
+              {userStore.user && (
+                <ShippingAddresses
+                  onSave={handleSaveAddress}
+                  name="addressId"
+                />
+              )}
+              <ShippingOptions
+                name="shippingServiceLevel"
+                onSave={handleSaveShippingMethod}
+              />
+              <Box display="flex" justifyContent="center">
+                <PrimaryWallyButton type="submit">
+                  Continue to Payment
+                </PrimaryWallyButton>
+              </Box>
+            </Form>
+          </Formik>
+        </Box>
+      </Card>
     </Container>
   );
 });

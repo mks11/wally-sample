@@ -41,38 +41,37 @@ function ShippingAddresses({ onSave, name }) {
   return (
     <CollapseCard
       collapsedHeight={collapsedHeight}
+      elevation={0}
       onSave={onSave}
       name="addressId"
       showSaveButton={showSaveButton}
       title="Shipping Address"
     >
-      <Box>
-        {selectedAddress ? (
-          <Address
-            address={selectedAddress}
-            preferredAddressId={user.preferred_address}
-          />
-        ) : (
-          <Box p={2}>
-            <Typography>No shipping address selected.</Typography>
+      {selectedAddress ? (
+        <Address
+          address={selectedAddress}
+          preferredAddressId={user.preferred_address}
+        />
+      ) : (
+        <Box py={2}>
+          <Typography>No shipping address selected.</Typography>
+        </Box>
+      )}
+      <AddNewAddress onCreate={handleSelect} />
+      {selectedAddress && (
+        <>
+          <Box py={2}>
+            <Divider />
           </Box>
-        )}
-        <AddNewAddress onCreate={handleSelect} />
-        {selectedAddress && (
-          <>
-            <Box py={2}>
-              <Divider />
-            </Box>
-            <AddressList
-              addresses={user ? user.addresses : []}
-              name={name}
-              onChange={handleSelect}
-              preferredAddressId={user.preferred_address}
-              selected={selectedAddress}
-            />
-          </>
-        )}
-      </Box>
+          <AddressList
+            addresses={user ? user.addresses : []}
+            name={name}
+            onChange={handleSelect}
+            preferredAddressId={user.preferred_address}
+            selected={selectedAddress}
+          />
+        </>
+      )}
     </CollapseCard>
   );
 }

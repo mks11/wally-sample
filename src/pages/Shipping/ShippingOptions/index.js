@@ -36,6 +36,7 @@ function ShippingOptions({ onSave, name }) {
     <CollapseCard
       title="Shipping Options"
       collapsedHeight={collapsedHeight}
+      elevation={0}
       name={name}
       onSave={onSave}
       showSaveButton={showSaveButton}

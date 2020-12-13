@@ -145,7 +145,6 @@ function Checkout({ breadcrumbs, location }) {
                                   fullWidth
                                   disabled={isSubmitting}
                                   disableElevation
-                                  disableRipple
                                 >
                                   Place Order
                                 </PrimaryWallyButton>
@@ -414,7 +413,7 @@ const OrderSummary = observer(() => {
           >
             <Box display="flex" alignItems="center">
               <Typography>Packaging Deposit</Typography>
-              <IconButton disableRipple onClick={handlePackagingDepositClick}>
+              <IconButton onClick={handlePackagingDepositClick}>
                 <InfoIcon />
               </IconButton>
             </Box>
