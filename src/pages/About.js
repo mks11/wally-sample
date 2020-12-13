@@ -32,15 +32,16 @@ function About() {
       description="Learn more about The Wally Shop's history and vision for a zero-waste future."
     >
       <PageSection>
+        <Typography variant="h1" gutterBottom>
+          We deliver your favorites from the brands you love, 100% waste-free.
+        </Typography>
         <Grid container alignItems="center" spacing={4}>
-          <Grid item xs={12} md={6} lg={4}>
-            <AboutPhoto />
+          <Grid item xs={12} md={5} lg={4}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <AboutPhoto />
+            </Box>
           </Grid>
-          <Grid item xs={12} md={6} lg={8}>
-            <Typography variant="h1" gutterBottom>
-              We deliver your favorites from the brands you love, 100%
-              waste-free.
-            </Typography>
+          <Grid item xs={12} md={7} lg={8}>
             <Typography gutterBottom>
               We're introducing a whole new way to shop sustainably. Our vision
               is to help you shop for everything (bulk foods! Beauty products!
