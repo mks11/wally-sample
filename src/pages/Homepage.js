@@ -1,31 +1,28 @@
 import React, { useEffect } from 'react';
 import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
-import { observer } from 'mobx-react';
 
-import SignupForm from 'forms/authentication/SignupForm';
-
-import intro450 from 'images/intro-450.jpg';
-import intro600 from 'images/intro-600.jpg';
-
-import order450 from 'images/order-450.jpg';
-import order600 from 'images/order-600.jpg';
-
-import tote450 from 'images/tote-450.jpg';
-import tote600 from 'images/tote-600.jpg';
-
-import returnPackaging450 from 'images/return-packaging-450.jpg';
-import returnPackaging600 from 'images/return-packaging-600.jpg';
-import { useStores } from 'hooks/mobx';
-
-import { Box, Container, Grid, Typography } from '@material-ui/core';
-import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
-
-import styled from 'styled-components';
-import HowTo from './shared/HowTo';
+// Custom Components
 import Page from './shared/Page';
 import PageSection from 'common/PageSection';
-import ResponsivePhoto from 'common/ResponsivePhoto';
+import SignupForm from 'forms/authentication/SignupForm';
+
+// Images
+import intro600 from 'images/intro-600.jpg';
+import order600 from 'images/order-600.jpg';
+import tote600 from 'images/tote-600.jpg';
+import returnPackaging600 from 'images/return-packaging-600.jpg';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+// Material UI
+import { Box, Grid, Typography } from '@material-ui/core';
+
+// Styled Components
+import styled from 'styled-components';
+import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
 
 function Homepage() {
   const {
@@ -34,6 +31,7 @@ function Homepage() {
     routing: routingStore,
     metric: metricStore,
   } = useStores();
+  const { isAdmin, isOps, isOpsLead, isRetail, isUser, user } = userStore;
 
   useEffect(() => {
     const { location } = routingStore;
@@ -49,35 +47,31 @@ function Homepage() {
         metricStore.triggerAudienceSource('ig');
       }
     }
+  }, []);
 
+  useEffect(() => {
     redirectToShopIfLoggedIn();
-  }, [userStore.user, metricStore, routingStore]);
+  }, [user]);
 
   async function redirectToShopIfLoggedIn() {
-    if (userStore.user) {
-      const { user } = userStore;
-      if (user.type === 'admin') {
-        routingStore.push('/manage/retail');
-      } else {
-        routingStore.push('/main');
-      }
-    } else {
-      try {
-        await userStore.getStatus();
-      } catch (error) {
-        // TODO: Implement a more elegant error handler than this.
-        console.error("Couldn't check user's auth status.");
-      }
+    if (user && isAdmin) {
+      routingStore.push('/manage/retail');
+    } else if (user && (isOps || isOpsLead)) {
+      routingStore.push('/pick-pack');
+    } else if (user && isRetail) {
+      routingStore.push('/retail');
+    } else if (user && isUser) {
+      routingStore.push('/main');
     }
   }
 
   const handleSignup = (e) => {
-    logModalView('/signup-zip');
+    logModalView('/signup');
     modalV2Store.open(<SignupForm />);
   };
 
   const StartShoppingButton = () => (
-    <Box my={5}>
+    <Box mt={5}>
       <PrimaryWallyButton onClick={handleSignup}>
         Start Shopping
       </PrimaryWallyButton>
@@ -90,88 +84,156 @@ function Homepage() {
         backgroundImage: 'linear-gradient(#fae1ff, #fff)',
       }}
     >
-      <NowShippingNationWideBanner />
+      {/* <NowShippingNationWideBanner /> */}
       <PageSection>
-        <Grid display="flex" flex={1} alignItems="center" container>
-          <Grid item xs={12} sm={6} align="center">
-            <Container maxWidth="sm">
-              <IntroPhoto />
-            </Container>
+        <Grid alignItems="center" container justify="center" spacing={4}>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={intro600}
+                alt={'Man holding jar of green lentils.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
           </Grid>
-          <Grid item sm={6}>
-            <Container maxWidth="sm">
-              <Box my={5}>
-                <Typography variant="h1" gutterBottom>
-                  Do you, with reusables.
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  The Wally Shop connects you with your favorite brands 100%
-                  waste-free. Our vision is to help you shop for everything in
-                  all reusable packaging. We're now available nationwide!
-                </Typography>
-                <StartShoppingButton />
-              </Box>
-            </Container>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h1" gutterBottom>
+                Do you, with reusables.
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                The Wally Shop connects you with your favorite brands 100%
+                waste-free. Our vision is to help you shop for everything in all
+                reusable packaging.
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </PageSection>
 
       <PageSection>
-        <HowTo
-          title="Order"
-          description="Choose from hundreds of responsibly-made, price-competitive bulk foods. At checkout, you'll be charged a
-              deposit for your packaging."
-          photo={
-            <ResponsivePhoto
-              mobileSrc={order450}
-              desktopSrc={order600}
-              alt="Man giving money in exchange for a jar of pasta."
-            />
-          }
-          photoAlign="right"
-        />
+        <Grid container alignItems="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Order
+              </Typography>
+              <Typography variant="body1">
+                Choose from hundreds of responsibly-made, price-competitive bulk
+                foods. At checkout, you'll be charged a deposit for your
+                packaging.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={order600}
+                alt={'Man giving money in exchange for a jar of pasta.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
       <PageSection>
-        <HowTo
-          title="Receive"
-          description="Your order will arrive at your door in completely reusable,
-              returnable packaging. The shipping tote it arrives in folds up for
-              easy storage. Simple, convenient, 100% waste free shopping."
-          photo={
-            <ResponsivePhoto
-              mobileSrc={tote450}
-              desktopSrc={tote600}
-              alt="The Wally Shop's reusable tote."
-            />
-          }
-          photoAlign="left"
-        />
+        <Grid container alignItems="center" spacing={4}>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={tote600}
+                alt={"The Wally Shop's reusable tote."}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box p={3}>
+              <Typography variant="h2" gutterBottom>
+                Receive
+              </Typography>
+              <Typography variant="body1">
+                Your order will arrive at your door in completely reusable,
+                returnable packaging. The shipping tote it arrives in folds up
+                for easy storage. Simple, convenient, 100% waste free shopping.
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
       <PageSection>
-        <HowTo
-          title="Return"
-          description="Once finished, you'll schedule a free packaging pick up or leave your packaging with your courier during a future delivery. Once received at our warehouse, your deposit is credited back to you and the packaging is cleaned to be put back into circulation."
-          photo={
-            <ResponsivePhoto
-              mobileSrc={returnPackaging450}
-              desktopSrc={returnPackaging600}
-              alt="Returning an empty jar."
-            />
-          }
-          photoAlign="right"
-        />
+        <Grid container alignItems="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box p={3}>
+              <Typography variant="h2" gutterBottom>
+                Return
+              </Typography>
+              <Typography variant="body1">
+                Once finished, you'll schedule a free packaging pick up or leave
+                your packaging with your courier during a future delivery. Once
+                received at our warehouse, your deposit is credited back to you
+                and the packaging is cleaned to be put back into circulation.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={returnPackaging600}
+                alt={'Returning an empty jar.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
       <PageSection>
-        <Box px={2} my={5}>
-          <Typography variant="h2" gutterBottom>
-            Experience The Wally Shop
-          </Typography>
-          <Typography gutterBottom>
-            Thousands of shoppers are joining the reusables revolution. Now,
-            it's your turn.
-          </Typography>
-          <StartShoppingButton />
-        </Box>
+        <Grid container alignItems="center" justify="center">
+          <Grid item xs={12} md={6}>
+            <Box px={3} py={4}>
+              <Typography variant="h2" gutterBottom>
+                Experience The Wally Shop
+              </Typography>
+              <Typography gutterBottom>
+                Thousands of shoppers are joining the reusables revolution. Now,
+                it's your turn.
+              </Typography>
+              <StartShoppingButton />
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
     </Page>
   );
@@ -199,31 +261,21 @@ const ScrollingH1 = styled('h1')`
   color: #3c2ebf;
 `;
 
-function NowShippingNationWideBanner() {
-  return (
-    <Box overflow="hidden" whiteSpace="nowrap">
-      <ScrollingContainer>
-        <ScrollingH1>
-          Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-          nationwide ~{' '}
-        </ScrollingH1>
-      </ScrollingContainer>
-      <ScrollingContainer2>
-        <ScrollingH1>
-          Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-          nationwide ~{' '}
-        </ScrollingH1>
-      </ScrollingContainer2>
-    </Box>
-  );
-}
-
-function IntroPhoto() {
-  return (
-    <ResponsivePhoto
-      mobileSrc={intro450}
-      desktopSrc={intro600}
-      alt="Man holding jar of green lentils."
-    />
-  );
-}
+// function NowShippingNationWideBanner() {
+//   return (
+//     <Box overflow="hidden" whiteSpace="nowrap">
+//       <ScrollingContainer>
+//         <ScrollingH1>
+//           Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+//           nationwide ~{' '}
+//         </ScrollingH1>
+//       </ScrollingContainer>
+//       <ScrollingContainer2>
+//         <ScrollingH1>
+//           Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+//           nationwide ~{' '}
+//         </ScrollingH1>
+//       </ScrollingContainer2>
+//     </Box>
+//   );
+// }
