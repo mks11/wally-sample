@@ -277,9 +277,8 @@ function Routes(props) {
           }
         }}
       />
-      <Route exact path="/" component={Homepage} />
-      <Route component={Homepage} />{' '}
       {/* This catchall will redirect any unidentified routes to the homepage */}
+      <Route component={Homepage} />
     </Switch>
   );
 }
