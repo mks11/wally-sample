@@ -13,11 +13,12 @@ import RootModalV2 from 'modals/RootModalV2';
 import LoadingSpinner from 'modals/LoadingSpinner';
 import RootSnackbar from 'snackbars/RootSnackbar';
 
-// Hooks
-import { useStores } from 'hooks/mobx';
-
 // Material UI
 import { Box, Container, Typography } from '@material-ui/core';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
 
 // React Router
 import { Link } from 'react-router-dom';
@@ -25,8 +26,10 @@ import { Link } from 'react-router-dom';
 // Styled components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
-export default function Layout() {
-  const { user, modalV2 } = useStores();
+const Layout = observer(() => {
+  const { modalV2, snackbar, user: userStore } = useStores();
+  const { user, token } = userStore;
+
   const [cookies] = useCookies();
   const { hasReadCookieNotice } = cookies;
 
@@ -37,8 +40,8 @@ export default function Layout() {
   }, [hasReadCookieNotice]);
 
   useEffect(() => {
-    user.getStatus();
-  }, []);
+    loadUser();
+  }, [token, user]);
 
   return (
     <div className="app">
@@ -54,7 +57,22 @@ export default function Layout() {
       <LoadingSpinner />
     </div>
   );
-}
+
+  async function loadUser() {
+    try {
+      if (!user && token) {
+        await userStore.getStatus();
+      }
+    } catch (error) {
+      snackbar.openSnackbar(
+        "Failed to verify user's authentication status",
+        'error',
+      );
+    }
+  }
+});
+
+export default Layout;
 
 function CookieNotice() {
   const { modalV2 } = useStores();
