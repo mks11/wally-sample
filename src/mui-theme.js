@@ -38,6 +38,11 @@ let theme = createMuiTheme({
       main: '#CC2936',
     },
   },
+  props: {
+    MuiButton: {
+      disableElevation: true,
+    },
+  },
   typography: {
     h1: {
       fontFamily: ['ClearFace'].join(','),
@@ -103,8 +108,6 @@ let theme = createMuiTheme({
       },
     },
     MuiButton: {
-      disableElevation: true,
-      disableRipple: true,
       label: {
         textTransform: 'capitalize',
       },
