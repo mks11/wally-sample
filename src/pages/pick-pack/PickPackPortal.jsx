@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+// Material UI
 import {
   Button,
   Card,
@@ -11,14 +13,20 @@ import {
   Divider,
   Typography,
 } from '@material-ui/core';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
-import DatePicker from 'react-datepicker';
+import { useTheme } from '@material-ui/core/styles';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Error from '@material-ui/icons/Error';
 import Cancel from '@material-ui/icons/Cancel';
-import styled from 'styled-components';
+import DatePicker from 'react-datepicker';
 
-import { connect } from 'utils';
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+// Styled Components
+import styled from 'styled-components';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
 import { API_GET_TODAYS_ORDERS, API_VALIDATE_PICK_PACK_ORDERS } from 'config';
 
 // Styles
@@ -137,11 +145,19 @@ function OrderCardContent({ orderLabel, returnLabel }) {
   );
 }
 
-function OrderCard({ orderDetails, highlight = false }) {
+function OrderCard({ orderDetails, isIncomplete = false }) {
+  const theme = useTheme();
   const { name, orderId, inboundLabel, outboundLabel, status } = orderDetails;
 
   return (
-    <Card className={`${styles.card} ${highlight ? styles.highlight : ''}`}>
+    <Card
+      className={`${styles.card}`}
+      style={{
+        border: `1px solid ${
+          isIncomplete ? theme.palette.error.main : 'transparent'
+        }`,
+      }}
+    >
       <CardHeader orderId={orderId} name={name} status={status} />
       <OrderCardContent returnLabel={inboundLabel} orderLabel={outboundLabel} />
     </Card>
@@ -156,58 +172,68 @@ function sortOrders(a, b) {
   return aStatus < bStatus ? 1 : aStatus > bStatus ? -1 : 0;
 }
 
-class PickPackPortal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ordersAndLabels: [],
-      highlightedOrders: [],
-    };
+function PickPackPortal() {
+  const [incompleteOrders, setIncompleteOrders] = useState([]);
+  const [ordersAndLabels, setOrdersAndLabels] = useState([]);
+  const [ordersWereValidated, setOrdersWereValidated] = useState(false);
 
-    this.modalStore = props.store.modal;
-    this.userStore = props.store.user;
-    this.loadingStore = props.store.loading;
-    // Unpack selected order date to pass through fetchTodaysOrders
-    this.selectedDate = props.store.pickPack.selectedDate;
-    this.setSelectedDate = props.store.pickPack.setSelectedDate;
+  const {
+    loading: loadingStore,
+    modal: modalStore,
+    pickPack,
+    user: userStore,
+  } = useStores();
+
+  // Pick/Pack State
+  const { selectedDate } = pickPack;
+
+  // User State
+  const { isOpsLead, isAdmin, user, token } = userStore;
+
+  useEffect(() => {
+    loadTodaysOrders();
+  }, [user, token]);
+
+  function loadTodaysOrders() {
+    if (user && token && token.accessToken) {
+      loadingStore.show();
+      fetchTodaysOrders(selectedDate)
+        .then((res) => {
+          const {
+            data: { ordersAndLabels },
+          } = res;
+
+          if (ordersAndLabels.length) {
+            setOrdersAndLabels(ordersAndLabels);
+          }
+        })
+        .catch((err) => {
+          modalStore.toggleModal(
+            'error',
+            err.message ? err.message : undefined,
+          );
+        })
+        .finally(() => {
+          loadingStore.hide();
+        });
+    }
   }
 
-  componentDidMount() {
-    this.loadingStore.toggle();
-    this.fetchTodaysOrders(this.selectedDate)
-      .then((res) => {
-        const {
-          data: { ordersAndLabels },
-        } = res;
-
-        if (ordersAndLabels.length) {
-          this.setState({ ordersAndLabels });
-        }
-      })
-      .catch((err) => {
-        this.modalStore.toggleModal(
-          'error',
-          err.message ? err.message : undefined,
-        );
-      })
-      .finally(() => {
-        setTimeout(() => this.loadingStore.toggle(), 300);
-      });
-  }
-
-  fetchTodaysOrders = async (orderPlacedDate) => {
+  // TODO: Move to API layer
+  const fetchTodaysOrders = async (orderPlacedDate) => {
     return axios.get(
       API_GET_TODAYS_ORDERS + orderPlacedDate,
-      this.userStore.getHeaderAuth(),
+      userStore.getHeaderAuth(),
     );
   };
 
-  validateOrders = async () => {
-    this.loadingStore.toggle();
+  const validateOrders = async () => {
+    loadingStore.show();
+    // TODO: Move this to API layer
     axios
       .get(
-        API_VALIDATE_PICK_PACK_ORDERS + this.selectedDate,
-        this.userStore.getHeaderAuth(),
+        API_VALIDATE_PICK_PACK_ORDERS + selectedDate,
+        userStore.getHeaderAuth(),
       )
       .then((res) => {
         const {
@@ -216,157 +242,138 @@ class PickPackPortal extends Component {
 
         if (incompleteOrders && incompleteOrders.length) {
           const numIncompleteOrders = incompleteOrders.length;
-          this.modalStore.toggleModal(
+          modalStore.toggleModal(
             'error',
             `${numIncompleteOrders} orders still need to be packed`,
           );
-          this.setState({ highlightedOrders: incompleteOrders });
+          setIncompleteOrders(incompleteOrders);
         } else {
-          this.setState({
-            showValidateOrders: false,
-          });
-
-          this.modalStore.toggleModal(
+          setOrdersWereValidated(true);
+          modalStore.toggleModal(
             'success',
             'Todays were completed successfully!',
           );
         }
       })
       .catch((err) => {
-        this.modalStore.toggleModal(
-          'error',
-          err.message ? err.message : undefined,
-        );
+        modalStore.toggleModal('error', err.message ? err.message : undefined);
       })
       .finally(() => {
-        setTimeout(() => this.loadingStore.toggle(), 300);
+        loadingStore.hide();
       });
   };
 
-  isHighlightedOrder = (orderId) => {
-    return !!this.state.highlightedOrders.find((o) => o.orderId === orderId);
+  const isIncompleteOrder = (orderId) => {
+    const incompleteOrder = incompleteOrders.find((o) => o._id === orderId);
+    if (incompleteOrder) return true;
+    return false;
   };
 
-  handleSelectOrderDate = (date) => {
+  const handleSelectOrderDate = (date) => {
     // Convert back to UTC from local string.
     const selectedDate = subtractUTCOffset(date);
-    this.setSelectedDate(selectedDate);
-    this.loadingStore.toggle();
-    this.fetchTodaysOrders(this.selectedDate)
+    pickPack.setSelectedDate(selectedDate);
+    loadingStore.show();
+    fetchTodaysOrders(selectedDate)
       .then((res) => {
         const {
           data: { ordersAndLabels },
         } = res;
 
-        if (ordersAndLabels.length) {
-          this.setState({ ordersAndLabels });
-        }
+        setOrdersAndLabels(ordersAndLabels);
       })
       .catch((err) => {
-        this.modalStore.toggleModal(
-          'error',
-          err.message ? err.message : undefined,
-        );
+        modalStore.toggleModal('error', err.message ? err.message : undefined);
       })
-      .finally(() => {
-        setTimeout(() => this.loadingStore.toggle(), 300);
-      });
+      .finally(() => loadingStore.hide());
   };
 
-  render() {
-    const { isOpsLead, isAdmin } = this.userStore;
-    const { ordersAndLabels, ordersWereValidated } = this.state;
-    const selectedDate = addUTCOffset(this.selectedDate);
-
-    return (
-      <Container maxWidth="xl">
-        <Typography
-          variant="h1"
-          align="center"
-          gutterBottom
-          style={{ marginTop: '0.75em' }}
-        >
-          Pick/Pack Orders
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={3}>
-            <Grid container direction="column">
-              <Grid item xs={12}>
-                <br />
-                <Typography variant="h2" gutterBottom>
-                  Sort & Filter
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Divider />
-                <br />
-              </Grid>
-              <Typography variant="body1">Filter By Date</Typography>
-              <DatePicker
-                selected={selectedDate}
-                onSelect={this.handleSelectOrderDate}
-                maxDate={moment().toDate()}
-                customInput={<SelectButton />}
-              />
+  return (
+    <Container maxWidth="xl">
+      <Typography
+        variant="h1"
+        align="center"
+        gutterBottom
+        style={{ marginTop: '0.75em' }}
+      >
+        Pick/Pack Orders
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={3}>
+          <Grid container direction="column">
+            <Grid item xs={12}>
+              <br />
+              <Typography variant="h2" gutterBottom>
+                Sort & Filter
+              </Typography>
             </Grid>
-          </Grid>
-          <Grid item xs={12} lg={9}>
-            <Grid container>
-              {ordersAndLabels.length ? (
-                ordersAndLabels.sort(sortOrders).map((orderDetails) => {
-                  return (
-                    <Grid
-                      key={orderDetails.orderId}
-                      item
-                      xs={12}
-                      sm={6}
-                      md={6}
-                      lg={4}
-                    >
-                      <OrderCard
-                        orderDetails={orderDetails}
-                        highlight={this.isHighlightedOrder(
-                          orderDetails.orderId,
-                        )}
-                      />
-                    </Grid>
-                  );
-                })
-              ) : (
-                <Grid item xs={12}>
-                  <Typography variant="h2" align="center">
-                    No orders have been received today.
-                  </Typography>
-                </Grid>
-              )}
+            <Grid item xs={12}>
+              <Divider />
+              <br />
             </Grid>
+            <Typography variant="body1">Filter By Date</Typography>
+            <DatePicker
+              selected={addUTCOffset(selectedDate)}
+              onSelect={handleSelectOrderDate}
+              maxDate={moment().toDate()}
+              customInput={<SelectButton />}
+            />
           </Grid>
         </Grid>
-        {(isOpsLead || isAdmin) && ordersAndLabels.length ? (
-          <Grid container justify="center">
-            <Grid item>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={this.validateOrders}
-                disabled={ordersWereValidated}
-                style={{
-                  margin: '1rem 0',
-                  borderRadius: '50px',
-                  color: ordersWereValidated ? '#a6a6a6' : '#07004D',
-                }}
-              >
-                <Typography variant="body1">Validate Orders</Typography>
-              </Button>
-            </Grid>
+        <Grid item xs={12} lg={9}>
+          <Grid container>
+            {ordersAndLabels.length ? (
+              ordersAndLabels.sort(sortOrders).map((orderDetails) => {
+                return (
+                  <Grid
+                    key={orderDetails.orderId}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={4}
+                  >
+                    <OrderCard
+                      orderDetails={orderDetails}
+                      isIncomplete={isIncompleteOrder(orderDetails.orderId)}
+                    />
+                  </Grid>
+                );
+              })
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="h2" align="center">
+                  No orders were received on this day.
+                </Typography>
+              </Grid>
+            )}
           </Grid>
-        ) : null}
-      </Container>
-    );
-  }
+        </Grid>
+      </Grid>
+      {(isOpsLead || isAdmin) && ordersAndLabels.length ? (
+        <Grid container justify="center">
+          <Grid item>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={validateOrders}
+              disabled={ordersWereValidated}
+              style={{
+                margin: '1rem 0',
+                borderRadius: '50px',
+                color: ordersWereValidated ? '#a6a6a6' : '#07004D',
+              }}
+            >
+              <Typography variant="body1">Validate Orders</Typography>
+            </Button>
+          </Grid>
+        </Grid>
+      ) : null}
+    </Container>
+  );
 }
 
-export default connect('store')(PickPackPortal);
+export default observer(PickPackPortal);
 
 function SelectButton({ value, onClick }) {
   return (
