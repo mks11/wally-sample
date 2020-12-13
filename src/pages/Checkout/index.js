@@ -72,6 +72,12 @@ function Checkout({ breadcrumbs, location }) {
   }
 
   useEffect(() => {
+    if (checkoutStore.cart && !checkoutStore.cart.cart_items.length) {
+      routingStore.push('/checkout/cart');
+    }
+  }, [checkoutStore.cart]);
+
+  useEffect(() => {
     // Store page view in google analytics
     const { location } = routingStore;
     logPageView(location.pathname);

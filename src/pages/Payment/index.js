@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Cookies
 import { useCookies } from 'react-cookie';
@@ -27,8 +27,14 @@ const Payment = observer(({ breadcrumbs, location }) => {
     'paymentId',
     'shippingServiceLevel',
   ]);
-  const { routing, user: userStore } = useStores();
+  const { checkout, routing, user: userStore } = useStores();
   const { user } = userStore;
+
+  useEffect(() => {
+    if (checkout.cart && !checkout.cart.cart_items.length) {
+      routing.push('/checkout/cart');
+    }
+  }, [checkout.cart]);
 
   let { addressId, paymentId, shippingServiceLevel } = cookies;
   if (!addressId || !shippingServiceLevel) {
