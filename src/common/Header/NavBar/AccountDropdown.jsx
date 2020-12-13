@@ -33,7 +33,6 @@ const AccountDropdown = ({ children, ...props }) => {
     <>
       <MenuButton
         aria-label="account"
-        disableRipple
         onClick={handleClick}
         style={{ padding: '8px 16px' }}
       >

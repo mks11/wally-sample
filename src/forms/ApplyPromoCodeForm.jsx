@@ -59,7 +59,6 @@ function ApplyPromoCodeForm() {
                     fullWidth
                     type="submit"
                     disableElevation
-                    disableRipple
                   >
                     Apply
                   </PrimaryWallyButton>

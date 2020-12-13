@@ -235,7 +235,6 @@ function CartItem({ item }) {
             <Box display="flex" alignItems="center">
               <IconButton
                 color="primary"
-                disableRipple
                 onClick={() => handleUpdateQuantity(-1)}
                 disabled={customer_quantity < 2 || isLoading}
               >
@@ -248,7 +247,6 @@ function CartItem({ item }) {
               <Typography>{customer_quantity}</Typography>
               <IconButton
                 color="primary"
-                disableRipple
                 onClick={() => handleUpdateQuantity(1)}
                 disabled={customer_quantity > 9 || isLoading}
               >

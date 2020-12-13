@@ -163,7 +163,7 @@ export const PaymentMethod = observer(({ paymentMethod }) => {
             <CreditCardDetails paymentMethod={paymentMethod} />
           </Grid>
           <Grid item>
-            <IconButton disableRipple onClick={handleClick}>
+            <IconButton onClick={handleClick}>
               <ExpandMoreIcon />
             </IconButton>
             <Menu

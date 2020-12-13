@@ -457,7 +457,6 @@ const PaymentMethodSwitch = withStyles((theme) => ({
   return (
     <Switch
       focusVisibleClassName={classes.focusVisible}
-      disableRipple
       classes={{
         root: classes.root,
         switchBase: classes.switchBase,
