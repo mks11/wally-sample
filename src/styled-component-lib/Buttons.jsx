@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import React from 'react';
 import { Button } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const PrimaryWallyButton = styled(Button).attrs((props) => ({
   color: 'primary',
@@ -61,3 +63,38 @@ export const ColorfulWallyButton = styled.button`
     background-color: ${(props) => `${props.bgColor}` || '#97adff40'};
   }
 `;
+
+export const ActivityButton = ({
+  isLoading,
+  loadingTitle = 'Submitting...',
+  color,
+  disabled = true, // default disable while submitting
+  children,
+  component,
+  loaderProps,
+  ...rest
+}) => {
+  const Comp = component || PrimaryWallyButton;
+  if (isLoading) {
+    return (
+      <Comp disabled={disabled} {...rest}>
+        {/**
+          Clones a element (like Typography) and sets the
+          loadingTitle to be its children
+          All variants and styles will be applied to the 'loadingTitle' as well
+         */}
+        {loadingTitle}
+        {/** Color "white" for the current 'primary' color
+          throws a warning for not being an inherited property
+        */}
+        <CircularProgress
+          color={color}
+          {...loaderProps}
+          style={{ marginLeft: '3px' }}
+        />
+      </Comp>
+    );
+  } else {
+    return <Comp {...rest}>{children} </Comp>;
+  }
+};

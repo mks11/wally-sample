@@ -10,7 +10,6 @@ import ContentStore from './ContentStore';
 import HelpStore from './HelpStore';
 import AdminStore from './AdminStore';
 import PackagingUnitStore from './PackagingUnitStore';
-import BackerStore from './BackerStore';
 import MetricStore from './MetricStore';
 import LoadingSpinnerStore from './LoadingSpinnerStore';
 import SnackbarStore from './SnackbarStore';
@@ -32,7 +31,6 @@ const store = {
   help: HelpStore,
   order: OrderStore,
   admin: AdminStore,
-  backer: BackerStore,
   pickPack: PickPackStore,
   metric: MetricStore,
   loading: LoadingSpinnerStore,

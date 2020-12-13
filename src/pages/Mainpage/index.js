@@ -33,11 +33,11 @@ import sidePanelSticker from 'images/sidepanel_sticker.png';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sapo-company/sapo-company-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/cornucopia-480.jpg',
   },
 ];
 const hasDots = heroImages.length > 1;
@@ -220,15 +220,13 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New Sapo Company Products'}
+        alt={'Thanksgiving Reusables Cornucopia'}
         img={img}
         justify="flex-start"
-        title={'Sapo Company'}
-        url="/shop/brands/sapo-company"
+        title={'Bulk Friday is Coming.'}
+        // url="/shop/brands/sapo-company"
       >
-        <Typography gutterBottom>
-          Bar soaps for that luxurious lather.
-        </Typography>
+        <Typography gutterBottom>Free shipping from 11/27 to 11/30</Typography>
       </HeroSlide>
     ));
 
@@ -536,7 +534,7 @@ function HeroSlideOverlay({ children, justify, title, url }) {
     >
       <Grid container justify={justify || 'flex-start'}>
         <Grid item xs={12} sm={8}>
-          {title && <HeroOverline>Limited Release</HeroOverline>}
+          {/* {title && <HeroOverline>Happy Holidays</HeroOverline>} */}
           {title && <HeroTitle>{title}</HeroTitle>}
           {children && children}
           {url && (

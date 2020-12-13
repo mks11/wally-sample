@@ -11,7 +11,6 @@ import {
   API_EDIT_USER,
   API_PAYMENT_REMOVE,
   API_REFER_FRIEND,
-  API_SUBSCRIBE_EMAIL,
   API_FORGOT_PASSWORD,
 } from '../config';
 
@@ -196,32 +195,28 @@ class UserStore {
     runInAction(() => (this.isAuthenticating = true));
     this.readStorage();
 
-    runInAction(() => {
-      if (!this.token && !this.token.accessToken) {
-        this.status = false;
-        return this.status;
-      }
-    });
+    if (!this.token && !this.token.accessToken) {
+      this.status = false;
+      return this.status;
+    }
 
     try {
       const resp = await axios.get(API_GET_LOGIN_STATUS, this.getHeaderAuth());
       let status = resp.data.status && localStorage.getItem('user');
 
-      runInAction(() => {
-        if (resp.data.status && localStorage.getItem('user')) {
-          this.status = true;
-          // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
-          this.user = JSON.parse(localStorage.getItem('user'));
-          if (update) {
-            this.getUser();
-          }
-        } else {
-          status = false;
-          this.status = false;
-          this.user = null;
-          this.logout();
+      if (resp.data.status && localStorage.getItem('user')) {
+        this.status = true;
+        // const respGetUser = await axios.get(API_GET_USER, this.getHeaderAuth())
+        this.user = JSON.parse(localStorage.getItem('user'));
+        if (update) {
+          this.getUser();
         }
-      });
+      } else {
+        status = false;
+        this.status = false;
+        this.user = null;
+        this.logout();
+      }
 
       return status;
     } catch (e) {
@@ -295,11 +290,6 @@ class UserStore {
     }
 
     return data;
-  }
-
-  async subscribeNewsletter(email) {
-    const res = await axios.post(API_SUBSCRIBE_EMAIL, { email });
-    return res.data;
   }
 
   async adjustDeliveryTimes(delivery_date, deliveryTimes) {

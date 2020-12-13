@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Yup from 'yup';
+import moment from 'moment';
 
 // Utils
 import { logEvent } from 'services/google-analytics';
@@ -31,7 +32,7 @@ function ApplyPromoCodeForm() {
         Redeem a promo code or gift card
       </Typography>
       <Formik
-        initialValues={{ promoCode: '' }}
+        initialValues={{ promoCode: '', timestamp: moment().toISOString(true) }}
         validationSchema={Yup.object({
           promoCode: Yup.string().required("Promo code can't be blank."),
         })}
@@ -72,7 +73,7 @@ function ApplyPromoCodeForm() {
   );
 
   async function applyPromoCode(
-    { promoCode },
+    { promoCode, timestamp },
     { resetForm, setFieldError, setSubmitting },
   ) {
     const { user } = userStore;
@@ -86,7 +87,7 @@ function ApplyPromoCodeForm() {
         });
         const auth = userStore.getHeaderAuth();
 
-        const res = await applyPromo(promoCode, auth);
+        const res = await applyPromo({ promoCode, timestamp }, auth);
         // Reload the user if their promo included a benefit or store credit
         const {
           data: { benefit, store_credit },

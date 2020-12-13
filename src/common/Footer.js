@@ -1,174 +1,229 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { validateEmail, connect } from '../utils';
-import { INSTAGRAM, FACEBOOK } from '../config';
 import { Facebook, Instagram } from '@material-ui/icons';
-import footerLogo from 'images/logo.png';
+import { observer } from 'mobx-react';
+import {
+  Box,
+  Grid,
+  Container,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core';
 
-class Footer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-    };
+import SubscribeToNewsletter from './../common/SubscribeToNewsletter';
 
-    this.zipStore = this.props.store.zip;
-    this.userStore = this.props.store.user;
-    this.routing = this.props.store.routing;
+import styled from 'styled-components';
+
+const INSTAGRAM = 'https://www.instagram.com/thewallyshop/';
+const FACEBOOK = 'https://facebook.com/thewallyshop';
+
+const FooterContainer = styled.footer`
+  padding: 30px 0;
+  color: #263a52;
+  line-height: 2;
+  position: relative;
+  a {
+    color: #263a52;
+    font-size: 16px;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 15px;
   }
 
-  handleSubscribe() {
-    if (!validateEmail(this.state.email)) {
-      this.setState({ invalidText: 'Invalid email' });
-      return;
+  h4 {
+    letter-spacing: 1.5px;
+    margin-bottom: 0;
+    padding-bottom: 12px;
+    position: relative;
+    font-size: 16px;
+  }
+
+  @media (min-width: 768px) {
+    h4 {
+      font-size: 16px;
     }
-
-    this.setState({ invalidText: false });
-
-    this.userStore
-      .subscribeNewsletter(this.state.email)
-      .then(() => {
-        this.setState({ invalidText: '', successText: 'Subscribed!' });
-        setTimeout(() => {
-          this.setState({ successText: '' });
-        }, 1500);
-      })
-      .catch((e) => {
-        this.setState({ invalidText: 'Failed to subscribe' });
-      });
   }
 
-  handleEmailChange = (e) => {
-    this.setState({ email: e.target.value, invalidText: '' });
-  };
-  render() {
-    const isHomePage = this.routing.location.pathname === '/';
-
-    let isAdmin = false;
-    if (this.userStore.user) {
-      const user = this.userStore.user;
-      isAdmin = user.type === 'admin';
-    }
-    if (isAdmin) return null;
-    return (
-      <footer
-        className={`aw-footer ${
-          isHomePage ? 'bg-transparent' : 'util-bg-color-white'
-        }`}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-auto col-sm-2">
-              <a href="/">
-                <img className="footer-logo" src={footerLogo} alt="" />
-              </a>
-            </div>
-            <div className="col col-sm-10">
-              <div className="row">
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">THE WALLY SHOP</h4>
-                  <ul>
-                    <li>
-                      <Link to="about">About</Link>
-                    </li>
-                    <li>
-                      <Link to="/blog">Blog</Link>
-                    </li>
-                    <li>
-                      <Link to="/giftcard">Gift Cards</Link>
-                    </li>
-                    <li>
-                      <Link to="howitworks">How It Works</Link>
-                    </li>
-                    <li>
-                      <Link to="/backers">Our Backers</Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">SUPPORT</h4>
-                  <ul>
-                    <li>
-                      <a href="mailto:info@thewallyshop.co">Contact Us</a>
-                    </li>
-                    <li>
-                      <Link to={'/tnc'}>Terms &amp; Conditions</Link>
-                    </li>
-                    <li>
-                      <Link to={'/privacy'}>Privacy Policy</Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">FOLLOW US</h4>
-                  <ul>
-                    <li className="d-block align-middle">
-                      <a
-                        href={FACEBOOK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Facebook style={{ fontSize: '48px' }} />
-                      </a>
-                    </li>
-                    <li className="d-block align-middle">
-                      <a
-                        href={INSTAGRAM}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Instagram style={{ fontSize: '48px' }} />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="container">
-          <div className="footer-bottom">
-            <div className="container">
-              <form className="form-inline" style={{ position: 'relative' }}>
-                <label htmlFor="subscribe-email">
-                  Subscribe to our newsletter
-                </label>
-                <div className="input-group">
-                  <input
-                    type="email"
-                    id="subscribe-email"
-                    className="form-control"
-                    placeholder="Enter your email"
-                    onChange={this.handleEmailChange}
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      id="btn-subscribe"
-                      onClick={(e) => this.handleSubscribe(e)}
-                    >
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
-                {this.state.invalidText ? (
-                  <span className="text-error  d-block ml-2 mt-0 p-0 footer-message">
-                    {this.state.invalidText}
-                  </span>
-                ) : null}
-                {this.state.successText ? (
-                  <span className="text-green  d-block ml-2 mt-0 p-0 footer-message">
-                    {this.state.successText}
-                  </span>
-                ) : null}
-              </form>
-            </div>
-          </div>
-        </div>
-      </footer>
-    );
+  h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: #263a52;
   }
+`;
+
+const MobileFooterWrapper = styled(Grid)`
+  @media only screen and (min-width: 567px) {
+    display: none;
+  }
+`;
+
+const FooterWrapper = styled(Grid)`
+  @media only screen and (max-width: 566px) {
+    display: none;
+  }
+`;
+
+function Footer() {
+  return (
+    <FooterContainer>
+      <Container maxWidth="xl">
+        <MobileFooterWrapper container justify="space-between" spacing={4}>
+          <Grid item xs={12}>
+            <Typography variant="h4">THE WALLY SHOP</Typography>
+            <List>
+              <ListItem disableGutters>
+                <Link to="about">About</Link>
+              </ListItem>
+              <ListItem disableGutters>
+                <Link to="howitworks">How It Works</Link>
+              </ListItem>
+              <ListItem disableGutters>
+                <Link to="/backers">Our Backers</Link>
+              </ListItem>
+              <ListItem disableGutters>
+                <Link to="/blog">Blog</Link>
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h4">SUPPORT</Typography>
+            <List>
+              <ListItem disableGutters>
+                <a href="mailto:info@thewallyshop.co">Contact Us</a>
+              </ListItem>
+              <ListItem disableGutters>
+                <Link to={'/tnc'}>Terms &amp; Conditions</Link>
+              </ListItem>
+              <ListItem disableGutters>
+                <Link to={'/privacy'}>Privacy Policy</Link>
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h4">FOLLOW US</Typography>
+            <List>
+              <ListItem disableGutters>
+                <a
+                  href={FACEBOOK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    padding: '0.5rem',
+                  }}
+                >
+                  <Facebook style={{ fontSize: '35px' }} />{' '}
+                  <span style={{ marginLeft: '4px' }}>Facebook</span>
+                </a>
+              </ListItem>
+              <ListItem disableGutters>
+                <a
+                  href={INSTAGRAM}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    padding: '0.5rem',
+                  }}
+                >
+                  <Instagram style={{ fontSize: '35px' }} />{' '}
+                  <span style={{ marginLeft: '4px' }}>Instagram</span>
+                </a>
+              </ListItem>
+              <ListItem disableGutters>
+                <Box display="flex" alignItems="center">
+                  <SubscribeToNewsletter />
+                </Box>
+              </ListItem>
+            </List>
+          </Grid>
+        </MobileFooterWrapper>
+        {/* Rendered md and up */}
+        <FooterWrapper container justify="space-evenly" spacing={4}>
+          <Grid item sm={4}>
+            <Typography variant="h4">THE WALLY SHOP</Typography>
+            <List>
+              <ListItem>
+                <Link to="about">About</Link>
+              </ListItem>
+              <ListItem>
+                <Link to="howitworks">How It Works</Link>
+              </ListItem>
+              <ListItem>
+                <Link to="/backers">Our Backers</Link>
+              </ListItem>
+              <ListItem>
+                <Link to="/blog">Blog</Link>
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item sm={4}>
+            <Typography variant="h4">SUPPORT</Typography>
+            <List>
+              <ListItem>
+                <a href="mailto:info@thewallyshop.co">Contact Us</a>
+              </ListItem>
+              <ListItem>
+                <Link to={'/tnc'}>Terms &amp; Conditions</Link>
+              </ListItem>
+              <ListItem>
+                <Link to={'/privacy'}>Privacy Policy</Link>
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item sm={4}>
+            <Typography variant="h4">FOLLOW US</Typography>
+            <List>
+              <ListItem disableGutters>
+                <a
+                  href={FACEBOOK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    padding: '0.5rem',
+                  }}
+                >
+                  <Facebook style={{ fontSize: '35px' }} />{' '}
+                  <span style={{ marginLeft: '4px' }}>Facebook</span>
+                </a>
+              </ListItem>
+              <ListItem disableGutters>
+                <a
+                  href={INSTAGRAM}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    padding: '0.5rem',
+                  }}
+                >
+                  <Instagram style={{ fontSize: '35px' }} />{' '}
+                  <span style={{ marginLeft: '4px' }}>Instagram</span>
+                </a>
+              </ListItem>
+              <ListItem disableGutters>
+                <Box display="flex" alignItems="center">
+                  <SubscribeToNewsletter />
+                </Box>
+              </ListItem>
+            </List>
+          </Grid>
+        </FooterWrapper>
+      </Container>
+    </FooterContainer>
+  );
 }
 
-export default connect('store')(Footer);
+export default observer(Footer);
