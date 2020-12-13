@@ -8,6 +8,10 @@ import { useCookies } from 'react-cookie';
 import { Box, Typography } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
 const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
   const theme = useTheme();
   const [cookies] = useCookies([
@@ -15,15 +19,19 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
     'shippingServiceLevel',
     'paymentId',
   ]);
-
   const { addressId, paymentId, shippingServiceLevel } = cookies;
+
+  const { checkout } = useStores();
+  const { cart } = checkout;
 
   if (breadcrumbs.length <= 1) return null;
   return (
-    <Box mt={4}>
+    <Box my={4}>
       {/* Link back to any previous steps of the breadcrumb. */}
       {breadcrumbs.map(({ name, path }, idx) => {
         const isCurrentPath = location.pathname.includes(name) ? true : false;
+        const shippingIsDisabled =
+          cart && cart.cart_items && !cart.cart_items.length;
 
         // Disable payment link if addressId or shipping cookies not set
         const paymentIsDisabled =
@@ -37,7 +45,10 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
         return (
           <Box component="span" key={name}>
             <Box component="span" mr={1}>
-              {isCurrentPath || paymentIsDisabled || reviewIsDisabled ? (
+              {isCurrentPath ||
+              shippingIsDisabled ||
+              paymentIsDisabled ||
+              reviewIsDisabled ? (
                 <Typography
                   component="span"
                   color={isCurrentPath ? 'textPrimary' : 'textSecondary'}
@@ -62,4 +73,4 @@ const CheckoutFlowBreadcrumbs = ({ breadcrumbs, location }) => {
   );
 };
 
-export default CheckoutFlowBreadcrumbs;
+export default observer(CheckoutFlowBreadcrumbs);
