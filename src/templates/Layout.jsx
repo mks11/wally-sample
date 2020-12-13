@@ -29,7 +29,6 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 const Layout = observer(() => {
   const { modalV2, snackbar, user: userStore } = useStores();
   const { user, token } = userStore;
-
   const [cookies] = useCookies();
   const { hasReadCookieNotice } = cookies;
 
@@ -60,7 +59,7 @@ const Layout = observer(() => {
 
   async function loadUser() {
     try {
-      if (!user && token) {
+      if (!user && !token) {
         await userStore.getStatus();
       }
     } catch (error) {

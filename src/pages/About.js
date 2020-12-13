@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
 import { logPageView } from 'services/google-analytics';
+
+// Custom Components
+import Page from 'templates/Page';
+import PageSection from 'common/PageSection';
+
+// Images
+import about450 from 'images/about-450.jpg';
+
+// Material UI
+import { Box, Typography, Grid } from '@material-ui/core';
+
+// MobX
+import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
-import about450 from 'images/about-450.jpg';
-import about600 from 'images/about-600.jpg';
-
-import { Box, Typography, Grid } from '@material-ui/core';
-import { useStores } from 'hooks/mobx';
-import Page from './shared/Page';
-import PageSection from 'common/PageSection';
+// React Router
+import { InternalWallyLink } from 'styled-component-lib/Links';
 
 function About() {
   const { routing: routingStore } = useStores();
@@ -29,7 +37,7 @@ function About() {
             <AboutPhoto />
           </Grid>
           <Grid item xs={12} md={6} lg={8}>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h1" gutterBottom>
               We deliver your favorites from the brands you love, 100%
               waste-free.
             </Typography>
@@ -95,9 +103,11 @@ function About() {
         </Typography>
       </PageSection>
       <Box>
-        <Typography variant="h2" component="p">
-          <a href="/">Start shopping sustainably</a>.
-        </Typography>
+        <InternalWallyLink to="/">
+          <Typography variant="h3" component="p">
+            Start shopping sustainably.
+          </Typography>
+        </InternalWallyLink>
       </Box>
     </Page>
   );
@@ -108,11 +118,7 @@ export default observer(About);
 function AboutPhoto() {
   return (
     <img
-      srcSet={`${about450} 450w,
-               ${about600} 600w`}
-      sizes="(max-width: 767px) 450px,
-              600px"
-      src={about600}
+      src={about450}
       alt={'About page'}
       style={{
         maxWidth: '100%',

@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram } from '@material-ui/icons';
-import { observer } from 'mobx-react';
+import { useMediaQuery } from 'react-responsive';
+
+// Custom Components
+import SubscribeToNewsletter, {
+  SubscribeToNewsletterForm,
+} from 'common/SubscribeToNewsletter';
+
+// Material UI
 import {
   Box,
   Grid,
@@ -10,8 +16,7 @@ import {
   ListItem,
   Typography,
 } from '@material-ui/core';
-
-import SubscribeToNewsletter from './../common/SubscribeToNewsletter';
+import { Facebook, Instagram } from '@material-ui/icons';
 
 import styled from 'styled-components';
 
@@ -33,21 +38,22 @@ const FooterContainer = styled.footer`
     margin-top: 15px;
   }
 
-  h4 {
-    letter-spacing: 1.5px;
-    margin-bottom: 0;
-    padding-bottom: 12px;
-    position: relative;
-    font-size: 16px;
-  }
-
   @media (min-width: 768px) {
     h4 {
       font-size: 16px;
     }
   }
+`;
 
-  h4::after {
+const FooterSectionHeader = styled(Typography).attrs({
+  component: 'p',
+  variant: 'h6',
+  gutterBottom: true,
+})`
+  padding-bottom: 0.5rem;
+  position: relative;
+
+  &::after {
     content: '';
     position: absolute;
     left: 0;
@@ -58,25 +64,16 @@ const FooterContainer = styled.footer`
   }
 `;
 
-const MobileFooterWrapper = styled(Grid)`
-  @media only screen and (min-width: 567px) {
-    display: none;
-  }
-`;
-
-const FooterWrapper = styled(Grid)`
-  @media only screen and (max-width: 566px) {
-    display: none;
-  }
-`;
-
 function Footer() {
+  const isXs = useMediaQuery({ query: '(max-width: 566px)' });
+  const isLg = useMediaQuery({ query: '(min-width: 992px)' });
+
   return (
     <FooterContainer>
       <Container maxWidth="xl">
-        <MobileFooterWrapper container justify="space-between" spacing={4}>
-          <Grid item xs={12}>
-            <Typography variant="h4">THE WALLY SHOP</Typography>
+        <Grid container justify="space-evenly" spacing={4}>
+          <Grid item xs={12} sm={4} lg={3}>
+            <FooterSectionHeader>THE WALLY SHOP</FooterSectionHeader>
             <List>
               <ListItem disableGutters>
                 <Link to="about">About</Link>
@@ -92,8 +89,8 @@ function Footer() {
               </ListItem>
             </List>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h4">SUPPORT</Typography>
+          <Grid item xs={12} sm={4} lg={3}>
+            <FooterSectionHeader>SUPPORT</FooterSectionHeader>
             <List>
               <ListItem disableGutters>
                 <a href="mailto:info@thewallyshop.co">Contact Us</a>
@@ -106,8 +103,8 @@ function Footer() {
               </ListItem>
             </List>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h4">FOLLOW US</Typography>
+          <Grid item xs={12} sm={4} lg={3}>
+            <FooterSectionHeader>FOLLOW US</FooterSectionHeader>
             <List>
               <ListItem disableGutters>
                 <a
@@ -146,84 +143,16 @@ function Footer() {
               </ListItem>
             </List>
           </Grid>
-        </MobileFooterWrapper>
-        {/* Rendered md and up */}
-        <FooterWrapper container justify="space-evenly" spacing={4}>
-          <Grid item sm={4}>
-            <Typography variant="h4">THE WALLY SHOP</Typography>
-            <List>
-              <ListItem>
-                <Link to="about">About</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="howitworks">How It Works</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/backers">Our Backers</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/blog">Blog</Link>
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item sm={4}>
-            <Typography variant="h4">SUPPORT</Typography>
-            <List>
-              <ListItem>
-                <a href="mailto:info@thewallyshop.co">Contact Us</a>
-              </ListItem>
-              <ListItem>
-                <Link to={'/tnc'}>Terms &amp; Conditions</Link>
-              </ListItem>
-              <ListItem>
-                <Link to={'/privacy'}>Privacy Policy</Link>
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item sm={4}>
-            <Typography variant="h4">FOLLOW US</Typography>
-            <List>
-              <ListItem disableGutters>
-                <a
-                  href={FACEBOOK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    padding: '0.5rem',
-                  }}
-                >
-                  <Facebook style={{ fontSize: '35px' }} />{' '}
-                  <span style={{ marginLeft: '4px' }}>Facebook</span>
-                </a>
-              </ListItem>
-              <ListItem disableGutters>
-                <a
-                  href={INSTAGRAM}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    padding: '0.5rem',
-                  }}
-                >
-                  <Instagram style={{ fontSize: '35px' }} />{' '}
-                  <span style={{ marginLeft: '4px' }}>Instagram</span>
-                </a>
-              </ListItem>
-              <ListItem disableGutters>
-                <Box display="flex" alignItems="center">
-                  <SubscribeToNewsletter />
-                </Box>
-              </ListItem>
-            </List>
-          </Grid>
-        </FooterWrapper>
+          {(isXs || isLg) && (
+            <Grid item xs={12} lg={3}>
+              <FooterSectionHeader>NEWSLETTER</FooterSectionHeader>
+              <SubscribeToNewsletterForm />
+            </Grid>
+          )}
+        </Grid>
       </Container>
     </FooterContainer>
   );
 }
 
-export default observer(Footer);
+export default Footer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, List, ListItem, Box } from '@material-ui/core';
-import Page from './shared/Page';
+import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
 
 export default function Privacy() {
@@ -10,6 +10,9 @@ export default function Privacy() {
       description="The Wally Shop's privacy policy."
       content="Privacy Policy"
     >
+      <Box mt={4}>
+        <Typography variant="h1">Privacy Policy</Typography>
+      </Box>
       <Typography color="textSecondary" gutterBottom>
         Effective date: March 20, 2018
       </Typography>

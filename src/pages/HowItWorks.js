@@ -1,24 +1,21 @@
 import React from 'react';
 
-import orderHd450 from 'images/order-hd-450.jpg';
-import orderHd600 from 'images/order-hd-600.jpg';
-
-import toteHd450 from 'images/tote-hd-450.jpg';
-import toteHd600 from 'images/tote-hd-600.jpg';
-
-import returnPackagingHd450 from 'images/return-packaging-hd-450.jpg';
-import returnPackagingHd600 from 'images/return-packaging-hd-600.jpg';
-
-import { observer } from 'mobx-react';
-
-import HowTo from './shared/HowTo';
-import ResponsivePhoto from 'common/ResponsivePhoto';
-
-import { Box, Typography } from '@material-ui/core';
-import Page from './shared/Page';
+// Custom Components
+import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
 
-function HowItWorks() {
+// Images
+import orderHd600 from 'images/order-hd-600.jpg';
+import toteHd600 from 'images/tote-hd-600.jpg';
+import returnPackagingHd600 from 'images/return-packaging-hd-600.jpg';
+
+// Material UI
+import { Box, Grid, Typography } from '@material-ui/core';
+
+// Styled Components
+import { ReverseOrderPhotoWrapper } from 'styled-component-lib/Grid';
+
+export default function HowItWorks() {
   return (
     <Page
       title="How it Works"
@@ -26,8 +23,8 @@ function HowItWorks() {
       content="Our Process"
     >
       <PageSection>
-        <Box px={2}>
-          <Typography variant="h2" gutterBottom>
+        <Box py={4} px={2}>
+          <Typography variant="h1" gutterBottom>
             It's what's on the inside that counts.
           </Typography>
           <Typography>
@@ -46,62 +43,107 @@ function HowItWorks() {
         </Box>
       </PageSection>
       <PageSection>
-        <HowTo
-          title="Order"
-          description="Choose from hundreds of responsibly-made, Trader Joe’s
-                  price-competitive bulk foods. At checkout, you will be charged
-                  a deposit for your packaging (don’t worry, you will be getting
-                  it back!)."
-          photo={
-            <ResponsivePhoto
-              mobileSrc={orderHd450}
-              desktopSrc={orderHd600}
-              alt="Man giving money in exchange for a jar of pasta."
-            />
-          }
-        />
+        <Grid alignItems="center" container justify="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Order
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Choose from hundreds of responsibly-made, Trader Joe’s
+                price-competitive bulk foods. At checkout, you will be charged a
+                deposit for your packaging (don’t worry, you will be getting it
+                back!).
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={orderHd600}
+                alt={'Man giving money in exchange for a jar of pasta.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
       <PageSection>
-        <HowTo
-          title="Receive"
-          description="
-                  Your order will arrive at your doorstep in completely
-                  reusable, returnable packaging. The shipping tote it arrives
-                  in folds up for easy storage. Simple, convenient, 100% waste
-                  free shopping.
-            "
-          photoAlign="left"
-          photo={
-            <ResponsivePhoto
-              mobileSrc={toteHd450}
-              desktopSrc={toteHd600}
-              alt="The Wally Shop's reusable tote."
-            />
-          }
-        />
+        <Grid alignItems="center" container justify="center" spacing={4}>
+          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={4}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={toteHd600}
+                alt={"The Wally Shop's reusable tote."}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </ReverseOrderPhotoWrapper>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Receive
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Your order will arrive at your doorstep in completely reusable,
+                returnable packaging. The shipping tote it arrives in folds up
+                for easy storage. Simple, convenient, 100% waste free shopping.
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
       <PageSection>
-        <HowTo
-          title="Return"
-          description="
+        <Grid alignItems="center" container justify="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Return
+              </Typography>
+              <Typography variant="body1" gutterBottom>
                 Once finished, you can return all your packaging (jars, totes,
-                anything we send to you, we take back and reuse) to a
-                FedEx/UPS delivery courier on a future delivery or schedule a
-                free pick-up on the website. Your deposit is credited back to
-                you and the packaging is cleaned to be put back into
-                circulation.
-            "
-          photo={
-            <ResponsivePhoto
-              mobileSrc={returnPackagingHd450}
-              desktopSrc={returnPackagingHd600}
-              alt="Returning an empty jar."
-            />
-          }
-        />
+                anything we send to you, we take back and reuse) to a FedEx/UPS
+                delivery courier on a future delivery or schedule a free pick-up
+                on the website. Your deposit is credited back to you and the
+                packaging is cleaned to be put back into circulation.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={returnPackagingHd600}
+                alt={'Returning an empty jar.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
       </PageSection>
     </Page>
   );
 }
-
-export default observer(HowItWorks);

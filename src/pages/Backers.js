@@ -1,44 +1,49 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { observer } from 'mobx-react';
-import { useStores } from 'hooks/mobx';
-import { List, ListItem, Typography } from '@material-ui/core';
-import Page from './shared/Page';
+// Custom Components
+import Page from 'templates/Page';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
-function Backers() {
+// Material UI
+import { Box, List, ListItem, Typography } from '@material-ui/core';
+
+export default function Backers() {
   // Load backers 10 at a time.
   const limit = 10;
   const sliceIndex = useRef(10);
-  const [backersSlice, setBackersSlice] = useState(backers.slice(0, 10));
-  const { user: userStore } = useStores();
-
-  useEffect(() => {
-    userStore.getStatus();
-  }, [userStore]);
+  const [backerSlices, setBackerSlices] = useState([
+    backers.slice(0, 10).join(', '),
+  ]);
 
   const isDisabled = () => sliceIndex.current >= backers.length;
 
   const loadMoreBackers = () => {
-    let nextLimit = sliceIndex.current + limit;
+    let currentLimit = sliceIndex.current;
+    let nextLimit = currentLimit + limit;
     if (nextLimit >= backers.length) nextLimit = backers.length;
+    setBackerSlices([
+      ...backerSlices,
+      backers.slice(currentLimit, nextLimit).join(', '),
+    ]);
 
     sliceIndex.current = nextLimit;
-    setBackersSlice(backers.slice(0, nextLimit));
   };
 
   return (
     <Page
-      title="Our Backers"
       description="The Wally Shop's Kick-Starter backers."
+      maxWidth="xl"
+      title="Our Backers"
     >
-      <Typography variant="h2" gutterBottom>
-        We're extremely grateful to the people who made this all possible:
-      </Typography>
+      <Box mt={4}>
+        <Typography variant="h1" gutterBottom>
+          We're extremely grateful to the people who made this possible:
+        </Typography>
+      </Box>
       <List>
-        {backersSlice.map((backer, idx) => (
-          <ListItem key={backer + idx}>
-            <Typography>{backer}</Typography>
+        {backerSlices.map((backerSlice, idx) => (
+          <ListItem key={backerSlice[0] + idx}>
+            <Typography>{backerSlice}</Typography>
           </ListItem>
         ))}
       </List>
@@ -716,5 +721,3 @@ var backers = [
   'Kim Garcia',
   'Cynthia Jones',
 ];
-
-export default observer(Backers);

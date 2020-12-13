@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
-import Page from './shared/Page';
+import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
 
 export default function Tnc() {
@@ -11,6 +11,9 @@ export default function Tnc() {
       description="The Wally Shop's terms and conditions of service."
       content="Terms and Conditions"
     >
+      <Box mt={4}>
+        <Typography variant="h1">Terms and Conditions</Typography>
+      </Box>
       <Typography color="textSecondary" gutterBottom>
         Last updated: March 20, 2018
       </Typography>

@@ -3,7 +3,7 @@ import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
 
 // Custom Components
-import Page from './shared/Page';
+import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
 import SignupForm from 'forms/authentication/SignupForm';
 
@@ -23,6 +23,7 @@ import { Box, Grid, Typography } from '@material-ui/core';
 // Styled Components
 import styled from 'styled-components';
 import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
+import { ReverseOrderPhotoWrapper } from 'styled-component-lib/Grid';
 
 function Homepage() {
   const {
@@ -87,6 +88,18 @@ function Homepage() {
       {/* <NowShippingNationWideBanner /> */}
       <PageSection>
         <Grid alignItems="center" container justify="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h1" gutterBottom>
+                Do you, with reusables.
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                The Wally Shop connects you with your favorite brands 100%
+                waste-free. Our vision is to help you shop for everything in all
+                reusable packaging.
+              </Typography>
+            </Box>
+          </Grid>
           <Grid item xs={12} sm={5} md={6}>
             <Box
               display="flex"
@@ -104,36 +117,12 @@ function Homepage() {
               />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box px={2}>
-              <Typography variant="h1" gutterBottom>
-                Do you, with reusables.
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                The Wally Shop connects you with your favorite brands 100%
-                waste-free. Our vision is to help you shop for everything in all
-                reusable packaging.
-              </Typography>
-            </Box>
-          </Grid>
         </Grid>
       </PageSection>
 
       <PageSection>
         <Grid container alignItems="center" spacing={4}>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box px={2}>
-              <Typography variant="h2" gutterBottom>
-                Order
-              </Typography>
-              <Typography variant="body1">
-                Choose from hundreds of responsibly-made, price-competitive bulk
-                foods. At checkout, you'll be charged a deposit for your
-                packaging.
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={5} md={6}>
+          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={4}>
             <Box
               display="flex"
               justifyContent="center"
@@ -149,11 +138,35 @@ function Homepage() {
                 }}
               />
             </Box>
+          </ReverseOrderPhotoWrapper>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Order
+              </Typography>
+              <Typography variant="body1">
+                Choose from hundreds of responsibly-made, price-competitive bulk
+                foods. At checkout, you'll be charged a deposit for your
+                packaging.
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </PageSection>
       <PageSection>
         <Grid container alignItems="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Receive
+              </Typography>
+              <Typography variant="body1">
+                Your order will arrive at your door in completely reusable,
+                returnable packaging. The shipping tote it arrives in folds up
+                for easy storage. Simple, convenient, 100% waste free shopping.
+              </Typography>
+            </Box>
+          </Grid>
           <Grid item xs={12} sm={5} md={6}>
             <Box
               display="flex"
@@ -171,36 +184,11 @@ function Homepage() {
               />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box p={3}>
-              <Typography variant="h2" gutterBottom>
-                Receive
-              </Typography>
-              <Typography variant="body1">
-                Your order will arrive at your door in completely reusable,
-                returnable packaging. The shipping tote it arrives in folds up
-                for easy storage. Simple, convenient, 100% waste free shopping.
-              </Typography>
-            </Box>
-          </Grid>
         </Grid>
       </PageSection>
       <PageSection>
         <Grid container alignItems="center" spacing={4}>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box p={3}>
-              <Typography variant="h2" gutterBottom>
-                Return
-              </Typography>
-              <Typography variant="body1">
-                Once finished, you'll schedule a free packaging pick up or leave
-                your packaging with your courier during a future delivery. Once
-                received at our warehouse, your deposit is credited back to you
-                and the packaging is cleaned to be put back into circulation.
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={5} md={6}>
+          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={8}>
             <Box
               display="flex"
               justifyContent="center"
@@ -215,6 +203,19 @@ function Homepage() {
                   height: 'auto',
                 }}
               />
+            </Box>
+          </ReverseOrderPhotoWrapper>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Return
+              </Typography>
+              <Typography variant="body1">
+                Once finished, you'll schedule a free packaging pick up or leave
+                your packaging with your courier during a future delivery. Once
+                received at our warehouse, your deposit is credited back to you
+                and the packaging is cleaned to be put back into circulation.
+              </Typography>
             </Box>
           </Grid>
         </Grid>

@@ -103,6 +103,8 @@ let theme = createMuiTheme({
       },
     },
     MuiButton: {
+      disableElevation: true,
+      disableRipple: true,
       label: {
         textTransform: 'capitalize',
       },
