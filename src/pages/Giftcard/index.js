@@ -58,7 +58,7 @@ function GiftCardPage(props) {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="md">
       <Head
         title="Gift Card"
         description="Treat your loved ones to a zero-waste Wally Shop giftcard."
