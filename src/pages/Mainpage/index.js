@@ -31,11 +31,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/waste-free-products-by-tangie/waste-free-products-by-tangie-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-480.jpg',
   },
 ];
 
@@ -294,14 +294,14 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New products by Waste Free Products by Tangie'}
+        alt={'New products by Soapbox Soaps'}
         img={img}
         justify="flex-start"
-        title="Just Add Water"
-        url="/shop/brands/waste-free-products-by-tangie"
+        title="Soapbox"
+        url="/shop/brands/soapbox"
       >
         <Typography gutterBottom>
-          Sustainable soap bars by Tangie for all your cleaning needs.
+          Feel the difference, make a difference.
         </Typography>
       </HeroSlide>
     ));
@@ -639,7 +639,7 @@ function HeroSlideOverlay({ children, justify, title, url }) {
           {children && children}
           {url && (
             <PrimaryWallyButton component={Link} to={url} alt={title}>
-              <Typography component="span">Shop Now</Typography>
+              Shop Now
             </PrimaryWallyButton>
           )}
         </Grid>
