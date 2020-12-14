@@ -89,10 +89,17 @@ function ApplyPromoCodeForm() {
         const res = await applyPromo({ promoCode, timestamp }, auth);
         // Reload the user if their promo included a benefit or store credit
         const {
-          data: { benefit, store_credit },
+          data: {
+            benefit,
+            delivery_fee_discount,
+            discount_percentage,
+            store_credit,
+          },
         } = res;
         if (benefit || store_credit) await userStore.getUser();
-
+        if (delivery_fee_discount || discount_percentage) {
+          await checkoutStore.getCurrentCart(auth);
+        }
         await checkoutStore.getOrderSummary(auth);
         snackbarStore.openSnackbar(
           'Promo code applied successfully!',
