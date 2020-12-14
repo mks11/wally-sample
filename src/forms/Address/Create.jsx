@@ -176,7 +176,6 @@ function AddressCreateForm({ onCreate }) {
                     disabled={isSubmitting ? true : false}
                     fullWidth
                     isLoading={isSubmitting}
-                    loadingTitle={'Loading...'}
                     type="submit"
                   >
                     Submit
