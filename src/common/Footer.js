@@ -71,88 +71,90 @@ function Footer() {
   return (
     <FooterContainer>
       <Container maxWidth="xl">
-        <Grid container justify="space-evenly" spacing={4}>
-          <Grid item xs={12} sm={4} lg={3}>
-            <FooterSectionHeader>THE WALLY SHOP</FooterSectionHeader>
-            <List>
-              <ListItem disableGutters>
-                <Link to="about">About</Link>
-              </ListItem>
-              <ListItem disableGutters>
-                <Link to="howitworks">How It Works</Link>
-              </ListItem>
-              <ListItem disableGutters>
-                <Link to="/backers">Our Backers</Link>
-              </ListItem>
-              <ListItem disableGutters>
-                <Link to="/blog">Blog</Link>
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item xs={12} sm={4} lg={3}>
-            <FooterSectionHeader>SUPPORT</FooterSectionHeader>
-            <List>
-              <ListItem disableGutters>
-                <Link to={'/help'}>Help</Link>
-              </ListItem>
-              <ListItem disableGutters>
-                <a href="mailto:info@thewallyshop.co">Contact Us</a>
-              </ListItem>
-              <ListItem disableGutters>
-                <Link to={'/tnc'}>Terms &amp; Conditions</Link>
-              </ListItem>
-              <ListItem disableGutters>
-                <Link to={'/privacy'}>Privacy Policy</Link>
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item xs={12} sm={4} lg={3}>
-            <FooterSectionHeader>FOLLOW US</FooterSectionHeader>
-            <List>
-              <ListItem disableGutters>
-                <a
-                  href={FACEBOOK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    padding: '0.5rem',
-                  }}
-                >
-                  <Facebook style={{ fontSize: '35px' }} />{' '}
-                  <span style={{ marginLeft: '4px' }}>Facebook</span>
-                </a>
-              </ListItem>
-              <ListItem disableGutters>
-                <a
-                  href={INSTAGRAM}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    padding: '0.5rem',
-                  }}
-                >
-                  <Instagram style={{ fontSize: '35px' }} />{' '}
-                  <span style={{ marginLeft: '4px' }}>Instagram</span>
-                </a>
-              </ListItem>
-              <ListItem disableGutters>
-                <Box display="flex" alignItems="center">
-                  <SubscribeToNewsletter />
-                </Box>
-              </ListItem>
-            </List>
-          </Grid>
-          {(isXs || isLg) && (
-            <Grid item xs={12} lg={3}>
-              <FooterSectionHeader>NEWSLETTER</FooterSectionHeader>
-              <SubscribeToNewsletterForm />
+        <Box py={2}>
+          <Grid container justify="space-evenly" spacing={4}>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>THE WALLY SHOP</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <Link to="about">About</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to="howitworks">How It Works</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to="/backers">Our Backers</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to="/blog">Blog</Link>
+                </ListItem>
+              </List>
             </Grid>
-          )}
-        </Grid>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>SUPPORT</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <Link to={'/help'}>Help</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <a href="mailto:info@thewallyshop.co">Contact Us</a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to={'/tnc'}>Terms &amp; Conditions</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to={'/privacy'}>Privacy Policy</Link>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>FOLLOW US</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <a
+                    href={FACEBOOK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <Facebook style={{ fontSize: '35px' }} />{' '}
+                    <span style={{ marginLeft: '4px' }}>Facebook</span>
+                  </a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <a
+                    href={INSTAGRAM}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <Instagram style={{ fontSize: '35px' }} />{' '}
+                    <span style={{ marginLeft: '4px' }}>Instagram</span>
+                  </a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Box display="flex" alignItems="center">
+                    <SubscribeToNewsletter />
+                  </Box>
+                </ListItem>
+              </List>
+            </Grid>
+            {(isXs || isLg) && (
+              <Grid item xs={12} lg={3}>
+                <FooterSectionHeader>NEWSLETTER</FooterSectionHeader>
+                <SubscribeToNewsletterForm />
+              </Grid>
+            )}
+          </Grid>
+        </Box>
       </Container>
     </FooterContainer>
   );
