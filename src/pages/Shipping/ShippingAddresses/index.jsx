@@ -99,7 +99,7 @@ function AddNewAddress({ onCreate }) {
   };
 
   return (
-    <Container maxWidth="sm" disableGutters>
+    <Container maxWidth="xs" disableGutters>
       <Box p={2}>
         <PrimaryWallyButton
           onClick={handleAddNewAddress}

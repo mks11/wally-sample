@@ -83,7 +83,7 @@ export default function CollapseCard({
           >
             <Box>{children}</Box>
             {showSaveButton ? (
-              <Container maxWidth="sm" disableGutters>
+              <Container maxWidth="xs" disableGutters>
                 <Box mt={2} px={2}>
                   <PrimaryWallyButton onClick={handleSave} fullWidth>
                     Save
