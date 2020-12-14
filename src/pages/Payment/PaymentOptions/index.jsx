@@ -87,7 +87,7 @@ function AddNewPayment({ onCreate }) {
         </Typography>
         <StripeCardInput onAdd={onCreate} />
       </Suspense>,
-      'left',
+      'right',
     );
   };
 

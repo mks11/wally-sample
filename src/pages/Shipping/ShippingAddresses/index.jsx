@@ -94,7 +94,7 @@ function AddNewAddress({ onCreate }) {
       <Suspense fallback={SuspenseFallback()}>
         <AddressCreateForm onCreate={onCreate} />
       </Suspense>,
-      'left',
+      'right',
     );
   };
 
