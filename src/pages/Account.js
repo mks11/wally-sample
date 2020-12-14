@@ -404,7 +404,9 @@ function AddNewPaymentMethod() {
   const handleAddNewPaymentMethod = () => {
     modalV2Store.open(
       <>
-        <Typography variant="h1">Add Payment Method</Typography>
+        <Typography variant="h1" gutterBottom>
+          Add Payment Method
+        </Typography>
         <StripeCardInput />
       </>,
     );
