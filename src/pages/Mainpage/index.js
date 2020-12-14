@@ -471,6 +471,20 @@ const SlideOverlayWrapper = styled(Box)`
   padding: 2rem;
 `;
 
+const HeroOverline = styled.p`
+  font-family: 'Sofia Pro', sans-serif;
+  font-weight: bold;
+  font-size: 1.246rem;
+  @media only screen and (min-width: 768px) {
+    font-size: 1.4239rem;
+  }
+  @media only screen and (min-width: 992px) {
+    font-size: 1.602rem;
+  }
+
+  margin-bottom: 0;
+`;
+
 const HeroTitle = styled.h1`
   font-family: 'Clearface', serif;
   font-size: 1.416rem;
