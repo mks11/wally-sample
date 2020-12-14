@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 // Styling
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
 // Custom Components
 import Navbar from 'common/Header/NavBar';
@@ -56,6 +56,13 @@ import Navbar from 'common/Header/NavBar';
 //     height: 48px;
 //   }
 // `;
+const LogoLink = styled(Link)`
+  &&& {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+`;
 
 const Logo = observer(() => {
   const shouldDisplayCondensedLogo = useMediaQuery({
@@ -70,7 +77,7 @@ const Logo = observer(() => {
 
   return (
     <Box>
-      <Link to={home} onClick={onLogoClick}>
+      <LogoLink to={home} onClick={onLogoClick}>
         {shouldDisplayCondensedLogo ? (
           <Typography variant="h1" style={{ fontSize: '4rem' }}>
             w
@@ -78,7 +85,7 @@ const Logo = observer(() => {
         ) : (
           <Typography variant="h1">the wally shop</Typography>
         )}
-      </Link>
+      </LogoLink>
     </Box>
   );
 });
