@@ -14,14 +14,17 @@ const CustomPhoneInput = forwardRef((props, ref) => {
 
 export default function PhoneNumberInput({ name, ...props }) {
   const { setFieldValue } = useFormikContext();
+
   const handleChange = (value) => {
-    const val = value.substr(2);
-    setFieldValue(name, val);
+    if (value) {
+      const val = value.substr(2);
+      setFieldValue(name, val);
+    }
   };
 
   const [field, meta] = useField({ name });
   //drop onChange and value (to prevent override)
-  const { onChange, value, ...restField } = field;
+  const { onChange, value, ...rest } = field;
 
   return (
     <>
@@ -30,11 +33,12 @@ export default function PhoneNumberInput({ name, ...props }) {
         inputComponent={CustomPhoneInput}
         metadata={metadata}
         onChange={handleChange}
-        error={!!(meta.touched && meta.error)}
-        {...restField}
+        error={meta.touched && meta.error}
+        {...rest}
         {...props}
+        value={'+1' + value}
       />
-      <HelperText error={!!(meta.touched && meta.error)}>
+      <HelperText error={meta.touched && meta.error}>
         {meta.touched && meta.error ? meta.error : ' '}
       </HelperText>
     </>
