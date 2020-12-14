@@ -226,6 +226,29 @@ class Mainpage extends Component {
         <div className="product-content">
           <Container maxWidth="xl">
             <div className="row ">
+              {/* Featured Brands */}
+              <Container maxWidth="xl" disableGutters>
+                {/* displayed from 568px and up */}
+                <DesktopCarouselWrapper my={2} zIndex={1}>
+                  <ImageCarousel
+                    dots={hasDots}
+                    keyName={'featured-brands'}
+                    height={675}
+                    slides={slides}
+                    width={1200}
+                  />
+                </DesktopCarouselWrapper>
+                {/* displayed from 567px and down */}
+                <MobileCarouselWrapper my={2} zIndex={1}>
+                  <ImageCarousel
+                    dots={hasDots}
+                    keyName={'featured-brands'}
+                    height={480}
+                    slides={slides}
+                    width={480}
+                  />
+                </MobileCarouselWrapper>
+              </Container>
               <div className="col-xl-2 col-md-3 col-sm-4">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
@@ -352,30 +375,6 @@ class Mainpage extends Component {
                             alt=""
                           />
                         )}
-
-                        {/* Featured Brands */}
-                        <Container maxWidth="lg" disableGutters>
-                          {/* displayed from 568px and up */}
-                          <DesktopCarouselWrapper my={2} zIndex={1}>
-                            <ImageCarousel
-                              dots={hasDots}
-                              keyName={'featured-brands'}
-                              height={675}
-                              slides={slides}
-                              width={1200}
-                            />
-                          </DesktopCarouselWrapper>
-                          {/* displayed from 567px and down */}
-                          <MobileCarouselWrapper my={2} zIndex={1}>
-                            <ImageCarousel
-                              dots={hasDots}
-                              keyName={'featured-brands'}
-                              height={480}
-                              slides={slides}
-                              width={480}
-                            />
-                          </MobileCarouselWrapper>
-                        </Container>
 
                         {this.state.categoryTypeMode === 'limit' ? (
                           <div className="row">
