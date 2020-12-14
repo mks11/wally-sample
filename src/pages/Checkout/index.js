@@ -260,6 +260,10 @@ const OrderSummary = observer(() => {
   const wasTaxed =
     order && typeof order.tax_amount === 'number' && +order.tax_amount;
   const orderTotal = order && order.total && order.total / 100;
+  const hasDiscount =
+    (order && order.applied_packaging_balance) ||
+    order.applied_store_credit ||
+    (order.applied_promo_codes && order.applied_promo_codes.length);
 
   // User state
   const { user } = userStore;
@@ -460,19 +464,25 @@ const OrderSummary = observer(() => {
                 : theme.palette.text.main
             }
           >
-            <Typography gutterBottom>Shipping</Typography>
-            <Typography gutterBottom>
+            <Typography gutterBottom={hasDiscount ? true : false}>
+              Shipping
+            </Typography>
+            <Typography gutterBottom={hasDiscount ? true : false}>
               {hasFreeShipping
                 ? 'Free'
                 : formatMoney(order.delivery_amount / 100)}
             </Typography>
           </Box>
-          <Box mb={2}>
-            <Divider />
-          </Box>
-          <Typography component="p" variant="h6" gutterBottom>
-            Discounts and Promotions
-          </Typography>
+          {hasDiscount && (
+            <>
+              <Box mb={2}>
+                <Divider />
+              </Box>
+              <Typography component="p" variant="h6" gutterBottom>
+                Discounts and Promotions
+              </Typography>
+            </>
+          )}
           <Box color={theme.palette.success.main}>
             {order.applied_packaging_balance === 0 ? null : (
               <Box
