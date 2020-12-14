@@ -1,8 +1,16 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { logPageView, logModalView } from "services/google-analytics";
-import { connect } from "../utils";
+import { logPageView, logModalView } from 'services/google-analytics';
+import { connect } from '../utils';
 
+// Custom Components
+import PageSection from 'common/PageSection';
+
+// Material UI
+import { Box, Container, Typography } from '@material-ui/core';
+
+// Styled Components
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 class OrderConfirmation extends Component {
   constructor(props) {
     super(props);
@@ -17,19 +25,19 @@ class OrderConfirmation extends Component {
     const { location } = this.routing;
     logPageView(location.pathname);
 
-    logModalView("/refer");
+    logModalView('/refer');
 
     this.userStore.getStatus(true).then((status) => {
       if (status) {
-        this.modalStore.toggleModal("referral");
+        this.modalStore.toggleModal('referral');
       } else {
-        this.routing.push("/main");
+        this.routing.push('/main');
       }
     });
   }
 
   handleShopMore() {
-    this.routing.push("/main");
+    this.routing.push('/main');
   }
 
   render() {
@@ -37,36 +45,36 @@ class OrderConfirmation extends Component {
     if (!id) {
       return null;
     }
-    return (
-      <section className="page-section">
-        <div className="container-fluid">
-          <h1 className="my-1">Your order has been placed!</h1>
-          <h1 className="my-1 mt-4">Order ID: #{id}</h1>
-          <p style={{ fontSize: "25px" }}>
-            Thank you for your order! You should receive an order confirmation
-            email shortly. When you’re finished with any Wally Shop containers
-            or bags, simply return them to the courier upon your next, or any
-            future, Wally Shop delivery.
-          </p>
 
-          <div className="btn-hero--wrapper mb-3 mt-4">
-            <button
-              onClick={(e) => this.handleShopMore(e)}
-              id="btn-hero--submit"
-              href="#nav-hero"
-              className="btn btn-block btn-success btn-get--started btn-left mr-4 confirm-submit"
-              data-submit="Submit"
-            >
-              KEEP SHOPPING
-            </button>
-            {/* <span>
-                For every friend you refer, you’ll get $10 once they purchase, and they’ll get $10 just for signing up! Details <Link to="/help/detail/5bd1d6c31ee5e4f1d0b42c29">here.</Link>
-              </span> */}
-          </div>
-        </div>
-      </section>
+    return (
+      <PageSection>
+        <Container maxWidth="xl">
+          <Typography variant="h1" gutterBottom>
+            Your order has been placed!
+          </Typography>
+          <Typography variant="h2" gutterBottom>
+            Order ID: #{id}
+          </Typography>
+          <Typography gutterBottom>Thank you for your order!</Typography>
+          <Typography gutterBottom>
+            You should receive an order confirmation email shortly.
+          </Typography>
+          <Typography gutterBottom>
+            When you’re finished with your packaging, flip the shipping label on
+            your tote to the reverse side. This is where your return label is
+            located. You can either drop off your packaging with a delivery
+            courier on your next order, or schedule a pickup through our website
+            when you're ready to return your packaging.
+          </Typography>
+          <Box my={4}>
+            <PrimaryWallyButton onClick={(e) => this.handleShopMore(e)}>
+              Keep Shopping
+            </PrimaryWallyButton>
+          </Box>
+        </Container>
+      </PageSection>
     );
   }
 }
 
-export default connect("store")(OrderConfirmation);
+export default connect('store')(OrderConfirmation);
