@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 // API
 import { createPaymentMethod } from 'api/payment';
 
+// Material ui
+import { Box } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+
 // MobX
 import { useStores } from 'hooks/mobx';
 
@@ -12,10 +16,10 @@ import { CardElement, ElementsConsumer } from '@stripe/react-stripe-js';
 // Components
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Box } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
 import Checkbox from 'common/FormikComponents/NonRenderPropAPI/Checkbox';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+// Styled Components
+import { ActivityButton } from 'styled-component-lib/Buttons';
 import { HelperText } from 'styled-component-lib/HelperText';
 
 function CardInput({ elements, onAdd, stripe }) {
@@ -23,7 +27,7 @@ function CardInput({ elements, onAdd, stripe }) {
   const { user: userStore, modalV2 } = useStores();
   const theme = useTheme();
   const errorColor = theme.palette.error.main;
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     if (!stripe || !elements) {
       return;
     }
@@ -45,9 +49,12 @@ function CardInput({ elements, onAdd, stripe }) {
       );
       userStore.setUserData(user);
       onAdd && onAdd(paymentMethod._id);
+      setSubmitting(false);
       modalV2.close();
     } catch (error) {
+      setSubmitting(false);
       if (
+        // Stripe errors from backend
         error.response &&
         error.response.data &&
         error.response.data.error &&
@@ -55,11 +62,15 @@ function CardInput({ elements, onAdd, stripe }) {
       ) {
         const { message } = error.response.data.error;
         setPaymentError(message);
-      } else if (error && error.error && error.error.message) {
+      } else if (
+        // Stripe payload errors
+        error &&
+        error.error &&
+        error.error.message
+      ) {
         const { message } = error.error;
         setPaymentError(message);
       } else {
-        console.log(error);
         setPaymentError('Failed to add new card.');
       }
     }
@@ -70,9 +81,8 @@ function CardInput({ elements, onAdd, stripe }) {
       initialValues={{ isPreferredPayment: false }}
       validationSchema={Yup.object({ isPreferredPayment: Yup.bool() })}
       enableReinitialize
-      onSubmit={(values, { setSubmitting }) => {
-        handleSubmit(values);
-        setSubmitting(false);
+      onSubmit={(values, actions) => {
+        handleSubmit(values, actions);
       }}
     >
       {({ isSubmitting }) => (
@@ -96,9 +106,13 @@ function CardInput({ elements, onAdd, stripe }) {
               color="primary"
             />
           </Box>
-          <PrimaryWallyButton type="submit" disabled={isSubmitting}>
+          <ActivityButton
+            type="submit"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
             Add New Card
-          </PrimaryWallyButton>
+          </ActivityButton>
         </Form>
       )}
     </Formik>
