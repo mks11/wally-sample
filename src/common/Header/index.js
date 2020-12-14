@@ -12,50 +12,50 @@ import { Link } from 'react-router-dom';
 import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 // Styling
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 // Custom Components
 import Navbar from 'common/Header/NavBar';
 
 // images
-import logoFull from 'images/logo-full.svg';
-import logoCondensed from 'images/logo-condensed.svg';
+// import logoFull from 'images/logo-full.svg';
+// import logoCondensed from 'images/logo-condensed.svg';
 
-const LogoCondensed = styled.img`
-  height: 40px;
+// const LogoCondensed = styled.img`
+//   height: 40px;
 
-  @media only screen and (min-width: 567px) {
-    height: 40px;
-  }
+//   @media only screen and (min-width: 567px) {
+//     height: 40px;
+//   }
 
-  @media only screen and (min-width: 768px) {
-    height: 44px;
-  }
+//   @media only screen and (min-width: 768px) {
+//     height: 44px;
+//   }
 
-  @media only screen and (min-width: 992px) {
-    height: 48px;
-  }
-`;
+//   @media only screen and (min-width: 992px) {
+//     height: 48px;
+//   }
+// `;
 
-const LogoFull = styled.img`
-  height: 24px;
+// const LogoFull = styled.img`
+//   height: 24px;
 
-  @media only screen and (min-width: 375px) {
-    height: 32px;
-  }
+//   @media only screen and (min-width: 375px) {
+//     height: 32px;
+//   }
 
-  @media only screen and (min-width: 567px) {
-    height: 40px;
-  }
+//   @media only screen and (min-width: 567px) {
+//     height: 40px;
+//   }
 
-  @media only screen and (min-width: 768px) {
-    height: 44px;
-  }
+//   @media only screen and (min-width: 768px) {
+//     height: 44px;
+//   }
 
-  @media only screen and (min-width: 992px) {
-    height: 48px;
-  }
-`;
+//   @media only screen and (min-width: 992px) {
+//     height: 48px;
+//   }
+// `;
 
 const Logo = observer(() => {
   const shouldDisplayCondensedLogo = useMediaQuery({
@@ -72,9 +72,11 @@ const Logo = observer(() => {
     <Box>
       <Link to={home} onClick={onLogoClick}>
         {shouldDisplayCondensedLogo ? (
-          <LogoCondensed src={logoCondensed} alt="The Wally Shop logo." />
+          <Typography variant="h1" style={{ fontSize: '4rem' }}>
+            w
+          </Typography>
         ) : (
-          <LogoFull src={logoFull} alt="The Wally Shop logo." />
+          <Typography variant="h1">the wally shop</Typography>
         )}
       </Link>
     </Box>
