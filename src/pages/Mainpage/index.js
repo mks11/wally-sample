@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 // Services & utilities
-import { logPageView, logEvent } from 'services/google-analytics';
+import { logPageView } from 'services/google-analytics';
 import { connect } from 'utils';
 
 // Config
@@ -16,10 +16,8 @@ import { Image } from 'pure-react-carousel';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
-import CarbonBar from 'common/CarbonBar';
 import Product from './Product';
 import ProductList from './ProductList';
-import ProductTop from './ProductTop';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 // import ProductWithPackaging from '../ProductWithPackaging';
@@ -207,13 +205,6 @@ class Mainpage extends Component {
     const { sidebar } = this.state;
 
     const id = this.props.match.params.id;
-    const cartItems = this.checkoutStore.cart
-      ? this.checkoutStore.cart.cart_items
-      : [];
-    var count = 0;
-    for (var i = cartItems.length - 1; i >= 0; i--) {
-      count += cartItems[i].customer_quantity;
-    }
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null;
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null;
 
@@ -318,11 +309,6 @@ class Mainpage extends Component {
                       <img src={APP_URL + ads2} className="img-fluid" alt="" />
                     )}
 
-                    <div className="product-breadcrumb">
-                      <CarbonBar nCartItems={count} />
-                      <hr />
-                    </div>
-
                     <div className="row">
                       {this.productStore.search.display
                         .filter((p) =>
@@ -366,10 +352,6 @@ class Mainpage extends Component {
                             alt=""
                           />
                         )}
-
-                        <div className="product-breadcrumb">
-                          <CarbonBar nCartItems={count} />
-                        </div>
 
                         {/* Featured Brands */}
                         <Container maxWidth="lg" disableGutters>
@@ -487,26 +469,6 @@ const SlideOverlayWrapper = styled(Box)`
   }
 
   padding: 2rem;
-  ${'' /* background: rgb(255, 255, 255);
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.35) 100%
-  ); */}
-`;
-
-const HeroOverline = styled.p`
-  font-family: 'Sofia Pro', sans-serif;
-  font-weight: bold;
-  font-size: 1.246rem;
-  @media only screen and (min-width: 768px) {
-    font-size: 1.4239rem;
-  }
-  @media only screen and (min-width: 992px) {
-    font-size: 1.602rem;
-  }
-
-  margin-bottom: 0;
 `;
 
 const HeroTitle = styled.h1`
