@@ -17,8 +17,8 @@ export default function Banner({ children }) {
         </Grid>
         <Grid item xs={1}>
           <Box display="flex" justifyContent="center">
-            <IconButton>
-              <CloseIcon onClick={handleClick} />
+            <IconButton onClick={handleClick}>
+              <CloseIcon />
             </IconButton>
           </Box>
         </Grid>
