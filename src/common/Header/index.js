@@ -16,6 +16,7 @@ import styled from 'styled-components';
 
 // Custom Components
 import Navbar from 'common/Header/NavBar';
+import Banner from 'common/Banner';
 
 // images
 // import logoFull from 'images/logo-full.svg';
@@ -106,6 +107,16 @@ const Header = observer(() => {
     >
       <Container maxWidth="xl">
         <Box py={2}>
+          <Banner>
+            <Typography> hello, 👋! </Typography>
+            <Typography>
+              “May the joys of the season shed light, hope and fill our hearts
+              with peace.” “May the magic & thrill of the holiday season stretch
+              on!” “May the special joys of the Season be your today and
+              always.” “May the timeless message of Christmas fill your heart
+              and home with joy today and throughout the coming year.”
+            </Typography>
+          </Banner>
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
               <Logo />
