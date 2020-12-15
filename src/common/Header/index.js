@@ -108,13 +108,9 @@ const Header = observer(() => {
       <Container maxWidth="xl">
         <Box py={2}>
           <Banner>
-            <Typography> hello, 👋! </Typography>
             <Typography>
-              “May the joys of the season shed light, hope and fill our hearts
-              with peace.” “May the magic & thrill of the holiday season stretch
-              on!” “May the special joys of the Season be your today and
-              always.” “May the timeless message of Christmas fill your heart
-              and home with joy today and throughout the coming year.”
+              NOW THROUGH 12/27 ONLY. USE PROMO FOOBAR AT CHECKOUT FOR 10% OFF
+              OF $50!
             </Typography>
           </Banner>
           <Grid container justify="space-between" alignItems="center">
