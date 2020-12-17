@@ -5,7 +5,7 @@ import Homepage from './pages/Homepage';
 import Mainpage from './pages/Mainpage';
 import About from './pages/About';
 import LatestNews from './pages/LatestNews';
-import HowItWorks from './pages/HowItWorks';
+// import HowItWorks from './pages/HowItWorks';
 import Account from './pages/Account';
 import Help from './pages/Help';
 import HelpSingle from './pages/HelpSingle';
@@ -215,7 +215,9 @@ function Routes(props) {
       <Route exact path="/tnc" component={Tnc} />
       <Route exact path="/privacy" component={Privacy} />
       <Route exact path="/about" component={About} />
-      <Route exact path="/howitworks" component={HowItWorks} />
+      <Route exact path="/howitworks">
+        <Redirect to="/about" />
+      </Route>
       <Route exact path="/backers" component={Backers} />
       <Route exact path="/blog" component={Blog} />
       <Route exact path="/latest-news" component={LatestNews} />

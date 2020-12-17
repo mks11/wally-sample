@@ -97,7 +97,7 @@ const NavbarWrapper = styled.div`
   background: #fae1ff;
   padding: 0;
 
-  @media only screen and (min-width: 992px) {
+  @media only screen and (min-width: 821px) {
     padding: 16px 0;
   }
 `;

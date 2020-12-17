@@ -49,7 +49,6 @@ export const MobileGuestNav = observer(() => {
           </AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
       </MobileNavMenu>
-
       <AccountDropdown>
         <AccountDropdownMenuListItem>
           <AccountDropdownMenuBtn onClick={handleLogin}>

@@ -35,15 +35,18 @@ export const MobileUserNav = observer(() => {
           <AccountDropdownMenuItem to="/main">Shop</AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
         <AccountDropdownMenuListItem>
-          <AccountDropdownMenuItem to="/blog">Blog</AccountDropdownMenuItem>
-        </AccountDropdownMenuListItem>
-        <AccountDropdownMenuListItem>
           <AccountDropdownMenuItem to="/giftcard">
             Gift Cards
           </AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
         <AccountDropdownMenuListItem>
           <AccountDropdownMenuItem to="/help">Help</AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/about">About</AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/blog">Blog</AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
       </MobileNavMenu>
       <AccountDropdown>
@@ -168,8 +171,9 @@ export const DesktopUserNav = observer(() => {
   return user.isUser ? (
     <>
       <DesktopNavItem to="/main" text="Shop" />
-      <DesktopNavItem to="/blog" text="Blog" />
       <DesktopNavItem to="/giftcard" text="Gift Cards" />
+      <DesktopNavItem to="/about" text="About" />
+      <DesktopNavItem to="/blog" text="Blog" />
       <DesktopNavItem to="/help" text="Help" />
       <AccountDropdown>
         <AccountDropdownMenuListItem>

@@ -77,10 +77,7 @@ function Footer() {
               <FooterSectionHeader>THE WALLY SHOP</FooterSectionHeader>
               <List>
                 <ListItem disableGutters>
-                  <Link to="about">About</Link>
-                </ListItem>
-                <ListItem disableGutters>
-                  <Link to="howitworks">How It Works</Link>
+                  <Link to="/about">About</Link>
                 </ListItem>
                 <ListItem disableGutters>
                   <Link to="/backers">Our Backers</Link>
