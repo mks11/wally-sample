@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 
 import { formatMoney } from 'utils';
-import { logPageView } from 'services/google-analytics';
+import { logEvent, logPageView } from 'services/google-analytics';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { PRODUCT_BASE_URL } from 'config';
 import { useMediaQuery } from 'react-responsive';
@@ -52,7 +52,9 @@ const ReviewCart = ({ breadcrumbs, location }) => {
   useEffect(() => {
     // Store page view in google analytics
     logPageView(location.pathname);
+  }, []);
 
+  useEffect(() => {
     if (cart && cart.cart_items && cart.cart_items.length) {
       loadData();
     }
@@ -166,6 +168,7 @@ function ImpulseProduct({ product }) {
   const handleProductClick = async (product_id) => {
     try {
       await productStore.showModal(product_id, null);
+      logEvent({ category: 'Checkout', action: 'View Impulse Product' });
       modalV2.open(
         <Suspense
           fallback={<Typography variant="h1">Loading product...</Typography>}

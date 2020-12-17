@@ -107,7 +107,7 @@ const Cart = observer(() => {
   );
 
   const handleCheckout = () => {
-    logEvent({ category: 'Cart', action: 'ClickCheckout' });
+    logEvent({ category: 'Checkout', action: 'Continue To Checkout' });
     modalV2.close();
   };
 

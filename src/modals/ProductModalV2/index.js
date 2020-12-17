@@ -115,10 +115,10 @@ const ProductModalV2 = observer(() => {
 
     setIsSubmitting(true);
     const { activeProduct } = productStore;
-
+    const isImpulseProduct = routing.location.pathname.includes('checkout');
     logEvent({
       category: 'Product',
-      action: 'AddToCart',
+      action: isImpulseProduct ? 'Add Impulse Product To Cart' : 'Add To Cart',
       value: qty,
       label: productStore.activeProductId,
     });

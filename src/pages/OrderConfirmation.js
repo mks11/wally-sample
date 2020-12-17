@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { logPageView, logModalView } from 'services/google-analytics';
+import { logEvent, logPageView, logModalView } from 'services/google-analytics';
 import { connect } from '../utils';
 
 // Custom Components
@@ -25,10 +25,9 @@ class OrderConfirmation extends Component {
     const { location } = this.routing;
     logPageView(location.pathname);
 
-    logModalView('/refer');
-
     this.userStore.getStatus(true).then((status) => {
       if (status) {
+        logModalView('/refer');
         this.modalStore.toggleModal('referral');
       } else {
         this.routing.push('/main');
@@ -37,6 +36,7 @@ class OrderConfirmation extends Component {
   }
 
   handleShopMore() {
+    logEvent({ category: 'Checkout', action: 'Return to Shop' });
     this.routing.push('/main');
   }
 
@@ -50,7 +50,7 @@ class OrderConfirmation extends Component {
       <PageSection>
         <Container maxWidth="xl">
           <Typography variant="h1" gutterBottom>
-            Your order has been placed!
+            Your order was placed!
           </Typography>
           <Typography variant="h2" gutterBottom>
             Order ID: #{id}
@@ -66,7 +66,7 @@ class OrderConfirmation extends Component {
             courier on your next order, or schedule a pickup through our website
             when you're ready to return your packaging.
           </Typography>
-          <Box my={4}>
+          <Box my={4} display="flex" justifyContent="center">
             <PrimaryWallyButton onClick={(e) => this.handleShopMore(e)}>
               Keep Shopping
             </PrimaryWallyButton>

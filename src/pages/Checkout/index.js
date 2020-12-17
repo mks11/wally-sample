@@ -71,15 +71,17 @@ function Checkout({ breadcrumbs, location }) {
   }
 
   useEffect(() => {
+    // Store page view in google analytics
+    logPageView(location.pathname);
+  }, []);
+
+  useEffect(() => {
     if (checkoutStore.cart && !checkoutStore.cart.cart_items.length) {
       routingStore.push('/checkout/cart');
     }
   }, [checkoutStore.cart]);
 
   useEffect(() => {
-    // Store page view in google analytics
-    const { location } = routingStore;
-    logPageView(location.pathname);
     // This triggers a modal if the user hasn't visited the page yet.
     // The modal explains the packaging deposit process.
     // The 'flag' is set via a local storage item.
@@ -200,11 +202,6 @@ function Checkout({ breadcrumbs, location }) {
       const { addressId, cartId, paymentId, shippingServiceLevel } = values;
       const auth = userStore.getHeaderAuth();
       loadingStore.show();
-      logEvent({
-        category: 'Order',
-        action: 'Submit Order',
-      });
-
       const res = await submitOrder(
         {
           addressId,
@@ -214,10 +211,19 @@ function Checkout({ breadcrumbs, location }) {
         },
         auth,
       );
+      logEvent({
+        category: 'Checkout',
+        action: 'Submit Order',
+      });
       checkoutStore.clearCart(userStore.getHeaderAuth());
-      clearCookies();
       routingStore.push('/orders/' + res.data.order._id);
+      clearCookies();
     } catch (error) {
+      logEvent({
+        category: 'Checkout',
+        action: 'Order Submission Failure',
+        nonInteraction: true,
+      });
       let msg = getErrorMessage(error) || 'Order submission failed';
       let param = getErrorParam(error);
 
@@ -643,8 +649,8 @@ export const AppliedPromoCodes = observer(() => {
     <Box style={{ color: theme.palette.success.main }}>
       <Typography component="p">Applied Promo Codes:</Typography>
       <List style={{ padding: '0' }}>
-        {cart.applied_promo_codes.map((code) => (
-          <ListItem key={code.promo_code} style={{ padding: '4px 8px' }}>
+        {cart.applied_promo_codes.map((code, idx) => (
+          <ListItem key={code.promo_code + idx} style={{ padding: '4px 8px' }}>
             <Typography>{code.promo_code}</Typography>
           </ListItem>
         ))}

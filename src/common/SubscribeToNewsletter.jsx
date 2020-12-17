@@ -7,6 +7,7 @@ import { subscribeToNewsletter } from './../api/sendinblue';
 import { TextInput } from './FormikComponents/NonRenderPropAPI';
 import { useStores } from 'hooks/mobx';
 import { ActivityButton } from 'styled-component-lib/Buttons';
+import { logEvent } from 'services/google-analytics';
 
 export default function SubscribeToNewsletter() {
   const { modalV2 } = useStores();
@@ -49,6 +50,8 @@ export function SubscribeToNewsletterForm() {
   ) => {
     try {
       await subscribeToNewsletter(email);
+      logEvent({ category: 'Newsletter', action: 'Subscribe to newsletter' });
+      setSubmitting(false);
       modalV2.close();
       snackbarStore.openSnackbar('Subscribed to newsletter!', 'success');
       resetForm();
@@ -56,7 +59,6 @@ export function SubscribeToNewsletterForm() {
       if (e && e.response && e.response.data && e.response.data.error) {
         setFieldError('email', e.response.data.error.message);
       }
-    } finally {
       setSubmitting(false);
     }
   };

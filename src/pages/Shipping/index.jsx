@@ -19,6 +19,9 @@ import { Box, Card, Container } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
+// Services
+import { logPageView } from 'services/google-analytics';
+
 // Styled Components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
@@ -56,6 +59,11 @@ const Shipping = observer(({ breadcrumbs, location }) => {
       path: '/',
     });
   };
+
+  useEffect(() => {
+    // Store page view in google analytics
+    logPageView(location.pathname);
+  }, []);
 
   useEffect(() => {
     if (checkout.cart && !checkout.cart.cart_items.length) {

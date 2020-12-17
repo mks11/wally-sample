@@ -24,6 +24,7 @@ function ApplyPromoCodeForm() {
   const {
     checkout: checkoutStore,
     user: userStore,
+    routing,
     snackbar: snackbarStore,
   } = useStores();
   return (
@@ -79,13 +80,7 @@ function ApplyPromoCodeForm() {
 
     if (user) {
       try {
-        logEvent({
-          category: 'Promotions & Gift Cards',
-          action: 'ApplyPromo',
-          label: promoCode,
-        });
         const auth = userStore.getHeaderAuth();
-
         const res = await applyPromo({ promoCode, timestamp }, auth);
         // Reload the user if their promo included a benefit or store credit
         const {
@@ -96,6 +91,17 @@ function ApplyPromoCodeForm() {
             store_credit,
           },
         } = res;
+        const promoAppliedDuringCheckout = routing.location.pathname.includes(
+          'checkout',
+        );
+
+        logEvent({
+          category: 'Promotions & Gift Cards',
+          action: promoAppliedDuringCheckout
+            ? 'Apply Promo at Checkout'
+            : 'Apply Promo at Account',
+          label: promoCode,
+        });
         if (benefit || store_credit) await userStore.getUser();
         if (delivery_fee_discount || discount_percentage) {
           await checkoutStore.getCurrentCart(auth);
@@ -107,6 +113,12 @@ function ApplyPromoCodeForm() {
         );
         resetForm();
       } catch (error) {
+        logEvent({
+          category: 'Promotions & Gift Cards',
+          action: 'Apply Promo Failure',
+          label: promoCode,
+          nonInteraction: true,
+        });
         if (
           error.response &&
           error.response.data &&
