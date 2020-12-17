@@ -18,7 +18,11 @@ class HelpStore {
     const resp = await axios(API_HELP_GET_HELP_TOPICS);
     // Temporarily hide the Sourcing and Ingredients section because needs a major update.
     const topics = resp.data.length
-      ? resp.data.filter((t) => t.name !== 'Sourcing and Ingredients')
+      ? resp.data.filter(
+          (t) =>
+            t.name !== 'Sourcing and Ingredients' &&
+            t.name !== 'Referral Program',
+        )
       : [];
     this.topics = topics;
   }
