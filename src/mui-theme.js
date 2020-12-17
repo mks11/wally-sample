@@ -43,6 +43,7 @@ let theme = createMuiTheme({
       disableElevation: true,
     },
   },
+  // Minor Third
   typography: {
     h1: {
       fontFamily: ['ClearFace'].join(','),

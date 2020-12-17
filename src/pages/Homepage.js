@@ -8,8 +8,8 @@ import PageSection from 'common/PageSection';
 
 // Images
 import intro600 from 'images/intro-600.jpg';
-import order600 from 'images/order-600.jpg';
-import tote600 from 'images/tote-600.jpg';
+import order600 from 'images/order-hd-600.jpg';
+import tote600 from 'images/tote-hd-600.jpg';
 import returnPackaging600 from 'images/return-packaging-600.jpg';
 
 // MobX
@@ -137,7 +137,7 @@ function Homepage() {
             >
               <img
                 src={order600}
-                alt={'Man giving money in exchange for a jar of pasta.'}
+                alt={'Woman paying for groceries.'}
                 style={{
                   maxWidth: '100%',
                   height: 'auto',
