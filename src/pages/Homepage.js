@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
 
 // Custom Components
 import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
-import SignupForm from 'forms/authentication/SignupForm';
 
 // Images
 import intro600 from 'images/intro-600.jpg';
@@ -21,9 +20,11 @@ import { observer } from 'mobx-react';
 import { Box, Grid, Typography } from '@material-ui/core';
 
 // Styled Components
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
 import { ReverseOrderPhotoWrapper } from 'styled-component-lib/Grid';
+
+const SignupForm = lazy(() => import('forms/authentication/SignupForm'));
 
 function Homepage() {
   const {
@@ -68,11 +69,15 @@ function Homepage() {
 
   const handleSignup = (e) => {
     logModalView('/signup');
-    modalV2Store.open(<SignupForm />);
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <SignupForm />
+      </Suspense>,
+    );
   };
 
-  const StartShoppingButton = () => (
-    <Box mt={5}>
+  const StartShoppingButton = ({ justify = 'flex-start' }) => (
+    <Box mt={5} display="flex" justifyContent={justify} alignItems="center">
       <PrimaryWallyButton onClick={handleSignup}>
         Start Shopping
       </PrimaryWallyButton>
@@ -90,14 +95,15 @@ function Homepage() {
         <Grid alignItems="center" container justify="center" spacing={4}>
           <Grid item xs={12} sm={7} md={6}>
             <Box px={2}>
-              <Typography variant="h1" gutterBottom>
-                Do you, with reusables.
+              <Typography variant="h1" gutterBottom align="center">
+                Shop package free goodies
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                The Wally Shop connects you with your favorite brands 100%
-                waste-free. Our vision is to help you shop for everything in all
-                reusable packaging.
+              <Typography variant="body1" gutterBottom align="center">
+                Get your pantry essentials, household cleaning supplies, and
+                personal care items in all reusable packaging with The Wally
+                Shop!
               </Typography>
+              <StartShoppingButton justify="center" />
             </Box>
           </Grid>
           <Grid item xs={12} sm={5} md={6}>
@@ -145,9 +151,9 @@ function Homepage() {
                 Order
               </Typography>
               <Typography variant="body1">
-                Choose from hundreds of responsibly-made, price-competitive bulk
-                foods. At checkout, you'll be charged a deposit for your
-                packaging.
+                Choose from hundreds of responsibly-made, Trader Joe’s
+                price-competitive bulk foods. At checkout, you will be charged a
+                deposit for your packaging (don’t worry, you'll get it back!).
               </Typography>
             </Box>
           </Grid>
@@ -211,10 +217,11 @@ function Homepage() {
                 Return
               </Typography>
               <Typography variant="body1">
-                Once finished, you'll schedule a free packaging pick up or leave
-                your packaging with your courier during a future delivery. Once
-                received at our warehouse, your deposit is credited back to you
-                and the packaging is cleaned to be put back into circulation.
+                Once finished, you can return all your packaging (jars, totes,
+                anything we send to you, we take back and reuse) to a UPS
+                delivery courier on a future delivery or schedule a free pick-up
+                on the website. Your deposit is credited back to you and the
+                packaging is cleaned to be put back into circulation.
               </Typography>
             </Box>
           </Grid>
@@ -224,14 +231,14 @@ function Homepage() {
         <Grid container alignItems="center" justify="center">
           <Grid item xs={12} md={6}>
             <Box px={3} py={4}>
-              <Typography variant="h2" gutterBottom>
+              <Typography variant="h2" gutterBottom align="center">
                 Experience The Wally Shop
               </Typography>
-              <Typography gutterBottom>
+              <Typography gutterBottom align="center">
                 Thousands of shoppers are joining the reusables revolution. Now,
                 it's your turn.
               </Typography>
-              <StartShoppingButton />
+              <StartShoppingButton justify="center" />
             </Box>
           </Grid>
         </Grid>
@@ -242,25 +249,25 @@ function Homepage() {
 
 export default observer(Homepage);
 
-const ScrollingContainer = styled('div')`
-  display: inline-block;
-  animation: marquee 20s linear infinite;
-`;
+// const ScrollingContainer = styled('div')`
+//   display: inline-block;
+//   animation: marquee 20s linear infinite;
+// `;
 
-const ScrollingContainer2 = styled('div')`
-  display: inline-block;
-  animation: marquee2 20s linear infinite;
+// const ScrollingContainer2 = styled('div')`
+//   display: inline-block;
+//   animation: marquee2 20s linear infinite;
 
-  /* Must be half the animation duration of both divs so it stats in sync to
+/* Must be half the animation duration of both divs so it stats in sync to
   fill void left by completed transtition of first div */
-  animation-delay: 10s;
-`;
+// animation-delay: 10s;
+// `;
 
-const ScrollingH1 = styled('h1')`
-  text-align: center;
-  font-family: 'NEONGLOW';
-  color: #3c2ebf;
-`;
+// const ScrollingH1 = styled('h1')`
+//   text-align: center;
+//   font-family: 'NEONGLOW';
+//   color: #3c2ebf;
+// `;
 
 // function NowShippingNationWideBanner() {
 //   return (
@@ -280,3 +287,14 @@ const ScrollingH1 = styled('h1')`
 //     </Box>
 //   );
 // }
+
+function SuspenseFallback() {
+  return (
+    <Box>
+      <Typography variant="h1" gutterBottom>
+        Sign Up
+      </Typography>
+      <Typography>Loading...</Typography>
+    </Box>
+  );
+}
