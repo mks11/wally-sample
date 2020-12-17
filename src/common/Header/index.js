@@ -93,26 +93,29 @@ const Logo = observer(() => {
 
 const ProductTop = lazy(() => import('pages/Mainpage/ProductTop'));
 
+const NavbarWrapper = styled.div`
+  background: #fae1ff;
+  padding: 0;
+
+  @media only screen and (min-width: 992px) {
+    padding: 16px 0;
+  }
+`;
+
 const Header = observer(() => {
   const { routing } = useStores();
   const showProductTop = routing.location.pathname.includes('main');
 
   return (
-    <Box
-      component="header"
-      position="sticky"
-      top="0"
-      zIndex={10}
-      style={{ backgroundColor: '#fae1ff' }}
-    >
-      <Container maxWidth="xl">
-        <Box py={2}>
-          <Banner>
-            <Typography>
-              NOW THROUGH 12/27 ONLY. USE PROMO FOOBAR AT CHECKOUT FOR 10% OFF
-              OF $50!
-            </Typography>
-          </Banner>
+    <Box component="header" position="sticky" top="0" zIndex={10}>
+      <Banner>
+        <Typography align="center" style={{ color: '#fff' }}>
+          Take 10% off $50, 20% off $75, or 30% off $100 by entering
+          WALLY_HOLIDAYS during checkout. Valid through 12/24.
+        </Typography>
+      </Banner>
+      <NavbarWrapper>
+        <Container maxWidth="xl">
           <Grid container justify="space-between" alignItems="center">
             <Grid item>
               <Logo />
@@ -121,8 +124,8 @@ const Header = observer(() => {
               <Navbar />
             </Grid>
           </Grid>
-        </Box>
-      </Container>
+        </Container>
+      </NavbarWrapper>
       {showProductTop && (
         <Suspense fallback={<Typography>Search</Typography>}>
           <ProductTop />
