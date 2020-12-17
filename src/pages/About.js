@@ -33,7 +33,7 @@ function About() {
     >
       <PageSection>
         <Typography variant="h1" gutterBottom>
-          We deliver your favorites from the brands you love, 100% waste-free.
+          We deliver your faves from brands you love, 100% waste-free.
         </Typography>
         <Grid container alignItems="center" spacing={4}>
           <Grid item xs={12} md={5} lg={4}>
@@ -43,14 +43,16 @@ function About() {
           </Grid>
           <Grid item xs={12} md={7} lg={8}>
             <Typography gutterBottom>
-              We're introducing a whole new way to shop sustainably. Our vision
-              is to help you shop for everything (bulk foods! Beauty products!
-              Household products!) in all reusable packaging conveniently and
-              without sacrificing any value. We’re starting with
-              responsibly-made, Trader Joe’s price-competitive bulk foods, but
-              we will be expanding categories and on-boarding more brands in the
-              coming weeks. We want to get you what you need, 100% waste free,
-              so please reach out if you have any products in mind ;)
+              We are introducing a whole new way to shop sustainably. Our vision
+              is to help you shop for everything in all reusable packaging,
+              conveniently, and without sacrificing value!
+            </Typography>
+            <Typography gutterBottom>
+              Our all-reusable packaging can be returned so you can partake in
+              our sustainable, closed-loop system. By offering bulk grocery,
+              household cleaning, and personal care items without any packaging
+              waste, we’re making responsible and sustainable shopping
+              convenient!
             </Typography>
           </Grid>
         </Grid>

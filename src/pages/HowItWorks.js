@@ -118,7 +118,7 @@ export default function HowItWorks() {
               </Typography>
               <Typography variant="body1" gutterBottom>
                 Once finished, you can return all your packaging (jars, totes,
-                anything we send to you, we take back and reuse) to a FedEx/UPS
+                anything we send to you, we take back and reuse) to a UPS
                 delivery courier on a future delivery or schedule a free pick-up
                 on the website. Your deposit is credited back to you and the
                 packaging is cleaned to be put back into circulation.
