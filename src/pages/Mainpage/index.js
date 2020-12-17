@@ -41,13 +41,13 @@ var heroImages = [
 const hasDots = heroImages.length > 1;
 
 var DesktopCarouselWrapper = styled(Box)`
-  @media only screen and (max-width: 567px) {
+  @media only screen and (max-width: 480px) {
     display: none;
   }
 `;
 
 var MobileCarouselWrapper = styled(Box)`
-  @media only screen and (min-width: 568px) {
+  @media only screen and (min-width: 481px) {
     display: none;
   }
 `;
@@ -227,29 +227,7 @@ class Mainpage extends Component {
           <Container maxWidth="xl">
             <div className="row ">
               {/* Featured Brands */}
-              <Container maxWidth="xl" disableGutters>
-                {/* displayed from 568px and up */}
-                <DesktopCarouselWrapper my={2} zIndex={1}>
-                  <ImageCarousel
-                    dots={hasDots}
-                    keyName={'featured-brands'}
-                    height={675}
-                    slides={slides}
-                    width={1200}
-                  />
-                </DesktopCarouselWrapper>
-                {/* displayed from 567px and down */}
-                <MobileCarouselWrapper my={2} zIndex={1}>
-                  <ImageCarousel
-                    dots={hasDots}
-                    keyName={'featured-brands'}
-                    height={480}
-                    slides={slides}
-                    width={480}
-                  />
-                </MobileCarouselWrapper>
-              </Container>
-              <div className="col-xl-2 col-md-3 col-sm-4">
+              <div className="col-xl-3 col-lg-3 d-xl-block d-lg-block d-md-none d-sm-none d-none">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
@@ -266,7 +244,7 @@ class Mainpage extends Component {
               </div>
 
               {id === 'buyagain' && !this.productStore.search.state ? (
-                <div className="col-xl-10 col-md-9 col-sm-12">
+                <div className="col-xl-9 col-lg-9 col-md-12">
                   <div className="product-content-right">
                     <div className="product-breadcrumb">
                       <h2>Buy Again</h2>
@@ -326,7 +304,7 @@ class Mainpage extends Component {
               ) : null}
 
               {this.productStore.search.state ? (
-                <div className="col-xl-10 col-md-9 col-sm-12">
+                <div className="col-xl-9 col-lg-9 col-md-12">
                   <div className="product-content-right">
                     {ads2 && (
                       <img src={APP_URL + ads2} className="img-fluid" alt="" />
@@ -359,7 +337,7 @@ class Mainpage extends Component {
                 </div>
               ) : (
                 id !== 'buyagain' && (
-                  <div className="col-xl-10 col-md-9 col-sm-12">
+                  <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="product-content-right">
                       {/* {this.props.location.pathname.split('/')[1] ===
                       'packaging-blank' ? (
@@ -367,7 +345,27 @@ class Mainpage extends Component {
                           packagingId={this.props.match.params.id}
                         />
                       ) : ( */}
-                      <React.Fragment>
+                      <>
+                        {/* displayed from 481px and up */}
+                        <DesktopCarouselWrapper my={2} zIndex={1}>
+                          <ImageCarousel
+                            dots={hasDots}
+                            keyName={'featured-brands'}
+                            height={675}
+                            slides={slides}
+                            width={1200}
+                          />
+                        </DesktopCarouselWrapper>
+                        {/* displayed from 480px and down */}
+                        <MobileCarouselWrapper my={2} zIndex={1}>
+                          <ImageCarousel
+                            dots={hasDots}
+                            keyName={'featured-brands'}
+                            height={480}
+                            slides={slides}
+                            width={480}
+                          />
+                        </MobileCarouselWrapper>
                         {ads2 && (
                           <img
                             src={APP_URL + ads2.image}
@@ -396,8 +394,7 @@ class Mainpage extends Component {
                             ),
                           )
                         )}
-                      </React.Fragment>
-                      {/* )} */}
+                      </>
                     </div>
                   </div>
                 )
@@ -424,7 +421,7 @@ const LargeHeroImage = styled(Image)`
 
 const MediumHeroImage = styled(Image)`
   && {
-    @media only screen and (min-width: 568px) and (max-width: 768px) {
+    @media only screen and (min-width: 481px) and (max-width: 768px) {
       display: block;
     }
 
@@ -434,7 +431,7 @@ const MediumHeroImage = styled(Image)`
 
 const SmallHeroImage = styled(Image)`
   && {
-    @media only screen and (min-width: 568px) {
+    @media only screen and (min-width: 481px) {
       display: none;
     }
   }

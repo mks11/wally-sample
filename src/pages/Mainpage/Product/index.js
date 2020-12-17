@@ -36,7 +36,7 @@ const Product = ({ product }) => {
 
   return (
     <div
-      className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail"
+      className="col-lg-3 col-md-4 col-sm-4 col-6 product-thumbnail"
       onClick={() => handleProductClick(product.product_id)}
     >
       <LazyLoadImage
