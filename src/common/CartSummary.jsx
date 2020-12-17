@@ -31,7 +31,7 @@ const CartSummary = observer(() => {
   const { cart } = checkout;
   const items = cart ? cart.cart_items : [];
   const subtotal = cart ? cart.subtotal / 100 : 0;
-
+  console.log(items);
   return (
     <>
       <Box mb={2}>
@@ -230,38 +230,49 @@ function CartItem({ item }) {
 
       {/* Quantity adjustment and subtotal */}
       <Box my={1}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Box display="flex" alignItems="center">
-              <IconButton
-                color="primary"
-                onClick={() => handleUpdateQuantity(-1)}
-                disabled={customer_quantity < 2 || isLoading}
-              >
-                {isLoading && !increasedQty ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <RemoveIcon />
-                )}
-              </IconButton>
-              <Typography>{customer_quantity}</Typography>
-              <IconButton
-                color="primary"
-                onClick={() => handleUpdateQuantity(1)}
-                disabled={customer_quantity > 9 || isLoading}
-              >
-                {isLoading && increasedQty ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <AddIcon />
-                )}
-              </IconButton>
-            </Box>
-          </Grid>
-          <Typography style={{ fontWeight: 'bold' }} align="center">
+        <Box alignItems="center" display="flex" justifyContent="flex-end">
+          <Box
+            display="flex"
+            alignItems="center"
+            style={{ marginRight: '16px' }}
+          >
+            <IconButton
+              color="primary"
+              onClick={() => handleUpdateQuantity(-1)}
+              disabled={customer_quantity < 2 || isLoading}
+            >
+              {isLoading && !increasedQty ? (
+                <CircularProgress size={24} />
+              ) : (
+                <RemoveIcon />
+              )}
+            </IconButton>
+            <Typography style={{ margin: '0 4px' }}>
+              {customer_quantity}
+            </Typography>
+            <IconButton
+              color="primary"
+              onClick={() => handleUpdateQuantity(1)}
+              disabled={customer_quantity > 9 || isLoading}
+            >
+              {isLoading && increasedQty ? (
+                <CircularProgress size={24} />
+              ) : (
+                <AddIcon />
+              )}
+            </IconButton>
+          </Box>
+          {item && item.product_price && (
+            <Typography align="center">
+              {formatMoney(item.product_price / 100)} ea
+            </Typography>
+          )}
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="flex-end">
+          <Typography component="p" variant="h6" align="center">
             {formatMoney(item.total / 100)}
           </Typography>
-        </Grid>
+        </Box>
       </Box>
       <Box mb={4}>
         <Divider />
