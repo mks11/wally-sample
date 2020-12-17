@@ -164,13 +164,13 @@ function Checkout({ breadcrumbs, location }) {
                                     by the Terms of Service and Privacy Policy.
                                   </Typography>
                                 </Box>
-                                <Box display="flex" justifyContent="center">
+                                {/* <Box display="flex" justifyContent="center">
                                   <HelperText
                                     error={errors.length ? true : false}
                                   >
                                     {errors.length ? errors[0] : ' '}
                                   </HelperText>
-                                </Box>
+                                </Box> */}
                               </Container>
                             </Box>
                           </Card>
@@ -216,14 +216,16 @@ function Checkout({ breadcrumbs, location }) {
       clearCookies();
       routingStore.push('/orders/' + res.data.order._id);
     } catch (error) {
-      let msg = getErrorMessage(error);
+      let msg = getErrorMessage(error) || 'Order submission failed';
       let param = getErrorParam(error);
 
       if (msg && param) {
         setFieldError(param, msg);
-      } else {
-        snackbarStore.openSnackbar('Order submission failed.', 'error');
       }
+      snackbarStore.openSnackbar(msg, 'error', 6000, {
+        horizontal: 'center',
+        vertical: 'bottom',
+      });
     } finally {
       loadingStore.hide();
     }
@@ -311,7 +313,7 @@ const OrderSummary = observer(() => {
     <>
       {/* Address */}
       <Card style={{ marginBottom: '16px' }} elevation={0}>
-        <Box px={2} py={1}>
+        <Box p={2}>
           <Box
             alignItems="center"
             display="flex"
