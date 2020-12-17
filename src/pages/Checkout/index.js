@@ -39,7 +39,6 @@ import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
 // Styled components
-import { HelperText } from 'styled-component-lib/HelperText';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { PrimaryTextLink } from 'styled-component-lib/Links';
 
@@ -112,6 +111,9 @@ function Checkout({ breadcrumbs, location }) {
               </Box>
               {userStore.user && (
                 <>
+                  <ShippingAddress />
+                  <ShippingMethod />
+                  <PaymentMethod />
                   <OrderSummary />
                   <Formik
                     initialValues={{
@@ -248,12 +250,135 @@ export default observer(Checkout);
 
 const PackagingDepositInfo = lazy(() => import('modals/PackagingDepositInfo'));
 
+const ShippingAddress = observer(() => {
+  // MobX
+  const { user: userStore } = useStores();
+  const { user } = userStore;
+
+  const [cookies] = useCookies(['addressId']);
+  const { addressId } = cookies;
+
+  var address;
+
+  // Find user's address using id stored in cookie.
+  if (user && user.addresses && addressId) {
+    const { addresses } = user;
+    address = addresses.find((a) => a._id.toString() === addressId);
+  }
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box p={2}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Shipping Address
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/shipping">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {address ? (
+          <Address
+            address={address}
+            preferredAddressId={user.preferred_address}
+          />
+        ) : (
+          <Typography>No shipping address selected.</Typography>
+        )}
+      </Box>
+    </Card>
+  );
+});
+
+const ShippingMethod = () => {
+  // Cookies related to the checkout experience
+  const [cookies] = useCookies(['shippingServiceLevel']);
+  const { shippingServiceLevel } = cookies;
+
+  var shippingMethod;
+
+  if (shippingServiceLevel) {
+    shippingMethod = OPTIONS.find((o) => o.value === shippingServiceLevel);
+  }
+
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box px={2} py={1} pb={2}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Shipping Method
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/shipping">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {shippingMethod ? (
+          <Typography>{getDeliveryDates(shippingMethod)}</Typography>
+        ) : (
+          <Typography>No shipping method selected.</Typography>
+        )}
+      </Box>
+    </Card>
+  );
+};
+
+const PaymentMethod = observer(() => {
+  // MobX
+  const { user: userStore } = useStores();
+  const { user } = userStore;
+
+  // Cookies related to the checkout experience
+  const [cookies] = useCookies(['paymentId']);
+  const { paymentId } = cookies;
+
+  var paymentMethod;
+
+  if (user && user.payment && paymentId) {
+    const { payment } = user;
+    paymentMethod = payment.find((p) => p._id.toString() === paymentId);
+  }
+
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box px={2} py={1}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Payment Method
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/payment">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {paymentMethod ? (
+          <CreditCard my={0} paymentMethod={paymentMethod} />
+        ) : (
+          <Box py={1}>
+            <Typography>No payment method selected.</Typography>
+          </Box>
+        )}
+        <Box mt={3}>
+          <ApplyPromoCodeForm />
+          <AppliedPromoCodes />
+        </Box>
+      </Box>
+    </Card>
+  );
+});
+
 const OrderSummary = observer(() => {
   const theme = useTheme();
-  const { checkout, modalV2, user: userStore } = useStores();
+  const { checkout, modalV2 } = useStores();
 
   // Order summary state
-  const { cart, order } = checkout;
+  const { order } = checkout;
   const cart_items = order && order.cart_items ? order.cart_items : [];
   const hasFreeShipping =
     order &&
@@ -266,34 +391,8 @@ const OrderSummary = observer(() => {
     (order && order.applied_packaging_balance) ||
     order.applied_store_credit ||
     (order.applied_promo_codes && order.applied_promo_codes.length);
-
-  // User state
-  const { user } = userStore;
-
-  // Cookies related to the checkout experience
-  const [cookies] = useCookies([
-    'addressId',
-    'paymentId',
-    'shippingServiceLevel',
-  ]);
-  const { addressId, paymentId, shippingServiceLevel } = cookies;
-
-  var address, paymentMethod, shippingMethod;
-
-  // Find user's address using id stored in cookie.
-  if (user && user.addresses && addressId) {
-    const { addresses } = user;
-    address = addresses.find((a) => a._id.toString() === addressId);
-  }
-
-  if (shippingServiceLevel) {
-    shippingMethod = OPTIONS.find((o) => o.value === shippingServiceLevel);
-  }
-
-  if (user && user.payment && paymentId) {
-    const { payment } = user;
-    paymentMethod = payment.find((p) => p._id.toString() === paymentId);
-  }
+  const packagingUsed =
+    order && order.packaging_used ? order.packaging_used : [];
 
   function handlePackagingDepositClick() {
     modalV2.open(
@@ -310,256 +409,200 @@ const OrderSummary = observer(() => {
   }
 
   return (
-    <>
-      {/* Address */}
-      <Card style={{ marginBottom: '16px' }} elevation={0}>
-        <Box p={2}>
-          <Box
-            alignItems="center"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <Typography component="h2" variant="h4">
-              Shipping Address
-            </Typography>
-
-            <PrimaryTextLink to="/checkout/shipping">
-              <Typography component="span" variant="h6">
-                Change
-              </Typography>
-            </PrimaryTextLink>
-          </Box>
-          {address ? (
-            <Address
-              address={address}
-              preferredAddressId={user.preferred_address}
-            />
-          ) : (
-            <Typography>No shipping address selected.</Typography>
-          )}
+    <Card elevation={0}>
+      <Box p={2}>
+        <Typography component="h2" variant="h4" gutterBottom>
+          Order Summary
+        </Typography>
+        <Typography component="p" variant="h6" gutterBottom>
+          Products
+        </Typography>
+        {cart_items.map((item, i) => (
+          <OrderItem key={item.product_name} item={item} />
+        ))}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography gutterBottom>Subtotal</Typography>
+          <Typography gutterBottom>
+            {formatMoney(order.subtotal / 100)}
+          </Typography>
         </Box>
-      </Card>
-
-      {/* Shipping method */}
-      <Card style={{ marginBottom: '16px' }} elevation={0}>
-        <Box px={2} py={1} pb={2}>
-          <Box
-            alignItems="center"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <Typography component="h2" variant="h4">
-              Shipping Method
-            </Typography>
-
-            <PrimaryTextLink to="/checkout/shipping">
-              <Typography component="span" variant="h6">
-                Change
-              </Typography>
-            </PrimaryTextLink>
-          </Box>
-          {shippingMethod ? (
-            <Typography>{getDeliveryDates(shippingMethod)}</Typography>
-          ) : (
-            <Typography>No shipping method selected.</Typography>
-          )}
+        <Box mb={2}>
+          <Divider />
         </Box>
-      </Card>
 
-      {/* Payment method */}
-      <Card style={{ marginBottom: '16px' }} elevation={0}>
-        <Box px={2} py={1}>
-          <Box
-            alignItems="center"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <Typography component="h2" variant="h4">
-              Payment Method
+        {/* Packaging Deposit */}
+        <Box display="flex" alignItems="center">
+          <Typography component="p" variant="h6">
+            Packaging Deposit
+          </Typography>
+          <IconButton onClick={handlePackagingDepositClick}>
+            <InfoIcon />
+          </IconButton>
+        </Box>
+        <div>
+          {packagingUsed.map((p) => {
+            const { quantity, type } = p;
+            return (
+              <Box
+                key={type}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <div>
+                  <Typography component="span" style={{ marginRight: '8px' }}>
+                    {type}
+                  </Typography>
+                  <Typography component="span" color="textSecondary">
+                    ({quantity})
+                  </Typography>
+                </div>
+
+                <Typography>
+                  {type.includes('Tote')
+                    ? formatMoney(1000 / 100)
+                    : formatMoney((quantity * 100) / 100)}
+                </Typography>
+              </Box>
+            );
+          })}
+        </div>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography gutterBottom>Subtotal</Typography>
+          <Typography gutterBottom>
+            {formatMoney(order.packaging_deposit / 100)}
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Divider />
+        </Box>
+
+        {/* Tax && Fees */}
+        <Typography component="h3" variant="h6" gutterBottom>
+          Taxes and Fees
+        </Typography>
+        {/* Tax */}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          color={
+            !wasTaxed ? theme.palette.success.main : theme.palette.text.main
+          }
+        >
+          <Typography>Tax</Typography>
+          <Typography>
+            {wasTaxed ? formatMoney(order.tax_amount / 100) : 'None'}
+          </Typography>
+        </Box>
+        {/* Shipping */}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          color={
+            hasFreeShipping
+              ? theme.palette.success.main
+              : theme.palette.text.main
+          }
+        >
+          <Typography gutterBottom={hasDiscount ? true : false}>
+            Shipping
+          </Typography>
+          <Typography gutterBottom={hasDiscount ? true : false}>
+            {hasFreeShipping
+              ? 'Free'
+              : formatMoney(order.delivery_amount / 100)}
+          </Typography>
+        </Box>
+        {hasDiscount && (
+          <>
+            <Box mb={2}>
+              <Divider />
+            </Box>
+            <Typography component="p" variant="h6" gutterBottom>
+              Discounts and Promotions
             </Typography>
-
-            <PrimaryTextLink to="/checkout/payment">
-              <Typography component="span" variant="h6">
-                Change
+          </>
+        )}
+        <Box color={theme.palette.success.main}>
+          {order.applied_packaging_balance === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Packaging Deposit Balance</Typography>
+              <Typography>
+                -{formatMoney(order.applied_packaging_balance / 100)}
               </Typography>
-            </PrimaryTextLink>
-          </Box>
-          {paymentMethod ? (
-            <CreditCard my={0} paymentMethod={paymentMethod} />
-          ) : (
-            <Box py={1}>
-              <Typography>No payment method selected.</Typography>
             </Box>
           )}
-          <Box mt={3}>
-            <ApplyPromoCodeForm />
-          </Box>
-        </Box>
-      </Card>
 
-      {/* Order Summary */}
-      <Card elevation={0}>
-        <Box p={2}>
-          <Typography component="h2" variant="h4" gutterBottom>
-            Order Summary
-          </Typography>
-          <Typography component="p" variant="h6" gutterBottom>
-            Products
-          </Typography>
-          {cart_items.map((item, i) => (
-            <OrderItem key={item.product_name} item={item} />
-          ))}
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            mt={4}
-          >
-            <Typography>Subtotal</Typography>
-            <Typography>{formatMoney(order.subtotal / 100)}</Typography>
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box display="flex" alignItems="center">
-              <Typography>Packaging Deposit</Typography>
-              <IconButton onClick={handlePackagingDepositClick}>
-                <InfoIcon />
-              </IconButton>
-            </Box>
-
-            <Typography>
-              {formatMoney(order.packaging_deposit / 100)}
-            </Typography>
-          </Box>
-          <Box mb={2}>
-            <Divider />
-          </Box>
-
-          {/* Tax && Fees */}
-          <Typography component="h3" variant="h6" gutterBottom>
-            Taxes and Fees
-          </Typography>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            color={
-              !wasTaxed ? theme.palette.success.main : theme.palette.text.main
-            }
-          >
-            <Typography>Tax</Typography>
-            <Typography>
-              {wasTaxed ? formatMoney(order.tax_amount / 100) : 'None'}
-            </Typography>
-          </Box>
-
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            color={
-              hasFreeShipping
-                ? theme.palette.success.main
-                : theme.palette.text.main
-            }
-          >
-            <Typography gutterBottom={hasDiscount ? true : false}>
-              Shipping
-            </Typography>
-            <Typography gutterBottom={hasDiscount ? true : false}>
-              {hasFreeShipping
-                ? 'Free'
-                : formatMoney(order.delivery_amount / 100)}
-            </Typography>
-          </Box>
-          {hasDiscount && (
-            <>
-              <Box mb={2}>
-                <Divider />
-              </Box>
-              <Typography component="p" variant="h6" gutterBottom>
-                Discounts and Promotions
+          {order.applied_store_credit === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Store Credit</Typography>
+              <Typography>
+                -{formatMoney(order.applied_store_credit / 100)}
               </Typography>
-            </>
+            </Box>
           )}
-          <Box color={theme.palette.success.main}>
-            {order.applied_packaging_balance === 0 ? null : (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography>Packaging Deposit Balance</Typography>
-                <Typography>
-                  -{formatMoney(order.applied_packaging_balance / 100)}
-                </Typography>
-              </Box>
-            )}
 
-            {order.applied_store_credit === 0 ? null : (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography>Store Credit</Typography>
-                <Typography>
-                  -{formatMoney(order.applied_store_credit / 100)}
-                </Typography>
-              </Box>
-            )}
+          {order.promo_discount === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Promotional Discounts</Typography>
 
-            {order.promo_discount === 0 ? null : (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography>Promotional Discounts</Typography>
-
-                <Typography>
-                  -{formatMoney(order.promo_discount / 100)}
-                </Typography>
-              </Box>
-            )}
-            {cart.applied_promo_codes.length ? (
-              <>
-                <Typography color="textPrimary" component="p">
-                  Applied Promo Codes
-                </Typography>
-                <List>
-                  {cart.applied_promo_codes.map((code) => (
-                    <ListItem key={code.promo_code} style={{ padding: '8px' }}>
-                      <Typography color="textPrimary">
-                        {code.promo_code}
-                      </Typography>
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            ) : null}
-          </Box>
-          <Box my={2}>
-            <Divider />
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h6" component="p">
-              Total
-            </Typography>
-            <Typography variant="h6" component="p">
-              {formatMoney(orderTotal)}
-            </Typography>
-          </Box>
+              <Typography>
+                -{formatMoney(order.promo_discount / 100)}
+              </Typography>
+            </Box>
+          )}
+          <AppliedPromoCodes />
         </Box>
-      </Card>
-    </>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography>Subtotal</Typography>
+          <Typography>
+            {hasFreeShipping
+              ? 'Free'
+              : formatMoney(order.tax_amount + order.delivery_amount / 100)}
+          </Typography>
+        </Box>
+        <Box my={2}>
+          <Divider />
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" component="p">
+            Total
+          </Typography>
+          <Typography variant="h6" component="p">
+            {formatMoney(orderTotal)}
+          </Typography>
+        </Box>
+      </Box>
+    </Card>
   );
 });
 
@@ -569,15 +612,43 @@ function OrderItem({ item }) {
     <>
       <Grid container justify="space-between">
         <Grid item xs={9} md={10}>
-          <Typography>{product_name}</Typography>
+          <Typography
+            component="span"
+            style={{ marginRight: '8px' }}
+            gutterBottom
+          >
+            {product_name}
+          </Typography>
+          <Typography component="span" color="textSecondary" gutterBottom>
+            ({customer_quantity})
+          </Typography>
         </Grid>
         <Grid item>
           <Typography>{formatMoney(total / 100)}</Typography>
         </Grid>
       </Grid>
-      <Typography color="textSecondary" gutterBottom>
-        Quantity {customer_quantity}
-      </Typography>
     </>
   );
 }
+
+export const AppliedPromoCodes = observer(() => {
+  const theme = useTheme();
+  const { checkout } = useStores();
+  const { cart } = checkout;
+
+  const hasPromoCode =
+    cart && cart.applied_promo_codes && cart.applied_promo_codes.length;
+
+  return hasPromoCode ? (
+    <Box style={{ color: theme.palette.success.main }}>
+      <Typography component="p">Applied Promo Codes:</Typography>
+      <List style={{ padding: '0' }}>
+        {cart.applied_promo_codes.map((code) => (
+          <ListItem key={code.promo_code} style={{ padding: '4px 8px' }}>
+            <Typography>{code.promo_code}</Typography>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  ) : null;
+});

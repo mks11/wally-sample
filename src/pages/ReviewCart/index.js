@@ -41,7 +41,6 @@ const ReviewCart = ({ breadcrumbs, location }) => {
 
   const {
     checkout: checkoutStore,
-    loading: loadingStore,
     product: productStore,
     snackbar: snackbarStore,
     user: userStore,
@@ -54,7 +53,7 @@ const ReviewCart = ({ breadcrumbs, location }) => {
     // Store page view in google analytics
     logPageView(location.pathname);
 
-    if (cart) {
+    if (cart && cart.cart_items && cart.cart_items.length) {
       loadData();
     }
   }, [cart]);
@@ -69,7 +68,6 @@ const ReviewCart = ({ breadcrumbs, location }) => {
 
   const loadData = async () => {
     try {
-      loadingStore.show();
       const auth = userStore.user ? userStore.getHeaderAuth() : {};
       const cartId = cart ? cart._id.toString() : undefined;
       const res = await productStore.getImpulseProducts(cartId, auth);
@@ -78,8 +76,6 @@ const ReviewCart = ({ breadcrumbs, location }) => {
       }
     } catch (error) {
       snackbarStore.openSnackbar('Failed to load similar products', 'error');
-    } finally {
-      loadingStore.hide();
     }
   };
 
