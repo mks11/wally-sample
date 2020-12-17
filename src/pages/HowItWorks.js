@@ -4,16 +4,8 @@ import React from 'react';
 import Page from 'templates/Page';
 import PageSection from 'common/PageSection';
 
-// Images
-import orderHd600 from 'images/order-hd-600.jpg';
-import toteHd600 from 'images/tote-hd-600.jpg';
-import returnPackagingHd600 from 'images/return-packaging-hd-600.jpg';
-
 // Material UI
-import { Box, Grid, Typography } from '@material-ui/core';
-
-// Styled Components
-import { ReverseOrderPhotoWrapper } from 'styled-component-lib/Grid';
+import { Typography } from '@material-ui/core';
 
 export default function HowItWorks() {
   return (
@@ -23,126 +15,118 @@ export default function HowItWorks() {
       content="Our Process"
     >
       <PageSection>
-        <Box py={4} px={2}>
-          <Typography variant="h1" gutterBottom>
-            It's what's on the inside that counts.
-          </Typography>
-          <Typography>
-            We're introducing a whole new way to shop sustainably. Our vision is
-            to help you shop for everything (Bulk foods! Beauty products!
-            Household products!) conveniently in all reusable packaging. We’re
-            starting with responsibly-made, Trader Joe’s price-competitive bulk
-            foods, but we will be expanding categories and on-boarding more
-            brands constantly. We want to get you what you need, 100% waste
-            free, so please{' '}
-            <a href="mailto: info@thewallyshop.co" alt="reach out to us.">
-              reach out
-            </a>{' '}
-            if you have any brands in mind.
-          </Typography>
-        </Box>
+        <Typography variant="h1" gutterBottom>
+          How does The Wally Shop Work?
+        </Typography>
+        <Typography gutterBottom>
+          Here at The Wally Shop, we understand that our closed loop delivery
+          service is new, exciting, and a little confusing. To sum it up, we are
+          an innovative, zero-waste grocery & home goods delivery service that
+          brings customers their favorite products in all-reusable packaging.
+          The all-reusable packaging can be returned so customers can partake in
+          our sustainable, closed-loop system. By offering bulk grocery,
+          household cleaning, and personal care items without any packaging
+          waste, we’re making responsible and sustainable shopping convenient!
+        </Typography>
+        <Typography>Now, let’s dive into the nitty gritty details.</Typography>
       </PageSection>
       <PageSection>
-        <Grid alignItems="center" container justify="center" spacing={4}>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box px={2}>
-              <Typography variant="h2" gutterBottom>
-                Order
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Choose from hundreds of responsibly-made, Trader Joe’s
-                price-competitive bulk foods. At checkout, you will be charged a
-                deposit for your packaging (don’t worry, you will be getting it
-                back!).
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={5} md={6}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              px={2}
-            >
-              <img
-                src={orderHd600}
-                alt={'Man giving money in exchange for a jar of pasta.'}
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+        <Typography variant="h2" gutterBottom>
+          Sign Up
+        </Typography>
+        <Typography>
+          When you sign up for The Wally Shop, you’ll see we offer a vast
+          selection of pantry essentials, household cleaning supplies, and
+          personal care items. Each of these products are packed (with love!) at
+          our warehouse in Austin, Texas. Although we started in Brooklyn, we
+          made the hop, skip, and jump over to Texas when we started shipping
+          nationwide so we could better serve our customers across the
+          continental US!
+        </Typography>
       </PageSection>
       <PageSection>
-        <Grid alignItems="center" container justify="center" spacing={4}>
-          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={4}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              px={2}
-            >
-              <img
-                src={toteHd600}
-                alt={"The Wally Shop's reusable tote."}
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </Box>
-          </ReverseOrderPhotoWrapper>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box px={2}>
-              <Typography variant="h2" gutterBottom>
-                Receive
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Your order will arrive at your doorstep in completely reusable,
-                returnable packaging. The shipping tote it arrives in folds up
-                for easy storage. Simple, convenient, 100% waste free shopping.
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <Typography variant="h2" gutterBottom>
+          Shopping
+        </Typography>
+        <Typography gutterBottom>
+          When you start to add goodies to your cart, you’ll notice a bar that
+          tracks your progress toward minimizing your carbon footprint by
+          filling your tote. Each of our totes fit 12 jars, so once you reach 12
+          jars, you've fully filled the tote! Yeehaw!
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          Checkout
+        </Typography>
+        <Typography gutterBottom>
+          When you’re ready to checkout, you’ll see a packaging deposit based on
+          the number of jars, bottles, and totes your order fills. Each jar and
+          bottle has a packaging deposit of $1 while the tote has a deposit of
+          $10. So, if you have 12 jars and 1 tote, you will pay a deposit of
+          $22! But don’t worry – you’ll get this back once you return your
+          packaging! You will normally see your packaging deposit returned
+          within one week of returning your packaging. Please note, this deposit
+          is initially returned as store credit to be used on a future order,
+          but you can reach out to us at{' '}
+          <a
+            href="mailto:info@thewallyshop.co"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            info@thewallyshop.co
+          </a>{' '}
+          to request a refund to your original payment method, if you like.
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          Returning your packaging
+        </Typography>
+        <Typography>
+          Speaking of returning the packaging, you’re probably wondering how the
+          heck you’re supposed to do that! It’s pretty simple: The return label
+          is located on the backside of the original shipping label, so simply
+          flip over the cardstock on each of your totes so they're ready to be
+          returned! You can either drop off your tote at your local UPS facility
+          or schedule a pickup through our website (make sure you're logged in!)
+          Then voila, you’ve completed your first closed-loop shopping
+          experience with The Wally Shop!
+        </Typography>
       </PageSection>
       <PageSection>
-        <Grid alignItems="center" container justify="center" spacing={4}>
-          <Grid item xs={12} sm={7} md={6}>
-            <Box px={2}>
-              <Typography variant="h2" gutterBottom>
-                Return
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Once finished, you can return all your packaging (jars, totes,
-                anything we send to you, we take back and reuse) to a UPS
-                delivery courier on a future delivery or schedule a free pick-up
-                on the website. Your deposit is credited back to you and the
-                packaging is cleaned to be put back into circulation.
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={5} md={6}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              px={2}
-            >
-              <img
-                src={returnPackagingHd600}
-                alt={'Returning an empty jar.'}
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+        <Typography variant="h2" gutterBottom>
+          Our packaging
+        </Typography>
+        <Typography gutterBottom>
+          Let us guess… you have some specific questions regarding our packaging
+          and we get that! Let us clear some things up.
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          The types of packaging we use
+        </Typography>
+        <Typography gutterBottom>
+          We have two types of packaging that we use for our waste free goods.
+          Polypropylene jars and HDPE (High Density Polyethylene) bottles.
+          Polypropylene and HDPE are heat- and chemical- resistant, tough, and
+          flexible plastics that can be used thousands of times! They are BPA-
+          free and considered to be the safest of all plastics because of their
+          high resistance to heat, making them microwave and dishwasher safe.
+          These jars and bottles vary in sizing, from 4oz to 32oz! Our jars are
+          cleaned in our warehouse using a commercial dishwasher. Commercial
+          dishwashers use extremely high temperatures, making it safe for reuse.
+          While we so appreciate you wanting to help out, please leave the
+          cleaning to the pros!
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          How do I know what's in each jar?
+        </Typography>
+        <Typography>
+          You may ask, “If you reuse your jars and they all look the same, how
+          do I know which product is which?” We’ve got an answer: Each jar has a
+          unique QR code on the bottom. This QR code allows you to see what the
+          product is (like a traditional label!) If you hold your camera up to
+          it and click the link, it will send you directly to the product page
+          on our site. On the backend, the QR label also allows us to see how
+          far a jar has traveled and how many times it’s been reused! So please
+          make sure to keep it attached, it’s like the jar's birthmark!
+        </Typography>
       </PageSection>
     </Page>
   );
