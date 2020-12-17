@@ -166,6 +166,13 @@ class Help extends Component {
 
                 <Grid item xs={12}>
                   <ul className="list-group list-group-flush">
+                    <li className={qClass}>
+                      <Link to="/howitworks">
+                        <Typography style={{ color: '#6060a8' }}>
+                          How does The Wally Shop work?
+                        </Typography>
+                      </Link>
+                    </li>
                     {this.helpStore.questions.map((item, key) => (
                       <li
                         key={key}
