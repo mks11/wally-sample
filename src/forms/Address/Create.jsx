@@ -24,6 +24,9 @@ import { useStores } from 'hooks/mobx';
 // Styled Components
 import { ActivityButton } from 'styled-component-lib/Buttons';
 
+// Utils
+import { santizePhoneNum } from 'utils';
+
 function AddressCreateForm({ onCreate }) {
   const stores = useStores();
   const {
@@ -56,6 +59,11 @@ function AddressCreateForm({ onCreate }) {
     }
   };
 
+  const primaryTelephone =
+    user && user.primary_telephone
+      ? santizePhoneNum(user.primary_telephone)
+      : '';
+
   return (
     <>
       <Typography variant="h1" gutterBottom>
@@ -64,7 +72,7 @@ function AddressCreateForm({ onCreate }) {
       <Formik
         initialValues={{
           name: user ? user.name : '',
-          telephone: user ? user.primary_telephone : '',
+          telephone: primaryTelephone,
           streetAddress: '',
           unit: '',
           city: '',
