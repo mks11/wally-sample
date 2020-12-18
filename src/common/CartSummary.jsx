@@ -274,7 +274,7 @@ function CartItem({ item }) {
           </Typography>
         </Box>
       </Box>
-      <Box mb={4}>
+      <Box mb={1}>
         <Divider />
       </Box>
     </Box>
