@@ -9,8 +9,8 @@ export const OPTIONS = [
   {
     leastNumDays: 1,
     mostNumDays: 5,
-    earliestDeliveryDay: moment().add(1, 'd').format('MM/DD/YY'),
-    latestDeliveryDay: moment().add(5, 'd').format('MM/DD/YY'),
+    earliestDeliveryDay: moment().add(2, 'd').format('MM/DD/YY'),
+    latestDeliveryDay: moment().add(6, 'd').format('MM/DD/YY'),
     name: 'UPS Ground',
     price: '8.99',
     value: 'ups_ground',
@@ -75,7 +75,7 @@ export default ShippingOptions;
 
 export function getDeliveryDates(method) {
   const { earliestDeliveryDay, latestDeliveryDay } = method;
-  return 'Get it between ' + earliestDeliveryDay + ' and ' + latestDeliveryDay;
+  return 'Get it ' + earliestDeliveryDay + ' to ' + latestDeliveryDay;
 }
 
 const ShippingMethod = ({ method }) => {

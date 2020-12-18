@@ -138,15 +138,13 @@ const ReviewCart = ({ breadcrumbs, location }) => {
                   Review your cart
                 </Typography>
                 <CartSummary />
-                {impulseProducts.length ? (
-                  <Box display="flex" justifyContent="center" pt={2}>
-                    <PrimaryContainedLink to="/checkout/shipping">
-                      <Typography component="span" variant="h6">
-                        Continue To Shipping
-                      </Typography>
-                    </PrimaryContainedLink>
-                  </Box>
-                ) : null}
+                <Box display="flex" justifyContent="center" pt={2}>
+                  <PrimaryContainedLink to="/checkout/shipping">
+                    <Typography component="span" variant="h6">
+                      Continue To Shipping
+                    </Typography>
+                  </PrimaryContainedLink>
+                </Box>
               </Box>
             </Card>
           ) : null}
