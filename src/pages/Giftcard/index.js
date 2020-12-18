@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import qs from 'qs';
 
-import { logPageView } from 'services/google-analytics';
+import { logPageView, logEvent } from 'services/google-analytics';
 import { getErrorMessage, getErrorParam } from 'utils';
 
 // API
@@ -114,6 +114,7 @@ const GiftForm = observer(() => {
       await purchaseGiftCard(data, auth).then(({ data }) => {
         const { promo_code } = data;
         const { recipient, sender } = values;
+        logEvent({ category: 'Checkout', action: 'Gift card purchase' });
         const successMessage =
           'We sent a receipt of your purchase to ' +
           sender +
@@ -122,8 +123,8 @@ const GiftForm = observer(() => {
           '. Your loved one can use code ' +
           promo_code +
           ' to redeem their gift, either on their account or during checkout.';
-        setPurchaseResult({ promoCode: promo_code, successMessage });
         resetForm();
+        setPurchaseResult({ promoCode: promo_code, successMessage });
       });
     } catch (error) {
       const message = getErrorMessage(error);
