@@ -106,11 +106,6 @@ const Cart = observer(() => {
     </>
   );
 
-  const handleCheckout = () => {
-    logEvent({ category: 'Checkout', action: 'Continue To Checkout' });
-    modalV2.close();
-  };
-
   const handleClick = () => {
     modalV2.open(
       <>
@@ -120,13 +115,7 @@ const Cart = observer(() => {
         <Suspense fallback={SuspenseFallback()}>
           <CartSummary />
         </Suspense>
-        <Box display="flex" justifyContent="center" py={2}>
-          <PrimaryContainedLink to="/checkout/cart" onClick={handleCheckout}>
-            <Typography component="span" variant="h6">
-              Continue To Checkout
-            </Typography>
-          </PrimaryContainedLink>
-        </Box>
+        <ContinueToCheckout />
       </>,
       'right',
     );
@@ -165,6 +154,24 @@ const Cart = observer(() => {
     return items.reduce((acc, item) => (acc += item.customer_quantity), 0);
   }
 });
+
+export const ContinueToCheckout = () => {
+  const { modalV2 } = useStores();
+  const handleCheckout = () => {
+    logEvent({ category: 'Checkout', action: 'Continue To Checkout' });
+    modalV2.close();
+  };
+
+  return (
+    <Box display="flex" justifyContent="center" py={2}>
+      <PrimaryContainedLink to="/checkout/cart" onClick={handleCheckout}>
+        <Typography component="span" variant="h6">
+          Continue To Checkout
+        </Typography>
+      </PrimaryContainedLink>
+    </Box>
+  );
+};
 
 export const DesktopUserNav = observer(() => {
   const { user } = useStores();
