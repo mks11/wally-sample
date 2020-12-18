@@ -110,8 +110,8 @@ const Header = observer(() => {
     <Box component="header" position="sticky" top="0" zIndex={10}>
       <Banner>
         <Typography align="center" style={{ color: '#fff' }}>
-          Take 10% off $50, 20% off $75, or 30% off $100 by entering
-          WALLY_HOLIDAYS during checkout. Valid through 12/24.
+          Take 10% off $50, 20% off $75, or 30% off $100 by entering code
+          WALLYDAYS during checkout! Valid through 12/24.
         </Typography>
       </Banner>
       <NavbarWrapper>
