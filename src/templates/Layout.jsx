@@ -27,7 +27,7 @@ import { Link } from 'react-router-dom';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 const Layout = observer(() => {
-  const { modalV2, snackbar, user: userStore } = useStores();
+  const { modalV2, user: userStore } = useStores();
   const { user, token } = userStore;
   const [cookies] = useCookies();
   const { hasReadCookieNotice } = cookies;
@@ -63,10 +63,7 @@ const Layout = observer(() => {
         await userStore.getStatus();
       }
     } catch (error) {
-      snackbar.openSnackbar(
-        "Failed to verify user's authentication status",
-        'error',
-      );
+      console.error("Failed to verify user's authentication status");
     }
   }
 });

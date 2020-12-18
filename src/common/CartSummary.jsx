@@ -26,14 +26,12 @@ import { ContinueToCheckout } from 'common/Header/NavBar/UserNav';
 
 // Styled Components
 import { PrimaryTextButton } from 'styled-component-lib/Buttons';
-import { PrimaryContainedLink } from 'styled-component-lib/Links';
 
 const CartSummary = observer(() => {
   const { checkout } = useStores();
   const { cart } = checkout;
   const items = cart ? cart.cart_items : [];
   const subtotal = cart ? cart.subtotal / 100 : 0;
-  console.log(items);
   return (
     <>
       <Box mb={2}>
@@ -110,7 +108,9 @@ function CartItem({ item }) {
   const handleDelete = (item) => {
     logEvent({ category: 'Cart', action: 'ClickDeleteProduct' });
     modalV2.open(
-      <Suspense fallback={<Typography variant="h1">Remove Item</Typography>}>
+      <Suspense
+        fallback={<Typography variant="h1">Remove From Cart</Typography>}
+      >
         <RemoveItemForm
           item={item}
           handleReinitializeCartSummary={openCartSummary}
