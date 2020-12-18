@@ -99,6 +99,10 @@ function getErrorParam(error) {
   return null;
 }
 
+function santizePhoneNum(phoneNum) {
+  return phoneNum.replace(/\D/g, '');
+}
+
 export {
   connect,
   validateEmail,
@@ -109,4 +113,5 @@ export {
   getItemsCount,
   getErrorMessage,
   getErrorParam,
+  santizePhoneNum,
 };
