@@ -23,6 +23,8 @@ import { observer } from 'mobx-react';
 // React Router
 import { Link } from 'react-router-dom';
 
+import { useMediaQuery } from 'react-responsive';
+
 // Styled components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
@@ -82,15 +84,12 @@ function CookieNotice() {
     modalV2.close();
   };
 
+  const isXs = useMediaQuery({ query: '(max-width: 566px)' });
+
   return (
     <Container maxWidth="xl">
-      <Box
-        px={4}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box>
+      {isXs ? (
+        <Box px={2}>
           <Typography component="h1" variant="h4" gutterBottom>
             Our Cookie Policy
           </Typography>
@@ -101,11 +100,34 @@ function CookieNotice() {
           <Link to="/privacy">
             <Typography gutterBottom>Learn More</Typography>
           </Link>
+          <PrimaryWallyButton onClick={handleAcceptCookies} fullWidth>
+            Got it!
+          </PrimaryWallyButton>
         </Box>
-        <PrimaryWallyButton onClick={handleAcceptCookies}>
-          Got it!
-        </PrimaryWallyButton>
-      </Box>
+      ) : (
+        <Box
+          px={4}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box>
+            <Typography component="h1" variant="h4" gutterBottom>
+              Our Cookie Policy
+            </Typography>
+            <Typography gutterBottom>
+              We use cookies to deliver a smooth shopping experience and to
+              analyze traffic on our site.
+            </Typography>
+            <Link to="/privacy">
+              <Typography gutterBottom>Learn More</Typography>
+            </Link>
+          </Box>
+          <PrimaryWallyButton onClick={handleAcceptCookies}>
+            Got it!
+          </PrimaryWallyButton>
+        </Box>
+      )}
     </Container>
   );
 }
