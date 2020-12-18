@@ -14,6 +14,7 @@ let theme = createMuiTheme({
   palette: {
     primary: {
       main: '#97adff',
+      dark: '#6979b2',
     },
     secondary: {
       main: '#42E2B8',
@@ -27,6 +28,9 @@ let theme = createMuiTheme({
     yellow: {
       main: '#F1D26A',
     },
+    text: {
+      main: '#000',
+    },
     success: {
       main: '#60A561',
     },
@@ -34,11 +38,18 @@ let theme = createMuiTheme({
       main: '#CC2936',
     },
   },
+  props: {
+    MuiButton: {
+      disableElevation: true,
+    },
+  },
+  // Minor Third
   typography: {
     h1: {
       fontFamily: ['ClearFace'].join(','),
       fontSize: '2.488rem',
       fontWeight: 'bold',
+      color: '#000',
     },
     h2: {
       fontFamily: ['Sofia Pro'].join(','),
@@ -85,7 +96,7 @@ let theme = createMuiTheme({
     },
     button: {
       fontFamily: ['Sofia Pro'].join(','),
-      fontSize: '1.2rem',
+      fontSize: '1rem',
       fontWeight: 'bold',
     },
     caption: {},

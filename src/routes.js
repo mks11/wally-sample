@@ -5,20 +5,24 @@ import Homepage from './pages/Homepage';
 import Mainpage from './pages/Mainpage';
 import About from './pages/About';
 import LatestNews from './pages/LatestNews';
-import HowItWorks from './pages/HowItWorks';
+// import HowItWorks from './pages/HowItWorks';
 import Account from './pages/Account';
 import Help from './pages/Help';
 import HelpSingle from './pages/HelpSingle';
 import HelpSingleAnswer from './pages/HelpSingleAnswer';
 import HelpAnswer from './pages/HelpAnswer';
 import ResetPassword from './pages/ResetPassword';
-import EmailVerification from './pages/EmailVerification';
 import Orders from './pages/Orders';
 import ManageOrders from './pages/ManageOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
-import SimilarProducts from './pages/SimilarProducts';
+
+// Checkout Flow
+import ReviewCart from './pages/ReviewCart';
+import Shipping from './pages/Shipping';
+import Payment from './pages/Payment';
 import Checkout from './pages/Checkout';
-import GiftCheckout from './pages/GiftCheckout';
+
+import Giftcard from './pages/Giftcard';
 import InviteFriends from './pages/InviteFriends';
 import Backers from './pages/Backers';
 import Tnc from './pages/Tnc';
@@ -63,6 +67,17 @@ import PackagingInventoryPortal from 'pages/packaging-inventory/';
 // Hooks
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
+
+export const CHECKOUT_ROUTES = [
+  { path: '/checkout/cart', name: 'cart', Component: ReviewCart },
+  { path: '/checkout/shipping', name: 'shipping', Component: Shipping },
+  { path: '/checkout/payment', name: 'payment', Component: Payment },
+  {
+    path: '/checkout/review',
+    name: 'review',
+    Component: Checkout,
+  },
+];
 
 const ProtectedRoute = observer(({ component: Component, ...rest }) => {
   const { user } = useStores();
@@ -200,16 +215,28 @@ function Routes(props) {
       <Route exact path="/tnc" component={Tnc} />
       <Route exact path="/privacy" component={Privacy} />
       <Route exact path="/about" component={About} />
-      <Route exact path="/howitworks" component={HowItWorks} />
+      <Route exact path="/howitworks">
+        <Redirect to="/about" />
+      </Route>
       <Route exact path="/backers" component={Backers} />
       <Route exact path="/blog" component={Blog} />
       <Route exact path="/latest-news" component={LatestNews} />
       <Route exact path="/help" component={Help} />
       <Route exact path="/help/topics" component={HelpSingle} />
-      <Route exact path="/giftcard" component={GiftCheckout} />
+      <Route exact path="/giftcard" component={Giftcard} />
       <Route exact path="/sell-through-wally">
         <Redirect to="#!" />
       </Route>
+      {CHECKOUT_ROUTES.map(({ Component, name, path }) => (
+        <Route
+          exact
+          key={name}
+          path={path}
+          render={(props) => (
+            <Component {...props} breadcrumbs={CHECKOUT_ROUTES} />
+          )}
+        />
+      ))}
       {/* ==================== User Routes (NOT CRAWLED) ==================== */}
       <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
@@ -230,11 +257,10 @@ function Routes(props) {
         path="/shop/brands/:brandName"
         component={ShopByBrand}
       />
-      <Route exact path="/verify" component={EmailVerification} />
       <Route exact path="/cart/add" component={CartAdd} />
       <Route exact path="/refer" component={ReferFriend} />
-      <Route exact path="/checkout" component={Checkout} />
-      <Route exact path="/main/similar-products" component={SimilarProducts} />
+      {/* Checkout Flow */}
+      <ProtectedRoute exact path="/checkout" component={Checkout} />
       <Route path="/main/:id" component={Mainpage} />
       <Route exact path="/schedule-pickup" component={Mainpage} />
       {/* Doesn't check if you're already logged in. Assumes you want to sign up */}
@@ -253,9 +279,8 @@ function Routes(props) {
           }
         }}
       />
-      <Route exact path="/" component={Homepage} />
-      <Route component={Homepage} />{' '}
       {/* This catchall will redirect any unidentified routes to the homepage */}
+      <Route component={Homepage} />
     </Switch>
   );
 }

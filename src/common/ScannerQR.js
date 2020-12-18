@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import QrReader from 'react-qr-reader';
 import LazyLoad from 'react-lazyload';
-import { isMobile } from 'react-device-detect';
 import {
   Container,
   Grid,

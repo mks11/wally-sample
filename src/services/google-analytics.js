@@ -1,4 +1,4 @@
-import ReactGA from "react-ga";
+import ReactGA from 'react-ga';
 
 /**
  * Log a page view using google analytics
@@ -9,20 +9,21 @@ export const logPageView = (pathname) => {
 };
 
 export const logEvent = ({
-  category = "",
-  action = "",
+  category = '',
+  action = '',
   value = null,
-  label = "",
+  label = '',
 } = {}) => {
   if (category && action) {
     var GAEvent = { category: category, action: action };
-    if (label) GAEvent["label"] = label;
-    if (value) GAEvent["value"] = parseFloat(value);
+    if (label) GAEvent.label = label;
+    if (value) GAEvent.value = parseInt(value);
+
     ReactGA.event(GAEvent);
   }
 };
 
-export const logModalView = (modalPath = "") => {
+export const logModalView = (modalPath = '') => {
   if (modalPath) {
     ReactGA.modalview(modalPath);
   }

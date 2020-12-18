@@ -1,332 +1,300 @@
-import React, { Component } from 'react';
-import { logPageView, logEvent, logModalView } from 'services/google-analytics';
+import React, { useEffect, lazy, Suspense } from 'react';
+import { logPageView, logModalView } from 'services/google-analytics';
 import qs from 'qs';
-import { Row, Col } from 'reactstrap';
-import { validateEmail, connect } from '../utils';
-import SignupForm from 'forms/authentication/SignupForm';
 
-class Homepage extends Component {
-  constructor(props, context) {
-    super(props, context);
+// Custom Components
+import Page from 'templates/Page';
+import PageSection from 'common/PageSection';
 
-    this.state = {
-      // model
-      zip: '',
-      email: '',
-      audienceSource: '',
-      heroText: 'Shop package-free groceries',
-      heroDescription:
-        "In response to Covid-19, The Wally Shop has no more waitlist, making access to food available to all.\n For every order placed, we'll also be donating $1 to Feeding America.",
-      heroDescriptionAlign: 'center',
+// Images
+import intro600 from 'images/intro-600.jpg';
+import order600 from 'images/order-hd-600.jpg';
+import tote600 from 'images/tote-hd-600.jpg';
+import returnPackaging600 from 'images/return-packaging-600.jpg';
 
-      invalidEmail: false,
-      invalidZip: false,
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
 
-      width: window.innerWidth,
-    };
+// Material UI
+import { Box, Grid, Typography } from '@material-ui/core';
 
-    //input
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handleSubscribe = this.handleSubscribe.bind(this);
-    this.handleSignup = this.handleSignup.bind(this);
-    this.zipStore = this.props.store.zip;
-    this.userStore = this.props.store.user;
-    this.modalStore = this.props.store.modal;
-    this.modalV2Store = this.props.store.modalV2;
-    this.routing = this.props.store.routing;
-    this.metricStore = this.props.store.metric;
-  }
+// Styled Components
+// import styled from 'styled-components';
+import { PrimaryWallyButton } from '../styled-component-lib/Buttons';
+import { ReverseOrderPhotoWrapper } from 'styled-component-lib/Grid';
 
-  componentDidMount() {
-    const { location } = this.routing;
+const SignupForm = lazy(() => import('forms/authentication/SignupForm'));
+
+function Homepage() {
+  const {
+    user: userStore,
+    modalV2: modalV2Store,
+    routing: routingStore,
+    metric: metricStore,
+  } = useStores();
+  const { isAdmin, isOps, isOpsLead, isRetail, isUser, user } = userStore;
+
+  useEffect(() => {
+    const { location } = routingStore;
+
     logPageView(location.pathname);
 
-    if (
-      qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).color
-    ) {
+    // Not sure if this does anything useful anymore.
+    if (qs.parse(location.search, { ignoreQueryPrefix: true }).color) {
       if (
-        qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
-          .color === 'purple'
+        qs.parse(location.search, { ignoreQueryPrefix: true }).color ===
+        'purple'
       ) {
-        this.setState({ audienceSource: 'ig' });
-        this.metricStore.triggerAudienceSource('ig');
+        metricStore.triggerAudienceSource('ig');
       }
     }
+  }, []);
 
-    this.userStore
-      .getStatus()
-      .then((status) => {
-        if (status) {
-          const user = this.userStore.user;
-          console.log(user.type);
-          if (user.type === 'admin') {
-            this.routing.push('/manage/retail');
-          } else {
-            this.routing.push('/main');
-          }
-        }
-        this.setState({ fetching: false });
-      })
-      .catch((e) => {
-        console.error('Failed to get status', e);
-        this.setState({ fetching: false });
-      });
+  useEffect(() => {
+    redirectToShopIfLoggedIn();
+  }, [user]);
 
-    window.$('body').addClass('homepage-background');
-  }
-
-  componentWillUnmount() {
-    window.$('body').removeClass('homepage-background');
-  }
-
-  handleSubscribe() {
-    if (!validateEmail(this.state.email)) {
-      this.setState({ invalidEmail: 'Invalid Email' });
-      return;
+  async function redirectToShopIfLoggedIn() {
+    if (user && isAdmin) {
+      routingStore.push('/manage/retail');
+    } else if (user && (isOps || isOpsLead)) {
+      routingStore.push('/pick-pack');
+    } else if (user && isRetail) {
+      routingStore.push('/retail');
+    } else if (user && isUser) {
+      routingStore.push('/main');
     }
-
-    this.setState({ invalidEmail: '' });
-    logEvent({
-      category: 'Homepage',
-      action: 'SubmitEmail',
-      value: this.state.zip,
-      label: 'GetNotified',
-    });
-    this.userStore
-      .getWaitlistInfo({
-        email: this.state.email,
-        src: this.state.audienceSource,
-      })
-      .then((res) => {
-        this.modalStore.toggleModal('waitinglist', null, res);
-      })
-      .catch(() => {
-        this.modalStore.toggleModal(
-          'error',
-          'Something went wrong during your request',
-        );
-      });
   }
 
-  handleSignup(e) {
-    logModalView('/signup-zip');
-    this.modalV2Store.open(<SignupForm />);
-  }
-
-  handleEmail(e) {
-    this.setState({ email: e.target.value });
-    e.preventDefault();
-  }
-
-  render() {
-    const StartShoppingButton = () => (
-      <button
-        onClick={this.handleSignup}
-        id="btn-hero--submit"
-        href="#nav-hero"
-        className="btn btn-block mx-auto btn-success btn-get--started"
-        data-submit="Submit"
-      >
-        START SHOPPING
-      </button>
+  const handleSignup = (e) => {
+    logModalView('/signup');
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <SignupForm />
+      </Suspense>,
     );
+  };
 
-    const isMobile = this.state.width <= 500;
-    const isMobileHoriz = this.state.width > 500 && this.state.width <= 800;
-    let heroClass = 'landing-section aw-hero';
-    if (isMobile) {
-      heroClass += ' mobile';
-    }
-    if (isMobileHoriz) {
-      heroClass += ' mobile-horiz';
-    }
+  const StartShoppingButton = ({ justify = 'flex-start' }) => (
+    <Box mt={5} display="flex" justifyContent={justify} alignItems="center">
+      <PrimaryWallyButton onClick={handleSignup}>
+        Start Shopping
+      </PrimaryWallyButton>
+    </Box>
+  );
 
-    return (
-      <div className="homepage">
-        <section className="align-items-center">
-          <div className="container scroll-text">
-            <div>
-              <br></br>
-            </div>
-            <div id="div-1-scroll" className="">
-              <h1>
-                Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-                nationwide ~{' '}
-              </h1>
-            </div>
-            <div id="div-2-scroll" className="">
-              <h1>
-                Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
-                nationwide ~{' '}
-              </h1>
-            </div>
-          </div>
-        </section>
-        <section id="nav-hero" className={heroClass}>
-          <div className="container-fluid">
-            <div className="row justify-content-center align-items-center">
-              <IntroPhoto />
-
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-                <h1 className="aw-hero--heading mb-4">{this.state.heroText}</h1>
-                <h2 className={this.state.heroDescriptionAlign}>
-                  {this.state.heroDescription}
-                </h2>
-                <div className="mt-5">
-                  <StartShoppingButton />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="page-section aw-our--story align-items-center">
-          <div className="container h-75 w-75">
-            <div className="tagline">
-              <h2>Do you with reusables.</h2>
-              <p></p>
-              <p>
-                The Wally Shop is the platform connecting you with your favorite
-                brands 100% waste-free IRL and we are now available nationwide{' '}
-                <span role="img" aria-label="sprinkle">
-                  ✨
-                </span>{' '}
-                Our vision is to help you shop for everything in all reusable
-                packaging (cleaning, beauty, pet supplies, you name it!).
-              </p>
-              <p>
-                We hope you’re as ready as we are to join the
-                #reusablesrevolution and change the world in dreamy purple ~ one
-                order at a time. #wallydreamsinpurple
-              </p>
-            </div>
-
-            <div className="row d-flex justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
-                <div className="w-75 pl-lg-4">
-                  <h1>Order</h1>
-                  <p>
-                    Choose from hundreds of responsibly-made, Trader Joe’s
-                    price-competitive bulk foods. At checkout, you will be
-                    charged a deposit for your packaging (don’t worry, you will
-                    be getting it back!).
-                  </p>
-                </div>
-              </div>
-              <OrderPhoto />
-            </div>
-
-            <div className="row d-flex justify-content-center align-items-center mt-5">
-              <TotePhoto />
-              <div className="receive-item receive-div col-12 col-sm-10 col-md-8 col-lg-6 col-lg-offset-2 col-md-offset-2">
-                <div className="receive-item w-75 pull-right">
-                  <h1>Receive</h1>
-                  <p className="receive-item">
-                    Your order will arrive at your doorstep in completely
-                    reusable, returnable packaging. The shipping tote it arrives
-                    in folds up for easy storage. Simple, convenient, 100% waste
-                    free shopping.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="row d-flex mt-5 justify-content-center align-items-center">
-              <div className="col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2">
-                <div className="w-75 pl-lg-4">
-                  <h1>Return</h1>
-                  <p>
-                    Once finished, you can return all your packaging (jars,
-                    totes, anything we send to you, we take back and reuse) to a
-                    FedEx/UPS delivery courier on a future delivery or schedule
-                    a free pick-up on the website. Your deposit is credited back
-                    to you and the packaging is cleaned to be put back into
-                    circulation.
-                  </p>
-                </div>
-              </div>
-              <ReturnPackagingPhoto />
-            </div>
-
-            <div className="row mt-5">
-              <div className="col-md-12 mb-md-4">
-                <Row>
-                  <Col>
-                    <div className="text-center">
-                      <StartShoppingButton />
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </div>
-
-          <br />
-          <br />
-        </section>
-      </div>
-    );
-  }
-}
-
-export default connect('store')(Homepage);
-
-function IntroPhoto() {
   return (
-    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-1 order-md-2 order-sm-2 order-2 mt-5">
-      <img
-        srcSet="images/intro-450.jpg 450w,
-                   images/intro-600.jpg 600w"
-        sizes="(max-width: 767px) 450px,
-                  600px"
-        src="images/intro-600.jpg"
-        alt="Man holding jar of green lentils."
-      />
-    </div>
+    <Page
+      style={{
+        backgroundImage: 'linear-gradient(#fae1ff, #fff)',
+      }}
+    >
+      {/* <NowShippingNationWideBanner /> */}
+      <PageSection>
+        <Grid alignItems="center" container justify="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h1" gutterBottom align="center">
+                Shop package free goodies
+              </Typography>
+              <Typography variant="body1" gutterBottom align="center">
+                Get your pantry essentials, household cleaning supplies, and
+                personal care items in all reusable packaging with The Wally
+                Shop!
+              </Typography>
+              <StartShoppingButton justify="center" />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={intro600}
+                alt={'Man holding jar of green lentils.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+      </PageSection>
+
+      <PageSection>
+        <Grid container alignItems="center" spacing={4}>
+          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={4}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={order600}
+                alt={'Woman paying for groceries.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </ReverseOrderPhotoWrapper>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Order
+              </Typography>
+              <Typography variant="body1">
+                Choose from hundreds of responsibly-made, Trader Joe’s
+                price-competitive bulk foods. At checkout, you will be charged a
+                deposit for your packaging (don’t worry, you'll get it back!).
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </PageSection>
+      <PageSection>
+        <Grid container alignItems="center" spacing={4}>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Receive
+              </Typography>
+              <Typography variant="body1">
+                Your order will arrive at your door in completely reusable,
+                returnable packaging. The shipping tote it arrives in folds up
+                for easy storage. Simple, convenient, 100% waste free shopping.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={5} md={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={tote600}
+                alt={"The Wally Shop's reusable tote."}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+      </PageSection>
+      <PageSection>
+        <Grid container alignItems="center" spacing={4}>
+          <ReverseOrderPhotoWrapper item xs={12} sm={5} md={6} order={8}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              px={2}
+            >
+              <img
+                src={returnPackaging600}
+                alt={'Returning an empty jar.'}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Box>
+          </ReverseOrderPhotoWrapper>
+          <Grid item xs={12} sm={7} md={6}>
+            <Box px={2}>
+              <Typography variant="h2" gutterBottom>
+                Return
+              </Typography>
+              <Typography variant="body1">
+                Once finished, you can return all your packaging (jars, totes,
+                anything we send to you, we take back and reuse) to a UPS
+                delivery courier on a future delivery or schedule a free pick-up
+                on the website. Your deposit is credited back to you and the
+                packaging is cleaned to be put back into circulation.
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </PageSection>
+      <PageSection>
+        <Grid container alignItems="center" justify="center">
+          <Grid item xs={12} md={6}>
+            <Box px={3} py={4}>
+              <Typography variant="h2" gutterBottom align="center">
+                Experience The Wally Shop
+              </Typography>
+              <Typography gutterBottom align="center">
+                Thousands of shoppers are joining the reusables revolution. Now,
+                it's your turn.
+              </Typography>
+              <StartShoppingButton justify="center" />
+            </Box>
+          </Grid>
+        </Grid>
+      </PageSection>
+    </Page>
   );
 }
 
-function OrderPhoto() {
-  return (
-    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img
-        srcSet="images/order-450.jpg 450w,
-                   images/order-600.jpg 600w"
-        sizes="(max-width: 767px) 450px,
-                  600px"
-        src="images/order-600.jpg"
-        alt="Man giving money in exchange for a jar of pasta."
-      />
-    </div>
-  );
-}
+export default observer(Homepage);
 
-function TotePhoto() {
-  return (
-    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6">
-      <img
-        srcSet="images/tote-450.jpg 450w,
-                   images/tote-600.jpg 600w"
-        sizes="(max-width: 767px) 450px,
-                  600px"
-        src="images/tote-600.jpg"
-        alt="The Wally Shop's reusable tote."
-      />
-    </div>
-  );
-}
+// const ScrollingContainer = styled('div')`
+//   display: inline-block;
+//   animation: marquee 20s linear infinite;
+// `;
 
-function ReturnPackagingPhoto() {
+// const ScrollingContainer2 = styled('div')`
+//   display: inline-block;
+//   animation: marquee2 20s linear infinite;
+
+/* Must be half the animation duration of both divs so it stats in sync to
+  fill void left by completed transtition of first div */
+// animation-delay: 10s;
+// `;
+
+// const ScrollingH1 = styled('h1')`
+//   text-align: center;
+//   font-family: 'NEONGLOW';
+//   color: #3c2ebf;
+// `;
+
+// function NowShippingNationWideBanner() {
+//   return (
+//     <Box overflow="hidden" whiteSpace="nowrap">
+//       <ScrollingContainer>
+//         <ScrollingH1>
+//           Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+//           nationwide ~{' '}
+//         </ScrollingH1>
+//       </ScrollingContainer>
+//       <ScrollingContainer2>
+//         <ScrollingH1>
+//           Now shipping nationwide ~ Now shipping nationwide ~ Now shipping
+//           nationwide ~{' '}
+//         </ScrollingH1>
+//       </ScrollingContainer2>
+//     </Box>
+//   );
+// }
+
+function SuspenseFallback() {
   return (
-    <div className="howto-item col-12 col-sm-10 col-md-8 col-lg-6 order-lg-2 order-md-1 order-sm-1 order-1">
-      <img
-        srcSet="images/return-packaging-450.jpg 450w,
-                   images/return-packaging-600.jpg 600w"
-        sizes="(max-width: 767px) 450px,
-                  600px"
-        src="images/return-packaging-600.jpg"
-        alt="Returning an empty jar."
-      />
-    </div>
+    <Box>
+      <Typography variant="h1" gutterBottom>
+        Sign Up
+      </Typography>
+      <Typography>Loading...</Typography>
+    </Box>
   );
 }

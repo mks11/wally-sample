@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
-// Hooks
-import { useStores } from 'hooks/mobx';
+// Cookies
+import { useCookies } from 'react-cookie';
 
-// Components
+// Custom Components
 import Backdrop from 'common/Backdrop';
 import Header from 'common/Header';
 import Routes from 'routes';
@@ -13,12 +13,34 @@ import RootModalV2 from 'modals/RootModalV2';
 import LoadingSpinner from 'modals/LoadingSpinner';
 import RootSnackbar from 'snackbars/RootSnackbar';
 
-export default function Layout() {
-  const { user } = useStores();
+// Material UI
+import { Box, Container, Typography } from '@material-ui/core';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+// React Router
+import { Link } from 'react-router-dom';
+
+// Styled components
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+
+const Layout = observer(() => {
+  const { modalV2, snackbar, user: userStore } = useStores();
+  const { user, token } = userStore;
+  const [cookies] = useCookies();
+  const { hasReadCookieNotice } = cookies;
 
   useEffect(() => {
-    user.getStatus();
-  }, []);
+    if (!hasReadCookieNotice) {
+      modalV2.open(<CookieNotice />, 'bottom', 'xl', { width: '100%' });
+    }
+  }, [hasReadCookieNotice]);
+
+  useEffect(() => {
+    loadUser();
+  }, [token, user]);
 
   return (
     <div className="app">
@@ -33,5 +55,60 @@ export default function Layout() {
       <RootSnackbar />
       <LoadingSpinner />
     </div>
+  );
+
+  async function loadUser() {
+    try {
+      if (!user && !token) {
+        await userStore.getStatus();
+      }
+    } catch (error) {
+      snackbar.openSnackbar(
+        "Failed to verify user's authentication status",
+        'error',
+      );
+    }
+  }
+});
+
+export default Layout;
+
+function CookieNotice() {
+  const { modalV2 } = useStores();
+  const [cookies, setCookie] = useCookies();
+
+  const handleAcceptCookies = () => {
+    setCookie('hasReadCookieNotice', true, {
+      maxAge: 60 * 60 * 24 * 365 * 10,
+      path: '/',
+    });
+    modalV2.close();
+  };
+
+  return (
+    <Container maxWidth="xl">
+      <Box
+        px={4}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Box>
+          <Typography component="h1" variant="h4" gutterBottom>
+            Our Cookie Policy
+          </Typography>
+          <Typography gutterBottom>
+            We use cookies to deliver a smooth shopping experience and to
+            analyze traffic on our site.
+          </Typography>
+          <Link to="/privacy">
+            <Typography gutterBottom>Learn More</Typography>
+          </Link>
+        </Box>
+        <PrimaryWallyButton onClick={handleAcceptCookies}>
+          Got it!
+        </PrimaryWallyButton>
+      </Box>
+    </Container>
   );
 }

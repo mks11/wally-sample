@@ -80,11 +80,7 @@ export default function LoginForm() {
             />
           </Box>
           <Box my={2}>
-            <PrimaryWallyButton
-              style={{ padding: '1em 1.5em' }}
-              type="submit"
-              fullWidth
-            >
+            <PrimaryWallyButton type="submit" fullWidth>
               <Typography variant="h5" component="span">
                 Log In
               </Typography>
@@ -95,12 +91,7 @@ export default function LoginForm() {
       <Box my={2}>
         <FBLogin />
       </Box>
-      <PrimaryWallyButton
-        style={{ padding: '1em 1.5em' }}
-        variant="outlined"
-        fullWidth
-        onClick={showSignupForm}
-      >
+      <PrimaryWallyButton variant="outlined" fullWidth onClick={showSignupForm}>
         <Typography variant="h5" component="span">
           Sign Up
         </Typography>

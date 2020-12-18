@@ -1,7 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-
-import { Box } from '@material-ui/core';
 
 // Custom Components
 import { DesktopGuestNav } from 'common/Header/NavBar/GuestNav';
@@ -10,22 +7,18 @@ import { DesktopAdminNav } from './AdminNav';
 import { DesktopOpsNav } from './OpsNav';
 import { DesktopRetailNav } from './Retail';
 
-const DesktopNavWrapper = styled(Box)`
-  display: none;
-  @media only screen and (min-width: 768px) {
-    display: flex;
-  }
-`;
+// Material Ui
+import { Box } from '@material-ui/core';
 
 function DesktopNav() {
   return (
-    <DesktopNavWrapper>
+    <Box display="flex">
       <DesktopGuestNav />
       <DesktopUserNav />
       <DesktopAdminNav />
       <DesktopOpsNav />
       <DesktopRetailNav />
-    </DesktopNavWrapper>
+    </Box>
   );
 }
 

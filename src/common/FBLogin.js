@@ -41,7 +41,7 @@ function FBLogin({ ...props }) {
       appId={FB_KEY}
       cssClass={`btn btn-blue-fb ${isRequesting ? 'inactive' : ''}`}
       autoLoad={false}
-      textButton="Facebook"
+      textButton="Continue With Facebook"
       fields="name,email,picture"
       scope="public_profile,email"
       callback={login}

@@ -124,9 +124,7 @@ export default function SchedulePickupForm() {
         validateField,
         values,
       }) => {
-        {
-          /* Calculate range of earliest availabilities */
-        }
+        /* Calculate range of earliest availabilities */
         const lowerEarliestTimeBound = getLowerEarliestTimeBound(
           values.scheduledDate,
         );
@@ -139,9 +137,7 @@ export default function SchedulePickupForm() {
           60,
         );
 
-        {
-          /* Calculate range of latest availabilities */
-        }
+        /* Calculate range of latest availabilities */
         const lowerLatestTimeBound = getLowerLatestTimeBound(
           values.earliestTime,
         );
@@ -256,10 +252,6 @@ export default function SchedulePickupForm() {
  * Leave as a class, causes errors otherwise.
  */
 class DateInput extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Button

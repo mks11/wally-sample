@@ -12,9 +12,9 @@ function RootSnackbar() {
   const { snackbar } = useStores();
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      anchorOrigin={snackbar.anchorOrigin}
       open={snackbar.isOpen}
-      autoHideDuration={6000}
+      autoHideDuration={snackbar.autoHideDuration}
       onClose={snackbar.closeSnackbar}
     >
       <Alert onClose={snackbar.closeSnackbar} severity={snackbar.severity}>

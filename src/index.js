@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 
+// Cookies
+import { CookiesProvider } from 'react-cookie';
+
 // Components
 import ScrollToTop from './common/ScrollToTop';
 import ScrollSpy from 'common/ScrollSpy';
 import Layout from 'templates/Layout';
+
 // Context
-import { CookiesProvider } from 'react-cookie';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { Provider } from 'mobx-react';
 
@@ -20,14 +23,17 @@ import { syncHistoryWithStore } from 'mobx-react-router';
 import store from './stores';
 
 // Styles
+import 'css/main.css';
+import 'css/styles.css';
 import theme from 'mui-theme';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faStroopwafel, faSearch } from '@fortawesome/free-solid-svg-icons';
+
+// Stripe
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { STRIPE_API_KEY } from 'config';
 
 const browserHistory = createBrowserHistory();
 const history = syncHistoryWithStore(browserHistory, store.routing);
-
-library.add(faStroopwafel, faSearch);
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize(process.env.REACT_APP_GA_PROPERTY_DEFAULT);
@@ -38,19 +44,23 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+const stripePromise = loadStripe(STRIPE_API_KEY);
+
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <StylesProvider injectFirst>
       <Provider store={store}>
-        <Router history={history}>
-          <CookiesProvider>
-            <ScrollSpy>
-              <ScrollToTop>
-                <Layout />
-              </ScrollToTop>
-            </ScrollSpy>
-          </CookiesProvider>
-        </Router>
+        <Elements stripe={stripePromise}>
+          <Router history={history}>
+            <CookiesProvider>
+              <ScrollSpy>
+                <ScrollToTop>
+                  <Layout />
+                </ScrollToTop>
+              </ScrollSpy>
+            </CookiesProvider>
+          </Router>
+        </Elements>
       </Provider>
     </StylesProvider>
   </ThemeProvider>,

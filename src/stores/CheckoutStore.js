@@ -1,79 +1,88 @@
-import { observable, decorate, action, runInAction } from 'mobx';
+import axios from 'axios';
+import { observable, decorate, action } from 'mobx';
+import moment from 'moment';
+
+// API
+import { updateCart } from 'api/cart';
 import {
   API_GET_CURRENT_CART,
-  API_EDIT_CURRENT_CART,
   API_GET_ORDER_SUMMARY,
   API_DELIVERY_TIMES,
-  API_CREATE_ORDER,
 } from '../config';
-import axios from 'axios';
-import moment from 'moment';
 
 class CheckoutStore {
   cart = null;
+  isRetrievingCart = false;
   order = null;
   deliveryTimes = [];
 
   async clearCart(auth) {
-    localStorage.removeItem('cart');
-    return this.getCurrentCart(auth, {});
-  }
-
-  async getCurrentCart(auth, delivery) {
-    let res;
-
-    const local = localStorage.getItem('cart');
-    let url = API_GET_CURRENT_CART;
-    if (local) {
-      runInAction(() => {
-        this.cart = JSON.parse(local);
-      });
-      url += '/' + this.cart._id;
-    }
-
-    // const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    // url += "?time=" + currentTime;
-    // url += "&delivery_zip=" + delivery.zip;
-    // url += "&delivery_date=" + delivery.date;
-
     if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.get(url);
-      localStorage.setItem('cart', JSON.stringify(res.data));
-    } else {
-      res = await axios.get(url, auth);
       localStorage.removeItem('cart');
     }
-    runInAction(() => {
-      this.cart = res.data;
-    });
-    return res.data;
+    this.cart = null;
+    this.order = null;
+    return this.getCurrentCart(auth);
   }
 
-  async editCurrentCart(data, auth, order_summary, delivery) {
-    let cart_id;
-    if (this.cart) {
-      cart_id = this.cart._id;
-    }
-    if (order_summary) {
-      cart_id = this.order.cart_id;
-    }
+  getCurrentCart(auth) {
+    if (this.isRetrievingCart) return;
+    this.isRetrievingCart = true;
+    var cart = localStorage.getItem('cart');
 
-    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
-    const url = `${
-      API_EDIT_CURRENT_CART + cart_id
-    }?time=${currentTime}&delivery_zip=${delivery.zip}&delivery_date=${
-      delivery.date
-    }`;
-    let res;
     if (auth.headers.Authorization === 'Bearer undefined') {
-      res = await axios.patch(url, data);
+      /**
+       * For guest users, their cart is maintained in local storage.
+       *
+       * We only need to make an API call for a guest user that doesn't yet
+       * have a cart cookie in local storage. This API call detects that the
+       * user is a guest and just sends back a new cart object, without saving
+       * to the DB.
+       */
+      if (!cart) {
+        return axios.get(API_GET_CURRENT_CART).then((res) => {
+          localStorage.setItem('cart', JSON.stringify(res.data));
+          this.isRetrievingCart = false;
+        });
+      } else {
+        this.cart = cart;
+        this.isRetrievingCart = false;
+      }
     } else {
-      res = await axios.patch(url, data, auth);
-    }
+      // TODO: If guest customer has cart open in their browser, then signs up for acct,
+      // We need to persist their cart to the DB and remove it from local storage.
+      // if (cart) localStorage.removeItem('cart');
 
-    this.cart = res.data;
-    if (order_summary) {
-      this.getOrderSummary(auth);
+      // If the store is already observing the user's cart, send oid in the req
+      let url = API_GET_CURRENT_CART;
+      if (this.cart && this.cart._id) url += '/' + this.cart._id;
+
+      return axios.get(url, auth).then((res) => {
+        this.cart = res.data;
+        this.isRetrievingCart = false;
+      });
+    }
+  }
+
+  async editCurrentCart(data, auth, order_summary) {
+    if (this.cart) {
+      const cartId = this.cart._id;
+      let res;
+
+      if (auth.headers.Authorization === 'Bearer undefined') {
+        // For guest users. Not implemented yet on backend.
+        res = updateCart(cartId, data);
+      } else {
+        res = updateCart(cartId, data, auth);
+      }
+
+      return res.then((res) => {
+        this.cart = res.data;
+
+        if (order_summary) {
+          this.getOrderSummary(auth);
+        }
+      });
     }
   }
 
@@ -90,17 +99,6 @@ class CheckoutStore {
   async getOrderSummary(auth) {
     const res = await axios.get(API_GET_ORDER_SUMMARY, auth);
     this.order = res.data;
-    return res.data;
-  }
-
-  async submitOrder(data, auth) {
-    const res = await axios.post(
-      `${API_CREATE_ORDER}?time=${moment().format('YYYY-MM-DD HH:mm:ss')}`,
-      data,
-      auth,
-      data.has_returns,
-      data.pickup_notes,
-    );
     return res.data;
   }
 
@@ -156,6 +154,7 @@ class CheckoutStore {
 
 decorate(CheckoutStore, {
   cart: observable,
+  isRetrievingCart: observable,
   order: observable,
   deliveryTimes: observable,
 

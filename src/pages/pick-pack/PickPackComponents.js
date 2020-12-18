@@ -11,7 +11,9 @@ export const ScanQRButton = styled(Button)`
   border-radius: 50px;
 `;
 
-export const ResetButton = styled(Button).attrs({ variant: 'outlined' })`
+export const ResetButton = styled(Button).attrs((props) => ({
+  variant: 'outlined',
+}))`
   padding-top: 1rem;
   padding-bottom: 1rem;
   min-width: 125px;

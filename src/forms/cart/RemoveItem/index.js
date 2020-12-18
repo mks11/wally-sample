@@ -9,56 +9,58 @@ import { logEvent } from 'services/google-analytics';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { PrimaryWallyButton, DangerButton } from 'styled-component-lib/Buttons';
 
-function RemoveItemForm({ item }) {
-  const { routing, checkout, user, modalV2 } = useStores();
+function RemoveItemForm({
+  item,
+  handleReinitializeCartSummary,
+  reloadOrderSummary = false,
+}) {
+  const { checkout, user, modalV2 } = useStores();
 
-  const handleClose = () => modalV2.close();
-  const handleDelete = () => {
+  const handleClose = () => {
+    handleReinitializeCartSummary
+      ? handleReinitializeCartSummary()
+      : modalV2.close();
+  };
+
+  const handleDelete = async () => {
     logEvent({ category: 'Cart', action: 'ConfirmDelete' });
-
-    const orderSummary = routing.location.pathname.indexOf('checkout') !== -1;
-
-    // TODO: ERROR HANDLING
-    checkout
-      .editCurrentCart(
+    try {
+      await checkout.editCurrentCart(
         {
           items: [
             {
-              quantity: 0,
-              product_id: item.productId,
               inventory_id: item.inventoryId,
+              quantity: 0,
             },
           ],
         },
         user.getHeaderAuth(),
-        orderSummary,
-        user.getDeliveryParams(),
-      )
-      .then(() => modalV2.close())
-      .catch((e) => {
-        const msg = e.response.data.error.message;
-        console.error('Failed to add to cart', e);
-      });
+        reloadOrderSummary,
+      );
+      handleClose();
+    } catch (error) {
+      console.error('Failed to add to cart', error);
+    }
   };
   return (
     <Box>
-      <Typography variant="h1" gutterBottom>
-        Remove from Cart
-      </Typography>
-      <Typography
-        gutterBottom
-      >{`Are you sure you want to remove ${item.name} from your cart?`}</Typography>
+      <Typography variant="h1">Remove from Cart</Typography>
+      <Box py={2}>
+        <Typography
+          gutterBottom
+        >{`Are you sure you want to remove ${item.name} from your cart?`}</Typography>
+      </Box>
       <Box py={1}>
-        <Grid container spacing={2}>
-          <Grid item>
-            <PrimaryWallyButton onClick={handleDelete}>
+        <Grid container spacing={2} justify="center">
+          <Grid item xs={6}>
+            <DangerButton onClick={handleDelete} fullWidth>
               <Typography>Yes</Typography>
-            </PrimaryWallyButton>
-          </Grid>
-          <Grid item>
-            <DangerButton onClick={handleClose}>
-              <Typography>No</Typography>
             </DangerButton>
+          </Grid>
+          <Grid item xs={6}>
+            <PrimaryWallyButton onClick={handleClose} fullWidth>
+              <Typography>No</Typography>
+            </PrimaryWallyButton>
           </Grid>
         </Grid>
       </Box>

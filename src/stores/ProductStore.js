@@ -1,14 +1,18 @@
 import { observable, decorate, action, computed } from 'mobx';
+
+// API
+import { getImpulseProducts } from 'api/product';
+
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
   API_GET_IMPULSE_PRODUCTS,
-  API_GET_CATEGORIES,
+  // API_GET_CATEGORIES,
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
   API_RATE_PRODUCT,
-  API_GET_PRODUCTS_MATCHING_FILTERS,
+  // API_GET_PRODUCTS_MATCHING_FILTERS,
 } from '../config';
 import UserStore from './UserStore';
 import axios from 'axios';
@@ -41,10 +45,24 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
-
   products = [];
 
-  /*** Vendor filters */
+  // Product filtration - temporary implementation
+  filters = [];
+  addFilter = (filter) => {
+    this.filters.push(filter);
+  };
+  removeFilter = (idx) => {
+    this.filters.splice(idx, 1);
+  };
+  updateFilters(filters) {
+    this.filters = filters;
+  }
+  resetFilters() {
+    this.filters = [];
+  }
+
+  /*** Product Filters NOT COMPLETE */
   availableLifestyles = [];
   selectedLifestyles = [];
   availableValues = [];
@@ -53,9 +71,8 @@ class ProductStore {
   selectedSubcategories = [];
   availableBrands = [];
   selectedBrands = [];
-  /*** Ends Vendor filters */
 
-  /***  Vendor computed properties  */
+  /***  Product properties  */
   get filteredProducts() {
     if (
       !this.selectedLifestyles.length &&
@@ -88,7 +105,6 @@ class ProductStore {
       },
     );
   }
-  /*** Ends Vendor computed properties */
 
   /*** Vendor filtering actions */
   initializeProductAssortment(assortmentDetails = {}) {
@@ -185,6 +201,10 @@ class ProductStore {
     return res.data;
   }
 
+  resetActiveProduct() {
+    this.activeProduct = null;
+  }
+
   getAdvertisements() {
     axios
       .get(API_GET_ADVERTISEMENTS)
@@ -226,26 +246,12 @@ class ProductStore {
     return res.data;
   }
 
-  async getImpulseProducts(auth) {
-    let res;
-    this.impulse_products = [];
-
+  getImpulseProducts(cartId, auth) {
     this.fetch = true;
-
-    if (auth && auth.headers.Authorization !== 'Bearer undefined') {
-      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`, auth);
-    } else {
-      res = await axios.get(`${API_GET_IMPULSE_PRODUCTS}`);
-    }
-    const data = res.data;
-
-    this.impulse_products = data.products;
-
-    this.path = data.path;
-    this.sidebar = data.sidebar;
-    this.fetch = false;
-
-    return res.data;
+    return getImpulseProducts(cartId, auth).then((res) => {
+      this.fetch = false;
+      return res;
+    });
   }
 
   async getHistoricalProducts(auth) {
@@ -438,7 +444,7 @@ decorate(ProductStore, {
   addSelectedValue: action,
   removeSelectedValue: action,
   /** Ends Vendor */
-
+  resetActiveProduct: action,
   showModal: action,
   getAdvertisements: action,
   getProductDisplayed: action,
@@ -453,6 +459,10 @@ decorate(ProductStore, {
   getHistoricalProducts: action,
   getProductComments: action,
   getProductsMatchingFilters: action,
+  addFilter: action,
+  removeFilter: action,
+  updateFilters: action,
+  resetFilters: action,
 });
 
 export default new ProductStore();

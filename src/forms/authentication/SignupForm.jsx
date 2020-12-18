@@ -30,7 +30,7 @@ import * as Yup from 'yup';
 export default function SignupForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const { checkout, modal, modalV2, routing, user } = useStores();
+  const { modal, modalV2, routing, user } = useStores();
 
   return (
     <Box>
@@ -102,11 +102,7 @@ export default function SignupForm() {
             </Typography>
           </Box>
           <Box my={2}>
-            <PrimaryWallyButton
-              style={{ padding: '1em 1.5em' }}
-              type="submit"
-              fullWidth
-            >
+            <PrimaryWallyButton type="submit" fullWidth>
               <Typography variant="h5" component="span">
                 Sign Up
               </Typography>
@@ -117,12 +113,7 @@ export default function SignupForm() {
       <Box my={2}>
         <FBLogin />
       </Box>
-      <PrimaryWallyButton
-        style={{ padding: '1em 1.5em' }}
-        variant="outlined"
-        fullWidth
-        onClick={showLoginForm}
-      >
+      <PrimaryWallyButton variant="outlined" fullWidth onClick={showLoginForm}>
         <Typography variant="h5" component="span">
           Log In
         </Typography>
@@ -136,7 +127,6 @@ export default function SignupForm() {
       .signup({ name, email, password })
       .then(() => {
         setSubmitting(false);
-        checkout.getCurrentCart(user.getHeaderAuth(), user.getDeliveryParams());
         modal.toggleModal('welcome');
         modalV2.close();
         routing.push('/main');

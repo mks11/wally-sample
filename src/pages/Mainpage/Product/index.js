@@ -1,20 +1,43 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+
+import { Typography } from '@material-ui/core';
 import { PRODUCT_BASE_URL } from 'config';
 import { formatMoney } from 'utils';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-const Product = (props) => {
-  const { product, onProductClick, deliveryTimes } = props;
+const ProductModal = lazy(() => import('modals/ProductModalV2'));
+
+const Product = ({ product }) => {
+  const { modalV2, product: productStore } = useStores();
+  const outOfStock = product.out_of_stock;
   const producer = product.producer || null;
+  let price_unit = 'per jar';
   const price = product.product_price / 100;
 
-  let price_unit = 'per jar';
+  const handleProductClick = async (product_id) => {
+    try {
+      await productStore.showModal(product_id, null);
+      modalV2.open(
+        <Suspense
+          fallback={<Typography variant="h1">Loading product...</Typography>}
+        >
+          <ProductModal />
+        </Suspense>,
+        'right',
+        'md',
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  const outOfStock = product.out_of_stock;
   return (
     <div
-      className="col-lg-3 col-md-4 col-6 col-sm-6 product-thumbnail"
-      onClick={() => onProductClick(product.product_id, deliveryTimes)}
+      className="col-lg-3 col-md-4 col-sm-4 col-6 product-thumbnail"
+      onClick={() => handleProductClick(product.product_id)}
     >
       <LazyLoadImage
         alt={product.product_name || product.name}

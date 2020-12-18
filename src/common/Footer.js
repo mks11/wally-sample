@@ -1,166 +1,160 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { validateEmail, connect } from "../utils";
-import { INSTAGRAM, FACEBOOK } from "../config";
-import {Facebook, Instagram} from '@material-ui/icons';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
-class Footer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: ""
-    };
+// Custom Components
+import SubscribeToNewsletter, {
+  SubscribeToNewsletterForm,
+} from 'common/SubscribeToNewsletter';
 
-    this.zipStore = this.props.store.zip;
-    this.userStore = this.props.store.user;
-    this.routing = this.props.store.routing
+// Material UI
+import {
+  Box,
+  Grid,
+  Container,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core';
+import { Facebook, Instagram } from '@material-ui/icons';
+
+import styled from 'styled-components';
+
+const INSTAGRAM = 'https://www.instagram.com/thewallyshop/';
+const FACEBOOK = 'https://facebook.com/thewallyshop';
+
+const FooterContainer = styled.footer`
+  padding: 30px 0;
+  color: #263a52;
+  line-height: 2;
+  position: relative;
+  a {
+    color: #263a52;
+    font-size: 16px;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 15px;
   }
 
-  handleSubscribe() {
-    if (!validateEmail(this.state.email)) {
-      this.setState({ invalidText: "Invalid email" });
-      return;
+  @media (min-width: 768px) {
+    h4 {
+      font-size: 16px;
     }
-
-    this.setState({ invalidText: false });
-
-    this.userStore
-      .subscribeNewsletter(this.state.email)
-      .then(() => {
-        this.setState({ invalidText: "", successText: "Subscribed!" });
-        setTimeout(() => {
-          this.setState({ successText: "" });
-        }, 1500);
-      })
-      .catch(e => {
-        this.setState({ invalidText: "Failed to subscribe" });
-      });
   }
+`;
 
-  handleEmailChange = e => {
-    this.setState({ email: e.target.value, invalidText: "" });
-  };
-  render() {
-    const isHomePage = this.routing.location.pathname === '/'
+const FooterSectionHeader = styled(Typography).attrs({
+  component: 'p',
+  variant: 'h6',
+  gutterBottom: true,
+})`
+  padding-bottom: 0.5rem;
+  position: relative;
 
-    let isAdmin = false;
-    if (this.userStore.user) {
-      const user = this.userStore.user;
-      isAdmin = user.type === "admin";
-    }
-    if (isAdmin) return null;
-    return (
-      <footer className={ `aw-footer ${ isHomePage ? 'bg-transparent' : 'util-bg-color-white' }` }>
-        <div className="container">
-          <div className="row">
-            <div className="col-auto col-sm-2">
-              <a href="/">
-                <img className="footer-logo" src={"/images/logo.png"} alt="" />
-              </a>
-            </div>
-            <div className="col col-sm-10">
-              <div className="row">
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">THE WALLY SHOP</h4>
-                  <ul>
-                    <li>
-                      <Link to="about">About</Link>
-                    </li>
-                    <li>
-                      <Link to="howitworks">How It Works</Link>
-                    </li>
-                    <li>
-                      <Link to="/backers">Our Backers</Link>
-                    </li>
-                    <li>
-                      <Link to="/blog">Blog</Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">SUPPORT</h4>
-                  <ul>
-                    <li>
-                      <a href="mailto:info@thewallyshop.co">Contact Us</a>
-                    </li>
-                    <li>
-                      <Link to={"/tnc"}>Terms &amp; Conditions</Link>
-                    </li>
-                    <li>
-                      <Link to={"/privacy"}>Privacy Policy</Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-sm-4">
-                  <h4 className="aw-footer--title">FOLLOW US</h4>
-                  <ul>
-                    <li className="d-block align-middle">
-                      <a
-                        href={FACEBOOK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Facebook style={{fontSize: '48px'}} />
-                      </a>
-                    </li>
-                    <li className="d-block align-middle">
-                      <a
-                        href={INSTAGRAM}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Instagram style={{fontSize: '48px'}} />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="container">
-          <div className="footer-bottom">
-            <div className="container">
-              <form className="form-inline" style={{ position: "relative" }}>
-                <label htmlFor="subscribe-email">
-                  Subscribe to our newsletter
-                </label>
-                <div className="input-group">
-                  <input
-                    type="email"
-                    id="subscribe-email"
-                    className="form-control"
-                    placeholder="Enter your email"
-                    onChange={this.handleEmailChange}
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      id="btn-subscribe"
-                      onClick={e => this.handleSubscribe(e)}
-                    >
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
-                {this.state.invalidText ? (
-                  <span className="text-error  d-block ml-2 mt-0 p-0 footer-message">
-                    {this.state.invalidText}
-                  </span>
-                ) : null}
-                {this.state.successText ? (
-                  <span className="text-green  d-block ml-2 mt-0 p-0 footer-message">
-                    {this.state.successText}
-                  </span>
-                ) : null}
-              </form>
-            </div>
-          </div>
-        </div>
-      </footer>
-    );
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: #263a52;
   }
+`;
+
+function Footer() {
+  const isXs = useMediaQuery({ query: '(max-width: 566px)' });
+  const isLg = useMediaQuery({ query: '(min-width: 992px)' });
+
+  return (
+    <FooterContainer>
+      <Container maxWidth="xl">
+        <Box py={2}>
+          <Grid container justify="space-evenly" spacing={4}>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>THE WALLY SHOP</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <Link to="/about">About</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to="/backers">Our Backers</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to="/blog">Blog</Link>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>SUPPORT</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <Link to={'/help'}>Help</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <a href="mailto:info@thewallyshop.co">Contact Us</a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to={'/tnc'}>Terms &amp; Conditions</Link>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Link to={'/privacy'}>Privacy Policy</Link>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} sm={4} lg={3}>
+              <FooterSectionHeader>FOLLOW US</FooterSectionHeader>
+              <List>
+                <ListItem disableGutters>
+                  <a
+                    href={FACEBOOK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <Facebook style={{ fontSize: '35px' }} />{' '}
+                    <span style={{ marginLeft: '4px' }}>Facebook</span>
+                  </a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <a
+                    href={INSTAGRAM}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <Instagram style={{ fontSize: '35px' }} />{' '}
+                    <span style={{ marginLeft: '4px' }}>Instagram</span>
+                  </a>
+                </ListItem>
+                <ListItem disableGutters>
+                  <Box display="flex" alignItems="center">
+                    <SubscribeToNewsletter />
+                  </Box>
+                </ListItem>
+              </List>
+            </Grid>
+            {(isXs || isLg) && (
+              <Grid item xs={12} lg={3}>
+                <FooterSectionHeader>NEWSLETTER</FooterSectionHeader>
+                <SubscribeToNewsletterForm />
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      </Container>
+    </FooterContainer>
+  );
 }
 
-export default connect("store")(Footer);
+export default Footer;

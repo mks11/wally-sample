@@ -1,723 +1,660 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import { Input } from 'reactstrap';
-import Title from 'common/page/Title';
-import PaymentSelect from 'common/PaymentSelect';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
-import { logPageView, logEvent } from 'services/google-analytics';
-import { connect, formatMoney, datesEqual } from 'utils';
+// API
+import { submitOrder } from 'api/order';
+import {
+  Box,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+import { InfoIcon } from 'Icons';
 
-import DeliveryAddressOptions from 'common/DeliveryAddressOptions';
-import DeliveryChangeModal from 'common/DeliveryChangeModal';
+// Cookies
+import { useCookies } from 'react-cookie';
 
-import PackagingSummary from './PackagingSummary';
-import ShippingOption from '../../common/ShippingOption';
+// Custom Components
+import Address from 'pages/Shipping/ShippingAddresses/Address';
+import CheckoutFlowBreadcrumbs from 'common/CheckoutFlowBreadcrumbs';
+import { CreditCard } from 'common/PaymentMethods';
+import { OPTIONS, getDeliveryDates } from 'pages/Shipping/ShippingOptions';
+
+// Forms
 import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
-class Checkout extends Component {
-  constructor(props) {
-    super(props);
+// Utilities
+import { logPageView, logEvent } from 'services/google-analytics';
+import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
 
-    this.userStore = this.props.store.user;
-    this.uiStore = this.props.store.ui;
-    this.modalStore = this.props.store.modal;
-    this.productStore = this.props.store.product;
-    this.checkoutStore = this.props.store.checkout;
-    this.routing = this.props.store.routing;
-    this.loading = this.props.store.loading;
+// MobX
+import { observer } from 'mobx-react';
+import { useStores } from 'hooks/mobx';
 
-    this.state = {
-      timeDropdown: false,
+// Styled components
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { PrimaryTextLink } from 'styled-component-lib/Links';
 
-      appliedStoreCredit: 0,
-      appliedStoreCreditAmount: 0,
-      applicableStoreCreditAmount: 0,
+function Checkout({ breadcrumbs, location }) {
+  // MobX state
+  const {
+    checkout: checkoutStore,
+    loading: loadingStore,
+    modal: modalStore,
+    routing: routingStore,
+    snackbar: snackbarStore,
+    user: userStore,
+  } = useStores();
+  const { cart, order } = checkoutStore;
+  const { flags, user } = userStore;
 
-      appliedPromo: false,
+  // Cookies related to the checkout experience
+  const [cookies, setCookie] = useCookies([
+    'addressId',
+    'paymentId',
+    'shippingServiceLevel',
+  ]);
+  const { addressId, paymentId, shippingServiceLevel } = cookies;
 
-      appliedTipAmount: 0,
-      appliedTipAmountChanged: false,
-      tipReadOnly: true,
-      tipApplyEdited: false,
-      freezedTipAmount: null,
-
-      selectedAddress: null,
-      selectedPayment: null,
-      selectedDay: null,
-      selectedDate: null,
-      selectedTime: null,
-
-      lockAddress: true,
-      lockPayment: false,
-      lockTime: false,
-      confirmHome: false,
-      confirmHomeError: false,
-
-      newAddress: false,
-      newPayment: false,
-
-      addressError: false,
-
-      invalidText: '',
-      successText: '',
-      invalidSelectAddress: '',
-
-      invalidAddressText: '',
-      newStreetAddress: '',
-      newAptNo: '',
-      newZip: '',
-      newContactName: '',
-      newPhoneNumber: '',
-      newDeliveryNotes: '',
-      newState: '',
-      newCity: '',
-      newCountry: '',
-      newPreferedAddress: false,
-
-      deliveryTimes: this.checkoutStore.deliveryTimes,
-
-      placeOrderRequest: false,
-
-      hasReturns: false,
-      pickupNotes: '',
-    };
+  // Redirect if user has navigated here via the address bar
+  if (!addressId || !shippingServiceLevel) {
+    routingStore.push('/checkout/shipping');
+  } else if (!paymentId) {
+    routingStore.push('/checkout/payment');
   }
 
-  componentDidMount() {
+  useEffect(() => {
     // Store page view in google analytics
-    const { location } = this.routing;
     logPageView(location.pathname);
+  }, []);
 
-    this.userStore.getStatus(true).then((status) => {
-      if (status) {
-        const selectedAddress =
-          this.userStore.selectedDeliveryAddress ||
-          (this.userStore.user
-            ? this.userStore.getAddressById(
-                this.userStore.user.preferred_address,
-              )
-            : null);
-        if (selectedAddress) {
-          this.userStore.setDeliveryAddress(selectedAddress);
-        }
+  useEffect(() => {
+    if (checkoutStore.cart && !checkoutStore.cart.cart_items.length) {
+      routingStore.push('/checkout/cart');
+    }
+  }, [checkoutStore.cart]);
 
-        // this.checkoutStore.getDeliveryTimes();
-        this.loadData();
-        if (this.userStore.user.addresses.length > 0) {
-          const selectedAddress = this.userStore.user.addresses.find(
-            (d) => d._id === this.userStore.user.preferred_address,
-          );
-          this.setState({ selectedAddress: selectedAddress._id });
-        } else {
-          this.setState({ lockAddress: false });
-        }
+  useEffect(() => {
+    // This triggers a modal if the user hasn't visited the page yet.
+    // The modal explains the packaging deposit process.
+    // The 'flag' is set via a local storage item.
+    if (user && flags && !flags.checkoutFirst) {
+      modalStore.toggleModal('checkoutfirst');
+    }
 
-        if (this.userStore.user.payment.length > 0) {
-          const selectedPayment = this.userStore.user.payment.find(
-            (d) => d._id === this.userStore.user.preferred_payment,
-          );
-          this.setState({ selectedPayment: selectedPayment._id });
-        }
+    if (user && flags.checkoutFirst) {
+      loadData();
+    }
+  }, [user, flags]);
 
-        const { checkoutFirst } = this.userStore.flags || {};
-        !checkoutFirst && this.modalStore.toggleModal('checkoutfirst');
-      } else {
-        this.routing.push('/main');
-      }
-    });
+  // TODO: Once guest experience implemented, this logic will need to change
+  if (!cart || !order || !user) {
+    return null;
   }
 
-  loadData() {
-    let dataOrder;
-    const deliveryData = this.userStore.getDeliveryParams();
-    const address_id = this.userStore.selectedDeliveryAddress
-      ? this.userStore.selectedDeliveryAddress.address_id
-      : '';
-    const tip = this.parseAppliedTip();
-    this.checkoutStore
-      .getOrderSummary(this.userStore.getHeaderAuth())
-      .then((data) => {
-        this.setState({
-          applicableStoreCreditAmount: this.checkoutStore.order
-            .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_discount,
-          appliedPromoCode: this.checkoutStore.order.promo,
-        });
-
-        dataOrder = data;
-        return data;
-      })
-      .then((data) => {
-        if (
-          !datesEqual(data.delivery_date, deliveryData.date) &&
-          deliveryData.date !== null
-        ) {
-          return this.checkoutStore.getDeliveryTimes().then(() => {
-            this.userStore.adjustDeliveryTimes(
-              dataOrder.delivery_date,
-              this.state.deliveryTimes,
-            );
-            this.setState({ invalidText: 'Please select delivery time' });
-          });
-        }
-        return null;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }
-
-  updateData() {
-    this.checkoutStore
-      .getOrderSummary(this.userStore.getHeaderAuth())
-      .then((data) => {
-        this.setState({
-          applicableStoreCreditAmount: this.checkoutStore.order
-            .applicable_store_credit,
-          appliedPromo: this.checkoutStore.order.promo_amount,
-          appliedPromoCode: this.checkoutStore.order.promo,
-          appliedTipAmount: this.checkoutStore.order.tip_amount / 100,
-        });
-      });
-  }
-
-  parseAppliedTip() {
-    const { appliedTipAmount } = this.state;
-    let tipValue = appliedTipAmount;
-
-    if (typeof appliedTipAmount === 'string') {
-      tipValue = appliedTipAmount.replace('$', '');
-    }
-
-    return (parseFloat(tipValue) * 100).toFixed();
-  }
-
-  applyStoreCredit() {
-    if (this.state.applicableStoreCreditAmount) {
-      this.setState({
-        appliedStoreCredit: true,
-        appliedStoreCreditAmount: this.checkoutStore.order
-          .applicable_store_credit,
-      });
-      this.checkoutStore.order.total =
-        this.checkoutStore.order.total -
-        this.checkoutStore.order.applicable_store_credit;
-    }
-  }
-
-  handleSelectAddress = (data) => {
-    const selectedAddress = this.userStore.selectedDeliveryAddress;
-    if (!selectedAddress || selectedAddress.address_id !== data.address_id) {
-      this.setState({ selectedAddress: data, selectedAddressChanged: true });
-      this.userStore.setDeliveryAddress(data);
-    } else {
-      this.setState({ selectedAddressChanged: false });
-    }
-  };
-
-  handleAddNewAddress = async (data) => {
-    const {
-      newContactName,
-      newState,
-      newDeliveryNotes,
-      newZip,
-      newAptNo,
-      newCity,
-      newCountry,
-      newPhoneNumber,
-      newStreetAddress,
-      newPreferedAddress,
-    } = data;
-
-    const dataMap = {
-      name: newContactName,
-      state: newState,
-      delivery_notes: newDeliveryNotes,
-      zip: newZip,
-      unit: newAptNo,
-      city: newCity,
-      country: newCountry,
-      telephone: newPhoneNumber,
-      street_address: newStreetAddress,
-      preferred_address: newPreferedAddress,
-    };
-
-    const response = await this.userStore.saveAddress(dataMap);
-    const address = this.userStore.selectedDeliveryAddress;
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-    return response;
-  };
-
-  handleSubmitAddress = async (address) => {
-    this.userStore.setDeliveryAddress(address);
-    this.setState({ lockAddress: true });
-  };
-
-  handleUnlockAddress = () => {
-    this.setState({ lockAddress: false });
-  };
-
-  handleSubmitPayment = (lock, selectedPayment) => {
-    logEvent({ category: 'Checkout', action: 'SubmitPayment' });
-    this.setState({
-      selectedPayment,
-      lockPayment: lock,
-    });
-  };
-
-  handleSelectTime = (selectedTime) => {
-    this.modalStore.showDeliveryChange('time', selectedTime);
-    this.setState({ invalidText: '' });
-  };
-
-  handleChangeDelivery = () => {
-    this.updateData();
-  };
-
-  handleEdit(id, quantity) {
-    this.productStore
-      .showModal(id, quantity, this.userStore.getDeliveryParams())
-      .then(() => {
-        this.modalStore.toggleModal('product');
-      });
-  }
-
-  handleDelete(data) {
-    const id = {
-      product_id: data.product_id,
-      inventory_id: data.inventory_id,
-    };
-    this.modalStore.toggleModal('delete', id);
-  }
-
-  handlePlaceOrder() {
-    const { placeOrderRequest } = this.state;
-
-    if (placeOrderRequest) {
-      return;
-    }
-
-    this.setState({ invalidText: '', placeOrderRequest: true });
-    if (!this.userStore.selectedDeliveryAddress) {
-      this.setState({
-        invalidText: 'Please select address',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-
-    if (!this.state.lockPayment) {
-      this.setState({
-        invalidText: 'Please select payment',
-        placeOrderRequest: false,
-      });
-      return;
-    }
-    this.loading.toggle();
-    logEvent({ category: 'Checkout', action: 'ConfirmCheckout' });
-    const deliveryTime = 'UPS Ground (1-5 Days)';
-
-    this.checkoutStore
-      .submitOrder(
-        {
-          cart_id: this.checkoutStore.cart._id,
-          store_credit: this.state.appliedStoreCreditAmount > 0,
-          user_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-          address_id: this.userStore.selectedDeliveryAddress.address_id,
-          payment_id: this.state.selectedPayment,
-          delivery_time: deliveryTime,
-          tip_amount: this.parseAppliedTip(),
-          has_returns: this.state.hasReturns,
-          pickup_notes: this.state.pickupNotes,
-        },
-        this.userStore.getHeaderAuth(),
-      )
-      .then((data) => {
-        logEvent({
-          category: 'Order',
-          action: 'Submit Order',
-        });
-        this.routing.push('/orders/' + data.order._id);
-        this.checkoutStore.clearCart(this.userStore.getHeaderAuth());
-        this.userStore.setDeliveryTime(null);
-        this.loading.toggle();
-        this.setState({ placeOrderRequest: false });
-      })
-      .catch((e) => {
-        console.error('Failed to submit order', e);
-        const msg = e.response.data.error.message;
-        this.setState({ invalidText: msg, placeOrderRequest: false });
-        this.loading.toggle();
-      });
-  }
-
-  handleReturnSet = (has_returns, pickup_notes) => {
-    this.setState({
-      hasReturns: has_returns,
-      pickupNotes: pickup_notes,
-    });
-  };
-
-  handleAddTip = () => {
-    if (!this.state.tipApplyEdited) {
-      this.setState({
-        tipApplyEdited: true,
-        freezedTipAmount: null,
-      });
-      this.updateData();
-    }
-  };
-
-  handleChangeTip = (e) => {
-    this.setState({
-      tipApplyEdited: false,
-      appliedTipAmount: e.target.value,
-      invalidText: '',
-    });
-  };
-
-  handleAddPayment = (data) => {
-    if (data) {
-      logEvent({ category: 'Checkout', action: 'SubmitNewPayment' });
-      this.userStore.setUserData(data);
-      this.setState({
-        selectedPayment: this.userStore.user.preferred_payment,
-        newPayment: false,
-      });
-    }
-  };
-
-  handleConfirmHome = () => {
-    logEvent({ category: 'Checkout', action: 'ConfirmAtHome' });
-    this.setState({
-      confirmHome: !this.state.confirmHome,
-      confirmHomeError: !!this.state.confirmHome,
-    });
-  };
-
-  handleTipAmountChange = (value, clickedByUser) => {
-    const order = this.checkoutStore.order;
-    const tipAmount = (value / 100) * order.subtotal;
-    this.setState({
-      appliedTipAmount: (tipAmount / 100).toFixed(2),
-      tipReadOnly: true,
-      appliedTipAmountChanged: clickedByUser,
-      freezedTipAmount: null,
-    });
-  };
-
-  handleTipCustomAmounClick = () => {
-    this.setState({
-      tipReadOnly: false,
-      freezedTipAmount: this.state.appliedTipAmount,
-    });
-  };
-
-  handlePackagingDepositClick = () => {
-    this.modalStore.toggleModal('packagingdeposit');
-  };
-
-  updateTotal() {
-    const order = this.checkoutStore.order;
-    const customTip =
-      this.state.freezedTipAmount || this.state.appliedTipAmount;
-    let total = order.total / 100;
-
-    if (!order.tip_amount || this.state.appliedTipAmountChanged) {
-      const currentTipAmount = order.tip_amount || 0;
-      total = (order.total - currentTipAmount) / 100 + parseFloat(customTip);
-    }
-    return total;
-  }
-
-  updateTipAmount() {
-    const order = this.checkoutStore.order;
-    const customTip =
-      this.state.freezedTipAmount || this.state.appliedTipAmount;
-    const tipAmount =
-      order.tip_amount && !this.state.appliedTipAmountChanged
-        ? formatMoney(order.tip_amount / 100)
-        : formatMoney(customTip);
-
-    return tipAmount;
-  }
-
-  handleApplyPromo() {
-    const { order } = this.checkoutStore;
-
-    if (order) {
-      this.setState({
-        appliedStoreCredit: order.applied_store_credit,
-        appliedPromo: true,
-        appliedPromoCode: order.promo_code,
-      });
-    }
-  }
-
-  render() {
-    if (!this.checkoutStore.order || !this.userStore.user) {
-      return null;
-    }
-
-    const order = this.checkoutStore.order;
-
-    const applicableStoreCreditAmount = this.state.applicableStoreCreditAmount
-      ? this.state.applicableStoreCreditAmount / 100
-      : 0;
-
-    let buttonPlaceOrderClass = 'btn btn-main';
-    if (
-      this.userStore.selectedDeliveryAddress &&
-      this.state.lockPayment &&
-      this.userStore.selectedDeliveryTime &&
-      !this.state.placeOrderRequest
-    ) {
-      buttonPlaceOrderClass += ' active';
-    }
-    if (this.userStore.selectedDeliveryAddress) {
-      buttonPlaceOrderClass += ' active';
-    }
-
-    const cart_items = order && order.cart_items ? order.cart_items : [];
-
-    const orderTotal = this.updateTotal();
-
-    return (
-      <div className="App">
-        <Title content="Checkout" />
-        <div className="container">
-          <div className="checkout-wrap">
-            <div className="">
-              <div style={{ maxWidth: '440px' }}>
-                {this.userStore.user && (
-                  <DeliveryAddressOptions
-                    lock={this.state.lockAddress}
-                    editable={true}
-                    selected={
-                      this.userStore.selectedDeliveryAddress
-                        ? this.userStore.selectedDeliveryAddress.address_id
-                        : null
-                    }
-                    user={this.userStore.user}
-                    onAddNew={this.handleAddNewAddress}
-                    onSubmit={this.handleSubmitAddress}
-                    onSelect={this.handleSelectAddress}
-                    onUnlock={this.handleUnlockAddress}
-                  />
-                )}
-
-                {this.userStore.user && (
-                  <ShippingOption
-                    lock={false}
-                    data={this.state.deliveryTimes}
-                    selected={this.userStore.selectedDeliveryTime}
-                    onSelectTime={this.handleSelectTime}
-                    title="Shipping Option"
-                    user={this.userStore.user}
-                  />
-                )}
-
-                <React.Fragment>
-                  <h3 className="m-0 mb-3 p-r mt-5">
-                    Payment
-                    {this.state.lockPayment ? (
-                      <a
-                        onClick={(e) => this.setState({ lockPayment: false })}
-                        className="address-rbtn link-blue pointer"
-                      >
-                        CHANGE
-                      </a>
-                    ) : null}
-                  </h3>
-                  <PaymentSelect
-                    {...{
-                      lockPayment: this.state.lockPayment,
-                      userPayment: this.userStore.user.payment,
-                      userPreferredPayment: this.userStore.user
-                        .preferred_payment,
-                      onAddPayment: this.handleAddPayment,
-                      onSubmitPayment: this.handleSubmitPayment,
-                      userGuest: !this.userStore.status,
-                      preselect: true,
+  return (
+    <Container maxWidth="md">
+      <CheckoutFlowBreadcrumbs breadcrumbs={breadcrumbs} location={location} />
+      <Box my={4}>
+        <Card elevation={1} style={{ background: 'rgba(0, 0, 0, 0.05)' }}>
+          <Box p={1}>
+            <Box p={1} borderRadius="4px">
+              <Box pt={2} px={1} pb={1}>
+                <Typography component="h1" variant="h3" gutterBottom>
+                  Review your order
+                </Typography>
+              </Box>
+              {userStore.user && (
+                <>
+                  <ShippingAddress />
+                  <ShippingMethod />
+                  <PaymentMethod />
+                  <OrderSummary />
+                  <Formik
+                    initialValues={{
+                      addressId: addressId || '',
+                      cartId: cart._id || '',
+                      paymentId: paymentId || '',
+                      shippingServiceLevel: shippingServiceLevel || '',
                     }}
-                  />
-                </React.Fragment>
-
-                {/* <Returns
-                  title="Returns"
-                  default={this.userStore.user.pickup_notes || null}
-                  onReturnChange={this.handleReturnSet}
-                /> */}
-              </div>
-            </div>
-            <div className="">
-              <section
-                className="order-summary mb-5"
-                style={{ maxWidth: '440px' }}
-              >
-                <div className="card1 card-shadow">
-                  <div className="card-body">
-                    <h3 className="m-0 mb-2">Order Summary</h3>
-                    <hr />
-                    {cart_items.map((c, i) => {
-                      const unit_type = c.unit_type || c.price_unit;
-                      const showType =
-                        unit_type === 'packaging'
-                          ? c.packaging_name
-                          : unit_type;
+                    validationSchema={Yup.object({
+                      addressId: Yup.string().required(
+                        'You must select a shipping address.',
+                      ),
+                      cartId: Yup.string().required(
+                        "You can't make an order without a cart.",
+                      ),
+                      paymentId: Yup.string().required(
+                        'You must select a payment method.',
+                      ),
+                      shippingServiceLevel: Yup.string().required(),
+                    })}
+                    enableReinitialize
+                    onSubmit={(values, { setFieldError, setSubmitting }) => {
+                      handlePlaceOrder(values, setFieldError);
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ errors, isSubmitting }) => {
+                      errors = Object.values(errors);
 
                       return (
-                        <div className="item mt-3 pb-2" key={i}>
-                          <div className="item-left">
-                            <h4 className="item-name">
-                              {c.product_id !== 'prod_pckging' ? (
-                                c.product_name
-                              ) : (
-                                <PackagingSummary title={c.product_name} />
-                              )}
-                            </h4>
-                            {unit_type !== 'packaging' &&
-                              c.product_id !== 'prod_pckging' && (
-                                <span className="item-detail mt-2 mb-1">
-                                  {c.packaging_name}
-                                </span>
-                              )}
-                            {c.product_id !== 'prod_pckging' && (
-                              <div className="item-link">
-                                <a
-                                  onClick={(e) =>
-                                    this.handleEdit(
-                                      c.product_id,
-                                      c.customer_quantity,
-                                    )
-                                  }
-                                  className="text-blue mr-2"
+                        <Form>
+                          <Card elevation={0}>
+                            <Box my={1}>
+                              <Container maxWidth="xs">
+                                <PrimaryWallyButton
+                                  type="submit"
+                                  fullWidth
+                                  disabled={isSubmitting}
+                                  disableElevation
                                 >
-                                  EDIT
-                                </a>
-                                <a
-                                  onClick={(e) => this.handleDelete(c)}
-                                  className="text-dark-grey"
-                                >
-                                  DELETE
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                          <div className="item-right">
-                            <h4>
-                              x{c.customer_quantity} {showType}
-                            </h4>
-                            <span className="item-price">
-                              {formatMoney(c.total / 100)}
-                            </span>
-                          </div>
-                        </div>
+                                  Place Order
+                                </PrimaryWallyButton>
+                                <Box pt={1} px={2}>
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    align="center"
+                                  >
+                                    By placing your order, you agree to be bound
+                                    by the Terms of Service and Privacy Policy.
+                                  </Typography>
+                                </Box>
+                                {/* <Box display="flex" justifyContent="center">
+                                  <HelperText
+                                    error={errors.length ? true : false}
+                                  >
+                                    {errors.length ? errors[0] : ' '}
+                                  </HelperText>
+                                </Box> */}
+                              </Container>
+                            </Box>
+                          </Card>
+                        </Form>
                       );
-                    })}
+                    }}
+                  </Formik>
+                </>
+              )}
+            </Box>
+          </Box>
+        </Card>
+      </Box>
+    </Container>
+  );
 
-                    <div className="item-summaries">
-                      <div className="summary">
-                        <span>Subtotal</span>
-                        <span>{formatMoney(order.subtotal / 100)}</span>
-                      </div>
-                      <div className="summary">
-                        <span>Taxes</span>
-                        <span>{formatMoney(order.tax_amount / 100)}</span>
-                      </div>
-                      <div className="summary">
-                        <span>Delivery fee (For there & back again)</span>
-                        <span>{formatMoney(order.delivery_amount / 100)}</span>
-                      </div>
+  function clearCookies() {
+    setCookie('addressId', '', { path: '/' });
+    setCookie('paymentId', '', { path: '/' });
+    setCookie('shippingServiceLevel', '', { path: '/' });
+  }
 
-                      <div className="summary">
-                        <span>
-                          <strong>
-                            <a onClick={this.handlePackagingDepositClick}>
-                              {' '}
-                              Packaging Deposit{' '}
-                            </a>
-                          </strong>{' '}
-                          (You'll get this back ;) )
-                        </span>
-                        <span>
-                          {formatMoney(order.packaging_deposit / 100)}
-                        </span>
-                      </div>
+  async function handlePlaceOrder(values, setFieldError) {
+    try {
+      const { addressId, cartId, paymentId, shippingServiceLevel } = values;
+      const auth = userStore.getHeaderAuth();
+      loadingStore.show();
+      const res = await submitOrder(
+        {
+          addressId,
+          cartId,
+          paymentId,
+          shippingServiceLevel,
+        },
+        auth,
+      );
+      logEvent({
+        category: 'Checkout',
+        action: 'Submit Order',
+      });
+      checkoutStore.clearCart(userStore.getHeaderAuth());
+      routingStore.push('/orders/' + res.data.order._id);
+      clearCookies();
+    } catch (error) {
+      logEvent({
+        category: 'Checkout',
+        action: 'Order Submission Failure',
+        nonInteraction: true,
+      });
+      let msg = getErrorMessage(error) || 'Order submission failed';
+      let param = getErrorParam(error);
 
-                      {order.applied_packaging_balance === 0 ? null : (
-                        <div className="summary">
-                          <span>Applied packaging deposit balance</span>
-                          <span>
-                            -
-                            {formatMoney(order.applied_packaging_balance / 100)}
-                          </span>
-                        </div>
-                      )}
+      if (msg && param) {
+        setFieldError(param, msg);
+      }
+      snackbarStore.openSnackbar(msg, 'error', 6000, {
+        horizontal: 'center',
+        vertical: 'bottom',
+      });
+    } finally {
+      loadingStore.hide();
+    }
+  }
 
-                      {order.promo_discount === 0 ? null : (
-                        <div className="summary">
-                          <span>Applied discount</span>
-                          <span>
-                            -{formatMoney(order.promo_discount / 100)}
-                          </span>
-                        </div>
-                      )}
-
-                      {order.applied_store_credit === 0 ? null : (
-                        <div className="summary">
-                          <span>Applied store credit</span>
-                          <span>
-                            -{formatMoney(order.applied_store_credit / 100)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="item-extras">
-                      <ApplyPromoCodeForm
-                        onApply={() => this.handleApplyPromo()}
-                      />
-                    </div>
-
-                    <div className="item-total">
-                      <span>Total</span>
-                      <span>{formatMoney(orderTotal)}</span>
-                    </div>
-
-                    <button
-                      onClick={(e) => this.handlePlaceOrder()}
-                      className={buttonPlaceOrderClass}
-                      disabled={cart_items.length == 0}
-                    >
-                      PLACE ORDER
-                    </button>
-                    {this.state.invalidText ? (
-                      <span className="text-error text-center d-block mt-2">
-                        {this.state.invalidText}
-                      </span>
-                    ) : null}
-                    {this.state.successText ? (
-                      <span className="text-success text-center d-block mt-2">
-                        {this.state.successText}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
-                <p className="mt-3">
-                  By placing your order, you agree to be bound by the Terms of
-                  Service and Privacy Policy.
-                </p>
-              </section>
-            </div>
-          </div>
-        </div>
-        <DeliveryChangeModal onChangeSubmit={this.handleChangeDelivery} />
-      </div>
-    );
+  async function loadData() {
+    try {
+      loadingStore.show();
+      const auth = userStore.getHeaderAuth();
+      await checkoutStore.getOrderSummary(auth);
+    } catch (error) {
+      snackbarStore.openSnackbar('Failed to retrieve order summary.', 'error');
+    } finally {
+      loadingStore.hide();
+    }
   }
 }
 
-export default connect('store')(Checkout);
+export default observer(Checkout);
+
+const PackagingDepositInfo = lazy(() => import('modals/PackagingDepositInfo'));
+
+const ShippingAddress = observer(() => {
+  // MobX
+  const { user: userStore } = useStores();
+  const { user } = userStore;
+
+  const [cookies] = useCookies(['addressId']);
+  const { addressId } = cookies;
+
+  var address;
+
+  // Find user's address using id stored in cookie.
+  if (user && user.addresses && addressId) {
+    const { addresses } = user;
+    address = addresses.find((a) => a._id.toString() === addressId);
+  }
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box p={2}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Shipping Address
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/shipping">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {address ? (
+          <Address
+            address={address}
+            preferredAddressId={user.preferred_address}
+          />
+        ) : (
+          <Typography>No shipping address selected.</Typography>
+        )}
+      </Box>
+    </Card>
+  );
+});
+
+const ShippingMethod = () => {
+  // Cookies related to the checkout experience
+  const [cookies] = useCookies(['shippingServiceLevel']);
+  const { shippingServiceLevel } = cookies;
+
+  var shippingMethod;
+
+  if (shippingServiceLevel) {
+    shippingMethod = OPTIONS.find((o) => o.value === shippingServiceLevel);
+  }
+
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box px={2} py={1} pb={2}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Shipping Method
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/shipping">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {shippingMethod ? (
+          <Typography>{getDeliveryDates(shippingMethod)}</Typography>
+        ) : (
+          <Typography>No shipping method selected.</Typography>
+        )}
+      </Box>
+    </Card>
+  );
+};
+
+const PaymentMethod = observer(() => {
+  // MobX
+  const { user: userStore } = useStores();
+  const { user } = userStore;
+
+  // Cookies related to the checkout experience
+  const [cookies] = useCookies(['paymentId']);
+  const { paymentId } = cookies;
+
+  var paymentMethod;
+
+  if (user && user.payment && paymentId) {
+    const { payment } = user;
+    paymentMethod = payment.find((p) => p._id.toString() === paymentId);
+  }
+
+  return (
+    <Card style={{ marginBottom: '16px' }} elevation={0}>
+      <Box px={2} py={1}>
+        <Box alignItems="center" display="flex" justifyContent="space-between">
+          <Typography component="h2" variant="h4">
+            Payment Method
+          </Typography>
+
+          <PrimaryTextLink to="/checkout/payment">
+            <Typography component="span" variant="h6">
+              Change
+            </Typography>
+          </PrimaryTextLink>
+        </Box>
+        {paymentMethod ? (
+          <CreditCard my={0} paymentMethod={paymentMethod} />
+        ) : (
+          <Box py={1}>
+            <Typography>No payment method selected.</Typography>
+          </Box>
+        )}
+        <Box mt={3}>
+          <ApplyPromoCodeForm />
+          <AppliedPromoCodes />
+        </Box>
+      </Box>
+    </Card>
+  );
+});
+
+const OrderSummary = observer(() => {
+  const theme = useTheme();
+  const { checkout, modalV2 } = useStores();
+
+  // Order summary state
+  const { order } = checkout;
+  const cart_items = order && order.cart_items ? order.cart_items : [];
+  const hasFreeShipping =
+    order &&
+    typeof order.delivery_amount === 'number' &&
+    !+order.delivery_amount;
+  const wasTaxed =
+    order && typeof order.tax_amount === 'number' && +order.tax_amount;
+  const orderTotal = order && order.total && order.total / 100;
+  const hasDiscount =
+    (order && order.applied_packaging_balance) ||
+    order.applied_store_credit ||
+    (order.applied_promo_codes && order.applied_promo_codes.length);
+  const packagingUsed =
+    order && order.packaging_used ? order.packaging_used : [];
+
+  function handlePackagingDepositClick() {
+    modalV2.open(
+      <Suspense
+        fallback={
+          <Typography variant="h1" gutterBottom>
+            Packaging Deposit?
+          </Typography>
+        }
+      >
+        <PackagingDepositInfo />
+      </Suspense>,
+    );
+  }
+
+  return (
+    <Card elevation={0}>
+      <Box p={2}>
+        <Typography component="h2" variant="h4" gutterBottom>
+          Order Summary
+        </Typography>
+        <Typography component="p" variant="h6" gutterBottom>
+          Products
+        </Typography>
+        {cart_items.map((item, i) => (
+          <OrderItem key={item.product_name} item={item} />
+        ))}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography gutterBottom>Subtotal</Typography>
+          <Typography gutterBottom>
+            {formatMoney(order.subtotal / 100)}
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Divider />
+        </Box>
+
+        {/* Packaging Deposit */}
+        <Box display="flex" alignItems="center">
+          <Typography component="p" variant="h6">
+            Packaging Deposit
+          </Typography>
+          <IconButton onClick={handlePackagingDepositClick}>
+            <InfoIcon />
+          </IconButton>
+        </Box>
+        <div>
+          {packagingUsed.map((p) => {
+            const { quantity, type } = p;
+            return (
+              <Box
+                key={type}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <div>
+                  <Typography component="span" style={{ marginRight: '8px' }}>
+                    {type}
+                  </Typography>
+                  <Typography component="span" color="textSecondary">
+                    ({quantity})
+                  </Typography>
+                </div>
+
+                <Typography>
+                  {type.includes('Tote')
+                    ? formatMoney(1000 / 100)
+                    : formatMoney((quantity * 100) / 100)}
+                </Typography>
+              </Box>
+            );
+          })}
+        </div>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography gutterBottom>Subtotal</Typography>
+          <Typography gutterBottom>
+            {formatMoney(order.packaging_deposit / 100)}
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Divider />
+        </Box>
+
+        {/* Tax && Fees */}
+        <Typography component="h3" variant="h6" gutterBottom>
+          Taxes and Fees
+        </Typography>
+        {/* Tax */}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          color={
+            !wasTaxed ? theme.palette.success.main : theme.palette.text.main
+          }
+        >
+          <Typography>Tax</Typography>
+          <Typography>
+            {wasTaxed ? formatMoney(order.tax_amount / 100) : 'None'}
+          </Typography>
+        </Box>
+        {/* Shipping */}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          color={
+            hasFreeShipping
+              ? theme.palette.success.main
+              : theme.palette.text.main
+          }
+        >
+          <Typography gutterBottom={hasDiscount ? true : false}>
+            Shipping
+          </Typography>
+          <Typography gutterBottom={hasDiscount ? true : false}>
+            {hasFreeShipping
+              ? 'Free'
+              : formatMoney(order.delivery_amount / 100)}
+          </Typography>
+        </Box>
+        {hasDiscount && (
+          <>
+            <Box mb={2}>
+              <Divider />
+            </Box>
+            <Typography component="p" variant="h6" gutterBottom>
+              Discounts and Promotions
+            </Typography>
+          </>
+        )}
+        <Box color={theme.palette.success.main}>
+          {order.applied_packaging_balance === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Packaging Deposit Balance</Typography>
+              <Typography>
+                -{formatMoney(order.applied_packaging_balance / 100)}
+              </Typography>
+            </Box>
+          )}
+
+          {order.applied_store_credit === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Store Credit</Typography>
+              <Typography>
+                -{formatMoney(order.applied_store_credit / 100)}
+              </Typography>
+            </Box>
+          )}
+
+          {order.promo_discount === 0 ? null : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>Promotional Discounts</Typography>
+
+              <Typography>
+                -{formatMoney(order.promo_discount / 100)}
+              </Typography>
+            </Box>
+          )}
+          <AppliedPromoCodes />
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Typography>Subtotal</Typography>
+          <Typography>
+            {hasFreeShipping
+              ? 'Free'
+              : formatMoney(order.tax_amount + order.delivery_amount / 100)}
+          </Typography>
+        </Box>
+        <Box my={2}>
+          <Divider />
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" component="p">
+            Total
+          </Typography>
+          <Typography variant="h6" component="p">
+            {formatMoney(orderTotal)}
+          </Typography>
+        </Box>
+      </Box>
+    </Card>
+  );
+});
+
+function OrderItem({ item }) {
+  const { customer_quantity, product_name, total } = item;
+  return (
+    <>
+      <Grid container justify="space-between">
+        <Grid item xs={9} md={10}>
+          <Typography
+            component="span"
+            style={{ marginRight: '8px' }}
+            gutterBottom
+          >
+            {product_name}
+          </Typography>
+          <Typography component="span" color="textSecondary" gutterBottom>
+            ({customer_quantity})
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography>{formatMoney(total / 100)}</Typography>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+export const AppliedPromoCodes = observer(() => {
+  const theme = useTheme();
+  const { checkout } = useStores();
+  const { cart } = checkout;
+
+  const hasPromoCode =
+    cart && cart.applied_promo_codes && cart.applied_promo_codes.length;
+
+  return hasPromoCode ? (
+    <Box style={{ color: theme.palette.success.main }}>
+      <Typography component="p">Applied Promo Codes:</Typography>
+      <List style={{ padding: '0' }}>
+        {cart.applied_promo_codes.map((code, idx) => (
+          <ListItem key={code.promo_code + idx} style={{ padding: '4px 8px' }}>
+            <Typography>{code.promo_code}</Typography>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  ) : null;
+});

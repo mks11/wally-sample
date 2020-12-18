@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
@@ -8,6 +8,7 @@ import { PRODUCT_BASE_URL } from 'config';
 import { formatMoney } from 'utils';
 import styled from 'styled-components';
 
+const ProductModal = lazy(() => import('modals/ProductModalV2'));
 function ProductList({ products }) {
   const noProductsAvailable = () => {
     return products.every((product) => {
@@ -58,13 +59,26 @@ const ProductCardWrapper = styled(Card)`
 
 function ProductCard({ product }) {
   const theme = useTheme();
-  const { modal, product: productStore } = useStores();
+  const { modalV2, product: productStore } = useStores();
   const { image_refs, name, product_id, vendorFull, inventory } = product;
-  const openProductModal = () => {
-    productStore.showModal(product_id, null).then(() => {
-      modal.toggleModal('product');
-    });
+
+  const handleProductClick = async (product_id) => {
+    try {
+      await productStore.showModal(product_id, null);
+      modalV2.open(
+        <Suspense
+          fallback={<Typography variant="h1">Loading product...</Typography>}
+        >
+          <ProductModal />
+        </Suspense>,
+        'right',
+        'md',
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   const SKU = inventory[0];
 
   return !image_refs.length ||
@@ -72,7 +86,14 @@ function ProductCard({ product }) {
     !product_id ||
     !vendorFull ||
     !inventory.length ? null : (
-    <Grid item xs={6} md={4} sm={4} lg={3} onClick={openProductModal}>
+    <Grid
+      item
+      xs={6}
+      md={4}
+      sm={4}
+      lg={3}
+      onClick={() => handleProductClick(product_id)}
+    >
       <ProductCardWrapper color={theme.palette.primary.main}>
         <CardContent>
           <Box mb={2}>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'utils'
+import React, { Component } from 'react';
+import { connect } from 'utils';
 
 const FILTERS_DATA = [
   { title: 'Dairy Free', value: 'allergen,dairy' },
@@ -11,50 +11,52 @@ const FILTERS_DATA = [
   { title: 'Fair Trade', value: 'tag,fair trade' },
   // { title: 'Fair Trade', value: 'tag,fair trade' },
   // { title: 'Kosher', value: 'tag,kosher' },
-]
+];
 
 class Filters extends Component {
   constructor(props) {
-    super(props)
-
-    this.state = {
-      filters: []
-    }
+    super(props);
+    this.productStore = this.props.store.product;
   }
 
-  handleOnFilterSelect = value => {
-    const { filters } = this.state
+  handleOnFilterSelect = (value) => {
+    const { filters } = this.productStore;
 
-    const valueIndex = filters.indexOf(value)
+    const valueIndex = filters.indexOf(value);
 
     if (valueIndex === -1) {
-      filters.push(value)
+      this.productStore.addFilter(value);
     } else {
-      filters.splice(valueIndex, 1)
+      this.productStore.removeFilter(valueIndex);
     }
 
-    this.setState({ filters })
-    this.props.onSelect && this.props.onSelect(filters)
-  }
+    this.props.onSelect && this.props.onSelect(filters);
+  };
 
   render() {
-    const { filters } = this.state
-    const { vertical = false, column = false } = this.props
+    const { filters } = this.productStore;
+    const { vertical = false, column = false } = this.props;
 
     return (
-      <div className={`filters ${vertical ? 'vertical' : ''} ${column ? 'column' : ''}`}>
+      <div
+        className={`filters ${vertical ? 'vertical' : ''} ${
+          column ? 'column' : ''
+        }`}
+      >
         <div className="filters-title">Filter by diet:</div>
         <div className="filters-values">
           <ul>
-            {
-              FILTERS_DATA.map(f => (
-                <li
-                  key={f.value}
-                  className={`${filters.includes(f.value) ? 'filters-selected' : ''}`}
-                  onClick={() => this.handleOnFilterSelect(f.value)}
-                >{f.title}</li>
-              ))
-            }
+            {FILTERS_DATA.map((f) => (
+              <li
+                key={f.value}
+                className={`${
+                  filters.includes(f.value) ? 'filters-selected' : ''
+                }`}
+                onClick={() => this.handleOnFilterSelect(f.value)}
+              >
+                {f.title}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -62,4 +64,4 @@ class Filters extends Component {
   }
 }
 
-export default connect('store')(Filters)
+export default connect('store')(Filters);

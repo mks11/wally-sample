@@ -21,18 +21,10 @@ export const API_RESET_PASSWORD = BASE_URL + '/api/user/reset-password/';
 export const API_GET_LOGIN_STATUS = BASE_URL + '/api/login/status';
 export const API_REFER_FRIEND = BASE_URL + '/api/user/refer';
 
-export const API_EMAIL_VERIFICATION = BASE_URL + '/api/waitlist/email/verify';
-export const API_PIN_VERIFICATION = BASE_URL + '/api/waitlist/verify-pin';
-export const API_WAITLIST_INFO = BASE_URL + '/api/waitlist';
-
 export const API_ADDRESS_NEW = BASE_URL + '/api/user/address';
 export const API_ADDRESS_EDIT = BASE_URL + '/api/user/address';
-export const API_ADDRESS_REMOVE = BASE_URL + '/api/user/address/';
 
-export const API_PAYMENT_NEW = BASE_URL + '/api/user/payment';
-export const API_PAYMENT_EDIT = BASE_URL + '/api/user/payment';
 export const API_PAYMENT_REMOVE = BASE_URL + '/api/user/payment/';
-export const API_PURCHASE_GIFTCARD = BASE_URL + '/api/user/giftcard';
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + '/api/products/';
 export const API_GET_HISTORICAL_PRODUCTS =
@@ -61,9 +53,6 @@ export const API_REFRESH_INVENTORY = BASE_URL + '/api/products/refresh';
 export const API_GET_CURRENT_CART = BASE_URL + '/api/cart';
 export const API_EDIT_CURRENT_CART = BASE_URL + '/api/cart/';
 
-export const API_GET_IMPULSE_PRODUCTS = BASE_URL + '/api/products/associated';
-
-export const API_CREATE_ORDER = BASE_URL + '/api/order';
 export const API_GET_ORDER_SUMMARY = BASE_URL + '/api/order/summary';
 export const API_UPDATE_ORDER = BASE_URL + '/api/order/update';
 export const API_DELIVERY_TIMES = BASE_URL + '/api/delivery_windows';
@@ -152,8 +141,6 @@ export const API_RETAIL_UPLOAD_SKUS = BASE_URL + '/api/admin/retail/skus';
 export const API_GET_ADVERTISEMENTS = BASE_URL + '/api/web/ad_display';
 export const GET_ZIP_CODES = BASE_URL + '/api/service/zipcodes';
 
-export const API_GET_KICKSTARTER_BACKERS = BASE_URL + '/api/web/backers';
-
 export const API_GET_PRODUCTS_MATCHING_FILTERS =
   BASE_URL + '/api/products/filter';
 
@@ -163,16 +150,12 @@ export const API_HELP_GET_HELP_TOPICS = BASE_URL + '/api/help/topics';
 export const API_HELP_GET_CONTACT = BASE_URL + '/api/help/getcontact';
 export const API_HELP_SEARCH = BASE_URL + '/api/help/search?search_term=';
 
-export const API_SUBSCRIBE_EMAIL = BASE_URL + '/api/email/newsletter/signup';
 export const API_SUBSCRIBE_NOTIFICATIONS = BASE_URL + '/api/email/signup';
 export const API_BLOG_POSTS_INDEX = BASE_URL + '/api/blogposts';
 export const API_GET_BLOG_POST = BASE_URL + '/api/blogpost/slug';
 export const API_EDIT_CART_ITEM = BASE_URL + '/api/order';
 
 export const API_POST_METRIC_SOURCE = BASE_URL + '/api/metric/audience-source';
-
-export const INSTAGRAM = 'https://www.instagram.com/thewallyshop/';
-export const FACEBOOK = 'https://facebook.com/thewallyshop';
 
 export const GOOGLE_API_KEY = 'AIzaSyB1VsxMUiBN9H89Qgs5Z1eXtbkCyNB1KGQ';
 

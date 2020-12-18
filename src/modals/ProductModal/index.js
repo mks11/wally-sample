@@ -1,5 +1,5 @@
 // Node Modules
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -19,6 +19,10 @@ import { Image, ImageWithZoom } from 'pure-react-carousel';
 import ImageCarousel from 'common/ImageCarousel';
 
 import { PRODUCT_BASE_URL } from 'config';
+
+// Images
+// import jarIcon from 'images/jar8_icon.png';
+// import jarIconGrey from 'images/jar8_grey_icon.png';
 
 const SimilarProducts = styled(Row)`
   flex-wrap: nowrap;
@@ -50,25 +54,28 @@ class ProductModal extends Component {
     const modal = this.modalStore;
     const user = this.userStore;
 
-    this.setState({ qty: product.activeProduct.min_size });
-    let priceMultiplier = 1;
-    this.setState({ priceMultiplier: priceMultiplier });
+    if (product.activeProduct) {
+      this.setState({ qty: product.activeProduct.min_size });
+      let priceMultiplier = 1;
+      this.setState({ priceMultiplier: priceMultiplier });
 
-    let packagingType =
-      product.activeProduct.available_inventory[0].packaging_type;
-    this.setState({ packagingType: packagingType });
+      let packagingType =
+        product.activeProduct.available_inventory[0].packaging_type;
+      this.setState({ packagingType: packagingType });
 
-    if (!product.activeProduct) return null;
+      this.setState({
+        outOfStock: product.activeProduct.out_of_stock,
+        available: true,
+      });
+      logModalView('/product/' + product.activeProductId);
 
-    this.setState({
-      outOfStock: product.activeProduct.out_of_stock,
-      available: true,
-    });
-    logModalView('/product/' + product.activeProductId);
-
-    if (product.activeProduct.add_ons && product.activeProduct.add_ons.length) {
-      const { addonsFirst } = user.flags || {};
-      !addonsFirst && modal.toggleAddonsFirst();
+      if (
+        product.activeProduct.add_ons &&
+        product.activeProduct.add_ons.length
+      ) {
+        const { addonsFirst } = user.flags || {};
+        !addonsFirst && modal.toggleAddonsFirst();
+      }
     }
   }
 
@@ -224,16 +231,14 @@ class ProductModal extends Component {
       ingredients,
       instruction,
       manufacturer,
-      manufacturer_url_name,
       max_qty,
       name,
       netWeight,
       pricePerOz,
-      packaging_vol,
-      packagings,
+      // packagings,
       product_id,
       similar_products,
-      std_packaging,
+      // std_packaging,
       subcat_name,
       tags,
       unit_type,
@@ -247,10 +252,10 @@ class ProductModal extends Component {
     if (fbw)
       shipMessage = 'Sold by ' + vendor + ', fulfilled by The Wally Shop.';
 
-    let infoPackageClass = 'package-info';
-    if (this.state.infoPackage) {
-      infoPackageClass += ' open';
-    }
+    // let infoPackageClass = 'package-info';
+    // if (this.state.infoPackage) {
+    //   infoPackageClass += ' open';
+    // }
 
     const inventory = available_inventory[0] ? available_inventory[0] : null;
     let qtyOptions = [];
@@ -279,9 +284,9 @@ class ProductModal extends Component {
       price_unit += unit_type;
     }
 
-    var weight_unit = 'lbs';
+    // var weight_unit = 'lbs';
     if (unit_weight && unit_weight < 0.05) {
-      weight_unit = 'oz';
+      // weight_unit = 'oz';
       unit_weight = unit_weight * 16;
     }
 
@@ -289,11 +294,11 @@ class ProductModal extends Component {
       unit_weight.toFixed(1);
     }
 
-    const packaging = packagings && packagings[0] ? packagings[0] : null;
-    const packaging_type = std_packaging;
-    const packaging_description = packaging ? packaging.description : null;
-    const packaging_size =
-      inventory && inventory.packaging && inventory.packaging.size;
+    // const packaging = packagings && packagings[0] ? packagings[0] : null;
+    // const packaging_type = std_packaging;
+    // const packaging_description = packaging ? packaging.description : null;
+    // const packaging_size =
+    //   inventory && inventory.packaging && inventory.packaging.size;
     const { slides, thumbnails } = createCarouselSlides(
       image_refs,
       ingredient_labels,
@@ -597,7 +602,7 @@ function ProductDetails({
   );
 }
 
-function createCarouselSlides(
+export function createCarouselSlides(
   imageRefs,
   ingredientLabels,
   name,
@@ -619,57 +624,43 @@ function createCarouselSlides(
   return { slides, thumbnails };
 }
 
-function JarIcons({ packagingSize }) {
-  return (
-    <div className="jar-icons">
-      <div>
-        <img
-          src={
-            packagingSize === 8
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
-          alt="Packaging size 8 oz"
-          width="22"
-        />
-        <div>8 oz</div>
-      </div>
-      <div>
-        <img
-          src={
-            packagingSize === 16 || packagingSize === 25
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
-          alt="Packaging size 25 oz"
-          width="26"
-        />
-        <div>{packagingSize === 16 ? '16 oz' : '25 oz'}</div>
-      </div>
-      <div>
-        <img
-          src={
-            packagingSize === 32
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
-          alt="Packaging size 32 oz"
-          width="30"
-        />
-        <div>32 oz</div>
-      </div>
-      <div>
-        <img
-          src={
-            packagingSize === 64
-              ? `/images/jar8_icon.png`
-              : `/images/jar8_grey_icon.png`
-          }
-          alt="Packaging size 64 oz"
-          width="34"
-        />
-        <div>64 oz</div>
-      </div>
-    </div>
-  );
-}
+// function JarIcons({ packagingSize }) {
+//   return (
+//     <div className="jar-icons">
+//       <div>
+//         <img
+//           src={packagingSize === 8 ? jarIcon : jarIconGrey}
+//           alt="Packaging size 8 oz"
+//           width="22"
+//         />
+//         <div>8 oz</div>
+//       </div>
+//       <div>
+//         <img
+//           src={
+//             packagingSize === 16 || packagingSize === 25 ? jarIcon : jarIconGrey
+//           }
+//           alt="Packaging size 25 oz"
+//           width="26"
+//         />
+//         <div>{packagingSize === 16 ? '16 oz' : '25 oz'}</div>
+//       </div>
+//       <div>
+//         <img
+//           src={packagingSize === 32 ? jarIcon : jarIconGrey}
+//           alt="Packaging size 32 oz"
+//           width="30"
+//         />
+//         <div>32 oz</div>
+//       </div>
+//       <div>
+//         <img
+//           src={packagingSize === 64 ? jarIcon : jarIconGrey}
+//           alt="Packaging size 64 oz"
+//           width="34"
+//         />
+//         <div>64 oz</div>
+//       </div>
+//     </div>
+//   );
+// }

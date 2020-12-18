@@ -1,64 +1,57 @@
 import React, { Component } from 'react';
-import {
-  Input,
-  FormGroup,
-  Label,
-  Col,
-  Button,
-} from 'reactstrap';
+import { Input, FormGroup, Label, Col, Button } from 'reactstrap';
+
+import mehIcon from 'images/meh.svg';
+import sadIcon from 'images/sad.svg';
+import smileIcon from 'images/smile.svg';
 
 class FeedbackModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       feedbackValue: 0,
       feedbackMsg: '',
       feedbackEmail: '',
       feedbackOrder: null,
-    }
+    };
   }
 
   componentDidMount() {
-    const { user } = this.props.stores
+    const { user } = this.props.stores;
     if (user.feedback) {
-      const {
-        email,
-        value,
-        order,
-      } = user.feedback
+      const { email, value, order } = user.feedback;
 
-      const parsedValue = parseInt(value)
-      const feedbackValue = (parsedValue < 4 && parsedValue > -1) ? parsedValue : 1
+      const parsedValue = parseInt(value);
+      const feedbackValue =
+        parsedValue < 4 && parsedValue > -1 ? parsedValue : 1;
 
       this.setState({
         feedbackValue,
         feedbackEmail: email,
         feedbackOrder: order,
-      })
+      });
     }
   }
 
-  handleFeedbackValueChange = value => {
-    this.setState({ feedbackValue: value })
-  }
+  handleFeedbackValueChange = (value) => {
+    this.setState({ feedbackValue: value });
+  };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value.toString(),
-    })
-  }
+    });
+  };
 
-  handleSubmit = e => {
-    const {
-      order,
-    } = this.props.stores
+  handleSubmit = (e) => {
+    const { order } = this.props.stores;
     const {
       feedbackValue,
       feedbackEmail,
       feedbackOrder,
       feedbackMsg,
-    } = this.state
+    } = this.state;
 
     if (feedbackValue !== null && feedbackEmail && feedbackOrder) {
       const feedback = {
@@ -66,23 +59,22 @@ class FeedbackModal extends Component {
         email: feedbackEmail,
         order_id: feedbackOrder,
         feedback_notes: feedbackMsg,
-      }
-      
-      order.submitFeedback(feedback)
-        .then(res => {
-          this.props.toggle()
+      };
+
+      order
+        .submitFeedback(feedback)
+        .then((res) => {
+          this.props.toggle();
         })
-        .catch(e => {
-          this.props.toggle()
-        })
+        .catch((e) => {
+          this.props.toggle();
+        });
     }
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   render() {
-    const {
-      feedbackValue
-    } = this.state
+    const { feedbackValue } = this.state;
 
     return (
       <div className="login-wrap feedback-modal">
@@ -93,7 +85,7 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
             >
-              <img src="images/smile.svg" alt="smile icon" />
+              <img src={smileIcon} alt="smile icon" />
             </Button>
           </Col>
           <Col xs={4}>
@@ -101,7 +93,7 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
             >
-              <img src="images/meh.svg" alt="meh icon" />
+              <img src={mehIcon} alt="meh icon" />
             </Button>
           </Col>
           <Col xs={4}>
@@ -109,12 +101,14 @@ class FeedbackModal extends Component {
               className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
             >
-              <img src="images/sad.svg" alt="sad icon" />
+              <img src={sadIcon} alt="sad icon" />
             </Button>
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="feedbackMsg" sm={12}>Please leave your feedback below</Label>
+          <Label for="feedbackMsg" sm={12}>
+            Please leave your feedback below
+          </Label>
           <Col sm={12}>
             <Input
               type="textarea"
@@ -124,10 +118,12 @@ class FeedbackModal extends Component {
             />
           </Col>
         </FormGroup>
-        <button className="btn btn-main active" onClick={this.handleSubmit}>Submit Feedback</button>
+        <button className="btn btn-main active" onClick={this.handleSubmit}>
+          Submit Feedback
+        </button>
       </div>
-    )
+    );
   }
 }
 
-export default FeedbackModal
+export default FeedbackModal;

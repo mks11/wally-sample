@@ -1,20 +1,20 @@
 module.exports = {
   policy: [
     {
-      userAgent: "*",
+      userAgent: '*',
       allow: [
-        "/",
-        "/tnc",
-        "/privacy",
-        "/about",
-        "/howitworks",
-        "/backers",
-        "/blog",
-        "/latest-news",
-        "/help",
-        "/help/topics",
-        "/giftcard",
-        "/sell-through-wally"
+        '/',
+        '/tnc',
+        '/privacy',
+        '/about',
+        '/howitworks',
+        '/backers',
+        '/blog',
+        '/latest-news',
+        '/help',
+        '/help/topics',
+        '/giftcard',
+        '/sell-through-wally',
       ],
       disallow: [
         // Admin routes
@@ -35,10 +35,10 @@ module.exports = {
         '/manage/orders',
         '/manage/receipts',
         '/manage/products',
-        '/manage/courier-routing'
-      ]
+        '/manage/courier-routing',
+      ],
     },
   ],
-  sitemap: "https://thewallyshop.co/sitemap.xml",
-  host: "https://thewallyshop.co",
+  sitemap: 'https://thewallyshop.co/sitemap.xml',
+  host: 'https://thewallyshop.co',
 };

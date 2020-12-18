@@ -1,7 +1,7 @@
 {
   "extends": [
-    "eslint:recommended",
-    "eslint-plugin-react",
+    "react-app",
+    "react-app/jest",
     "prettier",
     "prettier/react"
   ],

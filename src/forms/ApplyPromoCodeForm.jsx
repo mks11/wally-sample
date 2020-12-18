@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 
 // Utils
@@ -21,10 +20,11 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 // API
 import { applyPromo } from 'api/promocode';
 
-function ApplyPromoCodeForm({ onApply }) {
+function ApplyPromoCodeForm() {
   const {
     checkout: checkoutStore,
     user: userStore,
+    routing,
     snackbar: snackbarStore,
   } = useStores();
   return (
@@ -42,8 +42,8 @@ function ApplyPromoCodeForm({ onApply }) {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Box my={2}>
-              <Grid container spacing={2}>
+            <Box mt={2}>
+              <Grid container spacing={1}>
                 <Grid item xs={8}>
                   <TextInput
                     color="primary"
@@ -56,9 +56,10 @@ function ApplyPromoCodeForm({ onApply }) {
                 <Grid item xs={4}>
                   <PrimaryWallyButton
                     disabled={isSubmitting}
-                    style={{ padding: '0.7em 1.5em', maxHeight: '56px' }}
+                    style={{ height: '56px', maxHeight: '56px' }}
                     fullWidth
                     type="submit"
+                    disableElevation
                   >
                     Apply
                   </PrimaryWallyButton>
@@ -79,32 +80,45 @@ function ApplyPromoCodeForm({ onApply }) {
 
     if (user) {
       try {
-        logEvent({
-          category: 'Promotions & Gift Cards',
-          action: 'ApplyPromo',
-          label: promoCode,
-        });
         const auth = userStore.getHeaderAuth();
-
         const res = await applyPromo({ promoCode, timestamp }, auth);
-        onApply && onApply(promoCode);
         // Reload the user if their promo included a benefit or store credit
         const {
-          data: { benefit, store_credit },
+          data: {
+            benefit,
+            delivery_fee_discount,
+            discount_percentage,
+            store_credit,
+          },
         } = res;
-        if (benefit || store_credit) await userStore.getUser();
+        const promoAppliedDuringCheckout = routing.location.pathname.includes(
+          'checkout',
+        );
 
-        // Reload the order summary
-        const addressId = userStore.selectedDeliveryAddress
-          ? userStore.selectedDeliveryAddress.address_id
-          : '';
-        await checkoutStore.getOrderSummary(auth, null, null, addressId);
+        logEvent({
+          category: 'Promotions & Gift Cards',
+          action: promoAppliedDuringCheckout
+            ? 'Apply Promo at Checkout'
+            : 'Apply Promo at Account',
+          label: promoCode,
+        });
+        if (benefit || store_credit) await userStore.getUser();
+        if (delivery_fee_discount || discount_percentage) {
+          await checkoutStore.getCurrentCart(auth);
+        }
+        await checkoutStore.getOrderSummary(auth);
         snackbarStore.openSnackbar(
           'Promo code applied successfully!',
           'success',
         );
         resetForm();
       } catch (error) {
+        logEvent({
+          category: 'Promotions & Gift Cards',
+          action: 'Apply Promo Failure',
+          label: promoCode,
+          nonInteraction: true,
+        });
         if (
           error.response &&
           error.response.data &&
@@ -126,9 +140,5 @@ function ApplyPromoCodeForm({ onApply }) {
     }
   }
 }
-
-ApplyPromoCodeForm.propTypes = {
-  onApply: PropTypes.func,
-};
 
 export default observer(ApplyPromoCodeForm);

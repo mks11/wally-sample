@@ -2,7 +2,6 @@ import React from 'react';
 
 // Components
 import { ErrorText } from 'styled-component-lib/Typography';
-import { Typography } from '@material-ui/core';
 export default function ErrorModal({ stores, ...props }) {
   const { modal } = stores;
 

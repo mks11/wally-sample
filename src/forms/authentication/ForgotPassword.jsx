@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-// Config
-import { support } from 'config';
-
 // Hooks
 import { useStores } from 'hooks/mobx';
 
@@ -14,7 +11,6 @@ import { Box, Typography } from '@material-ui/core';
 import { TextInput } from 'common/FormikComponents/NonRenderPropAPI';
 
 // Styled Components
-import { Label } from 'styled-component-lib/InputLabel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 import * as Yup from 'yup';
@@ -55,7 +51,7 @@ export default function LoginForm() {
           />
         </Box>
         <Box my={2}>
-          <PrimaryWallyButton style={{ padding: '1em 1.5em' }} type="submit">
+          <PrimaryWallyButton type="submit">
             <Typography variant="h5" component="span">
               Submit
             </Typography>

@@ -1,94 +1,82 @@
 import React, { Component } from 'react';
-import {
-  Input,
-  FormGroup,
-  Label,
-  Col,
-  Button,
-} from 'reactstrap';
+import { Input, FormGroup, Label, Col, Button } from 'reactstrap';
+import mehIcon from 'images/meh.svg';
+import sadIcon from 'images/sad.svg';
+import smileIcon from 'images/smile.svg';
 
 class ServiceFeedbackModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       feedbackValue: 0,
       feedbackMsg: '',
       feedbackEmail: '',
-    }
+    };
   }
 
   componentDidMount() {
-    const { user } = this.props.stores
+    const { user } = this.props.stores;
     if (user.feedback) {
-      const {
-        email,
-        value,
-      } = user.feedback
+      const { email, value } = user.feedback;
 
-      const parsedValue = parseInt(value)
-      const feedbackValue = (parsedValue < 4 && parsedValue > -1) ? parsedValue : 1
+      const parsedValue = parseInt(value);
+      const feedbackValue =
+        parsedValue < 4 && parsedValue > -1 ? parsedValue : 1;
 
       this.setState({
         feedbackValue,
         feedbackEmail: email,
-      })
+      });
     }
   }
 
-  handleFeedbackValueChange = value => {
-    this.setState({ feedbackValue: value })
-  }
+  handleFeedbackValueChange = (value) => {
+    this.setState({ feedbackValue: value });
+  };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value.toString(),
-    })
-  }
+    });
+  };
 
-  handleSubmit = e => {
-    const {
-      order,
-    } = this.props.stores
-    const {
-      feedbackValue,
-      feedbackEmail,
-      feedbackMsg,
-    } = this.state
+  handleSubmit = (e) => {
+    const { order } = this.props.stores;
+    const { feedbackValue, feedbackEmail, feedbackMsg } = this.state;
 
     if (feedbackValue !== null && feedbackEmail) {
       const feedback = {
         feedback: feedbackValue,
         email: feedbackEmail,
         feedback_notes: feedbackMsg,
-      }
-      
-      order.submitServiceFeedback(feedback)
-        .then(res => {
-          this.props.toggle()
+      };
+
+      order
+        .submitServiceFeedback(feedback)
+        .then((res) => {
+          this.props.toggle();
         })
-        .catch(e => {
-          this.props.toggle()
-        })
+        .catch((e) => {
+          this.props.toggle();
+        });
     }
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   render() {
-    const {
-      feedbackValue
-    } = this.state
+    const { feedbackValue } = this.state;
 
-    let msgPlaceholder
-    switch(feedbackValue) {
+    let msgPlaceholder;
+    switch (feedbackValue) {
       case 0:
-        msgPlaceholder = 'Let us know what you are waiting for:'
+        msgPlaceholder = 'Let us know what you are waiting for:';
         break;
       case 1:
-        msgPlaceholder = 'What would you like to change?'
+        msgPlaceholder = 'What would you like to change?';
         break;
       case 2:
-        msgPlaceholder = 'Where can we improve?'
+        msgPlaceholder = 'Where can we improve?';
         break;
       default:
         break;
@@ -103,31 +91,37 @@ class ServiceFeedbackModal extends Component {
               className={`${feedbackValue === 2 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(2)}
             >
-              <img src="images/smile.svg" alt="smile" />
+              <img src={smileIcon} alt="smile" />
             </Button>
-            <div className="feedback-caption">Just haven’t ordered yet, waiting for: …</div>
+            <div className="feedback-caption">
+              Just haven’t ordered yet, waiting for: …
+            </div>
           </Col>
           <Col xs={4}>
             <Button
               className={`${feedbackValue === 1 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(1)}
             >
-              <img src="images/meh.svg" alt="meh" />
+              <img src={mehIcon} alt="meh" />
             </Button>
-            <div className="feedback-caption">Want to order, but haven’t because: …</div>
+            <div className="feedback-caption">
+              Want to order, but haven’t because: …
+            </div>
           </Col>
           <Col xs={4}>
             <Button
               className={`${feedbackValue === 0 ? 'active' : ''} feedback-btn`}
               onClick={() => this.handleFeedbackValueChange(0)}
             >
-              <img src="images/sad.svg" alt="sad" />
+              <img src={sadIcon} alt="sad" />
             </Button>
             <div className="feedback-caption">Won't order, here’s why: …</div>
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="feedbackMsg" sm={12}>{msgPlaceholder}</Label>
+          <Label for="feedbackMsg" sm={12}>
+            {msgPlaceholder}
+          </Label>
           <Col sm={12}>
             <Input
               type="textarea"
@@ -137,10 +131,12 @@ class ServiceFeedbackModal extends Component {
             />
           </Col>
         </FormGroup>
-        <button className="btn btn-main active" onClick={this.handleSubmit}>Submit Feedback</button>
+        <button className="btn btn-main active" onClick={this.handleSubmit}>
+          Submit Feedback
+        </button>
       </div>
-    )
+    );
   }
 }
 
-export default ServiceFeedbackModal
+export default ServiceFeedbackModal;

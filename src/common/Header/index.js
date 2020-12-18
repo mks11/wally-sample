@@ -1,84 +1,138 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Hooks
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
+import { useMediaQuery } from 'react-responsive';
 
 // React Router
 import { Link } from 'react-router-dom';
 
 // Npm Packaged Components
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 
 // Styling
 import styled from 'styled-components';
 
 // Custom Components
 import Navbar from 'common/Header/NavBar';
+import Banner from 'common/Banner';
 
-const LogoFull = styled.img`
-  height: 24px;
+// images
+// import logoFull from 'images/logo-full.svg';
+// import logoCondensed from 'images/logo-condensed.svg';
 
-  @media only screen and (min-width: 375px) {
-    height: 32px;
-  }
+// const LogoCondensed = styled.img`
+//   height: 40px;
 
-  @media only screen and (min-width: 567px) {
-    height: 40px;
-  }
+//   @media only screen and (min-width: 567px) {
+//     height: 40px;
+//   }
 
-  @media only screen and (min-width: 768px) {
-    height: 44px;
-  }
+//   @media only screen and (min-width: 768px) {
+//     height: 44px;
+//   }
 
-  @media only screen and (min-width: 992px) {
-    height: 48px;
+//   @media only screen and (min-width: 992px) {
+//     height: 48px;
+//   }
+// `;
+
+// const LogoFull = styled.img`
+//   height: 24px;
+
+//   @media only screen and (min-width: 375px) {
+//     height: 32px;
+//   }
+
+//   @media only screen and (min-width: 567px) {
+//     height: 40px;
+//   }
+
+//   @media only screen and (min-width: 768px) {
+//     height: 44px;
+//   }
+
+//   @media only screen and (min-width: 992px) {
+//     height: 48px;
+//   }
+// `;
+const LogoLink = styled(Link)`
+  &&& {
+    &:hover {
+      text-decoration: none;
+    }
   }
 `;
 
 const Logo = observer(() => {
+  const shouldDisplayCondensedLogo = useMediaQuery({
+    query: '(max-width: 480px)',
+  });
   const { user, product } = useStores();
 
   var home = user.user ? '/main' : '/';
-
   const onLogoClick = () => {
     product.resetSearch();
   };
 
   return (
     <Box>
-      <Link to={home} onClick={onLogoClick}>
-        <LogoFull src="/images/logo-full.svg" alt="The Wally Shop logo." />
-      </Link>
+      <LogoLink to={home} onClick={onLogoClick}>
+        {shouldDisplayCondensedLogo ? (
+          <Typography variant="h1" style={{ fontSize: '4rem' }}>
+            w
+          </Typography>
+        ) : (
+          <Typography variant="h1">the wally shop</Typography>
+        )}
+      </LogoLink>
     </Box>
   );
 });
 
-const HeaderWrapper = styled(Box)`
-  @media only screen and (min-width: 768px) {
-    padding: 1rem 0;
+const ProductTop = lazy(() => import('pages/Mainpage/ProductTop'));
+
+const NavbarWrapper = styled.div`
+  background: #fae1ff;
+  padding: 0;
+
+  @media only screen and (min-width: 821px) {
+    padding: 16px 0;
   }
 `;
 
-export default function Header() {
+const Header = observer(() => {
+  const { routing } = useStores();
+  const showProductTop = routing.location.pathname.includes('main');
+
   return (
-    <HeaderWrapper
-      component="header"
-      position="sticky"
-      top="0"
-      zIndex={10}
-      style={{ backgroundColor: '#fae1ff' }}
-    >
-      <Container maxWidth="xl">
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item>
-            <Logo />
+    <Box component="header" position="sticky" top="0" zIndex={10}>
+      <Banner>
+        <Typography align="center" style={{ color: '#fff' }}>
+          Take 10% off $50, 20% off $75, or 30% off $100 by entering code
+          WALLYDAYS during checkout! Valid through 12/24.
+        </Typography>
+      </Banner>
+      <NavbarWrapper>
+        <Container maxWidth="xl">
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Logo />
+            </Grid>
+            <Grid item>
+              <Navbar />
+            </Grid>
           </Grid>
-          <Grid item>
-            <Navbar />
-          </Grid>
-        </Grid>
-      </Container>
-    </HeaderWrapper>
+        </Container>
+      </NavbarWrapper>
+      {showProductTop && (
+        <Suspense fallback={<Typography>Search</Typography>}>
+          <ProductTop />
+        </Suspense>
+      )}
+    </Box>
   );
-}
+});
+
+export default Header;
