@@ -22,9 +22,11 @@ import { AddIcon, ArrowBackIcon, CloseIcon, RemoveIcon } from 'Icons';
 
 // Custom Components
 import CarbonBar from 'common/CarbonBar';
+import { ContinueToCheckout } from 'common/Header/NavBar/UserNav';
 
 // Styled Components
 import { PrimaryTextButton } from 'styled-component-lib/Buttons';
+import { PrimaryContainedLink } from 'styled-component-lib/Links';
 
 const CartSummary = observer(() => {
   const { checkout } = useStores();
@@ -169,6 +171,7 @@ function CartItem({ item }) {
           Cart
         </Typography>
         <CartSummary />
+        <ContinueToCheckout />
       </>,
       'right',
     );
