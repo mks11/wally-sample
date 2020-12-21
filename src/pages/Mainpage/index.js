@@ -31,11 +31,11 @@ import sidePanelSticker from 'images/sidepanel_sticker.png';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/soapbox/soapbox-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-480.jpg',
   },
 ];
 
@@ -212,15 +212,13 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New products by Soapbox Soaps'}
+        alt={'New products by Sustainable Snacks'}
         img={img}
         justify="flex-start"
-        title="Soapbox"
-        url="/shop/brands/soapbox"
+        title="Sustainable Snacks"
+        url="/shop/brands/sustainable-snacks"
       >
-        <Typography gutterBottom>
-          Feel the difference, make a difference.
-        </Typography>
+        <Typography gutterBottom>Small bites, big flavor.</Typography>
       </HeroSlide>
     ));
 
