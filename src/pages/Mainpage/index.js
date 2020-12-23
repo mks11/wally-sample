@@ -31,11 +31,11 @@ import sidePanelSticker from 'images/sidepanel_sticker.png';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/sustainable-snacks/sustainable-snacks-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-480.jpg',
   },
 ];
 
@@ -212,13 +212,13 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'New products by Sustainable Snacks'}
+        alt={'Free shipping holiday sale with code FREESHIP12.'}
         img={img}
         justify="flex-start"
-        title="Sustainable Snacks"
-        url="/shop/brands/sustainable-snacks"
+        title=""
+        url=""
       >
-        <Typography gutterBottom>Small bites, big flavor.</Typography>
+        {/* <Typography gutterBottom>Small bites, big flavor.</Typography> */}
       </HeroSlide>
     ));
 
