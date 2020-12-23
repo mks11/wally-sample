@@ -110,8 +110,8 @@ const Header = observer(() => {
     <Box component="header" position="sticky" top="0" zIndex={10}>
       <Banner>
         <Typography align="center" style={{ color: '#fff' }}>
-          Take 10% off $50, 20% off $75, or 30% off $100 by entering code
-          WALLYDAYS during checkout! Valid through 12/24.
+          Free shipping on all orders of 12 or more jars! Valid 12/25/20 -
+          1/1/21.
         </Typography>
       </Banner>
       <NavbarWrapper>
