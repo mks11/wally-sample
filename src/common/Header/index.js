@@ -110,8 +110,8 @@ const Header = observer(() => {
     <Box component="header" position="sticky" top="0" zIndex={10}>
       <Banner>
         <Typography align="center" style={{ color: '#fff' }}>
-          Free shipping on all orders of 12 or more jars! Offer valid 12/26 -
-          1/1.
+          Free shipping on all orders of 12 or more jars! Use code FREESHIP12 at
+          checkout. Offer valid 12/26 - 1/1.
         </Typography>
       </Banner>
       <NavbarWrapper>
