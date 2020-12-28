@@ -75,7 +75,7 @@ function Update({ stores: { modal, ...store }, ...props }) {
         enableReinitialize
         validationSchema={Yup.object({
           name: Yup.string().required("Name can't be blank"),
-          parent_ids: Yup.string(),
+          parent_ids: Yup.array(Yup.string()),
           default_packaging_type: Yup.string(),
         })}
         onSubmit={handleSubmit}
