@@ -48,10 +48,7 @@ function ShippingAddresses({ onSave, name }) {
       title="Shipping Address"
     >
       {selectedAddress ? (
-        <Address
-          address={selectedAddress}
-          preferredAddressId={user.preferred_address}
-        />
+        <Address address={selectedAddress} />
       ) : (
         <Box py={2}>
           <Typography>No shipping address selected.</Typography>
@@ -67,7 +64,6 @@ function ShippingAddresses({ onSave, name }) {
             addresses={user ? user.addresses : []}
             name={name}
             onChange={handleSelect}
-            preferredAddressId={user.preferred_address}
             selected={selectedAddress}
           />
         </>

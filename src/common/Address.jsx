@@ -1,6 +1,8 @@
 import React from 'react';
 import { Badge, Box, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import { useStores } from 'hooks/mobx';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -14,18 +16,12 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-export default function Address({ address = {}, preferredAddressId }) {
-  const {
-    _id,
-    street_address,
-    unit,
-    city,
-    state,
-    zip,
-    name,
-    telephone,
-  } = address;
-  const isPreferredAddress = _id.toString() === preferredAddressId;
+function Address({ address = {} }) {
+  const { street_address, unit, city, state, zip, name, telephone } = address;
+
+  const { user: userStore } = useStores();
+
+  const isPreferredAddress = userStore && userStore.preferred_address;
 
   // handles formatting when unit is not present
   var streetAddress = street_address;
@@ -57,3 +53,5 @@ export default function Address({ address = {}, preferredAddressId }) {
     </Box>
   );
 }
+
+export default observer(Address);

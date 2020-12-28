@@ -286,10 +286,7 @@ const ShippingAddress = observer(() => {
           </PrimaryTextLink>
         </Box>
         {address ? (
-          <Address
-            address={address}
-            preferredAddressId={user.preferred_address}
-          />
+          <Address address={address} />
         ) : (
           <Typography>No shipping address selected.</Typography>
         )}

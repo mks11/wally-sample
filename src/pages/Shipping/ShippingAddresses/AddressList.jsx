@@ -2,13 +2,7 @@ import React from 'react';
 import { RadioGroup } from '@material-ui/core';
 import AddressRadioItem from './AddressRadioItem';
 
-export default function AddressList({
-  addresses,
-  preferredAddressId,
-  name,
-  onChange,
-  selected,
-}) {
+export default function AddressList({ addresses, name, onChange, selected }) {
   const handleChange = (e) => {
     onChange(e.target.value);
   };
@@ -19,7 +13,6 @@ export default function AddressList({
         <AddressRadioItem
           key={address._id}
           address={address}
-          preferredAddressId={preferredAddressId}
           selected={selected}
         />
       ))}
