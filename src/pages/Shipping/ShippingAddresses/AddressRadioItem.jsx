@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   Radio,
 } from '@material-ui/core';
-import Address from './Address';
+import Address from 'common/Address';
 
 const useStyles = makeStyles(() => ({
   root: {

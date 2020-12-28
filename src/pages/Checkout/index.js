@@ -22,7 +22,7 @@ import { InfoIcon } from 'Icons';
 import { useCookies } from 'react-cookie';
 
 // Custom Components
-import Address from 'pages/Shipping/ShippingAddresses/Address';
+import Address from 'common/Address';
 import CheckoutFlowBreadcrumbs from 'common/CheckoutFlowBreadcrumbs';
 import { CreditCard } from 'common/PaymentMethods';
 import { OPTIONS, getDeliveryDates } from 'pages/Shipping/ShippingOptions';

@@ -4,7 +4,7 @@ import React, { lazy, Suspense } from 'react';
 import { useFormikContext } from 'formik';
 
 // Custom Components
-import Address from './Address';
+import Address from 'common/Address';
 import AddressList from './AddressList';
 import { AddIcon } from 'Icons';
 import CollapseCard from 'common/FormikComponents/NonRenderPropAPI/CollapseCard';
