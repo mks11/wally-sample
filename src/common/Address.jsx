@@ -1,8 +1,22 @@
-import React from 'react';
-import { Badge, Box, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+
+//MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
+
+// Material UI
+import {
+  Box,
+  Grid,
+  Typography,
+  Badge,
+  ListItem,
+  Menu,
+  IconButton,
+  MenuItem,
+} from '@material-ui/core';
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -16,7 +30,7 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-function Address({ address = {} }) {
+export default observer(({ address = {} }) => {
   const { street_address, unit, city, state, zip, name, telephone } = address;
 
   const { user: userStore } = useStores();
@@ -52,6 +66,73 @@ function Address({ address = {} }) {
       </Box>
     </Box>
   );
+});
+
+export function Address({ address: data = {} }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { is_active } = data;
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDefaultAddress = () => {};
+  const handleReactivateAddress = () => {};
+  const handleDeactivateAddress = () => {};
+
+  return (
+    <Box my={2}>
+      <ListItem>
+        <Grid container justify="space-between">
+          <Grid item xs={12} lg={3}>
+            <AddressDetail data={data} />
+          </Grid>
+          <Grid item>
+            <IconButton onClick={handleClick}>
+              <ExpandMoreIcon />
+            </IconButton>
+            <Menu
+              id="address-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {is_active && (
+                <MenuItem onClick={handleDefaultAddress}>Make Default</MenuItem>
+              )}
+              {is_active && (
+                <MenuItem onClick={handleDeactivateAddress}>
+                  Deactivate
+                </MenuItem>
+              )}
+              {!is_active && (
+                <MenuItem onClick={handleReactivateAddress}>
+                  Reactivate
+                </MenuItem>
+              )}
+            </Menu>
+          </Grid>
+        </Grid>
+      </ListItem>
+    </Box>
+  );
 }
 
-export default observer(Address);
+function AddressDetail({ data = {} }) {
+  return (
+    <>
+      <Typography variant="h4" component="h3">
+        {data.street_address} {data.unit}, {data.state} {data.zip}
+      </Typography>
+      <Typography variant="body1"> {data.name} </Typography>
+      <Typography variant="body1" gutterBottom>
+        {data.telephone}
+      </Typography>
+    </>
+  );
+}

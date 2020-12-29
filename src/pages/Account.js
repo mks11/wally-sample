@@ -15,28 +15,22 @@ import StripeCardInput from 'common/StripeCardInput';
 import { PaymentMethod } from 'common/PaymentMethods';
 
 // Styled Components
-import {
-  PrimaryTextButton,
-  PrimaryWallyButton,
-  DangerButton,
-} from 'styled-component-lib/Buttons';
+import { PrimaryTextButton } from 'styled-component-lib/Buttons';
 
 // Material UI
 import {
   Box,
-  Button,
   Container,
   Divider,
   FormGroup,
   FormControlLabel,
   List,
-  Grid,
   Switch,
   Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit, DeleteOutline } from '@material-ui/icons';
 import { AddIcon } from 'Icons';
+import { Address } from 'common/Address';
 
 // Addresses
 const AddressCreateForm = lazy(() => import('forms/Address/Create'));
@@ -51,6 +45,7 @@ class Account extends Component {
       editName: true,
       editTelephone: true,
       showDeactivatedPaymentMethods: false,
+      showDeactivatedAddresses: false,
     };
 
     this.userStore = this.props.store.user;
@@ -107,6 +102,13 @@ class Account extends Component {
       });
   }
 
+  toggleActiveAddress(event) {
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.checked,
+    });
+  }
+
   toggleActivePayments(event) {
     this.setState({ ...this.state, [event.target.name]: event.target.checked });
   }
@@ -127,7 +129,9 @@ class Account extends Component {
     const name = this.state.name;
     const telephone = this.state.telephone ? this.state.telephone : '';
 
-    const addresses = this.userStore.user.addresses;
+    const addresses = this.state.showDeactivatedAddresses
+      ? this.userStore.user.addresses
+      : this.userStore.user.addresses.filter((p) => p);
     const payments = this.state.showDeactivatedPaymentMethods
       ? this.userStore.user.payment
       : this.userStore.user.payment.filter((p) => p.is_active);
@@ -224,99 +228,30 @@ class Account extends Component {
             <Box py={2}>
               <ul className="list-addresses">
                 {addresses.length ? (
-                  addresses.map((data, index) => (
-                    <li key={index}>
-                      <Grid container justify="space-between">
-                        <Grid item xs={12} lg={3}>
-                          <Typography variant="h4" component="h3">
-                            {data.street_address} {data.unit}, {data.state}{' '}
-                            {data.zip}
-                          </Typography>
-                          <Typography variant="body1">{data.name}</Typography>
-                          <Typography variant="body1" gutterBottom>
-                            {data.telephone}
-                          </Typography>
-                        </Grid>
-                        {data.address_id ===
-                        this.userStore.user.preferred_address ? (
-                          <Grid item>
-                            <br />
-                            <Typography variant="h5" component="span">
-                              DEFAULT
-                            </Typography>
-                          </Grid>
-                        ) : (
-                          <Grid item xs={12} md={6} lg={3}>
-                            <br />
-                            <Button
-                              variant="outlined"
-                              fullWidth
-                              onClick={async () => {
-                                this.loading.show();
-                                this.userStore
-                                  .makeDefaultAddress(data.address_id)
-                                  .then(() => {
-                                    setTimeout(() => {
-                                      this.userStore.getUser();
-                                      this.snackbar.openSnackbar(
-                                        'Default address updated successfully!',
-                                        'success',
-                                      );
-                                    }, 200);
-                                  })
-                                  .finally(() => {
-                                    setTimeout(() => this.loading.hide(), 300);
-                                  });
-                              }}
-                            >
-                              <Typography variant="body1">
-                                Use as Default Address
-                              </Typography>
-                            </Button>
-                          </Grid>
-                        )}
-                      </Grid>
-                      <br />
-                      <br />
-                      <Grid container justify="flex-end" spacing={2}>
-                        <Grid item xs={6} lg={2}>
-                          <DangerButton
-                            variant="outlined"
-                            startIcon={<DeleteOutline fontSize="large" />}
-                            fullWidth
-                            onClick={() =>
-                              this.modalStore.toggleModal(
-                                'addressDelete',
-                                null,
-                                data.address_id,
-                              )
-                            }
-                          >
-                            <Typography variant="body1">Remove</Typography>
-                          </DangerButton>
-                        </Grid>
-                        <Grid item xs={6} lg={2}>
-                          <PrimaryWallyButton
-                            startIcon={<Edit fontSize="large" />}
-                            fullWidth
-                            onClick={() =>
-                              this.modalStore.toggleModal(
-                                'addressUpdate',
-                                null,
-                                data.address_id,
-                              )
-                            }
-                          >
-                            <Typography variant="body1">Update</Typography>
-                          </PrimaryWallyButton>
-                        </Grid>
-                      </Grid>
-                    </li>
-                  ))
+                  <>
+                    <Box display="flex" alignItems="center" pt={2} px={2}>
+                      <AddressActivationStatusSwitch
+                        onChange={(e) => this.toggleActiveAddress(e)}
+                        showDeactivatedAddresses={
+                          this.state.showDeactivatedAddresses
+                        }
+                      />
+                    </Box>
+                    <List>
+                      {addresses.map((data, index) => (
+                        <Address
+                          key={data.address_id || index}
+                          address={data}
+                        />
+                      ))}
+                    </List>
+                  </>
                 ) : (
-                  <Typography gutterBottom>
-                    You haven't added any addresses yet.
-                  </Typography>
+                  <Box my={2}>
+                    <Typography gutterBottom>
+                      You haven't added any addresses yet.
+                    </Typography>
+                  </Box>
                 )}
               </ul>
             </Box>
@@ -471,6 +406,59 @@ const PaymentMethodSwitch = withStyles((theme) => ({
   );
 });
 
+//TODO DRY
+const CommonSwitch = withStyles((theme) => ({
+  root: {
+    width: 42,
+    height: 26,
+    padding: 0,
+    margin: theme.spacing(1),
+  },
+  switchBase: {
+    padding: 1,
+    '&$checked': {
+      transform: 'translateX(16px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        backgroundColor: '#52d869',
+        opacity: 1,
+        border: 'none',
+      },
+    },
+    '&$focusVisible $thumb': {
+      color: '#52d869',
+      border: '6px solid #fff',
+    },
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+  },
+  track: {
+    borderRadius: 26 / 2,
+    border: `1px solid ${theme.palette.grey[400]}`,
+    backgroundColor: theme.palette.grey[50],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color', 'border']),
+  },
+  checked: {},
+  focusVisible: {},
+}))(({ classes, ...props }) => {
+  return (
+    <Switch
+      focusVisibleClassName={classes.focusVisible}
+      classes={{
+        root: classes.root,
+        switchBase: classes.switchBase,
+        thumb: classes.thumb,
+        track: classes.track,
+        checked: classes.checked,
+      }}
+      {...props}
+    />
+  );
+});
+
 function PaymentActivationStatusSwitch({
   showDeactivatedPaymentMethods,
   onChange,
@@ -486,6 +474,23 @@ function PaymentActivationStatusSwitch({
           />
         }
         label="Show inactive payment methods"
+      />
+    </FormGroup>
+  );
+}
+
+function AddressActivationStatusSwitch({ showDeactivatedAddresses, onChange }) {
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <CommonSwitch
+            checked={showDeactivatedAddresses}
+            onChange={onChange}
+            name="showDeactivatedAddresses"
+          />
+        }
+        label="Show inactive addresses"
       />
     </FormGroup>
   );
