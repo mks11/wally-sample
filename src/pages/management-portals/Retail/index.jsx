@@ -4,10 +4,11 @@ import { connect } from 'utils';
 import ManagementPortal, {
   SidebarItem,
 } from 'pages/management-portals/ManagementPortal';
-import Typography from '@material-ui/core/Typography';
+
+// Panels
 import Categories from './Categories';
+import Copacking from './Copacking';
 import Subcategories from './Subcategories';
-import Packaging from './Packaging';
 
 function RetailManagementPortal({ store: { retail: retailStore } }) {
   return (
@@ -43,13 +44,13 @@ function Sidebar({ store }) {
         title="Subcategories"
         content={<Subcategories />}
       />
-      {/* <SidebarItem
+      <SidebarItem
         selected={selected}
         setSelected={setSelected}
         store={store}
-        title="Packaging"
-        content={<Packaging />}
-      /> */}
+        title="Copacking Rounds"
+        content={<Copacking />}
+      />
     </>
   );
 }
