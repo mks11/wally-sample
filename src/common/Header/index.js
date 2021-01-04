@@ -16,7 +16,7 @@ import styled from 'styled-components';
 
 // Custom Components
 import Navbar from 'common/Header/NavBar';
-import Banner from 'common/Banner';
+// import Banner from 'common/Banner';
 
 // images
 // import logoFull from 'images/logo-full.svg';
@@ -108,12 +108,12 @@ const Header = observer(() => {
 
   return (
     <Box component="header" position="sticky" top="0" zIndex={10}>
-      <Banner>
+      {/* <Banner>
         <Typography align="center" style={{ color: '#fff' }}>
           Free shipping on all orders of 12 or more jars! Use code FREESHIP12 at
           checkout. Offer valid 12/26 - 1/1.
         </Typography>
-      </Banner>
+      </Banner> */}
       <NavbarWrapper>
         <Container maxWidth="xl">
           <Grid container justify="space-between" alignItems="center">
