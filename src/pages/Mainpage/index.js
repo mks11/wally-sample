@@ -31,11 +31,11 @@ import sidePanelSticker from 'images/sidepanel_sticker.png';
 var heroImages = [
   {
     lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-1200.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-1200.jpg',
     md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-768.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-768.jpg',
     sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/freeship12-480.jpg',
+      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-480.jpg',
   },
 ];
 
@@ -215,10 +215,12 @@ class Mainpage extends Component {
         alt={'Free shipping holiday sale with code FREESHIP12.'}
         img={img}
         justify="flex-start"
-        title=""
-        url=""
+        title="Wash up with Circular Bodies"
+        url="/shop/brands/circular-bodies"
       >
-        {/* <Typography gutterBottom>Small bites, big flavor.</Typography> */}
+        <Typography gutterBottom>
+          New biodegradable, sustainable soaps available now.
+        </Typography>
       </HeroSlide>
     ));
 
