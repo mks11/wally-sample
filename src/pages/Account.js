@@ -37,6 +37,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 import { AddIcon } from 'Icons';
+import UpdateAddressForm from 'forms/Address/Update';
 
 // Addresses
 const AddressCreateForm = lazy(() => import('forms/Address/Create'));
@@ -296,19 +297,7 @@ class Account extends Component {
                           </DangerButton>
                         </Grid>
                         <Grid item xs={6} lg={2}>
-                          <PrimaryWallyButton
-                            startIcon={<Edit fontSize="large" />}
-                            fullWidth
-                            onClick={() =>
-                              this.modalStore.toggleModal(
-                                'addressUpdate',
-                                null,
-                                data.address_id,
-                              )
-                            }
-                          >
-                            <Typography variant="body1">Update</Typography>
-                          </PrimaryWallyButton>
+                          <UpdateAddress addressId={data._id} />
                         </Grid>
                       </Grid>
                     </li>
@@ -396,6 +385,38 @@ function AddNewAddress() {
     <PrimaryTextButton onClick={handleAddNewAddress}>
       <AddIcon /> New
     </PrimaryTextButton>
+  );
+}
+
+function UpdateAddress({ addressId }) {
+  const { modalV2: modalV2Store } = useStores();
+
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Update Address
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
+
+  const handleUpdateAddress = () => {
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <UpdateAddressForm addressId={addressId} />
+      </Suspense>,
+      'right',
+    );
+  };
+
+  return (
+    <PrimaryWallyButton
+      startIcon={<Edit fontSize="large" />}
+      fullWidth
+      onClick={handleUpdateAddress}
+    >
+      Update
+    </PrimaryWallyButton>
   );
 }
 
