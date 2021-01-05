@@ -131,7 +131,7 @@ class Account extends Component {
 
     const addresses = this.state.showDeactivatedAddresses
       ? this.userStore.user.addresses
-      : this.userStore.user.addresses.filter((p) => p);
+      : this.userStore.user.addresses.filter((p) => p.is_active);
     const payments = this.state.showDeactivatedPaymentMethods
       ? this.userStore.user.payment
       : this.userStore.user.payment.filter((p) => p.is_active);

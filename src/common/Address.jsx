@@ -30,12 +30,13 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-export default observer(({ address = {} }) => {
+const AddressDetail = observer(({ address = {}, isActive }) => {
   const { street_address, unit, city, state, zip, name, telephone } = address;
 
   const { user: userStore } = useStores();
 
-  const isPreferredAddress = userStore && userStore.preferred_address;
+  const isPreferredAddress =
+    userStore && userStore.preferred_address === address._id;
 
   // handles formatting when unit is not present
   var streetAddress = street_address;
@@ -57,8 +58,9 @@ export default observer(({ address = {} }) => {
           {isPreferredAddress && (
             <StyledBadge badgeContent="Default" color="primary" />
           )}
+          {!isActive && <StyledBadge badgeContent="Inactive" color="error" />}
         </Typography>
-        <Typography>{streetAddress.trim()},</Typography>
+        <Typography>{streetAddress && streetAddress.trim()},</Typography>
         <Typography>
           {city}, {state} {zip}
         </Typography>
@@ -68,9 +70,11 @@ export default observer(({ address = {} }) => {
   );
 });
 
-export function Address({ address: data = {} }) {
+export default AddressDetail;
+
+export function Address({ address = {} }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { is_active } = data;
+  const { is_active } = address;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +93,7 @@ export function Address({ address: data = {} }) {
       <ListItem>
         <Grid container justify="space-between">
           <Grid item xs={12} lg={3}>
-            <AddressDetail data={data} />
+            <AddressDetail address={address} isActive={is_active} />
           </Grid>
           <Grid item>
             <IconButton onClick={handleClick}>
@@ -120,19 +124,5 @@ export function Address({ address: data = {} }) {
         </Grid>
       </ListItem>
     </Box>
-  );
-}
-
-function AddressDetail({ data = {} }) {
-  return (
-    <>
-      <Typography variant="h4" component="h3">
-        {data.street_address} {data.unit}, {data.state} {data.zip}
-      </Typography>
-      <Typography variant="body1"> {data.name} </Typography>
-      <Typography variant="body1" gutterBottom>
-        {data.telephone}
-      </Typography>
-    </>
   );
 }
