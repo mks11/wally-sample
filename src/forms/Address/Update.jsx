@@ -12,6 +12,7 @@ import { API_ADDRESS_EDIT } from 'config';
 import { ActivityButton } from 'styled-component-lib/Buttons';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 import 'yup-phone';
+import { santizePhoneNum } from 'utils';
 
 export default function UpdateAddressForm({ addressId, ...props }) {
   const { user: userStore, snackbar } = useStores();
@@ -59,7 +60,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
           initialValues={{
             addressId: address_id,
             name,
-            telephone,
+            telephone: telephone && santizePhoneNum(telephone),
             streetAddress: street_address,
             unit,
             city,
@@ -73,7 +74,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
             name: Yup.string().required("Name can't be blank"),
             telephone: Yup.string().phone(
               'US',
-              true,
+              false,
               'Telephone must be a valid US phone number',
             ),
             streetAddress: Yup.string().required('An address must be provided'),
@@ -95,6 +96,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="name"
                     placeholder="Enter your name"
                     label="Name"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -103,6 +105,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="telephone"
                     placeholder="Enter your telephone"
                     label="Telephone"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -117,6 +120,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="streetAddress"
                     label="Street Address"
                     placeholder="Street Address"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -125,6 +129,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="unit"
                     label="Unit"
                     placeholder="Apt number or company"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -133,6 +138,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="city"
                     label="City"
                     placeholder="City"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -141,6 +147,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="state"
                     placeholder="State"
                     label="State"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -149,6 +156,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     name="zip"
                     label="Zip"
                     placeholder="Zip"
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -158,6 +166,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     placeholder="Leave any notes for delivery... "
                     type="text"
                     multiline
+                    variant="outlined"
                     rows={1}
                     fullWidth
                   />
