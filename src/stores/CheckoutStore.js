@@ -40,10 +40,13 @@ class CheckoutStore {
        * to the DB.
        */
       if (!cart) {
-        return axios.get(API_GET_CURRENT_CART).then((res) => {
-          localStorage.setItem('cart', JSON.stringify(res.data));
-          this.isRetrievingCart = false;
-        });
+        return axios
+          .get(API_GET_CURRENT_CART)
+          .then((res) => {
+            localStorage.setItem('cart', JSON.stringify(res.data));
+          })
+          .catch((error) => console.error("Failed to load user's cart.", error))
+          .finally(() => (this.isRetrievingCart = false));
       } else {
         this.cart = cart;
         this.isRetrievingCart = false;
@@ -57,10 +60,13 @@ class CheckoutStore {
       let url = API_GET_CURRENT_CART;
       if (this.cart && this.cart._id) url += '/' + this.cart._id;
 
-      return axios.get(url, auth).then((res) => {
-        this.cart = res.data;
-        this.isRetrievingCart = false;
-      });
+      return axios
+        .get(url, auth)
+        .then((res) => {
+          this.cart = res.data;
+        })
+        .catch((error) => console.error("Failed to load user's cart.", error))
+        .finally(() => (this.isRetrievingCart = false));
     }
   }
 
