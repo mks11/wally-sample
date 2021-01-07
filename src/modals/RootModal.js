@@ -16,7 +16,6 @@ import CheckoutFirstModal from './CheckoutFirstModal';
 import MainFirstModal from './MainFirstModal';
 import MainSecondModal from './MainSecondModal';
 import ModalError from './ModalError';
-import AddressUpdateModal from './AddressUpdate';
 import AddressDeleteModal from './AddressDelete';
 import SuccessModal from './SuccessModal';
 import ReportIssueModal from './ReportIssueModal';
@@ -39,7 +38,6 @@ const ModalRoutes = {
   error: ModalError,
   success: SuccessModal,
   reportIssue: ReportIssueModal,
-  addressUpdate: AddressUpdateModal,
   addressDelete: AddressDeleteModal,
   retailCategoryAdd: Retail.CategoryAdd,
   retailCategoryDelete: Retail.CategoryDelete,

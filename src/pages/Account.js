@@ -31,6 +31,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { AddIcon } from 'Icons';
 import { Address } from 'common/Address';
+import UpdateAddressForm from 'forms/Address/Update';
 
 // Addresses
 const AddressCreateForm = lazy(() => import('forms/Address/Create'));
@@ -331,6 +332,38 @@ function AddNewAddress() {
     <PrimaryTextButton onClick={handleAddNewAddress}>
       <AddIcon /> New
     </PrimaryTextButton>
+  );
+}
+
+function UpdateAddress({ addressId }) {
+  const { modalV2: modalV2Store } = useStores();
+
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Update Address
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
+
+  const handleUpdateAddress = () => {
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <UpdateAddressForm addressId={addressId} />
+      </Suspense>,
+      'right',
+    );
+  };
+
+  return (
+    <PrimaryWallyButton
+      startIcon={<Edit fontSize="large" />}
+      fullWidth
+      onClick={handleUpdateAddress}
+    >
+      Update
+    </PrimaryWallyButton>
   );
 }
 
