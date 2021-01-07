@@ -21,9 +21,6 @@ export const API_RESET_PASSWORD = BASE_URL + '/api/user/reset-password/';
 export const API_GET_LOGIN_STATUS = BASE_URL + '/api/login/status';
 export const API_REFER_FRIEND = BASE_URL + '/api/user/refer';
 
-export const API_ADDRESS_NEW = BASE_URL + '/api/user/address';
-export const API_ADDRESS_EDIT = BASE_URL + '/api/user/address';
-
 export const API_PAYMENT_REMOVE = BASE_URL + '/api/user/payment/';
 
 export const API_GET_PRODUCT_DISPLAYED = BASE_URL + '/api/products/';
