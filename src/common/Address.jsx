@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 
 //MobX
 import { observer } from 'mobx-react';
@@ -72,9 +72,12 @@ const AddressDetail = observer(({ address = {}, isActive }) => {
 
 export default AddressDetail;
 
+const UpdateAddressForm = lazy(() => import('forms/Address/Update'));
+
 export function Address({ address = {} }) {
+  const { modalV2: modalV2Store } = useStores();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { is_active } = address;
+  const { _id, is_active } = address;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -85,8 +88,28 @@ export function Address({ address = {} }) {
   };
 
   const handleDefaultAddress = () => {};
-  const handleReactivateAddress = () => {};
+
   const handleDeactivateAddress = () => {};
+
+  const handleUpdateAddress = () => {
+    modalV2Store.open(
+      <Suspense fallback={SuspenseFallback()}>
+        <UpdateAddressForm addressId={_id} />
+      </Suspense>,
+      'right',
+    );
+  };
+
+  const handleReactivateAddress = () => {};
+
+  const SuspenseFallback = () => (
+    <>
+      <Typography variant="h1" gutterBottom>
+        Update Address
+      </Typography>
+      <Typography gutterBottom>Loading...</Typography>
+    </>
+  );
 
   return (
     <Box my={2}>
@@ -108,6 +131,9 @@ export function Address({ address = {} }) {
             >
               {is_active && (
                 <MenuItem onClick={handleDefaultAddress}>Make Default</MenuItem>
+              )}
+              {is_active && (
+                <MenuItem onClick={handleUpdateAddress}>Edit</MenuItem>
               )}
               {is_active && (
                 <MenuItem onClick={handleDeactivateAddress}>
