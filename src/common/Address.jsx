@@ -18,6 +18,9 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 
+// Utilities
+import { getErrorMessage } from 'utils';
+
 const StyledBadge = withStyles((theme) => ({
   badge: {
     right: -40,
@@ -76,9 +79,25 @@ export default AddressDetail;
 const UpdateAddressForm = lazy(() => import('forms/Address/Update'));
 
 export function Address({ address = {} }) {
-  const { modalV2: modalV2Store } = useStores();
+  const {
+    loading,
+    modalV2: modalV2Store,
+    snackbar,
+    user: userStore,
+  } = useStores();
   const [anchorEl, setAnchorEl] = useState(null);
   const { _id, is_active } = address;
+  const ADDRESS_API_BODY = {
+    _id,
+    name: address.name,
+    telephone: address.telephone,
+    streetAddress: address.street_address,
+    unit: address.unit,
+    city: address.city,
+    state: address.state,
+    zip: address.zip,
+    country: address.country,
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -88,7 +107,25 @@ export function Address({ address = {} }) {
     setAnchorEl(null);
   };
 
-  const handleDefaultAddress = () => {};
+  const handleDefaultAddress = async () => {
+    const data = { ...ADDRESS_API_BODY, isPreferredAddress: true };
+    try {
+      setAnchorEl(null);
+      loading.show();
+      await userStore.updateAddress(data);
+      snackbar.openSnackbar('Default address updated successfully!', 'success');
+    } catch (error) {
+      const msg = getErrorMessage(error);
+
+      if (msg) {
+        snackbar.openSnackbar(msg, 'error');
+      } else {
+        snackbar.openSnackbar('Failed to update default address.', 'error');
+      }
+    } finally {
+      loading.hide();
+    }
+  };
 
   const handleDeactivateAddress = () => {};
 
@@ -131,18 +168,18 @@ export function Address({ address = {} }) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {is_active && (
+              {is_active !== false && (
                 <MenuItem onClick={handleDefaultAddress}>Make Default</MenuItem>
               )}
-              {is_active && (
+              {is_active !== false && (
                 <MenuItem onClick={handleUpdateAddress}>Edit</MenuItem>
               )}
-              {is_active && (
+              {is_active !== false && (
                 <MenuItem onClick={handleDeactivateAddress}>
                   Deactivate
                 </MenuItem>
               )}
-              {!is_active && (
+              {is_active === false && (
                 <MenuItem onClick={handleReactivateAddress}>
                   Reactivate
                 </MenuItem>
