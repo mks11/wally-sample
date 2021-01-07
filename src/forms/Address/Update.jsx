@@ -10,7 +10,9 @@ import { useStores } from 'hooks/mobx';
 import { ActivityButton } from 'styled-component-lib/Buttons';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 import 'yup-phone';
-import { santizePhoneNum } from 'utils';
+
+// Utilities
+import { getErrorMessage, getErrorParam, santizePhoneNum } from 'utils';
 
 export default function UpdateAddressForm({ addressId, ...props }) {
   const { modalV2: modalV2Store, user: userStore, snackbar } = useStores();
@@ -29,15 +31,24 @@ export default function UpdateAddressForm({ addressId, ...props }) {
 
   var sanitizedTelephone = telephone ? santizePhoneNum(telephone) : '';
 
-  const handleFormSubmit = async (values, { setSubmitting }) => {
+  const handleFormSubmit = async (values, { setFieldError, setSubmitting }) => {
     try {
       await userStore.updateAddress(values);
       snackbar.openSnackbar('Address updated successfully!', 'success');
       setSubmitting(false);
       modalV2Store.close();
     } catch (error) {
-      console.log(error);
-      snackbar.openSnackbar('Failed to update address.', 'error');
+      const msg = getErrorMessage(error);
+      const param = getErrorParam(error);
+
+      if (msg && param) {
+        setFieldError(param, msg);
+      } else if (msg) {
+        snackbar.openSnackbar(msg, 'error');
+      } else {
+        snackbar.openSnackbar('Failed to update address.', 'error');
+      }
+
       setSubmitting(false);
     }
   };
@@ -71,7 +82,9 @@ export default function UpdateAddressForm({ addressId, ...props }) {
             streetAddress: Yup.string().required('An address must be provided'),
             city: Yup.string().required("City can't be blank"),
             state: Yup.string().required("State can't be blank"),
-            zip: Yup.string().required("Zip can't be blank"),
+            zip: Yup.string()
+              .required("Zip can't be blank")
+              .min(5, 'Zip must be 5 digits'),
             country: Yup.string().required("Country can't be blank"),
             shippoAddressId: Yup.string(),
           })}
