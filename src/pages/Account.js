@@ -131,7 +131,7 @@ class Account extends Component {
 
     const addresses = this.state.showDeactivatedAddresses
       ? this.userStore.user.addresses
-      : this.userStore.user.addresses.filter((p) => p.is_active);
+      : this.userStore.user.addresses.filter((a) => a.is_active !== false);
     const payments = this.state.showDeactivatedPaymentMethods
       ? this.userStore.user.payment
       : this.userStore.user.payment.filter((p) => p.is_active);
@@ -226,34 +226,29 @@ class Account extends Component {
             </Box>
             <Divider />
             <Box py={2}>
-              <ul className="list-addresses">
-                {addresses.length ? (
-                  <>
-                    <Box display="flex" alignItems="center" pt={2} px={2}>
-                      <AddressActivationStatusSwitch
-                        onChange={(e) => this.toggleActiveAddress(e)}
-                        showDeactivatedAddresses={
-                          this.state.showDeactivatedAddresses
-                        }
-                      />
-                    </Box>
-                    <List>
-                      {addresses.map((data, index) => (
-                        <Address
-                          key={data.address_id || index}
-                          address={data}
-                        />
-                      ))}
-                    </List>
-                  </>
-                ) : (
-                  <Box my={2}>
-                    <Typography gutterBottom>
-                      You haven't added any addresses yet.
-                    </Typography>
+              {addresses.length ? (
+                <>
+                  <Box display="flex" alignItems="center" pt={2} px={2}>
+                    <AddressActivationStatusSwitch
+                      onChange={(e) => this.toggleActiveAddress(e)}
+                      showDeactivatedAddresses={
+                        this.state.showDeactivatedAddresses
+                      }
+                    />
                   </Box>
-                )}
-              </ul>
+                  <List>
+                    {addresses.map((data, index) => (
+                      <Address key={data.address_id || index} address={data} />
+                    ))}
+                  </List>
+                </>
+              ) : (
+                <Box my={2}>
+                  <Typography gutterBottom>
+                    You haven't added any addresses yet.
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </Container>
         </Box>
