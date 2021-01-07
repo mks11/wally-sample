@@ -7,18 +7,16 @@ import {
   FormikPlacesAutoComplete,
 } from 'common/FormikComponents/NonRenderPropAPI';
 import { useStores } from 'hooks/mobx';
-import axios from 'axios';
-import { API_ADDRESS_EDIT } from 'config';
 import { ActivityButton } from 'styled-component-lib/Buttons';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
 import 'yup-phone';
 import { santizePhoneNum } from 'utils';
 
 export default function UpdateAddressForm({ addressId, ...props }) {
-  const { user: userStore, snackbar } = useStores();
+  const { modalV2: modalV2Store, user: userStore, snackbar } = useStores();
 
   const {
-    address_id,
+    _id,
     name,
     telephone,
     street_address,
@@ -27,40 +25,32 @@ export default function UpdateAddressForm({ addressId, ...props }) {
     state,
     zip,
     country,
-    delivery_notes,
   } = userStore.getAddressById(addressId) || {};
 
   var sanitizedTelephone = telephone ? santizePhoneNum(telephone) : '';
 
-  const handleFormSubmit = (values, { setSubmitting }) => {
-    axios
-      .patch(API_ADDRESS_EDIT, values, userStore.getHeaderAuth())
-      .then(() => {
-        userStore.getUser();
-        snackbar.openSnackbar(
-          'Your address was updated successfully!',
-          'success',
-        );
-      })
-      .catch((err) => {
-        snackbar.openSnackbar(
-          'There was an error updating your address. Please contact info@thewallyshop.co for assistance.',
-          'error',
-        );
-      })
-      .finally(() => {
-        setSubmitting(false);
-        props.toggle(); // close the modal
-      });
+  const handleFormSubmit = async (values, { setSubmitting }) => {
+    try {
+      await userStore.updateAddress(values);
+      snackbar.openSnackbar('Address updated successfully!', 'success');
+      setSubmitting(false);
+      modalV2Store.close();
+    } catch (error) {
+      console.log(error);
+      snackbar.openSnackbar('Failed to update address.', 'error');
+      setSubmitting(false);
+    }
   };
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h1"> Edit Address </Typography>
+      <Typography variant="h1" gutterBottom>
+        Edit Address
+      </Typography>
       <Box>
         <Formik
           initialValues={{
-            addressId: address_id,
+            _id,
             name,
             telephone: sanitizedTelephone,
             streetAddress: street_address,
@@ -69,10 +59,9 @@ export default function UpdateAddressForm({ addressId, ...props }) {
             state,
             zip,
             country,
-            deliveryNotes: delivery_notes, //optional
           }}
           validationSchema={Yup.object({
-            addressId: Yup.string().required('Address'),
+            _id: Yup.string().required("Address object id can't be blank"),
             name: Yup.string().required("Name can't be blank"),
             telephone: Yup.string().phone(
               'US',
@@ -84,7 +73,6 @@ export default function UpdateAddressForm({ addressId, ...props }) {
             state: Yup.string().required("State can't be blank"),
             zip: Yup.string().required("Zip can't be blank"),
             country: Yup.string().required("Country can't be blank"),
-            deliveryNotes: Yup.string(),
             shippoAddressId: Yup.string(),
           })}
           enableReinitialize={true}
@@ -92,8 +80,8 @@ export default function UpdateAddressForm({ addressId, ...props }) {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={12}>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={6}>
                   <TextInput
                     name="name"
                     placeholder="Enter your name"
@@ -102,7 +90,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={6}>
                   <PhoneInput
                     name="telephone"
                     placeholder="Enter your telephone"
@@ -117,7 +105,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     mode={'edit'}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextInput
                     name="streetAddress"
                     label="Street Address"
@@ -126,7 +114,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <TextInput
                     name="unit"
                     label="Unit"
@@ -135,7 +123,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                   <TextInput
                     name="city"
                     label="City"
@@ -144,7 +132,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} sm={3}>
                   <TextInput
                     name="state"
                     placeholder="State"
@@ -153,23 +141,12 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} sm={3}>
                   <TextInput
                     name="zip"
                     label="Zip"
                     placeholder="Zip"
                     variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextInput
-                    name="deliveryNotes"
-                    placeholder="Leave any notes for delivery... "
-                    type="text"
-                    multiline
-                    variant="outlined"
-                    rows={1}
                     fullWidth
                   />
                 </Grid>
