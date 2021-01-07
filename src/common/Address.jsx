@@ -34,9 +34,8 @@ const AddressDetail = observer(({ address = {}, isActive }) => {
   const { street_address, unit, city, state, zip, name, telephone } = address;
 
   const { user: userStore } = useStores();
-
-  const isPreferredAddress =
-    userStore && userStore.preferred_address === address._id;
+  const { user } = userStore;
+  const isPreferredAddress = user && user.preferred_address === address._id;
 
   // handles formatting when unit is not present
   var streetAddress = street_address;
@@ -58,7 +57,9 @@ const AddressDetail = observer(({ address = {}, isActive }) => {
           {isPreferredAddress && (
             <StyledBadge badgeContent="Default" color="primary" />
           )}
-          {!isActive && <StyledBadge badgeContent="Inactive" color="error" />}
+          {isActive === false && (
+            <StyledBadge badgeContent="Inactive" color="error" />
+          )}
         </Typography>
         <Typography>{streetAddress && streetAddress.trim()},</Typography>
         <Typography>
@@ -115,7 +116,7 @@ export function Address({ address = {} }) {
     <Box my={2}>
       <ListItem>
         <Grid container justify="space-between">
-          <Grid item xs={12} lg={3}>
+          <Grid item>
             <AddressDetail address={address} isActive={is_active} />
           </Grid>
           <Grid item>
