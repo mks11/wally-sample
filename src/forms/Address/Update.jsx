@@ -30,6 +30,8 @@ export default function UpdateAddressForm({ addressId, ...props }) {
     delivery_notes,
   } = userStore.getAddressById(addressId) || {};
 
+  var sanitizedTelephone = telephone ? santizePhoneNum(telephone) : '';
+
   const handleFormSubmit = (values, { setSubmitting }) => {
     axios
       .patch(API_ADDRESS_EDIT, values, userStore.getHeaderAuth())
@@ -60,7 +62,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
           initialValues={{
             addressId: address_id,
             name,
-            telephone: telephone && santizePhoneNum(telephone),
+            telephone: sanitizedTelephone,
             streetAddress: street_address,
             unit,
             city,
@@ -174,7 +176,11 @@ export default function UpdateAddressForm({ addressId, ...props }) {
               </Grid>
               <Grid container justify="center">
                 <Box margin={2}>
-                  <ActivityButton isLoading={isSubmitting} type="submit">
+                  <ActivityButton
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
+                    type="submit"
+                  >
                     <Typography variant="body1">Submit</Typography>
                   </ActivityButton>
                 </Box>
