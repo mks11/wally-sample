@@ -1,22 +1,31 @@
 import React from 'react';
+
+// Forms
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Grid, Box, Typography, Container } from '@material-ui/core';
+import 'yup-phone';
 import {
+  Checkbox,
   TextInput,
   FormikPlacesAutoComplete,
 } from 'common/FormikComponents/NonRenderPropAPI';
-import { useStores } from 'hooks/mobx';
-import { ActivityButton } from 'styled-component-lib/Buttons';
 import PhoneInput from 'common/FormikComponents/NonRenderPropAPI/PhoneInput';
-import 'yup-phone';
+
+// Material UI
+import { Grid, Box, Typography, Container } from '@material-ui/core';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+
+// Styled Components
+import { ActivityButton } from 'styled-component-lib/Buttons';
 
 // Utilities
 import { getErrorMessage, getErrorParam, santizePhoneNum } from 'utils';
 
 export default function UpdateAddressForm({ addressId, ...props }) {
   const { modalV2: modalV2Store, user: userStore, snackbar } = useStores();
-
+  const { user } = userStore;
   const {
     _id,
     name,
@@ -28,7 +37,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
     zip,
     country,
   } = userStore.getAddressById(addressId) || {};
-
+  const isPreferredAddress = _id.toString() === user.preferred_address;
   var sanitizedTelephone = telephone ? santizePhoneNum(telephone) : '';
 
   const handleFormSubmit = async (values, { setFieldError, setSubmitting }) => {
@@ -70,6 +79,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
             state,
             zip,
             country,
+            isPreferredAddress,
           }}
           validationSchema={Yup.object({
             _id: Yup.string().required("Address object id can't be blank"),
@@ -87,6 +97,7 @@ export default function UpdateAddressForm({ addressId, ...props }) {
               .min(5, 'Zip must be 5 digits'),
             country: Yup.string().required("Country can't be blank"),
             shippoAddressId: Yup.string(),
+            isPreferredAddress: Yup.bool(),
           })}
           enableReinitialize={true}
           onSubmit={handleFormSubmit}
@@ -161,6 +172,14 @@ export default function UpdateAddressForm({ addressId, ...props }) {
                     placeholder="Zip"
                     variant="outlined"
                     fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Checkbox
+                    name="isPreferredAddress"
+                    label="Set as my preferred address"
+                    color="primary"
+                    isChecked={isPreferredAddress}
                   />
                 </Grid>
               </Grid>
