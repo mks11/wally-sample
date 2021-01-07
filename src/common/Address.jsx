@@ -93,6 +93,7 @@ export function Address({ address = {} }) {
   const handleDeactivateAddress = () => {};
 
   const handleUpdateAddress = () => {
+    setAnchorEl(null);
     modalV2Store.open(
       <Suspense fallback={SuspenseFallback()}>
         <UpdateAddressForm addressId={_id} />
