@@ -95,7 +95,7 @@ class SearchBar extends Component {
           </div>
           <AsyncTypeahead
             id="product-search"
-            filterBy={['product_name']}
+            filterBy={['product_name', 'producer']}
             allowNew={false}
             isLoading={searchAheadLoading}
             multiple={false}
