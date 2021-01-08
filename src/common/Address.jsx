@@ -1,5 +1,8 @@
 import React, { lazy, Suspense, useState } from 'react';
 
+// Cookies
+import { useCookies } from 'react-cookie';
+
 //MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
@@ -79,6 +82,9 @@ export default AddressDetail;
 const UpdateAddressForm = lazy(() => import('forms/Address/Update'));
 
 export function Address({ address = {} }) {
+  const [cookies, setCookie] = useCookies(['addressId']);
+  const addressIdCookie = cookies['addressId'];
+
   const {
     loading,
     modalV2: modalV2Store,
@@ -133,6 +139,11 @@ export function Address({ address = {} }) {
       setAnchorEl(null);
       loading.show();
       await userStore.updateAddress(data);
+      if (_id === addressIdCookie) {
+        // Remove the user's selected shipping address cookie if they decide to
+        // remove the address it corresponds to.
+        setCookie('addressId', '', { path: '/' });
+      }
       snackbar.openSnackbar('Address deactivated successfully!', 'success');
     } catch (error) {
       const msg = getErrorMessage(error);
