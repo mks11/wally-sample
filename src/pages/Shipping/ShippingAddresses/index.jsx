@@ -26,7 +26,12 @@ function ShippingAddresses({ onSave, name }) {
   const { user: userStore } = useStores();
   const { user } = userStore;
   const { values, setFieldValue } = useFormikContext() || {};
-  const showSaveButton = user && user.addresses && user.addresses.length >= 3;
+  const activeAddresses =
+    user && user.addresses && user.addresses.length
+      ? user.addresses.filter((a) => a.is_active !== false)
+      : [];
+
+  const showSaveButton = activeAddresses.length >= 3;
 
   // will be equal to a stringified object id
   const addressId = values[name];
@@ -61,7 +66,7 @@ function ShippingAddresses({ onSave, name }) {
             <Divider />
           </Box>
           <AddressList
-            addresses={user ? user.addresses : []}
+            addresses={activeAddresses}
             name={name}
             onChange={handleSelect}
             selected={selectedAddress}
