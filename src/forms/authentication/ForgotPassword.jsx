@@ -11,7 +11,7 @@ import { Box, Typography } from '@material-ui/core';
 import { TextInput } from 'common/FormikComponents/NonRenderPropAPI';
 
 // Styled Components
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { ActivityButton } from 'styled-component-lib/Buttons';
 
 import * as Yup from 'yup';
 
@@ -30,34 +30,35 @@ export default function LoginForm() {
       enableReinitialize={true}
       onSubmit={forgotPassword}
     >
-      <Form>
-        <Typography variant="h1" gutterBottom>
-          Forgot Password
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Forgot your password? No worries!
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Enter your email address and we'll send you instructions to reset it.
-        </Typography>
-        <Box my={2}>
-          <TextInput
-            name="email"
-            variant="outlined"
-            color="primary"
-            placeholder="Email Address"
-            errorMsg={emailError}
-            setErrorMsg={setEmailError}
-          />
-        </Box>
-        <Box my={2}>
-          <PrimaryWallyButton type="submit">
-            <Typography variant="h5" component="span">
+      {({ isSubmitting }) => (
+        <Form>
+          <Typography variant="h1" gutterBottom>
+            Forgot Password
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Forgot your password? No worries!
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Enter your email address and we'll send you instructions to reset
+            it.
+          </Typography>
+          <Box my={2}>
+            <TextInput
+              name="email"
+              variant="outlined"
+              color="primary"
+              placeholder="Email Address"
+              errorMsg={emailError}
+              setErrorMsg={setEmailError}
+            />
+          </Box>
+          <Box my={2}>
+            <ActivityButton type="submit" isLoading={isSubmitting} fullWidth>
               Submit
-            </Typography>
-          </PrimaryWallyButton>
-        </Box>
-      </Form>
+            </ActivityButton>
+          </Box>
+        </Form>
+      )}
     </Formik>
   );
 

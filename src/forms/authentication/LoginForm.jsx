@@ -20,7 +20,10 @@ import FBLogin from 'common/FBLogin';
 
 // Styled Components
 import { Label } from 'styled-component-lib/InputLabel';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import {
+  PrimaryWallyButton,
+  ActivityButton,
+} from 'styled-component-lib/Buttons';
 
 import * as Yup from 'yup';
 
@@ -46,47 +49,47 @@ export default function LoginForm() {
         enableReinitialize={true}
         onSubmit={login}
       >
-        <Form>
-          <Typography variant="h1" gutterBottom>
-            Log In
-          </Typography>
-          <Box my={2}>
-            <Label>Email Address</Label>
-            <TextInput
-              name="email"
-              variant="outlined"
-              color="primary"
-              placeholder="Email Address"
-              errorMsg={emailError}
-              setErrorMsg={setEmailError}
-            />
-          </Box>
-          <Box my={2}>
-            <Box mb={1}>
-              <Grid container justify="space-between" alignItems="center">
-                <Label style={{ marginBottom: '0' }}>Password</Label>
-                <Button color="primary" onClick={forgotPassword}>
-                  <Typography variant="body1">Forgot Password?</Typography>
-                </Button>
-              </Grid>
+        {({ isSubmitting }) => (
+          <Form>
+            <Typography variant="h1" gutterBottom>
+              Log In
+            </Typography>
+            <Box my={2}>
+              <Label>Email Address</Label>
+              <TextInput
+                name="email"
+                variant="outlined"
+                color="primary"
+                placeholder="Email Address"
+                errorMsg={emailError}
+                setErrorMsg={setEmailError}
+              />
             </Box>
-            <PasswordInput
-              name="password"
-              variant="outlined"
-              color="primary"
-              placeholder="Password"
-              errorMsg={passwordError}
-              setErrorMsg={setPasswordError}
-            />
-          </Box>
-          <Box my={2}>
-            <PrimaryWallyButton type="submit" fullWidth>
-              <Typography variant="h5" component="span">
+            <Box my={2}>
+              <Box mb={1}>
+                <Grid container justify="space-between" alignItems="center">
+                  <Label style={{ marginBottom: '0' }}>Password</Label>
+                  <Button color="primary" onClick={forgotPassword}>
+                    <Typography variant="body1">Forgot Password?</Typography>
+                  </Button>
+                </Grid>
+              </Box>
+              <PasswordInput
+                name="password"
+                variant="outlined"
+                color="primary"
+                placeholder="Password"
+                errorMsg={passwordError}
+                setErrorMsg={setPasswordError}
+              />
+            </Box>
+            <Box my={2}>
+              <ActivityButton type="submit" isLoading={isSubmitting} fullWidth>
                 Log In
-              </Typography>
-            </PrimaryWallyButton>
-          </Box>
-        </Form>
+              </ActivityButton>
+            </Box>
+          </Form>
+        )}
       </Formik>
       <Box my={2}>
         <FBLogin />
