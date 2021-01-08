@@ -27,19 +27,7 @@ import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 // Images
 import sidePanelSticker from 'images/sidepanel_sticker.png';
-
-var heroImages = [
-  {
-    lg:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-1200.jpg',
-    md:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-768.jpg',
-    sm:
-      'https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/circular-bodies/circular-bodies-480.jpg',
-  },
-];
-
-const hasDots = heroImages.length > 1;
+import { HAS_DOTS, heroImages } from './Hero/config';
 
 var DesktopCarouselWrapper = styled(Box)`
   @media only screen and (max-width: 480px) {
@@ -212,15 +200,13 @@ class Mainpage extends Component {
     // Featured Brands
     const slides = heroImages.map((img) => (
       <HeroSlide
-        alt={'Free shipping holiday sale with code FREESHIP12.'}
+        alt={img.alt}
         img={img}
         justify="flex-start"
-        title="Wash up with Circular Bodies"
-        url="/shop/brands/circular-bodies"
+        title={img.title}
+        url={img.url}
       >
-        <Typography gutterBottom>
-          New biodegradable, sustainable soaps available now.
-        </Typography>
+        <Typography gutterBottom>{img.body}</Typography>
       </HeroSlide>
     ));
 
@@ -352,7 +338,7 @@ class Mainpage extends Component {
                         {/* displayed from 481px and up */}
                         <DesktopCarouselWrapper my={2} zIndex={1}>
                           <ImageCarousel
-                            dots={hasDots}
+                            dots={HAS_DOTS}
                             keyName={'featured-brands'}
                             height={675}
                             slides={slides}
@@ -362,7 +348,7 @@ class Mainpage extends Component {
                         {/* displayed from 480px and down */}
                         <MobileCarouselWrapper my={2} zIndex={1}>
                           <ImageCarousel
-                            dots={hasDots}
+                            dots={HAS_DOTS}
                             keyName={'featured-brands'}
                             height={480}
                             slides={slides}
