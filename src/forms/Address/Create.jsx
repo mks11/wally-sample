@@ -86,7 +86,7 @@ function AddressCreateForm({ onCreate }) {
             .phone('US', false, 'Telephone must be a valid US phone number')
             .matches(/^\d{10}$/, 'Telephone must be 10 digits.')
             .required("Telephone can't be blank"),
-          streetAddress: Yup.string().required('An address must be provided'),
+          streetAddress: Yup.string().required("Address can't be blank"),
           unit: Yup.string(),
           city: Yup.string().required("City can't be blank"),
           state: Yup.string().required("State can't be blank"),
@@ -100,7 +100,7 @@ function AddressCreateForm({ onCreate }) {
         {({ isSubmitting }) => (
           <Form>
             <Grid container spacing={1}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="name"
                   placeholder="Enter your name"
@@ -109,7 +109,7 @@ function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <PhoneInput
                   name="telephone"
                   placeholder="Enter your telephone"
@@ -124,7 +124,7 @@ function AddressCreateForm({ onCreate }) {
                   mode={'edit'}
                 />
               </Grid>
-              <Grid item xs={8} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="streetAddress"
                   label="Street Address"
@@ -133,7 +133,7 @@ function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={4} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="unit"
                   label="Unit"
@@ -142,7 +142,7 @@ function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextInput
                   name="city"
                   label="City"
@@ -151,7 +151,7 @@ function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6} sm={6} md={3}>
+              <Grid item xs={6} sm={3}>
                 <TextInput
                   name="state"
                   placeholder="State"
@@ -160,7 +160,7 @@ function AddressCreateForm({ onCreate }) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={6} sm={6} md={3}>
+              <Grid item xs={6} sm={3}>
                 <TextInput
                   name="zip"
                   label="Zip"

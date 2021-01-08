@@ -1,7 +1,7 @@
 import { observable, decorate, action, computed, runInAction } from 'mobx';
 
 // API
-import { deleteAddress } from 'api/address';
+import { updateAddressAPI, deleteAddress } from 'api/address';
 import {
   API_LOGIN,
   API_LOGIN_FACEBOOK,
@@ -168,15 +168,6 @@ class UserStore {
     });
   }
 
-  async makeDefaultAddress(address_id) {
-    const res = await axios.patch(
-      API_EDIT_USER,
-      { preferred_address: address_id },
-      this.getHeaderAuth(),
-    );
-    return res.data;
-  }
-
   async getUser() {
     const res = await axios.get(API_GET_USER, this.getHeaderAuth());
     this.setUserData(res.data);
@@ -260,10 +251,26 @@ class UserStore {
     return res.data;
   }
 
+  // ================================ ADDRESSES ================================
+
   getAddressById(id) {
     return this.user
       ? this.user.addresses.find((item) => item.address_id === id)
       : null;
+  }
+
+  updateAddress(data) {
+    const auth = this.getHeaderAuth();
+    return updateAddressAPI(data, auth).then((res) => (this.user = res.data));
+  }
+
+  async makeDefaultAddress(address_id) {
+    const res = await axios.patch(
+      API_EDIT_USER,
+      { preferred_address: address_id },
+      this.getHeaderAuth(),
+    );
+    return res.data;
   }
 
   setDeliveryTime(time) {
@@ -371,19 +378,23 @@ decorate(UserStore, {
 
   referFriend: action,
 
-  deleteAddress: action,
-  makeDefaultAddress: action,
+  // ================================ ADDRESSES ================================
 
+  deleteAddress: action,
+  getAddressById: action,
+  makeDefaultAddress: action,
+  updateAddress: action,
+
+  // ============================= PAYMENT METHODS =============================
   deletePayment: action,
 
   getHeaderAuth: action,
   forgotPassword: action,
   resetPassword: action,
 
-  setDeliveryTime: action,
   adjustDeliveryTimes: action,
+  setDeliveryTime: action,
 
-  getAddressById: action,
   updateFlags: action,
 });
 

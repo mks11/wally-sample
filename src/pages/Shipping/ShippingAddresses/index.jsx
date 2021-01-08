@@ -4,7 +4,7 @@ import React, { lazy, Suspense } from 'react';
 import { useFormikContext } from 'formik';
 
 // Custom Components
-import Address from './Address';
+import Address from 'common/Address';
 import AddressList from './AddressList';
 import { AddIcon } from 'Icons';
 import CollapseCard from 'common/FormikComponents/NonRenderPropAPI/CollapseCard';
@@ -26,7 +26,12 @@ function ShippingAddresses({ onSave, name }) {
   const { user: userStore } = useStores();
   const { user } = userStore;
   const { values, setFieldValue } = useFormikContext() || {};
-  const showSaveButton = user && user.addresses && user.addresses.length >= 3;
+  const activeAddresses =
+    user && user.addresses && user.addresses.length
+      ? user.addresses.filter((a) => a.is_active !== false)
+      : [];
+
+  const showSaveButton = activeAddresses.length >= 3;
 
   // will be equal to a stringified object id
   const addressId = values[name];
@@ -48,10 +53,7 @@ function ShippingAddresses({ onSave, name }) {
       title="Shipping Address"
     >
       {selectedAddress ? (
-        <Address
-          address={selectedAddress}
-          preferredAddressId={user.preferred_address}
-        />
+        <Address address={selectedAddress} />
       ) : (
         <Box py={2}>
           <Typography>No shipping address selected.</Typography>
@@ -64,10 +66,9 @@ function ShippingAddresses({ onSave, name }) {
             <Divider />
           </Box>
           <AddressList
-            addresses={user ? user.addresses : []}
+            addresses={activeAddresses}
             name={name}
             onChange={handleSelect}
-            preferredAddressId={user.preferred_address}
             selected={selectedAddress}
           />
         </>

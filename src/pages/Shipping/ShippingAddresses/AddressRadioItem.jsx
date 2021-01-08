@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   Radio,
 } from '@material-ui/core';
-import Address from './Address';
+import Address from 'common/Address';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,11 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function AddressRadioItem({
-  address,
-  selected,
-  preferredAddressId,
-}) {
+export default function AddressRadioItem({ address, selected }) {
   const classes = useStyles();
   const value = address._id;
   const isSelected = value === selected._id;
@@ -35,9 +31,7 @@ export default function AddressRadioItem({
         classes={{ root: classes.root, label: classes.label }}
         value={value}
         checked={isSelected}
-        label={
-          <Address address={address} preferredAddressId={preferredAddressId} />
-        }
+        label={<Address address={address} />}
       />
       <Divider />
     </Box>
