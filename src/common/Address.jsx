@@ -127,7 +127,25 @@ export function Address({ address = {} }) {
     }
   };
 
-  const handleDeactivateAddress = () => {};
+  const handleDeactivateAddress = async () => {
+    const data = { ...ADDRESS_API_BODY, isActive: false };
+    try {
+      setAnchorEl(null);
+      loading.show();
+      await userStore.updateAddress(data);
+      snackbar.openSnackbar('Address deactivated successfully!', 'success');
+    } catch (error) {
+      const msg = getErrorMessage(error);
+
+      if (msg) {
+        snackbar.openSnackbar(msg, 'error');
+      } else {
+        snackbar.openSnackbar('Failed to update default address.', 'error');
+      }
+    } finally {
+      loading.hide();
+    }
+  };
 
   const handleUpdateAddress = () => {
     setAnchorEl(null);
@@ -139,7 +157,25 @@ export function Address({ address = {} }) {
     );
   };
 
-  const handleReactivateAddress = () => {};
+  const handleReactivateAddress = async () => {
+    const data = { ...ADDRESS_API_BODY, isActive: true };
+    try {
+      setAnchorEl(null);
+      loading.show();
+      await userStore.updateAddress(data);
+      snackbar.openSnackbar('Address deactivated successfully!', 'success');
+    } catch (error) {
+      const msg = getErrorMessage(error);
+
+      if (msg) {
+        snackbar.openSnackbar(msg, 'error');
+      } else {
+        snackbar.openSnackbar('Failed to update default address.', 'error');
+      }
+    } finally {
+      loading.hide();
+    }
+  };
 
   const SuspenseFallback = () => (
     <>

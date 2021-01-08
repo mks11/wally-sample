@@ -24,6 +24,7 @@ export function updateAddressAPI(data, auth) {
     zip,
     country,
     isPreferredAddress,
+    isActive,
   } = data;
   if (!_id) throw new Error("Can't update address without object id.");
 
@@ -38,6 +39,7 @@ export function updateAddressAPI(data, auth) {
     zip,
     country,
     isPreferredAddress,
+    isActive,
   };
   return axios.patch(ENDPOINT, BODY, {
     baseURL: BASE_URL,
