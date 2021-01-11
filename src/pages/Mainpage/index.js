@@ -255,8 +255,9 @@ class Mainpage extends Component {
                           <ul>
                             <li
                               className={
-                                this.state.sortType === 'times_bought' &&
-                                'active'
+                                this.state.sortType === 'times_bought'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('times_bought')}
                             >
@@ -264,8 +265,9 @@ class Mainpage extends Component {
                             </li>
                             <li
                               className={
-                                this.state.sortType === 'last_ordered' &&
-                                'active'
+                                this.state.sortType === 'last_ordered'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('last_ordered')}
                             >
@@ -273,7 +275,9 @@ class Mainpage extends Component {
                             </li>
                             <li
                               className={
-                                this.state.sortType === 'by_name' && 'active'
+                                this.state.sortType === 'by_name'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('by_name')}
                             >
@@ -361,7 +365,6 @@ class Mainpage extends Component {
                         )
                       )}
                     </>
-                    )}
                   </div>
                 </div>
               )}
