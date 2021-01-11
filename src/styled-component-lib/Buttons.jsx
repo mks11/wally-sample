@@ -67,7 +67,7 @@ export const ColorfulWallyButton = styled.button`
 export const ActivityButton = ({
   isLoading,
   loadingTitle = 'Submitting...',
-  color,
+  color = 'inherit',
   disabled = true, // default disable while submitting
   children,
   component,
@@ -83,9 +83,6 @@ export const ActivityButton = ({
           All variants and styles will be applied to the 'loadingTitle' as well
          */}
         {loadingTitle}
-        {/** Color "white" for the current 'primary' color
-          throws a warning for not being an inherited property
-        */}
         <CircularProgress
           color={color}
           size={22}
