@@ -151,7 +151,7 @@ export function Address({ address = {} }) {
       if (msg) {
         snackbar.openSnackbar(msg, 'error');
       } else {
-        snackbar.openSnackbar('Failed to update default address.', 'error');
+        snackbar.openSnackbar('Failed to deactivate address.', 'error');
       }
     } finally {
       loading.hide();
@@ -174,14 +174,14 @@ export function Address({ address = {} }) {
       setAnchorEl(null);
       loading.show();
       await userStore.updateAddress(data);
-      snackbar.openSnackbar('Address deactivated successfully!', 'success');
+      snackbar.openSnackbar('Address reactivated successfully!', 'success');
     } catch (error) {
       const msg = getErrorMessage(error);
 
       if (msg) {
         snackbar.openSnackbar(msg, 'error');
       } else {
-        snackbar.openSnackbar('Failed to update default address.', 'error');
+        snackbar.openSnackbar('Failed to reactivate address.', 'error');
       }
     } finally {
       loading.hide();
