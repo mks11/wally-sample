@@ -206,7 +206,8 @@ class Mainpage extends Component {
         title={img.title}
         url={img.url}
       >
-        <Typography gutterBottom>{img.body}</Typography>
+        <Typography>Satisfy that umami craving with</Typography>
+        <Typography gutterBottom>these new meatless jerky snacks.</Typography>
       </HeroSlide>
     ));
 
