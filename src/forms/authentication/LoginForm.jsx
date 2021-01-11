@@ -84,7 +84,12 @@ export default function LoginForm() {
               />
             </Box>
             <Box my={2}>
-              <ActivityButton type="submit" isLoading={isSubmitting} fullWidth>
+              <ActivityButton
+                type="submit"
+                isLoading={isSubmitting}
+                loadingTitle={'Logging in...'}
+                fullWidth
+              >
                 Log In
               </ActivityButton>
             </Box>
@@ -95,9 +100,7 @@ export default function LoginForm() {
         <FBLogin />
       </Box>
       <PrimaryWallyButton variant="outlined" fullWidth onClick={showSignupForm}>
-        <Typography variant="h5" component="span">
-          Sign Up
-        </Typography>
+        Sign Up
       </PrimaryWallyButton>
     </Box>
   );

@@ -38,7 +38,7 @@ export default function SignupForm() {
   return (
     <Box>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ name: '', email: '', password: '' }}
         validationSchema={Yup.object({
           name: Yup.string().required("Name can't be blank."),
           email: Yup.string()
@@ -106,7 +106,12 @@ export default function SignupForm() {
               </Typography>
             </Box>
             <Box my={2}>
-              <ActivityButton type="submit" isLoading={isSubmitting} fullWidth>
+              <ActivityButton
+                type="submit"
+                isLoading={isSubmitting}
+                fullWidth
+                loadingTitle="Signing Up..."
+              >
                 Sign Up
               </ActivityButton>
             </Box>
@@ -117,9 +122,7 @@ export default function SignupForm() {
         <FBLogin />
       </Box>
       <PrimaryWallyButton variant="outlined" onClick={showLoginForm} fullWidth>
-        <Typography variant="h5" component="span">
-          Log In
-        </Typography>
+        Log In
       </PrimaryWallyButton>
     </Box>
   );
