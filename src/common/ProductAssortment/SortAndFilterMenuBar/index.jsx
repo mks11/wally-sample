@@ -2,14 +2,14 @@ import React, { lazy, Suspense } from 'react';
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 import { Typography, Box } from '@material-ui/core';
-import { PrimaryTextButton } from 'styled-component-lib/Buttons';
+import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 const SortAndFilterMenu = lazy(() => import('./../SortAndFilterMenu'));
 
 export default function SortAndFilterMenuBar() {
   return (
     <Box
-      height="48px"
+      height="64px"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
@@ -39,7 +39,9 @@ function OpenMenuButton() {
   };
 
   return (
-    <PrimaryTextButton onClick={handleClick}>Sort & Filter</PrimaryTextButton>
+    <PrimaryWallyButton onClick={handleClick} variant="outlined">
+      Sort & Filter
+    </PrimaryWallyButton>
   );
 }
 
