@@ -20,6 +20,7 @@ const randomlyOrdered = [
   seaMineralsBlueIrisHandSoap, // Price 472,      2020-11-30T16:51:05.284Z
 ];
 
+// Alphabetical Expectations
 const orderedAlphabeticallyASC = [
   citrusLavenderSoapBar,
   laundryConcentratePaste,
@@ -34,6 +35,8 @@ const orderedAlphabeticallyDES = [
   laundryConcentratePaste,
   citrusLavenderSoapBar,
 ];
+
+// Price Expectations
 const orderedByPriceASC = [
   seaMineralsBlueIrisHandSoap,
   citrusLavenderSoapBar,
@@ -48,6 +51,8 @@ const orderedByPriceDES = [
   citrusLavenderSoapBar,
   seaMineralsBlueIrisHandSoap,
 ];
+
+// Newness Expectations
 const orderedByNewnessASC = [
   naturalLaundryDetergentLavender,
   naturalLiquidHandSoapPeppermint,
@@ -68,6 +73,7 @@ describe('sortAlphabetically', () => {
     const result = sortAlphabetically(randomlyOrdered, 'ASCENDING');
     expect(result).toEqual(orderedAlphabeticallyASC);
   });
+
   test('#2 should order by "DESCENDING"', () => {
     const result = sortAlphabetically(randomlyOrdered, 'DESCENDING');
     expect(result).toEqual(orderedAlphabeticallyDES);
@@ -78,11 +84,13 @@ describe('sortAlphabetically', () => {
     expect(result).not.toEqual(orderedAlphabeticallyDES);
   });
 });
+
 describe('sortByNewness', () => {
   test('#1 should order by "ASCENDING"', () => {
     const result = sortByNewness(randomlyOrdered, 'ASCENDING');
     expect(result).toEqual(orderedByNewnessASC);
   });
+
   test('#2 should order by "DESCENDING"', () => {
     const result = sortByNewness(randomlyOrdered, 'DESCENDING');
     expect(result).toEqual(orderedByNewnessDES);
@@ -93,12 +101,14 @@ describe('sortByNewness', () => {
     expect(result).not.toEqual(orderedByNewnessDES);
   });
 });
+
 describe('sortByPrice', () => {
   test('#1 should order by "ASCENDING"', () => {
     const result = sortByPrice(randomlyOrdered, 'ASCENDING');
 
     expect(result).toEqual(orderedByPriceASC);
   });
+
   test('#2 should order by "DESCENDING"', () => {
     const result = sortByPrice(randomlyOrdered, 'DESCENDING');
     expect(result).toEqual(orderedByPriceDES);
