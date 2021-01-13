@@ -45,7 +45,6 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
-  products = [];
 
   // Product filtration - temporary implementation
   filters = [];
@@ -62,51 +61,111 @@ class ProductStore {
     this.filters = [];
   }
 
-  /*** Product Filters NOT COMPLETE */
+  // ================= Product Assortment V2 - WIP =================
+
+  products = [];
+
+  // Sorting Options
+  selectedSortingOption = 'alphabetical';
+
+  setSelectedSortingOption(value) {
+    this.selectedSortingOption = value;
+  }
+
+  // Lifestyle Tag Filters
   availableLifestyles = [];
   selectedLifestyles = [];
-  availableValues = [];
-  selectedValues = [];
-  availableSubcategories = [];
-  selectedSubcategories = [];
-  availableBrands = [];
-  selectedBrands = [];
 
-  /***  Product properties  */
-  get filteredProducts() {
-    if (
-      !this.selectedLifestyles.length &&
-      !this.selectedSubcategories.length &&
-      !this.selectedBrands.length &&
-      !this.selectedValues.length
-    ) {
-      return this.products;
+  addSelectedLifestyle(lifestyle) {
+    if (!this.selectedLifestyles.includes(lifestyle)) {
+      this.selectedLifestyles.push(lifestyle);
     }
+  }
 
-    return this.products.filter(
-      ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
-        const inLifestyles =
-          !this.selectedLifestyles.length ||
-          this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
-
-        const inValues =
-          !this.selectedValues.length ||
-          this.selectedValues.every((val) => values.includes(val));
-
-        const inSubcategory =
-          !this.selectedSubcategories.length ||
-          this.selectedSubcategories.includes[subcategory];
-
-        const inBrands =
-          !this.selectedBrands.length ||
-          this.selectedBrands.includes[vendorFull.name];
-
-        return inLifestyles && inValues && inSubcategory && inBrands;
-      },
+  removeSelectedLifestyle(lifestyle) {
+    this.selectedLifestyles = this.selectedLifestyles.filter(
+      (style) => style !== lifestyle,
     );
   }
 
-  /*** Vendor filtering actions */
+  // Value Tag Filters
+  availableValues = [];
+  selectedValues = [];
+
+  addSelectedValue(value) {
+    if (!this.selectedValues.includes(value)) {
+      this.selectedValues.push(value);
+    }
+  }
+
+  removeSelectedValue(value) {
+    this.selectedValues = this.selectedValues.filter((v) => v !== value);
+  }
+
+  // Subcat Tag Filters
+  availableSubcategories = [];
+  selectedSubcategories = [];
+
+  addSelectedSubcategory(subcategory) {
+    if (!this.selectedSubcategories.includes(subcategory)) {
+      this.selectedSubcategories.push(subcategory);
+    }
+  }
+
+  removeSelectedSubcategory(subcategory) {
+    this.selectedSubcategories = this.selectedSubcategories.filter(
+      (cat) => cat !== subcategory,
+    );
+  }
+
+  // Brand Tag Filters
+  availableBrands = [];
+  selectedBrands = [];
+
+  addSelectedBrand(brand) {
+    if (!this.selectedBrands.includes(brand)) {
+      this.selectedBrands.push(brand);
+    }
+  }
+
+  removeSelectedBrand(brand) {
+    this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
+  }
+
+  get filteredProducts() {
+    return this.products;
+    // if (
+    //   !this.selectedLifestyles.length &&
+    //   !this.selectedSubcategories.length &&
+    //   !this.selectedBrands.length &&
+    //   !this.selectedValues.length
+    // ) {
+    //   return this.products;
+    // }
+
+    // return this.products.filter(
+    //   ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
+    //     const inLifestyles =
+    //       !this.selectedLifestyles.length ||
+    //       this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+    //     const inValues =
+    //       !this.selectedValues.length ||
+    //       this.selectedValues.every((val) => values.includes(val));
+
+    //     const inSubcategory =
+    //       !this.selectedSubcategories.length ||
+    //       this.selectedSubcategories.includes[subcategory];
+
+    //     const inBrands =
+    //       !this.selectedBrands.length ||
+    //       this.selectedBrands.includes[vendorFull.name];
+
+    //     return inLifestyles && inValues && inSubcategory && inBrands;
+    //   },
+    // );
+  }
+
   initializeProductAssortment(assortmentDetails = {}) {
     const {
       products = [],
@@ -122,6 +181,7 @@ class ProductStore {
     this.availableBrands = brands;
   }
 
+  // TODO: Not sure if this is needed.
   resetProductAssortment() {
     this.availableBrands = [];
     this.availableLifestyles = [];
@@ -133,57 +193,31 @@ class ProductStore {
     this.selectedValues = [];
   }
 
-  resetSelectedFilters() {
+  resetProductAssortmentPrefs() {
+    this.selectedSortingOption = 'alphabetical';
     this.selectedBrands = [];
     this.selectedLifestyles = [];
     this.selectedSubcategories = [];
     this.selectedValues = [];
   }
 
-  addSelectedLifestyle(lifestyle) {
-    if (!this.selectedLifestyles.includes(lifestyle)) {
-      this.selectedLifestyles.push(lifestyle);
-    }
+  setProductAssortmentPrefs(prefs) {
+    const {
+      selectedSortingOption,
+      selectedBrands,
+      selectedLifestyles,
+      selectedSubcategories,
+      selectedValues,
+    } = prefs;
+
+    this.selectedSortingOption = selectedSortingOption;
+    this.selectedBrands = selectedBrands;
+    this.selectedLifestyles = selectedLifestyles;
+    this.selectedSubcategories = selectedSubcategories;
+    this.selectedValues = selectedValues;
   }
 
-  removeSelectedLifestyle(lifestyle) {
-    this.selectedLifestyles = this.selectedLifestyles.filter(
-      (style) => style !== lifestyle,
-    );
-  }
-
-  addSelectedSubcategory(subcategory) {
-    if (!this.selectedSubcategories.includes(subcategory)) {
-      this.selectedSubcategories.push(subcategory);
-    }
-  }
-
-  removeSelectedSubcategory(subcategory) {
-    this.selectedSubcategories = this.selectedSubcategories.filter(
-      (cat) => cat !== subcategory,
-    );
-  }
-
-  addSelectedBrand(brand) {
-    if (!this.selectedBrands.includes(brand)) {
-      this.selectedBrands.push(brand);
-    }
-  }
-
-  removeSelectedBrand(brand) {
-    this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
-  }
-
-  addSelectedValue(value) {
-    if (!this.selectedValues.includes(value)) {
-      this.selectedValues.push(value);
-    }
-  }
-
-  removeSelectedValue(value) {
-    this.selectedValues = this.selectedValues.filter((v) => v !== value);
-  }
-  /*** Ends Vendor filtering actions */
+  // ================== End Product Assortment Filtration V2 ==================
 
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id;
@@ -418,31 +452,38 @@ decorate(ProductStore, {
   currentSearchFilter: observable,
   filters: observable,
 
-  /*** Vendor
-   * Vendor observables */
+  // Product Assortment V2
   products: observable,
+
+  selectedSortingOption: observable,
+  setSelectedSortingOption: action,
+
   availableLifestyles: observable,
   selectedLifestyles: observable,
-  availableSubcategories: observable,
-  selectedSubcategories: observable,
-  availableBrands: observable,
-  selectedBrands: observable,
-  availableValues: observable,
-  selectedValues: observable,
-  /*** Vendor computed */
-  filteredProducts: computed,
-  /*** Vendor actions */
-  initializeProductAssortment: action,
-  resetProductAssortment: action,
-  resetSelectedFilters: action,
   addSelectedLifestyle: action,
   removeSelectedLifestyle: action,
+
+  availableSubcategories: observable,
+  selectedSubcategories: observable,
   addSelectedSubcategory: action,
   removeSelectedSubcategory: action,
+
+  availableBrands: observable,
+  selectedBrands: observable,
   addSelectedBrand: action,
   removeSelectedBrand: action,
+
+  availableValues: observable,
+  selectedValues: observable,
   addSelectedValue: action,
   removeSelectedValue: action,
+
+  filteredProducts: computed,
+  initializeProductAssortment: action,
+  resetProductAssortment: action,
+  resetProductAssortmentPrefs: action,
+  setProductAssortmentPrefs: action,
+
   /** Ends Vendor */
   resetActiveProduct: action,
   showModal: action,
