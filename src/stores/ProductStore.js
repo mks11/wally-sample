@@ -3,6 +3,9 @@ import { observable, decorate, action, computed } from 'mobx';
 // API
 import { getImpulseProducts } from 'api/product';
 
+// Sorting Config
+import sortingConfig from 'common/ProductAssortment/SortAndFilterMenu/sorting-config';
+
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
@@ -133,7 +136,44 @@ class ProductStore {
   }
 
   get filteredProducts() {
-    return this.products;
+    var products = this.products;
+    const sortingOption = this.selectedSortingOption;
+
+    if (sortingOption) {
+      const selectedSortingConfig = sortingConfig.find(
+        (option) => option.value === sortingOption,
+      );
+
+      if (selectedSortingConfig) {
+        const { sortingFunction } = selectedSortingConfig;
+
+        // Separate in stock and out of stock products
+
+        let inStockProducts = products.filter((p) => {
+          const { inventory } = p;
+          if (!inventory || !inventory.length) return false;
+          return p.inventory[0].current_inventory > 0;
+        });
+
+        let outOfStockProducts = products.filter((p) => {
+          const { inventory } = p;
+          if (!inventory || !inventory.length) return false;
+          return p.inventory[0].current_inventory === 0;
+        });
+
+        // Sort both in stock and out of stock products
+
+        inStockProducts = sortingFunction(inStockProducts);
+        outOfStockProducts = sortingFunction(outOfStockProducts);
+
+        // Push out of stock products to end of product assortment
+
+        products = inStockProducts.concat(outOfStockProducts);
+      }
+    }
+
+    return products;
+
     // if (
     //   !this.selectedLifestyles.length &&
     //   !this.selectedSubcategories.length &&
