@@ -308,7 +308,7 @@ class Mainpage extends Component {
                       {/* displayed from 481px and up */}
                       <DesktopCarouselWrapper my={2} zIndex={1}>
                         <ImageCarousel
-                          dots={hasDots}
+                          dots={HAS_DOTS}
                           keyName={'featured-brands'}
                           height={675}
                           slides={slides}
@@ -318,7 +318,7 @@ class Mainpage extends Component {
                       {/* displayed from 480px and down */}
                       <MobileCarouselWrapper my={2} zIndex={1}>
                         <ImageCarousel
-                          dots={hasDots}
+                          dots={HAS_DOTS}
                           keyName={'featured-brands'}
                           height={480}
                           slides={slides}
