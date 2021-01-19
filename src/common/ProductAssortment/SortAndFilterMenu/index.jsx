@@ -18,23 +18,25 @@ import {
   Typography,
 } from '@material-ui/core';
 
-// Sorting Options
+// Sorting and Filtration
+import { cookieName } from 'templates/ShoppingPage';
 import sortingConfig from './sorting-config';
 
 // Styled Components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 export default function SortAndFilterMenu() {
-  const cookieName = 'productAssortmentPrefs';
   const [cookies, setCookie] = useCookies([cookieName]);
-  const productAssortmentPrefs = cookies[cookieName];
+  var productAssortmentPrefs = cookies[cookieName];
+  if (!productAssortmentPrefs) productAssortmentPrefs = {};
+
   const {
-    pathname,
-    selectedSortingOption,
-    selectedBrands,
-    selectedLifestyles,
-    selectedSubcategories,
-    selectedValues,
+    pathname = '',
+    selectedSortingOption = '',
+    selectedBrands = [],
+    selectedLifestyles = [],
+    selectedSubcategories = [],
+    selectedValues = [],
   } = productAssortmentPrefs;
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -45,21 +47,11 @@ export default function SortAndFilterMenu() {
   return (
     <Formik
       initialValues={{
-        selectedSortingOption: selectedSortingOption
-          ? selectedSortingOption
-          : '',
-        selectedBrands:
-          selectedBrands && selectedBrands.length ? selectedBrands : [],
-        selectedLifestyles:
-          selectedLifestyles && selectedLifestyles.length
-            ? selectedLifestyles
-            : [],
-        selectedSubcategories:
-          selectedSubcategories && selectedSubcategories.length
-            ? selectedSubcategories
-            : [],
-        selectedValues:
-          selectedValues && selectedValues.length ? selectedValues : [],
+        selectedSortingOption,
+        selectedBrands,
+        selectedLifestyles,
+        selectedSubcategories,
+        selectedValues,
       }}
       validationSchema={Yup.object({
         selectedSortingOption: Yup.string().required(),
@@ -72,7 +64,6 @@ export default function SortAndFilterMenu() {
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={6}>
               <PrimaryWallyButton
-                type="reset"
                 variant="outlined"
                 disabled={isSubmitting}
                 fullWidth

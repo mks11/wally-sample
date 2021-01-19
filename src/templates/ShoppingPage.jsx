@@ -13,16 +13,16 @@ import ProductAssortment from 'common/ProductAssortment';
 import { Container } from '@material-ui/core';
 
 // MobX
+import { initialProductAssortmentPrefs } from 'stores/ProductStore';
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
 // React Router
 import { withRouter } from 'react-router-dom';
 
-import { initialProductAssortmentPrefs } from 'stores/ProductStore';
+export const cookieName = 'productAssortmentPrefs';
 
 function ShoppingPage({ children, pathname, query }) {
-  const cookieName = 'productAssortmentPrefs';
   const [cookies, setCookie] = useCookies([cookieName]);
   const productAssortmentPrefs = cookies[cookieName];
 
