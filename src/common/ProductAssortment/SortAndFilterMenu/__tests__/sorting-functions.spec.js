@@ -1,9 +1,9 @@
+import { ASCENDING, DESCENDING } from '../sorting-config';
+
 import {
   sortAlphabetically,
   sortByNewness,
   sortByPrice,
-  ASCENDING,
-  DESCENDING,
 } from './../sorting-functions';
 
 import {

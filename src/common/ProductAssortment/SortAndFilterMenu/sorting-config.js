@@ -4,27 +4,45 @@ import {
   sortByPrice,
 } from './sorting-functions';
 
+// Sorting Order
+export const ASCENDING = 'ASCENDING';
+export const DESCENDING = 'DESCENDING';
+
+// Sorting Options
+const A_TO_Z = 'ALPHABETICAL_ASCENDING';
+// TODO: Uncomment when needed.
+// const Z_TO_A = 'ALPHABETICAL_DESCENDING';
+const NEWEST = 'NEWNESS_DESCENDING';
+const LOW_TO_HIGH_PRICE = 'PRICE_ASCENDING';
+const HIGH_TO_LOW_PRICE = 'PRICE_DESCENDING';
+
+export const DEFAULT_SORTING_OPTION = A_TO_Z;
+
 const sortingConfig = [
   {
     label: 'A-Z',
-    value: 'alphabetical',
-    sortingFunction: (products) => sortAlphabetically(products, 'ASCENDING'),
+    value: A_TO_Z,
+    sortingFunction: (products) => sortAlphabetically(products, ASCENDING),
   },
   {
     label: 'Newest',
-    value: 'newest',
-    sortingFunction: (products) => sortByNewness(products, 'DESCENDING'),
+    value: NEWEST,
+    sortingFunction: (products) => sortByNewness(products, DESCENDING),
   },
   {
     label: 'Price (Low to High)',
-    value: 'priceLowToHigh',
-    sortingFunction: (products) => sortByPrice(products, 'ASCENDING'),
+    value: LOW_TO_HIGH_PRICE,
+    sortingFunction: (products) => sortByPrice(products, ASCENDING),
   },
   {
     label: 'Price (High to Low)',
-    value: 'priceHighToLow',
-    sortingFunction: (products) => sortByPrice(products, 'DESCENDING'),
+    value: HIGH_TO_LOW_PRICE,
+    sortingFunction: (products) => sortByPrice(products, DESCENDING),
   },
 ];
 
 export default sortingConfig;
+
+export const POSSIBLE_SORTING_OPTIONS = sortingConfig.map(
+  (option) => option.value,
+);

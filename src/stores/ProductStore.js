@@ -4,7 +4,10 @@ import { observable, decorate, action, computed } from 'mobx';
 import { getImpulseProducts } from 'api/product';
 
 // Sorting Config
-import sortingConfig from 'common/ProductAssortment/SortAndFilterMenu/sorting-config';
+import sortingConfig, {
+  DEFAULT_SORTING_OPTION,
+  POSSIBLE_SORTING_OPTIONS,
+} from 'common/ProductAssortment/SortAndFilterMenu/sorting-config';
 
 import {
   API_GET_PRODUCT_DETAIL,
@@ -21,6 +24,13 @@ import UserStore from './UserStore';
 import axios from 'axios';
 import moment from 'moment';
 
+export const initialProductAssortmentPrefs = {
+  selectedSortingOption: DEFAULT_SORTING_OPTION,
+  selectedBrands: [],
+  selectedLifestyles: [],
+  selectedSubcategories: [],
+  selectedValues: [],
+};
 class ProductStore {
   main_display = [];
   historical_products = [];
@@ -69,11 +79,7 @@ class ProductStore {
   products = [];
 
   // Sorting Options
-  selectedSortingOption = 'alphabetical';
-
-  setSelectedSortingOption(value) {
-    this.selectedSortingOption = value;
-  }
+  selectedSortingOption = DEFAULT_SORTING_OPTION;
 
   // Lifestyle Tag Filters
   availableLifestyles = [];
@@ -206,49 +212,48 @@ class ProductStore {
     // );
   }
 
-  initializeProductAssortment(assortmentDetails = {}) {
-    const {
-      products = [],
-      lifestyles = [],
-      values = [],
-      subcategories = [],
-      brands = [],
-    } = assortmentDetails;
+  initializeProductAssortment({
+    products = [],
+    brands = [],
+    lifestyles = [],
+    subcategories = [],
+    values = [],
+  }) {
     this.products = products;
-    this.availableLifestyles = lifestyles;
-    this.availableValues = values;
-    this.availableSubcategories = subcategories;
     this.availableBrands = brands;
-  }
-
-  // TODO: Not sure if this is needed.
-  resetProductAssortment() {
-    this.availableBrands = [];
-    this.availableLifestyles = [];
-    this.availableSubcategories = [];
-    this.availableValues = [];
-    this.selectedBrands = [];
-    this.selectedLifestyles = [];
-    this.selectedSubcategories = [];
-    this.selectedValues = [];
+    this.availableLifestyles = lifestyles;
+    this.availableSubcategories = subcategories;
+    this.availableValues = values;
   }
 
   resetProductAssortmentPrefs() {
-    this.selectedSortingOption = 'alphabetical';
-    this.selectedBrands = [];
-    this.selectedLifestyles = [];
-    this.selectedSubcategories = [];
-    this.selectedValues = [];
-  }
-
-  setProductAssortmentPrefs(prefs) {
     const {
       selectedSortingOption,
       selectedBrands,
       selectedLifestyles,
       selectedSubcategories,
       selectedValues,
-    } = prefs;
+    } = initialProductAssortmentPrefs;
+
+    this.selectedSortingOption = selectedSortingOption;
+    this.selectedBrands = selectedBrands;
+    this.selectedLifestyles = selectedLifestyles;
+    this.selectedSubcategories = selectedSubcategories;
+    this.selectedValues = selectedValues;
+  }
+
+  setProductAssortmentPrefs({
+    selectedSortingOption = DEFAULT_SORTING_OPTION,
+    selectedBrands = [],
+    selectedLifestyles = [],
+    selectedSubcategories = [],
+    selectedValues = [],
+  }) {
+    // This situation is unlikely, but may assist in debugging.
+    // TODO: extend as needed.
+    if (!POSSIBLE_SORTING_OPTIONS.includes(selectedSortingOption)) {
+      console.error(`Invalid sorting value: ${selectedSortingOption}`);
+    }
 
     this.selectedSortingOption = selectedSortingOption;
     this.selectedBrands = selectedBrands;
@@ -496,7 +501,6 @@ decorate(ProductStore, {
   products: observable,
 
   selectedSortingOption: observable,
-  setSelectedSortingOption: action,
 
   availableLifestyles: observable,
   selectedLifestyles: observable,
@@ -520,7 +524,6 @@ decorate(ProductStore, {
 
   filteredProducts: computed,
   initializeProductAssortment: action,
-  resetProductAssortment: action,
   resetProductAssortmentPrefs: action,
   setProductAssortmentPrefs: action,
 

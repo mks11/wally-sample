@@ -1,7 +1,5 @@
 import { sortByTimestampDes } from 'utils';
-
-export const ASCENDING = 'ASCENDING';
-export const DESCENDING = 'DESCENDING';
+import { ASCENDING } from './sorting-config';
 
 export function sortAlphabetically(products, order = ASCENDING) {
   return [...products].sort((p1, p2) => {

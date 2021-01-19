@@ -19,13 +19,7 @@ import { useStores } from 'hooks/mobx';
 // React Router
 import { withRouter } from 'react-router-dom';
 
-export const initialProductAssortmentPrefs = {
-  selectedSortingOption: 'alphabetical',
-  selectedBrands: [],
-  selectedLifestyles: [],
-  selectedSubcategories: [],
-  selectedValues: [],
-};
+import { initialProductAssortmentPrefs } from 'stores/ProductStore';
 
 function ShoppingPage({ children, pathname, query }) {
   const cookieName = 'productAssortmentPrefs';
@@ -41,7 +35,9 @@ function ShoppingPage({ children, pathname, query }) {
   } = useStores();
 
   useEffect(() => {
+    // TODO: Remove when finished with this feature
     console.log(productAssortmentPrefs);
+
     let prefs = initialProductAssortmentPrefs;
     // If cookie doesn't exist yet or page has changed, initialize sort and filter options
     if (
