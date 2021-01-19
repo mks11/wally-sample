@@ -233,7 +233,7 @@ class Mainpage extends Component {
                 </div>
               </div>
 
-              {id === 'buyagain' && !this.productStore.search.state ? (
+              {id === 'buyagain' ? (
                 <div className="col-xl-9 col-lg-9 col-md-12">
                   <div className="product-content-right">
                     <div className="product-breadcrumb">
@@ -244,8 +244,9 @@ class Mainpage extends Component {
                           <ul>
                             <li
                               className={
-                                this.state.sortType === 'times_bought' &&
-                                'active'
+                                this.state.sortType === 'times_bought'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('times_bought')}
                             >
@@ -253,8 +254,9 @@ class Mainpage extends Component {
                             </li>
                             <li
                               className={
-                                this.state.sortType === 'last_ordered' &&
-                                'active'
+                                this.state.sortType === 'last_ordered'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('last_ordered')}
                             >
@@ -262,7 +264,9 @@ class Mainpage extends Component {
                             </li>
                             <li
                               className={
-                                this.state.sortType === 'by_name' && 'active'
+                                this.state.sortType === 'by_name'
+                                  ? 'active'
+                                  : ''
                               }
                               onClick={() => this.handleSort('by_name')}
                             >
@@ -291,103 +295,67 @@ class Mainpage extends Component {
                     </div>
                   </div>
                 </div>
-              ) : null}
-
-              {this.productStore.search.state ? (
+              ) : (
                 <div className="col-xl-9 col-lg-9 col-md-12">
                   <div className="product-content-right">
-                    {ads2 && (
-                      <img src={APP_URL + ads2} className="img-fluid" alt="" />
-                    )}
+                    {/* {this.props.location.pathname.split('/')[1] ===
+                    'packaging-blank' ? (
+                      <ProductWithPackaging
+                        packagingId={this.props.match.params.id}
+                      />
+                    ) : ( */}
+                    <>
+                      {/* displayed from 481px and up */}
+                      <DesktopCarouselWrapper my={2} zIndex={1}>
+                        <ImageCarousel
+                          dots={HAS_DOTS}
+                          keyName={'featured-brands'}
+                          height={675}
+                          slides={slides}
+                          width={1200}
+                        />
+                      </DesktopCarouselWrapper>
+                      {/* displayed from 480px and down */}
+                      <MobileCarouselWrapper my={2} zIndex={1}>
+                        <ImageCarousel
+                          dots={HAS_DOTS}
+                          keyName={'featured-brands'}
+                          height={480}
+                          slides={slides}
+                          width={480}
+                        />
+                      </MobileCarouselWrapper>
+                      {ads2 && (
+                        <img
+                          src={APP_URL + ads2.image}
+                          className="img-fluid"
+                          alt=""
+                        />
+                      )}
 
-                    <div className="row">
-                      {this.productStore.search.display
-                        .filter((p) =>
-                          this.productStore.filters.length
-                            ? !this.productStore.filters.some((f) => {
-                                if (p.allergens && p.tags) {
-                                  let [t, v] = f.split(',');
-                                  if (t === 'allergen')
-                                    return p.allergens.includes(v);
-                                  if (t === 'tag') return !p.tags.includes(v);
-                                }
-                                return true;
-                              })
-                            : true,
+                      {this.state.categoryTypeMode === 'limit' ? (
+                        <div className="row">
+                          {this.productStore.main_display.map(
+                            (category, index) => (
+                              <CategoryCard key={index} category={category} />
+                            ),
+                          )}
+                        </div>
+                      ) : (
+                        this.productStore.main_display.map(
+                          (category, index) => (
+                            <ProductList
+                              key={index}
+                              display={category}
+                              mode={this.state.categoryTypeMode}
+                              deliveryTimes={this.state.deliveryTimes}
+                            />
+                          ),
                         )
-                        .map((product, index) => (
-                          <Product
-                            key={index}
-                            product={product}
-                            deliveryTimes={this.state.deliveryTimes}
-                          />
-                        ))}
-                    </div>
+                      )}
+                    </>
                   </div>
                 </div>
-              ) : (
-                id !== 'buyagain' && (
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="product-content-right">
-                      {/* {this.props.location.pathname.split('/')[1] ===
-                      'packaging-blank' ? (
-                        <ProductWithPackaging
-                          packagingId={this.props.match.params.id}
-                        />
-                      ) : ( */}
-                      <>
-                        {/* displayed from 481px and up */}
-                        <DesktopCarouselWrapper my={2} zIndex={1}>
-                          <ImageCarousel
-                            dots={HAS_DOTS}
-                            keyName={'featured-brands'}
-                            height={675}
-                            slides={slides}
-                            width={1200}
-                          />
-                        </DesktopCarouselWrapper>
-                        {/* displayed from 480px and down */}
-                        <MobileCarouselWrapper my={2} zIndex={1}>
-                          <ImageCarousel
-                            dots={HAS_DOTS}
-                            keyName={'featured-brands'}
-                            height={480}
-                            slides={slides}
-                            width={480}
-                          />
-                        </MobileCarouselWrapper>
-                        {ads2 && (
-                          <img
-                            src={APP_URL + ads2.image}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        )}
-
-                        {this.state.categoryTypeMode === 'limit' ? (
-                          <div className="row">
-                            {this.productStore.main_display.map(
-                              (category, index) => (
-                                <CategoryCard key={index} category={category} />
-                              ),
-                            )}
-                          </div>
-                        ) : (
-                          this.productStore.main_display.map(
-                            (category, index) => (
-                              <ProductList
-                                key={index}
-                                display={category}
-                                mode={this.state.categoryTypeMode}
-                                deliveryTimes={this.state.deliveryTimes}
-                              />
-                            ),
-                          )
-                        )}
-                      </>
-                    </div>
-                  </div>
-                )
               )}
             </div>
           </Container>

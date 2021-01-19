@@ -22,7 +22,10 @@ import LoginForm from 'forms/authentication/LoginForm';
 
 // Styled Components
 import { Label } from 'styled-component-lib/InputLabel';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import {
+  PrimaryWallyButton,
+  ActivityButton,
+} from 'styled-component-lib/Buttons';
 import { InternalWallyLink } from 'styled-component-lib/Links';
 
 import * as Yup from 'yup';
@@ -35,7 +38,7 @@ export default function SignupForm() {
   return (
     <Box>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ name: '', email: '', password: '' }}
         validationSchema={Yup.object({
           name: Yup.string().required("Name can't be blank."),
           email: Yup.string()
@@ -46,77 +49,80 @@ export default function SignupForm() {
         enableReinitialize={true}
         onSubmit={signup}
       >
-        <Form>
-          <Typography variant="h1" gutterBottom>
-            Sign Up
-          </Typography>
-          <Box my={2}>
-            <Label>Name</Label>
-            <TextInput
-              name="name"
-              variant="outlined"
-              color="primary"
-              placeholder="Full name"
-            />
-          </Box>
-          <Box my={2}>
-            <Label>Email Address</Label>
-            <TextInput
-              name="email"
-              variant="outlined"
-              color="primary"
-              placeholder="Email Address"
-              errorMsg={emailError}
-              setErrorMsg={setEmailError}
-            />
-          </Box>
-          <Box my={2}>
-            <Label>Password</Label>
-            <PasswordInput
-              name="password"
-              variant="outlined"
-              color="primary"
-              placeholder="Password"
-              errorMsg={passwordError}
-              setErrorMsg={setPasswordError}
-            />
-          </Box>
-          <Box my={2}>
-            <Typography variant="body1" gutterBottom>
-              By signing up, you agree to our{' '}
-              <InternalWallyLink
-                target="_blank"
-                rel="noopener noreferrer"
-                to={'/tnc'}
-              >
-                <i>Terms of Service</i>
-              </InternalWallyLink>{' '}
-              &nbsp;and &nbsp;
-              <InternalWallyLink
-                target="_blank"
-                rel="noopener noreferrer"
-                to={'/privacy'}
-              >
-                <i>Privacy Policy.</i>
-              </InternalWallyLink>
+        {({ isSubmitting }) => (
+          <Form>
+            <Typography variant="h1" gutterBottom>
+              Sign Up
             </Typography>
-          </Box>
-          <Box my={2}>
-            <PrimaryWallyButton type="submit" fullWidth>
-              <Typography variant="h5" component="span">
-                Sign Up
+            <Box my={2}>
+              <Label>Name</Label>
+              <TextInput
+                name="name"
+                variant="outlined"
+                color="primary"
+                placeholder="Full name"
+              />
+            </Box>
+            <Box my={2}>
+              <Label>Email Address</Label>
+              <TextInput
+                name="email"
+                variant="outlined"
+                color="primary"
+                placeholder="Email Address"
+                errorMsg={emailError}
+                setErrorMsg={setEmailError}
+              />
+            </Box>
+            <Box my={2}>
+              <Label>Password</Label>
+              <PasswordInput
+                name="password"
+                variant="outlined"
+                color="primary"
+                placeholder="Password"
+                errorMsg={passwordError}
+                setErrorMsg={setPasswordError}
+              />
+            </Box>
+            <Box my={2}>
+              <Typography variant="body1" gutterBottom>
+                By signing up, you agree to our{' '}
+                <InternalWallyLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  to={'/tnc'}
+                >
+                  <i>Terms of Service</i>
+                </InternalWallyLink>{' '}
+                &nbsp;and &nbsp;
+                <InternalWallyLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  to={'/privacy'}
+                >
+                  <i>Privacy Policy.</i>
+                </InternalWallyLink>
               </Typography>
-            </PrimaryWallyButton>
-          </Box>
-        </Form>
+            </Box>
+            <Box my={2}>
+              <ActivityButton
+                type="submit"
+                isLoading={isSubmitting}
+                fullWidth
+                loadingTitle="Signing Up..."
+              >
+                Sign Up
+              </ActivityButton>
+            </Box>
+          </Form>
+        )}
       </Formik>
       <Box my={2}>
         <FBLogin />
       </Box>
-      <PrimaryWallyButton variant="outlined" fullWidth onClick={showLoginForm}>
-        <Typography variant="h5" component="span">
-          Log In
-        </Typography>
+      <PrimaryWallyButton variant="outlined" onClick={showLoginForm} fullWidth>
+        Log In
       </PrimaryWallyButton>
     </Box>
   );
