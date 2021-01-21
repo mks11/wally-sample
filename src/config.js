@@ -124,8 +124,6 @@ export const API_UPLOAD_COPACKING_QR_CODES =
   BASE_URL + '/api/admin/co-packing/qr-codes';
 export const API_GET_UPC_INFO = BASE_URL + '/api/admin/co-packing/vendor-upc';
 
-export const API_RETAIL_UPLOAD_PRODUCTS =
-  BASE_URL + '/api/admin/retail/products';
 export const API_RETAIL_UPLOAD_VENDORS = BASE_URL + '/api/admin/retail/vendors';
 export const API_RETAIL_UPLOAD_CATEGORIES =
   BASE_URL + '/api/admin/retail/internal';
