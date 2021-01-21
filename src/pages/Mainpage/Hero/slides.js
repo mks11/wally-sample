@@ -4,7 +4,7 @@ import React from 'react';
 import { ArrowForwardIcon } from 'Icons';
 
 // Material UI
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // Prop Types
 import PropTypes from 'prop-types';
@@ -12,15 +12,9 @@ import PropTypes from 'prop-types';
 // Pure React Carousel
 import { Image } from 'pure-react-carousel';
 
-// React Router
-import { Link } from 'react-router-dom';
-
 // Styled Components
 import styled from 'styled-components';
 import { PrimaryTextLink } from 'styled-component-lib/Links';
-
-// Styles
-import styles from './slides.module.css';
 
 const SlideOverlayWrapper = styled(Box)`
   @media only screen and (min-width: 992px) {
