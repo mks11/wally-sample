@@ -100,23 +100,21 @@ const HeroBodyWrapper = styled.div`
   position: absolute;
 
   @media only screen and (min-width: 481px) {
-    height: 100%;
     justify-content: center;
-    left: 0;
-    top: 0;
   }
 `;
 
 const HeroOverline = styled.p`
   font-family: 'Sofia Pro', sans-serif;
   font-weight: bold;
-  font-size: 1.246rem;
+  font-size: 1.125rem;
   color: #000;
+
   @media only screen and (min-width: 768px) {
-    font-size: 1.4239rem;
+    font-size: 1.266rem;
   }
   @media only screen and (min-width: 992px) {
-    font-size: 1.602rem;
+    font-size: 1.424rem;
   }
 
   margin-bottom: 0;
@@ -124,13 +122,14 @@ const HeroOverline = styled.p`
 
 const HeroTitle = styled.h1`
   font-family: 'Clearface', serif;
-  font-size: 1.416rem;
+  font-size: 1.266rem;
   color: #000;
+
   @media only screen and (min-width: 768px) {
-    font-size: 1.609rem;
+    font-size: 1.424rem;
   }
   @media only screen and (min-width: 992px) {
-    font-size: 1.802rem;
+    font-size: 1.602rem;
   }
 
   margin-bottom: 0.75rem;
@@ -141,10 +140,11 @@ const HeroBody = styled(Typography)`
 `;
 
 const FBWPageLink = styled(PrimaryTextLink)`
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: bold;
   padding: 0.7rem 1rem;
   display: flex;
+  justify-content: center;
   align-items: center;
   max-width: 135px;
 `;
