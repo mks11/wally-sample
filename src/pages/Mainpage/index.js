@@ -16,17 +16,18 @@ import { Image } from 'pure-react-carousel';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
-import Product from './Product';
-import ProductList from './ProductList';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
+import Filters from './ProductTop/Filters';
+import Product from './Product';
+import ProductList from './ProductList';
+
 // import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 // Images
-import sidePanelSticker from 'images/sidepanel_sticker.png';
 import { HAS_DOTS, heroImages } from './Hero/config';
 
 var DesktopCarouselWrapper = styled(Box)`
@@ -219,8 +220,11 @@ class Mainpage extends Component {
               <div className="col-xl-3 col-lg-3 d-xl-block d-lg-block d-md-none d-sm-none d-none">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
+                    <Typography component="p" gutterBottom variant="h4">
+                      Filter
+                    </Typography>
                     <div className="mb-4">
-                      <img src={sidePanelSticker} alt="" />
+                      <Filters />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />

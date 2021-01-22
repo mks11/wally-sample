@@ -35,7 +35,7 @@ function Filters() {
   return (
     <>
       <Box mb={2}>
-        <Typography component="p" gutterBottom variant="h5">
+        <Typography component="p" variant="h5">
           Shop by lifestyle:
         </Typography>
         <FormGroup row>
@@ -45,7 +45,7 @@ function Filters() {
         </FormGroup>
       </Box>
       <Box>
-        <Typography component="p" gutterBottom variant="h5">
+        <Typography component="p" variant="h5">
           Shop by values:
         </Typography>
         <FormGroup row>
@@ -68,6 +68,7 @@ const useStyles = makeStyles(() => ({
   },
   label: {
     width: '100%',
+    fontSize: '15px',
   },
 }));
 
@@ -90,6 +91,7 @@ const Filter = observer(({ filter }) => {
       productStore.removeFilter(valueIndex);
     }
   };
+
   return (
     <FormControlLabel
       classes={{ root: classes.root, label: classes.label }}

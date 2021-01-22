@@ -1,15 +1,21 @@
 import React, { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Container } from 'reactstrap';
+
+// Custom Components
+import SearchBar from './SearchBar';
+
+// Images
+import reorder from 'images/reorder.png';
+
+// Material UI
+import { Container } from '@material-ui/core';
 
 // MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
 
-import Filters from './Filters';
-import SearchBar from './SearchBar';
-
-import reorder from 'images/reorder.png';
+// ReactStrap
+import { Row, Col } from 'reactstrap';
 
 const MobileSearch = lazy(() => import('pages/Mainpage/MobileSearch'));
 
@@ -32,11 +38,8 @@ function ProductTop({ onSearch }) {
 
   return (
     <div className="product-top">
-      <Container>
+      <Container maxWidth="sm">
         <Row>
-          <Col className="d-none d-lg-block col-4">
-            <Filters />
-          </Col>
           <Col>
             <div className="d-flex align-items-start">
               <SearchBar />
