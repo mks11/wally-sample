@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Cookies
 import { useCookies } from 'react-cookie';
@@ -15,7 +15,9 @@ import {
   makeStyles,
   Radio,
   RadioGroup,
-  Typography,
+  ListItemText,
+  ListItem,
+  Collapse,
 } from '@material-ui/core';
 
 // Sorting and Filtration
@@ -28,6 +30,7 @@ import sortingConfig from './sorting-config';
 // Styled Components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 import { useLocation } from 'react-router-dom';
+import { Add, Remove } from '@material-ui/icons';
 
 export default function SortAndFilterMenu() {
   const [cookies, setCookie] = useCookies([cookieName]);
@@ -96,10 +99,36 @@ export default function SortAndFilterMenu() {
               </PrimaryWallyButton>
             </Grid>
           </Grid>
-          <Field name="selectedSortingOption" component={SortingOptionGroup} />
+
+          <CollapsableItem label="Sort">
+            <Field
+              name="selectedSortingOption"
+              component={SortingOptionGroup}
+            />
+          </CollapsableItem>
         </Form>
       )}
     </Formik>
+  );
+}
+
+function CollapsableItem({ label, children }) {
+  const [show, setShow] = useState(true);
+
+  const handleToggle = () => {
+    setShow((show) => !show);
+  };
+
+  return (
+    <>
+      <ListItem button onClick={handleToggle}>
+        <ListItemText primary={label} color="primary" />
+        {show ? <Remove /> : <Add />}
+      </ListItem>
+      <Collapse in={show} timeout="auto" unmountOnExit>
+        <Box paddingX={4}>{children}</Box>
+      </Collapse>
+    </>
   );
 }
 
