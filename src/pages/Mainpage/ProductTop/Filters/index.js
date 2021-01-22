@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// Material Design
+// Material UI
 import {
   Box,
   Checkbox,
@@ -36,7 +36,7 @@ function Filters() {
     <>
       <Box mb={2}>
         <Typography component="p" gutterBottom variant="h5">
-          Filter by lifestyle:
+          Shop by lifestyle:
         </Typography>
         <FormGroup row>
           {LIFESTYLE_FILTERS.map((f) => (
@@ -46,7 +46,7 @@ function Filters() {
       </Box>
       <Box>
         <Typography component="p" gutterBottom variant="h5">
-          Filter by values:
+          Shop by values:
         </Typography>
         <FormGroup row>
           {VALUE_FILTERS.map((f) => (
