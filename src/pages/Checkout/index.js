@@ -381,7 +381,13 @@ const OrderSummary = observer(() => {
   const { checkout, modalV2 } = useStores();
 
   // Order summary state
-  const { order } = checkout;
+  const { order = {} } = checkout;
+  const {
+    applied_packaging_balance = 0,
+    applied_store_credit = 0,
+    promo_discount = 0,
+  } = order;
+
   const cart_items = order && order.cart_items ? order.cart_items : [];
   const hasFreeShipping =
     order &&
@@ -390,10 +396,12 @@ const OrderSummary = observer(() => {
   const wasTaxed =
     order && typeof order.tax_amount === 'number' && +order.tax_amount;
   const orderTotal = order && order.total && order.total / 100;
-  const hasDiscount =
-    (order && order.applied_packaging_balance) ||
-    order.applied_store_credit ||
-    (order.applied_promo_codes && order.applied_promo_codes.length);
+
+  // Discounts
+  const totalDiscount =
+    applied_packaging_balance + applied_store_credit + promo_discount;
+  const hasDiscount = totalDiscount > 0;
+
   const packagingUsed =
     order && order.packaging_used ? order.packaging_used : [];
 
@@ -503,7 +511,7 @@ const OrderSummary = observer(() => {
             !wasTaxed ? theme.palette.success.main : theme.palette.text.main
           }
         >
-          <Typography>Tax</Typography>
+          <Typography color="textPrimary">Tax</Typography>
           <Typography>
             {wasTaxed ? formatMoney(order.tax_amount / 100) : 'None'}
           </Typography>
@@ -519,66 +527,12 @@ const OrderSummary = observer(() => {
               : theme.palette.text.main
           }
         >
-          <Typography gutterBottom={hasDiscount ? true : false}>
-            Shipping
-          </Typography>
-          <Typography gutterBottom={hasDiscount ? true : false}>
+          <Typography color="textPrimary">Shipping</Typography>
+          <Typography>
             {hasFreeShipping
               ? 'Free'
               : formatMoney(order.delivery_amount / 100)}
           </Typography>
-        </Box>
-        {hasDiscount && (
-          <>
-            <Box mb={2}>
-              <Divider />
-            </Box>
-            <Typography component="p" variant="h6" gutterBottom>
-              Discounts and Promotions
-            </Typography>
-          </>
-        )}
-        <Box color={theme.palette.success.main}>
-          {order.applied_packaging_balance === 0 ? null : (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography>Packaging Deposit Balance</Typography>
-              <Typography>
-                -{formatMoney(order.applied_packaging_balance / 100)}
-              </Typography>
-            </Box>
-          )}
-
-          {order.applied_store_credit === 0 ? null : (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography>Store Credit</Typography>
-              <Typography>
-                -{formatMoney(order.applied_store_credit / 100)}
-              </Typography>
-            </Box>
-          )}
-
-          {order.promo_discount === 0 ? null : (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography>Promotional Discounts</Typography>
-
-              <Typography>
-                -{formatMoney(order.promo_discount / 100)}
-              </Typography>
-            </Box>
-          )}
-          <AppliedPromoCodes />
         </Box>
         <Box
           display="flex"
@@ -586,14 +540,90 @@ const OrderSummary = observer(() => {
           justifyContent="space-between"
           mt={2}
         >
-          <Typography>Subtotal</Typography>
-          <Typography>
+          <Typography gutterBottom>Subtotal</Typography>
+          <Typography gutterBottom>
             {hasFreeShipping
               ? 'Free'
               : formatMoney(order.tax_amount + order.delivery_amount / 100)}
           </Typography>
         </Box>
-        <Box my={2}>
+
+        {/* =============== Discounts and Promotions ===============*/}
+
+        {hasDiscount && (
+          <Box>
+            <Box mb={2}>
+              <Divider />
+            </Box>
+            <Typography component="p" variant="h6" gutterBottom>
+              Discounts and Promotions
+            </Typography>
+            {order.applied_packaging_balance === 0 ? null : (
+              <Box
+                alignItems="center"
+                color={theme.palette.success.main}
+                display="flex"
+                justifyContent="space-between"
+              >
+                <Typography color="textPrimary">
+                  Packaging Deposit Balance
+                </Typography>
+                <Typography>
+                  -{formatMoney(order.applied_packaging_balance / 100)}
+                </Typography>
+              </Box>
+            )}
+
+            {order.applied_store_credit === 0 ? null : (
+              <Box
+                color={theme.palette.success.main}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color="textPrimary">Store Credit</Typography>
+                <Typography>
+                  -{formatMoney(order.applied_store_credit / 100)}
+                </Typography>
+              </Box>
+            )}
+
+            {order.promo_discount === 0 ? null : (
+              <Box
+                color={theme.palette.success.main}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color="textPrimary">
+                  Promotional Discounts
+                </Typography>
+
+                <Typography>
+                  -{formatMoney(order.promo_discount / 100)}
+                </Typography>
+              </Box>
+            )}
+            <AppliedPromoCodes />
+            {hasDiscount ? (
+              <Box
+                color={theme.palette.success.main}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                mt={2}
+              >
+                <Typography gutterBottom color="textPrimary">
+                  Subtotal
+                </Typography>
+                <Typography gutterBottom>
+                  -{formatMoney(totalDiscount / 100)}
+                </Typography>
+              </Box>
+            ) : null}
+          </Box>
+        )}
+        <Box mb={2}>
           <Divider />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -635,15 +665,14 @@ function OrderItem({ item }) {
 }
 
 export const AppliedPromoCodes = observer(() => {
-  const theme = useTheme();
   const { checkout } = useStores();
   const { cart } = checkout;
 
   const hasPromoCode =
     cart && cart.applied_promo_codes && cart.applied_promo_codes.length;
-
+  console.log(cart.applied_promo_codes);
   return hasPromoCode ? (
-    <Box style={{ color: theme.palette.success.main }}>
+    <Box>
       <Typography component="p">Applied Promo Codes:</Typography>
       <List style={{ padding: '0' }}>
         {cart.applied_promo_codes.map((code, idx) => (
