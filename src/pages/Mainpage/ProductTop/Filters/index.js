@@ -17,7 +17,7 @@ import { observer } from 'mobx-react';
 
 const FILTERS = [
   { title: 'Biodegradable', value: 'tag,Biodegradable' },
-  { title: 'BIPOC Led', value: 'tag,BIPOC-Led' },
+  { title: 'BIPOC-Led', value: 'tag,BIPOC-Led' },
   { title: 'Dairy-Free', value: 'allergen,dairy' },
   { title: 'Gluten-Free', value: 'allergen,gluten' },
   {
