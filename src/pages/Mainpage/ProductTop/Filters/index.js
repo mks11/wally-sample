@@ -15,46 +15,32 @@ import {
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
-const LIFESTYLE_FILTERS = [
+const FILTERS = [
+  { title: 'Biodegradable', value: 'tag,Biodegradable' },
+  { title: 'BIPOC Led', value: 'tag,BIPOC-Led' },
   { title: 'Dairy-Free', value: 'allergen,dairy' },
   { title: 'Gluten-Free', value: 'allergen,gluten' },
-  { title: 'Peanut-Free', value: 'allergen,peanuts' },
-  { title: 'Tree Nut Free', value: 'allergen,tree nuts' },
-];
-
-const VALUE_FILTERS = [
-  { title: 'Fair Trade', value: 'tag,fair trade' },
   {
-    title: 'Made With 95% Organic Ingredients',
-    value: 'tag,Made with 95% organic ingredients',
+    title: 'Made With at least 95% Organic Ingredients',
+    value: 'tag,Made with at least 95% organic ingredients',
   },
   { title: 'Non-GMO', value: 'tag,non gmo' },
+  { title: 'Vegan', value: 'tag,vegan' },
+  { title: 'Women-Led', value: 'tag,Woman-Led' },
 ];
 
 function Filters() {
   return (
-    <>
-      <Box mb={2}>
-        <Typography component="p" variant="h5">
-          Shop by lifestyle:
-        </Typography>
-        <FormGroup row>
-          {LIFESTYLE_FILTERS.map((f) => (
-            <Filter filter={f} key={f.title} />
-          ))}
-        </FormGroup>
-      </Box>
-      <Box>
-        <Typography component="p" variant="h5">
-          Shop by values:
-        </Typography>
-        <FormGroup row>
-          {VALUE_FILTERS.map((f) => (
-            <Filter filter={f} key={f.title} />
-          ))}
-        </FormGroup>
-      </Box>
-    </>
+    <Box mb={2}>
+      <Typography component="p" variant="h5">
+        Shop by lifestyle & values
+      </Typography>
+      <FormGroup row>
+        {FILTERS.map((f) => (
+          <Filter filter={f} key={f.title} />
+        ))}
+      </FormGroup>
+    </Box>
   );
 }
 
@@ -95,7 +81,14 @@ const Filter = observer(({ filter }) => {
   return (
     <FormControlLabel
       classes={{ root: classes.root, label: classes.label }}
-      control={<Checkbox color="primary" checked={isChecked} name={title} />}
+      control={
+        <Checkbox
+          color="primary"
+          checked={isChecked}
+          name={title}
+          style={{ padding: '6px' }}
+        />
+      }
       onChange={() => handleOnFilterSelect(value)}
       label={title}
     />

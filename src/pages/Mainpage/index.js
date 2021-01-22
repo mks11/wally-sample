@@ -220,9 +220,6 @@ class Mainpage extends Component {
               <div className="col-xl-3 col-lg-3 d-xl-block d-lg-block d-md-none d-sm-none d-none">
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
-                    <Typography component="p" gutterBottom variant="h4">
-                      Filter
-                    </Typography>
                     <div className="mb-4">
                       <Filters />
                     </div>
