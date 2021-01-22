@@ -1,6 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 // Services & utilities
 import { logPageView } from 'services/google-analytics';
@@ -10,9 +9,7 @@ import { connect } from 'utils';
 import { APP_URL } from 'config';
 
 // npm components
-import { Box, Container, Grid, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { Image } from 'pure-react-carousel';
+import { Box, Container, Typography } from '@material-ui/core';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
@@ -23,11 +20,10 @@ import CategoriesList from './CategoriesList';
 // import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
-import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
 
 // Images
 import sidePanelSticker from 'images/sidepanel_sticker.png';
-import { HAS_DOTS, heroImages } from './Hero/config';
+import slides, { HAS_DOTS } from './Hero/slides';
 
 var DesktopCarouselWrapper = styled(Box)`
   @media only screen and (max-width: 480px) {
@@ -197,19 +193,6 @@ class Mainpage extends Component {
     const ads1 = this.productStore.ads1 ? this.productStore.ads1 : null;
     const ads2 = this.productStore.ads2 ? this.productStore.ads2 : null;
 
-    // Featured Brands
-    const slides = heroImages.map((img) => (
-      <HeroSlide
-        alt={img.alt}
-        img={img}
-        justify="flex-start"
-        title={img.title}
-        url={img.url}
-      >
-        <Typography gutterBottom>{img.body}</Typography>
-      </HeroSlide>
-    ));
-
     return (
       <div className="App">
         <div className="product-content">
@@ -367,119 +350,3 @@ class Mainpage extends Component {
 }
 
 export default connect('store')(Mainpage);
-
-const LargeHeroImage = styled(Image)`
-  && {
-    @media only screen and (max-width: 768px) {
-      display: none;
-    }
-  }
-`;
-
-const MediumHeroImage = styled(Image)`
-  && {
-    @media only screen and (min-width: 481px) and (max-width: 768px) {
-      display: block;
-    }
-
-    display: none;
-  }
-`;
-
-const SmallHeroImage = styled(Image)`
-  && {
-    @media only screen and (min-width: 481px) {
-      display: none;
-    }
-  }
-`;
-
-function HeroSlide({ alt, children, img, justify, title, url }) {
-  return (
-    <Box position="relative">
-      <LargeHeroImage src={img.lg} alt={alt} />
-      <MediumHeroImage src={img.md} alt={alt} />
-      <SmallHeroImage src={img.sm} alt={alt} />
-      <HeroSlideOverlay justify={justify} title={title} url={url}>
-        {children}
-      </HeroSlideOverlay>
-    </Box>
-  );
-}
-
-HeroSlide.propTypes = {
-  alt: PropTypes.string,
-  body: PropTypes.string,
-  img: PropTypes.object.isRequired,
-  justify: PropTypes.string,
-  title: PropTypes.string,
-  url: PropTypes.string,
-};
-
-const SlideOverlayWrapper = styled(Box)`
-  @media only screen and (min-width: 992px) {
-    padding: 4.5rem;
-  }
-
-  padding: 2rem;
-`;
-
-const HeroOverline = styled.p`
-  font-family: 'Sofia Pro', sans-serif;
-  font-weight: bold;
-  font-size: 1.246rem;
-  @media only screen and (min-width: 768px) {
-    font-size: 1.4239rem;
-  }
-  @media only screen and (min-width: 992px) {
-    font-size: 1.602rem;
-  }
-
-  margin-bottom: 0;
-`;
-
-const HeroTitle = styled.h1`
-  font-family: 'Clearface', serif;
-  font-size: 1.416rem;
-  @media only screen and (min-width: 768px) {
-    font-size: 1.609rem;
-  }
-  @media only screen and (min-width: 992px) {
-    font-size: 1.802rem;
-  }
-
-  margin-bottom: 0.75rem;
-`;
-
-function HeroSlideOverlay({ children, justify, title, url }) {
-  return (
-    <SlideOverlayWrapper
-      position="absolute"
-      top="0"
-      left="0"
-      width="100%"
-      maxHeight="100%"
-      overflow="hidden"
-    >
-      <Grid container justify={justify || 'flex-start'}>
-        <Grid item xs={12} sm={8}>
-          {title && <HeroOverline>Limited Release</HeroOverline>}
-          {title && <HeroTitle>{title}</HeroTitle>}
-          {children && children}
-          {url && (
-            <PrimaryWallyButton component={Link} to={url} alt={title}>
-              Shop Now
-            </PrimaryWallyButton>
-          )}
-        </Grid>
-      </Grid>
-    </SlideOverlayWrapper>
-  );
-}
-
-HeroSlideOverlay.propTypes = {
-  body: PropTypes.string,
-  justify: PropTypes.string,
-  title: PropTypes.string,
-  url: PropTypes.string,
-};
