@@ -33,7 +33,7 @@ function Filters() {
   return (
     <Box mb={2}>
       <Typography component="p" variant="h5">
-        Shop by lifestyle & values
+        Shop by lifestyles & values
       </Typography>
       <FormGroup row>
         {FILTERS.map((f) => (
