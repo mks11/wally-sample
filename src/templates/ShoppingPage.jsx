@@ -81,7 +81,11 @@ function ShoppingPage({ children, pathname, query }) {
 
 export default withRouter(observer(ShoppingPage));
 
-function initializeProductAssortmentPrefs(cookieName, pathname, setCookie) {
+export function initializeProductAssortmentPrefs(
+  cookieName,
+  pathname,
+  setCookie,
+) {
   const prefs = {
     ...initialProductAssortmentPrefs,
     // So preferences can be reset when landing on a diff page

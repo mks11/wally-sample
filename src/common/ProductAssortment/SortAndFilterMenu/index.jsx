@@ -19,16 +19,21 @@ import {
 } from '@material-ui/core';
 
 // Sorting and Filtration
-import { cookieName } from 'templates/ShoppingPage';
+import {
+  cookieName,
+  initializeProductAssortmentPrefs,
+} from 'templates/ShoppingPage';
 import sortingConfig from './sorting-config';
 
 // Styled Components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import { useLocation } from 'react-router-dom';
 
 export default function SortAndFilterMenu() {
   const [cookies, setCookie] = useCookies([cookieName]);
   var productAssortmentPrefs = cookies[cookieName];
   if (!productAssortmentPrefs) productAssortmentPrefs = {};
+  const location = useLocation();
 
   const {
     pathname = '',
@@ -39,9 +44,18 @@ export default function SortAndFilterMenu() {
     selectedValues = [],
   } = productAssortmentPrefs;
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setCookie(cookieName, { pathname, ...values }, { path: '/' });
     setSubmitting(false);
+  };
+
+  const handleReset = (resetForm) => {
+    resetForm({ ...productAssortmentPrefs });
+    initializeProductAssortmentPrefs(
+      cookieName,
+      location && location.pathname,
+      setCookie,
+    );
   };
 
   return (
@@ -59,7 +73,7 @@ export default function SortAndFilterMenu() {
       enableReinitialize={true}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, resetForm }) => (
         <Form>
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={6}>
@@ -67,6 +81,7 @@ export default function SortAndFilterMenu() {
                 variant="outlined"
                 disabled={isSubmitting}
                 fullWidth
+                onClick={() => handleReset(resetForm)}
               >
                 Reset
               </PrimaryWallyButton>
