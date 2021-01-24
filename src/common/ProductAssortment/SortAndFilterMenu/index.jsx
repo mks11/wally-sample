@@ -18,6 +18,7 @@ import {
   ListItemText,
   ListItem,
   Collapse,
+  Divider,
 } from '@material-ui/core';
 
 // Sorting and Filtration
@@ -100,12 +101,14 @@ export default function SortAndFilterMenu() {
             </Grid>
           </Grid>
 
-          <CollapsableItem label="Sort">
-            <Field
-              name="selectedSortingOption"
-              component={SortingOptionGroup}
-            />
-          </CollapsableItem>
+          <Box marginTop={2}>
+            <CollapsableItem label="Sort">
+              <Field
+                name="selectedSortingOption"
+                component={SortingOptionGroup}
+              />
+            </CollapsableItem>
+          </Box>
         </Form>
       )}
     </Formik>
@@ -128,6 +131,7 @@ function CollapsableItem({ label, children }) {
       <Collapse in={show} timeout="auto" unmountOnExit>
         <Box paddingX={4}>{children}</Box>
       </Collapse>
+      <Divider />
     </>
   );
 }
