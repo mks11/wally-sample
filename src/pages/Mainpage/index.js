@@ -13,16 +13,17 @@ import { Box, Container, Typography } from '@material-ui/core';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
-import Product from './Product';
-import ProductList from './ProductList';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
+import Filters from './ProductTop/Filters';
+import Product from './Product';
+import ProductList from './ProductList';
+
 // import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
 import ImageCarousel from 'common/ImageCarousel';
 
 // Images
-import sidePanelSticker from 'images/sidepanel_sticker.png';
 import slides, { HAS_DOTS } from './Hero/slides';
 
 var DesktopCarouselWrapper = styled(Box)`
@@ -203,7 +204,7 @@ class Mainpage extends Component {
                 <div className="product-content-left">
                   <div className="product-content-left-scroll">
                     <div className="mb-4">
-                      <img src={sidePanelSticker} alt="" />
+                      <Filters />
                     </div>
                     <CategoriesList selectedId={id} list={sidebar} />
                     <br />

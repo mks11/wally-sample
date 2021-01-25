@@ -1,67 +1,103 @@
-import React, { Component } from 'react';
-import { connect } from 'utils';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const FILTERS_DATA = [
-  { title: 'Dairy Free', value: 'allergen,dairy' },
-  { title: 'Gluten Free', value: 'allergen,gluten' },
-  { title: 'Peanut Free', value: 'allergen,peanuts' },
-  { title: 'Tree Nuts Free', value: 'allergen,tree nuts' },
-  { title: 'Made With Organic', value: 'tag,organic' },
-  { title: 'Non GMO', value: 'tag,non gmo' },
-  { title: 'Fair Trade', value: 'tag,fair trade' },
-  // { title: 'Fair Trade', value: 'tag,fair trade' },
-  // { title: 'Kosher', value: 'tag,kosher' },
+// Material UI
+import {
+  Box,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+
+// MobX
+import { useStores } from 'hooks/mobx';
+import { observer } from 'mobx-react';
+
+const FILTERS = [
+  { title: 'Biodegradable', value: 'tag,Biodegradable' },
+  { title: 'BIPOC-Led', value: 'tag,BIPOC-Led' },
+  { title: 'Dairy-Free', value: 'allergen,dairy' },
+  { title: 'Gluten-Free', value: 'allergen,gluten' },
+  {
+    title: 'Made With at least 95% Organic Ingredients',
+    value: 'tag,Made with at least 95% organic ingredients',
+  },
+  { title: 'Non-GMO', value: 'tag,non gmo' },
+  { title: 'Vegan', value: 'tag,vegan' },
+  { title: 'Women-Led', value: 'tag,Woman-Led' },
 ];
 
-class Filters extends Component {
-  constructor(props) {
-    super(props);
-    this.productStore = this.props.store.product;
-  }
+function Filters() {
+  return (
+    <Box mb={2}>
+      <Typography component="p" variant="h5">
+        Shop by lifestyles & values
+      </Typography>
+      <FormGroup row>
+        {FILTERS.map((f) => (
+          <Filter filter={f} key={f.title} />
+        ))}
+      </FormGroup>
+    </Box>
+  );
+}
 
-  handleOnFilterSelect = (value) => {
-    const { filters } = this.productStore;
+export default Filters;
 
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%', // to make label clickable for the entire width
+    display: 'flex',
+    margin: 0,
+  },
+  label: {
+    width: '100%',
+    fontSize: '15px',
+  },
+}));
+
+const Filter = observer(({ filter }) => {
+  // State
+  const { product: productStore } = useStores();
+  const { filters } = productStore;
+  const { title, value } = filter;
+  const isChecked = filters.includes(value);
+
+  // Styles
+  const classes = useStyles();
+
+  const handleOnFilterSelect = (value) => {
     const valueIndex = filters.indexOf(value);
 
     if (valueIndex === -1) {
-      this.productStore.addFilter(value);
+      productStore.addFilter(value);
     } else {
-      this.productStore.removeFilter(valueIndex);
+      productStore.removeFilter(valueIndex);
     }
-
-    this.props.onSelect && this.props.onSelect(filters);
   };
 
-  render() {
-    const { filters } = this.productStore;
-    const { vertical = false, column = false } = this.props;
+  return (
+    <FormControlLabel
+      classes={{ root: classes.root, label: classes.label }}
+      control={
+        <Checkbox
+          color="primary"
+          checked={isChecked}
+          name={title}
+          style={{ padding: '6px' }}
+        />
+      }
+      onChange={() => handleOnFilterSelect(value)}
+      label={title}
+    />
+  );
+});
 
-    return (
-      <div
-        className={`filters ${vertical ? 'vertical' : ''} ${
-          column ? 'column' : ''
-        }`}
-      >
-        <div className="filters-title">Filter by diet:</div>
-        <div className="filters-values">
-          <ul>
-            {FILTERS_DATA.map((f) => (
-              <li
-                key={f.value}
-                className={`${
-                  filters.includes(f.value) ? 'filters-selected' : ''
-                }`}
-                onClick={() => this.handleOnFilterSelect(f.value)}
-              >
-                {f.title}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default connect('store')(Filters);
+Filter.propTypes = {
+  filter: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  }),
+};

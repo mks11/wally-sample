@@ -3289,13 +3289,8 @@ span.dropdown-item.lg {
 .product-content-left {
   font-size: 15px;
   position: sticky;
-  top: 213px;
+  top: 162px;
   border-right: 1px solid #cecece;
-}
-@media (max-width: 991px) {
-  .product-content-left {
-    top: 162px;
-  }
 }
 .header-wrap.top-bar-open + .aw-main .product-content-left {
   top: 181px;
@@ -3325,6 +3320,7 @@ span.dropdown-item.lg {
   max-height: calc(100vh - 181px);
   overflow-x: hidden;
   overflow-y: auto;
+  padding-top: 1rem;
 }
 
 .product-breadcrumb {
