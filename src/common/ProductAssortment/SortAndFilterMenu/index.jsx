@@ -48,13 +48,13 @@ export default function SortAndFilterMenu() {
     selectedValues = [],
   } = productAssortmentPrefs;
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     setCookie(cookieName, { pathname, ...values }, { path: '/' });
     setSubmitting(false);
   };
 
   const handleReset = (resetForm) => {
-    resetForm({ ...productAssortmentPrefs });
+    resetForm();
     initializeProductAssortmentPrefs(
       cookieName,
       location && location.pathname,
