@@ -7,12 +7,7 @@ import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
 // Custom Components
-import {
-  MobileNavItem,
-  MobileNavMenu,
-  SignOutButton,
-  MobileUserGreeting,
-} from './MobileNavComponents';
+import { MobileNavMenu } from './MobileNavComponents';
 import { DesktopNavItem } from 'common/Header/NavBar/DesktopNavComponents';
 import AccountDropdown, {
   AccountDropdownMenuItem,
@@ -45,55 +40,6 @@ export const MobileAdminNav = observer(() => {
     </>
   ) : null;
 });
-
-export function MobileAdminNavMenu() {
-  const { modalV2 } = useStores();
-  const handleClose = () => modalV2.close();
-  return (
-    <>
-      <MobileUserGreeting />
-      {/* <MobileNavItem to="/manage/shopper" onClick={handleClose} hasDivider>
-        Manage Shoppers
-      </MobileNavItem>
-      <MobileNavItem to="/manage/packaging" onClick={handleClose} hasDivider>
-        Manage Packaging
-      </MobileNavItem>
-      <MobileNavItem to="/manage/delivery" onClick={handleClose} hasDivider>
-        Manage Deliveries
-      </MobileNavItem>
-      <MobileNavItem
-        to="/manage/courier-routing"
-        onClick={handleClose}
-        hasDivider
-      >
-        Manage Courier Routes
-      </MobileNavItem>
-      <MobileNavItem
-        to="/manage/shopping-app-1"
-        onClick={handleClose}
-        hasDivider
-      >
-        Shopping App 1
-      </MobileNavItem>
-      <MobileNavItem to="/manage/orders" onClick={handleClose} hasDivider>
-        Packing App
-      </MobileNavItem>
-      <MobileNavItem to="/manage/products" onClick={handleClose} hasDivider>
-        Products App
-      </MobileNavItem>
-      <MobileNavItem to="/manage/shipping" onClick={handleClose} hasDivider>
-        Shipping
-      </MobileNavItem>
-      <MobileNavItem to="/manage/printing" onClick={handleClose} hasDivider>
-        Printing
-      </MobileNavItem>
-      <MobileNavItem to="/manage/blog" onClick={handleClose} hasDivider>
-        Manage Blog Posts
-      </MobileNavItem> */}
-      <SignOutButton />
-    </>
-  );
-}
 
 export const DesktopAdminNav = observer(() => {
   const { user } = useStores();

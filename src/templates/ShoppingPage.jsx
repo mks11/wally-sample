@@ -36,7 +36,7 @@ function ShoppingPage({ children, pathname, query }) {
 
   useEffect(() => {
     // TODO: Remove when finished with this feature
-    console.log(productAssortmentPrefs);
+    // console.log(productAssortmentPrefs);
 
     let prefs = initialProductAssortmentPrefs;
     // If cookie doesn't exist yet or page has changed, initialize sort and filter options

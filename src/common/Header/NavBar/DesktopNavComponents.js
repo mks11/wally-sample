@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // npm Packaged Components
-import { Box, MenuItem, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 import { Link } from 'react-router-dom';
 

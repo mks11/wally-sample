@@ -21,6 +21,9 @@ import {
   Divider,
 } from '@material-ui/core';
 
+// MobX
+import { useStores } from 'hooks/mobx';
+
 // Sorting and Filtration
 import {
   cookieName,
@@ -38,7 +41,7 @@ export default function SortAndFilterMenu() {
   var productAssortmentPrefs = cookies[cookieName];
   if (!productAssortmentPrefs) productAssortmentPrefs = {};
   const location = useLocation();
-
+  const { modalV2 } = useStores();
   const {
     pathname = '',
     selectedSortingOption = '',
@@ -51,6 +54,7 @@ export default function SortAndFilterMenu() {
   const handleSubmit = (values, { setSubmitting }) => {
     setCookie(cookieName, { pathname, ...values }, { path: '/' });
     setSubmitting(false);
+    modalV2.close();
   };
 
   const handleReset = (resetForm) => {
