@@ -19,6 +19,8 @@ import {
   ListItem,
   Collapse,
   Divider,
+  Checkbox,
+  FormGroup,
 } from '@material-ui/core';
 
 // MobX
@@ -41,7 +43,7 @@ export default function SortAndFilterMenu() {
   var productAssortmentPrefs = cookies[cookieName];
   if (!productAssortmentPrefs) productAssortmentPrefs = {};
   const location = useLocation();
-  const { modalV2 } = useStores();
+  const { modalV2, product: productStore } = useStores();
   const {
     pathname = '',
     selectedSortingOption = '',
@@ -50,6 +52,13 @@ export default function SortAndFilterMenu() {
     selectedSubcategories = [],
     selectedValues = [],
   } = productAssortmentPrefs;
+
+  const {
+    availableBrands,
+    availableLifestyles,
+    availableSubcategories,
+    availableValues,
+  } = productStore;
 
   const handleSubmit = (values, { setSubmitting }) => {
     setCookie(cookieName, { pathname, ...values }, { path: '/' });
@@ -104,12 +113,39 @@ export default function SortAndFilterMenu() {
               </PrimaryWallyButton>
             </Grid>
           </Grid>
-
           <Box marginTop={2}>
             <CollapsableItem label="Sort">
               <Field
                 name="selectedSortingOption"
                 component={SortingOptionGroup}
+              />
+            </CollapsableItem>
+            <CollapsableItem label="Shop by Category">
+              <Field
+                name="selectedSubcategories"
+                component={CheckboxGroup}
+                options={availableSubcategories}
+              />
+            </CollapsableItem>
+            <CollapsableItem label="Shop by Lifestyle">
+              <Field
+                name="selectedLifestyles"
+                component={CheckboxGroup}
+                options={availableLifestyles}
+              />
+            </CollapsableItem>
+            <CollapsableItem label="Shop by Values">
+              <Field
+                name="selectedValues"
+                component={CheckboxGroup}
+                options={availableValues}
+              />
+            </CollapsableItem>
+            <CollapsableItem label="Shop by Brand">
+              <Field
+                name="selectedBrands"
+                component={CheckboxGroup}
+                options={availableBrands}
               />
             </CollapsableItem>
           </Box>
@@ -137,6 +173,41 @@ function CollapsableItem({ label, children }) {
       </Collapse>
       <Divider />
     </>
+  );
+}
+
+function CheckboxGroup({ field, options = [] }) {
+  return (
+    <FormGroup aria-label={'Filtration options'}>
+      {options.map((option) => (
+        <CheckboxOption
+          key={option}
+          label={option}
+          value={option}
+          field={field}
+        />
+      ))}
+    </FormGroup>
+  );
+}
+function CheckboxOption({ field, label, value }) {
+  const classes = makeStyles(() => ({
+    root: {
+      width: '100%', // to make label clickable for the entire width
+      display: 'flex',
+      alignItems: 'center',
+    },
+    label: {
+      width: '100%',
+    },
+  }));
+
+  return (
+    <FormControlLabel
+      classes={{ root: classes.root, label: classes.label }}
+      control={<Checkbox color="primary" {...field} value={value} />}
+      label={label}
+    />
   );
 }
 
