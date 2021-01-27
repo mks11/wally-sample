@@ -141,7 +141,13 @@ class ProductStore {
   }
 
   get filteredProducts() {
-    var products = this.products;
+    let products = filterByLifeStylesBrandSubcategoryAndValues(this.products, {
+      selectedLifestyles: this.selectedLifestyles,
+      selectedSubcategories: this.selectedSubcategories,
+      selectedValues: this.selectedValues,
+      selectedBrands: this.selectedBrands,
+    });
+
     const sortingOption = this.selectedSortingOption;
 
     if (sortingOption) {
@@ -178,37 +184,6 @@ class ProductStore {
     }
 
     return products;
-
-    // if (
-    //   !this.selectedLifestyles.length &&
-    //   !this.selectedSubcategories.length &&
-    //   !this.selectedBrands.length &&
-    //   !this.selectedValues.length
-    // ) {
-    //   return this.products;
-    // }
-
-    // return this.products.filter(
-    //   ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
-    //     const inLifestyles =
-    //       !this.selectedLifestyles.length ||
-    //       this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
-
-    //     const inValues =
-    //       !this.selectedValues.length ||
-    //       this.selectedValues.every((val) => values.includes(val));
-
-    //     const inSubcategory =
-    //       !this.selectedSubcategories.length ||
-    //       this.selectedSubcategories.includes[subcategory];
-
-    //     const inBrands =
-    //       !this.selectedBrands.length ||
-    //       this.selectedBrands.includes[vendorFull.name];
-
-    //     return inLifestyles && inValues && inSubcategory && inBrands;
-    //   },
-    // );
   }
 
   initializeProductAssortment({
@@ -547,5 +522,31 @@ decorate(ProductStore, {
   updateFilters: action,
   resetFilters: action,
 });
+
+export function filterByLifeStylesBrandSubcategoryAndValues(
+  products,
+  { selectedLifestyles, selectedValues, selectedSubcategories, selectedBrands },
+) {
+  return products.filter(
+    ({ lifestyles = [], subcategory = {}, vendorFull = {}, values = [] }) => {
+      const inLifestyles =
+        !selectedLifestyles.length ||
+        selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+      const inValues =
+        !selectedValues.length ||
+        selectedValues.every((val) => values.includes(val));
+
+      const inSubcategory =
+        !selectedSubcategories.length ||
+        selectedSubcategories.includes[subcategory];
+
+      const inBrands =
+        !selectedBrands.length || selectedBrands.includes[vendorFull.name];
+
+      return inLifestyles && inValues && inSubcategory && inBrands;
+    },
+  );
+}
 
 export default new ProductStore();
