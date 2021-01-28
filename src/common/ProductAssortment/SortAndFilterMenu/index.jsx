@@ -214,7 +214,11 @@ function CheckboxOption({ field, label, value }) {
     },
   }));
 
-  const isChecked = value && field.value && field.value.includes(value);
+  const isChecked =
+    value &&
+    field.value &&
+    Array.isArray(field.value) &&
+    field.value.includes(value);
 
   return (
     <FormControlLabel
