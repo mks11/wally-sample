@@ -141,7 +141,7 @@ class ProductStore {
   }
 
   get filteredProducts() {
-    let products = filterByLifeStylesBrandSubcategoryAndValues(this.products, {
+    let products = applyFilters(this.products, {
       selectedLifestyles: this.selectedLifestyles,
       selectedSubcategories: this.selectedSubcategories,
       selectedValues: this.selectedValues,
