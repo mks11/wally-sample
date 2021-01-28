@@ -506,7 +506,9 @@ const RESPONSE_BRANDS_MATCH_ONE = {
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
-      vendor: 'MATCH_ONE',
+      vendorFull: {
+        name: 'MATCH_ONE',
+      },
     },
   ],
 };
@@ -517,11 +519,15 @@ const RESPONSE_BRANDS_MATCH_TWO = {
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
-      vendor: 'MATCH_TWO',
+      vendorFull: {
+        name: 'MATCH_TWO',
+      },
     },
     {
-      ...RESPONSE.products[0],
-      vendor: 'MATCH_TWO',
+      ...RESPONSE.products[1],
+      vendorFull: {
+        name: 'MATCH_TWO',
+      },
     },
   ],
 };
@@ -547,7 +553,12 @@ const RESPONSE_SUBCATEGORIES_MATCH_ONE = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
-    { ...RESPONSE.products[0], subcategory: ['MATCH_ONE', AN_UNLIKELY_STRING] },
+    {
+      ...RESPONSE.products[0],
+      subcategory: {
+        name: 'MATCH_ONE',
+      },
+    },
   ],
 };
 
@@ -555,8 +566,8 @@ const RESPONSE_SUBCATEGORIES_MATCH_TWO = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
-    { ...RESPONSE.products[0], subcategory: ['MATCH_TWO', AN_UNLIKELY_STRING] },
-    { ...RESPONSE.products[1], subcategory: ['MATCH_TWO', AN_UNLIKELY_STRING] },
+    { ...RESPONSE.products[0], subcategory: { name: 'MATCH_TWO' } },
+    { ...RESPONSE.products[1], subcategory: { name: 'MATCH_TWO' } },
   ],
 };
 
@@ -589,7 +600,9 @@ const RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE = {
     {
       ...RESPONSE.products[0],
       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      vendor: INTERSECTION_BRAND,
+      vendorFull: {
+        name: INTERSECTION_BRAND,
+      },
     },
     {
       ...RESPONSE.products[1],
@@ -597,7 +610,9 @@ const RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE = {
     },
     {
       ...RESPONSE.products[2],
-      vendor: INTERSECTION_BRAND,
+      vendorFull: {
+        name: INTERSECTION_BRAND,
+      },
     },
   ],
 };
@@ -628,7 +643,9 @@ const RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE = {
     {
       ...RESPONSE.products[0],
       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      subcategories: [INTERSECTION_SUBCATEGORY],
+      subcategory: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
     },
     {
       ...RESPONSE.products[1],
@@ -636,7 +653,9 @@ const RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE = {
     },
     {
       ...RESPONSE.products[2],
-      subcategories: [INTERSECTION_SUBCATEGORY, AN_UNLIKELY_STRING],
+      subcategory: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
     },
   ],
 };
@@ -647,7 +666,9 @@ const RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE = {
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
-      vendor: INTERSECTION_BRAND,
+      vendorFull: {
+        name: INTERSECTION_BRAND,
+      },
       lifestyles: [INTERSECTION_LIFESTYLE],
     },
     {
@@ -667,16 +688,13 @@ const RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE = {
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      lifestyles: [INTERSECTION_LIFESTYLE],
+      vendorFull: { name: INTERSECTION_BRAND },
+      subcategory: { name: INTERSECTION_SUBCATEGORY },
     },
+    { ...RESPONSE.products[0], vendorFull: { name: INTERSECTION_BRAND } },
     {
       ...RESPONSE.products[1],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
+      subcategory: { name: AN_UNLIKELY_STRING },
     },
   ],
 };
@@ -688,7 +706,9 @@ const RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE = {
     {
       ...RESPONSE.products[0],
       lifestyles: [INTERSECTION_LIFESTYLE],
-      subcategories: [INTERSECTION_SUBCATEGORY, AN_UNLIKELY_STRING],
+      subcategory: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
     },
     {
       ...RESPONSE.products[1],
@@ -696,7 +716,9 @@ const RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE = {
     },
     {
       ...RESPONSE.products[2],
-      subcategories: [INTERSECTION_SUBCATEGORY, AN_UNLIKELY_STRING],
+      subcategories: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
     },
   ],
 };
@@ -708,8 +730,12 @@ const RESPONSE_INTERSECTION_ALL_MATCH_ONE = {
     {
       ...RESPONSE.products[0],
       lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-      subcategories: [INTERSECTION_SUBCATEGORY, AN_UNLIKELY_STRING],
-      vendor: INTERSECTION_BRAND,
+      subcategory: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
+      vendorFull: {
+        name: INTERSECTION_BRAND,
+      },
       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
     },
     {
@@ -718,11 +744,15 @@ const RESPONSE_INTERSECTION_ALL_MATCH_ONE = {
     },
     {
       ...RESPONSE.products[2],
-      vendor: INTERSECTION_BRAND,
+      vendorFull: {
+        name: INTERSECTION_BRAND,
+      },
     },
     {
       ...RESPONSE.products[2],
-      subcategories: [INTERSECTION_SUBCATEGORY, AN_UNLIKELY_STRING],
+      subcategory: {
+        name: INTERSECTION_SUBCATEGORY,
+      },
     },
   ],
 };
