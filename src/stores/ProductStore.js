@@ -523,7 +523,7 @@ decorate(ProductStore, {
   resetFilters: action,
 });
 
-export function filterByLifeStylesBrandSubcategoryAndValues(
+export function applyFilters(
   products,
   { selectedLifestyles, selectedValues, selectedSubcategories, selectedBrands },
 ) {
@@ -539,10 +539,14 @@ export function filterByLifeStylesBrandSubcategoryAndValues(
 
       const inSubcategory =
         !selectedSubcategories.length ||
-        selectedSubcategories.includes[subcategory];
-
+        (subcategory &&
+          subcategory.name &&
+          selectedSubcategories.includes(subcategory.name));
       const inBrands =
-        !selectedBrands.length || selectedBrands.includes[vendorFull.name];
+        !selectedBrands.length ||
+        (vendorFull &&
+          vendorFull.name &&
+          selectedBrands.includes(vendorFull.name));
 
       return inLifestyles && inValues && inSubcategory && inBrands;
     },

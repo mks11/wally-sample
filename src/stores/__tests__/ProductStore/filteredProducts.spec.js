@@ -1,10 +1,10 @@
-import { filterByLifeStylesBrandSubcategoryAndValues as filterByPrefs } from './../../ProductStore';
+import { applyFilters } from './../../ProductStore';
 
 const AN_UNLIKELY_STRING = 'aXYx';
 
 describe('Products should be able to correctly filter by user preferences', () => {
   test('# should show ALL products when no filters provided', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: [],
@@ -15,7 +15,7 @@ describe('Products should be able to correctly filter by user preferences', () =
   });
 
   test('# should match zero when no products are returned', () => {
-    const result = filterByPrefs(RESPONSE_NO_MATCH.products, {
+    const result = applyFilters(RESPONSE_NO_MATCH.products, {
       selectedBrands: [AN_UNLIKELY_STRING],
       selectedLifestyles: [],
       selectedValues: [],
@@ -26,7 +26,7 @@ describe('Products should be able to correctly filter by user preferences', () =
   });
 
   test('# should show zero match when a random text is provided in selectedBrands', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: [AN_UNLIKELY_STRING],
       selectedLifestyles: [],
       selectedValues: [],
@@ -37,7 +37,7 @@ describe('Products should be able to correctly filter by user preferences', () =
   });
 
   test('# should show zero match when a random text is provided in selectedLifestyles', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
       selectedLifestyles: [AN_UNLIKELY_STRING],
       selectedValues: [],
@@ -47,7 +47,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(0);
   });
   test('# should show zero match when a random text is provided in selectedValues', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: [AN_UNLIKELY_STRING],
@@ -57,7 +57,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(0);
   });
   test('# should show zero match when a random text is provided in selectedSubcategories', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: [],
@@ -67,7 +67,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(0);
   });
   test('# should filter correctly for a matching Brand', () => {
-    const result = filterByPrefs(RESPONSE.products, {
+    const result = applyFilters(RESPONSE.products, {
       selectedBrands: ['NotMilk'],
       selectedLifestyles: [],
       selectedValues: [],
@@ -77,7 +77,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(RESPONSE.products.length);
   });
   test('# brand: should match exactly one', () => {
-    const result = filterByPrefs(RESPONSE_BRANDS_MATCH_ONE.products, {
+    const result = applyFilters(RESPONSE_BRANDS_MATCH_ONE.products, {
       selectedBrands: ['MATCH_ONE'],
       selectedLifestyles: [],
       selectedValues: [],
@@ -87,7 +87,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# brands:  should match exactly two', () => {
-    const result = filterByPrefs(RESPONSE_BRANDS_MATCH_TWO.products, {
+    const result = applyFilters(RESPONSE_BRANDS_MATCH_TWO.products, {
       selectedBrands: ['MATCH_TWO'],
       selectedLifestyles: [],
       selectedValues: [],
@@ -97,7 +97,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(2);
   });
   test('# lifestyles: should match exactly one', () => {
-    const result = filterByPrefs(RESPONSE_LIFESTYLES_MATCH_ONE.products, {
+    const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_ONE.products, {
       selectedBrands: [],
       selectedLifestyles: ['MATCH_ONE'],
       selectedValues: [],
@@ -107,7 +107,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# lifestyles:  should match exactly two', () => {
-    const result = filterByPrefs(RESPONSE_LIFESTYLES_MATCH_TWO.products, {
+    const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_TWO.products, {
       selectedBrands: [],
       selectedLifestyles: ['MATCH_TWO'],
       selectedValues: [],
@@ -117,7 +117,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(2);
   });
   test('# subcategories: should match exactly one', () => {
-    const result = filterByPrefs(RESPONSE_SUBCATEGORIES_MATCH_ONE.products, {
+    const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_ONE.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: [],
@@ -127,7 +127,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# subcategories:  should match exactly two', () => {
-    const result = filterByPrefs(RESPONSE_SUBCATEGORIES_MATCH_TWO.products, {
+    const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_TWO.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: [],
@@ -137,7 +137,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(2);
   });
   test('# values: should match exactly one', () => {
-    const result = filterByPrefs(RESPONSE_VALUES_MATCH_ONE.products, {
+    const result = applyFilters(RESPONSE_VALUES_MATCH_ONE.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: ['MATCH_ONE'],
@@ -147,7 +147,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# values: should match exactly two', () => {
-    const result = filterByPrefs(RESPONSE_VALUES_MATCH_TWO.products, {
+    const result = applyFilters(RESPONSE_VALUES_MATCH_TWO.products, {
       selectedBrands: [],
       selectedLifestyles: [],
       selectedValues: ['MATCH_TWO'],
@@ -157,7 +157,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(2);
   });
   test('# intersection: values & brands  : should match exactly one', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE.products,
       {
         selectedBrands: [INTERSECTION_BRAND],
@@ -170,7 +170,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection: values & lifestyle intersection : should match exactly one', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_VALUES_LIFESTYLES_MATCH_ONE.products,
       {
         selectedBrands: [],
@@ -183,7 +183,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection: values & subcategories  : should match exactly one', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE.products,
       {
         selectedBrands: [],
@@ -196,7 +196,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection: brands & lifestyles  : should match exactly one', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE.products,
       {
         selectedBrands: [INTERSECTION_BRAND],
@@ -209,7 +209,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection : brands & subcategories', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE.products,
       {
         selectedBrands: [INTERSECTION_BRAND],
@@ -222,7 +222,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection : lifestyles & subcategories', () => {
-    const result = filterByPrefs(
+    const result = applyFilters(
       RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE.products,
       {
         selectedBrands: [],
@@ -235,7 +235,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     expect(count).toBe(1);
   });
   test('# intersection : values & lifestyles & subcategories & brand', () => {
-    const result = filterByPrefs(RESPONSE_INTERSECTION_ALL_MATCH_ONE.products, {
+    const result = applyFilters(RESPONSE_INTERSECTION_ALL_MATCH_ONE.products, {
       selectedBrands: [],
       selectedLifestyles: [INTERSECTION_LIFESTYLE],
       selectedValues: [],
