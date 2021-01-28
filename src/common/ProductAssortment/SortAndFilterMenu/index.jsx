@@ -86,6 +86,10 @@ export default function SortAndFilterMenu() {
       }}
       validationSchema={Yup.object({
         selectedSortingOption: Yup.string().required(),
+        selectedBrands: Yup.array().of(Yup.string()),
+        selectedLifestyles: Yup.array().of(Yup.string()),
+        selectedSubcategories: Yup.array().of(Yup.string()),
+        selectedValues: Yup.array().of(Yup.string()),
       })}
       enableReinitialize={true}
       onSubmit={handleSubmit}
@@ -120,34 +124,42 @@ export default function SortAndFilterMenu() {
                 component={SortingOptionGroup}
               />
             </CollapsableItem>
-            <CollapsableItem label="Shop by Category">
-              <Field
-                name="selectedSubcategories"
-                component={CheckboxGroup}
-                options={availableSubcategories}
-              />
-            </CollapsableItem>
-            <CollapsableItem label="Shop by Lifestyle">
-              <Field
-                name="selectedLifestyles"
-                component={CheckboxGroup}
-                options={availableLifestyles}
-              />
-            </CollapsableItem>
-            <CollapsableItem label="Shop by Values">
-              <Field
-                name="selectedValues"
-                component={CheckboxGroup}
-                options={availableValues}
-              />
-            </CollapsableItem>
-            <CollapsableItem label="Shop by Brand">
-              <Field
-                name="selectedBrands"
-                component={CheckboxGroup}
-                options={availableBrands}
-              />
-            </CollapsableItem>
+            {availableSubcategories.length > 0 && (
+              <CollapsableItem label="Shop by Category">
+                <Field
+                  name="selectedSubcategories"
+                  component={CheckboxGroup}
+                  options={availableSubcategories}
+                />
+              </CollapsableItem>
+            )}
+            {availableLifestyles.length > 0 && (
+              <CollapsableItem label="Shop by Lifestyle">
+                <Field
+                  name="selectedLifestyles"
+                  component={CheckboxGroup}
+                  options={availableLifestyles}
+                />
+              </CollapsableItem>
+            )}
+            {availableValues.length > 0 && (
+              <CollapsableItem label="Shop by Values">
+                <Field
+                  name="selectedValues"
+                  component={CheckboxGroup}
+                  options={availableValues}
+                />
+              </CollapsableItem>
+            )}
+            {availableBrands.length > 0 && (
+              <CollapsableItem label="Shop by Brand">
+                <Field
+                  name="selectedBrands"
+                  component={CheckboxGroup}
+                  options={availableBrands}
+                />
+              </CollapsableItem>
+            )}
           </Box>
         </Form>
       )}
@@ -202,10 +214,19 @@ function CheckboxOption({ field, label, value }) {
     },
   }));
 
+  const isChecked = value && field.value && field.value.includes(value);
+
   return (
     <FormControlLabel
       classes={{ root: classes.root, label: classes.label }}
-      control={<Checkbox color="primary" {...field} value={value} />}
+      control={
+        <Checkbox
+          color="primary"
+          checked={isChecked}
+          {...field}
+          value={value}
+        />
+      }
       label={label}
     />
   );
