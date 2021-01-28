@@ -124,7 +124,7 @@ export default function SortAndFilterMenu() {
                 component={SortingOptionGroup}
               />
             </CollapsableItem>
-            {availableSubcategories.length > 0 && (
+            {availableSubcategories.length > 1 && (
               <CollapsableItem label="Shop by Category">
                 <Field
                   name="selectedSubcategories"
@@ -133,7 +133,7 @@ export default function SortAndFilterMenu() {
                 />
               </CollapsableItem>
             )}
-            {availableLifestyles.length > 0 && (
+            {availableLifestyles.length > 1 && (
               <CollapsableItem label="Shop by Lifestyle">
                 <Field
                   name="selectedLifestyles"
@@ -142,7 +142,7 @@ export default function SortAndFilterMenu() {
                 />
               </CollapsableItem>
             )}
-            {availableValues.length > 0 && (
+            {availableValues.length > 1 && (
               <CollapsableItem label="Shop by Values">
                 <Field
                   name="selectedValues"
@@ -151,7 +151,7 @@ export default function SortAndFilterMenu() {
                 />
               </CollapsableItem>
             )}
-            {availableBrands.length > 0 && (
+            {availableBrands.length > 1 && (
               <CollapsableItem label="Shop by Brand">
                 <Field
                   name="selectedBrands"
