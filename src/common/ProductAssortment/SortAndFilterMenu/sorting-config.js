@@ -9,12 +9,12 @@ export const ASCENDING = 'ASCENDING';
 export const DESCENDING = 'DESCENDING';
 
 // Sorting Options
-const A_TO_Z = 'ALPHABETICAL_ASCENDING';
+export const A_TO_Z = 'ALPHABETICAL_ASCENDING';
 // TODO: Uncomment when needed.
 // const Z_TO_A = 'ALPHABETICAL_DESCENDING';
-const NEWEST = 'NEWNESS_DESCENDING';
-const LOW_TO_HIGH_PRICE = 'PRICE_ASCENDING';
-const HIGH_TO_LOW_PRICE = 'PRICE_DESCENDING';
+export const NEWEST = 'NEWNESS_DESCENDING';
+export const LOW_TO_HIGH_PRICE = 'PRICE_ASCENDING';
+export const HIGH_TO_LOW_PRICE = 'PRICE_DESCENDING';
 
 export const DEFAULT_SORTING_OPTION = A_TO_Z;
 
