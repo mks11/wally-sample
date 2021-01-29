@@ -38,7 +38,7 @@ function ShopByBrand({ location, match }) {
       try {
         const auth = userStore.getHeaderAuth();
         const brand = await getVendor(brandName, auth);
-        setBrandData(brand.data);
+        if (brand.data) setBrandData(brand.data);
       } catch (e) {
         console.error(e);
         snackbar.openSnackbar('Failed to load brand data.', 'error');
@@ -52,7 +52,7 @@ function ShopByBrand({ location, match }) {
 
   return (
     <ShoppingPage pathname={pathname} query={query}>
-      {brandData && (
+      {brandData && (name || logo_url || description) && (
         <ProductAssortmentDetails
           title={name}
           image={logo_url}
