@@ -15,11 +15,15 @@ import { Box, Typography, Grid } from '@material-ui/core';
 import { useStores } from 'hooks/mobx';
 import { observer } from 'mobx-react';
 
+// React Responsive
+import { useMediaQuery } from 'react-responsive';
+
 // React Router
 import { InternalWallyLink } from 'styled-component-lib/Links';
 
 function About() {
   const { routing: routingStore } = useStores();
+  const isXs = useMediaQuery({ query: '(max-width: 603px)' });
 
   useEffect(() => {
     const { location } = routingStore;
@@ -32,11 +36,25 @@ function About() {
       description="Learn more about The Wally Shop's history and vision for a zero-waste future."
     >
       <PageSection>
-        <Typography variant="h1" gutterBottom>
-          We deliver your faves from brands you love, 100% waste-free.
+        <Typography variant="h1" align="center" gutterBottom>
+          {isXs ? (
+            <>
+              <span>We deliver your faves </span>
+              <br />
+              <span>from brands you love,</span>
+              <br />
+              <span> 100% waste-free.</span>
+            </>
+          ) : (
+            <>
+              <span>We deliver your faves from brands</span>
+              <br />
+              <span>you love, 100% waste-free.</span>
+            </>
+          )}
         </Typography>
-        <Grid container alignItems="center" spacing={4}>
-          <Grid item xs={12} md={5} lg={4}>
+        <Grid container alignItems="center" justify="center" spacing={4}>
+          <Grid item xs={8} sm={6} md={5} lg={4}>
             <Box display="flex" justifyContent="center" alignItems="center">
               <AboutPhoto />
             </Box>
@@ -45,14 +63,11 @@ function About() {
             <Typography gutterBottom>
               We're introducing a whole new way to shop sustainably. Our vision
               is to help you shop for everything in all reusable packaging,
-              conveniently, and without sacrificing value!
-            </Typography>
-            <Typography gutterBottom>
-              Our all-reusable packaging can be returned so you can partake in
-              our sustainable, closed-loop system. By offering bulk grocery,
-              household cleaning, and personal care items without any packaging
-              waste, we’re making responsible and sustainable shopping
-              convenient!
+              conveniently, and without sacrificing value! Our all-reusable
+              packaging can be returned so you can partake in our sustainable,
+              closed-loop system. By offering bulk grocery, household cleaning,
+              and personal care items without any packaging waste, we’re making
+              responsible and sustainable shopping convenient!
             </Typography>
           </Grid>
         </Grid>
@@ -65,15 +80,14 @@ function About() {
           You’ve seen the news, we’ve seen the news. We have a climate- and
           waste- crisis that threatens all of us. However, we definitely don’t
           believe in doom and gloom! We believe that united, we control our
-          future. We believe people want to do good, given the choice and it’s
-          on us help make it more convenient.
+          future. We believe people want to do good, given the choice, and it’s
+          on us to help make it more convenient.
         </Typography>
         <Typography gutterBottom>
-          That’s where we come in. Our mission is to help you get what you need
-          from your favorite brands, in all reusable, returnable packaging for a
-          100% waste free shopping experience. And while we are all cleaning up
-          the world ~ we’re going to have fun while we are at it, in full purple
-          dreamy glow{' '}
+          That’s where The Wally Shop comes in. Our mission is to help you get
+          what you need from your favorite brands, in all reusable, returnable
+          packaging for a 100% waste free shopping experience. And while we are
+          all cleaning up the world, we’re going to have fun while we are at it!{' '}
           <span role="img" aria-label="sparkle">
             ✨
           </span>
@@ -98,11 +112,41 @@ function About() {
           thousands of us attending rallies, voicing our concerns and showing
           our support for the planet. She realized that if we could build an
           option that took the best of what something like Amazon could offer -
-          value, selection, convenience - but in an inherently sustainably way,
+          value, selection, convenience - but in an inherently sustainable way,
           it would be something for people to rally around and feel powerful.
           Because everytime we choose the reusable option over the disposable
           option, we have made a real, positive impact. Together we can change
           the world, one order at a time.
+        </Typography>
+      </PageSection>
+      <PageSection>
+        <Typography variant="h2" gutterBottom>
+          Our Values
+        </Typography>
+        <Typography gutterBottom>
+          At our core, we are a zero-waste store that cares deeply about
+          sustainability. We know that in order to be sustainable, we need to
+          look at the BIG PICTURE, not just the packaging. That is why we strive
+          to source the highest quality products possible. Organic, fair trade,
+          and non-gmo products are at the core of living a more sustainable
+          lifestyle and we believe that these products should be easily
+          accessible to all.
+        </Typography>
+        <Typography gutterBottom>
+          We source our products both from large-scale distributors and directly
+          through small, mission-driven brands. Although we are a small but
+          mighty company, we continue to source more and more sustainable, high
+          quality products in bulk thanks to YOUR support! Our community
+          continues to grow and helps us spread the #reusablerevolution.
+        </Typography>
+        <Typography gutterBottom>
+          In true Wally fashion, we want to be fully transparent with you.
+          Although we are sourcing organic products, our packing facility is not
+          certified organic - yet! This means that we cannot claim any product
+          we sell is certified organic, and instead use the tag “Made with at
+          least 95% organic ingredients.” So while our products aren’t
+          “certified organic”, please know that you are still receiving high
+          quality products made with the organic ingredients you love!
         </Typography>
       </PageSection>
       <PageSection>
@@ -217,6 +261,52 @@ function About() {
           on our site. On the backend, the QR label also allows us to see how
           far a jar has traveled and how many times it’s been reused! So please
           make sure to keep it attached, it’s like the jar's birthmark!
+        </Typography>
+      </PageSection>
+      <PageSection>
+        <Typography variant="h2" gutterBottom>
+          Our packing process
+        </Typography>
+        <Typography gutterBottom>
+          So, we’re a sustainability shop with your favorite brands. You may be
+          wondering, how do you receive all of these wonderful products that one
+          would normally see in single use packaging on the shelf of your local
+          grocery store?
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          What packaging do your bulk products arrive at the warehouse in & how
+          do you dispose of it?
+        </Typography>
+        <Typography gutterBottom>
+          Our bulk goods arrive in larger packaging than you would see on the
+          shelf at your grocery store. Most of the dry goods are shipped in
+          paper packaging that we either reuse within our warehouse or recycle
+          properly at a local facility in Austin. The same goes for the liquids
+          that arrive in plastic packaging. If we are not reusing it in the
+          warehouse or sending it back to the distribution to reuse, we properly
+          recycle it at a local center.
+        </Typography>
+        <Typography variant="h3" gutterBottom>
+          How do you pack the bulk goods into the reusable jars?
+        </Typography>
+        <Typography gutterBottom>
+          We have several ways of packing products in our warehouse! For our
+          liquids, we have a machine that measures out the correct volume and
+          fills the jars and bottles. For solids, we use two methods depending
+          on the size/shape of the product. For example, for dried beans, nuts,
+          rice, coffee, etc there is a machine that measures the correct weight
+          for each product and fills the jar. But for snacks like Raw Bliss
+          Balls and Pulp Chips, we pack those by hand to ensure they do not get
+          crushed in the co-packing process.
+        </Typography>
+        <Typography>
+          <Typography>
+            As we mentioned before, our facility is not organic certified (yet!)
+            so although we cannot label our products as 100% organic certified,
+            you can rest easy knowing that we source the highest quality
+            products and follow every food safety guideline to maintain the
+            integrity of the product.
+          </Typography>
         </Typography>
       </PageSection>
       <Box>
