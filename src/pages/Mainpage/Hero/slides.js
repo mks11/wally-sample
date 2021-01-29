@@ -92,11 +92,11 @@ HeroSlide.propTypes = {
 };
 
 const HeroBodyWrapper = styled.div`
-  background-color: #fcdc63;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
-  max-width: 325px;
-  padding: 1.5rem;
+  ${'' /* max-width: 325px; */}
+  ${'' /* padding: 1.5rem; */}
   position: absolute;
 
   @media only screen and (min-width: 481px) {
@@ -152,22 +152,22 @@ const FBWPageLink = styled(PrimaryTextLink)`
 // Hero Image Config
 const slides = [
   <HeroSlide
-    alt="New products from AMG Snacks announcement."
+    alt="New products from Common Ground announcement."
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/amg-snacks/amg-snacks-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/amg-snacks/amg-snacks-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/amg-snacks/amg-snacks-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Bite Sized Energy</HeroTitle>
-      <HeroBody>Kick that 3pm slump with new</HeroBody>
-      <HeroBody gutterBottom> energy bites by AMG Snacks</HeroBody>
+      <HeroTitle>Clean Hair & Soft Skin Awaits</HeroTitle>
+      <HeroBody>New personal care products </HeroBody>
+      <HeroBody gutterBottom> by Common Ground live now</HeroBody>
       <div>
         <FBWPageLink
-          to="/shop/brands/amg-snacks"
-          alt="New products from AMG Snacks announcement."
+          to="/shop/brands/common-ground"
+          alt="Shop new Common Ground products now!"
         >
           Shop Now <ArrowForwardIcon fontSize="small" />
         </FBWPageLink>
