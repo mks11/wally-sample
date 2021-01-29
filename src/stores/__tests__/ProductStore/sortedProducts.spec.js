@@ -1,3 +1,8 @@
+// When writing absolute paths, ./ is redundant, because you're already in the '.' directory.
+// You can just write '../../ProductStore', for example. Also, since we can also specify paths relative to src,
+// This should be written as 'stores/ProductStore'
+
+// TODO: Clean up these relative paths.
 import { sortProducts } from './../../ProductStore';
 import {
   A_TO_Z,
@@ -7,6 +12,14 @@ import {
 } from './../../../common/ProductAssortment/SortAndFilterMenu/sorting-config';
 
 describe('Products should be able to correctly sort', () => {
+  // TODO: Remove the next four tests
+  // The reason why, is because you would observe this result in any of your
+  // other tests before they passed if you had this issue. Since you are
+  // asserting that the result of sorting should match the expected response,
+  // which you control the length of, if that test passes, then you also know
+  // that what's asserted in these four tests is true. As such, I don't think
+  // these tests are necessary.
+
   test('# the count on sort should not change: A_TO_Z', () => {
     const result = sortProducts(RESPONSE.products, A_TO_Z);
     expect(result.length).toBe(RESPONSE.products.length);
@@ -23,6 +36,8 @@ describe('Products should be able to correctly sort', () => {
     const result = sortProducts(RESPONSE.products, LOW_TO_HIGH_PRICE);
     expect(result.length).toBe(RESPONSE.products.length);
   });
+
+  // =======
 
   test('# HIGH_TO_LOW', () => {
     const result = sortProducts(
