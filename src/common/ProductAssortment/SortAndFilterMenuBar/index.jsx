@@ -53,16 +53,14 @@ const OpenMenuButton = observer(() => {
 
 const ResultsCounter = observer(() => {
   const { product: productStore } = useStores();
-
+  const { filteredProducts } = productStore;
   const formatResults = (products) => {
-    return products.length > 1
-      ? `${products.length} Results`
-      : `${products.length} Result`;
+    return products.length === 1 ? ' Result' : ' Results';
   };
 
   return (
     <Typography variant="h6" component="p">
-      {formatResults(productStore.filteredProducts)}
+      {filteredProducts.length + formatResults(filteredProducts)}
     </Typography>
   );
 });
