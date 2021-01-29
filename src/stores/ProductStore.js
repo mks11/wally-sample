@@ -509,6 +509,7 @@ export function applyFilters(
         (subcategory &&
           subcategory.name &&
           selectedSubcategories.includes(subcategory.name));
+
       const inBrands =
         !selectedBrands.length ||
         (vendorFull &&

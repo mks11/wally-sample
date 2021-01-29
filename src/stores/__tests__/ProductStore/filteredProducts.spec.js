@@ -2,6 +2,7 @@ import { applyFilters } from './../../ProductStore';
 
 const AN_UNLIKELY_STRING = 'aXYx';
 
+// TODO: You can remove all of comments after reviewing my feedback
 describe('Products should be able to correctly filter by user preferences', () => {
   test('# should show ALL products when no filters provided', () => {
     const result = applyFilters(RESPONSE.products, {
@@ -10,6 +11,9 @@ describe('Products should be able to correctly filter by user preferences', () =
       selectedValues: [],
       selectedSubcategories: [],
     });
+
+    // Added to assert expected structure of result matches the mock response
+    expect(result).toEqual(RESPONSE.products);
     const count = result.length;
     expect(count).toBe(RESPONSE.products.length);
   });
@@ -21,6 +25,8 @@ describe('Products should be able to correctly filter by user preferences', () =
       selectedValues: [],
       selectedSubcategories: [],
     });
+    // Added to assert expected structure of result matches the mock response
+    expect(result).toEqual(RESPONSE_NO_MATCH.products);
     const count = result.length;
     expect(count).toBe(0);
   });
@@ -46,6 +52,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     const count = result.length;
     expect(count).toBe(0);
   });
+
   test('# should show zero match when a random text is provided in selectedValues', () => {
     const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
@@ -56,6 +63,7 @@ describe('Products should be able to correctly filter by user preferences', () =
     const count = result.length;
     expect(count).toBe(0);
   });
+
   test('# should show zero match when a random text is provided in selectedSubcategories', () => {
     const result = applyFilters(RESPONSE.products, {
       selectedBrands: [],
@@ -66,184 +74,317 @@ describe('Products should be able to correctly filter by user preferences', () =
     const count = result.length;
     expect(count).toBe(0);
   });
-  test('# should filter correctly for a matching Brand', () => {
-    const result = applyFilters(RESPONSE.products, {
-      selectedBrands: ['NotMilk'],
+
+  // The three brands tests all assert the same thing. In situations like this,
+  // it's better to throw a lot of values at the test in one go than to create
+  // three tests, since these comparisons are evaluated iteratively anyways.
+
+  // Take a look at the revised test I created to see what I mean.
+
+  it("should correctly filter out products that don't match the selected brands", () => {
+    const result = applyFilters(RESPONSE_WITH_MULTIPLE_BRANDS.products, {
+      selectedBrands: ['Brand A', 'Brand B', 'Brand C'],
       selectedLifestyles: [],
       selectedValues: [],
       selectedSubcategories: [],
     });
+
+    // Only the four extra products we created should match.
+    const EXPECTED_RESULT = RESPONSE_WITH_MULTIPLE_BRANDS.products.slice(3);
+    expect(result).toEqual(EXPECTED_RESULT);
     const count = result.length;
-    expect(count).toBe(RESPONSE.products.length);
+    expect(count).toBe(4);
   });
-  test('# brand: should match exactly one', () => {
-    const result = applyFilters(RESPONSE_BRANDS_MATCH_ONE.products, {
-      selectedBrands: ['MATCH_ONE'],
-      selectedLifestyles: [],
-      selectedValues: [],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# brands:  should match exactly two', () => {
-    const result = applyFilters(RESPONSE_BRANDS_MATCH_TWO.products, {
-      selectedBrands: ['MATCH_TWO'],
-      selectedLifestyles: [],
-      selectedValues: [],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(2);
-  });
-  test('# lifestyles: should match exactly one', () => {
-    const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_ONE.products, {
-      selectedBrands: [],
-      selectedLifestyles: ['MATCH_ONE'],
-      selectedValues: [],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# lifestyles:  should match exactly two', () => {
-    const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_TWO.products, {
-      selectedBrands: [],
-      selectedLifestyles: ['MATCH_TWO'],
-      selectedValues: [],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(2);
-  });
-  test('# subcategories: should match exactly one', () => {
-    const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_ONE.products, {
-      selectedBrands: [],
-      selectedLifestyles: [],
-      selectedValues: [],
-      selectedSubcategories: ['MATCH_ONE'],
-    });
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# subcategories:  should match exactly two', () => {
-    const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_TWO.products, {
-      selectedBrands: [],
-      selectedLifestyles: [],
-      selectedValues: [],
-      selectedSubcategories: ['MATCH_TWO'],
-    });
-    const count = result.length;
-    expect(count).toBe(2);
-  });
-  test('# values: should match exactly one', () => {
-    const result = applyFilters(RESPONSE_VALUES_MATCH_ONE.products, {
-      selectedBrands: [],
-      selectedLifestyles: [],
-      selectedValues: ['MATCH_ONE'],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# values: should match exactly two', () => {
-    const result = applyFilters(RESPONSE_VALUES_MATCH_TWO.products, {
-      selectedBrands: [],
-      selectedLifestyles: [],
-      selectedValues: ['MATCH_TWO'],
-      selectedSubcategories: [],
-    });
-    const count = result.length;
-    expect(count).toBe(2);
-  });
-  test('# intersection: values & brands  : should match exactly one', () => {
+
+  // test('# should filter correctly for a matching Brand', () => {
+  //   const result = applyFilters(RESPONSE.products, {
+  //     selectedBrands: ['NotMilk'],
+  //     selectedLifestyles: [],
+  //     selectedValues: [],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(RESPONSE.products.length);
+  // });
+
+  // test('# brand: should match exactly one', () => {
+  //   const result = applyFilters(RESPONSE_BRANDS_MATCH_ONE.products, {
+  //     selectedBrands: ['MATCH_ONE'],
+  //     selectedLifestyles: [],
+  //     selectedValues: [],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# brands:  should match exactly two', () => {
+  //   const result = applyFilters(RESPONSE_BRANDS_MATCH_TWO.products, {
+  //     selectedBrands: ['MATCH_TWO'],
+  //     selectedLifestyles: [],
+  //     selectedValues: [],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(2);
+  // });
+
+  // I have the same feedback for the lifestyles tests as I do for the brands.
+
+  // Take a look at the revised test I created to see what I mean.
+
+  it("should correctly filter out products that don't match all of the selected lifestyles", () => {
     const result = applyFilters(
-      RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE.products,
-      {
-        selectedBrands: [INTERSECTION_BRAND],
-        selectedLifestyles: [],
-        selectedValues: [INTERSECTION_VALUE],
-        selectedSubcategories: [],
-      },
-    );
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# intersection: values & lifestyle intersection : should match exactly one', () => {
-    const result = applyFilters(
-      RESPONSE_INTERSECTION_VALUES_LIFESTYLES_MATCH_ONE.products,
+      RESPONSE_MULTIPLE_MATCHING_LIFESTYLES.products,
       {
         selectedBrands: [],
-        selectedLifestyles: [INTERSECTION_LIFESTYLE],
-        selectedValues: [INTERSECTION_VALUE],
-        selectedSubcategories: [],
-      },
-    );
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# intersection: values & subcategories  : should match exactly one', () => {
-    const result = applyFilters(
-      RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE.products,
-      {
-        selectedBrands: [],
-        selectedLifestyles: [],
-        selectedValues: [INTERSECTION_VALUE],
-        selectedSubcategories: [INTERSECTION_SUBCATEGORY],
-      },
-    );
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# intersection: brands & lifestyles  : should match exactly one', () => {
-    const result = applyFilters(
-      RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE.products,
-      {
-        selectedBrands: [INTERSECTION_BRAND],
-        selectedLifestyles: [INTERSECTION_LIFESTYLE],
+        selectedLifestyles: ['Lifestyle A', 'Lifestyle B', 'Lifestyle C'],
         selectedValues: [],
         selectedSubcategories: [],
       },
     );
-    const count = result.length;
-    expect(count).toBe(1);
-  });
-  test('# intersection : brands & subcategories', () => {
-    const result = applyFilters(
-      RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE.products,
-      {
-        selectedBrands: [INTERSECTION_BRAND],
-        selectedLifestyles: [],
-        selectedValues: [],
-        selectedSubcategories: [INTERSECTION_SUBCATEGORY],
-      },
+
+    const EXPECTED_RESULT = RESPONSE_MULTIPLE_MATCHING_LIFESTYLES.products.slice(
+      -1,
     );
+    expect(result).toEqual(EXPECTED_RESULT);
     const count = result.length;
     expect(count).toBe(1);
   });
-  test('# intersection : lifestyles & subcategories', () => {
+
+  // test('# lifestyles: should match exactly one', () => {
+  //   const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_ONE.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: ['MATCH_ONE'],
+  //     selectedValues: [],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# lifestyles:  should match exactly two', () => {
+  //   const result = applyFilters(RESPONSE_LIFESTYLES_MATCH_TWO.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: ['MATCH_TWO'],
+  //     selectedValues: [],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(2);
+  // });
+
+  // I have the same feedback for the subcategory tests as I do for the brands.
+
+  // Take a look at the revised test I created to see what I mean.
+
+  it("should correctly filter out products with subcategories that aren't selected", () => {
     const result = applyFilters(
-      RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE.products,
+      RESPONSE_MULTIPLE_MATCHING_SUBCATEGORIES.products,
       {
         selectedBrands: [],
-        selectedLifestyles: [INTERSECTION_LIFESTYLE],
+        selectedLifestyles: [],
         selectedValues: [],
-        selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+        selectedSubcategories: [
+          'Subcategory A',
+          'Subcategory B',
+          'Subcategory C',
+        ],
       },
     );
+
+    const EXPECTED_RESULT = RESPONSE_MULTIPLE_MATCHING_SUBCATEGORIES.products.slice(
+      3,
+    );
+    expect(result).toEqual(EXPECTED_RESULT);
     const count = result.length;
-    expect(count).toBe(1);
+    expect(count).toBe(3);
   });
-  test('# intersection : values & lifestyles & subcategories & brand', () => {
-    const result = applyFilters(RESPONSE_INTERSECTION_ALL_MATCH_ONE.products, {
+
+  // test('# subcategories: should match exactly one', () => {
+  //   const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_ONE.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: [],
+  //     selectedValues: [],
+  //     selectedSubcategories: ['MATCH_ONE'],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# subcategories:  should match exactly two', () => {
+  //   const result = applyFilters(RESPONSE_SUBCATEGORIES_MATCH_TWO.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: [],
+  //     selectedValues: [],
+  //     selectedSubcategories: ['MATCH_TWO'],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(2);
+  // });
+
+  // I have the same feedback for the subcategory tests as I do for the brands.
+
+  // Take a look at the revised test I created to see what I mean.
+
+  it("should correctly filter out products that don't match all selected values", () => {
+    const result = applyFilters(RESPONSE_MULTIPLE_MATCHING_VALUES.products, {
       selectedBrands: [],
-      selectedLifestyles: [INTERSECTION_LIFESTYLE],
-      selectedValues: [],
-      selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+      selectedLifestyles: [],
+      selectedValues: ['Value A', 'Value B', 'Value C'],
+      selectedSubcategories: [],
     });
+
+    const EXPECTED_RESULT = RESPONSE_MULTIPLE_MATCHING_VALUES.products.slice(
+      -1,
+    );
+    expect(result).toEqual(EXPECTED_RESULT);
     const count = result.length;
     expect(count).toBe(1);
   });
+
+  // test('# values: should match exactly one', () => {
+  //   const result = applyFilters(RESPONSE_VALUES_MATCH_ONE.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: [],
+  //     selectedValues: ['MATCH_ONE'],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# values: should match exactly two', () => {
+  //   const result = applyFilters(RESPONSE_VALUES_MATCH_TWO.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: [],
+  //     selectedValues: ['MATCH_TWO'],
+  //     selectedSubcategories: [],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(2);
+  // });
+
+  // For these integration tests where you are testing all conditions at once, I
+  // don't think we need to test each combination of values like this. My
+  // reasoning is that now that you've tested each unit of this function individually,
+  // there is no logical reason why certain combinations would cause this function
+  // to fail (based on the filtration code, which is basically all or nothing
+  // for each product)
+
+  // As such, I think it's better to simply lump all the test conditions into
+  // a single test that makes assertions on each of the selectedXXX fields as
+  // I've done below:
+
+  it("should correctly filter out products that don't match all of the selected filtration options", () => {
+    const result = applyFilters(RESPONSE_ALL_FILTER_OPTIONS_SELECTED.products, {
+      selectedBrands: ['Brand B'],
+      selectedLifestyles: ['Lifestyle A', 'Lifestyle B'],
+      selectedValues: ['Value A', 'Value B'],
+      selectedSubcategories: ['Subcategory A'],
+    });
+
+    const EXPECTED_RESULT = RESPONSE_ALL_FILTER_OPTIONS_SELECTED.products.slice(
+      -1,
+    );
+    expect(result).toEqual(EXPECTED_RESULT);
+    const count = result.length;
+    expect(count).toBe(1);
+  });
+
+  // test('# intersection: values & brands  : should match exactly one', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [INTERSECTION_BRAND],
+  //       selectedLifestyles: [],
+  //       selectedValues: [INTERSECTION_VALUE],
+  //       selectedSubcategories: [],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# intersection: values & lifestyle intersection : should match exactly one', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_VALUES_LIFESTYLES_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [],
+  //       selectedLifestyles: [INTERSECTION_LIFESTYLE],
+  //       selectedValues: [INTERSECTION_VALUE],
+  //       selectedSubcategories: [],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# intersection: values & subcategories  : should match exactly one', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [],
+  //       selectedLifestyles: [],
+  //       selectedValues: [INTERSECTION_VALUE],
+  //       selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# intersection: brands & lifestyles  : should match exactly one', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [INTERSECTION_BRAND],
+  //       selectedLifestyles: [INTERSECTION_LIFESTYLE],
+  //       selectedValues: [],
+  //       selectedSubcategories: [],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# intersection : brands & subcategories', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [INTERSECTION_BRAND],
+  //       selectedLifestyles: [],
+  //       selectedValues: [],
+  //       selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+  // test('# intersection : lifestyles & subcategories', () => {
+  //   const result = applyFilters(
+  //     RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE.products,
+  //     {
+  //       selectedBrands: [],
+  //       selectedLifestyles: [INTERSECTION_LIFESTYLE],
+  //       selectedValues: [],
+  //       selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+  //     },
+  //   );
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
+
+  // test('# intersection : values & lifestyles & subcategories & brand', () => {
+  //   const result = applyFilters(RESPONSE_INTERSECTION_ALL_MATCH_ONE.products, {
+  //     selectedBrands: [],
+  //     selectedLifestyles: [INTERSECTION_LIFESTYLE],
+  //     selectedValues: [],
+  //     selectedSubcategories: [INTERSECTION_SUBCATEGORY],
+  //   });
+  //   const count = result.length;
+  //   expect(count).toBe(1);
+  // });
 });
 
 // fixture
@@ -495,264 +636,374 @@ const RESPONSE = {
   values: ['Organic', 'Non-GMO', 'Vegan', 'Regionally Sourced'],
 };
 
+// TODO: Remove these comments after understanding this mistake
+// const RESPONSE_NO_MATCH = {
+//   ...RESPONSE,
+//   products: [],
+// };
+
+// @MKS If no products matched the query on the backend, this would be returned
 const RESPONSE_NO_MATCH = {
-  ...RESPONSE,
   products: [],
+  brands: [],
+  lifestyles: [],
+  subcategories: [],
+  values: [],
 };
 
-const RESPONSE_BRANDS_MATCH_ONE = {
+const RESPONSE_WITH_MULTIPLE_BRANDS = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
       vendorFull: {
-        name: 'MATCH_ONE',
+        name: 'Brand A',
       },
     },
-  ],
-};
-
-const RESPONSE_BRANDS_MATCH_TWO = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
       vendorFull: {
-        name: 'MATCH_TWO',
+        name: 'Brand B',
       },
     },
     {
-      ...RESPONSE.products[1],
+      ...RESPONSE.products[0],
       vendorFull: {
-        name: 'MATCH_TWO',
+        name: 'Brand C',
+      },
+    },
+    {
+      ...RESPONSE.products[0],
+      vendorFull: {
+        name: 'Brand A',
       },
     },
   ],
 };
 
-const RESPONSE_LIFESTYLES_MATCH_ONE = {
+// These can be removed
+
+// const RESPONSE_BRANDS_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       vendorFull: {
+//         name: 'MATCH_ONE',
+//       },
+//     },
+//   ],
+// };
+
+// const RESPONSE_BRANDS_MATCH_TWO = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       vendorFull: {
+//         name: 'MATCH_TWO',
+//       },
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       vendorFull: {
+//         name: 'MATCH_TWO',
+//       },
+//     },
+//   ],
+// };
+
+const RESPONSE_MULTIPLE_MATCHING_LIFESTYLES = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
-    { ...RESPONSE.products[0], lifestyles: ['MATCH_ONE', AN_UNLIKELY_STRING] },
+    { ...RESPONSE.products[0], lifestyles: ['Lifestyle A', 'Lifestyle B'] },
+    { ...RESPONSE.products[0], lifestyles: ['Lifestyle A', 'Lifestyle C'] },
+    {
+      ...RESPONSE.products[0],
+      lifestyles: ['Lifestyle A', 'Lifestyle B', 'Lifestyle C', 'Lifestyle D'],
+    },
   ],
 };
 
-const RESPONSE_LIFESTYLES_MATCH_TWO = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    { ...RESPONSE.products[0], lifestyles: ['MATCH_TWO', AN_UNLIKELY_STRING] },
-    { ...RESPONSE.products[1], lifestyles: ['MATCH_TWO', AN_UNLIKELY_STRING] },
-  ],
-};
+// These can be removed
 
-const RESPONSE_SUBCATEGORIES_MATCH_ONE = {
+// const RESPONSE_LIFESTYLES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     { ...RESPONSE.products[0], lifestyles: ['MATCH_ONE', AN_UNLIKELY_STRING] },
+//   ],
+// };
+
+// const RESPONSE_LIFESTYLES_MATCH_TWO = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     { ...RESPONSE.products[0], lifestyles: ['MATCH_TWO', AN_UNLIKELY_STRING] },
+//     { ...RESPONSE.products[1], lifestyles: ['MATCH_TWO', AN_UNLIKELY_STRING] },
+//   ],
+// };
+
+const RESPONSE_MULTIPLE_MATCHING_SUBCATEGORIES = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
     {
       ...RESPONSE.products[0],
       subcategory: {
-        name: 'MATCH_ONE',
+        name: 'Subcategory A',
+      },
+    },
+    {
+      ...RESPONSE.products[0],
+      subcategory: {
+        name: 'Subcategory B',
+      },
+    },
+    {
+      ...RESPONSE.products[0],
+      subcategory: {
+        name: 'Subcategory C',
       },
     },
   ],
 };
 
-const RESPONSE_SUBCATEGORIES_MATCH_TWO = {
+// These can be removed
+
+// const RESPONSE_SUBCATEGORIES_MATCH_TWO = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     { ...RESPONSE.products[0], subcategory: { name: 'MATCH_TWO' } },
+//     { ...RESPONSE.products[1], subcategory: { name: 'MATCH_TWO' } },
+//   ],
+// };
+
+const RESPONSE_MULTIPLE_MATCHING_VALUES = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
-    { ...RESPONSE.products[0], subcategory: { name: 'MATCH_TWO' } },
-    { ...RESPONSE.products[1], subcategory: { name: 'MATCH_TWO' } },
+    { ...RESPONSE.products[0], values: ['Value A', 'Value B'] },
+    { ...RESPONSE.products[0], values: ['Value A', 'Value C'] },
+    {
+      ...RESPONSE.products[0],
+      values: ['Value A', 'Value B', 'Value C', 'Value D'],
+    },
   ],
 };
 
-const RESPONSE_VALUES_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    { ...RESPONSE.products[0], values: ['MATCH_ONE', AN_UNLIKELY_STRING] },
-  ],
-};
+// const RESPONSE_VALUES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     { ...RESPONSE.products[0], values: ['MATCH_ONE', AN_UNLIKELY_STRING] },
+//   ],
+// };
 
-const RESPONSE_VALUES_MATCH_TWO = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    { ...RESPONSE.products[0], values: ['MATCH_TWO', AN_UNLIKELY_STRING] },
-    { ...RESPONSE.products[1], values: ['MATCH_TWO', AN_UNLIKELY_STRING] },
-  ],
-};
+// const RESPONSE_VALUES_MATCH_TWO = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     { ...RESPONSE.products[0], values: ['MATCH_TWO', AN_UNLIKELY_STRING] },
+//     { ...RESPONSE.products[1], values: ['MATCH_TWO', AN_UNLIKELY_STRING] },
+//   ],
+// };
 
 /**************   intersection of values, brands and lifestyles ************/
-const INTERSECTION_VALUE = 'INTERSECTION_VALUE';
-const INTERSECTION_BRAND = 'INTERSECTION_BRAND';
-const INTERSECTION_LIFESTYLE = 'INTERSECTION_LIFESTYLE';
-const INTERSECTION_SUBCATEGORY = 'INTERSECTION_SUBCATEGORY';
-const RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    {
-      ...RESPONSE.products[0],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      vendorFull: {
-        name: INTERSECTION_BRAND,
-      },
-    },
-    {
-      ...RESPONSE.products[1],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      vendorFull: {
-        name: INTERSECTION_BRAND,
-      },
-    },
-  ],
-};
-const RESPONSE_INTERSECTION_VALUES_LIFESTYLES_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    {
-      ...RESPONSE.products[0],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      lifestyles: [INTERSECTION_LIFESTYLE],
-    },
-    {
-      ...RESPONSE.products[1],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-    },
-  ],
-};
+// const INTERSECTION_VALUE = 'INTERSECTION_VALUE';
+// const INTERSECTION_BRAND = 'INTERSECTION_BRAND';
+// const INTERSECTION_LIFESTYLE = 'INTERSECTION_LIFESTYLE';
+// const INTERSECTION_SUBCATEGORY = 'INTERSECTION_SUBCATEGORY';
+// const RESPONSE_INTERSECTION_VALUES_BRANDS_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//       vendorFull: {
+//         name: INTERSECTION_BRAND,
+//       },
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//     },
+//     {
+//       ...RESPONSE.products[2],
+//       vendorFull: {
+//         name: INTERSECTION_BRAND,
+//       },
+//     },
+//   ],
+// };
+// const RESPONSE_INTERSECTION_VALUES_LIFESTYLES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//       lifestyles: [INTERSECTION_LIFESTYLE],
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//     },
+//     {
+//       ...RESPONSE.products[2],
+//       lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
+//     },
+//   ],
+// };
 
-const RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    {
-      ...RESPONSE.products[0],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-      subcategory: {
-        name: INTERSECTION_SUBCATEGORY,
-      },
-    },
-    {
-      ...RESPONSE.products[1],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      subcategory: {
-        name: INTERSECTION_SUBCATEGORY,
-      },
-    },
-  ],
-};
+// const RESPONSE_INTERSECTION_VALUES_SUBCATEGORIES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//       subcategory: {
+//         name: INTERSECTION_SUBCATEGORY,
+//       },
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//     },
+//     {
+//       ...RESPONSE.products[2],
+//       subcategory: {
+//         name: INTERSECTION_SUBCATEGORY,
+//       },
+//     },
+//   ],
+// };
 
-const RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE = {
+// const RESPONSE_INTERSECTION_BRANDS_LIFESTYLES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       vendorFull: {
+//         name: INTERSECTION_BRAND,
+//       },
+//       lifestyles: [INTERSECTION_LIFESTYLE],
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+//     },
+//     {
+//       ...RESPONSE.products[2],
+//       lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
+//     },
+//   ],
+// };
+
+// const RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       vendorFull: { name: INTERSECTION_BRAND },
+//       subcategory: { name: INTERSECTION_SUBCATEGORY },
+//     },
+//     { ...RESPONSE.products[0], vendorFull: { name: INTERSECTION_BRAND } },
+//     {
+//       ...RESPONSE.products[1],
+//       subcategory: { name: AN_UNLIKELY_STRING },
+//     },
+//   ],
+// };
+
+// const RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE = {
+//   ...RESPONSE,
+//   products: [
+//     ...RESPONSE.products,
+//     {
+//       ...RESPONSE.products[0],
+//       lifestyles: [INTERSECTION_LIFESTYLE],
+//       subcategory: {
+//         name: INTERSECTION_SUBCATEGORY,
+//       },
+//     },
+//     {
+//       ...RESPONSE.products[1],
+//       lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
+//     },
+//     {
+//       ...RESPONSE.products[2],
+//       subcategories: {
+//         name: INTERSECTION_SUBCATEGORY,
+//       },
+//     },
+//   ],
+// };
+
+// CONDITIONS:
+// 'Lifestyle A', 'Lifestyle B', 'Subcategory A', 'Brand B', 'Value A', 'Value B'
+const RESPONSE_ALL_FILTER_OPTIONS_SELECTED = {
   ...RESPONSE,
   products: [
     ...RESPONSE.products,
+    // Only has correct brand
     {
       ...RESPONSE.products[0],
       vendorFull: {
-        name: INTERSECTION_BRAND,
+        name: 'Brand B',
       },
-      lifestyles: [INTERSECTION_LIFESTYLE],
+      lifestyles: ['Lifestyle B', 'Lifestyle C'],
+      subcategory: { name: 'Subcategory B' },
+      values: ['Value B', 'Value C'],
     },
-    {
-      ...RESPONSE.products[1],
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-    },
-  ],
-};
-
-const RESPONSE_INTERSECTION_BRANDS_SUBCATEGORIES_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
+    // Only has correct lifestyles
     {
       ...RESPONSE.products[0],
-      vendorFull: { name: INTERSECTION_BRAND },
-      subcategory: { name: INTERSECTION_SUBCATEGORY },
-    },
-    { ...RESPONSE.products[0], vendorFull: { name: INTERSECTION_BRAND } },
-    {
-      ...RESPONSE.products[1],
-      subcategory: { name: AN_UNLIKELY_STRING },
-    },
-  ],
-};
-
-const RESPONSE_INTERSECTION_LIFESTYLES_SUBCATEGORIES_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    {
-      ...RESPONSE.products[0],
-      lifestyles: [INTERSECTION_LIFESTYLE],
-      subcategory: {
-        name: INTERSECTION_SUBCATEGORY,
-      },
-    },
-    {
-      ...RESPONSE.products[1],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
-      subcategories: {
-        name: INTERSECTION_SUBCATEGORY,
-      },
-    },
-  ],
-};
-
-const RESPONSE_INTERSECTION_ALL_MATCH_ONE = {
-  ...RESPONSE,
-  products: [
-    ...RESPONSE.products,
-    {
-      ...RESPONSE.products[0],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-      subcategory: {
-        name: INTERSECTION_SUBCATEGORY,
-      },
       vendorFull: {
-        name: INTERSECTION_BRAND,
+        name: 'Brand A',
       },
-      values: [INTERSECTION_VALUE, AN_UNLIKELY_STRING],
+      lifestyles: ['Lifestyle A', 'Lifestyle B'],
+      subcategory: { name: 'Subcategory B' },
+      values: ['Value C'],
     },
+    // Only has correct subcategory
     {
-      ...RESPONSE.products[1],
-      lifestyles: [INTERSECTION_LIFESTYLE, AN_UNLIKELY_STRING],
-    },
-    {
-      ...RESPONSE.products[2],
+      ...RESPONSE.products[0],
       vendorFull: {
-        name: INTERSECTION_BRAND,
+        name: 'Brand A',
       },
+      lifestyles: ['Lifestyle B', 'Lifestyle C'],
+      subcategory: { name: 'Subcategory A' },
+      values: ['Value C'],
     },
+    // Only has correct values
     {
-      ...RESPONSE.products[2],
-      subcategory: {
-        name: INTERSECTION_SUBCATEGORY,
+      ...RESPONSE.products[0],
+      vendorFull: {
+        name: 'Brand A',
       },
+      lifestyles: ['Lifestyle B', 'Lifestyle C'],
+      subcategory: { name: 'Subcategory C' },
+      values: ['Value A', 'Value B', 'Value C'],
+    },
+    // brand name, lifestyles, subcategory, and values all match the conditions
+    {
+      ...RESPONSE.products[0],
+      vendorFull: {
+        name: 'Brand B',
+      },
+      lifestyles: ['Lifestyle A', 'Lifestyle B', 'Lifestyle C'],
+      subcategory: { name: 'Subcategory A' },
+      values: ['Value A', 'Value B', 'Value C'],
     },
   ],
 };
