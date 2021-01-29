@@ -35,6 +35,17 @@ describe('Products should be able to correctly sort', () => {
     );
   });
 
+  test('# Sold Out Case: HIGH_TO_LOW: should not affect anything', () => {
+    const result = sortProducts(
+      RESPONSE_RANDOMLY_ORDERED_FOR_PRICE_SOLD_OUT.products,
+      HIGH_TO_LOW_PRICE,
+    );
+
+    expect(result).toEqual(
+      RESPONSE_RANDOMLY_ORDERED_FOR_PRICE_SOLD_OUT__EXPECTED_HIGH_TO_LOW.products,
+    );
+  });
+
   test('# LOW_TO_HIGH', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_PRICE.products,
@@ -362,6 +373,56 @@ const RESPONSE_RANDOMLY_ORDERED_FOR_PRICE = {
   ],
 };
 
+const RESPONSE_RANDOMLY_ORDERED_FOR_PRICE_SOLD_OUT = {
+  ...RESPONSE,
+  products: [
+    {
+      ...RESPONSE.products[0],
+      _id: 1,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 300,
+          isAvailable: false,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 2,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 100,
+          isAvailable: true,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 3,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 200,
+          isAvailable: false,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 4,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 50,
+          isAvailable: true,
+        },
+      ],
+    },
+  ],
+};
+
 const RESPONSE_RANDOMLY_ORDERED_FOR_ALPHABET = {
   ...RESPONSE,
   products: [
@@ -459,6 +520,56 @@ const RESPONSE_RANDOMLY_ORDERED_FOR_PRICE__EXPECTED_LOW_TO_HIGH = {
         {
           ...RESPONSE.products[0].inventory[0],
           price: 300,
+        },
+      ],
+    },
+  ],
+};
+
+const RESPONSE_RANDOMLY_ORDERED_FOR_PRICE_SOLD_OUT__EXPECTED_HIGH_TO_LOW = {
+  ...RESPONSE,
+  products: [
+    {
+      ...RESPONSE.products[0],
+      _id: 1,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 300,
+          isAvailable: false,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 3,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 200,
+          isAvailable: false,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 2,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 100,
+          isAvailable: true,
+        },
+      ],
+    },
+    {
+      ...RESPONSE.products[0],
+      _id: 4,
+      inventory: [
+        {
+          ...RESPONSE.products[0].inventory[0],
+          price: 50,
+          isAvailable: true,
         },
       ],
     },
