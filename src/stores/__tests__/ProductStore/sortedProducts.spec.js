@@ -1,45 +1,13 @@
-// When writing absolute paths, ./ is redundant, because you're already in the '.' directory.
-// You can just write '../../ProductStore', for example. Also, since we can also specify paths relative to src,
-// This should be written as 'stores/ProductStore'
-
-// TODO: Clean up these relative paths.
-import { sortProducts } from './../../ProductStore';
+import { sortProducts } from 'stores/ProductStore';
 import {
   A_TO_Z,
   NEWEST,
   HIGH_TO_LOW_PRICE,
   LOW_TO_HIGH_PRICE,
-} from './../../../common/ProductAssortment/SortAndFilterMenu/sorting-config';
+} from 'common/ProductAssortment/SortAndFilterMenu/sorting-config';
 
 describe('Products should be able to correctly sort', () => {
-  // TODO: Remove the next four tests
-  // The reason why, is because you would observe this result in any of your
-  // other tests before they passed if you had this issue. Since you are
-  // asserting that the result of sorting should match the expected response,
-  // which you control the length of, if that test passes, then you also know
-  // that what's asserted in these four tests is true. As such, I don't think
-  // these tests are necessary.
-
-  test('# the count on sort should not change: A_TO_Z', () => {
-    const result = sortProducts(RESPONSE.products, A_TO_Z);
-    expect(result.length).toBe(RESPONSE.products.length);
-  });
-  test('# the count on sort should not change: NEWEST', () => {
-    const result = sortProducts(RESPONSE.products, NEWEST);
-    expect(result.length).toBe(RESPONSE.products.length);
-  });
-  test('# the count on sort should not change: HIGH_TO_LOW_PRICE', () => {
-    const result = sortProducts(RESPONSE.products, HIGH_TO_LOW_PRICE);
-    expect(result.length).toBe(RESPONSE.products.length);
-  });
-  test('# the count on sort should not change: LOW_TO_HIGH_PRICE', () => {
-    const result = sortProducts(RESPONSE.products, LOW_TO_HIGH_PRICE);
-    expect(result.length).toBe(RESPONSE.products.length);
-  });
-
-  // =======
-
-  test('# HIGH_TO_LOW', () => {
+  it('# HIGH_TO_LOW', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_PRICE.products,
       HIGH_TO_LOW_PRICE,
@@ -50,7 +18,7 @@ describe('Products should be able to correctly sort', () => {
     );
   });
 
-  test('# Sold Out Case: HIGH_TO_LOW: should not affect anything', () => {
+  it('# Sold Out Case: HIGH_TO_LOW: should not affect anything', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_PRICE_SOLD_OUT.products,
       HIGH_TO_LOW_PRICE,
@@ -61,7 +29,7 @@ describe('Products should be able to correctly sort', () => {
     );
   });
 
-  test('# LOW_TO_HIGH', () => {
+  it('# LOW_TO_HIGH', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_PRICE.products,
       LOW_TO_HIGH_PRICE,
@@ -72,7 +40,7 @@ describe('Products should be able to correctly sort', () => {
     );
   });
 
-  test('# A_TO_Z', () => {
+  it('# A_TO_Z', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_ALPHABET.products,
       A_TO_Z,
@@ -83,7 +51,7 @@ describe('Products should be able to correctly sort', () => {
     );
   });
 
-  test('# NEWEST', () => {
+  it('# NEWEST', () => {
     const result = sortProducts(
       RESPONSE_RANDOMLY_ORDERED_FOR_NEWNESS.products,
       NEWEST,
