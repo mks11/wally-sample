@@ -20,8 +20,8 @@ export default function SortAndFilterMenuBar() {
   );
 }
 
-function OpenMenuButton() {
-  const { modalV2: modalV2Store } = useStores();
+const OpenMenuButton = observer(() => {
+  const { modalV2: modalV2Store, product: productStore } = useStores();
 
   const SuspenseFallback = () => (
     <>
@@ -38,18 +38,31 @@ function OpenMenuButton() {
     );
   };
 
+  const isDisabled = productStore.products && productStore.products.length < 1;
+
   return (
-    <PrimaryWallyButton onClick={handleClick} variant="outlined">
+    <PrimaryWallyButton
+      onClick={handleClick}
+      disabled={isDisabled}
+      variant="outlined"
+    >
       Sort & Filter
     </PrimaryWallyButton>
   );
-}
+});
 
 const ResultsCounter = observer(() => {
   const { product: productStore } = useStores();
+
+  const formatResults = (products) => {
+    return products.length > 1
+      ? `${products.length} Results`
+      : `${products.length} Result`;
+  };
+
   return (
     <Typography variant="h6" component="p">
-      {productStore.filteredProducts.length} Results
+      {formatResults(productStore.filteredProducts)}
     </Typography>
   );
 });

@@ -7,9 +7,6 @@ import ProductList from './ProductList';
 
 function ProductAssortment() {
   const { product } = useStores();
-  if (!product.filteredProducts.length) {
-    return null;
-  }
 
   return (
     <Box>
