@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // API
 import { getProductAssortment } from 'api/product';
@@ -23,6 +23,7 @@ import { withRouter } from 'react-router-dom';
 export const cookieName = 'productAssortmentPrefs';
 
 function ShoppingPage({ children, pathname, query }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [cookies, setCookie] = useCookies([cookieName]);
   const productAssortmentPrefs = cookies[cookieName];
 
@@ -57,14 +58,14 @@ function ShoppingPage({ children, pathname, query }) {
     async function loadProductAssortment() {
       try {
         const auth = userStore.getHeaderAuth();
-        loading.show();
+        setIsLoading(true);
         const productAssortment = await getProductAssortment(query, auth);
         productStore.initializeProductAssortment(productAssortment.data);
       } catch (e) {
         console.error(e);
         snackbar.openSnackbar('Failed to load product assortment.', 'error');
       } finally {
-        setTimeout(() => loading.hide(), 300);
+        setIsLoading(false);
       }
     }
 
@@ -74,7 +75,7 @@ function ShoppingPage({ children, pathname, query }) {
   return (
     <Container maxWidth="xl">
       {children}
-      <ProductAssortment />
+      <ProductAssortment isLoading={isLoading} />
     </Container>
   );
 }

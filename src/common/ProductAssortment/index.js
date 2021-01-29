@@ -5,13 +5,13 @@ import { useStores } from 'hooks/mobx';
 import SortAndFilterMenuBar from './SortAndFilterMenuBar';
 import ProductList from './ProductList';
 
-function ProductAssortment() {
+function ProductAssortment({ isLoading }) {
   const { product } = useStores();
 
   return (
     <Box>
       <SortAndFilterMenuBar />
-      <ProductList products={product.filteredProducts} />
+      <ProductList isLoading={isLoading} products={product.filteredProducts} />
     </Box>
   );
 }
