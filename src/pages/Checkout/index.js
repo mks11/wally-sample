@@ -32,7 +32,12 @@ import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
+import {
+  formatMoney,
+  getErrorMessage,
+  getErrorParam,
+  shouldChargeToteDeposit,
+} from 'utils';
 
 // MobX
 import { observer } from 'mobx-react';
@@ -90,6 +95,7 @@ function Checkout({ breadcrumbs, location }) {
     }
 
     if (user && flags.checkoutFirst) {
+      console.log('loading');
       loadData();
     }
   }, [user, flags]);
@@ -458,6 +464,10 @@ const OrderSummary = observer(() => {
         <div>
           {packagingUsed.map((p) => {
             const { quantity, type } = p;
+            if (type.includes('Tote') && !shouldChargeToteDeposit()) {
+              return null;
+            }
+
             return (
               <Box
                 key={type}
@@ -474,11 +484,7 @@ const OrderSummary = observer(() => {
                   </Typography>
                 </div>
 
-                <Typography>
-                  {type.includes('Tote')
-                    ? formatMoney(1000 / 100)
-                    : formatMoney((quantity * 100) / 100)}
-                </Typography>
+                <Typography>{getPackagingDeposit(type, quantity)}</Typography>
               </Box>
             );
           })}
@@ -638,6 +644,14 @@ const OrderSummary = observer(() => {
     </Card>
   );
 });
+
+// Shouldn't have to take care of this on the frontend, since the backend
+// knows this data.
+function getPackagingDeposit(type, quantity) {
+  return type.includes('Tote')
+    ? formatMoney(1000 / 100)
+    : formatMoney((quantity * 100) / 100);
+}
 
 function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;
