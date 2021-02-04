@@ -5,6 +5,7 @@ import { ArrowForwardIcon } from 'Icons';
 
 // Material UI
 import { Box, Typography } from '@material-ui/core';
+import theme from 'mui-theme';
 
 // Prop Types
 import PropTypes from 'prop-types';
@@ -140,6 +141,14 @@ const HeroBody = styled(Typography)`
 `;
 
 const FBWPageLink = styled(PrimaryTextLink)`
+  background-color: ${theme.palette.primary.main};
+  color: ${theme.palette.white.main};
+  &&& {
+    &:hover {
+      color: ${theme.palette.white.dark};
+    }
+  }
+
   font-size: 1rem;
   font-weight: bold;
   padding: 0.7rem 1rem;
@@ -152,22 +161,22 @@ const FBWPageLink = styled(PrimaryTextLink)`
 // Hero Image Config
 const slides = [
   <HeroSlide
-    alt="New products from Common Ground announcement."
+    alt="New products from Yaya Maria's announcement."
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/common-ground/common-ground-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Clean Hair & Soft Skin Awaits</HeroTitle>
-      <HeroBody>New personal care products </HeroBody>
-      <HeroBody gutterBottom> by Common Ground live now</HeroBody>
+      <HeroTitle>Soaps by Yaya Maria's</HeroTitle>
+      <HeroBody>Sweet lavender hand and dish soap </HeroBody>
+      <HeroBody gutterBottom> available now for a limited time.</HeroBody>
       <div>
         <FBWPageLink
-          to="/shop/brands/common-ground"
-          alt="Shop new Common Ground products now!"
+          to="/shop/brands/yaya-marias"
+          alt="Shop new Yaya Maria's products now!"
         >
           Shop Now <ArrowForwardIcon fontSize="small" />
         </FBWPageLink>

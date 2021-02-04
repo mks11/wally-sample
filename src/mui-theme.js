@@ -37,6 +37,10 @@ let theme = createMuiTheme({
     error: {
       main: '#CC2936',
     },
+    white: {
+      main: '#fff',
+      dark: '#EBEBEB',
+    },
   },
   props: {
     MuiButton: {
