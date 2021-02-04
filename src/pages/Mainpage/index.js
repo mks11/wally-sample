@@ -1,5 +1,4 @@
 import React, { Component, lazy, Suspense } from 'react';
-import styled from 'styled-components';
 
 // Services & utilities
 import { logPageView } from 'services/google-analytics';
@@ -9,34 +8,19 @@ import { connect } from 'utils';
 import { APP_URL } from 'config';
 
 // npm components
-import { Box, Container, Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
 import CategoryCard from './CategoryCard';
 import CategoriesList from './CategoriesList';
 import Filters from './ProductTop/Filters';
+import Hero from './Hero';
 import Product from './Product';
 import ProductList from './ProductList';
 
 // import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
-import ImageCarousel from 'common/ImageCarousel';
-
-// Images
-import slides, { HAS_DOTS } from './Hero/slides';
-
-var DesktopCarouselWrapper = styled(Box)`
-  @media only screen and (max-width: 480px) {
-    display: none;
-  }
-`;
-
-var MobileCarouselWrapper = styled(Box)`
-  @media only screen and (min-width: 481px) {
-    display: none;
-  }
-`;
 
 const ProductModal = lazy(() => import('modals/ProductModalV2'));
 
@@ -288,26 +272,7 @@ class Mainpage extends Component {
                       />
                     ) : ( */}
                     <>
-                      {/* displayed from 481px and up */}
-                      <DesktopCarouselWrapper my={2} zIndex={1}>
-                        <ImageCarousel
-                          dots={HAS_DOTS}
-                          keyName={'featured-brands'}
-                          height={675}
-                          slides={slides}
-                          width={1200}
-                        />
-                      </DesktopCarouselWrapper>
-                      {/* displayed from 480px and down */}
-                      <MobileCarouselWrapper my={2} zIndex={1}>
-                        <ImageCarousel
-                          dots={HAS_DOTS}
-                          keyName={'featured-brands'}
-                          height={480}
-                          slides={slides}
-                          width={480}
-                        />
-                      </MobileCarouselWrapper>
+                      <Hero />
                       {ads2 && (
                         <img
                           src={APP_URL + ads2.image}
