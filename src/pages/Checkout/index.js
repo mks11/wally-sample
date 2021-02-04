@@ -458,6 +458,7 @@ const OrderSummary = observer(() => {
         <div>
           {packagingUsed.map((p) => {
             const { quantity, type } = p;
+            if (type.includes('Reusable')) return null;
             return (
               <Box
                 key={type}
