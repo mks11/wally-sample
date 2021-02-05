@@ -1,76 +1,65 @@
 import React, { useEffect, useState } from 'react';
+
+// API
+import { getVendor } from 'api/vendor';
+
+// Custom Components
+import ProductAssortmentDetails from 'common/ProductAssortmentDetails';
+
+// MobX
 import { observer } from 'mobx-react';
 import { useStores } from 'hooks/mobx';
+
+// React Router
 import { withRouter } from 'react-router-dom';
-import { Container } from '@material-ui/core';
-import axios from 'axios';
-import { API_GET_BRAND } from 'config';
-import { API_GET_PRODUCTS_MATCHING_FILTERS } from 'config';
-import ProductAssortmentDetails from 'common/ProductAssortmentDetails';
-import ProductAssortment from 'common/ProductAssortment';
 
-function getBrand(user, brandName) {
-  return axios.get(API_GET_BRAND, {
-    ...user.getHeaderAuth(),
-    params: {
-      urlName: brandName,
-    },
-  });
-}
+// Templates
+import ShoppingPage from './ShoppingPage';
 
-function getProductAssortment(user, brandName) {
-  return axios.get(API_GET_PRODUCTS_MATCHING_FILTERS, {
-    ...user.getHeaderAuth(),
-    params: {
-      brandUrlName: brandName,
-    },
-  });
-}
+function ShopByBrand({ location, match }) {
+  const { brandName = '' } = match.params;
+  const pathname = location && location.pathname ? location.pathname : '';
+  const query = {
+    brandUrlName: brandName,
+  };
 
-function ShopByBrand({ match }) {
-  const { user: userStore, snackbar, loading, product } = useStores();
+  // Local State
   const [brandData, setBrandData] = useState({
     name: '',
     logo_url: '',
     description: '',
   });
-  const { brandName = '' } = match.params;
+
+  // MobX State
+  const { user: userStore, snackbar } = useStores();
 
   useEffect(() => {
-    async function load() {
+    async function loadBrandData() {
       try {
-        loading.show();
-        const [brand, productAssortment] = await Promise.all([
-          getBrand(userStore, brandName),
-          getProductAssortment(userStore, brandName),
-        ]);
-        product.initializeProductAssortment(productAssortment.data);
-        setBrandData(brand.data);
+        const auth = userStore.getHeaderAuth();
+        const brand = await getVendor(brandName, auth);
+        if (brand.data) setBrandData(brand.data);
       } catch (e) {
-        snackbar.openSnackbar(
-          'An error occurred while loading brand data. Brand data is unavailable',
-          'error',
-        );
-      } finally {
-        setTimeout(loading.hide(), 300);
+        console.error(e);
+        snackbar.openSnackbar('Failed to load brand data.', 'error');
       }
     }
-    load();
+
+    loadBrandData();
   }, []);
 
   const { name, logo_url, description } = brandData;
 
   return (
-    <Container maxWidth="xl">
-      {brandData && (
+    <ShoppingPage pathname={pathname} query={query}>
+      {brandData && (name || logo_url || description) && (
         <ProductAssortmentDetails
           title={name}
           image={logo_url}
           description={description}
         />
       )}
-      <ProductAssortment />
-    </Container>
+    </ShoppingPage>
   );
 }
 

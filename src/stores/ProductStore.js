@@ -3,11 +3,16 @@ import { observable, decorate, action, computed } from 'mobx';
 // API
 import { getImpulseProducts } from 'api/product';
 
+// Sorting Config
+import sortingConfig, {
+  DEFAULT_SORTING_OPTION,
+  POSSIBLE_SORTING_OPTIONS,
+} from 'common/ProductAssortment/SortAndFilterMenu/sorting-config';
+
 import {
   API_GET_PRODUCT_DETAIL,
   API_GET_ADVERTISEMENTS,
   API_GET_PRODUCT_DISPLAYED,
-  API_GET_IMPULSE_PRODUCTS,
   // API_GET_CATEGORIES,
   API_SEARCH_KEYWORD,
   API_GET_HISTORICAL_PRODUCTS,
@@ -18,6 +23,13 @@ import UserStore from './UserStore';
 import axios from 'axios';
 import moment from 'moment';
 
+export const initialProductAssortmentPrefs = {
+  selectedSortingOption: DEFAULT_SORTING_OPTION,
+  selectedBrands: [],
+  selectedLifestyles: [],
+  selectedSubcategories: [],
+  selectedValues: [],
+};
 class ProductStore {
   main_display = [];
   historical_products = [];
@@ -45,7 +57,6 @@ class ProductStore {
 
   currentSearchFilter = [];
   currentSearchCategory = 'All Categories';
-  products = [];
 
   // Product filtration - temporary implementation
   filters = [];
@@ -62,83 +73,16 @@ class ProductStore {
     this.filters = [];
   }
 
-  /*** Product Filters NOT COMPLETE */
+  // ================= Product Assortment V2 - WIP =================
+
+  products = [];
+
+  // Sorting Options
+  selectedSortingOption = DEFAULT_SORTING_OPTION;
+
+  // Lifestyle Tag Filters
   availableLifestyles = [];
   selectedLifestyles = [];
-  availableValues = [];
-  selectedValues = [];
-  availableSubcategories = [];
-  selectedSubcategories = [];
-  availableBrands = [];
-  selectedBrands = [];
-
-  /***  Product properties  */
-  get filteredProducts() {
-    if (
-      !this.selectedLifestyles.length &&
-      !this.selectedSubcategories.length &&
-      !this.selectedBrands.length &&
-      !this.selectedValues.length
-    ) {
-      return this.products;
-    }
-
-    return this.products.filter(
-      ({ lifestyles = [], subcategory, vendorFull = {}, values }) => {
-        const inLifestyles =
-          !this.selectedLifestyles.length ||
-          this.selectedLifestyles.every((ls) => lifestyles.includes(ls));
-
-        const inValues =
-          !this.selectedValues.length ||
-          this.selectedValues.every((val) => values.includes(val));
-
-        const inSubcategory =
-          !this.selectedSubcategories.length ||
-          this.selectedSubcategories.includes[subcategory];
-
-        const inBrands =
-          !this.selectedBrands.length ||
-          this.selectedBrands.includes[vendorFull.name];
-
-        return inLifestyles && inValues && inSubcategory && inBrands;
-      },
-    );
-  }
-
-  /*** Vendor filtering actions */
-  initializeProductAssortment(assortmentDetails = {}) {
-    const {
-      products = [],
-      lifestyles = [],
-      values = [],
-      subcategories = [],
-      brands = [],
-    } = assortmentDetails;
-    this.products = products;
-    this.availableLifestyles = lifestyles;
-    this.availableValues = values;
-    this.availableSubcategories = subcategories;
-    this.availableBrands = brands;
-  }
-
-  resetProductAssortment() {
-    this.availableBrands = [];
-    this.availableLifestyles = [];
-    this.availableSubcategories = [];
-    this.availableValues = [];
-    this.selectedBrands = [];
-    this.selectedLifestyles = [];
-    this.selectedSubcategories = [];
-    this.selectedValues = [];
-  }
-
-  resetSelectedFilters() {
-    this.selectedBrands = [];
-    this.selectedLifestyles = [];
-    this.selectedSubcategories = [];
-    this.selectedValues = [];
-  }
 
   addSelectedLifestyle(lifestyle) {
     if (!this.selectedLifestyles.includes(lifestyle)) {
@@ -152,6 +96,24 @@ class ProductStore {
     );
   }
 
+  // Value Tag Filters
+  availableValues = [];
+  selectedValues = [];
+
+  addSelectedValue(value) {
+    if (!this.selectedValues.includes(value)) {
+      this.selectedValues.push(value);
+    }
+  }
+
+  removeSelectedValue(value) {
+    this.selectedValues = this.selectedValues.filter((v) => v !== value);
+  }
+
+  // Subcat Tag Filters
+  availableSubcategories = [];
+  selectedSubcategories = [];
+
   addSelectedSubcategory(subcategory) {
     if (!this.selectedSubcategories.includes(subcategory)) {
       this.selectedSubcategories.push(subcategory);
@@ -164,6 +126,10 @@ class ProductStore {
     );
   }
 
+  // Brand Tag Filters
+  availableBrands = [];
+  selectedBrands = [];
+
   addSelectedBrand(brand) {
     if (!this.selectedBrands.includes(brand)) {
       this.selectedBrands.push(brand);
@@ -174,16 +140,70 @@ class ProductStore {
     this.selectedBrands = this.selectedBrands.filter((br) => br !== brand);
   }
 
-  addSelectedValue(value) {
-    if (!this.selectedValues.includes(value)) {
-      this.selectedValues.push(value);
-    }
+  get filteredProducts() {
+    let products = applyFilters(this.products, {
+      selectedLifestyles: this.selectedLifestyles,
+      selectedSubcategories: this.selectedSubcategories,
+      selectedValues: this.selectedValues,
+      selectedBrands: this.selectedBrands,
+    });
+
+    const sortingOption = this.selectedSortingOption;
+
+    return sortProducts(products, sortingOption);
   }
 
-  removeSelectedValue(value) {
-    this.selectedValues = this.selectedValues.filter((v) => v !== value);
+  initializeProductAssortment({
+    products = [],
+    brands = [],
+    lifestyles = [],
+    subcategories = [],
+    values = [],
+  }) {
+    this.products = products;
+    this.availableBrands = brands;
+    this.availableLifestyles = lifestyles;
+    this.availableSubcategories = subcategories;
+    this.availableValues = values;
   }
-  /*** Ends Vendor filtering actions */
+
+  resetProductAssortmentPrefs() {
+    const {
+      selectedSortingOption,
+      selectedBrands,
+      selectedLifestyles,
+      selectedSubcategories,
+      selectedValues,
+    } = initialProductAssortmentPrefs;
+
+    this.selectedSortingOption = selectedSortingOption;
+    this.selectedBrands = selectedBrands;
+    this.selectedLifestyles = selectedLifestyles;
+    this.selectedSubcategories = selectedSubcategories;
+    this.selectedValues = selectedValues;
+  }
+
+  setProductAssortmentPrefs({
+    selectedSortingOption = DEFAULT_SORTING_OPTION,
+    selectedBrands = [],
+    selectedLifestyles = [],
+    selectedSubcategories = [],
+    selectedValues = [],
+  }) {
+    // This situation is unlikely, but may assist in debugging.
+    // TODO: extend as needed.
+    if (!POSSIBLE_SORTING_OPTIONS.includes(selectedSortingOption)) {
+      console.error(`Invalid sorting value: ${selectedSortingOption}`);
+    }
+
+    this.selectedSortingOption = selectedSortingOption;
+    this.selectedBrands = selectedBrands;
+    this.selectedLifestyles = selectedLifestyles;
+    this.selectedSubcategories = selectedSubcategories;
+    this.selectedValues = selectedValues;
+  }
+
+  // ================== End Product Assortment Filtration V2 ==================
 
   async showModal(product_id, customer_quantity) {
     this.activeProductId = product_id;
@@ -418,31 +438,36 @@ decorate(ProductStore, {
   currentSearchFilter: observable,
   filters: observable,
 
-  /*** Vendor
-   * Vendor observables */
+  // Product Assortment V2
   products: observable,
+
+  selectedSortingOption: observable,
+
   availableLifestyles: observable,
   selectedLifestyles: observable,
-  availableSubcategories: observable,
-  selectedSubcategories: observable,
-  availableBrands: observable,
-  selectedBrands: observable,
-  availableValues: observable,
-  selectedValues: observable,
-  /*** Vendor computed */
-  filteredProducts: computed,
-  /*** Vendor actions */
-  initializeProductAssortment: action,
-  resetProductAssortment: action,
-  resetSelectedFilters: action,
   addSelectedLifestyle: action,
   removeSelectedLifestyle: action,
+
+  availableSubcategories: observable,
+  selectedSubcategories: observable,
   addSelectedSubcategory: action,
   removeSelectedSubcategory: action,
+
+  availableBrands: observable,
+  selectedBrands: observable,
   addSelectedBrand: action,
   removeSelectedBrand: action,
+
+  availableValues: observable,
+  selectedValues: observable,
   addSelectedValue: action,
   removeSelectedValue: action,
+
+  filteredProducts: computed,
+  initializeProductAssortment: action,
+  resetProductAssortmentPrefs: action,
+  setProductAssortmentPrefs: action,
+
   /** Ends Vendor */
   resetActiveProduct: action,
   showModal: action,
@@ -464,5 +489,73 @@ decorate(ProductStore, {
   updateFilters: action,
   resetFilters: action,
 });
+
+export function applyFilters(
+  products,
+  { selectedLifestyles, selectedValues, selectedSubcategories, selectedBrands },
+) {
+  return products.filter(
+    ({ lifestyles = [], subcategory = {}, vendorFull = {}, values = [] }) => {
+      const inLifestyles =
+        !selectedLifestyles.length ||
+        selectedLifestyles.every((ls) => lifestyles.includes(ls));
+
+      const inValues =
+        !selectedValues.length ||
+        selectedValues.every((val) => values.includes(val));
+
+      const inSubcategory =
+        !selectedSubcategories.length ||
+        (subcategory &&
+          subcategory.name &&
+          selectedSubcategories.includes(subcategory.name));
+
+      const inBrands =
+        !selectedBrands.length ||
+        (vendorFull &&
+          vendorFull.name &&
+          selectedBrands.includes(vendorFull.name));
+
+      return inLifestyles && inValues && inSubcategory && inBrands;
+    },
+  );
+}
+
+export function sortProducts(products, sortingOption) {
+  let result = [];
+  if (sortingOption) {
+    const selectedSortingConfig = sortingConfig.find(
+      (option) => option.value === sortingOption,
+    );
+
+    if (selectedSortingConfig) {
+      const { sortingFunction } = selectedSortingConfig;
+
+      // Separate in stock and out of stock products
+
+      let inStockProducts = products.filter((p) => {
+        const { inventory } = p;
+        if (!inventory || !inventory.length) return false;
+        return p.inventory[0].current_inventory > 0;
+      });
+
+      let outOfStockProducts = products.filter((p) => {
+        const { inventory } = p;
+        if (!inventory || !inventory.length) return false;
+        return p.inventory[0].current_inventory === 0;
+      });
+
+      // Sort both in stock and out of stock products
+
+      inStockProducts = sortingFunction(inStockProducts);
+      outOfStockProducts = sortingFunction(outOfStockProducts);
+
+      // Push out of stock products to end of product assortment
+
+      result = inStockProducts.concat(outOfStockProducts);
+    }
+  }
+  return result;
+}
 
 export default new ProductStore();

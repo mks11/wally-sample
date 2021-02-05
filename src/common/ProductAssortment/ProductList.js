@@ -1,6 +1,13 @@
 import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { useStores } from 'hooks/mobx';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -9,7 +16,7 @@ import { formatMoney } from 'utils';
 import styled from 'styled-components';
 
 const ProductModal = lazy(() => import('modals/ProductModalV2'));
-function ProductList({ products }) {
+function ProductList({ isLoading, products }) {
   const noProductsAvailable = () => {
     return products.every((product) => {
       const { image_refs, name, product_id, vendorFull, inventory } = product;
@@ -27,7 +34,11 @@ function ProductList({ products }) {
     <Box py={2}>
       {noProductsAvailable() ? (
         <Box display="flex" justifyContent="center">
-          <Typography variant="h2">No products available</Typography>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Typography variant="h2">No products available</Typography>
+          )}
         </Box>
       ) : (
         <Grid container spacing={2}>

@@ -24,3 +24,15 @@ export function updateProducts(filename, formData, auth) {
     params: { filename },
   });
 }
+
+const GET_PRODUCTS_MATCHING_FILTERS_API = '/api/products/filter';
+
+export function getProductAssortment(query, auth) {
+  return axios.get(GET_PRODUCTS_MATCHING_FILTERS_API, {
+    baseURL: BASE_URL,
+    ...auth,
+    params: {
+      ...query,
+    },
+  });
+}

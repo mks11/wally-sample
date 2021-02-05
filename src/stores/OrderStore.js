@@ -1,4 +1,4 @@
-import { observable, decorate, action, runInAction } from 'mobx';
+import { observable, decorate, action } from 'mobx';
 import {
   API_GET_ORDERS,
   API_SUBMIT_ISSUE,
