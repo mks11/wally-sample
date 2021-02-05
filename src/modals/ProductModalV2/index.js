@@ -245,6 +245,7 @@ const ProductModalV2 = observer(() => {
     available_inventory,
     avg_rating,
     buy_by_packaging,
+    cat_ids,
     description,
     fbw,
     image_refs,
@@ -328,6 +329,11 @@ const ProductModalV2 = observer(() => {
     nutrition_facts,
     product_id,
   );
+  const REUSABLE_PACKAGING_CAT_IDS = ['689908'];
+  const SHOULD_HIDE_NET_WEIGHT =
+    cat_ids &&
+    cat_ids.length &&
+    cat_ids.some((c) => REUSABLE_PACKAGING_CAT_IDS.includes(c));
 
   return (
     <Box>
@@ -360,21 +366,25 @@ const ProductModalV2 = observer(() => {
           >
             {formatMoney(price)}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="span"
-            gutterBottom
-            style={{ fontWeight: 'bold' }}
-          >
-            {typeof netWeight === 'number'
-              ? `Net weight ${netWeight} oz `
-              : `${netWeight} `}
-          </Typography>
-          <Typography variant="subtitle1" component="span" gutterBottom>
-            {typeof pricePerOz === 'number'
-              ? `(${formatMoney(pricePerOz)} / oz)`
-              : `(${pricePerOz})`}
-          </Typography>
+          {!SHOULD_HIDE_NET_WEIGHT ? (
+            <>
+              <Typography
+                variant="subtitle1"
+                component="span"
+                gutterBottom
+                style={{ fontWeight: 'bold' }}
+              >
+                {typeof netWeight === 'number'
+                  ? `Net weight ${netWeight} oz `
+                  : `${netWeight} `}
+              </Typography>
+              <Typography variant="subtitle1" component="span" gutterBottom>
+                {typeof pricePerOz === 'number'
+                  ? `(${formatMoney(pricePerOz)} / oz)`
+                  : `(${pricePerOz})`}
+              </Typography>
+            </>
+          ) : null}
 
           {/* NOT SURE WHAT THIS DOES BUT DON'T THINK IT'S NECESSARY RIGHT NOW */}
           {/* {['ea', 'bunch', 'pint'].includes(unit_type) && unit_weight && (
