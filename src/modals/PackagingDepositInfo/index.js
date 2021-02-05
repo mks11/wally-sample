@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { shouldChargeToteDeposit } from 'utils';
 
 function PackagingDepositInfo() {
+  let toteCost = shouldChargeToteDeposit() ? '$10 each (one size)' : 'Free';
+
   return (
     <Box>
       <Typography variant="h1" gutterBottom>
@@ -39,7 +42,7 @@ function PackagingDepositInfo() {
       <List>
         <ListItem>
           <Typography>
-            <strong>Shipping Tote</strong> - $10 each (one size)
+            <strong>Shipping Tote</strong> - {toteCost}
           </Typography>
         </ListItem>
         <ListItem>

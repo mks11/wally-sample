@@ -32,12 +32,7 @@ import ApplyPromoCodeForm from 'forms/ApplyPromoCodeForm';
 
 // Utilities
 import { logPageView, logEvent } from 'services/google-analytics';
-import {
-  formatMoney,
-  getErrorMessage,
-  getErrorParam,
-  shouldChargeToteDeposit,
-} from 'utils';
+import { formatMoney, getErrorMessage, getErrorParam } from 'utils';
 
 // MobX
 import { observer } from 'mobx-react';
@@ -463,8 +458,9 @@ const OrderSummary = observer(() => {
         </Box>
         <div>
           {packagingUsed.map((p) => {
-            const { quantity, type } = p;
-            if (type.includes('Tote') && !shouldChargeToteDeposit()) {
+            const { per_unit_deposit_amount, quantity, type } = p;
+
+            if (per_unit_deposit_amount < 1) {
               return null;
             }
 
