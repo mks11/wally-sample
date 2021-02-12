@@ -158,25 +158,27 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
+const COMPANY_NAME = 'NuttZo';
+
 // Hero Image Config
 const slides = [
   <HeroSlide
-    alt="New products from Yaya Maria's announcement."
+    alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/yaya-marias/yaya-maria-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Soaps by Yaya Maria's</HeroTitle>
-      <HeroBody>Sweet lavender hand and dish soap </HeroBody>
-      <HeroBody gutterBottom> available now for a limited time.</HeroBody>
+      <HeroTitle>Paleo Power Fuel by NuttZo</HeroTitle>
+      <HeroBody>Limited run of vegan protein packed</HeroBody>
+      <HeroBody gutterBottom>nut & seed butters available now.</HeroBody>
       <div>
         <FBWPageLink
-          to="/shop/brands/yaya-marias"
-          alt="Shop new Yaya Maria's products now!"
+          to="/shop/brands/nuttzo"
+          alt={`Shop new ${COMPANY_NAME} products now!`}
         >
           Shop Now <ArrowForwardIcon fontSize="small" />
         </FBWPageLink>
