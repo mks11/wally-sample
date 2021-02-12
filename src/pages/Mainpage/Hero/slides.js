@@ -174,7 +174,7 @@ const slides = [
       <HeroOverline>Limited Release</HeroOverline>
       <HeroTitle>Paleo Power Fuel by NuttZo</HeroTitle>
       <HeroBody>Limited run of vegan protein packed</HeroBody>
-      <HeroBody gutterBottom>nut & seed butters available now.</HeroBody>
+      <HeroBody gutterBottom>nut & seed butter available now.</HeroBody>
       <div>
         <FBWPageLink
           to="/shop/brands/nuttzo"
