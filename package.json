@@ -9,7 +9,7 @@
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.11.0",
     "aws-s3": "^2.0.5",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "formik": "^2.2.3",
     "mobx": "^5.0.3",
     "mobx-react": "^6.3.0",
