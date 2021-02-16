@@ -90,6 +90,7 @@ function Checkout({ breadcrumbs, location }) {
     }
 
     if (user && flags.checkoutFirst) {
+      console.log('loading');
       loadData();
     }
   }, [user, flags]);
@@ -457,8 +458,12 @@ const OrderSummary = observer(() => {
         </Box>
         <div>
           {packagingUsed.map((p) => {
-            const { quantity, type } = p;
-            if (type.includes('Reusable')) return null;
+            const { per_unit_deposit_amount, quantity, type } = p;
+
+            if (per_unit_deposit_amount < 1) {
+              return null;
+            }
+
             return (
               <Box
                 key={type}
@@ -475,11 +480,7 @@ const OrderSummary = observer(() => {
                   </Typography>
                 </div>
 
-                <Typography>
-                  {type.includes('Tote')
-                    ? formatMoney(1000 / 100)
-                    : formatMoney((quantity * 100) / 100)}
-                </Typography>
+                <Typography>{getPackagingDeposit(type, quantity)}</Typography>
               </Box>
             );
           })}
@@ -639,6 +640,14 @@ const OrderSummary = observer(() => {
     </Card>
   );
 });
+
+// Shouldn't have to take care of this on the frontend, since the backend
+// knows this data.
+function getPackagingDeposit(type, quantity) {
+  return type.includes('Tote')
+    ? formatMoney(1000 / 100)
+    : formatMoney((quantity * 100) / 100);
+}
 
 function OrderItem({ item }) {
   const { customer_quantity, product_name, total } = item;

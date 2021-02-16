@@ -10,6 +10,8 @@ import {
   API_DELIVERY_TIMES,
 } from '../config';
 
+// Helpers
+import { getTimestamp } from 'helpers/date';
 class CheckoutStore {
   cart = null;
   isRetrievingCart = false;
@@ -103,7 +105,11 @@ class CheckoutStore {
   }
 
   async getOrderSummary(auth) {
-    const res = await axios.get(API_GET_ORDER_SUMMARY, auth);
+    const timestamp = getTimestamp();
+    const res = await axios.get(API_GET_ORDER_SUMMARY, {
+      ...auth,
+      params: { timestamp },
+    });
     this.order = res.data;
     return res.data;
   }

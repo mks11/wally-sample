@@ -103,6 +103,15 @@ function santizePhoneNum(phoneNum) {
   return phoneNum.replace(/\D/g, '');
 }
 
+function shouldChargeToteDeposit() {
+  const FORMAT = 'YYYY-MM-DD';
+  const TIMESTAMP = moment.parseZone().format('YYYY-MM-DD');
+  const FREE_TOTE_DEPOSIT_START_DATE = moment
+    .utc('2021-03-06T00:00:00.000Z')
+    .format(FORMAT);
+  return moment(TIMESTAMP).isBefore(FREE_TOTE_DEPOSIT_START_DATE);
+}
+
 export {
   connect,
   validateEmail,
@@ -114,4 +123,5 @@ export {
   getErrorMessage,
   getErrorParam,
   santizePhoneNum,
+  shouldChargeToteDeposit,
 };
