@@ -141,11 +141,11 @@ const HeroBody = styled(Typography)`
 `;
 
 const FBWPageLink = styled(PrimaryTextLink)`
-  background-color: ${theme.palette.primary.main};
-  color: ${theme.palette.white.main};
+  background-color: ${theme.palette.primary.white};
+  color: ${theme.palette.primary.main};
   &&& {
     &:hover {
-      color: ${theme.palette.white.dark};
+      color: ${theme.palette.primary.dark};
     }
   }
 
@@ -176,14 +176,12 @@ const slides = [
       <HeroTitle>by The Good Hippie</HeroTitle>
       <HeroBody>Soak away the day with these</HeroBody>
       <HeroBody gutterBottom>limited run calming bath salts.</HeroBody>
-      <div>
-        <FBWPageLink
-          to="/shop/brands/the-good-hippie"
-          alt={`Shop new ${COMPANY_NAME} products now!`}
-        >
-          Shop Now <ArrowForwardIcon fontSize="small" />
-        </FBWPageLink>
-      </div>
+      <FBWPageLink
+        to="/shop/brands/the-good-hippie"
+        alt={`Shop new ${COMPANY_NAME} products now!`}
+      >
+        Shop Now <ArrowForwardIcon fontSize="small" />
+      </FBWPageLink>
     </HeroBodyWrapper>
   </HeroSlide>,
 ];
