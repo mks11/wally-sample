@@ -118,7 +118,7 @@ const HeroOverline = styled.p`
     font-size: 1.424rem;
   }
 
-  margin-bottom: 0;
+  margin-bottom: 0.25rem;
 `;
 
 const HeroTitle = styled.h1`
@@ -133,7 +133,7 @@ const HeroTitle = styled.h1`
     font-size: 1.602rem;
   }
 
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
 `;
 
 const HeroBody = styled(Typography)`
@@ -158,7 +158,7 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
-const COMPANY_NAME = 'NuttZo';
+const COMPANY_NAME = 'The Good Hippie';
 
 // Hero Image Config
 const slides = [
@@ -166,18 +166,19 @@ const slides = [
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/nuttzo/nuttzo-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Paleo Power Fuel by NuttZo</HeroTitle>
-      <HeroBody>Limited run of vegan protein packed</HeroBody>
-      <HeroBody gutterBottom>nut & seed butter available now.</HeroBody>
+      <HeroTitle>Small Batch Skincare</HeroTitle>
+      <HeroTitle>by The Good Hippie</HeroTitle>
+      <HeroBody>Soak away the day with these</HeroBody>
+      <HeroBody gutterBottom>limited run calming bath salts.</HeroBody>
       <div>
         <FBWPageLink
-          to="/shop/brands/nuttzo"
+          to="/shop/brands/the-good-hippie"
           alt={`Shop new ${COMPANY_NAME} products now!`}
         >
           Shop Now <ArrowForwardIcon fontSize="small" />
