@@ -141,11 +141,11 @@ const HeroBody = styled(Typography)`
 `;
 
 const FBWPageLink = styled(PrimaryTextLink)`
-  background-color: ${theme.palette.primary.white};
-  color: ${theme.palette.primary.main};
+  background-color: ${theme.palette.primary.main};
+  color: ${theme.palette.white.main};
   &&& {
     &:hover {
-      color: ${theme.palette.primary.dark};
+      color: ${theme.palette.white.dark};
     }
   }
 
@@ -158,7 +158,7 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
-const COMPANY_NAME = 'The Good Hippie';
+const COMPANY_NAME = 'Kaylaan';
 
 // Hero Image Config
 const slides = [
@@ -166,18 +166,18 @@ const slides = [
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-good-hippie/the-good-hippie-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Small Batch Skincare</HeroTitle>
-      <HeroTitle>by The Good Hippie</HeroTitle>
-      <HeroBody>Soak away the day with these</HeroBody>
-      <HeroBody gutterBottom>limited run calming bath salts.</HeroBody>
+      <HeroTitle>Bigger & Brighter</HeroTitle>
+      <HeroTitle>Smiles by Kaylaan</HeroTitle>
+      <HeroBody>Natural, Sustainable, & Portable</HeroBody>
+      <HeroBody gutterBottom>Toothpaste Tablets.</HeroBody>
       <FBWPageLink
-        to="/shop/brands/the-good-hippie"
+        to="/shop/brands/kaylaan"
         alt={`Shop new ${COMPANY_NAME} products now!`}
       >
         Shop Now <ArrowForwardIcon fontSize="small" />
