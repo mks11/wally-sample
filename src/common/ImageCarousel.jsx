@@ -19,6 +19,9 @@ import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 // Custom CSS
 import styles from 'common/ImageCarousel.module.css';
 
+// React Responsive
+import { useMediaQuery } from 'react-responsive';
+
 const BackSlideControl = styled(ButtonBack)`
   position: absolute;
   top: 50%;
@@ -67,6 +70,7 @@ export default function ImageCarousel({
 }) {
   // Only allow a certain amount of slides
   slides = slides.slice(0, numSlides + 1);
+  const shouldDisplayButtons = useMediaQuery({ query: '(min-width: 1200px)' });
 
   return (
     <CarouselProvider
@@ -85,7 +89,7 @@ export default function ImageCarousel({
             </Slide>
           ))}
         </Slider>
-        {slides && slides.length > 1 && (
+        {slides && slides.length > 1 && shouldDisplayButtons && (
           <>
             <BackSlideControl>
               <ChevronLeft fontSize="large" />

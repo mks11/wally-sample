@@ -18,11 +18,10 @@ import styled from 'styled-components';
 import { PrimaryTextLink } from 'styled-component-lib/Links';
 
 const SlideOverlayWrapper = styled(Box)`
-  @media only screen and (min-width: 992px) {
-    padding: 2rem;
-  }
-
   padding: 1rem;
+  @media only screen and (min-width: 1200px) {
+    padding: 2rem 3.5rem;
+  }
 `;
 
 function HeroSlideOverlay({ children, justify }) {
@@ -96,12 +95,23 @@ const HeroBodyWrapper = styled.div`
   background-color: transparent;
   display: flex;
   flex-direction: column;
-  ${'' /* max-width: 325px; */}
+  max-width: 75%;
   ${'' /* padding: 1.5rem; */}
-  position: absolute;
 
   @media only screen and (min-width: 481px) {
     justify-content: center;
+  }
+  @media only screen and (min-width: 576px) {
+    max-width: 70%;
+  }
+  @media only screen and (min-width: 768px) {
+    max-width: 65%;
+  }
+  @media only screen and (min-width: 992px) {
+    max-width: 60%;
+  }
+  @media only screen and (min-width: 1200px) {
+    max-width: 65%;
   }
 `;
 
@@ -133,7 +143,7 @@ const HeroTitle = styled.h1`
     font-size: 1.602rem;
   }
 
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
 `;
 
 const HeroBody = styled(Typography)`
@@ -163,6 +173,25 @@ const COMPANY_NAME = 'Kaylaan';
 // Hero Image Config
 const slides = [
   <HeroSlide
+    alt={`Birthday month free promo announcement.`}
+    justify="flex-start"
+    alignItems="center"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-480.jpg"
+  >
+    <HeroBodyWrapper>
+      <HeroTitle>Adios, Ciao, Bye Tote Deposit!</HeroTitle>
+      <HeroBody gutterBottom>
+        To celebrate our birthday, we’re giving back to you!
+      </HeroBody>
+      <HeroBody>
+        We're removing the $10 tote deposit on <strong>all orders</strong>{' '}
+        placed on 3/6 and beyond.
+      </HeroBody>
+    </HeroBodyWrapper>
+  </HeroSlide>,
+  <HeroSlide
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
@@ -172,10 +201,10 @@ const slides = [
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Bigger & Brighter</HeroTitle>
-      <HeroTitle>Smiles by Kaylaan</HeroTitle>
-      <HeroBody>Natural, Sustainable, & Portable</HeroBody>
-      <HeroBody gutterBottom>Toothpaste Tablets.</HeroBody>
+      <HeroTitle>Bigger & Brighter Smiles by Kaylaan</HeroTitle>
+      <HeroBody gutterBottom>
+        Natural, Sustainable, & Portable Toothpaste Tablets.
+      </HeroBody>
       <FBWPageLink
         to="/shop/brands/kaylaan"
         alt={`Shop new ${COMPANY_NAME} products now!`}
