@@ -168,45 +168,24 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
-const COMPANY_NAME = 'Kaylaan';
+const COMPANY_NAME = 'AshaPops';
 
 // Hero Image Config
 const slides = [
   <HeroSlide
-    alt={`Birthday month free promo announcement.`}
-    justify="flex-start"
-    alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/hero-images/birthday-promo/wally-birthday-480.jpg"
-  >
-    <HeroBodyWrapper>
-      <HeroTitle>Adios, Ciao, Bye Tote Deposit!</HeroTitle>
-      <HeroBody gutterBottom>
-        To celebrate our birthday, we’re giving back to you!
-      </HeroBody>
-      <HeroBody>
-        We're removing the $10 tote deposit on <strong>all orders</strong>{' '}
-        placed on 3/6 and beyond.
-      </HeroBody>
-    </HeroBodyWrapper>
-  </HeroSlide>,
-  <HeroSlide
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/kaylaan/kaylaan-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-480.jpg"
   >
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Bigger & Brighter Smiles by Kaylaan</HeroTitle>
-      <HeroBody gutterBottom>
-        Natural, Sustainable, & Portable Toothpaste Tablets.
-      </HeroBody>
+      <HeroTitle>Snack Better with AshaPops</HeroTitle>
+      <HeroBody gutterBottom>Water Lily Seed Snacks Available Now</HeroBody>
       <FBWPageLink
-        to="/shop/brands/kaylaan"
+        to="/shop/brands/ashapops"
         alt={`Shop new ${COMPANY_NAME} products now!`}
       >
         Shop Now <ArrowForwardIcon fontSize="small" />
