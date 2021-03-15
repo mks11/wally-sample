@@ -183,7 +183,7 @@ const slides = [
     <HeroBodyWrapper>
       <HeroOverline>Limited Release</HeroOverline>
       <HeroTitle>Snack Better with AshaPops</HeroTitle>
-      <HeroBody gutterBottom>Water Lily Seed Snacks Available Now</HeroBody>
+      <HeroBody gutterBottom>Water lily seed snacks available now</HeroBody>
       <FBWPageLink
         to="/shop/brands/ashapops"
         alt={`Shop new ${COMPANY_NAME} products now!`}
