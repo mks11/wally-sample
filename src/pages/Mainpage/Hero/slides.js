@@ -168,7 +168,7 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
-const COMPANY_NAME = 'AshaPops';
+const COMPANY_NAME = 'The Home Farm';
 
 // Hero Image Config
 const slides = [
@@ -176,16 +176,17 @@ const slides = [
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/ashapops/ashapops-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-480.jpg"
   >
     <HeroBodyWrapper>
-      <HeroOverline>Limited Release</HeroOverline>
-      <HeroTitle>Snack Better with AshaPops</HeroTitle>
-      <HeroBody gutterBottom>Water lily seed snacks available now</HeroBody>
+      <HeroTitle style={{ marginBottom: 0 }}>Clean Beauty,</HeroTitle>
+      <HeroTitle>Holistic Health</HeroTitle>
+      <HeroBody>New Clay Mask</HeroBody>
+      <HeroBody gutterBottom>by The Home Farm</HeroBody>
       <FBWPageLink
-        to="/shop/brands/ashapops"
+        to="/shop/brands/the-home-farm"
         alt={`Shop new ${COMPANY_NAME} products now!`}
       >
         Shop Now <ArrowForwardIcon fontSize="small" />
