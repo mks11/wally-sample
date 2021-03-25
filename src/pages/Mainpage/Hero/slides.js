@@ -168,7 +168,7 @@ const FBWPageLink = styled(PrimaryTextLink)`
   max-width: 135px;
 `;
 
-const COMPANY_NAME = 'The Home Farm';
+const COMPANY_NAME = 'Goldmine';
 
 // Hero Image Config
 const slides = [
@@ -176,17 +176,16 @@ const slides = [
     alt={`New products from ${COMPANY_NAME} announcement.`}
     justify="flex-start"
     alignItems="center"
-    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-1200.jpg"
-    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-768.jpg"
-    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/the-home-farm/the-home-farm-480.jpg"
+    srcLg="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/goldmine-temp/goldmine-1200.jpg"
+    srcMd="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/goldmine-temp/goldmine-768.jpg"
+    srcSm="https://the-wally-shop-app.s3.us-east-2.amazonaws.com/featured-brand-hero-images/goldmine-temp/goldmine-480.jpg"
   >
     <HeroBodyWrapper>
-      <HeroTitle style={{ marginBottom: 0 }}>Clean Beauty,</HeroTitle>
-      <HeroTitle>Holistic Health</HeroTitle>
-      <HeroBody>New Clay Mask</HeroBody>
-      <HeroBody gutterBottom>by The Home Farm</HeroBody>
+      <HeroTitle>Drink Golden</HeroTitle>
+      <HeroBody>New, Easy to Drink</HeroBody>
+      <HeroBody gutterBottom>Adaptogens by Goldmine</HeroBody>
       <FBWPageLink
-        to="/shop/brands/the-home-farm"
+        to="/shop/brands/goldmine"
         alt={`Shop new ${COMPANY_NAME} products now!`}
       >
         Shop Now <ArrowForwardIcon fontSize="small" />
