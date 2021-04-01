@@ -52,6 +52,7 @@ import OutboundShipments from './pages/manage/shipments/OutboundShipments';
 import InboundShipments from './pages/manage/shipments/InboundShipments';
 import ManageRetail from './pages/manage/retail/ManageRetail';
 import RetailManagementPortal from './pages/management-portals/Retail';
+import PackagingDepositRefund from './pages/PackagingDepositRefund';
 
 // Pick/Pack
 import PickPackPortal from 'pages/pick-pack/PickPackPortal';
@@ -238,6 +239,11 @@ function Routes(props) {
         />
       ))}
       {/* ==================== User Routes (NOT CRAWLED) ==================== */}
+      <ProtectedRoute
+        exact
+        path="/packaging-credit-refund"
+        component={PackagingDepositRefund}
+      />
       <Route exact path="/blog/:slug" component={BlogPost} />
       <Route exact path="/orders/:id" component={OrderConfirmation} />
       <Route exact path="/help" component={Help} />

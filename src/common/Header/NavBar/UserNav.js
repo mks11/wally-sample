@@ -21,7 +21,6 @@ import AccountDropdown, {
   AccountDropdownMenuBtn,
 } from 'common/Header/NavBar/AccountDropdown';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
-import RedeemPackagingBalance from 'forms/user-nav/RedeemPackagingBalance';
 
 // Styled components
 import { PrimaryContainedLink } from 'styled-component-lib/Links';
@@ -59,7 +58,11 @@ export const MobileUserNav = observer(() => {
           </AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
         <PackagingBalance />
-        <RedeemDepositButton />
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/packaging-credit-refund">
+            Refund Packaging Balance
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
         <SchedulePickupButton />
       </AccountDropdown>
       <Cart />
@@ -192,7 +195,11 @@ export const DesktopUserNav = observer(() => {
           </AccountDropdownMenuItem>
         </AccountDropdownMenuListItem>
         <PackagingBalance />
-        <RedeemDepositButton />
+        <AccountDropdownMenuListItem>
+          <AccountDropdownMenuItem to="/packaging-credit-refund">
+            Refund Packaging Balance
+          </AccountDropdownMenuItem>
+        </AccountDropdownMenuListItem>
         <SchedulePickupButton />
       </AccountDropdown>
       <Cart />
@@ -211,23 +218,6 @@ function SchedulePickupButton({ onClick }) {
     <AccountDropdownMenuListItem>
       <AccountDropdownMenuBtn onClick={schedulePickup}>
         Schedule Pickup
-      </AccountDropdownMenuBtn>
-    </AccountDropdownMenuListItem>
-  );
-}
-
-function RedeemDepositButton({ onClick }) {
-  const { modalV2 } = useStores();
-  const redeemDeposit = () => {
-    logModalView('/redeem-deposit');
-    onClick();
-    modalV2.open(<RedeemPackagingBalance />);
-  };
-
-  return (
-    <AccountDropdownMenuListItem>
-      <AccountDropdownMenuBtn onClick={redeemDeposit}>
-        Redeem Packaging Balance
       </AccountDropdownMenuBtn>
     </AccountDropdownMenuListItem>
   );
