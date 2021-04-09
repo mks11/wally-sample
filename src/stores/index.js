@@ -16,6 +16,7 @@ import SnackbarStore from './SnackbarStore';
 import { RouterStore } from 'mobx-react-router';
 import PickPackStore from './PickPackStore';
 import RetailStore from './RetailStore';
+import DialogStore from './DialogStore';
 
 const store = {
   ui: UiStore,
@@ -37,6 +38,7 @@ const store = {
   snackbar: SnackbarStore,
   routing: new RouterStore(),
   retail: RetailStore,
+  dialog: DialogStore,
 };
 
 export default store;

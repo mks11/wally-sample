@@ -27,6 +27,7 @@ import { useMediaQuery } from 'react-responsive';
 
 // Styled components
 import { PrimaryWallyButton } from 'styled-component-lib/Buttons';
+import RootDialog from 'common/RootDialog';
 
 const Layout = observer(() => {
   const { modalV2, user: userStore } = useStores();
@@ -56,6 +57,7 @@ const Layout = observer(() => {
       <RootModalV2 />
       <RootSnackbar />
       <LoadingSpinner />
+      <RootDialog />
     </div>
   );
 

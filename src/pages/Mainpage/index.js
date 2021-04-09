@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component, lazy, Suspense, useEffect } from 'react';
 
 // Services & utilities
 import { logPageView } from 'services/google-analytics';
@@ -8,7 +8,7 @@ import { connect } from 'utils';
 import { APP_URL } from 'config';
 
 // npm components
-import { Container, Typography } from '@material-ui/core';
+import { Box, Container, Typography, Button } from '@material-ui/core';
 
 // Custom Components
 import AddonFirstModal from 'common/AddonFirstModal';
@@ -21,6 +21,10 @@ import ProductList from './ProductList';
 
 // import ProductWithPackaging from '../ProductWithPackaging';
 import SchedulePickupForm from 'forms/user-nav/SchedulePickupForm';
+import { useStores } from 'hooks/mobx';
+
+// Cookies
+import { useCookies } from 'react-cookie';
 
 const ProductModal = lazy(() => import('modals/ProductModalV2'));
 
@@ -308,11 +312,37 @@ class Mainpage extends Component {
             </div>
           </Container>
         </div>
-
+        <ClosingNotification />
         <AddonFirstModal />
       </div>
     );
   }
+}
+
+function ClosingNotification() {
+  const { dialog: dialogStore } = useStores();
+
+  const [cookies, setCookies] = useCookies(['readClosingNotification']);
+
+  const handleRead = () => {
+    setCookies('readClosingNotification', 'read');
+    dialogStore.close();
+  };
+
+  useEffect(() => {
+    if (cookies['readClosingNotification']) {
+      return;
+    }
+    dialogStore.open(
+      <>
+        <Typography>Message </Typography>
+        <Button onClick={handleRead}> OK </Button>
+      </>,
+      'sm',
+    );
+  }, []);
+
+  return <Box />;
 }
 
 export default connect('store')(Mainpage);
